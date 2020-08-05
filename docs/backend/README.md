@@ -1,0 +1,1 @@
+## Things to know about server and API
