@@ -1,0 +1,9 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 50px;
+}
+
+.header > div:nth-child(2) {
+  margin-left: auto;
+}
