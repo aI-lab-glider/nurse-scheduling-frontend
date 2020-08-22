@@ -16,6 +16,18 @@ function ProblemMetadataComponent() {
     console.log("Metadata form submitted!");
   };
 
+  function textField(id, label, value, setFunction) {
+    return (
+      <TextField
+        required
+        id={id}
+        label={label}
+        value={value}
+        onChange={(e) => setFunction(e.target.value)}
+      />
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} autoComplete="off">
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={plLocale}>
@@ -29,27 +41,11 @@ function ProblemMetadataComponent() {
           onChange={handleDateChange}
         />
       </MuiPickersUtilsProvider>
-      <TextField
-        required
-        id="children"
-        label="Ilość dzieci"
-        value={numberOfChildren}
-        onChange={(e) => setNumberOfChildren(e.target.value)}
-      />
-      <TextField
-        required
-        id="nurses"
-        label="Ilość pielęgniarek"
-        value={numberOfNurses}
-        onChange={(e) => setNumberOfNurses(e.target.value)}
-      />
-      <TextField
-        required
-        id="sitters"
-        label="Ilość opiekunek"
-        value={numberOfSitters}
-        onChange={(e) => setNumberOfSitters(e.target.value)}
-      />
+
+      {textField("children", "Ilość dzieci", numberOfChildren, setNumberOfChildren)}
+      {textField("nurses", "Ilość pielęgniarek", numberOfNurses, setNumberOfNurses)}
+      {textField("sitters", "Ilość opiekunek", numberOfSitters, setNumberOfSitters)}
+
       <Button type="submit" variant="contained" color="primary">
         Poprawić harmonogram
       </Button>
