@@ -13,7 +13,9 @@ function ProblemMetadataComponent() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Metadata form submitted!");
+    const year = selectedDate.getFullYear();
+    const month = selectedDate.getMonth() + 1;
+    console.log({ numberOfChildren, numberOfNurses, numberOfSitters, year, month });
   };
 
   function textField(id, label, value, setFunction) {
