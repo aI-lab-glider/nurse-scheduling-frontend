@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
-export const useFileReader = (): [string, (srcFile: File) => void] => {
+export const useFileReader = (): [ArrayBuffer | undefined, (srcFile: File) => void] => {
   const fileReader: FileReader = new FileReader();
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState<ArrayBuffer>();
 
   useEffect(() => {
     const updateContent = () => {
-      setContent(fileReader.result as string);
+      setContent(fileReader.result as ArrayBuffer);
     };
 
     fileReader.addEventListener("loadend", updateContent);
@@ -14,7 +14,7 @@ export const useFileReader = (): [string, (srcFile: File) => void] => {
   }, [fileReader]);
 
   const setSrcFile = (file: File) => {
-    fileReader.readAsText(file);
+    fileReader.readAsArrayBuffer(file);
   };
 
   return [content, setSrcFile];

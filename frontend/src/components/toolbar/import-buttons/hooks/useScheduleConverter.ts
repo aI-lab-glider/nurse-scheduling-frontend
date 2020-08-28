@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
+import XLSXParser from "xlsx";
 import { ScheduleDataModel } from "../../../../state/models";
 import { useFileReader } from "./useFileReader";
 
 export const useScheduleConverter = (): [ScheduleDataModel, (srcFile: File) => void] => {
-  const [textContent, setSrcFile] = useFileReader();
-  const [schedule, setSchedule] = useState({});
+  const [fileContent, setSrcFile] = useFileReader();
+  const [schedule, setSchedule] = useState<ScheduleDataModel>({});
 
   useEffect(() => {
-    const convertedContent = convertToSchedule(textContent);
+    const convertedContent = convertToSchedule(fileContent);
     setSchedule(convertedContent);
-  }, [textContent]);
+  }, [fileContent]);
 
-  const convertToSchedule = (textContent: string): ScheduleDataModel => {
-    return {
-      schedule: [
-        [1, 2, 3],
-        [1, 2, 3],
-      ],
-    };
+  const convertToSchedule = (fileContent: ArrayBuffer | undefined): ScheduleDataModel => {
+    if (!fileContent) {
+      return {} as ScheduleDataModel;
+    }
+    let workbook = XLSXParser.read(fileContent, { type: "array" });
+    let schedule = Object.values(workbook.Sheets)[0];
+    console.log(schedule);
+    return {} as ScheduleDataModel;
   };
   return [schedule, setSrcFile];
 };
