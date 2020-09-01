@@ -1,5 +1,5 @@
 import { EmployeeInfoModel } from "./employee-info.model";
-import { MonthInfoModel } from "./model-info.model";
+import { MonthInfoModel } from "./month-info.model";
 import { ScheduleInfoModel } from "./schedule-info.model";
 import { ShiftInfoModel } from "./shift-info.model";
 

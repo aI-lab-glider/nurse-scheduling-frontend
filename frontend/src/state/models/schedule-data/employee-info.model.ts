@@ -3,6 +3,10 @@ export enum EmploymentType {
   HALF = "HALF",
 }
 
+export enum EmployeeRole {
+  NURSE = "pielęgniarka",
+  BABYSITTER = "opiekunka",
+}
 export interface EmployeeInfoModel {
   time: EmploymentType;
 }

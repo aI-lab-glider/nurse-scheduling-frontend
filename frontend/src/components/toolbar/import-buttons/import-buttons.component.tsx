@@ -9,6 +9,7 @@ import { ActionModel, ScheduleDataModel } from "../../../state/models";
 import { useScheduleConverter } from "./hooks/useScheduleConverter";
 import { ImportButtonsActionType } from "./models/import-buttons-action-type.enum";
 
+
 function ImportButtonsComponent() {
   const [open, setOpen] = useState(false);
   const [content, setSrcFile] = useScheduleConverter();
@@ -16,6 +17,7 @@ function ImportButtonsComponent() {
   const scheduleDipatcher = useDispatch();
 
   useEffect(() => {
+    console.log(content);
     scheduleDipatcher({
       type: ImportButtonsActionType.IMPORT,
       payload: content,
