@@ -1,21 +1,35 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import DateFnsUtils from "@date-io/date-fns";
 import plLocale from "date-fns/locale/pl";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 
+import backend from "../../../api/backend";
+
 function ProblemMetadataComponent() {
   const [selectedDate, handleDateChange] = useState(new Date());
   const [numberOfChildren, setNumberOfChildren] = useState("");
   const [numberOfNurses, setNumberOfNurses] = useState("");
   const [numberOfSitters, setNumberOfSitters] = useState("");
+  const schedule = useSelector((state) => state.scheduleData);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const year = selectedDate.getFullYear();
     const month = selectedDate.getMonth() + 1;
-    console.log({ numberOfChildren, numberOfNurses, numberOfSitters, year, month });
+    const message = {
+      numberOfChildren,
+      numberOfNurses,
+      numberOfSitters,
+      year,
+      month,
+      schedule,
+    };
+    console.log(message);
+    const response = await backend.post("/fix_schedule/", message);
+    console.log(response);
   };
 
   function textField(id, label, value, setFunction) {
