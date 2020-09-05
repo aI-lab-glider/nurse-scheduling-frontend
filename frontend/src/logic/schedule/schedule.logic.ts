@@ -1,9 +1,9 @@
 import { SectionLogic } from "../../helpers/section.model";
-import { ScheduleDataModel } from "../../state/models";
+import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row.logic";
 import { MetaDataLogic } from "./metadata.logic";
-import { ScheduleInfoLogic } from "./schedule-info.logic";
+import { ShiftsInfoLogic } from "./shifts-info.logic";
 
 type ScheduleLogicSectionField = {
   rawData?: DataRow[];
@@ -19,10 +19,10 @@ export class ScheduleLogic {
       initializer: ChildrenInfoLogic,
     },
     nurse_info: {
-      initializer: ScheduleInfoLogic,
+      initializer: ShiftsInfoLogic,
     },
     babysitter_info: {
-      initializer: ScheduleInfoLogic,
+      initializer: ShiftsInfoLogic,
     },
   };
   //#endregion
@@ -44,14 +44,19 @@ export class ScheduleLogic {
         year: this.metaData.year,
       },
       shifts: {
-        ...(this.sections["nurse_info"].sectionLogic as ScheduleInfoLogic).asDict(),
-        ...(this.sections["babysitter_info"].sectionLogic as ScheduleInfoLogic).asDict(),
+        ...(this.sections["nurse_info"].sectionLogic as ShiftsInfoLogic).asDict(),
+        ...(this.sections["babysitter_info"].sectionLogic as ShiftsInfoLogic).asDict(),
       },
       month_info: {
         days_of_week: this.metaData.daysOfWeek,
         day_numbers: this.metaData.dayNumbers,
         children_number: (this.sections["children_info"].sectionLogic as ChildrenInfoLogic)
           .registeredChildrenNumber,
+      },
+      employee_info: {
+        babysitterCount: (this.sections["babysitter_info"].sectionLogic as ShiftsInfoLogic)
+          .workersCount,
+        nurseCount: (this.sections["nurse_info"].sectionLogic as ShiftsInfoLogic).workersCount,
       },
     };
   }

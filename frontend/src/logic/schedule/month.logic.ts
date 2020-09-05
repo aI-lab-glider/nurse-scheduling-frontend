@@ -3,7 +3,7 @@ import { DayOfWeek, WeekDays } from "../../state/models/schedule-data/month-info
 
 export class MonthLogic {
   //#region transltaions
-  private monthTranslations = {
+  private static monthTranslations = {
     styczeń: "january",
     luty: "february",
     marzec: "march",
@@ -29,12 +29,18 @@ export class MonthLogic {
   //#endregion
 
   constructor(nameInPolish: string, year: string) {
-    this.month = this.monthTranslations[StringHelper.getRawValue(nameInPolish)];
-    this.monthNumber = Object.values(this.monthTranslations).findIndex((m) => m === this.month);
+    this.month = MonthLogic.monthTranslations[StringHelper.getRawValue(nameInPolish)];
+    this.monthNumber = Object.values(MonthLogic.monthTranslations).findIndex(
+      (m) => m === this.month
+    );
     [this.daysOfWeek, this.dates, this.dayCount] = this.createFullWeekCalendar(this.month, year);
   }
 
   //#region logic
+  public static convertToDate(monthNumber: number, year) {
+    return new Date(`1 ${Object.values(MonthLogic.monthTranslations)[monthNumber]} ${year}`);
+  }
+
   private createFullWeekCalendar(month: string, year: string): [DayOfWeek[], number[], number] {
     let [daysOfWeek, dates, _] = this.createCalendar(month, year);
     [daysOfWeek, dates] = this.trimToFullWeeks(daysOfWeek, dates);
@@ -63,8 +69,9 @@ export class MonthLogic {
 
   private isdDateBelongsToMonth(date: number, month: string, year: string) {
     return (
-      Object.values(this.monthTranslations)[new Date(`${date} ${month} ${year}`).getMonth()] ===
-      month
+      Object.values(MonthLogic.monthTranslations)[
+        new Date(`${date} ${month} ${year}`).getMonth()
+      ] === month
     );
   }
   //#endregion

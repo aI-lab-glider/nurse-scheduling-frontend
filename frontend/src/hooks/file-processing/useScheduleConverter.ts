@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import XLSXParser from "xlsx";
-import { DataRow } from "../../../../logic/schedule/data-row.logic";
-import { ScheduleLogic } from "../../../../logic/schedule/schedule.logic";
-import { ScheduleDataModel } from "../../../../state/models";
+import { DataRow } from "../../logic/schedule/data-row.logic";
+import { ScheduleLogic } from "../../logic/schedule/schedule.logic";
+import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { useFileReader } from "./useFileReader";
 
 export const useScheduleConverter = (): [ScheduleDataModel, (srcFile: File) => void] => {

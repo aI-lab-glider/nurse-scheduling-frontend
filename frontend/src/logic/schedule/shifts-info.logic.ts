@@ -3,7 +3,7 @@ import { Shift } from "../../state/models/schedule-data/shift-info.model";
 import { DataRow } from "./data-row.logic";
 import { MetaDataLogic } from "./metadata.logic";
 
-export class ScheduleInfoLogic implements SectionLogic {
+export class ShiftsInfoLogic implements SectionLogic {
   //#region  members
   data: DataRow[];
   shifts: { [key: string]: Shift[] };
@@ -18,6 +18,10 @@ export class ScheduleInfoLogic implements SectionLogic {
   }
 
   //#endregion
+
+  public get workersCount(): number {
+    return Object.keys(this.shifts).length;
+  }
 
   public asDict() {
     return { ...this.shifts };
