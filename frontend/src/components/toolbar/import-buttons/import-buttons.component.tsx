@@ -9,13 +9,16 @@ import { ActionModel, ScheduleDataModel } from "../../../state/models";
 import { useScheduleConverter } from "./hooks/useScheduleConverter";
 import { ImportButtonsActionType } from "./models/import-buttons-action-type.enum";
 
-
 function ImportButtonsComponent() {
+  //#region members
   const [open, setOpen] = useState(false);
   const [content, setSrcFile] = useScheduleConverter();
   const anchorRef = useRef(null);
-  const scheduleDipatcher = useDispatch();
 
+  //#endregion
+
+  //#region effects
+  const scheduleDipatcher = useDispatch();
   useEffect(() => {
     console.log(content);
     scheduleDipatcher({
@@ -23,7 +26,9 @@ function ImportButtonsComponent() {
       payload: content,
     } as ActionModel<ScheduleDataModel>);
   }, [content, scheduleDipatcher]);
+  //#endregion
 
+  //#region logic
   const handleImport = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target?.files && event.target?.files[0];
     if (file) {
@@ -38,6 +43,8 @@ function ImportButtonsComponent() {
   const handleToggle = () => {
     setOpen((prevVal) => !prevVal);
   };
+  //#endregion
+
   // #region view
   return (
     <React.Fragment>

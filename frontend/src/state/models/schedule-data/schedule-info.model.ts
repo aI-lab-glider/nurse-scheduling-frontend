@@ -1,5 +1,5 @@
 export interface ScheduleInfoModel {
-  UUID: string;
+  UUID?: string;
   month_number: number;
   year: number;
 }
