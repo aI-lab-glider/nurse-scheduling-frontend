@@ -1,1 +1,0 @@
-## Things to know about alhorithm
