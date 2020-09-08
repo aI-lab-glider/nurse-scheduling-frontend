@@ -5,8 +5,8 @@ import { MetaDataLogic } from "./metadata.logic";
 
 export class ShiftsInfoLogic implements SectionLogic {
   //#region  members
-  data: DataRow[];
-  shifts: { [key: string]: Shift[] };
+  private data: DataRow[];
+  private shifts: { [key: string]: Shift[] };
 
   constructor(scheduleInfoSection: DataRow[], metaData: MetaDataLogic) {
     this.data = scheduleInfoSection;
@@ -18,6 +18,16 @@ export class ShiftsInfoLogic implements SectionLogic {
   }
 
   //#endregion
+
+  public asDataRowArray(): DataRow[] {
+    return Object.keys(this.shifts).map((k) => {
+      let row = [k, ...this.shifts[k]];
+      let rowAsObject = row
+        .map((r, i) => ({ [i]: r }))
+        .reduce((prev, curr) => ({ ...prev, ...curr }));
+      return new DataRow(rowAsObject);
+    });
+  }
 
   public get workersCount(): number {
     return Object.keys(this.shifts).length;
