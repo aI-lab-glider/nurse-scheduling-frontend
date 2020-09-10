@@ -23,24 +23,26 @@ export function ProblemMetadataComponent() {
   const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData);
 
   useEffect(() => {
-    let monthNumber = schedule.schedule_info?.month_number;
-    let year = schedule.schedule_info?.year;
-    let nurseCount = schedule.employee_info?.nurseCount;
-    let babysitterCount = schedule.employee_info?.babysitterCount;
-    // children number in first day of month
-    let childrenCount = schedule.month_info?.children_number[0];
+    if (schedule) {
+      let monthNumber = schedule.schedule_info?.month_number;
+      let year = schedule.schedule_info?.year;
+      let nurseCount = schedule.employee_info?.nurseCount;
+      let babysitterCount = schedule.employee_info?.babysitterCount;
+      // children number in first day of month
+      let childrenCount = schedule.month_info?.children_number[0];
 
-    if (monthNumber && year) {
-      handleDateChange(MonthLogic.convertToDate(monthNumber, year));
-    }
-    if (childrenCount) {
-      setNumberOfChildren(childrenCount);
-    }
-    if (babysitterCount) {
-      setNumberOfSitters(babysitterCount);
-    }
-    if (nurseCount) {
-      setNumberOfNurses(nurseCount);
+      if (monthNumber && year) {
+        handleDateChange(MonthLogic.convertToDate(monthNumber, year));
+      }
+      if (childrenCount) {
+        setNumberOfChildren(childrenCount);
+      }
+      if (babysitterCount) {
+        setNumberOfSitters(babysitterCount);
+      }
+      if (nurseCount) {
+        setNumberOfNurses(nurseCount);
+      }
     }
   }, [schedule]);
   //#endregion
@@ -48,9 +50,11 @@ export function ProblemMetadataComponent() {
   //#region handlers
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(schedule);
-    const response = await backend.fixSchedule(schedule);
-    console.log(response);
+    if (schedule) {
+      console.log(schedule);
+      const response = await backend.fixSchedule(schedule);
+      console.log(response);
+    }
   };
   //#endregion
 

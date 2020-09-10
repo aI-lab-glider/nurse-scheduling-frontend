@@ -2,8 +2,9 @@ import { ActionModel } from "../models/action.model";
 import { ScheduleDataModel } from "../models/schedule-data/schedule-data.model";
 
 export enum ScheduleDataActionType {
-  UPDATE = "update",
+  UPDATE = "updateScheduleData",
 }
+
 export function scheduleDataReducer(
   state: ScheduleDataModel = {},
   action: ActionModel<ScheduleDataModel>

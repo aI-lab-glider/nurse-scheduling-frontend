@@ -31,6 +31,12 @@ export class ScheduleLogic {
   private metaData: MetaDataLogic;
   //#endregion
 
+  //#public methods
+
+  public getNurseInfo(): ShiftsInfoLogic {
+    return this.sections["nurse_info"].sectionLogic as ShiftsInfoLogic;
+  }
+
   public findRowByKey(key: string): [DataRow | undefined, number] {
     let index = this.schedule.findIndex((r) => r.matchesRowKey(key));
     let data = this.schedule[index];
@@ -60,7 +66,7 @@ export class ScheduleLogic {
       },
     };
   }
-
+  //#endregion
   //#region initialization
   constructor(schedule: Array<Object>) {
     this.schedule = schedule.map((i) => new DataRow(i));
