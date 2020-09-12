@@ -4,10 +4,13 @@ import TextField from "@material-ui/core/TextField";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import plLocale from "date-fns/locale/pl";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import backend from "../../../api/backend";
 import { MonthLogic } from "../../../logic/schedule/month.logic";
+import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
+import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
 import "./problem-metadata.css";
 
 export function ProblemMetadataComponent() {
@@ -21,6 +24,8 @@ export function ProblemMetadataComponent() {
 
   //#region state interaction
   const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData);
+
+  const dispatcher = useDispatch();
 
   useEffect(() => {
     if (schedule) {
@@ -52,8 +57,11 @@ export function ProblemMetadataComponent() {
     event.preventDefault();
     if (schedule) {
       console.log(schedule);
-      const response = await backend.fixSchedule(schedule);
-      console.log(response);
+      const response = await backend.getErrors(schedule);
+      dispatcher({
+        type: ScheduleErrorActionType.UPDATE,
+        payload: response,
+      } as ActionModel<ScheduleErrorModel[]>);
     }
   };
   //#endregion
