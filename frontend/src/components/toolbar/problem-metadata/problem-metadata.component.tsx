@@ -53,16 +53,35 @@ export function ProblemMetadataComponent() {
   //#endregion
 
   //#region handlers
+
+  // TODO: toast the error messages instead of console logging
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (schedule) {
-      console.log(schedule);
-      const response = await backend.getErrors(schedule);
-      dispatcher({
-        type: ScheduleErrorActionType.UPDATE,
-        payload: response,
-      } as ActionModel<ScheduleErrorModel[]>);
+
+    if (!schedule?.employee_info) {
+      console.log("Missing nurse count or babysitter count in schedule!");
+      return;
     }
+
+    let nurseCount = schedule?.employee_info?.nurseCount;
+    let babysitterCount = schedule?.employee_info?.babysitterCount;
+
+    if (nurseCount > numberOfNurses) {
+      setNumberOfNurses(nurseCount);
+      console.log("Nurse count smaller than scheduled!");
+    }
+
+    if (babysitterCount > numberOfSitters) {
+      setNumberOfSitters(babysitterCount);
+      console.log("Sitter count smaller than scheduled!");
+    }
+
+    console.log(schedule);
+    const response = await backend.getErrors(schedule);
+    dispatcher({
+      type: ScheduleErrorActionType.UPDATE,
+      payload: response,
+    } as ActionModel<ScheduleErrorModel[]>);
   };
   //#endregion
 
