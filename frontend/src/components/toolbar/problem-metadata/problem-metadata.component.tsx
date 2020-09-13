@@ -60,13 +60,12 @@ export function ProblemMetadataComponent() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!schedule?.employee_info?.nurseCount || !schedule?.employee_info?.babysitterCount) {
+    let { nurseCount, babysitterCount, ...rest } = schedule?.employee_info || {};
+
+    if (!nurseCount || !babysitterCount) {
       setOpenMissingWorkerSnackbar(true);
       return;
     }
-
-    let nurseCount = schedule.employee_info.nurseCount;
-    let babysitterCount = schedule.employee_info.babysitterCount;
 
     if (nurseCount > numberOfNurses) {
       setNumberOfNurses(nurseCount);
@@ -79,7 +78,7 @@ export function ProblemMetadataComponent() {
     }
 
     console.log(schedule);
-    const response = await backend.getErrors(schedule);
+    const response = await backend.getErrors(schedule!);
     dispatcher({
       type: ScheduleErrorActionType.UPDATE,
       payload: response,
