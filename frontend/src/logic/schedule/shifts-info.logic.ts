@@ -5,14 +5,16 @@ import { MetaDataLogic } from "./metadata.logic";
 
 export class ShiftsInfoLogic implements SectionLogic {
   //#region  members
-  private data: DataRow[];
+  private rowByKeys: { [key: string]: DataRow } = {};
 
   constructor(scheduleInfoSection: DataRow[], private metaData: MetaDataLogic) {
-    this.data = scheduleInfoSection.map((row) => {
+    let data = scheduleInfoSection.map((row) => {
       row.updateData(this.fillRowWithShifts);
       row.cropData(this.metaData.firsMondayDate, this.metaData.lastSundayDate + 1);
-
       return row;
+    });
+    data.forEach((row) => {
+      this.rowByKeys[row.rowKey] = row;
     });
   }
 
@@ -25,17 +27,25 @@ export class ShiftsInfoLogic implements SectionLogic {
     return this.data.length;
   }
 
+  public get data() {
+    return Object.values(this.rowByKeys);
+  }
+
   public getWorkerShifts(): { [workerName: string]: Shift[] } {
     return this.data
       .map((row) => ({
-        [row.rowKey]: this.fillRowWithShifts(
-          row.rowData(true).slice(this.metaData.firsMondayDate, this.metaData.lastSundayDate + 1)
-        ),
+        [row.rowKey]: this.fillRowWithShifts(row.rowData(true)),
       }))
       .reduce((prev, curr) => ({ ...prev, ...curr }));
   }
 
   //#region logic
+  public tryUpdate(row: DataRow) {
+    if (Object.keys(this.rowByKeys).includes(row.rowKey)) {
+      this.rowByKeys[row.rowKey] = row;
+    }
+  }
+
   private fillRowWithShifts(row: string[]): Shift[] {
     let previousShift: Shift = null;
     return row.map((i) => {

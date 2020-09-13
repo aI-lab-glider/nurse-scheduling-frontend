@@ -36,20 +36,27 @@ export class DataRow {
     this.data = [key, ...this.rowData(true, false).slice(from, to)];
   }
 
-  matchesRowKey(value: string, strict: boolean = false) {
+  public setValue(index: number, value: string) {
+    let key = this.rowKey;
+    let data = this.rowData(true, false);
+    data[index] = value;
+    this.data = [key, ...data];
+  }
+
+  public matchesRowKey(value: string, strict: boolean = false) {
     return strict
       ? !this.isEmpty && this.rowKey === value
       : !this.isEmpty && StringHelper.getRawValue(this.rowKey) === StringHelper.getRawValue(value);
   }
 
-  findValue(key: string) {
+  public findValue(key: string) {
     let data = this.data.find((cell) => StringHelper.includesEquvivalent(cell, key));
     data = StringHelper.getRawValue(data);
     key = StringHelper.getRawValue(key);
     return StringHelper.getRawValue(data.replace(key, ""));
   }
 
-  findValues(...args: string[]): string[] {
+  public findValues(...args: string[]): string[] {
     return args.map((arg) => this.findValue(arg));
   }
 }
