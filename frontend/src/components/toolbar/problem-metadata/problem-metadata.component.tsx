@@ -11,6 +11,7 @@ import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
+import { SnackbarComponent } from "./snackbar.component";
 import "./problem-metadata.css";
 
 export function ProblemMetadataComponent() {
@@ -20,6 +21,9 @@ export function ProblemMetadataComponent() {
   const [numberOfChildren, setNumberOfChildren] = useState<number>(0);
   const [numberOfNurses, setNumberOfNurses] = useState<number>(0);
   const [numberOfSitters, setNumberOfSitters] = useState<number>(0);
+  const [openMissingWorkerSnackbar, setOpenMissingWorkerSnackbar] = useState<boolean>(false);
+  const [openTooFewNursesSnackbar, setOpenTooFewNursesSnackbar] = useState<boolean>(false);
+  const [openTooFewSittersSnackbar, setOpenTooFewSittersSnackbar] = useState<boolean>(false);
   //#endregion
 
   //#region state interaction
@@ -59,7 +63,7 @@ export function ProblemMetadataComponent() {
     event.preventDefault();
 
     if (!schedule?.employee_info?.nurseCount || !schedule?.employee_info?.babysitterCount) {
-      console.log("Missing nurse count or babysitter count in schedule!");
+      setOpenMissingWorkerSnackbar(true);
       return;
     }
 
@@ -68,12 +72,12 @@ export function ProblemMetadataComponent() {
 
     if (nurseCount > numberOfNurses) {
       setNumberOfNurses(nurseCount);
-      console.log("Nurse count smaller than scheduled!");
+      setOpenTooFewNursesSnackbar(true);
     }
 
     if (babysitterCount > numberOfSitters) {
       setNumberOfSitters(babysitterCount);
-      console.log("Sitter count smaller than scheduled!");
+      setOpenTooFewSittersSnackbar(true);
     }
 
     console.log(schedule);
@@ -86,6 +90,10 @@ export function ProblemMetadataComponent() {
   //#endregion
 
   //#region  view
+  function alertSnackbar(message, open, setOpen) {
+    return <SnackbarComponent alertMessage={message} open={open} setOpen={setOpen} key={message} />;
+  }
+
   function textField(id, label, value, setFunction) {
     return (
       <TextField
@@ -129,6 +137,21 @@ export function ProblemMetadataComponent() {
       >
         Poprawić
       </Button>
+      {alertSnackbar(
+        "Wczytany harmonogram nie zawiera ilości pielęgniarek lub opiekunek",
+        openMissingWorkerSnackbar,
+        setOpenMissingWorkerSnackbar
+      )}
+      {alertSnackbar(
+        "Wprowadzono mniej pielęgniarek niż w harmonogramie",
+        openTooFewNursesSnackbar,
+        setOpenTooFewNursesSnackbar
+      )}
+      {alertSnackbar(
+        "Wprowadzono mniej opiekunek niż w harmonogramie",
+        openTooFewSittersSnackbar,
+        setOpenTooFewSittersSnackbar
+      )}
     </form>
   );
   //#endregion
