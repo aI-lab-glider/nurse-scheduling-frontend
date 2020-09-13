@@ -21,9 +21,8 @@ export function ProblemMetadataComponent() {
   const [numberOfChildren, setNumberOfChildren] = useState<number>(0);
   const [numberOfNurses, setNumberOfNurses] = useState<number>(0);
   const [numberOfSitters, setNumberOfSitters] = useState<number>(0);
-  const [openMissingWorkerSnackbar, setOpenMissingWorkerSnackbar] = useState<boolean>(false);
-  const [openTooFewNursesSnackbar, setOpenTooFewNursesSnackbar] = useState<boolean>(false);
-  const [openTooFewSittersSnackbar, setOpenTooFewSittersSnackbar] = useState<boolean>(false);
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   //#endregion
 
   //#region state interaction
@@ -57,24 +56,29 @@ export function ProblemMetadataComponent() {
   //#endregion
 
   //#region handlers
+  function showSnackbar(message) {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    let { nurseCount, babysitterCount, ...rest } = schedule?.employee_info || {};
+    let { nurseCount, babysitterCount } = schedule?.employee_info || {};
 
     if (!nurseCount || !babysitterCount) {
-      setOpenMissingWorkerSnackbar(true);
+      showSnackbar("Wczytany harmonogram nie zawiera ilości pielęgniarek lub opiekunek");
       return;
     }
 
     if (nurseCount > numberOfNurses) {
       setNumberOfNurses(nurseCount);
-      setOpenTooFewNursesSnackbar(true);
+      showSnackbar("Wprowadzono mniej pielęgniarek niż w harmonogramie");
     }
 
     if (babysitterCount > numberOfSitters) {
       setNumberOfSitters(babysitterCount);
-      setOpenTooFewSittersSnackbar(true);
+      showSnackbar("Wprowadzono mniej opiekunek niż w harmonogramie");
     }
 
     console.log(schedule);
@@ -87,10 +91,6 @@ export function ProblemMetadataComponent() {
   //#endregion
 
   //#region  view
-  function alertSnackbar(message, open, setOpen) {
-    return <SnackbarComponent alertMessage={message} open={open} setOpen={setOpen} key={message} />;
-  }
-
   function textField(id, label, value, setFunction) {
     return (
       <TextField
@@ -134,21 +134,12 @@ export function ProblemMetadataComponent() {
       >
         Poprawić
       </Button>
-      {alertSnackbar(
-        "Wczytany harmonogram nie zawiera ilości pielęgniarek lub opiekunek",
-        openMissingWorkerSnackbar,
-        setOpenMissingWorkerSnackbar
-      )}
-      {alertSnackbar(
-        "Wprowadzono mniej pielęgniarek niż w harmonogramie",
-        openTooFewNursesSnackbar,
-        setOpenTooFewNursesSnackbar
-      )}
-      {alertSnackbar(
-        "Wprowadzono mniej opiekunek niż w harmonogramie",
-        openTooFewSittersSnackbar,
-        setOpenTooFewSittersSnackbar
-      )}
+      <SnackbarComponent
+        alertMessage={snackbarMessage}
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
+        key={snackbarMessage}
+      />
     </form>
   );
   //#endregion
