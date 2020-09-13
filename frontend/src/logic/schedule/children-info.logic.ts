@@ -13,11 +13,16 @@ export class ChildrenInfoLogic implements SectionLogic {
   //#endregion
 
   //#region members
+  private data: DataRow[];
   private childrenData: { [key: string]: number[] };
   //#endregion
 
-  constructor(childrenInfoSection: DataRow[], private metaData: MetaDataLogic) {
-    this.childrenData = this.parseInfoSection(childrenInfoSection, metaData);
+  constructor(childrenInfoSection: DataRow[], metaData: MetaDataLogic) {
+    this.data = childrenInfoSection.map((row) => {
+      row.cropData(metaData.firsMondayDate, metaData.lastSundayDate + 1);
+      return row;
+    });
+    this.childrenData = this.parseInfoSection(this.data, metaData);
   }
 
   public get registeredChildrenNumber() {
@@ -25,14 +30,16 @@ export class ChildrenInfoLogic implements SectionLogic {
   }
 
   //#region logic
+  public get sectionData() {
+    return this.data;
+  }
+
   private parseInfoSection(
     childrenInfoSection: DataRow[],
     metaData: MetaDataLogic
   ): { [key: string]: number[] } {
     return childrenInfoSection.reduce((storage, row) => {
-      storage[this.traslations[row.key]] = row
-        .data()
-        .slice(metaData.firsMondayDate, metaData.lastSundayDate + 1);
+      storage[this.traslations[row.rowKey]] = row.rowData(true, false);
       return storage;
     }, {});
   }

@@ -3,17 +3,38 @@ import { DataRow } from "./data-row.logic";
 import { MonthLogic } from "./month.logic";
 
 export class MetaDataLogic {
+  //#region  translations
+  private translations = {
+    month_label: "miesiąc",
+    year_label: "rok",
+    hour_amount_label: "ilość godz",
+    dates_key: "Dni miesiąca",
+    no_metadata_info_msg: "W harmonogramie nie podano danych o roku i miesiącu",
+  };
+  //#endregion
+
   private month: string;
   private hours: string;
   private _year: string;
   private monthLogic: MonthLogic;
 
   constructor(dataRow?: DataRow) {
+    let {
+      no_metadata_info_msg,
+      year_label,
+      hour_amount_label,
+      month_label,
+      ..._
+    } = this.translations;
     if (dataRow) {
-      [this.month, this._year, this.hours] = dataRow.findValues("miesiąc", "rok", "ilość godz");
+      [this.month, this._year, this.hours] = dataRow.findValues(
+        month_label,
+        year_label,
+        hour_amount_label
+      );
       this.monthLogic = new MonthLogic(this.month, this._year);
     } else {
-      throw new Error("No metadata description provided");
+      throw new Error(no_metadata_info_msg);
     }
   }
 
@@ -34,6 +55,17 @@ export class MetaDataLogic {
 
   public get dayNumbers(): number[] {
     return this.monthLogic.dates;
+  }
+
+  public get dayNumbersAsDataRow(): DataRow {
+    let { dates_key, ..._ } = this.translations;
+    let datesAsObject = this.monthLogic.dates.reduce(
+      (storage, date, index) => {
+        return { ...storage, [index + " "]: date };
+      },
+      { key: dates_key }
+    );
+    return new DataRow(datesAsObject);
   }
   /**
    * Counts from 0

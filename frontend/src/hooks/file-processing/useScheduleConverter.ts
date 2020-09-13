@@ -18,11 +18,6 @@ export const useScheduleConverter = (): [
 
   //#region logic
 
-  const cropToData = (scheduleSheet: Array<object>) => {
-    let end = findDataEnd(scheduleSheet);
-    return scheduleSheet.slice(0, end);
-  };
-
   const findDataEnd = (scheduleSheet: Array<object>) => {
     // empty row is a pattern
     let stopPatternLen = 4;
@@ -35,28 +30,33 @@ export const useScheduleConverter = (): [
     return i - stopPatternLen;
   };
 
-  const convertBinaryToObjectArray = (content: ArrayBuffer | undefined): Array<Object> => {
-    if (!content) {
-      return [];
-    }
-
-    let workbook = XLSXParser.read(content, { type: "array" });
-
-    let scheduleSheet = XLSXParser.utils.sheet_to_json(Object.values(workbook.Sheets)[0], {
-      defval: null,
-      header: 1,
-    }) as Array<object>;
-
-    return cropToData(scheduleSheet);
-  };
-
   //#endregion
 
   //#region effects
   useEffect(() => {
+    const cropToData = (scheduleSheet: Array<object>) => {
+      let end = findDataEnd(scheduleSheet);
+      return scheduleSheet.slice(0, end);
+    };
+
+    const convertBinaryToObjectArray = (content: ArrayBuffer | undefined): Array<Object> => {
+      if (!content) {
+        return [];
+      }
+
+      let workbook = XLSXParser.read(content, { type: "array" });
+
+      let scheduleSheet = XLSXParser.utils.sheet_to_json(Object.values(workbook.Sheets)[0], {
+        defval: null,
+        header: 1,
+      }) as Array<object>;
+
+      return cropToData(scheduleSheet);
+    };
+
     let parsedFileContent = convertBinaryToObjectArray(fileContent);
     setScheduleSheet(parsedFileContent);
-    if (Object.keys(parsedFileContent).length != 0) {
+    if (Object.keys(parsedFileContent).length !== 0) {
       const logic = new ScheduleLogic(parsedFileContent as Array<Object>);
       setSchedule(logic.asDict());
     }

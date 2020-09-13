@@ -37,6 +37,17 @@ export class ScheduleLogic {
     return this.sections["nurse_info"].sectionLogic as ShiftsInfoLogic;
   }
 
+  public getChildrenInfo(): ChildrenInfoLogic {
+    return this.sections["children_info"].sectionLogic as ChildrenInfoLogic;
+  }
+
+  public getMetadata(): MetaDataLogic {
+    return this.metaData;
+  }
+  public getBabySitterInfo(): ShiftsInfoLogic {
+    return this.sections["babysitter_info"].sectionLogic as ShiftsInfoLogic;
+  }
+
   public findRowByKey(key: string): [DataRow | undefined, number] {
     let index = this.schedule.findIndex((r) => r.matchesRowKey(key));
     let data = this.schedule[index];
@@ -50,8 +61,8 @@ export class ScheduleLogic {
         year: this.metaData.year,
       },
       shifts: {
-        ...(this.sections["nurse_info"].sectionLogic as ShiftsInfoLogic).asDict(),
-        ...(this.sections["babysitter_info"].sectionLogic as ShiftsInfoLogic).asDict(),
+        ...(this.sections["nurse_info"].sectionLogic as ShiftsInfoLogic).getWorkerShifts(),
+        ...(this.sections["babysitter_info"].sectionLogic as ShiftsInfoLogic).getWorkerShifts(),
       },
       month_info: {
         days_of_week: this.metaData.daysOfWeek,
