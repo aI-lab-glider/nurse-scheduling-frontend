@@ -58,13 +58,13 @@ export function ProblemMetadataComponent() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!schedule?.employee_info) {
+    if (!schedule?.employee_info?.nurseCount || !schedule?.employee_info?.babysitterCount) {
       console.log("Missing nurse count or babysitter count in schedule!");
       return;
     }
 
-    let nurseCount = schedule?.employee_info?.nurseCount;
-    let babysitterCount = schedule?.employee_info?.babysitterCount;
+    let nurseCount = schedule.employee_info.nurseCount;
+    let babysitterCount = schedule.employee_info.babysitterCount;
 
     if (nurseCount > numberOfNurses) {
       setNumberOfNurses(nurseCount);
