@@ -61,13 +61,10 @@ export function ProblemMetadataComponent() {
     setSnackbarOpen(true);
   }
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  function handleNumberOfNursesChange() {
+    let { nurseCount } = schedule?.employee_info || {};
 
-    let { nurseCount, babysitterCount } = schedule?.employee_info || {};
-
-    if (!nurseCount || !babysitterCount) {
-      showSnackbar("Wczytany harmonogram nie zawiera ilości pielęgniarek lub opiekunek");
+    if (!nurseCount) {
       return;
     }
 
@@ -75,23 +72,36 @@ export function ProblemMetadataComponent() {
       setNumberOfNurses(nurseCount);
       showSnackbar("Wprowadzono mniej pielęgniarek niż w harmonogramie");
     }
+  }
+
+  function handleNumberOfSittersChange() {
+    let { babysitterCount } = schedule?.employee_info || {};
+
+    if (!babysitterCount) {
+      return;
+    }
 
     if (babysitterCount > numberOfSitters) {
       setNumberOfSitters(babysitterCount);
       showSnackbar("Wprowadzono mniej opiekunek niż w harmonogramie");
     }
+  }
 
-    console.log(schedule);
-    const response = await backend.getErrors(schedule!);
-    dispatcher({
-      type: ScheduleErrorActionType.UPDATE,
-      payload: response,
-    } as ActionModel<ScheduleErrorModel[]>);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (schedule) {
+      console.log(schedule);
+      const response = await backend.getErrors(schedule!);
+      dispatcher({
+        type: ScheduleErrorActionType.UPDATE,
+        payload: response,
+      } as ActionModel<ScheduleErrorModel[]>);
+    }
   };
   //#endregion
 
   //#region  view
-  function textField(id, label, value, setFunction) {
+  function textField(id, label, value, setFunction, onTextFieldBlur?) {
     return (
       <TextField
         required
@@ -99,6 +109,7 @@ export function ProblemMetadataComponent() {
         label={label}
         value={value}
         onChange={(e) => setFunction(e.target.value)}
+        onBlur={onTextFieldBlur}
       />
     );
   }
@@ -122,8 +133,20 @@ export function ProblemMetadataComponent() {
       </MuiPickersUtilsProvider>
 
       {textField("children", "Ilość dzieci", numberOfChildren, setNumberOfChildren)}
-      {textField("nurses", "Ilość pielęgniarek", numberOfNurses, setNumberOfNurses)}
-      {textField("sitters", "Ilość opiekunek", numberOfSitters, setNumberOfSitters)}
+      {textField(
+        "nurses",
+        "Ilość pielęgniarek",
+        numberOfNurses,
+        setNumberOfNurses,
+        handleNumberOfNursesChange
+      )}
+      {textField(
+        "sitters",
+        "Ilość opiekunek",
+        numberOfSitters,
+        setNumberOfSitters,
+        handleNumberOfSittersChange
+      )}
       <br />
       <Button
         size="small"
