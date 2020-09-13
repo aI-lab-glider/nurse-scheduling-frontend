@@ -57,8 +57,6 @@ export function ProblemMetadataComponent() {
   //#endregion
 
   //#region handlers
-
-  // TODO: toast the error messages instead of console logging
   const handleSubmit = async (event) => {
     event.preventDefault();
 
