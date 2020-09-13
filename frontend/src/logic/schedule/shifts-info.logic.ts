@@ -6,49 +6,43 @@ import { MetaDataLogic } from "./metadata.logic";
 export class ShiftsInfoLogic implements SectionLogic {
   //#region  members
   private data: DataRow[];
-  private shifts: { [key: string]: Shift[] };
 
-  constructor(scheduleInfoSection: DataRow[], metaData: MetaDataLogic) {
-    this.data = scheduleInfoSection;
-    this.shifts = scheduleInfoSection
+  constructor(scheduleInfoSection: DataRow[], private metaData: MetaDataLogic) {
+    this.data = scheduleInfoSection.map((row) => {
+      row.updateData(this.fillRowWithShifts);
+      row.cropData(this.metaData.firsMondayDate, this.metaData.lastSundayDate + 1);
+
+      return row;
+    });
+  }
+
+  //#endregion
+  public get sectionData(): DataRow[] {
+    return this.data;
+  }
+
+  public get workersCount(): number {
+    return this.data.length;
+  }
+
+  public getWorkerShifts(): { [workerName: string]: Shift[] } {
+    return this.data
       .map((row) => ({
-        [row.key]: this.getShiftsFromRow(row, metaData),
+        [row.rowKey]: this.fillRowWithShifts(
+          row.rowData(true).slice(this.metaData.firsMondayDate, this.metaData.lastSundayDate + 1)
+        ),
       }))
       .reduce((prev, curr) => ({ ...prev, ...curr }));
   }
 
-  //#endregion
-
-  public asDataRowArray(): DataRow[] {
-    return Object.keys(this.shifts).map((k) => {
-      let row = [k, ...this.shifts[k]];
-      let rowAsObject = row
-        .map((r, i) => ({ [i]: r }))
-        .reduce((prev, curr) => ({ ...prev, ...curr }));
-      return new DataRow(rowAsObject);
-    });
-  }
-
-  public get workersCount(): number {
-    return Object.keys(this.shifts).length;
-  }
-
-  public asDict() {
-    return { ...this.shifts };
-  }
-
   //#region logic
-  private getShiftsFromRow(row: DataRow, metaData: MetaDataLogic): Shift[] {
-    let shifts: Shift[] = this.fillShiftsRow(
-      row.data(true).slice(metaData.firsMondayDate, metaData.lastSundayDate + 1)
-    );
-    return shifts;
-  }
-
-  private fillShiftsRow(row: string[]): Shift[] {
+  private fillRowWithShifts(row: string[]): Shift[] {
     let previousShift: Shift = null;
     return row.map((i) => {
-      if (i === null) {
+      if (typeof i == "number") {
+        return i;
+      }
+      if (i === null || i === "*") {
         return previousShift || "W";
       }
       switch (i.trim().slice(0, 2).trim()) {
