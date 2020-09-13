@@ -11,6 +11,7 @@ import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
+import { SnackbarComponent } from "./snackbar.component";
 import "./problem-metadata.css";
 
 export function ProblemMetadataComponent() {
@@ -20,6 +21,8 @@ export function ProblemMetadataComponent() {
   const [numberOfChildren, setNumberOfChildren] = useState<number>(0);
   const [numberOfNurses, setNumberOfNurses] = useState<number>(0);
   const [numberOfSitters, setNumberOfSitters] = useState<number>(0);
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   //#endregion
 
   //#region state interaction
@@ -53,11 +56,42 @@ export function ProblemMetadataComponent() {
   //#endregion
 
   //#region handlers
+  function showSnackbar(message) {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  }
+
+  function handleNumberOfNursesChange() {
+    let { nurseCount } = schedule?.employee_info || {};
+
+    if (!nurseCount) {
+      return;
+    }
+
+    if (nurseCount > numberOfNurses) {
+      setNumberOfNurses(nurseCount);
+      showSnackbar("Wprowadzono mniej pielęgniarek niż w harmonogramie");
+    }
+  }
+
+  function handleNumberOfSittersChange() {
+    let { babysitterCount } = schedule?.employee_info || {};
+
+    if (!babysitterCount) {
+      return;
+    }
+
+    if (babysitterCount > numberOfSitters) {
+      setNumberOfSitters(babysitterCount);
+      showSnackbar("Wprowadzono mniej opiekunek niż w harmonogramie");
+    }
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (schedule) {
       console.log(schedule);
-      const response = await backend.getErrors(schedule);
+      const response = await backend.getErrors(schedule!);
       dispatcher({
         type: ScheduleErrorActionType.UPDATE,
         payload: response,
@@ -67,7 +101,7 @@ export function ProblemMetadataComponent() {
   //#endregion
 
   //#region  view
-  function textField(id, label, value, setFunction) {
+  function textField(id, label, value, setFunction, onTextFieldBlur?) {
     return (
       <TextField
         required
@@ -75,6 +109,7 @@ export function ProblemMetadataComponent() {
         label={label}
         value={value}
         onChange={(e) => setFunction(e.target.value)}
+        onBlur={onTextFieldBlur}
       />
     );
   }
@@ -98,8 +133,20 @@ export function ProblemMetadataComponent() {
       </MuiPickersUtilsProvider>
 
       {textField("children", "Ilość dzieci", numberOfChildren, setNumberOfChildren)}
-      {textField("nurses", "Ilość pielęgniarek", numberOfNurses, setNumberOfNurses)}
-      {textField("sitters", "Ilość opiekunek", numberOfSitters, setNumberOfSitters)}
+      {textField(
+        "nurses",
+        "Ilość pielęgniarek",
+        numberOfNurses,
+        setNumberOfNurses,
+        handleNumberOfNursesChange
+      )}
+      {textField(
+        "sitters",
+        "Ilość opiekunek",
+        numberOfSitters,
+        setNumberOfSitters,
+        handleNumberOfSittersChange
+      )}
       <br />
       <Button
         size="small"
@@ -110,6 +157,12 @@ export function ProblemMetadataComponent() {
       >
         Poprawić
       </Button>
+      <SnackbarComponent
+        alertMessage={snackbarMessage}
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
+        key={snackbarMessage}
+      />
     </form>
   );
   //#endregion
