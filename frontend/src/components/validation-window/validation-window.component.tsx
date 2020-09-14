@@ -3,10 +3,11 @@ import { useSelector } from "react-redux";
 
 import Alert from "@material-ui/lab/Alert";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
+import { ScheduleErrorMessageModel } from "../../state/models/schedule-data/schedule-error-message.model";
 
 export function ValidationWindowComponent() {
   //#region members
-  const [errors, setErrors] = useState();
+  const [errors, setErrors] = useState<ScheduleErrorMessageModel[]>();
   //#endregion
 
   //#region state interaction
@@ -14,23 +15,18 @@ export function ValidationWindowComponent() {
 
   useEffect(() => {
     if (errors_received) {
-      console.log("Got errors!");
-      console.log(errors_received);
+      setErrors(errors_received);
     }
   }, [errors_received]);
 
   //#endregion
 
   //#region view
-  function error(message) {
+
+  function alert(message) {
     return <Alert severity="warning">{message}</Alert>;
   }
 
-  return (
-    <div>
-      {error("Brakuje 3 pielęgniarek na zmianie dziennej dnia 17!")}
-      {error("bleblepleple")}
-    </div>
-  );
+  return <div>{errors?.map((r) => alert(r.message))}</div>;
   //#endregion
 }
