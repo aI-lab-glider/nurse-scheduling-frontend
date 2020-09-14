@@ -1,4 +1,5 @@
 import { SectionLogic } from "../../helpers/section.model";
+import { StringHelper } from "../../helpers/string.helper";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row.logic";
@@ -13,7 +14,6 @@ type ScheduleLogicSectionField = {
 
 export class ScheduleLogic {
   //#region members
-  //#region schedule sections
   private readonly sections: { [key: string]: ScheduleLogicSectionField } = {
     children_info: {
       initializer: ChildrenInfoLogic,
@@ -25,11 +25,16 @@ export class ScheduleLogic {
       initializer: ShiftsInfoLogic,
     },
   };
-  //#endregion
   private metaData: MetaDataLogic;
   //#endregion
 
-  //#public methods
+  constructor(schedule: Array<Object>) {
+    schedule = schedule.map((i) => new DataRow(i));
+    [this.metaData, schedule] = this.initMetadataAndCleanUp(schedule as DataRow[]);
+    this.sections = this.initSections(schedule as DataRow[], this.metaData);
+  }
+
+  //#region logic
 
   public getNurseInfo(): ShiftsInfoLogic {
     return this.sections["nurse_info"].sectionLogic as ShiftsInfoLogic;
@@ -47,7 +52,10 @@ export class ScheduleLogic {
   }
 
   public findRowByKey(schedule, key: string): [DataRow | undefined, number] {
-    let index = schedule.findIndex((r) => r.matchesRowKey(key));
+    let index = schedule.findIndex(
+      (row) =>
+        !row.isEmpty && StringHelper.getRawValue(row.rowKey) === StringHelper.getRawValue(key)
+    );
     let data = schedule[index];
     return [data, index];
   }
@@ -84,13 +92,8 @@ export class ScheduleLogic {
     };
   }
   //#endregion
-  //#region initialization
-  constructor(schedule: Array<Object>) {
-    schedule = schedule.map((i) => new DataRow(i));
-    [this.metaData, schedule] = this.initMetadataAndCleanUp(schedule as DataRow[]);
-    this.initSections(schedule as DataRow[])
-  }
 
+  //#region parser
   private initMetadataAndCleanUp(rawData: DataRow[]): [MetaDataLogic, DataRow[]] {
     let metaDataKey = "Grafik";
     let [dataRow, start] = this.findRowByKey(rawData, metaDataKey);
@@ -99,44 +102,46 @@ export class ScheduleLogic {
     return [new MetaDataLogic(dataRow), schedule];
   }
 
-  private initSections(schedule: DataRow[]) {
+  private initSections(schedule: DataRow[], metaData: MetaDataLogic) {
     const childrenSectionData = this.findChildrenSection(schedule);
-    this.sections["children_info"] = {
+    const sections = {};
+    sections["children_info"] = {
       rawData: childrenSectionData,
-      sectionLogic: new ChildrenInfoLogic(childrenSectionData, this.metaData),
+      sectionLogic: new ChildrenInfoLogic(childrenSectionData, metaData),
       initializer: ChildrenInfoLogic,
-    }
+    };
 
-    const [ nurseSectionData, nurseEndIdx ]  = this.findShiftSection(schedule)
-    this.sections["nurse_info"] = {
+    const [nurseSectionData, nurseEndIdx] = this.findShiftSection(schedule);
+    sections["nurse_info"] = {
       rawData: nurseSectionData,
-      sectionLogic: new ShiftsInfoLogic(nurseSectionData, this.metaData),
+      sectionLogic: new ShiftsInfoLogic(nurseSectionData, metaData),
       initializer: ShiftsInfoLogic,
-    }
+    };
 
-    const [ babysitterData ]  = this.findShiftSection(schedule.slice(nurseEndIdx + 1))
-    this.sections["babysitter_info"] = {
+    const [babysitterData] = this.findShiftSection(schedule.slice(nurseEndIdx + 1));
+    sections["babysitter_info"] = {
       rawData: babysitterData,
-      sectionLogic: new ShiftsInfoLogic(babysitterData, this.metaData),
+      sectionLogic: new ShiftsInfoLogic(babysitterData, metaData),
       initializer: ShiftsInfoLogic,
-    }
+    };
+    return sections;
   }
   //#endregion
 
   //#region find shift section logic
-  private findShiftSection(rawData: DataRow[]) : [DataRow[], number] {
-    const sectionData: DataRow[] = []
+  private findShiftSection(rawData: DataRow[]): [DataRow[], number] {
+    const sectionData: DataRow[] = [];
 
-    let sectionDataIdx = rawData.findIndex(rawData => rawData.isShiftRow)
-    if(sectionDataIdx === -1 ){
+    let sectionDataIdx = rawData.findIndex((rawData) => rawData.isShiftRow);
+    if (sectionDataIdx === -1) {
       throw new Error("Cannot find section beginning");
     }
-    while (rawData[sectionDataIdx].isShiftRow){
-      sectionData.push(rawData[sectionDataIdx])
-      sectionDataIdx++
+    while (rawData[sectionDataIdx].isShiftRow) {
+      sectionData.push(rawData[sectionDataIdx]);
+      sectionDataIdx++;
     }
     const dataEndIdx = sectionDataIdx;
-    return [sectionData, dataEndIdx]
+    return [sectionData, dataEndIdx];
   }
   //#endregion
 

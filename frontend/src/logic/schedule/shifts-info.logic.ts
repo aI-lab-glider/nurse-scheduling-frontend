@@ -19,6 +19,7 @@ export class ShiftsInfoLogic implements SectionLogic {
   }
 
   //#endregion
+  //#region logic
   public get sectionData(): DataRow[] {
     return this.data;
   }
@@ -39,12 +40,14 @@ export class ShiftsInfoLogic implements SectionLogic {
       .reduce((prev, curr) => ({ ...prev, ...curr }));
   }
 
-  //#region logic
   public tryUpdate(row: DataRow) {
     if (Object.keys(this.rowByKeys).includes(row.rowKey)) {
       this.rowByKeys[row.rowKey] = row;
     }
   }
+  //#endregion
+
+  //#region parser
 
   private fillRowWithShifts(row: string[]): Shift[] {
     let previousShift: Shift = null;

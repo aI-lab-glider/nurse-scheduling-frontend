@@ -49,7 +49,9 @@ export class ChildrenInfoLogic implements SectionLogic {
       this.rowByKeys[row.rowKey] = row;
     }
   }
+  //#endregion
 
+  //#region parser
   private parseInfoSection(
     childrenInfoSection: DataRow[],
     metaData: MetaDataLogic

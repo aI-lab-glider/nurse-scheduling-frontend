@@ -27,7 +27,7 @@ export function ShiftCellComponent({ value, className = "", onDataChange }: Cell
 
   useEffect(() => {
     setStyle(`${className} ${shift}`);
-  }, [shift]);
+  }, [shift, className]);
 
   return (
     <BaseCellComponent
