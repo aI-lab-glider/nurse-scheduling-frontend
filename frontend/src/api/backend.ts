@@ -13,14 +13,39 @@ class Backend {
   }
 
   // TODO: add mapping logic for various error codes and responses
-  mapErrorResponseToErrorMessage(errorResponse: ScheduleErrorModel): ScheduleErrorMessageModel {
-    return {
-      code: errorResponse.code,
-      message: errorResponse.code,
-    };
+  mapErrorResponseToErrorMessage(error: ScheduleErrorModel): ScheduleErrorMessageModel {
+    const code = error.code;
+
+    let message = "";
+
+    switch (code) {
+      case "AON":
+        message = `Brak pielęgniarek w dniu ${error.day} na zmianie ${error.day_time}`;
+        break;
+      case "WND":
+        message = `Za mało pracowników w trakcie dnia w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
+        break;
+      case "WNN":
+        message = `Za mało pracowników w nocy w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
+        break;
+      case "DSS":
+        message = `Niedozwolona sekwencja zmian dla pracownika ${error.worker} w dniu ${error.day}: ${error.succeeding} po ${error.preceding}`;
+        break;
+      case "LLB":
+        message = `Brak wymaganej długiej przerwy dla pracownika ${error.worker} w tygodniu ${error.week}`;
+        break;
+      case "WUH":
+        message = `Pracownik ${error.worker} ma ${error.hours} niedogodzin`;
+        break;
+      case "WOH":
+        message = `Pracownik ${error.worker} ma ${error.hours} nadgodzin`;
+        break;
+    }
+
+    return { code, message };
   }
 
-  getErrors(schedule: ScheduleDataModel): Promise<ScheduleErrorModel[]> {
+  getErrors(schedule: ScheduleDataModel): Promise<ScheduleErrorMessageModel[]> {
     return this.axios
       .post("/schedule_errors/", schedule)
       .then((resp) => resp.data.map(this.mapErrorResponseToErrorMessage));
