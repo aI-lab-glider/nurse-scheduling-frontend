@@ -1,4 +1,5 @@
 import { SectionLogic } from "../../helpers/section.model";
+import { StringHelper } from "../../helpers/string.helper";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row.logic";
@@ -13,7 +14,6 @@ type ScheduleLogicSectionField = {
 
 export class ScheduleLogic {
   //#region members
-  //#region schedule sections
   private readonly sections: { [key: string]: ScheduleLogicSectionField } = {
     children_info: {
       initializer: ChildrenInfoLogic,
@@ -25,11 +25,16 @@ export class ScheduleLogic {
       initializer: ShiftsInfoLogic,
     },
   };
-  //#endregion
   private metaData: MetaDataLogic;
   //#endregion
 
-  //#public methods
+  constructor(schedule: Array<Object>) {
+    schedule = schedule.map((i) => new DataRow(i));
+    [this.metaData, schedule] = this.initMetadataAndCleanUp(schedule as DataRow[]);
+    this.sections = this.initSections(schedule as DataRow[], this.metaData);
+  }
+
+  //#region logic
 
   public getNurseInfo(): ShiftsInfoLogic {
     return this.sections["nurse_info"].sectionLogic as ShiftsInfoLogic;
@@ -47,7 +52,10 @@ export class ScheduleLogic {
   }
 
   public findRowByKey(schedule, key: string): [DataRow | undefined, number] {
-    let index = schedule.findIndex((r) => r.matchesRowKey(key));
+    let index = schedule.findIndex(
+      (row) =>
+        !row.isEmpty && StringHelper.getRawValue(row.rowKey) === StringHelper.getRawValue(key)
+    );
     let data = schedule[index];
     return [data, index];
   }
@@ -84,13 +92,8 @@ export class ScheduleLogic {
     };
   }
   //#endregion
-  //#region initialization
-  constructor(schedule: Array<Object>) {
-    schedule = schedule.map((i) => new DataRow(i));
-    [this.metaData, schedule] = this.initMetadataAndCleanUp(schedule as DataRow[]);
-    this.sections = this.initSections(schedule as DataRow[], this.metaData);
-  }
 
+  //#region parser
   private initSections(rawData: DataRow[], metadata: MetaDataLogic) {
     let sectionsCount = Object.keys(this.sections).length;
     let rawDataBySections = this.cropSections(rawData, sectionsCount);
@@ -116,12 +119,10 @@ export class ScheduleLogic {
     let schedule = rawData.slice(start + notSectionsRowsCountFromBeginning);
     return [new MetaDataLogic(dataRow), schedule];
   }
-  //#endregion
 
-  //#region crop logic
   private cropSection(schedule: DataRow[]): [DataRow[], DataRow[]] {
-    let start = schedule.findIndex((r) => !r.isEmpty);
-    let end = schedule.findIndex((r, index) => index > start && r.isEmpty);
+    let start = schedule.findIndex((row) => !row.isEmpty);
+    let end = schedule.findIndex((row, index) => index > start && row.isEmpty);
     return [schedule.slice(start, end), schedule.slice(end)];
   }
 

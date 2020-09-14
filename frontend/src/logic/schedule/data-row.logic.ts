@@ -43,12 +43,6 @@ export class DataRow {
     this.data = [key, ...data];
   }
 
-  public matchesRowKey(value: string, strict: boolean = false) {
-    return strict
-      ? !this.isEmpty && this.rowKey === value
-      : !this.isEmpty && StringHelper.getRawValue(this.rowKey) === StringHelper.getRawValue(value);
-  }
-
   public findValue(key: string) {
     let data = this.data.find((cell) => StringHelper.includesEquvivalent(cell, key));
     data = StringHelper.getRawValue(data);
