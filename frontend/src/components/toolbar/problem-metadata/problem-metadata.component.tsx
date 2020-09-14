@@ -11,14 +11,13 @@ import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
-import { SnackbarComponent } from "./snackbar.component";
 import "./problem-metadata.css";
+import { SnackbarComponent } from "./snackbar.component";
 
 export function ProblemMetadataComponent() {
   //#region members
 
   const [selectedDate, handleDateChange] = useState<Date>(new Date());
-  const [numberOfChildren, setNumberOfChildren] = useState<number>(0);
   const [numberOfNurses, setNumberOfNurses] = useState<number>(0);
   const [numberOfSitters, setNumberOfSitters] = useState<number>(0);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
@@ -32,19 +31,13 @@ export function ProblemMetadataComponent() {
 
   useEffect(() => {
     if (schedule) {
-      let monthNumber = schedule.schedule_info?.month_number;
-      let year = schedule.schedule_info?.year;
-      let nurseCount = schedule.employee_info?.nurseCount;
-      let babysitterCount = schedule.employee_info?.babysitterCount;
-      // children number in first day of month
-      let childrenCount = schedule.month_info?.children_number[0];
+      let { year, month_number } = schedule.schedule_info || {};
+      let { babysitterCount, nurseCount } = schedule.employee_info || {};
 
-      if (monthNumber && year) {
-        handleDateChange(MonthLogic.convertToDate(monthNumber, year));
+      if (month_number && year) {
+        handleDateChange(MonthLogic.convertToDate(month_number, year));
       }
-      if (childrenCount) {
-        setNumberOfChildren(childrenCount);
-      }
+
       if (babysitterCount) {
         setNumberOfSitters(babysitterCount);
       }
@@ -132,7 +125,6 @@ export function ProblemMetadataComponent() {
         />
       </MuiPickersUtilsProvider>
 
-      {textField("children", "Ilość dzieci", numberOfChildren, setNumberOfChildren)}
       {textField(
         "nurses",
         "Ilość pielęgniarek",

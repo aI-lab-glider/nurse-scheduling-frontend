@@ -4,6 +4,7 @@ import { MetaDataLogic } from "./metadata.logic";
 
 export class ChildrenInfoLogic implements SectionLogic {
   //#region translations
+  // TODO refactor
   private traslations = {
     "liczba dzieci zarejestrowanych": "registered_children_count",
     "liczba dzieci hospitalizowanych": "hospitalized_children_count",
@@ -13,25 +14,40 @@ export class ChildrenInfoLogic implements SectionLogic {
   //#endregion
 
   //#region members
-  private data: DataRow[];
   private childrenData: { [key: string]: number[] };
+  private rowByKeys: { [key: string]: DataRow } = {};
   //#endregion
 
   constructor(childrenInfoSection: DataRow[], metaData: MetaDataLogic) {
-    this.data = childrenInfoSection.map((row) => {
+    let data = childrenInfoSection.map((row) => {
       row.cropData(metaData.firsMondayDate, metaData.lastSundayDate + 1);
       return row;
     });
+    data.forEach((row) => {
+      this.rowByKeys[row.rowKey] = row;
+    });
     this.childrenData = this.parseInfoSection(this.data, metaData);
+  }
+  public get data() {
+    return Object.values(this.rowByKeys);
   }
 
   public get registeredChildrenNumber() {
-    return this.childrenData["registered_children_count"];
+    // TODO refactor
+    return this.rowByKeys["liczba dzieci zarejestrowanych"]
+      .rowData(true, false)
+      .map((i) => parseInt(i));
   }
 
   //#region logic
   public get sectionData() {
     return this.data;
+  }
+
+  public tryUpdate(row: DataRow) {
+    if (Object.keys(this.rowByKeys).includes(row.rowKey)) {
+      this.rowByKeys[row.rowKey] = row;
+    }
   }
 
   private parseInfoSection(

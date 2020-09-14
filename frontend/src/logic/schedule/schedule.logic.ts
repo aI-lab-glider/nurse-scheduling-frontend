@@ -26,8 +26,6 @@ export class ScheduleLogic {
     },
   };
   //#endregion
-
-  private schedule: DataRow[];
   private metaData: MetaDataLogic;
   //#endregion
 
@@ -48,10 +46,18 @@ export class ScheduleLogic {
     return this.sections["babysitter_info"].sectionLogic as ShiftsInfoLogic;
   }
 
-  public findRowByKey(key: string): [DataRow | undefined, number] {
-    let index = this.schedule.findIndex((r) => r.matchesRowKey(key));
-    let data = this.schedule[index];
+  public findRowByKey(schedule, key: string): [DataRow | undefined, number] {
+    let index = schedule.findIndex((r) => r.matchesRowKey(key));
+    let data = schedule[index];
     return [data, index];
+  }
+
+  public updateRow(row: DataRow) {
+    Object.values(this.sections)
+      .map((s) => s.sectionLogic)
+      .forEach((logic) => {
+        logic && logic.tryUpdate(row);
+      });
   }
 
   public asDict(): ScheduleDataModel {
@@ -80,14 +86,14 @@ export class ScheduleLogic {
   //#endregion
   //#region initialization
   constructor(schedule: Array<Object>) {
-    this.schedule = schedule.map((i) => new DataRow(i));
-    [this.metaData, this.schedule] = this.initMetadataAndCleanUp(this.schedule);
-    this.sections = this.initSections(this.schedule, this.metaData);
+    schedule = schedule.map((i) => new DataRow(i));
+    [this.metaData, schedule] = this.initMetadataAndCleanUp(schedule as DataRow[]);
+    this.sections = this.initSections(schedule as DataRow[], this.metaData);
   }
 
   private initSections(rawData: DataRow[], metadata: MetaDataLogic) {
     let sectionsCount = Object.keys(this.sections).length;
-    let rawDataBySections = this.cropSections(sectionsCount);
+    let rawDataBySections = this.cropSections(rawData, sectionsCount);
     let initializedSections = {};
     Object.keys(this.sections).forEach((key, index) => {
       let rawData = rawDataBySections[index];
@@ -105,7 +111,7 @@ export class ScheduleLogic {
 
   private initMetadataAndCleanUp(rawData: DataRow[]): [MetaDataLogic, DataRow[]] {
     let metaDataKey = "Grafik";
-    let [dataRow, start] = this.findRowByKey(metaDataKey);
+    let [dataRow, start] = this.findRowByKey(rawData, metaDataKey);
     let notSectionsRowsCountFromBeginning = 3;
     let schedule = rawData.slice(start + notSectionsRowsCountFromBeginning);
     return [new MetaDataLogic(dataRow), schedule];
@@ -119,8 +125,7 @@ export class ScheduleLogic {
     return [schedule.slice(start, end), schedule.slice(end)];
   }
 
-  private cropSections(amount: number, offset: number = 0): DataRow[][] {
-    let schedule = this.schedule;
+  private cropSections(schedule: DataRow[], amount: number, offset: number = 0): DataRow[][] {
     let result: DataRow[][] = [];
     for (let i = 0; i < amount; ++i) {
       if (i >= offset) {
