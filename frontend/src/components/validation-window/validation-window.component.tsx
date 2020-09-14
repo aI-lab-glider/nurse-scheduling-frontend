@@ -15,6 +15,7 @@ export function ValidationWindowComponent() {
   useEffect(() => {
     if (errors_received) {
       console.log("Got errors!");
+      console.log(errors_received);
     }
   }, [errors_received]);
 
