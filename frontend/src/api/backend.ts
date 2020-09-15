@@ -12,15 +12,22 @@ class Backend {
     });
   }
 
-  // TODO: add mapping logic for various error codes and responses
   mapErrorResponseToErrorMessage(error: ScheduleErrorModel): ScheduleErrorMessageModel {
+    const dayTimeTranslations = {
+      MORNING: "porannej",
+      AFTERNOON: "popołudniowej",
+      NIGHT: "nocnej",
+    };
+
     const code = error.code;
 
     let message = "";
 
     switch (code) {
       case "AON":
-        message = `Brak pielęgniarek w dniu ${error.day} na zmianie ${error.day_time}`;
+        message = `Brak pielęgniarek w dniu ${error.day} na zmianie ${
+          error.day_time ? dayTimeTranslations[error.day_time] : ""
+        }`;
         break;
       case "WND":
         message = `Za mało pracowników w trakcie dnia w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
