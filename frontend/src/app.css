@@ -9,10 +9,6 @@
   justify-content: flex-start;
 }
 
-.cols-3-to-1 :nth-child(1) {
-  flex-grow: 3;
-}
-
 .flex {
   display: flex;
 }

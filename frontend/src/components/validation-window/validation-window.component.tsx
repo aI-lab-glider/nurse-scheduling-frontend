@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-
 import Alert from "@material-ui/lab/Alert";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
 import { ScheduleErrorMessageModel } from "../../state/models/schedule-data/schedule-error-message.model";
 
@@ -23,10 +22,14 @@ export function ValidationWindowComponent() {
 
   //#region view
 
-  function alert(message) {
-    return <Alert severity="warning">{message}</Alert>;
+  function alert(message, index) {
+    return (
+      <Alert key={index + message.slice(0, 5)} variant="outlined" severity="warning">
+        {message}
+      </Alert>
+    );
   }
 
-  return <div>{errors?.map((r) => alert(r.message))}</div>;
+  return <div className="content-box">{errors?.map((r, index) => alert(r.message, index))}</div>;
   //#endregion
 }
