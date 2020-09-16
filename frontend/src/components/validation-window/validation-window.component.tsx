@@ -24,7 +24,11 @@ export function ValidationWindowComponent() {
   //#region view
 
   function alert(message) {
-    return <Alert severity="warning">{message}</Alert>;
+    return (
+      <Alert variant="outlined" severity="warning">
+        {message}
+      </Alert>
+    );
   }
 
   return <div>{errors?.map((r) => alert(r.message))}</div>;
