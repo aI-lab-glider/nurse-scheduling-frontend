@@ -1,12 +1,16 @@
 import { StringHelper } from "../../helpers/string.helper";
+import { ShiftCode } from "../../state/models/schedule-data/shift-info.model";
 
 export class DataRow {
   private data: string[];
+  public isShiftRow: boolean;
 
   constructor(data: Object) {
     this.data = Object.values(data);
+    this.isShiftRow = this.checkShiftRowPattern()
   }
 
+  //#public methods
   public get isEmpty() {
     return this.rowData(false, true).length === 0;
   }
@@ -59,4 +63,37 @@ export class DataRow {
   public findValues(...args: string[]): string[] {
     return args.map((arg) => this.findValue(arg));
   }
+  //#endregion
+
+  //# row check region
+  private checkShiftRowPattern(): boolean {
+    const containsNotEmptyKey = this.data[0] != null && this.data[0] != "";
+
+    let shiftCodesList = Object.keys(ShiftCode)
+        .map(k => ShiftCode[k as any])
+    let containsAnyShiftCode = false;
+    shiftCodesList.forEach(shift => {
+      if(this.data.includes(shift)){
+        containsAnyShiftCode = true;
+      }
+    })
+
+    const dataLen = this.data.length
+    const hoursCellsNumber = 3
+    if(this.data.length < hoursCellsNumber){
+      return false
+    }
+    let containsHoursInfo = true;
+    for(let i = 1; i<hoursCellsNumber + 1; i++){
+      if(typeof this.data[dataLen - i] !== 'number'){
+        containsHoursInfo = false
+      }
+    }
+
+    return containsNotEmptyKey &&
+        containsAnyShiftCode &&
+        containsHoursInfo
+  }
+  //#endregion
+
 }

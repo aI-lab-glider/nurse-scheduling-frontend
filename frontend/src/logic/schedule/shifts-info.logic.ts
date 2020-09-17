@@ -55,6 +55,7 @@ export class ShiftsInfoLogic implements SectionLogic {
       if (i === null || i === "*") {
         return previousShift || "W";
       }
+      // TODO: What about RPN?
       switch (i.trim().slice(0, 2).trim()) {
         case "L4":
           previousShift = previousShift === "L4" ? null : "L4";

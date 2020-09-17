@@ -60,7 +60,7 @@ export class ScheduleLogic {
       });
   }
 
-  public asDict(): ScheduleDataModel {
+  public getScheduleModel(): ScheduleDataModel {
     return {
       schedule_info: {
         month_number: this.metaData.monthNumber,
@@ -88,25 +88,7 @@ export class ScheduleLogic {
   constructor(schedule: Array<Object>) {
     schedule = schedule.map((i) => new DataRow(i));
     [this.metaData, schedule] = this.initMetadataAndCleanUp(schedule as DataRow[]);
-    this.sections = this.initSections(schedule as DataRow[], this.metaData);
-  }
-
-  private initSections(rawData: DataRow[], metadata: MetaDataLogic) {
-    let sectionsCount = Object.keys(this.sections).length;
-    let rawDataBySections = this.cropSections(rawData, sectionsCount);
-    let initializedSections = {};
-    Object.keys(this.sections).forEach((key, index) => {
-      let rawData = rawDataBySections[index];
-      let initializer = this.sections[key].initializer;
-
-      initializedSections[key] = {
-        rawData: rawData,
-        sectionLogic: new initializer(rawData, metadata),
-        initializer: initializer,
-      } as ScheduleLogicSectionField;
-    });
-
-    return initializedSections;
+    this.initSections(schedule as DataRow[])
   }
 
   private initMetadataAndCleanUp(rawData: DataRow[]): [MetaDataLogic, DataRow[]] {
@@ -116,25 +98,54 @@ export class ScheduleLogic {
     let schedule = rawData.slice(start + notSectionsRowsCountFromBeginning);
     return [new MetaDataLogic(dataRow), schedule];
   }
+
+  private initSections(schedule: DataRow[]) {
+    const childrenSectionData = this.findChildrenSection(schedule);
+    this.sections["children_info"] = {
+      rawData: childrenSectionData,
+      sectionLogic: new ChildrenInfoLogic(childrenSectionData, this.metaData),
+      initializer: ChildrenInfoLogic,
+    }
+
+    const [ nurseSectionData, nurseEndIdx ]  = this.findShiftSection(schedule)
+    this.sections["nurse_info"] = {
+      rawData: nurseSectionData,
+      sectionLogic: new ShiftsInfoLogic(nurseSectionData, this.metaData),
+      initializer: ShiftsInfoLogic,
+    }
+
+    const [ babysitterData ]  = this.findShiftSection(schedule.slice(nurseEndIdx + 1))
+    this.sections["babysitter_info"] = {
+      rawData: babysitterData,
+      sectionLogic: new ShiftsInfoLogic(babysitterData, this.metaData),
+      initializer: ShiftsInfoLogic,
+    }
+  }
   //#endregion
 
-  //#region crop logic
-  private cropSection(schedule: DataRow[]): [DataRow[], DataRow[]] {
+  //#region find shift section logic
+  private findShiftSection(rawData: DataRow[]) : [DataRow[], number] {
+    const sectionData: DataRow[] = []
+
+    let sectionDataIdx = rawData.findIndex(rawData => rawData.isShiftRow)
+    if(sectionDataIdx === -1 ){
+      throw new Error("Cannot find section beginning");
+    }
+    while (rawData[sectionDataIdx].isShiftRow){
+      sectionData.push(rawData[sectionDataIdx])
+      sectionDataIdx++
+    }
+    const dataEndIdx = sectionDataIdx;
+    return [sectionData, dataEndIdx]
+  }
+  //#endregion
+
+  //#region find children section
+  private findChildrenSection(schedule: DataRow[]): DataRow[] {
     let start = schedule.findIndex((r) => !r.isEmpty);
     let end = schedule.findIndex((r, index) => index > start && r.isEmpty);
-    return [schedule.slice(start, end), schedule.slice(end)];
+    return schedule.slice(start, end);
   }
 
-  private cropSections(schedule: DataRow[], amount: number, offset: number = 0): DataRow[][] {
-    let result: DataRow[][] = [];
-    for (let i = 0; i < amount; ++i) {
-      if (i >= offset) {
-        let [section, reduced_schedule] = this.cropSection(schedule);
-        schedule = reduced_schedule;
-        result.push(section);
-      }
-    }
-    return result;
-  }
   //#endregion
 }
