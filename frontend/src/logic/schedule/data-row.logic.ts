@@ -65,19 +65,13 @@ export class DataRow {
   }
   //#endregion
 
-  //# row check region
+  //#region row check region
   private checkShiftRowPattern(): boolean {
     const containsNotEmptyKey = this.data[0] != null && this.data[0] != "";
 
-    let shiftCodesList = Object.keys(ShiftCode)
-        .map(k => ShiftCode[k as any])
-    let containsAnyShiftCode = false;
-    shiftCodesList.forEach(shift => {
-      if(this.data.includes(shift)){
-        containsAnyShiftCode = true;
-      }
-    })
+    let containsShiftCode = this.data.filter( c => c in ShiftCode).length != 0
 
+    // TODO: Validate constraint with new schedules
     const dataLen = this.data.length
     const hoursCellsNumber = 3
     if(this.data.length < hoursCellsNumber){
@@ -91,7 +85,7 @@ export class DataRow {
     }
 
     return containsNotEmptyKey &&
-        containsAnyShiftCode &&
+        containsShiftCode &&
         containsHoursInfo
   }
   //#endregion
