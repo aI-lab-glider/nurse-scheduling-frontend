@@ -58,7 +58,7 @@ export const useScheduleConverter = (): [
     setScheduleSheet(parsedFileContent);
     if (Object.keys(parsedFileContent).length !== 0) {
       const logic = new ScheduleLogic(parsedFileContent as Array<Object>);
-      setSchedule(logic.asDict());
+      setSchedule(logic.getScheduleModel());
     }
   }, [fileContent]);
   //#endregion

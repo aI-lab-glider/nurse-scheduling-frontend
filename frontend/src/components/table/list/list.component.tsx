@@ -31,7 +31,7 @@ function ListComponent() {
     scheduleLogicRef.current?.updateRow(row);
     dispatcher({
       type: ScheduleDataActionType.UPDATE,
-      payload: scheduleLogicRef.current?.asDict(),
+      payload: scheduleLogicRef.current?.getScheduleModel(),
     } as ActionModel<ScheduleDataModel>);
   }
 
