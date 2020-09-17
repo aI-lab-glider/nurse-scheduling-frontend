@@ -49,7 +49,7 @@ class Backend {
         break;
     }
 
-    return { code, message };
+    return { code, message, worker: error.worker, day: error.day, week: error.week };
   }
 
   getErrors(schedule: ScheduleDataModel): Promise<ScheduleErrorMessageModel[]> {
