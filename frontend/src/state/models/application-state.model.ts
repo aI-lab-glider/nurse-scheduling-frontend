@@ -1,8 +1,8 @@
 import { ScheduleDataModel } from "./schedule-data/schedule-data.model";
-import { ScheduleErrorModel } from "./schedule-data/schedule-error.model";
+import { ScheduleErrorMessageModel } from "./schedule-data/schedule-error-message.model";
 
 export interface ApplicationStateModel {
   uploadedScheduleSheet?: Array<Object>;
   scheduleData?: ScheduleDataModel;
-  scheduleErrors?: ScheduleErrorModel[];
+  scheduleErrors?: ScheduleErrorMessageModel[];
 }
