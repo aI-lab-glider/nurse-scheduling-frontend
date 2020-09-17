@@ -22,14 +22,13 @@ export function ValidationWindowComponent() {
 
   //#region view
 
-  function alert(message, index) {
-    return (
-      <Alert key={index + message.slice(0, 5)} variant="outlined" severity="warning">
-        {message}
+  return (
+  <div className="content-box">
+    {errors?.map((error, index) => 
+      <Alert key={index + error.message.slice(0, 5)} variant="outlined" severity="warning">
+        {error.message}
       </Alert>
-    );
-  }
-
-  return <div className="content-box">{errors?.map((r, index) => alert(r.message, index))}</div>;
+    )}
+  </div>)
   //#endregion
 }
