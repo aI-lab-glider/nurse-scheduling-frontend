@@ -28,8 +28,12 @@ export class MonthLogic {
 
   //#endregion
 
-  constructor(nameInPolish: string, year: string) {
-    this.month = MonthLogic.monthTranslations[StringHelper.getRawValue(nameInPolish)];
+  constructor(monthId: string | number, year: string) {
+    if (typeof monthId == "string") {
+      this.month = MonthLogic.monthTranslations[StringHelper.getRawValue(monthId)];
+    } else {
+      this.month = Object.values(MonthLogic.monthTranslations)[monthId];
+    }
     this.monthNumber = Object.values(MonthLogic.monthTranslations).findIndex(
       (m) => m === this.month
     );

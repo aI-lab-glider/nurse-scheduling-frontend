@@ -1,13 +1,13 @@
 import { StringHelper } from "../../helpers/string.helper";
 import { ShiftCode } from "../../state/models/schedule-data/shift-info.model";
 
-export class DataRow {
+export class DataRowParser {
   private data: string[];
   public isShiftRow: boolean;
 
   constructor(data: Object) {
     this.data = Object.values(data);
-    this.isShiftRow = this.checkShiftRowPattern()
+    this.isShiftRow = this.checkShiftRowPattern();
   }
 
   //#public methods
@@ -29,22 +29,15 @@ export class DataRow {
       : this.data.filter((c) => includeNulls || c != null).slice(key_position);
   }
 
-  public updateData(updateCallback: (row: string[]) => any[]) {
+  public processRow(processingFunction: (row: string[]) => any[]) {
     let rowKey = this.rowKey;
     let rowContent = this.rowData(true);
-    this.data = [rowKey, ...updateCallback(rowContent)];
+    this.data = [rowKey, ...processingFunction(rowContent)];
   }
 
   public cropData(from: number, to: number) {
     let key = this.rowKey;
     this.data = [key, ...this.rowData(true, false).slice(from, to)];
-  }
-
-  public setValue(index: number, value: string) {
-    let key = this.rowKey;
-    let data = this.rowData(true, false);
-    data[index] = value;
-    this.data = [key, ...data];
   }
 
   public findValue(key: string) {
@@ -61,27 +54,24 @@ export class DataRow {
 
   //#region row check region
   private checkShiftRowPattern(): boolean {
-    const containsNotEmptyKey = this.data[0] != null && this.data[0] != "";
+    const containsNotEmptyKey = this.data[0] !== null && this.data[0] !== "";
 
-    let containsShiftCode = this.data.filter( c => c in ShiftCode).length != 0
+    let containsShiftCode = this.data.filter((c) => c in ShiftCode).length !== 0;
 
     // TODO: Validate constraint with new schedules
-    const dataLen = this.data.length
-    const hoursCellsNumber = 3
-    if(this.data.length < hoursCellsNumber){
-      return false
+    const dataLen = this.data.length;
+    const hoursCellsNumber = 3;
+    if (this.data.length < hoursCellsNumber) {
+      return false;
     }
     let containsHoursInfo = true;
-    for(let i = 1; i<hoursCellsNumber + 1; i++){
-      if(typeof this.data[dataLen - i] !== 'number'){
-        containsHoursInfo = false
+    for (let i = 1; i < hoursCellsNumber + 1; i++) {
+      if (typeof this.data[dataLen - i] !== "number") {
+        containsHoursInfo = false;
       }
     }
 
-    return containsNotEmptyKey &&
-        containsShiftCode &&
-        containsHoursInfo
+    return containsNotEmptyKey && containsShiftCode && containsHoursInfo;
   }
   //#endregion
-
 }

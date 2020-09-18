@@ -8,4 +8,5 @@ export interface ScheduleDataModel {
   month_info?: MonthInfoModel;
   employee_info?: EmployeeInfoModel;
   shifts?: ShiftInfoModel;
+  isNew?: boolean;
 }

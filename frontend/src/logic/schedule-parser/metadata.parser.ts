@@ -1,8 +1,8 @@
 import { DayOfWeek } from "../../state/models/schedule-data/month-info.model";
-import { DataRow } from "./data-row.logic";
-import { MonthLogic } from "./month.logic";
+import { MonthLogic } from "../real-schedule-logic/month.logic";
+import { DataRowParser } from "./data-row.parser";
 
-export class MetaDataLogic {
+export class MetaDataParser {
   //#region  translations
   private translations = {
     month_label: "miesiąc",
@@ -18,7 +18,7 @@ export class MetaDataLogic {
   private _year: string;
   private monthLogic: MonthLogic;
 
-  constructor(dataRow?: DataRow) {
+  constructor(dataRow?: DataRowParser) {
     let {
       no_metadata_info_msg,
       year_label,
@@ -57,7 +57,7 @@ export class MetaDataLogic {
     return this.monthLogic.dates;
   }
 
-  public get dayNumbersAsDataRow(): DataRow {
+  public get dayNumbersAsDataRow(): DataRowParser {
     let { dates_key, ..._ } = this.translations;
     let datesAsObject = this.monthLogic.dates.reduce(
       (storage, date, index) => {
@@ -65,7 +65,7 @@ export class MetaDataLogic {
       },
       { key: dates_key }
     );
-    return new DataRow(datesAsObject);
+    return new DataRowParser(datesAsObject);
   }
   /**
    * Counts from 0

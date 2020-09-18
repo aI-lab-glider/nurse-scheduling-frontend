@@ -1,8 +1,7 @@
-import { SectionLogic } from "../../helpers/section.model";
-import { DataRow } from "./data-row.logic";
-import { MetaDataLogic } from "./metadata.logic";
+import { DataRowParser } from "./data-row.parser";
+import { MetaDataParser } from "./metadata.parser";
 
-export class ChildrenInfoLogic implements SectionLogic {
+export class ChildrenInfoParser {
   //#region translations
   // TODO refactor
   private traslations = {
@@ -15,10 +14,10 @@ export class ChildrenInfoLogic implements SectionLogic {
 
   //#region members
   private childrenData: { [key: string]: number[] };
-  private rowByKeys: { [key: string]: DataRow } = {};
+  private rowByKeys: { [key: string]: DataRowParser } = {};
   //#endregion
 
-  constructor(childrenInfoSection: DataRow[], metaData: MetaDataLogic) {
+  constructor(childrenInfoSection: DataRowParser[], metaData: MetaDataParser) {
     let data = childrenInfoSection.map((row) => {
       row.cropData(metaData.firsMondayDate, metaData.lastSundayDate + 1);
       return row;
@@ -26,10 +25,7 @@ export class ChildrenInfoLogic implements SectionLogic {
     data.forEach((row) => {
       this.rowByKeys[row.rowKey] = row;
     });
-    this.childrenData = this.parseInfoSection(this.data, metaData);
-  }
-  public get data() {
-    return Object.values(this.rowByKeys);
+    this.childrenData = this.parseInfoSection(this.sectionData, metaData);
   }
 
   public get registeredChildrenNumber() {
@@ -39,22 +35,14 @@ export class ChildrenInfoLogic implements SectionLogic {
       .map((i) => parseInt(i));
   }
 
-  //#region logic
   public get sectionData() {
-    return this.data;
+    return Object.values(this.rowByKeys);
   }
-
-  public tryUpdate(row: DataRow) {
-    if (Object.keys(this.rowByKeys).includes(row.rowKey)) {
-      this.rowByKeys[row.rowKey] = row;
-    }
-  }
-  //#endregion
 
   //#region parser
   private parseInfoSection(
-    childrenInfoSection: DataRow[],
-    metaData: MetaDataLogic
+    childrenInfoSection: DataRowParser[],
+    metaData: MetaDataParser
   ): { [key: string]: number[] } {
     return childrenInfoSection.reduce((storage, row) => {
       storage[this.traslations[row.rowKey]] = row.rowData(true, false);

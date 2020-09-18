@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DataRow } from "../../../logic/schedule/data-row.logic";
-import { ScheduleLogic } from "../../../logic/schedule/schedule.logic";
+import { DataRow } from "../../../logic/real-schedule-logic/data-row";
+import { ScheduleLogic } from "../../../logic/real-schedule-logic/schedule.logic";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-data.model";
@@ -11,27 +11,24 @@ import "./list.component.css";
 import { ScheduleRowComponent } from "./schedule-row.component";
 
 function ListComponent() {
-  const uploadedScheduleSheet = useSelector(
-    (state: ApplicationStateModel) => state.uploadedScheduleSheet
-  );
-
   const [scheduleLogic, setScheduleLogic] = useState<ScheduleLogic>();
 
   const scheduleLogicRef = useRef<ScheduleLogic>();
+  const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData);
   useEffect(() => {
-    if (Object.keys(uploadedScheduleSheet || {}).length !== 0) {
-      let logic = new ScheduleLogic(uploadedScheduleSheet as Array<Object>);
+    if (scheduleModel?.isNew) {
+      const logic = new ScheduleLogic(scheduleModel);
       scheduleLogicRef.current = logic;
       setScheduleLogic(logic);
     }
-  }, [uploadedScheduleSheet]);
+  }, [scheduleModel]);
 
   const dispatcher = useDispatch();
   function onRowUpdate(row: DataRow) {
     scheduleLogicRef.current?.updateRow(row);
     dispatcher({
       type: ScheduleDataActionType.UPDATE,
-      payload: scheduleLogicRef.current?.getScheduleModel(),
+      payload: scheduleLogicRef.current?.getScheduleDataModel(),
     } as ActionModel<ScheduleDataModel>);
   }
 

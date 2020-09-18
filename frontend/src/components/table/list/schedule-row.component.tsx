@@ -1,5 +1,5 @@
 import React from "react";
-import { DataRow } from "../../../logic/schedule/data-row.logic";
+import { DataRow } from "../../../logic/real-schedule-logic/data-row";
 import { BaseCellComponent } from "./cell-components/base-cell.component";
 import { CellOptions } from "./cell-components/cell-options.model";
 import "./row.css";
