@@ -16,6 +16,7 @@ const sh = StringHelper;
 export function ShiftsSectionComponent({
   workerType,
   data = [],
+  metaDataLogic,
   onSectionUpdated,
 }: ShiftsSectionOptions) {
   const logic = new ShiftsInfoLogic(DataRowHelper.dataRowsAsValueDict<Shift>(data, true));
@@ -38,7 +39,7 @@ export function ShiftsSectionComponent({
       {data.length > 0 && (
         <tr className="section-header">
           <td>
-            <h3>{sh.capitilize(WorkerTypeHelper.translate(workerType, true))}</h3>
+            <h3>{sh.capitalize(WorkerTypeHelper.translate(workerType, true))}</h3>
           </td>
 
           <td>
@@ -53,6 +54,7 @@ export function ShiftsSectionComponent({
         data={data}
         onSectionUpdated={onSectionUpdated}
         cellComponent={ShiftCellComponent}
+        metaDataLogic={metaDataLogic}
         logic={logic}
       />
     </React.Fragment>

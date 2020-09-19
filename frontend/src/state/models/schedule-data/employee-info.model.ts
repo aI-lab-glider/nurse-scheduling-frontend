@@ -8,7 +8,7 @@ export class WorkerTypeHelper {
   static translate(type: WorkerType, pluralize = false): string {
     switch(type) {
       case WorkerType.NURSE:
-        return pluralize ? "piełęgniarki" : "piełęgniarka"
+        return pluralize ? "pielęgniarki" : "pielęgniarka";
       case WorkerType.OTHER:
         return pluralize ? "opiekunki" : "opiekunka" 
     }

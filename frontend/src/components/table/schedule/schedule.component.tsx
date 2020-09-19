@@ -38,6 +38,7 @@ export function ScheduleComponent() {
       <tbody>
         <DateSectionComponent
           data={scheduleState.dateSection}
+          metaDataLogic={scheduleLogic?.getMetadata()}
           onSectionUpdated={(newSectionData) => {
             // TODO implement
           }}
@@ -47,6 +48,7 @@ export function ScheduleComponent() {
 
         <ChildrenSectionComponent
           data={scheduleState.childrenSection}
+          metaDataLogic={scheduleLogic?.getMetadata()}
           onSectionUpdated={(newSectionData) =>
             dispatchScheduleState({
               type: ScheduleActionType.UpdateChildrenShiftSection,
@@ -60,6 +62,7 @@ export function ScheduleComponent() {
         <ShiftsSectionComponent
           workerType={WorkerType.NURSE}
           data={scheduleState.nurseShiftsSection}
+          metaDataLogic={scheduleLogic?.getMetadata()}
           onSectionUpdated={(newSectionData) =>
             dispatchScheduleState({
               type: ScheduleActionType.UpdateNurseShiftSection,
@@ -73,6 +76,7 @@ export function ScheduleComponent() {
         <ShiftsSectionComponent
           workerType={WorkerType.OTHER}
           data={scheduleState.babysitterShiftsSection}
+          metaDataLogic={scheduleLogic?.getMetadata()}
           onSectionUpdated={(newSectionData) =>
             dispatchScheduleState({
               type: ScheduleActionType.UpdateBabysitterShiftSection,

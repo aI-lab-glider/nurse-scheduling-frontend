@@ -17,20 +17,19 @@ export class ScheduleLogic {
   private sections: ScheduleSections;
 
   private metadata?: MetadataLogic;
-  // private sections: (SectionLogic | undefined)[];
-  
+
   constructor(scheduleModel: ScheduleDataModel) {
     const [nurseShifts, babysitterShifts] = this.parseShiftsBasedOnEmployeeType(scheduleModel);
-    
+
     this.sections = {
-        nurseInfo: new ShiftsInfoLogic(nurseShifts || {}),
-        
-        babysitterInfo: new ShiftsInfoLogic(babysitterShifts || {}),
-        
-        childrenInfo: new ChildrenInfoLogic({
-                        "liczba dzieci zarejestrowanych": scheduleModel.month_info?.children_number || [],
-                      })
-    }
+      nurseInfo: new ShiftsInfoLogic(nurseShifts || {}),
+
+      babysitterInfo: new ShiftsInfoLogic(babysitterShifts || {}),
+
+      childrenInfo: new ChildrenInfoLogic({
+        "liczba dzieci zarejestrowanych": scheduleModel.month_info?.children_number || [],
+      }),
+    };
 
     this.metadata =
       scheduleModel.schedule_info &&
@@ -136,11 +135,11 @@ export class ScheduleLogic {
 
   public updateSection(section: keyof ScheduleSections, newSectionData: DataRow[]) {
     // Refactor
-    let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true)
-    if (section === 'childrenInfo') {
-      this.sections.childrenInfo = new ChildrenInfoLogic({...data});
+    let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
+    if (section === "childrenInfo") {
+      this.sections.childrenInfo = new ChildrenInfoLogic({ ...data });
     } else {
-      this.sections[section] = new ShiftsInfoLogic({...data});
+      this.sections[section] = new ShiftsInfoLogic({ ...data });
     }
   }
 }

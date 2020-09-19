@@ -1,13 +1,13 @@
 import { ActionModel } from "../models/action.model";
-import { ScheduleErrorModel } from "../models/schedule-data/schedule-error.model";
+import { ScheduleErrorMessageModel } from "../models/schedule-data/schedule-error-message.model";
 
 export enum ScheduleErrorActionType {
   UPDATE = "updateScheduleError",
 }
 
 export function scheduleErrorsReducer(
-  state: ScheduleErrorModel[] = [],
-  action: ActionModel<ScheduleErrorModel[]>
+  state: ScheduleErrorMessageModel[] = [],
+  action: ActionModel<ScheduleErrorMessageModel[]>
 ) {
   switch (action.type) {
     case ScheduleErrorActionType.UPDATE:

@@ -8,6 +8,7 @@ export function BaseSectionComponent({
   data = [],
   onSectionUpdated,
   logic,
+  metaDataLogic,
   cellComponent = BaseCellComponent,
 }: BaseSectionOptions) {
   function onRowUpdated(row: DataRow) {
@@ -21,6 +22,7 @@ export function BaseSectionComponent({
     <React.Fragment>
       {data.map((dataRow, index) => (
         <ScheduleRowComponent
+          metaDataLogic={metaDataLogic}
           onRowUpdated={onRowUpdated}
           key={`${dataRow.rowKey}${index}`}
           dataRow={dataRow}

@@ -9,6 +9,7 @@ export class ShiftsInfoParser {
   constructor(scheduleInfoSection: DataRowParser[], private metaData: MetaDataParser) {
     let data = scheduleInfoSection.map((row) => {
       row.processRow(this.fillRowWithShifts);
+      // lastSundayData + 1 because slice not include last index
       row.cropData(this.metaData.firsMondayDate, this.metaData.lastSundayDate + 1);
       return row;
     });

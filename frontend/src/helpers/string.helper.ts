@@ -13,7 +13,7 @@ export class StringHelper {
     return value?.toLowerCase().trim() || "";
   }
 
-  static capitilize(value: string) : string {
-    return value.charAt(0).toUpperCase() + value.slice(1)
+  static capitalize(value: string): string {
+    return value.charAt(0).toUpperCase() + value.slice(1);
   }
 }

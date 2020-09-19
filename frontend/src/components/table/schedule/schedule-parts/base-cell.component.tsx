@@ -6,6 +6,7 @@ import { CellOptions, CellState } from "./cell-options.model";
 export function BaseCellComponent({
   value,
   className = "",
+  dayType = "",
   isEditable = true,
   onDataChanged,
   onStateChange,
@@ -57,7 +58,7 @@ export function BaseCellComponent({
   }
   //  #region view
   return (
-    <td className={`cell ${className || ""}`} onClick={onCellClicked}>
+    <td className={`cell ${className || ""} ${dayType}`} onClick={onCellClicked}>
       {content}
     </td>
   );
