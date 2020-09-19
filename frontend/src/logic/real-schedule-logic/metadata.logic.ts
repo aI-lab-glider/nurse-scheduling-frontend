@@ -1,8 +1,9 @@
 import { DayOfWeek } from "../../state/models/schedule-data/month-info.model";
 import { DataRow } from "./data-row";
 import { MonthLogic } from "./month.logic";
+import { SectionLogic } from "./section-logic.model";
 
-export class MetadataLogic {
+export class MetadataLogic implements SectionLogic{
   private translations = {
     dates_key: "Dni miesiąca",
   };
@@ -11,6 +12,10 @@ export class MetadataLogic {
 
   constructor(private _year: string, private month: number) {
     this.monthLogic = new MonthLogic(month, _year);
+  }
+  
+  tryUpdate(dataRow: DataRow) {
+    throw new Error("Method not implemented.");
   }
 
   public get monthNumber() {
@@ -32,7 +37,7 @@ export class MetadataLogic {
     return this.monthLogic.dates;
   }
 
-  public get dayNumbersAsDataRow(): DataRow {
-    return new DataRow(this.translations.dates_key, this.dayNumbers);
+  public get sectionData(): DataRow[] {
+    return [new DataRow(this.translations.dates_key, this.dayNumbers)];
   }
 }

@@ -6,6 +6,6 @@ export interface CellOptions {
   value: string;
   className: string;
   isEditable?: boolean;
-  onDataChange?: (newValue: string) => void;
+  onDataChanged?: (newValue: string) => void;
   onStateChange?: (state: CellState) => void;
 }

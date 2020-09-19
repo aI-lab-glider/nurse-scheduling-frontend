@@ -6,11 +6,12 @@ import { SectionLogic } from "./section-logic.model";
 export class ShiftsInfoLogic implements SectionLogic {
   private shifts: { [nurseName: string]: DataRow } = {};
 
+  
   constructor(shiftSection: ShiftInfoModel) {
-    Object.keys(shiftSection).forEach((key) => {
-      this.shifts[key] = new DataRow(key, shiftSection[key]);
-    });
-  }
+      Object.keys(shiftSection).forEach((key) => {
+          this.shifts[key] = new DataRow(key, shiftSection[key]);
+        })
+    }
 
   public get sectionData(): DataRow[] {
     return Object.values(this.shifts);
@@ -31,6 +32,8 @@ export class ShiftsInfoLogic implements SectionLogic {
   public tryUpdate(row: DataRow) {
     if (Object.keys(this.shifts).includes(row.rowKey)) {
       this.shifts[row.rowKey] = row;
+      return true;
     }
+    return false;
   }
 }

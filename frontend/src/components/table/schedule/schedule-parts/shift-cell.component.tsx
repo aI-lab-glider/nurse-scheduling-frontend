@@ -3,7 +3,7 @@ import { BaseCellComponent } from "./base-cell.component";
 import { CellOptions, CellState } from "./cell-options.model";
 import "./shift-cell.css";
 
-export function ShiftCellComponent({ value, className = "", onDataChange }: CellOptions) {
+export function ShiftCellComponent({ value, className = "", onDataChanged }: CellOptions) {
   const [shift, setShift] = useState(value);
   const [style, setStyle] = useState(`${className} ${shift}`);
 
@@ -20,8 +20,8 @@ export function ShiftCellComponent({ value, className = "", onDataChange }: Cell
 
   function onBaseCellUpdate(newShift: string) {
     setShift(newShift);
-    if (onDataChange) {
-      onDataChange(newShift);
+    if (onDataChanged) {
+      onDataChanged(newShift);
     }
   }
 
@@ -34,7 +34,7 @@ export function ShiftCellComponent({ value, className = "", onDataChange }: Cell
       value={value === "W" ? "" : value}
       className={style}
       onStateChange={onStateChange}
-      onDataChange={onBaseCellUpdate}
+      onDataChanged={onBaseCellUpdate}
     ></BaseCellComponent>
   );
 }

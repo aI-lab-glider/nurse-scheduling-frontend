@@ -28,6 +28,8 @@ export class ChildrenInfoLogic implements SectionLogic {
   public tryUpdate(row: DataRow) {
     if (Object.keys(this.childrenInfoAsDataRows).includes(row.rowKey)) {
       this.childrenInfoAsDataRows[row.rowKey] = row;
+      return true;
     }
+    return false;
   }
 }

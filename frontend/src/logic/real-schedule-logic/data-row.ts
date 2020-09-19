@@ -1,7 +1,7 @@
 import { DataRowModel } from "../../helpers/row.helper";
 
 export class DataRow implements DataRowModel {
-  constructor(private key: string, private data: any[]) {}
+  constructor(private key: string, private data: any[] = []) {}
 
   public get isEmpty() {
     return this.data.filter((i) => i !== null).length === 0;
@@ -18,12 +18,17 @@ export class DataRow implements DataRowModel {
 
   public updateData(updateCallback: (row: string[]) => any[]) {
     let data = this.rowData(true, false);
-    this.data = updateCallback(this.data);
+    this.data = updateCallback(data);
   }
 
   public setValue(index: number, value: string) {
     let data = this.rowData(true, false);
     data[index] = value;
     this.data = [...data];
+  }
+
+  public get length() {
+    // data + key
+    return this.data.length + 1
   }
 }

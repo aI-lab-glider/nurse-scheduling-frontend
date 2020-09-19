@@ -3,6 +3,18 @@ export enum WorkerType {
   OTHER = "OTHER",
 }
 
+export class WorkerTypeHelper {
+
+  static translate(type: WorkerType, pluralize = false): string {
+    switch(type) {
+      case WorkerType.NURSE:
+        return pluralize ? "piełęgniarki" : "piełęgniarka"
+      case WorkerType.OTHER:
+        return pluralize ? "opiekunki" : "opiekunka" 
+    }
+  }
+}
+
 export interface EmployeeInfoModel {
   nurseCount: number;
   babysitterCount: number;

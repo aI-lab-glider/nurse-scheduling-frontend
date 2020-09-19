@@ -7,7 +7,7 @@ export function BaseCellComponent({
   value,
   className = "",
   isEditable = true,
-  onDataChange,
+  onDataChanged,
   onStateChange,
 }: CellOptions) {
   const [cellValue, setCellValue] = useState(value);
@@ -41,8 +41,8 @@ export function BaseCellComponent({
   function onCellValueSave(newValue: string) {
     isEditing = false;
     setCellValue(newValue);
-    if (onDataChange) {
-      onDataChange(newValue);
+    if (onDataChanged && newValue != cellValue) {
+      onDataChanged(newValue);
     }
     if (onStateChange) {
       onStateChange(CellState.STOP_EDITING);

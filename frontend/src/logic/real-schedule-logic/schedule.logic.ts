@@ -1,34 +1,43 @@
+import { DataRowHelper } from "../../helpers/row.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row";
 import { MetadataLogic } from "./metadata.logic";
-import { SectionLogic } from "./section-logic.model";
 import { ShiftsInfoLogic } from "./shifts-info.logic";
 
+interface ScheduleSections {
+  nurseInfo: ShiftsInfoLogic,
+  babysitterInfo: ShiftsInfoLogic,
+  childrenInfo: ChildrenInfoLogic
+}
+
 export class ScheduleLogic {
-  private nurseInfo?: ShiftsInfoLogic;
-  private babysitterInfo?: ShiftsInfoLogic;
-  private childrenInfo?: ChildrenInfoLogic;
+  private sections: ScheduleSections;
+
   private metadata?: MetadataLogic;
-  private sections: (SectionLogic | undefined)[];
+  // private sections: (SectionLogic | undefined)[];
+  
   constructor(scheduleModel: ScheduleDataModel) {
     const [nurseShifts, babysitterShifts] = this.parseShiftsBasedOnEmployeeType(scheduleModel);
-    this.nurseInfo = scheduleModel.shifts && new ShiftsInfoLogic(nurseShifts);
-    this.babysitterInfo = scheduleModel.shifts && new ShiftsInfoLogic(babysitterShifts);
-    this.childrenInfo =
-      scheduleModel.month_info?.children_number &&
-      new ChildrenInfoLogic({
-        "liczba dzieci zarejestrowanych": scheduleModel.month_info?.children_number,
-      });
+    
+    this.sections = {
+        nurseInfo: new ShiftsInfoLogic(nurseShifts || {}),
+        
+        babysitterInfo: new ShiftsInfoLogic(babysitterShifts || {}),
+        
+        childrenInfo: new ChildrenInfoLogic({
+                        "liczba dzieci zarejestrowanych": scheduleModel.month_info?.children_number || [],
+                      })
+    }
+
     this.metadata =
       scheduleModel.schedule_info &&
       new MetadataLogic(
         scheduleModel.schedule_info.year.toString(),
         scheduleModel.schedule_info.month_number
       );
-    this.sections = [this.babysitterInfo, this.childrenInfo, this.nurseInfo];
   }
 
   private parseShiftsBasedOnEmployeeType(scheduleModel: ScheduleDataModel) {
@@ -55,27 +64,27 @@ export class ScheduleLogic {
         year: this.metadata?.year || 0,
       },
       shifts: {
-        ...this.nurseInfo?.getWorkerShifts(),
-        ...this.babysitterInfo?.getWorkerShifts(),
+        ...this.sections.nurseInfo.getWorkerShifts(),
+        ...this.sections.babysitterInfo.getWorkerShifts(),
       },
       month_info: {
         first_day: this.metadata?.dayNumbers[0],
-        children_number: this.childrenInfo?.registeredChildrenNumber,
+        children_number: this.sections.childrenInfo.registeredChildrenNumber,
       },
       employee_info: {
         type: this.getWorkerTypes(),
-        babysitterCount: this.babysitterInfo?.workersCount || 0,
-        nurseCount: this.nurseInfo?.workersCount || 0,
+        babysitterCount: this.sections.babysitterInfo.workersCount || 0,
+        nurseCount: this.sections.nurseInfo.workersCount || 0,
       },
     };
   }
 
   private getWorkerTypes() {
     let result = {};
-    this.babysitterInfo?.getWorkers().forEach((babysitter) => {
+    this.sections.babysitterInfo.getWorkers().forEach((babysitter) => {
       result[babysitter] = WorkerType.OTHER;
     });
-    this.nurseInfo?.getWorkers().forEach((nurse) => {
+    this.sections.nurseInfo.getWorkers().forEach((nurse) => {
       result[nurse] = WorkerType.NURSE;
     });
 
@@ -83,29 +92,29 @@ export class ScheduleLogic {
   }
 
   public getNurseInfo(): ShiftsInfoLogic {
-    if (!this.nurseInfo) {
+    if (!this.sections.nurseInfo) {
       throw Error("no nurses");
     }
-    return this.nurseInfo;
+    return this.sections.nurseInfo;
   }
 
   public getBabySitterInfo(): ShiftsInfoLogic {
-    if (!this.babysitterInfo) {
-      throw Error("no nurses");
+    if (!this.sections.babysitterInfo) {
+      throw Error("no babysitter");
     }
-    return this.babysitterInfo;
+    return this.sections.babysitterInfo;
   }
 
   public getChildrenInfo(): ChildrenInfoLogic {
-    if (!this.childrenInfo) {
-      throw Error("no nurses");
+    if (!this.sections.childrenInfo) {
+      throw Error("no children info");
     }
-    return this.childrenInfo;
+    return this.sections.childrenInfo;
   }
 
   public getMetadata(): MetadataLogic {
     if (!this.metadata) {
-      throw Error("no nurses");
+      throw Error("no metadata");
     }
     return this.metadata;
   }
@@ -120,8 +129,18 @@ export class ScheduleLogic {
   }
 
   public updateRow(row: DataRow) {
-    this.sections.forEach((section) => {
+    Object.values(this.sections).forEach((section) => {
       section && section.tryUpdate(row);
     });
+  }
+
+  public updateSection(section: keyof ScheduleSections, newSectionData: DataRow[]) {
+    // Refactor
+    let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true)
+    if (section === 'childrenInfo') {
+      this.sections.childrenInfo = new ChildrenInfoLogic({...data});
+    } else {
+      this.sections[section] = new ShiftsInfoLogic({...data});
+    }
   }
 }
