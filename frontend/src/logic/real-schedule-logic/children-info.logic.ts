@@ -20,6 +20,9 @@ export class ChildrenInfoLogic implements SectionLogic {
 
   public get registeredChildrenNumber() {
     // TODO refactor
+    // In current schedules, there are more thna one field, that provides information about children.
+    //  Nevertheless, in model used by alghorythm - only one.
+    // So this function  (and the model that we send to the backend ) should be reviewed after we will receive new schedules
     return this.childrenInfoAsDataRows["liczba dzieci zarejestrowanych"]
       .rowData(true, false)
       .map((i) => parseInt(i));

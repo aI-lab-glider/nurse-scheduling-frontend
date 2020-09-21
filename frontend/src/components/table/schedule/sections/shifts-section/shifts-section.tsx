@@ -11,7 +11,6 @@ import { BaseSectionComponent } from "../base-section/base-section.component";
 import "./shifts-section.css";
 import { ShiftsSectionOptions } from "./shifts-section.options";
 
-const sh = StringHelper;
 
 export function ShiftsSectionComponent({
   workerType,
@@ -39,7 +38,7 @@ export function ShiftsSectionComponent({
       {data.length > 0 && (
         <tr className="section-header">
           <td>
-            <h3>{sh.capitalize(WorkerTypeHelper.translate(workerType, true))}</h3>
+            <h3>{StringHelper.capitalize(WorkerTypeHelper.translate(workerType, true))}</h3>
           </td>
 
           <td>

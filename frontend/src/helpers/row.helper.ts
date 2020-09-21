@@ -1,8 +1,5 @@
+import { DataRowModel } from "../state/models/data-row.model";
 
-export interface DataRowModel {
-  rowKey: string;
-  rowData: (includeNulls: boolean, includeKey: boolean) => any[];
-}
 export class DataRowHelper {
   public static dataRowsAsValueDict<T>(
     dataRows: DataRowModel[],

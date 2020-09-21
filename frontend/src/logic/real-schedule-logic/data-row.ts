@@ -1,4 +1,4 @@
-import { DataRowModel } from "../../helpers/row.helper";
+import { DataRowModel } from "../../state/models/data-row.model";
 
 export class DataRow implements DataRowModel {
   constructor(private key: string, private data: any[] = []) {}
