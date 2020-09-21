@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 import { ScheduleDataModel } from "../state/models/schedule-data/schedule-data.model";
-import { ScheduleErrorModel } from "../state/models/schedule-data/schedule-error.model";
 import { ScheduleErrorMessageModel } from "../state/models/schedule-data/schedule-error-message.model";
+import { ScheduleErrorModel } from "../state/models/schedule-data/schedule-error.model";
 
 class Backend {
   axios: AxiosInstance;
@@ -56,6 +56,11 @@ class Backend {
     return this.axios
       .post("/schedule_errors/", schedule)
       .then((resp) => resp.data.map(this.mapErrorResponseToErrorMessage));
+  }
+
+  fixSchedule(schedule: ScheduleDataModel): Promise<ScheduleDataModel[]> {
+    return this.axios.post("/fix_schedule/", schedule)
+                      .then((resp) => resp.data);
   }
 }
 
