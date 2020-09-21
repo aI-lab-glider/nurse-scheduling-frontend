@@ -2,9 +2,10 @@ import { ArrayHelper } from "../../helpers/array.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { DayOfWeek, WeekDays } from "../../state/models/schedule-data/month-info.model";
 
-export interface DateType {
+export interface VerboseDate {
   date:number,
-  dayOfWeek: DayOfWeek
+  dayOfWeek: DayOfWeek,
+  isBlocked?: boolean,
 }
 
 export class MonthLogic {
@@ -28,11 +29,23 @@ export class MonthLogic {
   //#region members
   private month: string;
   public monthNumber: number;
-  public dates: number[] = [];
-  public dayCount: number = 0;
-  public daysOfWeek: DayOfWeek[] = [];
-  private _dateTypes: DateType[] = [] 
+  public _dates: number[] = [];
+  public _dayCount: number = 0;
+  public _daysOfWeek: DayOfWeek[] = [];
+  private _verboseDates: VerboseDate[] = [] 
   //#endregion
+
+  public get dates() {
+    return this._verboseDates.map(d => d.date);
+  }
+
+  public get dayCount() {
+    return this._verboseDates.length;
+  }
+
+  public get daysOfWeek() {
+    return this._verboseDates.map(d => d.dayOfWeek);
+  }
 
   constructor(monthId: string | number, year: string) {
     if (typeof monthId == "string") {
@@ -43,16 +56,16 @@ export class MonthLogic {
     this.monthNumber = Object.values(MonthLogic.monthTranslations).findIndex(
       (m) => m === this.month
     );
-    [this.daysOfWeek, this.dates, this.dayCount] = this.createFullWeekCalendar(this.month, year);
-    this._dateTypes = this.desribeDates(this.dates, this.daysOfWeek)
+    this._verboseDates = this.createFullWeekCalendar(this.month, year);
+    // this._dateTypes = this.toVerboseDates(this.dates, this.daysOfWeek)
   }
 
   //#region logic
-  public get dateTypes(): DateType[] {
-    return this._dateTypes;
+  public get verboseDates(): VerboseDate[] {
+    return this._verboseDates;
   } 
 
-  private desribeDates(dates: number[], weekDays: DayOfWeek[]): DateType[] {
+  private toVerboseDates(dates: number[], weekDays: DayOfWeek[]): VerboseDate[] {
     return ArrayHelper.zip(dates, weekDays).map(([date, weekDay]) => {
       return {
         date: date,
@@ -66,10 +79,15 @@ export class MonthLogic {
   }
 
 
-  private createFullWeekCalendar(month: string, year: string): [DayOfWeek[], number[], number] {
+  private createFullWeekCalendar(month: string, year: string): VerboseDate[] {
     let [daysOfWeek, dates, _] = this.createCalendar(month, year);
-    [daysOfWeek, dates] = this.trimToFullWeeks(daysOfWeek, dates);
-    return [daysOfWeek, dates, dates.length];
+    
+    let verboseDates = this.toVerboseDates(dates, daysOfWeek);
+    verboseDates = this.trimToFullWeeks(verboseDates);
+    
+    return verboseDates
+    // [daysOfWeek, dates] = this.trimToFullWeeks(daysOfWeek, dates);
+    // [daysOfWeek, dates, dates.length];
   }
 
   private createCalendar(month: string, year: string): [DayOfWeek[], number[], number] {
@@ -83,13 +101,15 @@ export class MonthLogic {
     return [daysOfWeek, dates, dates.length];
   }
 
-  private trimToFullWeeks(days_of_week: DayOfWeek[], dates: number[]): [DayOfWeek[], number[]] {
-    let firstMondayIndex = days_of_week.indexOf("MO");
-    let lastSundayIndex = days_of_week.lastIndexOf("SU");
-    return [
-      days_of_week.slice(firstMondayIndex, lastSundayIndex + 1),
-      dates.slice(firstMondayIndex, lastSundayIndex + 1),
-    ];
+  private trimToFullWeeks(verboseDates: VerboseDate[]): VerboseDate[] {
+    let firstMondayIndex = verboseDates.findIndex(d => d.dayOfWeek === "MO");
+    let lastSundayIndex = verboseDates.length - [...verboseDates].reverse().findIndex(d => d.dayOfWeek === "SU");
+    return verboseDates.map((item, index) => {
+      return {
+        ...item,
+        isBlocked: index < firstMondayIndex || index > lastSundayIndex 
+      }
+    })    
   }
 
   private isdDateBelongsToMonth(date: number, month: string, year: string) {

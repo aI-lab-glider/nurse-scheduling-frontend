@@ -44,7 +44,7 @@ export class ScheduleParser {
         ...this.babysitterShiftsParser.getWorkerShifts(),
       },
       month_info: {
-        first_day: this.metaData.dayNumbers[0],
+        blocked_days: this.metaData.blockedDays,
         children_number: this.childrenInfoParser.registeredChildrenNumber,
       },
       employee_info: {
