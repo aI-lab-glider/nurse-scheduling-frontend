@@ -13,19 +13,22 @@ import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.re
 export function ImportButtonsComponent() {
   //#region members
   const [open, setOpen] = useState(false);
-  const [content, setSrcFile] = useScheduleConverter();
+  const [convertedSchedule, xlxsSheet, setSrcFile] = useScheduleConverter();
   const anchorRef = useRef(null);
 
   //#endregion
 
   //#region effects
   const scheduleDipatcher = useDispatch();
+
   useEffect(() => {
-    scheduleDipatcher({
-      type: ScheduleDataActionType.UPDATE,
-      payload: content,
-    } as ActionModel<ScheduleDataModel>);
-  }, [content, scheduleDipatcher]);
+    if (convertedSchedule) {
+      scheduleDipatcher({
+        type: ScheduleDataActionType.ADD_NEW,
+        payload: convertedSchedule,
+      } as ActionModel<ScheduleDataModel>);
+    }
+  }, [convertedSchedule, scheduleDipatcher]);
   //#endregion
 
   //#region logic

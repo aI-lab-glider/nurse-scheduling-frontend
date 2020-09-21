@@ -1,11 +1,12 @@
 import React from "react";
 import LegendComponent from "./legend/legend-component";
-import ListComponent from "./list/list-component";
+import { ScheduleComponent } from "./schedule/schedule.component";
+import "./table.component.css";
 
 export function TableComponent() {
   return (
-    <div>
-      <ListComponent />
+    <div className="table">
+      <ScheduleComponent />
       <LegendComponent />
     </div>
   );

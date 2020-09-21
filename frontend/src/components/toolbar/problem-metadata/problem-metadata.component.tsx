@@ -4,58 +4,97 @@ import TextField from "@material-ui/core/TextField";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import plLocale from "date-fns/locale/pl";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import backend from "../../../api/backend";
-import { MonthLogic } from "../../../logic/schedule/month.logic";
+import { MonthLogic } from "../../../logic/real-schedule-logic/month.logic";
+import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
+import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
 import "./problem-metadata.css";
+import { SnackbarComponent } from "./snackbar.component";
 
 export function ProblemMetadataComponent() {
   //#region members
 
   const [selectedDate, handleDateChange] = useState<Date>(new Date());
-  const [numberOfChildren, setNumberOfChildren] = useState<number>(0);
   const [numberOfNurses, setNumberOfNurses] = useState<number>(0);
   const [numberOfSitters, setNumberOfSitters] = useState<number>(0);
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   //#endregion
 
   //#region state interaction
   const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData);
 
-  useEffect(() => {
-    let monthNumber = schedule.schedule_info?.month_number;
-    let year = schedule.schedule_info?.year;
-    let nurseCount = schedule.employee_info?.nurseCount;
-    let babysitterCount = schedule.employee_info?.babysitterCount;
-    // children number in first day of month
-    let childrenCount = schedule.month_info?.children_number[0];
+  const dispatcher = useDispatch();
 
-    if (monthNumber && year) {
-      handleDateChange(MonthLogic.convertToDate(monthNumber, year));
-    }
-    if (childrenCount) {
-      setNumberOfChildren(childrenCount);
-    }
-    if (babysitterCount) {
-      setNumberOfSitters(babysitterCount);
-    }
-    if (nurseCount) {
-      setNumberOfNurses(nurseCount);
+  useEffect(() => {
+    if (schedule) {
+      let { year, month_number } = schedule.schedule_info || {};
+      let { babysitterCount, nurseCount } = schedule.employee_info || {};
+
+      if (month_number && year) {
+        handleDateChange(MonthLogic.convertToDate(month_number, year));
+      }
+
+      if (babysitterCount) {
+        setNumberOfSitters(babysitterCount);
+      }
+      if (nurseCount) {
+        setNumberOfNurses(nurseCount);
+      }
     }
   }, [schedule]);
   //#endregion
 
   //#region handlers
+  function showSnackbar(message) {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  }
+
+  function handleNumberOfNursesChange() {
+    let { nurseCount } = schedule?.employee_info || {};
+
+    if (!nurseCount) {
+      return;
+    }
+
+    if (nurseCount > numberOfNurses) {
+      setNumberOfNurses(nurseCount);
+      showSnackbar("Wprowadzono mniej pielęgniarek niż w harmonogramie");
+    }
+  }
+
+  function handleNumberOfSittersChange() {
+    let { babysitterCount } = schedule?.employee_info || {};
+
+    if (!babysitterCount) {
+      return;
+    }
+
+    if (babysitterCount > numberOfSitters) {
+      setNumberOfSitters(babysitterCount);
+      showSnackbar("Wprowadzono mniej opiekunek niż w harmonogramie");
+    }
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(schedule);
-    const response = await backend.fixSchedule(schedule);
-    console.log(response);
+    if (schedule) {
+      console.log(schedule);
+      const response = await backend.getErrors(schedule!);
+      dispatcher({
+        type: ScheduleErrorActionType.UPDATE,
+        payload: response,
+      } as ActionModel<ScheduleErrorModel[]>);
+    }
   };
   //#endregion
 
   //#region  view
-  function textField(id, label, value, setFunction) {
+  function textField(id, label, value, setFunction, onTextFieldBlur?) {
     return (
       <TextField
         required
@@ -63,6 +102,7 @@ export function ProblemMetadataComponent() {
         label={label}
         value={value}
         onChange={(e) => setFunction(e.target.value)}
+        onBlur={onTextFieldBlur}
       />
     );
   }
@@ -85,9 +125,20 @@ export function ProblemMetadataComponent() {
         />
       </MuiPickersUtilsProvider>
 
-      {textField("children", "Ilość dzieci", numberOfChildren, setNumberOfChildren)}
-      {textField("nurses", "Ilość pielęgniarek", numberOfNurses, setNumberOfNurses)}
-      {textField("sitters", "Ilość opiekunek", numberOfSitters, setNumberOfSitters)}
+      {textField(
+        "nurses",
+        "Ilość pielęgniarek",
+        numberOfNurses,
+        setNumberOfNurses,
+        handleNumberOfNursesChange
+      )}
+      {textField(
+        "sitters",
+        "Ilość opiekunek",
+        numberOfSitters,
+        setNumberOfSitters,
+        handleNumberOfSittersChange
+      )}
       <br />
       <Button
         size="small"
@@ -98,6 +149,12 @@ export function ProblemMetadataComponent() {
       >
         Poprawić
       </Button>
+      <SnackbarComponent
+        alertMessage={snackbarMessage}
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
+        key={snackbarMessage}
+      />
     </form>
   );
   //#endregion

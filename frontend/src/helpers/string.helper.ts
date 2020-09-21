@@ -12,4 +12,8 @@ export class StringHelper {
   static getRawValue(value: string | null | undefined): string {
     return value?.toLowerCase().trim() || "";
   }
+
+  static capitalize(value: string): string {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  }
 }

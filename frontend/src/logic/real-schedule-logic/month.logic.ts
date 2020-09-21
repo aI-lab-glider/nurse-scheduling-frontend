@@ -1,5 +1,11 @@
+import { ArrayHelper } from "../../helpers/array.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { DayOfWeek, WeekDays } from "../../state/models/schedule-data/month-info.model";
+
+export interface DateType {
+  date:number,
+  dayOfWeek: DayOfWeek
+}
 
 export class MonthLogic {
   //#region transltaions
@@ -25,21 +31,40 @@ export class MonthLogic {
   public dates: number[] = [];
   public dayCount: number = 0;
   public daysOfWeek: DayOfWeek[] = [];
-
+  private _dateTypes: DateType[] = [] 
   //#endregion
 
-  constructor(nameInPolish: string, year: string) {
-    this.month = MonthLogic.monthTranslations[StringHelper.getRawValue(nameInPolish)];
+  constructor(monthId: string | number, year: string) {
+    if (typeof monthId == "string") {
+      this.month = MonthLogic.monthTranslations[StringHelper.getRawValue(monthId)];
+    } else {
+      this.month = Object.values(MonthLogic.monthTranslations)[monthId];
+    }
     this.monthNumber = Object.values(MonthLogic.monthTranslations).findIndex(
       (m) => m === this.month
     );
     [this.daysOfWeek, this.dates, this.dayCount] = this.createFullWeekCalendar(this.month, year);
+    this._dateTypes = this.desribeDates(this.dates, this.daysOfWeek)
   }
 
   //#region logic
+  public get dateTypes(): DateType[] {
+    return this._dateTypes;
+  } 
+
+  private desribeDates(dates: number[], weekDays: DayOfWeek[]): DateType[] {
+    return ArrayHelper.zip(dates, weekDays).map(([date, weekDay]) => {
+      return {
+        date: date,
+        dayOfWeek: weekDay 
+      }
+    })
+  }
+
   public static convertToDate(monthNumber: number, year) {
     return new Date(`1 ${Object.values(MonthLogic.monthTranslations)[monthNumber]} ${year}`);
   }
+
 
   private createFullWeekCalendar(month: string, year: string): [DayOfWeek[], number[], number] {
     let [daysOfWeek, dates, _] = this.createCalendar(month, year);
@@ -62,8 +87,8 @@ export class MonthLogic {
     let firstMondayIndex = days_of_week.indexOf("MO");
     let lastSundayIndex = days_of_week.lastIndexOf("SU");
     return [
-      days_of_week.slice(firstMondayIndex, lastSundayIndex),
-      dates.slice(firstMondayIndex, lastSundayIndex),
+      days_of_week.slice(firstMondayIndex, lastSundayIndex + 1),
+      dates.slice(firstMondayIndex, lastSundayIndex + 1),
     ];
   }
 
@@ -74,5 +99,6 @@ export class MonthLogic {
       ] === month
     );
   }
+  
   //#endregion
 }

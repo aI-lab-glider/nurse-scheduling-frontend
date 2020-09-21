@@ -1,10 +1,8 @@
-import React from 'react';
+import React from "react";
 
 function LegendComponent () {
-    return (
-        <div>
-            "LegendComponent works !"
-        </div>
-    );
+    // in future here will be added some more logic: 
+    // for example editing of colors for shifts 
+    return <React.Fragment></React.Fragment>
 }
 export default LegendComponent;
