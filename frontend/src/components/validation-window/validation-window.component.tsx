@@ -16,23 +16,33 @@ export function ValidationWindowComponent() {
   //#endregion
 
   //#region state interaction
-  const errors_received = useSelector((state: ApplicationStateModel) => state.scheduleErrors);
+  const errorsReceived = useSelector((state: ApplicationStateModel) => state.scheduleErrors);
 
   useEffect(() => {
-    if (errors_received?.length) {
-      setErrors(errors_received);
+    if (errorsReceived?.length) {
+      setErrors(errorsReceived);
       setOpen(true);
     }
-  }, [errors_received]);
+  }, [errorsReceived]);
   //#endregion
 
   //#region handlers
+  const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    if (
+      event.type === "keydown" &&
+      ((event as React.KeyboardEvent).key === "Tab" ||
+        (event as React.KeyboardEvent).key === "Shift")
+    ) {
+      return;
+    }
 
+    setOpen(open);
+  };
   //#endregion
 
   //#region view
   return (
-    <Drawer open={open} anchor={"right"}>
+    <Drawer open={open} onClose={toggleDrawer(false)} anchor={"right"}>
       <List>
         {errors?.map((error, index) => (
           <ListItem key={index + error.message.slice(0, 5)}>
