@@ -1,4 +1,5 @@
 import DateFnsUtils from "@date-io/date-fns";
+import { Box } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -10,6 +11,7 @@ import { MonthLogic } from "../../../logic/real-schedule-logic/month.logic";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
+import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
 import "./problem-metadata.css";
 import { SnackbarComponent } from "./snackbar.component";
@@ -80,17 +82,28 @@ export function ProblemMetadataComponent() {
     }
   }
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+
+  async function onFixScheduleClicked() {
     if (schedule) {
-      console.log(schedule);
+      const response = await backend.fixSchedule(schedule!);
+      dispatcher({
+        type: ScheduleDataActionType.ADD_NEW,
+        payload: response
+      });
+      showSnackbar("Harmonogram został poprawiony");
+    }
+  }
+  
+  async function onShowErrorsClicked() {
+    if (schedule) {
       const response = await backend.getErrors(schedule!);
       dispatcher({
         type: ScheduleErrorActionType.UPDATE,
         payload: response,
       } as ActionModel<ScheduleErrorModel[]>);
     }
-  };
+  }
+
   //#endregion
 
   //#region  view
@@ -108,7 +121,8 @@ export function ProblemMetadataComponent() {
   }
 
   return (
-    <form className="form" onSubmit={handleSubmit} autoComplete="off">
+    <form className="form" autoComplete="off">
+
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={plLocale}>
         <DatePicker
           required
@@ -140,15 +154,30 @@ export function ProblemMetadataComponent() {
         handleNumberOfSittersChange
       )}
       <br />
-      <Button
-        size="small"
-        className="submit-button"
-        type="submit"
-        variant="contained"
-        color="primary"
-      >
-        Poprawić
-      </Button>
+        <div
+          className="submit-button-container">
+          <Box>
+            <Button
+              size="small"
+              className="submit-button"
+              variant="outlined"
+              onClick={onFixScheduleClicked}>
+              Poprawić
+            </Button>
+          </Box>
+
+          <Box>
+            <Button
+              size="small"
+              className="submit-button"
+              variant="outlined"
+              onClick={onShowErrorsClicked}>
+                Sprawdzić
+            </Button>
+
+          </Box>          
+        </div>
+      
       <SnackbarComponent
         alertMessage={snackbarMessage}
         open={snackbarOpen}
