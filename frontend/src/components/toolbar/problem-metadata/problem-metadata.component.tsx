@@ -6,7 +6,7 @@ import plLocale from "date-fns/locale/pl";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import backend from "../../../api/backend";
-import { MonthLogic } from "../../../logic/schedule/month.logic";
+import { MonthLogic } from "../../../logic/real-schedule-logic/month.logic";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";

@@ -1,15 +1,15 @@
-import { SectionLogic } from "../../helpers/section.model";
 import { Shift } from "../../state/models/schedule-data/shift-info.model";
-import { DataRow } from "./data-row.logic";
-import { MetaDataLogic } from "./metadata.logic";
+import { DataRowParser } from "./data-row.parser";
+import { MetaDataParser } from "./metadata.parser";
 
-export class ShiftsInfoLogic implements SectionLogic {
+export class ShiftsInfoParser {
   //#region  members
-  private rowByKeys: { [key: string]: DataRow } = {};
+  private rowByKeys: { [key: string]: DataRowParser } = {};
 
-  constructor(scheduleInfoSection: DataRow[], private metaData: MetaDataLogic) {
+  constructor(scheduleInfoSection: DataRowParser[], private metaData: MetaDataParser) {
     let data = scheduleInfoSection.map((row) => {
-      row.updateData(this.fillRowWithShifts);
+      row.processRow(this.fillRowWithShifts);
+      // lastSundayData + 1 because slice not include last index
       row.cropData(this.metaData.firsMondayDate, this.metaData.lastSundayDate + 1);
       return row;
     });
@@ -19,7 +19,8 @@ export class ShiftsInfoLogic implements SectionLogic {
   }
 
   //#endregion
-  public get sectionData(): DataRow[] {
+  //#region logic
+  public get sectionData(): DataRowParser[] {
     return this.data;
   }
 
@@ -39,12 +40,9 @@ export class ShiftsInfoLogic implements SectionLogic {
       .reduce((prev, curr) => ({ ...prev, ...curr }));
   }
 
-  //#region logic
-  public tryUpdate(row: DataRow) {
-    if (Object.keys(this.rowByKeys).includes(row.rowKey)) {
-      this.rowByKeys[row.rowKey] = row;
-    }
-  }
+  //#endregion
+
+  //#region parser
 
   private fillRowWithShifts(row: string[]): Shift[] {
     let previousShift: Shift = null;

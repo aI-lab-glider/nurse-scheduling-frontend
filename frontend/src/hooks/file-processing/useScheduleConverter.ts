@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import XLSXParser from "xlsx";
-import { DataRow } from "../../logic/schedule/data-row.logic";
-import { ScheduleLogic } from "../../logic/schedule/schedule.logic";
+import { DataRowParser } from "../../logic/schedule-parser/data-row.parser";
+import { ScheduleParser } from "../../logic/schedule-parser/schedule.parser";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { useFileReader } from "./useFileReader";
 
@@ -13,7 +13,7 @@ export const useScheduleConverter = (): [
   //#region members
   const [scheduleSheet, setScheduleSheet] = useState<Array<object>>();
   const [fileContent, setSrcFile] = useFileReader();
-  const [schedule, setSchedule] = useState<ScheduleDataModel>();
+  const [scheduleModel, setScheduleModel] = useState<ScheduleDataModel>();
   //#endregion
 
   //#region logic
@@ -23,7 +23,7 @@ export const useScheduleConverter = (): [
     let stopPatternLen = 4;
     let actualPatternLen = 0;
     for (var i = 0; actualPatternLen < stopPatternLen; ++i) {
-      let row = new DataRow(scheduleSheet[i]);
+      let row = new DataRowParser(scheduleSheet[i]);
       if (row.isEmpty) actualPatternLen += 1;
       else actualPatternLen = 0;
     }
@@ -57,11 +57,11 @@ export const useScheduleConverter = (): [
     let parsedFileContent = convertBinaryToObjectArray(fileContent);
     setScheduleSheet(parsedFileContent);
     if (Object.keys(parsedFileContent).length !== 0) {
-      const logic = new ScheduleLogic(parsedFileContent as Array<Object>);
-      setSchedule(logic.getScheduleModel());
+      const parser = new ScheduleParser(parsedFileContent as Array<Object>);
+      setScheduleModel(parser.getScheduleModel());
     }
   }, [fileContent]);
   //#endregion
 
-  return [schedule, scheduleSheet, setSrcFile];
+  return [scheduleModel, scheduleSheet, setSrcFile];
 };

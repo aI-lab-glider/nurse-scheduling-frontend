@@ -9,7 +9,6 @@ import { useScheduleConverter } from "../../../hooks/file-processing/useSchedule
 import { ActionModel } from "../../../state/models/action.model";
 import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-data.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
-import { xlxsSheetDataActionType } from "../../../state/reducers/xlxs-sheet-data-reducer";
 
 export function ImportButtonsComponent() {
   //#region members
@@ -25,18 +24,11 @@ export function ImportButtonsComponent() {
   useEffect(() => {
     if (convertedSchedule) {
       scheduleDipatcher({
-        type: ScheduleDataActionType.UPDATE,
+        type: ScheduleDataActionType.ADD_NEW,
         payload: convertedSchedule,
       } as ActionModel<ScheduleDataModel>);
     }
-
-    if (xlxsSheet) {
-      scheduleDipatcher({
-        type: xlxsSheetDataActionType.UPDATE,
-        payload: xlxsSheet,
-      });
-    }
-  }, [convertedSchedule, xlxsSheet, scheduleDipatcher]);
+  }, [convertedSchedule, scheduleDipatcher]);
   //#endregion
 
   //#region logic

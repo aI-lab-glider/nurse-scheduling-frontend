@@ -5,7 +5,8 @@ export enum CellState {
 export interface CellOptions {
   value: string;
   className: string;
+  dayType?: string;
   isEditable?: boolean;
-  onDataChange?: (newValue: string) => void;
+  onDataChanged?: (newValue: string) => void;
   onStateChange?: (state: CellState) => void;
 }

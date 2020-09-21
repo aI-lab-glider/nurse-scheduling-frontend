@@ -6,8 +6,9 @@ import { CellOptions, CellState } from "./cell-options.model";
 export function BaseCellComponent({
   value,
   className = "",
+  dayType = "",
   isEditable = true,
-  onDataChange,
+  onDataChanged,
   onStateChange,
 }: CellOptions) {
   const [cellValue, setCellValue] = useState(value);
@@ -41,8 +42,8 @@ export function BaseCellComponent({
   function onCellValueSave(newValue: string) {
     isEditing = false;
     setCellValue(newValue);
-    if (onDataChange) {
-      onDataChange(newValue);
+    if (onDataChanged && newValue != cellValue) {
+      onDataChanged(newValue);
     }
     if (onStateChange) {
       onStateChange(CellState.STOP_EDITING);
@@ -57,7 +58,7 @@ export function BaseCellComponent({
   }
   //  #region view
   return (
-    <td className={`cell ${className || ""}`} onClick={onCellClicked}>
+    <td className={`cell ${className || ""} ${dayType}`} onClick={onCellClicked}>
       {content}
     </td>
   );

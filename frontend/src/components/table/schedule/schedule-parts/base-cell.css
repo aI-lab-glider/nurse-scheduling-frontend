@@ -21,3 +21,11 @@
   border: 0px solid white;
   opacity: 0;
 }
+
+.SU {
+  background-color: rgba(219, 219, 4, 0.945);
+}
+
+.SA {
+  background-color: rgba(3, 3, 219, 0.904);
+}

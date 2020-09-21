@@ -1,9 +1,12 @@
 .DN {
   color: blueviolet;
+  background-color: rgb(255, 255, 255);
+
 }
 
 .D {
   color: green;
+  background-color: rgb(255, 255, 255);
 }
 
 .L4 {
@@ -16,8 +19,10 @@
 
 .N {
   color: darkred;
+  background-color: rgb(255, 255, 255);
 }
 
 .RP {
   color: green;
+  background-color: rgb(255, 255, 255);
 }
