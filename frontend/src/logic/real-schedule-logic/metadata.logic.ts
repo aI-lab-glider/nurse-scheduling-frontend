@@ -1,9 +1,7 @@
 import { DayOfWeek } from "../../state/models/schedule-data/month-info.model";
 import { DataRow } from "./data-row";
-import { DateType, MonthLogic } from "./month.logic";
+import { MonthLogic, VerboseDate } from "./month.logic";
 import { SectionLogic } from "./section-logic.model";
-
-export interface VerboseDate extends DateType {}
 
 export class MetadataLogic implements SectionLogic {
   private translations = {
@@ -21,9 +19,12 @@ export class MetadataLogic implements SectionLogic {
   }
 
   public get verboseDates(): VerboseDate[] {
-    return this.monthLogic.dateTypes;
+    return this.monthLogic.verboseDates;
   }
 
+  public get blockedDates(): number[] {
+    return this.verboseDates.filter(date => date.isBlocked).map(date => date.date);
+  }
   public get monthNumber() {
     return this.monthLogic.monthNumber;
   }

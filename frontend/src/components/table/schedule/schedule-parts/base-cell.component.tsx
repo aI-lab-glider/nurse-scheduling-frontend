@@ -58,7 +58,7 @@ export function BaseCellComponent({
   }
   //  #region view
   return (
-    <td className={`cell ${className || ""} ${dayType}`} onClick={onCellClicked}>
+    <td className={ isEditable ? `cell ${className || ""} ${dayType}` : 'cell blocked'} onClick={onCellClicked}>
       {content}
     </td>
   );
