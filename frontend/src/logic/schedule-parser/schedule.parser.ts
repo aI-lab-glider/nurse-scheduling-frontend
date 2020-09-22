@@ -44,7 +44,7 @@ export class ScheduleParser {
         ...this.babysitterShiftsParser.getWorkerShifts(),
       },
       month_info: {
-        blocked_days: this.metaData.blockedDays,
+        frozen_days: this.metaData.frozenDays,
         children_number: this.childrenInfoParser.registeredChildrenNumber,
       },
       employee_info: {
@@ -60,7 +60,7 @@ export class ScheduleParser {
     Object.keys(this.babysitterShiftsParser.getWorkerShifts()).forEach((babysitter) => {
       result[babysitter] = WorkerType.OTHER;
     });
-    Object.keys(this.babysitterShiftsParser.getWorkerShifts()).forEach((nurse) => {
+    Object.keys(this.nurseShiftsParser.getWorkerShifts()).forEach((nurse) => {
       result[nurse] = WorkerType.NURSE;
     });
 

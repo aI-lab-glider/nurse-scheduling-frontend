@@ -45,7 +45,7 @@ export function ScheduleRowComponent({
             dayType={verboseDates?.[index].dayOfWeek || ""}
             onDataChanged={(newValue) => onShiftChange(index, newValue)}
             className={`key ${!dataRow || dataRow?.isEmpty ? "hidden" : ""}`}
-            isEditable={!verboseDates?.[index].isBlocked}
+            isEditable={!verboseDates?.[index].isFrozen}
           />
         );
       })}

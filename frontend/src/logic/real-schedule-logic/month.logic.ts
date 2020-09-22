@@ -5,7 +5,7 @@ import { DayOfWeek, WeekDays } from "../../state/models/schedule-data/month-info
 export interface VerboseDate {
   date:number,
   dayOfWeek: DayOfWeek,
-  isBlocked?: boolean,
+  isFrozen?: boolean,
 }
 
 export class MonthLogic {
@@ -107,7 +107,7 @@ export class MonthLogic {
     return verboseDates.map((item, index) => {
       return {
         ...item,
-        isBlocked: index < firstMondayIndex || index > lastSundayIndex 
+        isFrozen: index < firstMondayIndex || index > lastSundayIndex 
       }
     })    
   }
