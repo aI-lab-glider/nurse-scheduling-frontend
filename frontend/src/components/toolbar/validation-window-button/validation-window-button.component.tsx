@@ -13,10 +13,13 @@ export default function ValidationWindowButtonComponent() {
 
   //#region state interaction
   const errorsReceived = useSelector((state: ApplicationStateModel) => state.scheduleErrors);
+  const noErrorsFound = [{ code: "", message: "Nie znaleziono błędów" }];
 
   useEffect(() => {
     if (errorsReceived?.length) {
       setErrors(errorsReceived);
+    } else {
+      setErrors(noErrorsFound);
     }
   }, [errorsReceived]);
   //#endregion
