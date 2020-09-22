@@ -5,7 +5,7 @@ import { ScheduleErrorMessageModel } from "../../../state/models/schedule-data/s
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { useSelector } from "react-redux";
 
-export default function ValidationWindowButtonComponent() {
+export default function ValidationDrawerComponent() {
   //#region members
   const [errors, setErrors] = useState<ScheduleErrorMessageModel[]>();
   const [open, setOpen] = useState<boolean>(false);
@@ -26,14 +26,6 @@ export default function ValidationWindowButtonComponent() {
 
   //#region handlers
   const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-    if (
-      event.type === "keydown" &&
-      ((event as React.KeyboardEvent).key === "Tab" ||
-        (event as React.KeyboardEvent).key === "Shift")
-    ) {
-      return;
-    }
-
     setOpen(open);
   };
   //#endregion
