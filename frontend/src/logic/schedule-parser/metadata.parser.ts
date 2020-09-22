@@ -38,8 +38,8 @@ export class MetaDataParser {
     }
   }
 
-  public get blockedDays(): number[] {
-    return this.monthLogic.verboseDates.filter(date => date.isBlocked).map(date => date.date - 1);
+  public get frozenDays(): number[] {
+    return this.monthLogic.verboseDates.filter(date => date.isFrozen).map(date => date.date - 1);
   }
   public get monthNumber() {
     return this.monthLogic.monthNumber;

@@ -22,8 +22,8 @@ export class MetadataLogic implements SectionLogic {
     return this.monthLogic.verboseDates;
   }
 
-  public get blockedDates(): number[] {
-    return this.verboseDates.filter(date => date.isBlocked).map(date => date.date);
+  public get frozenDates(): number[] {
+    return this.verboseDates.filter(date => date.isFrozen).map(date => date.date);
   }
   public get monthNumber() {
     return this.monthLogic.monthNumber;

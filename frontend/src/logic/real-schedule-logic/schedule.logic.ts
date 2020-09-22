@@ -67,7 +67,7 @@ export class ScheduleLogic {
         ...this.sections.babysitterInfo.getWorkerShifts(),
       },
       month_info: {
-        blocked_days: this.metadata?.blockedDates || [],
+        frozen_days: this.metadata?.frozenDates || [],
         children_number: this.sections.childrenInfo.registeredChildrenNumber,
       },
       employee_info: {
