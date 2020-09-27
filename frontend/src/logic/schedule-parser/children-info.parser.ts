@@ -19,7 +19,7 @@ export class ChildrenInfoParser {
 
   constructor(childrenInfoSection: DataRowParser[], metaData: MetaDataParser) {
     let data = childrenInfoSection.map((row) => {
-      row.cropData(metaData.firsMondayDate, metaData.lastSundayDate + 1);
+      row.cropData(metaData.validaDataStart, metaData.validaDataEnd + 1);
       return row;
     });
     data.forEach((row) => {

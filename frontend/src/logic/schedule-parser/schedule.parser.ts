@@ -12,7 +12,7 @@ export class ScheduleParser {
   private babysitterShiftsParser: ShiftsInfoParser;
   private childrenInfoParser: ChildrenInfoParser;
   private metaData: MetaDataParser;
-
+  
   constructor(schedule: Array<Object>) {
     schedule = schedule.map((i) => new DataRowParser(i));
     [this.metaData, schedule] = this.initMetadataAndCleanUp(schedule as DataRowParser[]);
@@ -23,6 +23,7 @@ export class ScheduleParser {
     ] = this.initSections(schedule as DataRowParser[], this.metaData);
   }
   //#endregion
+
 
   public findRowByKey(schedule, key: string): [DataRowParser | undefined, number] {
     let index = schedule.findIndex(
@@ -38,6 +39,7 @@ export class ScheduleParser {
       schedule_info: {
         month_number: this.metaData.monthNumber,
         year: this.metaData.year,
+        daysFromPreviousMonthExists: this.metaData.daysFromPreviousMonthExists,
       },
       shifts: {
         ...this.nurseShiftsParser.getWorkerShifts(),
@@ -46,6 +48,7 @@ export class ScheduleParser {
       month_info: {
         frozen_days: this.metaData.frozenDays,
         children_number: this.childrenInfoParser.registeredChildrenNumber,
+        dates: this.metaData.dates
       },
       employee_info: {
         type: this.getWorkerTypes(),
@@ -69,12 +72,17 @@ export class ScheduleParser {
   //#endregion
 
   //#region parser
-  private initMetadataAndCleanUp(rawData: DataRowParser[]): [MetaDataParser, DataRowParser[]] {
+  private initMetadataAndCleanUp(schedule: DataRowParser[]): [MetaDataParser, DataRowParser[]] {
     let metaDataKey = "Grafik";
-    let [dataRow, start] = this.findRowByKey(rawData, metaDataKey);
+    let [dataRow, start] = this.findRowByKey(schedule, metaDataKey);
+    if (!dataRow) {
+      throw new Error('No metadata provided');
+    }
+    // Assumption made, that days always go after metadata
+    let daysRow = schedule[start+1];
     let notSectionsRowsCountFromBeginning = 3;
-    let schedule = rawData.slice(start + notSectionsRowsCountFromBeginning);
-    return [new MetaDataParser(dataRow), schedule];
+    schedule = schedule.slice(start + notSectionsRowsCountFromBeginning);
+    return [new MetaDataParser(dataRow, daysRow), schedule];
   }
 
   private initSections(
