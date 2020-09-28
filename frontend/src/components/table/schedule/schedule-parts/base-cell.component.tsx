@@ -4,15 +4,17 @@ import "./base-cell.css";
 import { CellOptions, CellState } from "./cell-options.model";
 
 export function BaseCellComponent({
+  index,
   value,
   className = "",
   dayType = "",
   isEditable = true,
   onDataChanged,
   onStateChange,
+  onContextMenu,
 }: CellOptions) {
-  const [cellValue, setCellValue] = useState(value);
 
+  const [cellValue, setCellValue] = useState(value);
   let isEditing = false;
 
   const inputRef = React.createRef<HTMLInputElement>();
@@ -56,11 +58,17 @@ export function BaseCellComponent({
       onCellValueSave(currentInputValue);
     }
   }
+
+  function handleContextMenu(e: React.MouseEvent) {
+    e.preventDefault();
+    onContextMenu && onContextMenu(index, isEditable);
+  }
   //  #region view
   return (
     <td
       className={isEditable ? `cell ${className || ""} ${dayType}` : "cell frozen"}
       onClick={onCellClicked}
+      onContextMenu={handleContextMenu}
     >
       {content}
     </td>
