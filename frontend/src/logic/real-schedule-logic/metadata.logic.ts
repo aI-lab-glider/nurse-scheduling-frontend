@@ -8,12 +8,12 @@ export class MetadataLogic implements SectionLogic {
     dates_key: "Dni miesiąca",
   };
 
-  private monthLogic;
+  private monthLogic: MonthLogic;
 
-  constructor(private _year: string, private month: number) {
-    this.monthLogic = new MonthLogic(month, _year);
+  constructor(private _year: string, private month: number, monthDates: number[], public daysFromPreviousMonthExists: boolean) {
+    this.monthLogic = new MonthLogic(this.month, _year, monthDates, daysFromPreviousMonthExists);
   }
-
+  
   tryUpdate(dataRow: DataRow) {
     throw new Error("Method not implemented.");
   }
@@ -38,6 +38,10 @@ export class MetadataLogic implements SectionLogic {
 
   public get daysOfWeek(): DayOfWeek[] {
     return this.monthLogic.daysOfWeek;
+  }
+
+  public get dates(): number[] {
+    return this.monthLogic.verboseDates.map(d => d.date);
   }
 
   public get dayNumbers(): number[] {

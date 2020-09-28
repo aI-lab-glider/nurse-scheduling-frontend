@@ -5,4 +5,5 @@ export interface MonthInfoModel {
   // first_day?: number;
   children_number?: number[];
   frozen_days: number[];
+  dates: number[];
 }
