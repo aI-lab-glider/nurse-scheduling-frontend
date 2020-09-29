@@ -23,7 +23,6 @@ export function ImportButtonsComponent() {
 
   useEffect(() => {
     if (convertedSchedule) {
-      console.log(convertedSchedule);
       scheduleDipatcher({
         type: ScheduleDataActionType.ADD_NEW,
         payload: convertedSchedule,

@@ -50,8 +50,8 @@ export class MetaDataParser {
     return firstDayIndex != 0
   }
 
-  public get frozenDays(): number[] {
-    return this.monthLogic.verboseDates.filter(date => date.isFrozen).map(date => date.date - 1);
+  public get frozenDays(): [number,number][] {
+    return this.monthLogic.verboseDates.filter(date => date.isFrozen).map((date, index) => [0, index]);
   }
   public get monthNumber() {
     return this.monthLogic.monthNumber;

@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { DataRow } from "../../../../logic/real-schedule-logic/data-row";
 import { MetadataLogic } from "../../../../logic/real-schedule-logic/metadata.logic";
 import { BaseCellComponent } from "./base-cell.component";
@@ -19,7 +20,8 @@ export function ScheduleRowComponent({
   metaDataLogic,
 }: ScheduleRowOptions) {
 
-  let key = dataRow?.rowKey;
+  const dispatcher = useDispatch();
+  let nurse = dataRow?.rowKey ?? "";
   let data = dataRow?.rowData(false) || [];
   const verboseDates = metaDataLogic?.verboseDates;
 
@@ -31,21 +33,29 @@ export function ScheduleRowComponent({
     }
   }
 
+  function changeCellFrozenState(index: number, state: boolean) {
+    let frozenDatesAction = metaDataLogic?.changeShiftFrozenState(nurse, index, !state);
+    dispatcher(frozenDatesAction);
+  }
+
   return (
     <tr className="row">
       <BaseCellComponent
-        value={key || ""}
+        index={0}
+        value={nurse || ""}
         className={`key ${!dataRow || dataRow?.isEmpty ? "hidden" : ""}`}
       />
       {data.map((cellData, index) => {
         return (
           <CellComponent
+            index={index}
             key={`${cellData}${index}`}
             value={cellData}
             dayType={verboseDates?.[index].dayOfWeek || ""}
             onDataChanged={(newValue) => onShiftChange(index, newValue)}
-            className={`key ${!dataRow || dataRow?.isEmpty ? "hidden" : ""}`}
+            className={`${!dataRow || dataRow?.isEmpty ? "hidden" : ""}`}
             isEditable={!verboseDates?.[index].isFrozen}
+            onContextMenu={changeCellFrozenState}
           />
         );
       })}

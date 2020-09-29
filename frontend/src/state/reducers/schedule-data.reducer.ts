@@ -1,4 +1,6 @@
+import { MonthLogicActionType } from "../../logic/real-schedule-logic/metadata.logic";
 import { ActionModel } from "../models/action.model";
+import { MonthInfoModel } from "../models/schedule-data/month-info.model";
 import { ScheduleDataModel } from "../models/schedule-data/schedule-data.model";
 
 export enum ScheduleDataActionType {
@@ -18,6 +20,14 @@ export function scheduleDataReducer(
     case ScheduleDataActionType.UPDATE:
       scheduleModel.isNew = false;
       return Object.assign({}, state, scheduleModel);
+    case MonthLogicActionType.UpdateFrozenDates:
+      scheduleModel.isNew = false;
+      return Object.assign({}, state, {
+        month_info: {
+          ...state.month_info,
+          frozen_days: action.payload,
+        } as MonthInfoModel
+      })
     default:
       return state;
   }

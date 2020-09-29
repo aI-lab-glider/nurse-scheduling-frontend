@@ -9,6 +9,7 @@ export interface VerboseDate {
 }
 
 export class MonthLogic {
+  
   //#region transltaions
   private static monthTranslations = {
     styczeń: "january",
@@ -87,7 +88,6 @@ export class MonthLogic {
     // for (let day = 1; day < 31 && this.isDateBelongsToMonth(day, month, year); ++day) {
     for(let day of this.monthDates){
       if (day  === 1){
-        console.log('here');
         this.daysFromPreviousMonthExists = false;
       }
       let date = new Date(`${day} ${month} ${year}`)
@@ -102,8 +102,8 @@ export class MonthLogic {
   }
   private isDateFrozen(date: Date) {
     let today = new Date();
-    return (date.getDate() < today.getDate() 
-            || date.getMonth() <= today.getMonth() 
+    return ( (date.getDate() < today.getDate() 
+              && date.getMonth() <= today.getMonth()) 
             || date.getFullYear() < today.getFullYear() 
             || this.daysFromPreviousMonthExists)
   }
