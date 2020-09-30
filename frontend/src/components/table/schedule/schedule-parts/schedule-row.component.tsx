@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { DataRow } from "../../../../logic/real-schedule-logic/data-row";
 import { MetadataLogic } from "../../../../logic/real-schedule-logic/metadata.logic";
 import { BaseCellComponent } from "./base-cell.component";
-import { CellOptions } from "./cell-options.model";
+import { CellOptions, CellState } from "./cell-options.model";
 import "./schedule-row.component.css";
 
 export interface ScheduleRowOptions {
@@ -20,6 +20,8 @@ export function ScheduleRowComponent({
   metaDataLogic,
 }: ScheduleRowOptions) {
 
+  const [selectedCells, setSelectedCells] = useState<number[]>([]);
+
   const dispatcher = useDispatch();
   let nurse = dataRow?.rowKey ?? "";
   let data = dataRow?.rowData(false) || [];
@@ -27,15 +29,28 @@ export function ScheduleRowComponent({
 
   function onShiftChange(index: number, newShift: string) {
     dataRow = dataRow as DataRow;
-    dataRow.setValue(index, newShift);
+    dataRow.setValue(selectedCells, newShift);
     if (onRowUpdated) {
       onRowUpdated(dataRow);
     }
+    setSelectedCells([]);
   }
 
   function changeCellFrozenState(index: number, state: boolean) {
     let frozenDatesAction = metaDataLogic?.changeShiftFrozenState(nurse, index, !state);
     dispatcher(frozenDatesAction);
+  }
+
+  function registerCell(index: number) {
+    setSelectedCells([...selectedCells, index]);
+  }
+
+  function onCellStateChanged(cellState: CellState) {
+    switch (cellState) {
+      case CellState.STOP_EDITING:
+        setSelectedCells([]);
+        break;
+    }
   }
 
   return (
@@ -56,6 +71,9 @@ export function ScheduleRowComponent({
             className={`${!dataRow || dataRow?.isEmpty ? "hidden" : ""}`}
             isEditable={!verboseDates?.[index].isFrozen}
             onContextMenu={changeCellFrozenState}
+            pushToRow={registerCell}
+            isSelected={selectedCells.includes(index)}
+            onStateChange={onCellStateChanged}
           />
         );
       })}

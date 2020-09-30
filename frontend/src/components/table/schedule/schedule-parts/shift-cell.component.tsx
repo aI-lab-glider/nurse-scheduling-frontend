@@ -1,36 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BaseCellComponent } from "./base-cell.component";
-import { CellOptions, CellState } from "./cell-options.model";
+import { CellOptions } from "./cell-options.model";
 import "./shift-cell.css";
 
-export function ShiftCellComponent({ value, className = "", dayType ,onDataChanged, isEditable, onContextMenu, index }: CellOptions) {
+export function ShiftCellComponent(
+  options: CellOptions) {
+  const {dayType, value, className, isEditable, onDataChanged, onContextMenu, isSelected} = options;
   const isWeekend = dayType === "SA" || dayType === "SU";
   const [shift, setShift] = useState(value);
-  const [style, setStyle] = useState(`${className} ${ isWeekend ? '' : shift}`);
   const [isEditableState, setIsEditableState] = useState(isEditable);
-  function onStateChange(newState: CellState) {
-    switch (newState) {
-      case CellState.START_EDITING:
-        if (!isWeekend) {
-          setStyle(style.replace(shift as string, ""));
-        }
-      break;
-      case CellState.STOP_EDITING:
-        setStyle(style);
-        break;
-    }
-  }
-
+  
   function onBaseCellUpdate(newShift: string) {
     setShift(newShift);
     if (onDataChanged) {
       onDataChanged(newShift);
     }
   }
-
-  useEffect(() => {
-    setStyle(`${className} ${isWeekend ? '' : shift }`);
-  }, [shift, className]);
 
   function handleContextMenu(index: number, isFrozen: boolean) {
     let newState = !isFrozen;
@@ -40,11 +25,9 @@ export function ShiftCellComponent({ value, className = "", dayType ,onDataChang
 
   return (
     <BaseCellComponent
-      index={index}
-      dayType= {dayType}
+      {...options}      
       value={value === "W" ? "" : value}
-      className={style}
-      onStateChange={onStateChange}
+      className={className + (isSelected ? '' : isWeekend ? '' : shift)}
       onDataChanged={onBaseCellUpdate}
       isEditable={isEditableState}
       onContextMenu={handleContextMenu}

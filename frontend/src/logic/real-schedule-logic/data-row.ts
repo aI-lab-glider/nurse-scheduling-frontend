@@ -21,14 +21,16 @@ export class DataRow implements DataRowModel {
     this.data = updateCallback(data);
   }
 
-  public setValue(index: number, value: string) {
+  public setValue(indexes: number[], value: string) {
     let data = this.rowData(true, false);
-    data[index] = value;
+    for (let index of indexes) {
+      data[index] = value;
+    }
     this.data = [...data];
   }
 
   public get length() {
     // data + key
-    return this.data.length + 1
+    return this.data.length + 1;
   }
 }

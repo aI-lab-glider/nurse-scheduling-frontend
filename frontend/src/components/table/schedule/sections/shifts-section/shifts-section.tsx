@@ -12,12 +12,8 @@ import "./shifts-section.css";
 import { ShiftsSectionOptions } from "./shifts-section.options";
 
 
-export function ShiftsSectionComponent({
-  workerType,
-  data = [],
-  metaDataLogic,
-  onSectionUpdated,
-}: ShiftsSectionOptions) {
+export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
+  const { onSectionUpdated, data = [], workerType, metaDataLogic } = options;
   const logic = new ShiftsInfoLogic(DataRowHelper.dataRowsAsValueDict<Shift>(data, true));
 
   function addDataRow(newRow: DataRow) {
@@ -50,6 +46,7 @@ export function ShiftsSectionComponent({
       )}
 
       <BaseSectionComponent
+        {...options}
         data={data}
         onSectionUpdated={onSectionUpdated}
         cellComponent={ShiftCellComponent}
