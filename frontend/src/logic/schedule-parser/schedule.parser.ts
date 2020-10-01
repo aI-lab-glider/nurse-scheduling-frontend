@@ -46,11 +46,16 @@ export class ScheduleParser {
         ...this.babysitterShiftsParser.getWorkerShifts(),
       },
       month_info: {
-        frozen_days: this.metaData.frozenDays,
+        frozen_shifts: this.metaData.frozenDays,
         children_number: this.childrenInfoParser.registeredChildrenNumber,
-        dates: this.metaData.dates
+        dates: this.metaData.dates,
       },
       employee_info: {
+        time: {
+          ...this.nurseShiftsParser.mockEmployeeWorkTime(),
+          ...this.babysitterShiftsParser.mockEmployeeWorkTime(),
+        },
+
         type: this.getWorkerTypes(),
         babysitterCount: this.babysitterShiftsParser.workersCount,
         nurseCount: this.nurseShiftsParser.workersCount,

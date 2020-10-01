@@ -16,6 +16,7 @@ export class WorkerTypeHelper {
 }
 
 export interface EmployeeInfoModel {
+  time: { [key: string]: number };
   nurseCount: number;
   babysitterCount: number;
   type: { [workerName: string]: WorkerType[] };

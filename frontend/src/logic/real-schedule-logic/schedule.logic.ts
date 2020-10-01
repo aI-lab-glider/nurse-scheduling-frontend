@@ -64,21 +64,25 @@ export class ScheduleLogic {
       schedule_info: {
         month_number: this.metadata?.monthNumber ?? 0,
         year: this.metadata?.year ?? 0,
-        daysFromPreviousMonthExists: this.metadata?.daysFromPreviousMonthExists ?? false
+        daysFromPreviousMonthExists: this.metadata?.daysFromPreviousMonthExists ?? false,
       },
       shifts: {
         ...this.sections.nurseInfo.getWorkerShifts(),
         ...this.sections.babysitterInfo.getWorkerShifts(),
       },
       month_info: {
-        frozen_days: this.metadata?.frozenDates ?? [],
+        frozen_shifts: this.metadata?.frozenDates ?? [],
         children_number: this.sections.childrenInfo.registeredChildrenNumber,
-        dates: this.metadata?.dates ?? []
+        dates: this.metadata?.dates ?? [],
       },
       employee_info: {
         type: this.getWorkerTypes(),
         babysitterCount: this.sections.babysitterInfo.workersCount || 0,
         nurseCount: this.sections.nurseInfo.workersCount || 0,
+        time: {
+          ...this.sections.babysitterInfo.mockEmployeeWorkTime(),
+          ...this.sections.nurseInfo.mockEmployeeWorkTime(),
+        },
       },
     };
   }

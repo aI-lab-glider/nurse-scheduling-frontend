@@ -24,6 +24,12 @@ export class ShiftsInfoParser {
     return this.data;
   }
 
+  public mockEmployeeWorkTime(): { [key: string]: number } {
+    let employeeDict = {};
+    Object.keys(this.getWorkerShifts()).forEach((key) => (employeeDict[key] = 1.0));
+    return employeeDict;
+  }
+
   public get workersCount(): number {
     return this.data.length;
   }

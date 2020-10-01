@@ -8,7 +8,7 @@ class Backend {
 
   constructor() {
     this.axios = axios.create({
-      baseURL: "http://127.0.0.1:5000/",
+      baseURL: "http://127.0.0.1:8000/",
     });
   }
 
@@ -54,13 +54,12 @@ class Backend {
 
   getErrors(schedule: ScheduleDataModel): Promise<ScheduleErrorMessageModel[]> {
     return this.axios
-      .post("/schedule_errors/", schedule)
+      .post("/schedule_errors", schedule)
       .then((resp) => resp.data.map(this.mapErrorResponseToErrorMessage));
   }
 
   fixSchedule(schedule: ScheduleDataModel): Promise<ScheduleDataModel[]> {
-    return this.axios.post("/fix_schedule/", schedule)
-                      .then((resp) => resp.data);
+    return this.axios.post("/fix_schedule", schedule).then((resp) => resp.data);
   }
 }
 

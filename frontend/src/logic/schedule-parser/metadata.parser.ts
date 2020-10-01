@@ -51,7 +51,9 @@ export class MetaDataParser {
   }
 
   public get frozenDays(): [number,number][] {
-    return this.monthLogic.verboseDates.filter(date => date.isFrozen).map((date, index) => [0, index]);
+    return this.monthLogic.verboseDates
+      .filter((date) => date.isFrozen)
+      .map((date, index) => [0, index + 1]);
   }
   public get monthNumber() {
     return this.monthLogic.monthNumber;
