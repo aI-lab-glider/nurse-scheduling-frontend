@@ -14,8 +14,22 @@ This repository contains the frontend web application, and also a mock backend s
 
 ## Installing Web App
 
-`npm install` - to install dependecies
+`npm install`
 
 ## Running Web App
 
-`npm start` - to start the application
+`npm start`
+
+## Preparing Mock Backend Server
+
+Have python, pip and venv installed, cd into backend/server, then
+
+`python3 -m venv venv`
+`source venv/bin/activate`
+`pip install -r requirements.txt`
+
+## Running Mock Backend Server
+
+`source venv/bin/activate`
+`export FLASK_APP=example_server.py`
+`python -m flask run`
