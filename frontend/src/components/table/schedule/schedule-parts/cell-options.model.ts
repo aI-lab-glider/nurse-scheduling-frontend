@@ -12,4 +12,6 @@ export interface CellOptions {
   onDataChanged?: (newValue: string) => void;
   onStateChange?: (state: CellState) => void;
   onContextMenu?: (cellIndex: number, isEditable: boolean) => void;
+  pushToRow?: (index: number) => void;
+  isSelected?: boolean;
 }

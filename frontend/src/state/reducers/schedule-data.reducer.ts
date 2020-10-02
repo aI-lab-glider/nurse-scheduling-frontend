@@ -16,6 +16,7 @@ export function scheduleDataReducer(
   switch (action.type) {
     case ScheduleDataActionType.ADD_NEW:
       scheduleModel.isNew = true;
+      console.log(scheduleModel);
       return Object.assign({}, state, scheduleModel);
     case ScheduleDataActionType.UPDATE:
       scheduleModel.isNew = false;
@@ -25,9 +26,9 @@ export function scheduleDataReducer(
       return Object.assign({}, state, {
         month_info: {
           ...state.month_info,
-          frozen_days: action.payload,
-        } as MonthInfoModel
-      })
+          frozen_shifts: action.payload,
+        } as MonthInfoModel,
+      });
     default:
       return state;
   }

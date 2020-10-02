@@ -53,7 +53,7 @@ export class MetadataLogic implements SectionLogic {
   }
 
   public get frozenDates(): [string | number, number][] {
-    return this.verboseDates.filter((date) => date.isFrozen).map((date, index) => [0, index]);
+    return this.verboseDates.filter((date) => date.isFrozen).map((date, index) => [0, index + 1]);
   }
   public get monthNumber() {
     return this.monthLogic.monthNumber;

@@ -1,3 +1,5 @@
 .table {
   min-width: 60%;
+  height: 70vh;
+  overflow: scroll;
 }

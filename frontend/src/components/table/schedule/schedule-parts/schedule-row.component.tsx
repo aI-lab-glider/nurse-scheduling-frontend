@@ -1,9 +1,10 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { DataRow } from "../../../../logic/real-schedule-logic/data-row";
 import { MetadataLogic } from "../../../../logic/real-schedule-logic/metadata.logic";
+import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 import { BaseCellComponent } from "./base-cell.component";
-import { CellOptions } from "./cell-options.model";
+import { CellOptions, CellState } from "./cell-options.model";
 import "./schedule-row.component.css";
 
 export interface ScheduleRowOptions {
@@ -13,12 +14,23 @@ export interface ScheduleRowOptions {
   cellComponent?: (cellOptions: CellOptions) => JSX.Element;
 }
 
+interface Errors {
+  rowErrors: string[];
+  cellErrors: string[][];
+}
 export function ScheduleRowComponent({
   dataRow,
   cellComponent: CellComponent = BaseCellComponent,
   onRowUpdated,
   metaDataLogic,
 }: ScheduleRowOptions) {
+
+  const errors = useSelector((state: ApplicationStateModel) => {
+    let errors = state.scheduleErrors;
+    return errors?.filter((e) => e.worker && e.worker == dataRow?.rowKey).join(" ");
+  });
+
+  const [selectedCells, setSelectedCells] = useState<number[]>([]);
 
   const dispatcher = useDispatch();
   let nurse = dataRow?.rowKey ?? "";
@@ -27,10 +39,11 @@ export function ScheduleRowComponent({
 
   function onShiftChange(index: number, newShift: string) {
     dataRow = dataRow as DataRow;
-    dataRow.setValue(index, newShift);
+    dataRow.setValue(selectedCells, newShift);
     if (onRowUpdated) {
       onRowUpdated(dataRow);
     }
+    setSelectedCells([]);
   }
 
   function changeCellFrozenState(index: number, state: boolean) {
@@ -38,12 +51,24 @@ export function ScheduleRowComponent({
     dispatcher(frozenDatesAction);
   }
 
+  function registerCell(index: number) {
+    setSelectedCells([...selectedCells, index]);
+  }
+
+  function onCellStateChanged(cellState: CellState) {
+    switch (cellState) {
+      case CellState.STOP_EDITING:
+        setSelectedCells([]);
+        break;
+    }
+  }
+
   return (
     <tr className="row">
       <BaseCellComponent
         index={0}
         value={nurse || ""}
-        className={`key ${!dataRow || dataRow?.isEmpty ? "hidden" : ""}`}
+        className={`key ${!dataRow || dataRow?.isEmpty ? "hidden" : ""} ${errors}`}
       />
       {data.map((cellData, index) => {
         return (
@@ -56,6 +81,9 @@ export function ScheduleRowComponent({
             className={`${!dataRow || dataRow?.isEmpty ? "hidden" : ""}`}
             isEditable={!verboseDates?.[index].isFrozen}
             onContextMenu={changeCellFrozenState}
+            pushToRow={registerCell}
+            isSelected={selectedCells.includes(index)}
+            onStateChange={onCellStateChanged}
           />
         );
       })}

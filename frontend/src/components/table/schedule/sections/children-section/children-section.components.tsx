@@ -4,16 +4,14 @@ import { ChildrenInfoLogic } from "../../../../../logic/real-schedule-logic/chil
 import { BaseSectionComponent } from "../base-section/base-section.component";
 import { ChildrenSectionOptions } from "./children-section.options";
 
-export function ChildrenSectionComponent({
-  data = [],
-  metaDataLogic,
-  onSectionUpdated,
-}: ChildrenSectionOptions) {
+export function ChildrenSectionComponent(options: ChildrenSectionOptions) {
+  const { data =[], metaDataLogic, onSectionUpdated } = options;
   const logic = new ChildrenInfoLogic(DataRowHelper.dataRowsAsValueDict<number>(data, true));
 
   return (
     (
     <BaseSectionComponent
+          {...options}
           data={data}
           metaDataLogic={metaDataLogic}
           onSectionUpdated={onSectionUpdated}
