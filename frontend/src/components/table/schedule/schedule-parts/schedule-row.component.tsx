@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { DataRow } from "../../../../logic/real-schedule-logic/data-row";
 import { MetadataLogic } from "../../../../logic/real-schedule-logic/metadata.logic";
+import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 import { BaseCellComponent } from "./base-cell.component";
 import { CellOptions, CellState } from "./cell-options.model";
 import "./schedule-row.component.css";
@@ -13,12 +14,21 @@ export interface ScheduleRowOptions {
   cellComponent?: (cellOptions: CellOptions) => JSX.Element;
 }
 
+interface Errors {
+  rowErrors: string[];
+  cellErrors: string[][];
+}
 export function ScheduleRowComponent({
   dataRow,
   cellComponent: CellComponent = BaseCellComponent,
   onRowUpdated,
   metaDataLogic,
 }: ScheduleRowOptions) {
+
+  const errors = useSelector((state: ApplicationStateModel) => {
+    let errors = state.scheduleErrors;
+    return errors?.filter((e) => e.worker && e.worker == dataRow?.rowKey).join(" ");
+  });
 
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
 
@@ -58,7 +68,7 @@ export function ScheduleRowComponent({
       <BaseCellComponent
         index={0}
         value={nurse || ""}
-        className={`key ${!dataRow || dataRow?.isEmpty ? "hidden" : ""}`}
+        className={`key ${!dataRow || dataRow?.isEmpty ? "hidden" : ""} ${errors}`}
       />
       {data.map((cellData, index) => {
         return (
