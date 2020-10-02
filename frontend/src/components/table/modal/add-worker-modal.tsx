@@ -1,26 +1,28 @@
 import React, { useState } from "react";
 import { Modal, TextField } from "@material-ui/core";
-import "./worker_modal.component.css";
+import "./add-worker-modal.css";
 import { WorkerTypeHelper } from "../../../state/models/schedule-data/employee-info.model";
 import Button from "@material-ui/core/Button";
 
-export function WorkerModal({ isOpened, setIsOpened, submit, workerType }) {
-  const [name, setName] = useState("");
-  const [nameError, setNameError] = useState(false);
+const initialState = {
+  name: "",
+  nameError: false,
+  time: "",
+  timeError: false,
+};
 
-  const [time, setTime] = useState("1.0");
-  const [timeError, setTimeError] = useState(false);
+const NAME_MIN_LENGTH = 5;
 
-  const handleClose = () => {
-    setIsOpened(false);
+export function AddWorkerModal({ isOpened, setIsOpened, submit, workerType }) {
+  const [{ name, nameError, time, timeError }, setState] = useState(initialState);
+
+  const clearState = () => {
+    setState({ ...initialState });
   };
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-
-  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTime(e.target.value);
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setState((prevState) => ({ ...prevState, [name]: value }));
   };
 
   const parseTimeIfPossible = (time) => {
@@ -37,27 +39,33 @@ export function WorkerModal({ isOpened, setIsOpened, submit, workerType }) {
   };
 
   const validateName = (name) => {
-    return name.length > 5;
+    return name.length >= NAME_MIN_LENGTH;
   };
 
   const handleSubmit = () => {
     const { isTimeFormatValid, parsedTime } = parseTimeIfPossible(time);
     const isNameValid = validateName(name);
+
     if (isTimeFormatValid) {
-      setTimeError(false);
+      setState((prevState) => ({ ...prevState, timeError: false }));
       if (isNameValid) {
-        setNameError(false);
         submit(name, parsedTime);
         handleClose();
+      } else {
+        setState((prevState) => ({ ...prevState, nameError: true }));
       }
-      setNameError(true);
     } else {
-      setTimeError(true);
+      setState((prevState) => ({ ...prevState, timeError: true }));
     }
   };
 
+  const handleClose = () => {
+    clearState();
+    setIsOpened(false);
+  };
+
   const body = (
-    <div className="workerModal">
+    <div className="worker-modal">
       <h2 id="modal-title">
         Dodaj nowego pracownika do sekcji {WorkerTypeHelper.translate(workerType, true)}
       </h2>
@@ -66,21 +74,23 @@ export function WorkerModal({ isOpened, setIsOpened, submit, workerType }) {
           id="name-input"
           label="Imię i nazwisko"
           value={name}
-          onChange={handleNameChange}
+          name="name"
+          onChange={onChange}
           required
           error={nameError}
-          helperText={"Muszą mieć co najmniej 5 znaków"}
+          helperText={`Musi mieć co najmniej ${NAME_MIN_LENGTH} znaków`}
         />
         <TextField
           id="time-input"
           label="Etat"
           value={time}
-          onChange={handleTimeChange}
+          name={"time"}
+          onChange={onChange}
           required
           helperText={"Obsługiwane formaty to: dziesiętny np. 0.1 i ułamkowy np. 3/5"}
           error={timeError}
         />
-        <Button onClick={handleSubmit} className="submit-button" variant="outlined">
+        <Button onClick={handleSubmit} className="add-worker-button" variant="outlined">
           Dodaj
         </Button>
       </form>
