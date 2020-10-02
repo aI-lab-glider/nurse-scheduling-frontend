@@ -1,5 +1,5 @@
 import { Button } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { DataRowHelper } from "../../../../../helpers/row.helper";
 import { StringHelper } from "../../../../../helpers/string.helper";
 import { DataRow } from "../../../../../logic/real-schedule-logic/data-row";
@@ -10,7 +10,7 @@ import { ShiftCellComponent } from "../../schedule-parts/shift-cell.component";
 import { BaseSectionComponent } from "../base-section/base-section.component";
 import "./shifts-section.css";
 import { ShiftsSectionOptions } from "./shifts-section.options";
-
+import { WorkerModal } from "../../../modal/worker_modal.component";
 
 export function ShiftsSectionComponent({
   workerType,
@@ -20,14 +20,27 @@ export function ShiftsSectionComponent({
 }: ShiftsSectionOptions) {
   const logic = new ShiftsInfoLogic(DataRowHelper.dataRowsAsValueDict<Shift>(data, true));
 
+  const [isOpened, setIsOpened] = useState(false);
+
+  const modal = (
+    <WorkerModal
+      isOpened={isOpened}
+      setIsOpened={setIsOpened}
+      submit={submit}
+      workerType={workerType}
+    />
+  );
+
   function addDataRow(newRow: DataRow) {
     onSectionUpdated([...logic.sectionData, newRow]);
   }
 
   function onAddButtonClicked() {
+    setIsOpened(true);
+  }
+
+  function submit(name, time) {
     if (data.length > 0) {
-      // call modal here and assign name from modal to const name
-      const name = Math.random() * Math.random() + " ";
       const dataRow = new DataRow(name, new Array(data[0].length - 1).fill("W"));
       addDataRow(dataRow);
     }
@@ -56,6 +69,7 @@ export function ShiftsSectionComponent({
         metaDataLogic={metaDataLogic}
         logic={logic}
       />
+      {modal}
     </React.Fragment>
   );
 }
