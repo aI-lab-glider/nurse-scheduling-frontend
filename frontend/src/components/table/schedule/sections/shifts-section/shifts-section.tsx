@@ -10,7 +10,7 @@ import { ShiftCellComponent } from "../../schedule-parts/shift-cell.component";
 import { BaseSectionComponent } from "../base-section/base-section.component";
 import "./shifts-section.css";
 import { ShiftsSectionOptions } from "./shifts-section.options";
-import { WorkerModal } from "../../../modal/worker_modal.component";
+import { AddWorkerModal } from "../../../modal/add-worker-modal";
 
 export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
   const { onSectionUpdated, data = [], workerType, metaDataLogic } = options;
@@ -19,7 +19,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
   const [isOpened, setIsOpened] = useState(false);
 
   const modal = (
-    <WorkerModal
+    <AddWorkerModal
       isOpened={isOpened}
       setIsOpened={setIsOpened}
       submit={submit}
