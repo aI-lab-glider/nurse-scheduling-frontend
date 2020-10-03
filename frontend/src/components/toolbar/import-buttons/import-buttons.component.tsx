@@ -52,7 +52,7 @@ export function ImportButtonsComponent() {
   return (
     <div>
       <Button onClick={() => handleToggle()} ref={anchorRef}>
-        File
+        Plik
         <ArrowDropDownIcon />
       </Button>
       <Popper open={open} anchorEl={anchorRef.current}>
@@ -63,7 +63,7 @@ export function ImportButtonsComponent() {
         >
           <ButtonGroup orientation="vertical">
             <Button component="label">
-              Select a file
+              Wczytaj
               <input
                 onChange={(event) => handleImport(event)}
                 style={{ display: "none" }}
@@ -71,7 +71,7 @@ export function ImportButtonsComponent() {
               />
             </Button>
 
-            <Button onClick={() => handleExport()}>Save file as ...</Button>
+            <Button onClick={() => handleExport()}>Zapisz jako...</Button>
           </ButtonGroup>
         </ClickAwayListener>
       </Popper>
