@@ -82,18 +82,17 @@ export function ProblemMetadataComponent() {
     }
   }
 
-
   async function onFixScheduleClicked() {
     if (schedule) {
       const response = await backend.fixSchedule(schedule!);
       dispatcher({
         type: ScheduleDataActionType.ADD_NEW,
-        payload: response
+        payload: response,
       });
       showSnackbar("Harmonogram został poprawiony");
     }
   }
-  
+
   async function onShowErrorsClicked() {
     if (schedule) {
       const response = await backend.getErrors(schedule!);
@@ -122,7 +121,6 @@ export function ProblemMetadataComponent() {
 
   return (
     <form className="form" autoComplete="off">
-
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={plLocale}>
         <DatePicker
           required
@@ -154,30 +152,30 @@ export function ProblemMetadataComponent() {
         handleNumberOfSittersChange
       )}
       <br />
-        <div
-          className="submit-button-container">
-          <Box>
-            <Button
-              size="small"
-              className="submit-button"
-              variant="outlined"
-              onClick={onFixScheduleClicked}>
-              Poprawić
-            </Button>
-          </Box>
+      <div className="submit-button-container">
+        <Box>
+          <Button
+            size="small"
+            className="submit-button"
+            variant="outlined"
+            onClick={onFixScheduleClicked}
+          >
+            Popraw
+          </Button>
+        </Box>
 
-          <Box>
-            <Button
-              size="small"
-              className="submit-button"
-              variant="outlined"
-              onClick={onShowErrorsClicked}>
-                Sprawdzić
-            </Button>
+        <Box>
+          <Button
+            size="small"
+            className="submit-button"
+            variant="outlined"
+            onClick={onShowErrorsClicked}
+          >
+            Sprawdź
+          </Button>
+        </Box>
+      </div>
 
-          </Box>          
-        </div>
-      
       <SnackbarComponent
         alertMessage={snackbarMessage}
         open={snackbarOpen}
