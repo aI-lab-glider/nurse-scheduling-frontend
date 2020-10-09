@@ -2,8 +2,9 @@ import { DataRowHelper } from "../../helpers/row.helper";
 import { Shift, ShiftInfoModel } from "../../state/models/schedule-data/shift-info.model";
 import { DataRow } from "./data-row";
 import { SectionLogic } from "./section-logic.model";
+import { ShiftsProvider } from "../schedule-provider";
 
-export class ShiftsInfoLogic implements SectionLogic {
+export class ShiftsInfoLogic implements SectionLogic, ShiftsProvider {
   private shifts: { [nurseName: string]: DataRow } = {};
 
   constructor(shiftSection: ShiftInfoModel) {

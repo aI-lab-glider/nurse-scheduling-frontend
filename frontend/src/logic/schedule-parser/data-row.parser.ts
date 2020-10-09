@@ -6,7 +6,7 @@ export class DataRowParser {
   public isShiftRow: boolean;
 
   constructor(data: Object) {
-    this.data = Object.values(data);
+    this.data = Object.values(data).map((x) => x?.toString() || null);
     this.isShiftRow = this.checkShiftRowPattern();
   }
 
@@ -66,7 +66,7 @@ export class DataRowParser {
     }
     let containsHoursInfo = true;
     for (let i = 1; i < hoursCellsNumber + 1; i++) {
-      if (typeof this.data[dataLen - i] !== "number") {
+      if (typeof parseInt(this.data[dataLen - i]) !== "number") {
         containsHoursInfo = false;
       }
     }

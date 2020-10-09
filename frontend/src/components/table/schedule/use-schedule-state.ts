@@ -23,15 +23,15 @@ export function useScheduleState(): [
           return { ...action.payload, isScheduleModified: false };
         case ScheduleActionType.UpdateNurseShiftSection:
           data = action.payload.nurseShiftsSection;
-          scheduleLogic && scheduleLogic.updateSection("nurseInfo", data);
+          scheduleLogic && scheduleLogic.updateNurseSection(data);
           return { ...state, nurseShiftsSection: data, isScheduleModified: true };
         case ScheduleActionType.UpdateBabysitterShiftSection:
           data = action.payload.babysitterShiftsSection;
-          scheduleLogic && scheduleLogic.updateSection("babysitterInfo", data);
+          scheduleLogic && scheduleLogic.updateBabysitterSection(data);
           return { ...state, babysitterShiftsSection: data, isScheduleModified: true };
         case ScheduleActionType.UpdateChildrenShiftSection:
           data = action.payload.childrenSection;
-          scheduleLogic && scheduleLogic.updateSection("childrenInfo", data);
+          scheduleLogic && scheduleLogic.updateChildrenSection(data);
           return { ...state, childrenSection: data, isScheduleModified: true };
         default:
           return state;
