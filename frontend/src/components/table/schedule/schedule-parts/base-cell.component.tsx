@@ -1,4 +1,5 @@
 import React from "react";
+import { ColorProvider } from "../../../../helpers/colors/color.provider";
 import "./base-cell.css";
 import { CellOptions, CellState } from "./cell-options.model";
 
@@ -6,17 +7,19 @@ export function BaseCellComponent({
   index,
   value,
   className = "",
-  dayType = "",
+  verboseDate,
   isEditable = true,
   onDataChanged,
   onStateChange,
   onContextMenu,
   pushToRow,
-  isSelected
+  isSelected,
+  style
 }: CellOptions) {
-
+  if (isEditable === undefined || isEditable === null ) {
+    isEditable = true;
+  }
   const inputRef = React.createRef<HTMLInputElement>();  
-
   function setCellState(state: CellState) {
     switch(state) {
       case CellState.START_EDITING:
@@ -38,7 +41,7 @@ export function BaseCellComponent({
     }
   }
 
-  function handleKeyPress(key: string, currentInputValue) {
+  function handleKeyPress(key: string, currentInputValue: string) {
       if (isSelected && key === "Enter") {
         saveCellValue(currentInputValue);
     } else if (key === "Escape") {
@@ -52,15 +55,25 @@ export function BaseCellComponent({
     onContextMenu && onContextMenu(index, isEditable);
   }
 
+  function getBackgroundColor(): string { 
+    return style?.backgroundColor.toString() || ColorProvider.getDayColor(verboseDate).backgroundColor.toString() 
+  }
+  
+  function getTextColor(): string { 
+    return style?.textColor.toString() || ColorProvider.getDayColor(verboseDate).textColor.toString() 
+  }
   //  #region view
   return (
     <td
-      className={isEditable ? `cell ${className || ""} ${dayType}` : "cell frozen"}
+      className={`cell ${className}`}
       onClick={(e) => setCellState(CellState.START_EDITING)}
-      onContextMenu={handleContextMenu}>
+      onContextMenu={handleContextMenu}
+      style={{
+          color: getTextColor(),
+          backgroundColor: getBackgroundColor()
+        }}>
       
-      {isSelected &&  <input
-                            defaultValue={value}
+      {isSelected &&  <input defaultValue={value}
                             autoFocus={true}
                             onKeyDown={(e) => handleKeyPress(e.key, inputRef.current?.value || value)}
                             ref={inputRef}

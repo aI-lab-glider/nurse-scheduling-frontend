@@ -76,7 +76,7 @@ export function ScheduleRowComponent({
             index={index}
             key={`${cellData}${index}`}
             value={cellData}
-            dayType={verboseDates?.[index].dayOfWeek || ""}
+            verboseDate={verboseDates?.[index]}
             onDataChanged={(newValue) => onShiftChange(index, newValue)}
             className={`${!dataRow || dataRow?.isEmpty ? "empty" : ""}`}
             isEditable={!verboseDates?.[index].isFrozen}
