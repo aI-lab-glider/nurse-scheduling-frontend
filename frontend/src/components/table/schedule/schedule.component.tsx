@@ -16,7 +16,7 @@ import { useScheduleState } from "./use-schedule-state";
 export function ScheduleComponent() {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData);
   const dispatchGlobalState = useDispatch();
-  const [scheduleState, dispatchScheduleState, setNewSchedule, scheduleLogic] = useScheduleState();
+  const [scheduleState, dispatchScheduleState, setNewSchedule, scheduleLogic, isInitialized] = useScheduleState();
 
   useEffect(() => {
     if (scheduleState.isScheduleModified && scheduleLogic) {
@@ -34,57 +34,59 @@ export function ScheduleComponent() {
   }, [scheduleModel]);
 
   return (
-    <table className="table">
-      <tbody>
-        <DateSectionComponent
-          data={scheduleState.dateSection}
-          metaDataLogic={scheduleLogic?.getMetadata()}
-          onSectionUpdated={(newSectionData) => {
-            // TODO implement
-          }}
-        />
+    <React.Fragment>
+        {isInitialized && <table className="table">
+          <tbody>
+            <DateSectionComponent
+              data={scheduleState.dateSection}
+              metaDataLogic={scheduleLogic?.getMetadata()}
+              onSectionUpdated={(newSectionData) => {
+                // TODO implement
+              }}
+            />
 
-        <ScheduleRowComponent />
+            <ScheduleRowComponent />
 
-        <ChildrenSectionComponent
-          data={scheduleState.childrenSection}
-          metaDataLogic={scheduleLogic?.getMetadata()}
-          onSectionUpdated={(newSectionData) =>
-            dispatchScheduleState({
-              type: ScheduleActionType.UpdateChildrenShiftSection,
-              payload: { childrenSection: newSectionData },
-            })
-          }
-        />
+            <ChildrenSectionComponent
+              data={scheduleState.childrenSection}
+              metaDataLogic={scheduleLogic?.getMetadata()}
+              onSectionUpdated={(newSectionData) =>
+                dispatchScheduleState({
+                  type: ScheduleActionType.UpdateChildrenShiftSection,
+                  payload: { childrenSection: newSectionData },
+                })
+              }
+            />
 
-        <ScheduleRowComponent />
+            <ScheduleRowComponent />
 
-        <ShiftsSectionComponent
-          workerType={WorkerType.NURSE}
-          data={scheduleState.nurseShiftsSection}
-          metaDataLogic={scheduleLogic?.getMetadata()}
-          onSectionUpdated={(newSectionData) =>
-            dispatchScheduleState({
-              type: ScheduleActionType.UpdateNurseShiftSection,
-              payload: { nurseShiftsSection: newSectionData },
-            })
-          }
-        />
+            <ShiftsSectionComponent
+              workerType={WorkerType.NURSE}
+              data={scheduleState.nurseShiftsSection}
+              metaDataLogic={scheduleLogic?.getMetadata()}
+              onSectionUpdated={(newSectionData) =>
+                dispatchScheduleState({
+                  type: ScheduleActionType.UpdateNurseShiftSection,
+                  payload: { nurseShiftsSection: newSectionData },
+                })
+              }
+            />
 
-        <ScheduleRowComponent />
+            <ScheduleRowComponent />
 
-        <ShiftsSectionComponent
-          workerType={WorkerType.OTHER}
-          data={scheduleState.babysitterShiftsSection}
-          metaDataLogic={scheduleLogic?.getMetadata()}
-          onSectionUpdated={(newSectionData) =>
-            dispatchScheduleState({
-              type: ScheduleActionType.UpdateBabysitterShiftSection,
-              payload: { babysitterShiftsSection: newSectionData },
-            })
-          }
-        />
-      </tbody>
-    </table>
+            <ShiftsSectionComponent
+              workerType={WorkerType.OTHER}
+              data={scheduleState.babysitterShiftsSection}
+              metaDataLogic={scheduleLogic?.getMetadata()}
+              onSectionUpdated={(newSectionData) =>
+                dispatchScheduleState({
+                  type: ScheduleActionType.UpdateBabysitterShiftSection,
+                  payload: { babysitterShiftsSection: newSectionData },
+                })
+              }
+            />
+          </tbody>
+        </table>}
+    </React.Fragment>
   );
 }

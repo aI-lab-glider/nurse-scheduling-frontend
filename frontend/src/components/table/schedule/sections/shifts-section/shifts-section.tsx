@@ -35,7 +35,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
     setIsOpened(true);
   }
 
-  function submit(name, time) {
+  function submit(name: string, time: number) {
     if (data.length > 0) {
       const dataRow = new DataRow(name, new Array(data[0].length - 1).fill("W"));
       addDataRow(dataRow);
