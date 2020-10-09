@@ -1,8 +1,8 @@
 import { DataRowHelper } from "../../helpers/row.helper";
-import { Shift, ShiftInfoModel } from "../../state/models/schedule-data/shift-info.model";
+import { ShiftCode, ShiftInfoModel } from "../../state/models/schedule-data/shift-info.model";
+import { ShiftsProvider } from "../schedule-provider";
 import { DataRow } from "./data-row";
 import { SectionLogic } from "./section-logic.model";
-import { ShiftsProvider } from "../schedule-provider";
 
 export class ShiftsInfoLogic implements SectionLogic, ShiftsProvider {
   private shifts: { [nurseName: string]: DataRow } = {};
@@ -21,8 +21,8 @@ export class ShiftsInfoLogic implements SectionLogic, ShiftsProvider {
     return this.sectionData.length;
   }
 
-  public getWorkerShifts(): { [nurseName: string]: Shift[] } {
-    return DataRowHelper.dataRowsAsValueDict<Shift>(Object.values(this.shifts), false);
+  public getWorkerShifts(): { [nurseName: string]: ShiftCode[] } {
+    return DataRowHelper.dataRowsAsValueDict<ShiftCode>(Object.values(this.shifts), false);
   }
 
   public getWorkers(): string[] {

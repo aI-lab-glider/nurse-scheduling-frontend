@@ -1,4 +1,4 @@
-import { Shift } from "./shift-info.model";
+import { ShiftCode } from "./shift-info.model";
 
 export type DayTime = "MORNING" | "AFTERNOON" | "NIGHT";
 
@@ -11,6 +11,6 @@ export interface ScheduleErrorModel {
   hours?: number;
   day?: number;
   day_time?: DayTime;
-  preceding?: Shift;
-  succeeding?: Shift;
+  preceding?: ShiftCode;
+  succeeding?: ShiftCode;
 }

@@ -1,7 +1,7 @@
-import { DayOfWeek } from "../../state/models/schedule-data/month-info.model";
+import { WeekDay } from "../../state/models/schedule-data/month-info.model";
 import { MonthLogic } from "../real-schedule-logic/month.logic";
-import { DataRowParser } from "./data-row.parser";
 import { MetadataProvider } from "../schedule-provider";
+import { DataRowParser } from "./data-row.parser";
 
 export class MetaDataParser implements MetadataProvider {
   //#region  translations
@@ -70,7 +70,7 @@ export class MetaDataParser implements MetadataProvider {
     return parseInt(this._year);
   }
 
-  public get daysOfWeek(): DayOfWeek[] {
+  public get daysOfWeek(): WeekDay[] {
     return this.monthLogic.daysOfWeek;
   }
 

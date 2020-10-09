@@ -1,11 +1,11 @@
 import { StringHelper } from "../../helpers/string.helper";
-import { DayOfWeek, WeekDays } from "../../state/models/schedule-data/month-info.model";
+import { WeekDay } from "../../state/models/schedule-data/month-info.model";
 
 export interface VerboseDate {
-  date:number,
-  dayOfWeek: DayOfWeek,
-  isFrozen?: boolean,
-  month: string,
+  date: number;
+  dayOfWeek: WeekDay;
+  isFrozen?: boolean;
+  month: string;
 }
 
 export class MonthLogic {
@@ -93,10 +93,10 @@ export class MonthLogic {
       let date = new Date(`${day} ${month} ${year}`)
       verboseDates.push({
         date: day,
-        dayOfWeek: WeekDays[date.getDay()],
+        dayOfWeek: Object.values(WeekDay)[date.getDay()],
         isFrozen: this.isDateFrozen(date),
-        month: month
-      })      
+        month: month,
+      });      
     }
     return verboseDates;
   }

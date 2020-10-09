@@ -1,5 +1,12 @@
-export type DayOfWeek = "MO" | "TU" | "WE" | "TH" | "FR" | "SA" | "SU";
-export const WeekDays: DayOfWeek[] = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
+export enum WeekDay {
+  MO = "MO",
+  TU = "TU",
+  WE = "WE",
+  TH = "TH",
+  FR = "FR",
+  SA = "SA",
+  SU = "SU"
+};
 
 export interface MonthInfoModel {
   children_number?: number[];

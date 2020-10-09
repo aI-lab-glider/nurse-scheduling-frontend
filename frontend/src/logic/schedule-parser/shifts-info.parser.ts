@@ -1,7 +1,7 @@
-import { Shift } from "../../state/models/schedule-data/shift-info.model";
+import { ShiftCode } from "../../state/models/schedule-data/shift-info.model";
+import { ShiftsProvider } from "../schedule-provider";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
-import { ShiftsProvider } from "../schedule-provider";
 
 export class ShiftsInfoParser implements ShiftsProvider {
   //#region  members
@@ -39,7 +39,7 @@ export class ShiftsInfoParser implements ShiftsProvider {
     return Object.values(this.rowByKeys);
   }
 
-  public getWorkerShifts(): { [workerName: string]: Shift[] } {
+  public getWorkerShifts(): { [workerName: string]: ShiftCode[] } {
     return this.data
       .map((row) => ({
         [row.rowKey]: this.fillRowWithShifts(row.rowData(true)),
@@ -51,24 +51,28 @@ export class ShiftsInfoParser implements ShiftsProvider {
 
   //#region parser
 
-  private fillRowWithShifts(row: string[]): Shift[] {
-    let previousShift: Shift = null;
+  private fillRowWithShifts(row: string[]): ShiftCode[] {
+    let previousShift: ShiftCode | null = null;
     return row.map((i) => {
-      if (i === null || i === "*") {
-        return previousShift || "W";
+      // required to handle notes with notes, such as:
+      // U (urlop wypoczynkowy za 2016,11dni,88godzin  /5.08-22.08.2016 )
+      // in that case, we should take 2 first values, because they correspond to actual shift
+      i = i?.trim().slice(0,2).trim();
+      if (!i || i === ShiftCode.Wildcard) {
+        return previousShift || ShiftCode.W;
       }
-      switch (i.trim().slice(0, 2).trim()) {
-        case "L4":
-          previousShift = previousShift === "L4" ? null : "L4";
+      switch (i) {
+        case ShiftCode.L4:
+          previousShift = previousShift === ShiftCode.L4 ? null : ShiftCode.L4;
           break;
-        case "U":
-          previousShift = previousShift === "U" ? null : "U";
+        case ShiftCode.U:
+          previousShift = previousShift === ShiftCode.U ? null : ShiftCode.U;
           break;
         default:
           previousShift = null;
           break;
       }
-      return previousShift || (i?.trim().slice(0, 2).trim() as Shift);
+      return previousShift || (ShiftCode[i] ?? ShiftCode.W); // if shift code is not recognized, consider it as W 
     });
   }
   //#endregion

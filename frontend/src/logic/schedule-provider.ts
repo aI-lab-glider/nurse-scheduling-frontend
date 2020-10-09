@@ -1,6 +1,6 @@
-import { ScheduleDataModel } from "../state/models/schedule-data/schedule-data.model";
-import { Shift } from "../state/models/schedule-data/shift-info.model";
 import { WorkerType } from "../state/models/schedule-data/employee-info.model";
+import { ScheduleDataModel } from "../state/models/schedule-data/schedule-data.model";
+import { ShiftCode } from "../state/models/schedule-data/shift-info.model";
 
 export interface MetadataProvider {
   monthNumber: number;
@@ -11,7 +11,7 @@ export interface MetadataProvider {
 }
 
 export interface ShiftsProvider {
-  getWorkerShifts(): { [workerName: string]: Shift[] };
+  getWorkerShifts(): { [workerName: string]: ShiftCode[] };
   mockEmployeeWorkTime(): { [key: string]: number };
   workersCount: number;
 }
