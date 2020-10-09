@@ -1,8 +1,4 @@
-.frozen {
-  background-color: lightgray;
-}
 .cell {
-  /* padding: 5px 15px; */
   border: 1px solid black;
 }
 
@@ -23,12 +19,4 @@
 .empty {
   border: 0px solid white;
   opacity: 0;
-}
-
-.SU {
-  background-color: rgba(219, 219, 4, 0.945);
-}
-
-.SA {
-  background-color: rgba(3, 3, 219, 0.904);
 }
