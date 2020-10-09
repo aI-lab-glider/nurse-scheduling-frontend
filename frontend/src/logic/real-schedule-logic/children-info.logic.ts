@@ -1,7 +1,8 @@
 import { DataRow } from "./data-row";
 import { SectionLogic } from "./section-logic.model";
+import { ChildrenInfoProvider } from "../schedule-provider";
 
-export class ChildrenInfoLogic implements SectionLogic {
+export class ChildrenInfoLogic implements SectionLogic, ChildrenInfoProvider {
   private childrenInfoAsDataRows: { [key: string]: DataRow } = {};
 
   constructor(private childrenInfo: { [key: string]: number[] }) {

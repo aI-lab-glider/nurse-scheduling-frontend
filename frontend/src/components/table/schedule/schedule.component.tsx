@@ -22,7 +22,7 @@ export function ScheduleComponent() {
     if (scheduleState.isScheduleModified && scheduleLogic) {
       dispatchGlobalState({
         type: ScheduleDataActionType.UPDATE,
-        payload: scheduleLogic.getScheduleDataModel(),
+        payload: scheduleLogic.schedule.getDataModel(),
       } as ActionModel<ScheduleDataModel>);
     }
   }, [scheduleState, dispatchGlobalState, scheduleLogic]);

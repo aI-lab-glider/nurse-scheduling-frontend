@@ -1,29 +1,32 @@
 import { StringHelper } from "../../helpers/string.helper";
 import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
-import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ChildrenInfoParser } from "./children-info.parser";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { ShiftsInfoParser } from "./shifts-info.parser";
+import { ScheduleProvider, Schedule } from "../schedule-provider";
 
-export class ScheduleParser {
+export class ScheduleParser implements ScheduleProvider {
   //#region members
-  private nurseShiftsParser: ShiftsInfoParser;
-  private babysitterShiftsParser: ShiftsInfoParser;
-  private childrenInfoParser: ChildrenInfoParser;
-  private metaData: MetaDataParser;
-  
+  readonly nurseInfoProvider: ShiftsInfoParser;
+  readonly babysitterInfoProvider: ShiftsInfoParser;
+  readonly childrenInfoProvider: ChildrenInfoParser;
+  readonly metadataProvider: MetaDataParser;
+
+  readonly schedule: Schedule;
+
   constructor(schedule: Array<Object>) {
     schedule = schedule.map((i) => new DataRowParser(i));
-    [this.metaData, schedule] = this.initMetadataAndCleanUp(schedule as DataRowParser[]);
+    [this.metadataProvider, schedule] = this.initMetadataAndCleanUp(schedule as DataRowParser[]);
     [
-      this.childrenInfoParser,
-      this.nurseShiftsParser,
-      this.babysitterShiftsParser,
-    ] = this.initSections(schedule as DataRowParser[], this.metaData);
+      this.childrenInfoProvider,
+      this.nurseInfoProvider,
+      this.babysitterInfoProvider,
+    ] = this.initSections(schedule as DataRowParser[], this.metadataProvider);
+    this.schedule = new Schedule(this);
   }
-  //#endregion
 
+  //#endregion
 
   public findRowByKey(schedule, key: string): [DataRowParser | undefined, number] {
     let index = schedule.findIndex(
@@ -34,46 +37,18 @@ export class ScheduleParser {
     return [data, index];
   }
 
-  public getScheduleModel(): ScheduleDataModel {
-    return {
-      schedule_info: {
-        month_number: this.metaData.monthNumber,
-        year: this.metaData.year,
-        daysFromPreviousMonthExists: this.metaData.daysFromPreviousMonthExists,
-      },
-      shifts: {
-        ...this.nurseShiftsParser.getWorkerShifts(),
-        ...this.babysitterShiftsParser.getWorkerShifts(),
-      },
-      month_info: {
-        frozen_shifts: this.metaData.frozenDays,
-        children_number: this.childrenInfoParser.registeredChildrenNumber,
-        dates: this.metaData.dates,
-      },
-      employee_info: {
-        time: {
-          ...this.nurseShiftsParser.mockEmployeeWorkTime(),
-          ...this.babysitterShiftsParser.mockEmployeeWorkTime(),
-        },
-
-        type: this.getWorkerTypes(),
-        babysitterCount: this.babysitterShiftsParser.workersCount,
-        nurseCount: this.nurseShiftsParser.workersCount,
-      },
-    };
-  }
-
-  private getWorkerTypes() {
+  getWorkerTypes() {
     let result = {};
-    Object.keys(this.babysitterShiftsParser.getWorkerShifts()).forEach((babysitter) => {
+    Object.keys(this.babysitterInfoProvider.getWorkerShifts()).forEach((babysitter) => {
       result[babysitter] = WorkerType.OTHER;
     });
-    Object.keys(this.nurseShiftsParser.getWorkerShifts()).forEach((nurse) => {
+    Object.keys(this.nurseInfoProvider.getWorkerShifts()).forEach((nurse) => {
       result[nurse] = WorkerType.NURSE;
     });
 
     return result;
   }
+
   //#endregion
 
   //#region parser
@@ -81,10 +56,10 @@ export class ScheduleParser {
     let metaDataKey = "Grafik";
     let [dataRow, start] = this.findRowByKey(schedule, metaDataKey);
     if (!dataRow) {
-      throw new Error('No metadata provided');
+      throw new Error("No metadata provided");
     }
     // Assumption made, that days always go after metadata
-    let daysRow = schedule[start+1];
+    let daysRow = schedule[start + 1];
     let notSectionsRowsCountFromBeginning = 3;
     schedule = schedule.slice(start + notSectionsRowsCountFromBeginning);
     return [new MetaDataParser(dataRow, daysRow), schedule];
@@ -104,6 +79,7 @@ export class ScheduleParser {
       new ShiftsInfoParser(babysitterData, metaData),
     ];
   }
+
   //#endregion
 
   //#region find shift section logic
@@ -121,6 +97,7 @@ export class ScheduleParser {
     const dataEndIdx = sectionDataIdx;
     return [sectionData, dataEndIdx];
   }
+
   //#endregion
 
   //#region find children section

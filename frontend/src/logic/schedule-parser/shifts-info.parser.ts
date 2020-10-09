@@ -1,8 +1,9 @@
 import { Shift } from "../../state/models/schedule-data/shift-info.model";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
+import { ShiftsProvider } from "../schedule-provider";
 
-export class ShiftsInfoParser {
+export class ShiftsInfoParser implements ShiftsProvider {
   //#region  members
   private rowByKeys: { [key: string]: DataRowParser } = {};
 
@@ -53,9 +54,6 @@ export class ShiftsInfoParser {
   private fillRowWithShifts(row: string[]): Shift[] {
     let previousShift: Shift = null;
     return row.map((i) => {
-      if (typeof i == "number") {
-        return i;
-      }
       if (i === null || i === "*") {
         return previousShift || "W";
       }

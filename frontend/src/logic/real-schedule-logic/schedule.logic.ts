@@ -6,40 +6,38 @@ import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row";
 import { MetadataLogic } from "./metadata.logic";
 import { ShiftsInfoLogic } from "./shifts-info.logic";
+import { ScheduleProvider, Schedule } from "../schedule-provider";
 
-interface ScheduleSections {
-  nurseInfo: ShiftsInfoLogic,
-  babysitterInfo: ShiftsInfoLogic,
-  childrenInfo: ChildrenInfoLogic
-}
+export class ScheduleLogic implements ScheduleProvider {
+  nurseInfoProvider: ShiftsInfoLogic;
+  babysitterInfoProvider: ShiftsInfoLogic;
+  childrenInfoProvider: ChildrenInfoLogic;
 
-export class ScheduleLogic {
-  private sections: ScheduleSections;
+  readonly metadataProvider?: MetadataLogic;
 
-  private metadata?: MetadataLogic;
+  readonly schedule: Schedule;
 
   constructor(scheduleModel: ScheduleDataModel) {
     const [nurseShifts, babysitterShifts] = this.parseShiftsBasedOnEmployeeType(scheduleModel);
 
-    this.sections = {
-      nurseInfo: new ShiftsInfoLogic(nurseShifts || {}),
+    this.nurseInfoProvider = new ShiftsInfoLogic(nurseShifts || {});
 
-      babysitterInfo: new ShiftsInfoLogic(babysitterShifts || {}),
+    this.babysitterInfoProvider = new ShiftsInfoLogic(babysitterShifts || {});
 
-      childrenInfo: new ChildrenInfoLogic({
-        "liczba dzieci zarejestrowanych": scheduleModel.month_info?.children_number || [],
-      }),
-    };
+    this.childrenInfoProvider = new ChildrenInfoLogic({
+      "liczba dzieci zarejestrowanych": scheduleModel.month_info?.children_number || [],
+    });
 
-    this.metadata =
-      scheduleModel.schedule_info && 
-      scheduleModel.month_info && 
+    this.metadataProvider =
+      scheduleModel.schedule_info &&
+      scheduleModel.month_info &&
       new MetadataLogic(
         scheduleModel.schedule_info.year.toString(),
         scheduleModel.schedule_info.month_number,
         scheduleModel.month_info.dates,
         scheduleModel.schedule_info.daysFromPreviousMonthExists
       );
+    this.schedule = new Schedule(this);
   }
 
   private parseShiftsBasedOnEmployeeType(scheduleModel: ScheduleDataModel) {
@@ -59,40 +57,12 @@ export class ScheduleLogic {
     // scheduleModel.
   }
 
-  public getScheduleDataModel(): ScheduleDataModel {
-    return {
-      schedule_info: {
-        month_number: this.metadata?.monthNumber ?? 0,
-        year: this.metadata?.year ?? 0,
-        daysFromPreviousMonthExists: this.metadata?.daysFromPreviousMonthExists ?? false,
-      },
-      shifts: {
-        ...this.sections.nurseInfo.getWorkerShifts(),
-        ...this.sections.babysitterInfo.getWorkerShifts(),
-      },
-      month_info: {
-        frozen_shifts: this.metadata?.frozenDates ?? [],
-        children_number: this.sections.childrenInfo.registeredChildrenNumber,
-        dates: this.metadata?.dates ?? [],
-      },
-      employee_info: {
-        type: this.getWorkerTypes(),
-        babysitterCount: this.sections.babysitterInfo.workersCount || 0,
-        nurseCount: this.sections.nurseInfo.workersCount || 0,
-        time: {
-          ...this.sections.babysitterInfo.mockEmployeeWorkTime(),
-          ...this.sections.nurseInfo.mockEmployeeWorkTime(),
-        },
-      },
-    };
-  }
-
-  private getWorkerTypes() {
+  getWorkerTypes() {
     let result = {};
-    this.sections.babysitterInfo.getWorkers().forEach((babysitter) => {
+    this.babysitterInfoProvider.getWorkers().forEach((babysitter) => {
       result[babysitter] = WorkerType.OTHER;
     });
-    this.sections.nurseInfo.getWorkers().forEach((nurse) => {
+    this.nurseInfoProvider.getWorkers().forEach((nurse) => {
       result[nurse] = WorkerType.NURSE;
     });
 
@@ -100,33 +70,34 @@ export class ScheduleLogic {
   }
 
   public getNurseInfo(): ShiftsInfoLogic {
-    if (!this.sections.nurseInfo) {
+    if (!this.nurseInfoProvider) {
       throw Error("no nurses");
     }
-    return this.sections.nurseInfo;
+    return this.nurseInfoProvider;
   }
 
   public getBabySitterInfo(): ShiftsInfoLogic {
-    if (!this.sections.babysitterInfo) {
+    if (!this.babysitterInfoProvider) {
       throw Error("no babysitter");
     }
-    return this.sections.babysitterInfo;
+    return this.babysitterInfoProvider;
   }
 
   public getChildrenInfo(): ChildrenInfoLogic {
-    if (!this.sections.childrenInfo) {
+    if (!this.childrenInfoProvider) {
       throw Error("no children info");
     }
-    return this.sections.childrenInfo;
+    return this.childrenInfoProvider;
   }
 
   public getMetadata(): MetadataLogic {
-    if (!this.metadata) {
+    if (!this.metadataProvider) {
       throw Error("no metadata");
     }
-    return this.metadata;
+    return this.metadataProvider;
   }
 
+  // TODO: Why do we still store this two unused methods findRowByKey and updateRow?
   public findRowByKey(schedule, key: string): [DataRow | undefined, number] {
     let index = schedule.findIndex(
       (row) =>
@@ -137,18 +108,27 @@ export class ScheduleLogic {
   }
 
   public updateRow(row: DataRow) {
-    Object.values(this.sections).forEach((section) => {
-      section && section.tryUpdate(row);
-    });
+    this.nurseInfoProvider.tryUpdate(row);
+    this.babysitterInfoProvider.tryUpdate(row);
+    this.childrenInfoProvider.tryUpdate(row);
   }
 
-  public updateSection(section: keyof ScheduleSections, newSectionData: DataRow[]) {
+  //TODO: Check if it still needs to refactored
+  public updateChildrenSection(newSectionData: DataRow[]) {
     // Refactor
     let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
-    if (section === "childrenInfo") {
-      this.sections.childrenInfo = new ChildrenInfoLogic({ ...data });
-    } else {
-      this.sections[section] = new ShiftsInfoLogic({ ...data });
-    }
+    this.childrenInfoProvider = new ChildrenInfoLogic({ ...data });
+  }
+
+  public updateNurseSection(newSectionData: DataRow[]) {
+    // Refactor
+    let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
+    this.nurseInfoProvider = new ShiftsInfoLogic({ ...data });
+  }
+
+  public updateBabysitterSection(newSectionData: DataRow[]) {
+    // Refactor
+    let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
+    this.babysitterInfoProvider = new ShiftsInfoLogic({ ...data });
   }
 }

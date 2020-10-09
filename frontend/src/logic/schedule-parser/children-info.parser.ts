@@ -1,7 +1,8 @@
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
+import { ChildrenInfoProvider } from "../schedule-provider";
 
-export class ChildrenInfoParser {
+export class ChildrenInfoParser implements ChildrenInfoProvider {
   //#region translations
   // TODO refactor
   private traslations = {

@@ -1,8 +1,9 @@
 import { DayOfWeek } from "../../state/models/schedule-data/month-info.model";
 import { MonthLogic } from "../real-schedule-logic/month.logic";
 import { DataRowParser } from "./data-row.parser";
+import { MetadataProvider } from "../schedule-provider";
 
-export class MetaDataParser {
+export class MetaDataParser implements MetadataProvider {
   //#region  translations
   private translations = {
     month_label: "miesiąc",
@@ -19,38 +20,41 @@ export class MetaDataParser {
   private monthLogic: MonthLogic;
 
   constructor(headerRow: DataRowParser, private daysRow: DataRowParser) {
-    let {
-      no_metadata_info_msg,
-      year_label,
-      hour_amount_label,
-      month_label,
-    } = this.translations;
+    let { no_metadata_info_msg, year_label, hour_amount_label, month_label } = this.translations;
     if (headerRow) {
       [this.month, this._year, this.hours] = headerRow.findValues(
         month_label,
         year_label,
         hour_amount_label
       );
-      this.monthLogic = new MonthLogic(this.month, this._year, daysRow.rowData(false, false).map(i => parseInt(i)).filter(i => i<=31), this.daysFromPreviousMonthExists);      
+      this.monthLogic = new MonthLogic(
+        this.month,
+        this._year,
+        daysRow
+          .rowData(false, false)
+          .map((i) => parseInt(i))
+          .filter((i) => i <= 31),
+        this.daysFromPreviousMonthExists
+      );
     } else {
       throw new Error(no_metadata_info_msg);
     }
   }
 
   public get daysFromPreviousMonthExists() {
-    return this._daysFromPreviousMonthExists(this.daysRow)
+    return this._daysFromPreviousMonthExists(this.daysRow);
   }
-  
+
   public get dates() {
     return this.monthLogic.dates;
   }
   private _daysFromPreviousMonthExists(daysRow?: DataRowParser) {
-    if (!daysRow) throw new Error(this.translations['no_metadata_info_msg']);
-    let firstDayIndex = daysRow.rowData(true,false).map(parseInt).indexOf(1);
-    return firstDayIndex != 0
+    if (!daysRow) throw new Error(this.translations["no_metadata_info_msg"]);
+    let firstDayIndex = daysRow.rowData(true, false).map(parseInt).indexOf(1);
+    return firstDayIndex != 0;
   }
 
-  public get frozenDays(): [number,number][] {
+  public get frozenDays(): [number, number][] {
     return this.monthLogic.verboseDates
       .filter((date) => date.isFrozen)
       .map((date, index) => [0, index + 1]);
@@ -88,7 +92,7 @@ export class MetaDataParser {
    * Counts from 0
    */
   public get validaDataStart() {
-    return 0
+    return 0;
   }
 
   /**

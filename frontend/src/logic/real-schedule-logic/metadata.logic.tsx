@@ -3,11 +3,12 @@ import { DayOfWeek } from "../../state/models/schedule-data/month-info.model";
 import { DataRow } from "./data-row";
 import { MonthLogic, VerboseDate } from "./month.logic";
 import { SectionLogic } from "./section-logic.model";
+import { MetadataProvider } from "../schedule-provider";
 export enum MonthLogicActionType {
   UpdateFrozenDates = "updateFrozenDates",
 }
 
-export class MetadataLogic implements SectionLogic {
+export class MetadataLogic implements SectionLogic, MetadataProvider {
   private translations = {
     dates_key: "Dni miesiąca",
   };

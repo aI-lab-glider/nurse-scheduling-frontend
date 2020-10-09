@@ -58,7 +58,7 @@ export const useScheduleConverter = (): [
     setScheduleSheet(parsedFileContent);
     if (Object.keys(parsedFileContent).length !== 0) {
       const parser = new ScheduleParser(parsedFileContent as Array<Object>);
-      setScheduleModel(parser.getScheduleModel());
+      setScheduleModel(parser.schedule.getDataModel());
     }
   }, [fileContent]);
   //#endregion
