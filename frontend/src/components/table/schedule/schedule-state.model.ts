@@ -5,10 +5,12 @@ export enum ScheduleActionType {
   UpdateBabysitterShiftSection = "updateBabysitterShiftSection",
   UpdateFullState = "updateFullState",
   UpdateChildrenShiftSection = "updateChildrenShiftSection",
+  UpdateExtraWorkersSection = "updateExtraWorkersSection"
 }
 
 export interface ScheduleComponentState {
   childrenSection?: DataRow[];
+  extraWorkersSection?: DataRow[];
   nurseShiftsSection?: DataRow[];
   babysitterShiftsSection?: DataRow[];
   dateSection?: DataRow[];
@@ -18,6 +20,7 @@ export interface ScheduleComponentState {
 export const scheduleInitialState: ScheduleComponentState = {
   nurseShiftsSection: [],
   babysitterShiftsSection: [],
+  extraWorkersSection: [],
   childrenSection: [],
   isScheduleModified: false,
 };

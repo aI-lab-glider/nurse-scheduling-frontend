@@ -22,11 +22,16 @@ export interface ChildrenInfoProvider {
   registeredChildrenNumber: number[];
 }
 
+export interface ExtraWorkersInfoProvider {
+  extraWorkers: number[];
+}
+
 export interface ScheduleProvider {
   readonly metadataProvider?: MetadataProvider;
   readonly nurseInfoProvider: ShiftsProvider;
   readonly babysitterInfoProvider: ShiftsProvider;
   readonly childrenInfoProvider: ChildrenInfoProvider;
+  readonly extraWorkersInfoProvider?: ExtraWorkersInfoProvider;
   getWorkerTypes(): { [workerName: string]: WorkerType[] };
 }
 
@@ -53,6 +58,7 @@ export class Schedule {
         frozen_shifts: this.provider.metadataProvider?.frozenDates ?? [],
         children_number: this.provider.childrenInfoProvider.registeredChildrenNumber,
         dates: this.provider.metadataProvider?.dates ?? [],
+        extra_workers: this.provider.extraWorkersInfoProvider?.extraWorkers ?? [],
       },
       employee_info: {
         type: this.provider.getWorkerTypes(),
