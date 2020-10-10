@@ -8,9 +8,9 @@ export class Color {
     private a: number = 1
   ) {}
 
-  public fade() {
+  public fade(opacity: number = 0.5) {
     if (this.toString() === Colors.WHITE.toString()) return Colors.LIGHT_GREY.fade();
-    this.a = 0.5;
+    this.a = opacity;
     return this;
   }
 
