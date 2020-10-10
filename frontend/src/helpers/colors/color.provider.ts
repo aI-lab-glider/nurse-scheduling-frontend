@@ -30,10 +30,7 @@ export class ColorProvider {
         break;
       case ShiftCode.U:
         colorSet.backgroundColor = Colors.LIME_GREEN;
-      case ShiftCode.P:
-      case ShiftCode.PN:
-      case ShiftCode.R:
-      case ShiftCode.W:
+      case (ShiftCode.P, ShiftCode.PN, ShiftCode.R, ShiftCode.W):
         break;
     }
     return { ...colorSet, ...ColorProvider.getDayColor(day, colorSet, ignoreFrozenState) };
@@ -60,6 +57,7 @@ export class ColorProvider {
           backgroundColor: Colors.BEAUTY_BUSH,
           textColor: Colors.BLACK,
         };
+        break;
     }
     return day.isFrozen && !ignoreFrozenState
       ? { ...colorSet, backgroundColor: colorSet.backgroundColor.fade() }

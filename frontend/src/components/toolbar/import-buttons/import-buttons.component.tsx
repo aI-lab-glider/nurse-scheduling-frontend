@@ -8,12 +8,14 @@ import { useDispatch } from "react-redux";
 import { useScheduleConverter } from "../../../hooks/file-processing/useScheduleConverter";
 import { ActionModel } from "../../../state/models/action.model";
 import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-data.model";
+import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
+import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
 
 export function ImportButtonsComponent() {
   //#region members
   const [open, setOpen] = useState(false);
-  const [convertedSchedule, xlxsSheet, setSrcFile] = useScheduleConverter();
+  const { scheduleModel, setSrcFile, scheduleErrors } = useScheduleConverter();
   const anchorRef = useRef(null);
 
   //#endregion
@@ -22,13 +24,17 @@ export function ImportButtonsComponent() {
   const scheduleDipatcher = useDispatch();
 
   useEffect(() => {
-    if (convertedSchedule) {
+    if (scheduleModel) {
       scheduleDipatcher({
         type: ScheduleDataActionType.ADD_NEW,
-        payload: convertedSchedule,
+        payload: scheduleModel,
       } as ActionModel<ScheduleDataModel>);
+      scheduleDipatcher({
+        type: ScheduleErrorActionType.UPDATE,
+        payload: scheduleErrors,
+      } as ActionModel<ScheduleErrorModel[]>);
     }
-  }, [convertedSchedule, scheduleDipatcher]);
+  }, [scheduleModel, scheduleDipatcher, scheduleErrors]);
   //#endregion
 
   //#region logic

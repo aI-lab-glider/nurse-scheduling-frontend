@@ -9,7 +9,7 @@ function getShiftCode(value: string): ShiftCode {
   return ShiftCode[value] || ShiftCode.W;
 }
 export function ShiftCellComponent(options: CellOptions) {
-  const { verboseDate, value, className, isEditable, onDataChanged, onContextMenu } = options;
+  const { verboseDate, value, className, onDataChanged, onContextMenu } = options;
   const [shift, setShift] = useState<ShiftCode>(getShiftCode(value));
   const [verboseDateState, setverboseDateState] = useState<VerboseDate | undefined>(verboseDate);
 

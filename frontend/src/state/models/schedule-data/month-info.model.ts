@@ -5,7 +5,7 @@ export enum WeekDay {
   TH = "TH",
   FR = "FR",
   SA = "SA",
-  SU = "SU"
+  SU = "SU",
 };
 
 export interface MonthInfoModel {

@@ -27,7 +27,7 @@ export function ScheduleRowComponent({
 
   const errors = useSelector((state: ApplicationStateModel) => {
     let errors = state.scheduleErrors;
-    return errors?.filter((e) => e.worker && e.worker == dataRow?.rowKey).join(" ");
+    return errors?.filter((e) => e.worker && e.worker === dataRow?.rowKey).join(" ");
   });
 
   const [selectedCells, setSelectedCells] = useState<number[]>([]);

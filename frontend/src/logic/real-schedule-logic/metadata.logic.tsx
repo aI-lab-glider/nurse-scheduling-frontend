@@ -23,7 +23,7 @@ export class MetadataLogic implements SectionLogic, MetadataProvider {
       frozenDates.push([nurse, index]);
     } else {
       let ind = frozenDates.indexOf([nurse, index]);
-      if (ind != -1) {
+      if (ind !== -1) {
         delete frozenDates[ind];
       }
     }

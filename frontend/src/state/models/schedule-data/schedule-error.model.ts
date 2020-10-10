@@ -1,12 +1,26 @@
 import { ShiftCode } from "./shift-info.model";
 
+export enum AlgorithmErrorCode {
+  AON = "AON",
+  WND = "WND",
+  WNN = "WNN",
+  DSS = "DSS",
+  LLB = "LLB",
+  WUH = "WUH",
+  WOH = "WOH",
+}
+
+export enum ParseErrorCode {
+  UNKNOWN_SHIFT = "unknownSymbol",
+}
+
 export type DayTime = "MORNING" | "AFTERNOON" | "NIGHT";
 
 export interface ScheduleErrorModel {
-  code: string;
+  code: AlgorithmErrorCode | ParseErrorCode;
   worker?: string;
   week?: number;
-  actual?: number;
+  actual?: string | number;
   required?: number;
   hours?: number;
   day?: number;

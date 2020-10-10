@@ -28,7 +28,6 @@ export class MonthLogic {
   //#endregion
 
   //#region members
-  private month: string;
   public monthNumber: number;
   private _verboseDates: VerboseDate[] = [] 
   private monthDates: number[];
@@ -46,26 +45,26 @@ export class MonthLogic {
     return this._verboseDates.map(d => d.dayOfWeek);
   }
 
-  constructor(monthId: string | number, year: string, monthDates: number[], private daysFromPreviousMonthExists: boolean) {
+  constructor(monthId: string | number, year: string, monthDates: number[], daysFromPreviousMonthExists: boolean) {
     if (typeof monthId == "string") {
       // this.month = MonthLogic.monthTranslations[StringHelper.getRawValue(monthId)];
-        monthId = Object.keys(MonthLogic.monthTranslations).findIndex((month) => StringHelper.getRawValue(month) == monthId);
+        monthId = Object.keys(MonthLogic.monthTranslations).findIndex((month) => StringHelper.getRawValue(month) === monthId);
     }
-    this.month = Object.values(MonthLogic.monthTranslations)[monthId];
     if (!monthDates) {
-      this.monthDates = this.generateMonthDates(this.month, year);
+      this.monthDates = this.generateMonthDates(monthId, year);
     } else {
       this.monthDates = monthDates;
     }
 
     this.monthNumber = monthId;
     
-    this._verboseDates = this.createCalendar(this.month, year);
+    this._verboseDates = this.createCalendar(this.monthNumber, year, daysFromPreviousMonthExists);
   }
 
   //#region logic
-  private generateMonthDates(month: string, year: string): number[] {
+  private generateMonthDates(monthNumber: number, year: string): number[] {
     let dates:number[] = [];
+    const month = Object.values(MonthLogic.monthTranslations)[monthNumber];
     let day = 1;
     while (this.isDateBelongsToMonth(day, month, year)) {
       dates.push(day);
@@ -83,29 +82,40 @@ export class MonthLogic {
     return new Date(`1 ${Object.values(MonthLogic.monthTranslations)[monthNumber]} ${year}`);
   }
 
-  private createCalendar(month: string, year: string): VerboseDate[] {
+  private createCalendar(monthNumber: number, year: string, daysFromPreviousMonthExists: boolean): VerboseDate[] {
     let verboseDates: VerboseDate[] = [];
-    // for (let day = 1; day < 31 && this.isDateBelongsToMonth(day, month, year); ++day) {
-    for(let day of this.monthDates){
-      if (day  === 1){
-        this.daysFromPreviousMonthExists = false;
+    // declare array by hand instead of using Object.values(WeekDay), to be sure
+    // that order of day will always be consistent with js-function Date.getDay()
+    const weekDays = [
+      WeekDay.SU,
+      WeekDay.MO,
+      WeekDay.TU,
+      WeekDay.WE,
+      WeekDay.TH,
+      WeekDay.FR,
+      WeekDay.SA,
+    ];
+    for (let day of this.monthDates) {
+      if (day === 1) {
+        daysFromPreviousMonthExists = false;
       }
-      let date = new Date(`${day} ${month} ${year}`)
+      const month = Object.values(MonthLogic.monthTranslations)[daysFromPreviousMonthExists ? monthNumber - 1 : monthNumber];
+      let date = new Date(`${day} ${month} ${year}`);
       verboseDates.push({
         date: day,
-        dayOfWeek: Object.values(WeekDay)[date.getDay()],
-        isFrozen: this.isDateFrozen(date),
+        dayOfWeek: weekDays[date.getDay()],
+        isFrozen: this.isDateFrozen(date, daysFromPreviousMonthExists),
         month: month,
-      });      
+      });
     }
     return verboseDates;
   }
-  private isDateFrozen(date: Date) {
+  private isDateFrozen(date: Date, dayBelongToPreviousMonth: boolean) {
     let today = new Date();
     return ( (date.getDate() < today.getDate() 
               && date.getMonth() <= today.getMonth()) 
             || date.getFullYear() < today.getFullYear() 
-            || this.daysFromPreviousMonthExists)
+            || dayBelongToPreviousMonth)
   }
 
   private isDateBelongsToMonth(date: number, month: string, year: string) {
