@@ -12,6 +12,7 @@ import { ChildrenSectionComponent } from "./sections/children-section/children-s
 import { DateSectionComponent } from "./sections/date-section/date-section.component";
 import { ShiftsSectionComponent } from "./sections/shifts-section/shifts-section";
 import { useScheduleState } from "./use-schedule-state";
+import {ExtraWorkersSection} from "./sections/extra-workers-section/extra-workers-section.components";
 
 export function ScheduleComponent() {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData);
@@ -56,6 +57,19 @@ export function ScheduleComponent() {
                   payload: { childrenSection: newSectionData },
                 })
               }
+            />
+
+            <ScheduleRowComponent />
+
+            <ExtraWorkersSection
+                data={scheduleState.extraWorkersSection}
+                metaDataLogic={scheduleLogic?.getMetadata()}
+                onSectionUpdated={(newSectionData) =>
+                    dispatchScheduleState({
+                      type: ScheduleActionType.UpdateExtraWorkersSection,
+                      payload: { extraWorkersSection: newSectionData },
+                    })
+                }
             />
 
             <ScheduleRowComponent />
