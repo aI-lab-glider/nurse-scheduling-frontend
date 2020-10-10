@@ -50,30 +50,23 @@ export class ShiftsInfoParser implements ShiftsProvider {
   //#endregion
 
   //#region parser
+  private static getShiftFromCell(cell: string): ShiftCode | null {
+    return ShiftCode[cell?.trim().slice(0,2).trim()];
+  }
 
   private fillRowWithShifts(row: string[]): ShiftCode[] {
-    let previousShift: ShiftCode | null = null;
-    return row.map((i) => {
-      // required to handle notes with notes, such as:
-      // U (urlop wypoczynkowy za 2016,11dni,88godzin  /5.08-22.08.2016 )
-      // in that case, we should take 2 first values, because they correspond to actual shift
-      i = i?.trim().slice(0,2).trim();
-      if (!i || i === ShiftCode.Wildcard) {
-        return previousShift || ShiftCode.W;
+    const continuousShifts = [ShiftCode.L4, ShiftCode.U]; 
+    let previousShift: ShiftCode = ShiftCode.W;
+    return row.map((c) => {
+      let currentShift = ShiftsInfoParser.getShiftFromCell(c);
+      if (currentShift == null) {
+        currentShift = continuousShifts.includes(previousShift) ? previousShift : ShiftCode.W;
       }
-      switch (i) {
-        case ShiftCode.L4:
-          previousShift = previousShift === ShiftCode.L4 ? null : ShiftCode.L4;
-          break;
-        case ShiftCode.U:
-          previousShift = previousShift === ShiftCode.U ? null : ShiftCode.U;
-          break;
-        default:
-          previousShift = null;
-          break;
-      }
-      return previousShift || (ShiftCode[i] ?? ShiftCode.W); // if shift code is not recognized, consider it as W 
+      previousShift = currentShift
+      return currentShift;
     });
   }
+
+
   //#endregion
 }

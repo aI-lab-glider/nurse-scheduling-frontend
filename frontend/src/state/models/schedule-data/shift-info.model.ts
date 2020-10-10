@@ -9,7 +9,6 @@ export enum ShiftCode {
   W = "W",
   U = "U",
   L4 = "L4",
-  Wildcard = "*",
 }
 
 export interface ShiftInfoModel {
