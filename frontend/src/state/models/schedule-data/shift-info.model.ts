@@ -5,7 +5,6 @@ export enum ShiftCode {
   N = "N",
   DN = "DN",
   PN = "PN",
-  RPN = "RPN",
   W = "W",
   U = "U",
   L4 = "L4",
