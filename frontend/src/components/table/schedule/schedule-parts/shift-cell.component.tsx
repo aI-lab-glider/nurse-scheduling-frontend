@@ -5,14 +5,16 @@ import { ShiftCode } from "../../../../state/models/schedule-data/shift-info.mod
 import { BaseCellComponent } from "./base-cell.component";
 import { CellOptions } from "./cell-options.model";
 
-export function ShiftCellComponent(
-  options: CellOptions) {
+function getShiftCode(value: string): ShiftCode {
+  return ShiftCode[value] || ShiftCode.W;
+}
+export function ShiftCellComponent(options: CellOptions) {
   const { verboseDate, value, className, isEditable, onDataChanged, onContextMenu } = options;
-  const [shift, setShift] = useState<ShiftCode>(ShiftCode[value] ?? ShiftCode.Wildcard);
+  const [shift, setShift] = useState<ShiftCode>(getShiftCode(value));
   const [verboseDateState, setverboseDateState] = useState<VerboseDate | undefined>(verboseDate);
-  
+
   function onBaseCellUpdate(newShift: string) {
-    setShift(ShiftCode[newShift] || ShiftCode.Wildcard);
+    setShift(getShiftCode(newShift));
     if (onDataChanged) {
       onDataChanged(newShift);
     }

@@ -20,10 +20,10 @@ export class ColorProvider {
         colorSet.textColor = Colors.DARK_GREEN;
         break;
       case ShiftCode.DN:
-        colorSet.textColor = Colors.BLUE_VIOLET;
+        colorSet.textColor = Colors.DARK_GREEN;
         break;
       case ShiftCode.L4:
-        colorSet.backgroundColor = Colors.DARK_RED;
+        colorSet.backgroundColor = Colors.RED;
         break;
       case ShiftCode.N:
         colorSet.textColor = Colors.DARK_RED;
@@ -50,10 +50,16 @@ export class ColorProvider {
     let colorSet = { ...defaultColorSet };
     switch (day.dayOfWeek) {
       case WeekDay.SA:
-        colorSet.backgroundColor = Colors.SLATE_BLUE;
+        colorSet = {
+          backgroundColor: Colors.FADED_GREEN,
+          textColor: Colors.BLACK,
+        };
         break;
       case WeekDay.SU:
-        colorSet.backgroundColor = Colors.DARK_SLATE_BLUE;
+        colorSet = {
+          backgroundColor: Colors.BEAUTY_BUSH,
+          textColor: Colors.BLACK,
+        };
     }
     return day.isFrozen && !ignoreFrozenState
       ? { ...colorSet, backgroundColor: colorSet.backgroundColor.fade() }
