@@ -51,7 +51,7 @@ export class MetaDataParser implements MetadataProvider {
   private _daysFromPreviousMonthExists(daysRow?: DataRowParser) {
     if (!daysRow) throw new Error(this.translations["no_metadata_info_msg"]);
     let firstDayIndex = daysRow.rowData(true, false).map(parseInt).indexOf(1);
-    return firstDayIndex != 0;
+    return firstDayIndex !== 0;
   }
 
   public get frozenDays(): [number, number][] {
@@ -79,7 +79,7 @@ export class MetaDataParser implements MetadataProvider {
   }
 
   public get dayNumbersAsDataRow(): DataRowParser {
-    let { dates_key, ..._ } = this.translations;
+    let { dates_key } = this.translations;
     let datesAsObject = this.monthLogic.dates.reduce(
       (storage, date, index) => {
         return { ...storage, [index + " "]: date };

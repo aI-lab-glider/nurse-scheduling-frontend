@@ -1,14 +1,17 @@
 import { Color } from "./color.model";
 
 export class Colors {
+  public static get TUSCANY() {
+    return new Color(252, 209, 42);
+  }
   public static get RED() {
     return new Color(255, 0, 0);
   }
   public static get FADED_GREEN() {
-    return new Color(149, 158, 131);
+    return new Color(195, 214, 155);
   }
   public static get BEAUTY_BUSH() {
-    return new Color(229, 184, 183);
+    return new Color(250, 192, 144);
   }
   public static get LIGHT_GREY() {
     return new Color(210, 210, 210);
