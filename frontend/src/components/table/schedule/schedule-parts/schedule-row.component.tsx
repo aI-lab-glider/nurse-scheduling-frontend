@@ -68,7 +68,7 @@ export function ScheduleRowComponent({
       <BaseCellComponent
         index={0}
         value={nurse || ""}
-        className={`key ${!dataRow || dataRow?.isEmpty ? "hidden" : ""} ${errors}`}
+        className={`key ${!dataRow || dataRow?.isEmpty ? "empty" : ""} ${errors}`}
       />
       {data.map((cellData, index) => {
         return (
@@ -78,7 +78,7 @@ export function ScheduleRowComponent({
             value={cellData}
             dayType={verboseDates?.[index].dayOfWeek || ""}
             onDataChanged={(newValue) => onShiftChange(index, newValue)}
-            className={`${!dataRow || dataRow?.isEmpty ? "hidden" : ""}`}
+            className={`${!dataRow || dataRow?.isEmpty ? "empty" : ""}`}
             isEditable={!verboseDates?.[index].isFrozen}
             onContextMenu={changeCellFrozenState}
             pushToRow={registerCell}

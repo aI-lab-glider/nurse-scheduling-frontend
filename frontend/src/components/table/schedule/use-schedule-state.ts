@@ -12,14 +12,17 @@ export function useScheduleState(): [
   ScheduleComponentState,
   Dispatch<ActionModel<ScheduleComponentState>>,
   (scheduleData: ScheduleDataModel) => void,
-  ScheduleLogic?
+  ScheduleLogic,
+  boolean
 ] {
-  const [scheduleLogic, setScheduleLogic] = useState<ScheduleLogic>();
+  const [isInitialiazed, setIsInitialiazed] = useState<boolean>(false);
+  const [scheduleLogic, setScheduleLogic] = useState<ScheduleLogic>(new ScheduleLogic({}));
   const [scheduleState, dispatchScheduleState] = useReducer(
     (state: ScheduleComponentState, action: ActionModel<ScheduleComponentState>) => {
       let data;
       switch (action.type) {
         case ScheduleActionType.UpdateFullState:
+          setIsInitialiazed(true);
           return { ...action.payload, isScheduleModified: false };
         case ScheduleActionType.UpdateNurseShiftSection:
           data = action.payload.nurseShiftsSection;
@@ -56,5 +59,5 @@ export function useScheduleState(): [
     });
   };
 
-  return [scheduleState, dispatchScheduleState, setNewSchedule, scheduleLogic];
+  return [scheduleState, dispatchScheduleState, setNewSchedule, scheduleLogic, isInitialiazed];
 }

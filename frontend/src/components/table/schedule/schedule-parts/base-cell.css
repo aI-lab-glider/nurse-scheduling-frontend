@@ -20,7 +20,7 @@
   margin: 5px;
 }
 
-.hidden {
+.empty {
   border: 0px solid white;
   opacity: 0;
 }

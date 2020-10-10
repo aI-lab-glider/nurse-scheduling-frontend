@@ -1,5 +1,10 @@
-.table {
-  min-width: 60%;
-  height: 70vh;
-  overflow: scroll;
+.table-container {
+  overflow: auto;
+  height: 80vh;
+  margin: 5px;
+  width: 100%;
+}
+
+.table-container table {
+  width: 100%;
 }
