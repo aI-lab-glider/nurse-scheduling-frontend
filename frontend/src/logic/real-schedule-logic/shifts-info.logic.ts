@@ -1,16 +1,26 @@
 import { DataRowHelper } from "../../helpers/row.helper";
-import { Shift, ShiftInfoModel } from "../../state/models/schedule-data/shift-info.model";
+import { ScheduleErrorModel } from "../../state/models/schedule-data/schedule-error.model";
+import { ShiftCode, ShiftInfoModel } from "../../state/models/schedule-data/shift-info.model";
+import { ShiftsProvider } from "../schedule-provider";
 import { DataRow } from "./data-row";
 import { SectionLogic } from "./section-logic.model";
-import { ShiftsProvider } from "../schedule-provider";
 
 export class ShiftsInfoLogic implements SectionLogic, ShiftsProvider {
   private shifts: { [nurseName: string]: DataRow } = {};
+  private _scheduleErrors: ScheduleErrorModel[] = [];
 
   constructor(shiftSection: ShiftInfoModel) {
     Object.keys(shiftSection).forEach((key) => {
       this.shifts[key] = new DataRow(key, shiftSection[key]);
     });
+  }
+
+  public get errors(): ScheduleErrorModel[] {
+    return [...this._scheduleErrors];
+  }
+
+  public set errors(value: ScheduleErrorModel[]) {
+    this._scheduleErrors = value;
   }
 
   public get sectionData(): DataRow[] {
@@ -21,8 +31,8 @@ export class ShiftsInfoLogic implements SectionLogic, ShiftsProvider {
     return this.sectionData.length;
   }
 
-  public getWorkerShifts(): { [nurseName: string]: Shift[] } {
-    return DataRowHelper.dataRowsAsValueDict<Shift>(Object.values(this.shifts), false);
+  public getWorkerShifts(): { [nurseName: string]: ShiftCode[] } {
+    return DataRowHelper.dataRowsAsValueDict<ShiftCode>(Object.values(this.shifts), false);
   }
 
   public getWorkers(): string[] {

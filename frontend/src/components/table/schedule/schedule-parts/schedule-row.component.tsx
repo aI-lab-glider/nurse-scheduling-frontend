@@ -27,7 +27,7 @@ export function ScheduleRowComponent({
 
   const errors = useSelector((state: ApplicationStateModel) => {
     let errors = state.scheduleErrors;
-    return errors?.filter((e) => e.worker && e.worker == dataRow?.rowKey).join(" ");
+    return errors?.filter((e) => e.worker && e.worker === dataRow?.rowKey).join(" ");
   });
 
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
@@ -76,7 +76,7 @@ export function ScheduleRowComponent({
             index={index}
             key={`${cellData}${index}`}
             value={cellData}
-            dayType={verboseDates?.[index].dayOfWeek || ""}
+            verboseDate={verboseDates?.[index]}
             onDataChanged={(newValue) => onShiftChange(index, newValue)}
             className={`${!dataRow || dataRow?.isEmpty ? "empty" : ""}`}
             isEditable={!verboseDates?.[index].isFrozen}

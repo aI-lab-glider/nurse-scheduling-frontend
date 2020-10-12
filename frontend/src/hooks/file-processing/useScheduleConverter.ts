@@ -3,14 +3,19 @@ import XLSXParser from "xlsx";
 import { DataRowParser } from "../../logic/schedule-parser/data-row.parser";
 import { ScheduleParser } from "../../logic/schedule-parser/schedule.parser";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
+import { ScheduleErrorModel } from "../../state/models/schedule-data/schedule-error.model";
 import { useFileReader } from "./useFileReader";
 
-export const useScheduleConverter = (): [
-  ScheduleDataModel | undefined,
-  Array<Object> | undefined,
-  (srcFile: File) => void
-] => {
+export interface useScheduleConverterOutput {
+  scheduleModel?: ScheduleDataModel;
+  scheduleSheet?: Array<Object>;
+  setSrcFile: (srcFile: File) => void;
+  scheduleErrors: ScheduleErrorModel[];
+}
+
+export const useScheduleConverter = (): useScheduleConverterOutput => {
   //#region members
+  const [scheduleErrors, setScheduleErrors] = useState<ScheduleErrorModel[]>([]);
   const [scheduleSheet, setScheduleSheet] = useState<Array<object>>();
   const [fileContent, setSrcFile] = useFileReader();
   const [scheduleModel, setScheduleModel] = useState<ScheduleDataModel>();
@@ -58,10 +63,19 @@ export const useScheduleConverter = (): [
     setScheduleSheet(parsedFileContent);
     if (Object.keys(parsedFileContent).length !== 0) {
       const parser = new ScheduleParser(parsedFileContent as Array<Object>);
+      setScheduleErrors([
+        ...parser.nurseInfoProvider.errors,
+        ...parser.babysitterInfoProvider.errors,
+      ]);
       setScheduleModel(parser.schedule.getDataModel());
     }
   }, [fileContent]);
   //#endregion
 
-  return [scheduleModel, scheduleSheet, setSrcFile];
+  return {
+    scheduleModel: scheduleModel,
+    scheduleSheet: scheduleSheet,
+    setSrcFile: setSrcFile,
+    scheduleErrors: scheduleErrors,
+  };
 };

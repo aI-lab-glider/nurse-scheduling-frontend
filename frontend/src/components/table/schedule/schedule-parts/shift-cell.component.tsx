@@ -1,36 +1,41 @@
 import React, { useState } from "react";
+import { ColorProvider } from "../../../../helpers/colors/color.provider";
+import { VerboseDate } from "../../../../logic/real-schedule-logic/month.logic";
+import { ShiftCode } from "../../../../state/models/schedule-data/shift-info.model";
 import { BaseCellComponent } from "./base-cell.component";
 import { CellOptions } from "./cell-options.model";
-import "./shift-cell.css";
 
-export function ShiftCellComponent(
-  options: CellOptions) {
-  const {dayType, value, className, isEditable, onDataChanged, onContextMenu, isSelected} = options;
-  const isWeekend = dayType === "SA" || dayType === "SU";
-  const [shift, setShift] = useState(value);
-  const [isEditableState, setIsEditableState] = useState(isEditable);
-  
+function getShiftCode(value: string): ShiftCode {
+  return ShiftCode[value] || ShiftCode.W;
+}
+export function ShiftCellComponent(options: CellOptions) {
+  const { verboseDate, value, className, onDataChanged, onContextMenu } = options;
+  const [shift, setShift] = useState<ShiftCode>(getShiftCode(value));
+  const [verboseDateState, setverboseDateState] = useState<VerboseDate | undefined>(verboseDate);
+
   function onBaseCellUpdate(newShift: string) {
-    setShift(newShift);
+    setShift(getShiftCode(newShift));
     if (onDataChanged) {
       onDataChanged(newShift);
     }
   }
 
-  function handleContextMenu(index: number, isFrozen: boolean) {
-    let newState = !isFrozen;
-    setIsEditableState(newState);
-    onContextMenu && onContextMenu(index, newState);
+  function toggleFrozenState(index: number, isCellEditable: boolean) {
+    if (verboseDate) {
+      setverboseDateState({ ...verboseDate, isFrozen: !isCellEditable });
+    }
+    onContextMenu && onContextMenu(index, verboseDateState?.isFrozen || false);
   }
 
   return (
     <BaseCellComponent
-      {...options}      
-      value={value === "W" ? "" : value}
-      className={className + (isSelected ? '' : isWeekend ? '' : shift)}
+      {...options}
+      value={value === ShiftCode.W ? "" : value}
+      className={className}
+      style={ColorProvider.getShiftColor(shift, verboseDateState)}
       onDataChanged={onBaseCellUpdate}
-      isEditable={isEditableState}
-      onContextMenu={handleContextMenu}
+      isEditable={verboseDateState?.isFrozen}
+      onContextMenu={toggleFrozenState}
     ></BaseCellComponent>
   );
 }

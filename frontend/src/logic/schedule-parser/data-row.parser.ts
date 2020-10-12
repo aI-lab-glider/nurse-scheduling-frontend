@@ -29,10 +29,9 @@ export class DataRowParser {
       : this.data.filter((c) => includeNulls || c != null).slice(key_position);
   }
 
-  public processRow(processingFunction: (row: string[]) => any[]) {
+  public processRow(processingFunction: (row: DataRowParser) => any[]) {
     let rowKey = this.rowKey;
-    let rowContent = this.rowData(true);
-    this.data = [rowKey, ...processingFunction(rowContent)];
+    this.data = [rowKey, ...processingFunction(this)];
   }
 
   public cropData(from: number, to: number) {

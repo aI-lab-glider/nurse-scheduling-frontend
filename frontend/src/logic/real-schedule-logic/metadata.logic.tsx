@@ -1,9 +1,9 @@
 import { ActionModel } from "../../state/models/action.model";
-import { DayOfWeek } from "../../state/models/schedule-data/month-info.model";
+import { WeekDay } from "../../state/models/schedule-data/month-info.model";
+import { MetadataProvider } from "../schedule-provider";
 import { DataRow } from "./data-row";
 import { MonthLogic, VerboseDate } from "./month.logic";
 import { SectionLogic } from "./section-logic.model";
-import { MetadataProvider } from "../schedule-provider";
 export enum MonthLogicActionType {
   UpdateFrozenDates = "updateFrozenDates",
 }
@@ -23,7 +23,7 @@ export class MetadataLogic implements SectionLogic, MetadataProvider {
       frozenDates.push([nurse, index]);
     } else {
       let ind = frozenDates.indexOf([nurse, index]);
-      if (ind != -1) {
+      if (ind !== -1) {
         delete frozenDates[ind];
       }
     }
@@ -67,7 +67,7 @@ export class MetadataLogic implements SectionLogic, MetadataProvider {
     return parseInt(this._year);
   }
 
-  public get daysOfWeek(): DayOfWeek[] {
+  public get daysOfWeek(): WeekDay[] {
     return this.monthLogic.daysOfWeek;
   }
 
