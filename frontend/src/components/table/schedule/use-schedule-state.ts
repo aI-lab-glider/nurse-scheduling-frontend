@@ -36,6 +36,10 @@ export function useScheduleState(): [
           data = action.payload.childrenSection;
           scheduleLogic && scheduleLogic.updateChildrenSection(data);
           return { ...state, childrenSection: data, isScheduleModified: true };
+        case ScheduleActionType.UpdateExtraWorkersSection:
+          data = action.payload.extraWorkersSection;
+          scheduleLogic && scheduleLogic.updateExtraWorkersSection(data);
+          return { ...state, extraWorkersSection: data, isScheduleModified: true };
         default:
           return state;
       }
@@ -50,6 +54,7 @@ export function useScheduleState(): [
       babysitterShiftsSection: logic.getBabySitterInfo().sectionData,
       childrenSection: logic.getChildrenInfo().sectionData,
       dateSection: logic.getMetadata().sectionData,
+      extraWorkersSection: logic.getExtraWorkersInfo().sectionData,
     };
 
     setScheduleLogic(logic);
