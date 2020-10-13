@@ -9,7 +9,7 @@ import "./schedule-row.component.css";
 
 export interface ScheduleRowOptions {
   dataRow?: DataRow;
-  metaDataLogic?: MetadataLogic,
+  metaDataLogic?: MetadataLogic;
   onRowUpdated?: (row: DataRow) => void;
   cellComponent?: (cellOptions: CellOptions) => JSX.Element;
 }
@@ -24,7 +24,6 @@ export function ScheduleRowComponent({
   onRowUpdated,
   metaDataLogic,
 }: ScheduleRowOptions) {
-
   const errors = useSelector((state: ApplicationStateModel) => {
     let errors = state.scheduleErrors;
     return errors?.filter((e) => e.worker && e.worker === dataRow?.rowKey).join(" ");
@@ -79,7 +78,7 @@ export function ScheduleRowComponent({
             verboseDate={verboseDates?.[index]}
             onDataChanged={(newValue) => onShiftChange(index, newValue)}
             className={`${!dataRow || dataRow?.isEmpty ? "empty" : ""}`}
-            isEditable={!verboseDates?.[index].isFrozen}
+            isEditable={!verboseDates?.[index]?.isFrozen}
             onContextMenu={changeCellFrozenState}
             pushToRow={registerCell}
             isSelected={selectedCells.includes(index)}

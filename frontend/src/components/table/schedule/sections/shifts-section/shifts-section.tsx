@@ -8,9 +8,9 @@ import { WorkerTypeHelper } from "../../../../../state/models/schedule-data/empl
 import { ShiftCode } from "../../../../../state/models/schedule-data/shift-info.model";
 import { AddWorkerModal } from "../../../modal/add-worker-modal";
 import { ShiftCellComponent } from "../../schedule-parts/shift-cell.component";
-import { BaseSectionComponent } from "../base-section/base-section.component";
 import "./shifts-section.css";
 import { ShiftsSectionOptions } from "./shifts-section.options";
+import {BaseShiftsSectionComponent} from "../base-shifts-section/base-shifts-section.component";
 
 export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
   const { onSectionUpdated, data = [], workerType, metaDataLogic } = options;
@@ -58,7 +58,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
         </tr>
       )}
 
-      <BaseSectionComponent
+      <BaseShiftsSectionComponent
         {...options}
         data={data}
         onSectionUpdated={onSectionUpdated}

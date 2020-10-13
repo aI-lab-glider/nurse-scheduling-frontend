@@ -53,6 +53,14 @@ export class MetadataLogic implements SectionLogic, MetadataProvider {
     return this.monthLogic.verboseDates;
   }
 
+  public get workingDaysNumber(): number {
+    return this.monthLogic.workingDaysNumber;
+  }
+
+  public get numberOfPreviousMonthDays(): number {
+    return this.monthLogic.numberOfPreviousMonthDays;
+  }
+
   public get frozenDates(): [string | number, number][] {
     return this.verboseDates.filter((date) => date.isFrozen).map((date, index) => [0, index + 1]);
   }
