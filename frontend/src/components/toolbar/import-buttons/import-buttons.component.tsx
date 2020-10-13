@@ -72,7 +72,7 @@ export function ImportButtonsComponent() {
       ) {
         shiftSection.push(emptyRow);
       }
-      let shifts = scheduleModel.shifts[worker];
+      let shifts = scheduleModel.shifts[worker].map((shift) => (shift === "W" ? null : shift));
       let shiftRow = [worker, ...shifts, 1, 1, 1];
       shiftSection.push(shiftRow);
     }
