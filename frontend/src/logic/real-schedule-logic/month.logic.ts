@@ -20,7 +20,7 @@ export class MonthLogic {
     lipiec: "july",
     sierpień: "august",
     wrzesień: "september",
-    pażdziernik: "october", // TODO pażdziernik => październik and change in .xlsx file in docs
+    październik: "october",
     listopad: "november",
     grudzień: "december",
   };
