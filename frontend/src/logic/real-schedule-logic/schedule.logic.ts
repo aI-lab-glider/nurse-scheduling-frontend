@@ -6,12 +6,14 @@ import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row";
 import { MetadataLogic } from "./metadata.logic";
 import { ShiftsInfoLogic } from "./shifts-info.logic";
-import { ScheduleProvider, Schedule } from "../schedule-provider";
+import { Schedule, ScheduleProvider } from "../schedule-provider";
+import { ExtraWorkersLogic } from "./extra-workers.logic";
 
 export class ScheduleLogic implements ScheduleProvider {
   nurseInfoProvider: ShiftsInfoLogic;
   babysitterInfoProvider: ShiftsInfoLogic;
   childrenInfoProvider: ChildrenInfoLogic;
+  extraWorkersInfoProvider: ExtraWorkersLogic;
 
   readonly metadataProvider?: MetadataLogic;
 
@@ -37,6 +39,9 @@ export class ScheduleLogic implements ScheduleProvider {
         scheduleModel.month_info.dates,
         scheduleModel.schedule_info.daysFromPreviousMonthExists
       );
+    this.extraWorkersInfoProvider = new ExtraWorkersLogic({
+      "liczba dodatkowych pracowników": scheduleModel.month_info?.extra_workers || [],
+    });
     this.schedule = new Schedule(this);
   }
 
@@ -54,7 +59,6 @@ export class ScheduleLogic implements ScheduleProvider {
       );
     }
     return [nursesShifts, babysitterShifts];
-    // scheduleModel.
   }
 
   getWorkerTypes() {
@@ -97,7 +101,13 @@ export class ScheduleLogic implements ScheduleProvider {
     return this.metadataProvider;
   }
 
-  // TODO: Why do we still store this two unused methods findRowByKey and updateRow?
+  public getExtraWorkersInfo(): ExtraWorkersLogic {
+    if (!this.extraWorkersInfoProvider) {
+      throw Error("no extra workers info");
+    }
+    return this.extraWorkersInfoProvider;
+  }
+
   public findRowByKey(schedule, key: string): [DataRow | undefined, number] {
     let index = schedule.findIndex(
       (row) =>
@@ -113,22 +123,23 @@ export class ScheduleLogic implements ScheduleProvider {
     this.childrenInfoProvider.tryUpdate(row);
   }
 
-  //TODO: Check if it still needs to refactored
   public updateChildrenSection(newSectionData: DataRow[]) {
-    // Refactor
     let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
     this.childrenInfoProvider = new ChildrenInfoLogic({ ...data });
   }
 
   public updateNurseSection(newSectionData: DataRow[]) {
-    // Refactor
     let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
     this.nurseInfoProvider = new ShiftsInfoLogic({ ...data });
   }
 
   public updateBabysitterSection(newSectionData: DataRow[]) {
-    // Refactor
     let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
     this.babysitterInfoProvider = new ShiftsInfoLogic({ ...data });
+  }
+
+  public updateExtraWorkersSection(newSectionData: DataRow[]) {
+    let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
+    this.extraWorkersInfoProvider = new ExtraWorkersLogic({ ...data });
   }
 }
