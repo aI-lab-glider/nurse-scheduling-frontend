@@ -19,7 +19,7 @@ export function ImportButtonsComponent() {
   const [open, setOpen] = useState(false);
   const { scheduleModel, setSrcFile, scheduleErrors } = useScheduleConverter();
   const anchorRef = useRef(null);
-  const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData);
+  const stateScheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData);
 
   //#endregion
 
@@ -49,8 +49,8 @@ export function ImportButtonsComponent() {
   };
 
   const handleExport = () => {
-    if (scheduleModel) {
-      writeScheduleToFile(scheduleModel);
+    if (stateScheduleModel) {
+      writeScheduleToFile(stateScheduleModel);
     }
   };
 
@@ -72,7 +72,8 @@ export function ImportButtonsComponent() {
       ) {
         shiftSection.push(emptyRow);
       }
-      let shiftRow = [worker, ...scheduleModel!.shifts[worker], 1, 1, 1];
+      let shifts = scheduleModel.shifts[worker];
+      let shiftRow = [worker, ...shifts, 1, 1, 1];
       shiftSection.push(shiftRow);
     }
 
