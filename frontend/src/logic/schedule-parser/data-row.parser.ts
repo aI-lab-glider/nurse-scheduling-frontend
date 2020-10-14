@@ -22,6 +22,14 @@ export class DataRowParser {
     return StringHelper.getRawValue(this.rowData(false, true)[0]);
   }
 
+  public set rowKey(value: string) {
+    if (this.data) {
+      this.data[0] = value;
+    } else {
+      this.data = [value];
+    }
+  }
+
   public rowData(includeNulls = false, includeKey = false) {
     let key_position = 1;
     return includeKey

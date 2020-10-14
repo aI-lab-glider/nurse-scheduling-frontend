@@ -27,6 +27,7 @@ export class MetaDataParser implements MetadataProvider {
         year_label,
         hour_amount_label
       );
+      daysRow.rowKey = "monthDates";
       this.monthLogic = new MonthLogic(
         this.month,
         this._year,

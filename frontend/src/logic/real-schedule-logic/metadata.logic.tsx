@@ -1,37 +1,30 @@
-import { ActionModel } from "../../state/models/action.model";
 import { WeekDay } from "../../state/models/schedule-data/month-info.model";
 import { MetadataProvider } from "../schedule-provider";
 import { DataRow } from "./data-row";
 import { MonthLogic, VerboseDate } from "./month.logic";
-import { SectionLogic } from "./section-logic.model";
+import { BaseSectionLogic } from "./section-logic.model";
 export enum MonthLogicActionType {
   UpdateFrozenDates = "updateFrozenDates",
 }
 
-export class MetadataLogic implements SectionLogic, MetadataProvider {
+export class MetadataLogic extends BaseSectionLogic implements MetadataProvider {
+  sectionKey = MetadataLogic.name;
+
   private translations = {
     dates_key: "Dni miesiąca",
   };
 
-  public changeShiftFrozenState(
-    nurse: string,
-    index: number,
-    isFrozen: boolean
-  ): ActionModel<[number | string, number][]> {
-    let frozenDates = this.frozenDates;
-    if (isFrozen) {
-      frozenDates.push([nurse, index]);
+  private _frozenShifts: [number, number][] = [];
+  public changeShiftFrozenState(workerIndex: number, index: number) {
+    let blockedPairInd = this._frozenShifts.findIndex(
+      (pair) => pair[0] === workerIndex && pair[1] === index
+    );
+    if (blockedPairInd !== -1) {
+      this._frozenShifts = this._frozenShifts.filter((v, index) => index != blockedPairInd);
     } else {
-      let ind = frozenDates.indexOf([nurse, index]);
-      if (ind !== -1) {
-        delete frozenDates[ind];
-      }
+      this._frozenShifts.push([workerIndex, index]);
     }
-
-    return {
-      type: MonthLogicActionType.UpdateFrozenDates,
-      payload: frozenDates,
-    };
+    return this.frozenDates;
   }
 
   private monthLogic: MonthLogic;
@@ -42,6 +35,7 @@ export class MetadataLogic implements SectionLogic, MetadataProvider {
     monthDates: number[],
     public daysFromPreviousMonthExists: boolean
   ) {
+    super();
     this.monthLogic = new MonthLogic(this.month, _year, monthDates, daysFromPreviousMonthExists);
   }
 
@@ -53,16 +47,13 @@ export class MetadataLogic implements SectionLogic, MetadataProvider {
     return this.monthLogic.verboseDates;
   }
 
-  public get workingDaysNumber(): number {
-    return this.monthLogic.workingDaysNumber;
-  }
-
-  public get numberOfPreviousMonthDays(): number {
-    return this.monthLogic.numberOfPreviousMonthDays;
-  }
-
-  public get frozenDates(): [string | number, number][] {
-    return this.verboseDates.filter((date) => date.isFrozen).map((date, index) => [0, index + 1]);
+  public get frozenDates(): [number, number][] {
+    return [
+      ...(this.verboseDates
+        .filter((date) => date.isFrozen)
+        .map((date, index) => [0, index + 1]) as [number, number][]),
+      ...this._frozenShifts,
+    ];
   }
   public get monthNumber() {
     return this.monthLogic.monthNumber;

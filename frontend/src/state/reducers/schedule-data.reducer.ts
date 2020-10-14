@@ -3,6 +3,9 @@ import { ActionModel } from "../models/action.model";
 import { MonthInfoModel } from "../models/schedule-data/month-info.model";
 import { ScheduleDataModel } from "../models/schedule-data/schedule-data.model";
 
+
+let uuid = 0;
+
 export enum ScheduleDataActionType {
   UPDATE = "updateScheduleData",
   ADD_NEW = "addNew",
@@ -16,7 +19,8 @@ export function scheduleDataReducer(
   switch (action.type) {
     case ScheduleDataActionType.ADD_NEW:
       scheduleModel.isNew = true;
-      console.log(scheduleModel);
+      uuid += 1;
+      if (scheduleModel.schedule_info) scheduleModel.schedule_info.UUID = uuid.toString();  
       return Object.assign({}, state, scheduleModel);
     case ScheduleDataActionType.UPDATE:
       scheduleModel.isNew = false;

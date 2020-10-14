@@ -1,35 +1,54 @@
-import { DataRowHelper } from "../../helpers/row.helper";
+import { Dispatch } from "redux";
 import { StringHelper } from "../../helpers/string.helper";
+import { ActionModel } from "../../state/models/action.model";
 import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
+import { ScheduleDataActionType } from "../../state/reducers/schedule-data.reducer";
+import { Schedule, ScheduleProvider } from "../schedule-provider";
 import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row";
 import { MetadataLogic } from "./metadata.logic";
+import { SectionLogic } from "./section-logic.model";
 import { ShiftsInfoLogic } from "./shifts-info.logic";
+<<<<<<< HEAD
 import { Schedule, ScheduleProvider } from "../schedule-provider";
 import { ExtraWorkersLogic } from "./extra-workers.logic";
+=======
+>>>>>>> 7985e24... NS-24
 
 export class ScheduleLogic implements ScheduleProvider {
+  private providers: SectionLogic[];
   nurseInfoProvider: ShiftsInfoLogic;
   babysitterInfoProvider: ShiftsInfoLogic;
   childrenInfoProvider: ChildrenInfoLogic;
+<<<<<<< HEAD
   extraWorkersInfoProvider: ExtraWorkersLogic;
 
+=======
+>>>>>>> 7985e24... NS-24
   readonly metadataProvider?: MetadataLogic;
 
   readonly schedule: Schedule;
 
-  constructor(scheduleModel: ScheduleDataModel) {
+  constructor(
+    scheduleModel: ScheduleDataModel,
+    private dispatchScheduleUpdate: Dispatch<ActionModel<ScheduleDataModel>>
+  ) {
     const [nurseShifts, babysitterShifts] = this.parseShiftsBasedOnEmployeeType(scheduleModel);
 
-    this.nurseInfoProvider = new ShiftsInfoLogic(nurseShifts || {});
+    this.nurseInfoProvider = new ShiftsInfoLogic(nurseShifts || {}, WorkerType.NURSE);
 
-    this.babysitterInfoProvider = new ShiftsInfoLogic(babysitterShifts || {});
+    this.babysitterInfoProvider = new ShiftsInfoLogic(babysitterShifts || {}, WorkerType.OTHER);
 
     this.childrenInfoProvider = new ChildrenInfoLogic({
       "liczba dzieci zarejestrowanych": scheduleModel.month_info?.children_number || [],
     });
-
+    this.providers = [
+      this.nurseInfoProvider,
+      this.babysitterInfoProvider,
+      this.childrenInfoProvider,
+    ];
+    // not include metadata
     this.metadataProvider =
       scheduleModel.schedule_info &&
       scheduleModel.month_info &&
@@ -43,6 +62,25 @@ export class ScheduleLogic implements ScheduleProvider {
       "liczba dodatkowych pracowników": scheduleModel.month_info?.extra_workers || [],
     });
     this.schedule = new Schedule(this);
+  }
+
+  public changeShiftFrozenState(
+    rowind: number,
+    shiftIndex: number,
+    updateLocalState: (updatedShifts: [number, number][]) => void
+  ) {
+    if (!this.metadataProvider) return;
+    const updatedShifts = this.metadataProvider.changeShiftFrozenState(rowind, shiftIndex);
+    updateLocalState && updateLocalState(updatedShifts);
+    this.updateGlobalState();
+  }
+
+  private updateGlobalState() {
+    const model = this.schedule.getDataModel();
+    this.dispatchScheduleUpdate({
+      type: ScheduleDataActionType.UPDATE,
+      payload: model,
+    });
   }
 
   private parseShiftsBasedOnEmployeeType(scheduleModel: ScheduleDataModel) {
@@ -117,6 +155,7 @@ export class ScheduleLogic implements ScheduleProvider {
     return [data, index];
   }
 
+<<<<<<< HEAD
   public updateRow(row: DataRow) {
     this.nurseInfoProvider.tryUpdate(row);
     this.babysitterInfoProvider.tryUpdate(row);
@@ -136,6 +175,22 @@ export class ScheduleLogic implements ScheduleProvider {
   public updateBabysitterSection(newSectionData: DataRow[]) {
     let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
     this.babysitterInfoProvider = new ShiftsInfoLogic({ ...data });
+=======
+  public updateRow(
+    sectionKey: string,
+    rowIndex: number,
+    updateIndexes: number[],
+    newValue: string,
+    updateLocalState: (dataRow: DataRow) => void
+  ) {
+    const newDataRow = this.providers
+      ?.find((provider) => provider.sectionKey === sectionKey)
+      ?.updateDataRow(rowIndex, updateIndexes, newValue);
+    if (newDataRow) {
+      updateLocalState(newDataRow);
+      this.updateGlobalState();
+    }
+>>>>>>> 7985e24... NS-24
   }
 
   public updateExtraWorkersSection(newSectionData: DataRow[]) {

@@ -1,18 +1,22 @@
 import { DataRowHelper } from "../../helpers/row.helper";
+import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
 import { ScheduleErrorModel } from "../../state/models/schedule-data/schedule-error.model";
 import { ShiftCode, ShiftInfoModel } from "../../state/models/schedule-data/shift-info.model";
 import { ShiftsProvider } from "../schedule-provider";
 import { DataRow } from "./data-row";
-import { SectionLogic } from "./section-logic.model";
+import { BaseSectionLogic } from "./section-logic.model";
 
-export class ShiftsInfoLogic implements SectionLogic, ShiftsProvider {
+export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider {
+  sectionKey: string;
   private shifts: { [nurseName: string]: DataRow } = {};
   private _scheduleErrors: ScheduleErrorModel[] = [];
 
-  constructor(shiftSection: ShiftInfoModel) {
+  constructor(shiftSection: ShiftInfoModel, workerType: WorkerType) {
+    super();
     Object.keys(shiftSection).forEach((key) => {
       this.shifts[key] = new DataRow(key, shiftSection[key]);
     });
+    this.sectionKey = `${workerType}Section`;
   }
 
   public get errors(): ScheduleErrorModel[] {
@@ -38,6 +42,7 @@ export class ShiftsInfoLogic implements SectionLogic, ShiftsProvider {
   public getWorkers(): string[] {
     return Object.keys(this.shifts);
   }
+
   public mockEmployeeWorkTime(): { [key: string]: number } {
     let employeeDict = {};
     Object.keys(this.shifts).forEach((key) => (employeeDict[key] = 1.0));

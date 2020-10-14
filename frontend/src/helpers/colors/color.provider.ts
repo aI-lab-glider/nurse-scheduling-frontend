@@ -9,9 +9,14 @@ export class ColorProvider {
     return { textColor: Colors.BLACK, backgroundColor: Colors.WHITE };
   }
 
+  static getHighlightColor() {
+    return Colors.LIGHT_BLUE.fade(0.4);
+  }
+
   static getShiftColor(
-    shift: ShiftCode,
+    shift?: ShiftCode,
     day?: VerboseDate,
+    isFrozen?: boolean,
     ignoreFrozenState: boolean = false
   ): CellColorSet {
     let colorSet: CellColorSet = ColorProvider.DEFAULT_COLOR_SET;
@@ -33,12 +38,16 @@ export class ColorProvider {
       case (ShiftCode.P, ShiftCode.PN, ShiftCode.R, ShiftCode.W):
         break;
     }
-    return { ...colorSet, ...ColorProvider.getDayColor(day, colorSet, ignoreFrozenState) };
+    return {
+      ...colorSet,
+      ...ColorProvider.getDayColor(day, colorSet, isFrozen, ignoreFrozenState),
+    };
   }
 
   static getDayColor(
     day?: VerboseDate,
     defaultColorSet: CellColorSet = ColorProvider.DEFAULT_COLOR_SET,
+    isFrozen: boolean = false,
     ignoreFrozenState: boolean = false
   ): CellColorSet {
     if (!day) {
@@ -59,7 +68,7 @@ export class ColorProvider {
         };
         break;
     }
-    return day.isFrozen && !ignoreFrozenState
+    return isFrozen && !ignoreFrozenState
       ? { ...colorSet, backgroundColor: colorSet.backgroundColor.fade() }
       : colorSet;
   }

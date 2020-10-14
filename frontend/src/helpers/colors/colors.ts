@@ -1,6 +1,9 @@
 import { Color } from "./color.model";
 
 export class Colors {
+  public static get LIGHT_BLUE() {
+    return new Color(137, 172, 255);
+  }
   public static get TUSCANY() {
     return new Color(252, 209, 42);
   }

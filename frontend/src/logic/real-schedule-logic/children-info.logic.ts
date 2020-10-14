@@ -1,11 +1,13 @@
-import { DataRow } from "./data-row";
-import { SectionLogic } from "./section-logic.model";
 import { ChildrenInfoProvider } from "../schedule-provider";
+import { DataRow } from "./data-row";
+import { BaseSectionLogic } from "./section-logic.model";
 
-export class ChildrenInfoLogic implements SectionLogic, ChildrenInfoProvider {
+export class ChildrenInfoLogic extends BaseSectionLogic implements ChildrenInfoProvider {
+  sectionKey = ChildrenInfoLogic.name;
   private childrenInfoAsDataRows: { [key: string]: DataRow } = {};
 
   constructor(private childrenInfo: { [key: string]: number[] }) {
+    super();
     Object.keys(childrenInfo).forEach((key) => {
       this.childrenInfoAsDataRows[key] = new DataRow(key, childrenInfo[key]);
     });

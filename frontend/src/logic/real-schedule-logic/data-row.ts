@@ -16,9 +16,10 @@ export class DataRow implements DataRowModel {
     return includeKey ? [this.key, ...filteredRow] : filteredRow;
   }
 
-  public updateData(updateCallback: (row: string[]) => any[]) {
+  public updateData(updateCallback: (row: string[]) => any[]): DataRow {
     let data = this.rowData(true, false);
     this.data = updateCallback(data);
+    return this;
   }
 
   public setValue(indexes: number[], value: string) {

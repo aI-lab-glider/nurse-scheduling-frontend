@@ -1,32 +1,22 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ActionModel } from "../../../state/models/action.model";
+import { useSelector } from "react-redux";
+import { DataRow } from "../../../logic/real-schedule-logic/data-row";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { WorkerType } from "../../../state/models/schedule-data/employee-info.model";
-import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-data.model";
-import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleRowComponent } from "./schedule-parts/schedule-row.component";
-import { ScheduleActionType } from "./schedule-state.model";
 import "./schedule.component.css";
 import { ChildrenSectionComponent } from "./sections/children-section/children-section.components";
 import { DateSectionComponent } from "./sections/date-section/date-section.component";
 import { ShiftsSectionComponent } from "./sections/shifts-section/shifts-section";
-import { useScheduleState } from "./use-schedule-state";
-import {ExtraWorkersSection} from "./sections/extra-workers-section/extra-workers-section.components";
+import { ScheduleLogicContext, useScheduleState } from "./use-schedule-state";
 
 export function ScheduleComponent() {
-  const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData);
-  const dispatchGlobalState = useDispatch();
-  const [scheduleState, dispatchScheduleState, setNewSchedule, scheduleLogic, isInitialized] = useScheduleState();
+  const scheduleModel = useSelector(
+    (state: ApplicationStateModel) => state.scheduleData,
+    (left, right) => left?.schedule_info?.UUID === right?.schedule_info?.UUID
+  );
 
-  useEffect(() => {
-    if (scheduleState.isScheduleModified && scheduleLogic) {
-      dispatchGlobalState({
-        type: ScheduleDataActionType.UPDATE,
-        payload: scheduleLogic.schedule.getDataModel(),
-      } as ActionModel<ScheduleDataModel>);
-    }
-  }, [scheduleState, dispatchGlobalState, scheduleLogic]);
+  const { scheduleLocalState, setNewSchedule } = useScheduleState();
 
   useEffect(() => {
     if (scheduleModel?.isNew) {
@@ -36,71 +26,44 @@ export function ScheduleComponent() {
 
   return (
     <React.Fragment>
-        {isInitialized && <table className="table">
+      {scheduleLocalState.isInitialized && (
+        <table className="table">
           <tbody>
-            <DateSectionComponent
-              data={scheduleState.dateSection}
-              metaDataLogic={scheduleLogic?.getMetadata()}
-              onSectionUpdated={(newSectionData) => {
-                // TODO implement
-              }}
-            />
+            <ScheduleLogicContext.Provider value={scheduleLocalState.scheduleLogic}>
+              <DateSectionComponent data={scheduleLocalState.dateSection} />
 
-            <ScheduleRowComponent />
+              <ScheduleRowComponent index={0} dataRow={new DataRow("", [])} />
 
-            <ChildrenSectionComponent
-              data={scheduleState.childrenSection}
-              metaDataLogic={scheduleLogic?.getMetadata()}
-              onSectionUpdated={(newSectionData) =>
-                dispatchScheduleState({
-                  type: ScheduleActionType.UpdateChildrenShiftSection,
-                  payload: { childrenSection: newSectionData },
-                })
-              }
-            />
+              <ChildrenSectionComponent data={scheduleLocalState.childrenSection} />
 
-            <ScheduleRowComponent />
+              <ScheduleRowComponent index={0} dataRow={new DataRow("", [])} />
 
-            <ExtraWorkersSection
+              <ExtraWorkersSection
                 data={scheduleState.extraWorkersSection}
                 metaDataLogic={scheduleLogic?.getMetadata()}
                 onSectionUpdated={(newSectionData) =>
-                    dispatchScheduleState({
-                      type: ScheduleActionType.UpdateExtraWorkersSection,
-                      payload: { extraWorkersSection: newSectionData },
-                    })
+                  dispatchScheduleState({
+                    type: ScheduleActionType.UpdateExtraWorkersSection,
+                    payload: { extraWorkersSection: newSectionData },
+                  })
                 }
-            />
+              />
 
-            <ScheduleRowComponent />
+              <ShiftsSectionComponent
+                workerType={WorkerType.NURSE}
+                data={scheduleLocalState.nurseShiftsSection}
+              />
 
-            <ShiftsSectionComponent
-              workerType={WorkerType.NURSE}
-              data={scheduleState.nurseShiftsSection}
-              metaDataLogic={scheduleLogic?.getMetadata()}
-              onSectionUpdated={(newSectionData) =>
-                dispatchScheduleState({
-                  type: ScheduleActionType.UpdateNurseShiftSection,
-                  payload: { nurseShiftsSection: newSectionData },
-                })
-              }
-            />
+              <ScheduleRowComponent index={0} dataRow={new DataRow("", [])} />
 
-            <ScheduleRowComponent />
-
-            <ShiftsSectionComponent
-              workerType={WorkerType.OTHER}
-              data={scheduleState.babysitterShiftsSection}
-              metaDataLogic={scheduleLogic?.getMetadata()}
-              onSectionUpdated={(newSectionData) =>
-                dispatchScheduleState({
-                  type: ScheduleActionType.UpdateBabysitterShiftSection,
-                  payload: { babysitterShiftsSection: newSectionData },
-                })
-              }
-            />
+              <ShiftsSectionComponent
+                workerType={WorkerType.OTHER}
+                data={scheduleLocalState.babysitterShiftsSection}
+              />
+            </ScheduleLogicContext.Provider>
           </tbody>
-        </table>}
+        </table>
+      )}
     </React.Fragment>
   );
 }

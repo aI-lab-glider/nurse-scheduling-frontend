@@ -1,88 +1,123 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useContext, useEffect, useState } from "react";
+import { ColorProvider } from "../../../../helpers/colors/color.provider";
 import { DataRow } from "../../../../logic/real-schedule-logic/data-row";
-import { MetadataLogic } from "../../../../logic/real-schedule-logic/metadata.logic";
-import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { DirectionKey } from "../sections/base-section/base-section.component";
+import { ScheduleLogicContext } from "../use-schedule-state";
 import { BaseCellComponent } from "./base-cell.component";
-import { CellOptions, CellState } from "./cell-options.model";
+import { CellOptions } from "./cell-options.model";
 import "./schedule-row.component.css";
 
+enum CellManagementKeys {
+  Enter = "Enter",
+  Escape = "Escape",
+}
 export interface ScheduleRowOptions {
-  dataRow?: DataRow;
-  metaDataLogic?: MetadataLogic;
-  onRowUpdated?: (row: DataRow) => void;
+  index: number;
+  dataRow: DataRow;
+  sectionKey?: string;
   cellComponent?: (cellOptions: CellOptions) => JSX.Element;
+  onKeyDown?: (cellIndex: number, event: React.KeyboardEvent) => void;
+  onClick?: (cellIndex: number) => void;
+  pointerPosition?: number;
 }
 
-interface Errors {
-  rowErrors: string[];
-  cellErrors: string[][];
-}
 export function ScheduleRowComponent({
+  index,
   dataRow,
+  sectionKey,
   cellComponent: CellComponent = BaseCellComponent,
-  onRowUpdated,
-  metaDataLogic,
+  pointerPosition = -1,
+  onKeyDown,
+  onClick,
 }: ScheduleRowOptions) {
-  const errors = useSelector((state: ApplicationStateModel) => {
-    let errors = state.scheduleErrors;
-    return errors?.filter((e) => e.worker && e.worker === dataRow?.rowKey).join(" ");
-  });
+  const scheduleLogic = useContext(ScheduleLogicContext);
+  const [dataRowState, setDataRowState] = useState<DataRow>(dataRow);
+  useEffect(() => {
+    setDataRowState(dataRow);
+  }, [dataRow]);
 
+  const [frozenShifts, setFrozenShifts] = useState<[number, number][]>([]);
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
+  const [selectionMode, setSelectionMode] = useState(false);
 
-  const dispatcher = useDispatch();
-  let nurse = dataRow?.rowKey ?? "";
-  let data = dataRow?.rowData(false) || [];
-  const verboseDates = metaDataLogic?.verboseDates;
-
-  function onShiftChange(index: number, newShift: string) {
-    dataRow = dataRow as DataRow;
-    dataRow.setValue(selectedCells, newShift);
-    if (onRowUpdated) {
-      onRowUpdated(dataRow);
+  useEffect(() => {
+    if (!selectionMode) {
+      setSelectedCells([]);
     }
+  }, [selectionMode]);
+  const verboseDates = scheduleLogic?.metadataProvider?.verboseDates;
+
+  function onContextMenu(cellIndex: number) {
+    if (scheduleLogic) {
+      scheduleLogic.changeShiftFrozenState(index, cellIndex, setFrozenShifts);
+    }
+  }
+  function saveValue(newValue: string) {
+    if (sectionKey)
+      scheduleLogic?.updateRow(sectionKey, index - 1, [pointerPosition], newValue, setDataRowState);
     setSelectedCells([]);
   }
 
-  function changeCellFrozenState(index: number, state: boolean) {
-    let frozenDatesAction = metaDataLogic?.changeShiftFrozenState(nurse, index, !state);
-    dispatcher(frozenDatesAction);
+  function isFrozen(cellInd: number) {
+    return (
+      verboseDates?.[cellInd]?.isFrozen ||
+      !!frozenShifts.find((fS) => fS[0] === index && fS[1] === cellInd) ||
+      false
+    );
   }
 
-  function registerCell(index: number) {
-    setSelectedCells([...selectedCells, index]);
-  }
-
-  function onCellStateChanged(cellState: CellState) {
-    switch (cellState) {
-      case CellState.STOP_EDITING:
-        setSelectedCells([]);
-        break;
+  function toggleSelection(cellIndex: number) {
+    if (selectedCells.includes(cellIndex)) {
+      setSelectedCells(selectedCells.filter((selectedCellIndex) => cellIndex != selectedCellIndex));
+    } else {
+      setSelectedCells([...selectedCells, cellIndex]);
     }
+  }
+
+  function handleKeyPress(cellIndex: number, cellValue: string, event: React.KeyboardEvent) {
+    if (event.key === CellManagementKeys.Enter) {
+      saveValue(cellValue);
+    }
+
+    if (event.ctrlKey && DirectionKey[event.key]) {
+      !selectionMode && setSelectionMode(true);
+      toggleSelection(cellIndex);
+    } else if (
+      DirectionKey[event.key] || // if moves in any direction withour CTRL - disable selection
+      event.key === CellManagementKeys.Escape
+    ) {
+      setSelectionMode(false);
+    }
+    onKeyDown && onKeyDown(cellIndex, event);
   }
 
   return (
     <tr className="row">
       <BaseCellComponent
         index={0}
-        value={nurse || ""}
-        className={`key ${!dataRow || dataRow?.isEmpty ? "empty" : ""} ${errors}`}
+        value={dataRow.rowKey || ""}
+        isSelected={false}
+        isBlocked={false}
+        onContextMenu={() => {}}
+        isPointerOn={false}
       />
-      {data.map((cellData, index) => {
+      {dataRowState.rowData(false).map((cellData, cellIndex) => {
         return (
           <CellComponent
-            index={index}
-            key={`${cellData}${index}`}
+            index={cellIndex}
+            key={`${cellData}${cellIndex}${isFrozen(cellIndex)}`}
             value={cellData}
-            verboseDate={verboseDates?.[index]}
-            onDataChanged={(newValue) => onShiftChange(index, newValue)}
-            className={`${!dataRow || dataRow?.isEmpty ? "empty" : ""}`}
-            isEditable={!verboseDates?.[index]?.isFrozen}
-            onContextMenu={changeCellFrozenState}
-            pushToRow={registerCell}
-            isSelected={selectedCells.includes(index)}
-            onStateChange={onCellStateChanged}
+            isSelected={selectedCells.includes(cellIndex)}
+            style={ColorProvider.getShiftColor(
+              cellData,
+              verboseDates?.[cellIndex],
+              isFrozen(cellIndex)
+            )}
+            isPointerOn={cellIndex === pointerPosition}
+            isBlocked={isFrozen(cellIndex)}
+            onKeyDown={(cellValue, event) => handleKeyPress(cellIndex, cellValue, event)}
+            onContextMenu={() => onContextMenu(cellIndex)}
+            onClick={() => onClick && onClick(cellIndex)}
           />
         );
       })}

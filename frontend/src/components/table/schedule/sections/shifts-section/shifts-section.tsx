@@ -1,20 +1,23 @@
 import { Button } from "@material-ui/core";
-import React, { useState } from "react";
-import { DataRowHelper } from "../../../../../helpers/row.helper";
+import React, { useContext, useState } from "react";
 import { StringHelper } from "../../../../../helpers/string.helper";
 import { DataRow } from "../../../../../logic/real-schedule-logic/data-row";
-import { ShiftsInfoLogic } from "../../../../../logic/real-schedule-logic/shifts-info.logic";
-import { WorkerTypeHelper } from "../../../../../state/models/schedule-data/employee-info.model";
+import {
+  WorkerType,
+  WorkerTypeHelper,
+} from "../../../../../state/models/schedule-data/employee-info.model";
 import { ShiftCode } from "../../../../../state/models/schedule-data/shift-info.model";
 import { AddWorkerModal } from "../../../modal/add-worker-modal";
 import { ShiftCellComponent } from "../../schedule-parts/shift-cell.component";
+import { ScheduleLogicContext } from "../../use-schedule-state";
+import { BaseSectionComponent } from "../base-section/base-section.component";
 import "./shifts-section.css";
 import { ShiftsSectionOptions } from "./shifts-section.options";
-import {BaseShiftsSectionComponent} from "../base-shifts-section/base-shifts-section.component";
+import { BaseShiftsSectionComponent } from "../base-shifts-section/base-shifts-section.component";
 
 export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
-  const { onSectionUpdated, data = [], workerType, metaDataLogic } = options;
-  const logic = new ShiftsInfoLogic(DataRowHelper.dataRowsAsValueDict<ShiftCode>(data, true));
+  const { data = [], workerType } = options;
+  const scheduleLogic = useContext(ScheduleLogicContext);
 
   const [isOpened, setIsOpened] = useState(false);
 
@@ -28,7 +31,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
   );
 
   function addDataRow(newRow: DataRow) {
-    onSectionUpdated([...logic.sectionData, newRow]);
+    // onSectionUpdated([...logic.sectionData, newRow]);
   }
 
   function onAddButtonClicked() {
@@ -61,10 +64,12 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
       <BaseShiftsSectionComponent
         {...options}
         data={data}
-        onSectionUpdated={onSectionUpdated}
+        sectionKey={
+          workerType === WorkerType.NURSE
+            ? scheduleLogic?.nurseInfoProvider.sectionKey || ""
+            : scheduleLogic?.babysitterInfoProvider.sectionKey || ""
+        }
         cellComponent={ShiftCellComponent}
-        metaDataLogic={metaDataLogic}
-        logic={logic}
       />
       {modal}
     </React.Fragment>
