@@ -3,8 +3,8 @@ import { ShiftCode } from "../../../../state/models/schedule-data/shift-info.mod
 import { BaseCellComponent } from "./base-cell.component";
 import { CellOptions } from "./cell-options.model";
 
-function getShiftCode(value: string): ShiftCode {
-  return ShiftCode[value] || ShiftCode.W;
+function getShiftCode(value: string | number): ShiftCode {
+  return typeof value === "number" ? value.toString() : ShiftCode[value] || ShiftCode.W;
 }
 
 export function ShiftCellComponent(options: CellOptions) {

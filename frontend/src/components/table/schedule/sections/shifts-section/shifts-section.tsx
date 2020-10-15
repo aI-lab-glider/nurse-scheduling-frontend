@@ -13,7 +13,7 @@ import { ScheduleLogicContext } from "../../use-schedule-state";
 import { BaseSectionComponent } from "../base-section/base-section.component";
 import "./shifts-section.css";
 import { ShiftsSectionOptions } from "./shifts-section.options";
-import { BaseShiftsSectionComponent } from "../base-shifts-section/base-shifts-section.component";
+import { ShiftRowComponent } from "../../schedule-parts/shift-row.component";
 
 export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
   const { data = [], workerType } = options;
@@ -69,11 +69,12 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
         </tr>
       )}
 
-      <BaseShiftsSectionComponent
+      <BaseSectionComponent
         {...options}
         data={dataState}
         sectionKey={sectionKey}
         cellComponent={ShiftCellComponent}
+        rowComponent={ShiftRowComponent}
       />
       {modal}
     </React.Fragment>

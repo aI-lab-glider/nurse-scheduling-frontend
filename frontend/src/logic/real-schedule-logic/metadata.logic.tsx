@@ -27,7 +27,7 @@ export class MetadataLogic extends BaseSectionLogic implements MetadataProvider 
     return this.frozenDates;
   }
 
-  private monthLogic: MonthLogic;
+  public monthLogic: MonthLogic;
 
   constructor(
     private _year: string,

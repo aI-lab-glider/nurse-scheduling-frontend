@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BaseCellComponent } from "../../schedule-parts/base-cell.component";
 import { ScheduleRowComponent } from "../../schedule-parts/schedule-row.component";
+import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
 import { BaseSectionOptions } from "./base-section.options";
 
 export enum DirectionKey {
@@ -15,6 +16,7 @@ type PointerPosition = { row: number; cell: number };
 export function BaseSectionComponent({
   data = [],
   cellComponent = BaseCellComponent,
+  rowComponent: RowComponent = ScheduleRowComponent,
   sectionKey,
 }: BaseSectionOptions) {
   const [pointerPosition, setPointerPosition] = useState<PointerPosition>({ row: -1, cell: -1 });
@@ -48,7 +50,7 @@ export function BaseSectionComponent({
   return (
     <React.Fragment>
       {data.map((dataRow, index) => (
-        <ScheduleRowComponent
+        <RowComponent
           sectionKey={sectionKey}
           key={`${dataRow.rowKey}${index}`}
           index={index + 1}

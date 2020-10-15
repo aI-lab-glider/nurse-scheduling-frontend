@@ -18,6 +18,7 @@ export interface ScheduleRowOptions {
   cellComponent?: (cellOptions: CellOptions) => JSX.Element;
   onKeyDown?: (cellIndex: number, event: React.KeyboardEvent) => void;
   onClick?: (cellIndex: number) => void;
+  onStateUpdate?: (row: DataRow) => void;
   pointerPosition?: number;
 }
 
@@ -29,6 +30,7 @@ export function ScheduleRowComponent({
   pointerPosition = -1,
   onKeyDown,
   onClick,
+  onStateUpdate,
 }: ScheduleRowOptions) {
   const scheduleLogic = useContext(ScheduleLogicContext);
   const [dataRowState, setDataRowState] = useState<DataRow>(dataRow);
@@ -59,7 +61,10 @@ export function ScheduleRowComponent({
         index - 1,
         [...selectedCells, pointerPosition],
         newValue,
-        setDataRowState
+        (newDataRow) => {
+          setDataRowState(newDataRow);
+          onStateUpdate && onStateUpdate(newDataRow);
+        }
       );
     setSelectedCells([]);
   }
