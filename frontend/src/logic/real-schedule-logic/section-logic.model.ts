@@ -2,12 +2,18 @@ import { DataRow } from "./data-row";
 
 export interface SectionLogic {
   sectionKey: string;
+  addDataRow(newRow: DataRow): DataRow[];
   updateDataRow(rowIndex: number, updateIndexes: number[], newValue: string): DataRow;
   sectionData: DataRow[];
 }
 
 export abstract class BaseSectionLogic implements SectionLogic {
   abstract sectionKey: string;
+
+  addDataRow(newRow: DataRow) {
+    this.sectionData = [...this.sectionData, newRow];
+    return this.sectionData;
+  }
 
   updateDataRow(rowIndex: number, updateIndexes: number[], newValue: string): DataRow {
     const updatedDataRow = this.sectionData[rowIndex].updateData((data) => {
@@ -17,4 +23,5 @@ export abstract class BaseSectionLogic implements SectionLogic {
     return updatedDataRow;
   }
   abstract get sectionData(): DataRow[];
+  abstract set sectionData(dataRows: DataRow[]);
 }

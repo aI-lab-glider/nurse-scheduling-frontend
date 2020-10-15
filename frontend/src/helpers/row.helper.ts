@@ -9,4 +9,10 @@ export class DataRowHelper {
       .map((r) => ({ [r.rowKey]: r.rowData(includeNulls, false) }))
       .reduce((acc, curr) => ({ ...acc, ...curr }), {});
   }
+
+  public static dataRowsAsDataRowDict<T extends DataRowModel>(dataRows: T[]) {
+    return dataRows
+      .map((r) => ({ [r.rowKey]: r }))
+      .reduce((acc, curr) => ({ ...acc, ...curr }), {});
+  }
 }

@@ -19,6 +19,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
   const { data = [], workerType } = options;
   const scheduleLogic = useContext(ScheduleLogicContext);
 
+  const [dataState, setDataState] = useState(data);
   const [isOpened, setIsOpened] = useState(false);
 
   const modal = (
@@ -30,8 +31,13 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
     />
   );
 
+  const sectionKey =
+    workerType === WorkerType.NURSE
+      ? scheduleLogic?.nurseInfoProvider.sectionKey || ""
+      : scheduleLogic?.babysitterInfoProvider.sectionKey || "";
+
   function addDataRow(newRow: DataRow) {
-    // onSectionUpdated([...logic.sectionData, newRow]);
+    scheduleLogic?.addRow(sectionKey, newRow, (newState) => setDataState([...newState]));
   }
 
   function onAddButtonClicked() {
@@ -63,12 +69,8 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
 
       <BaseShiftsSectionComponent
         {...options}
-        data={data}
-        sectionKey={
-          workerType === WorkerType.NURSE
-            ? scheduleLogic?.nurseInfoProvider.sectionKey || ""
-            : scheduleLogic?.babysitterInfoProvider.sectionKey || ""
-        }
+        data={dataState}
+        sectionKey={sectionKey}
         cellComponent={ShiftCellComponent}
       />
       {modal}

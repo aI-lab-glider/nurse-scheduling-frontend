@@ -148,7 +148,7 @@ export class ScheduleLogic implements ScheduleProvider {
 
   public findRowByKey(schedule, key: string): [DataRow | undefined, number] {
     let index = schedule.findIndex(
-      (row) =>
+      (row: DataRow) =>
         !row.isEmpty && StringHelper.getRawValue(row.rowKey) === StringHelper.getRawValue(key)
     );
     let data = schedule[index];
@@ -196,5 +196,19 @@ export class ScheduleLogic implements ScheduleProvider {
   public updateExtraWorkersSection(newSectionData: DataRow[]) {
     let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
     this.extraWorkersInfoProvider = new ExtraWorkersLogic({ ...data });
+  }
+
+  public addRow(
+    sectionKey: string,
+    newRow: DataRow,
+    updateLocalState: (dataRow: DataRow[]) => void
+  ) {
+    const newSectionContent = this.providers
+      ?.find((provider) => provider.sectionKey === sectionKey)
+      ?.addDataRow(newRow);
+    if (newSectionContent) {
+      updateLocalState(newSectionContent);
+      this.updateGlobalState();
+    }
   }
 }

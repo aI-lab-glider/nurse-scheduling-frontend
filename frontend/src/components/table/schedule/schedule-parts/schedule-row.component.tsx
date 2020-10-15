@@ -35,10 +35,10 @@ export function ScheduleRowComponent({
   useEffect(() => {
     setDataRowState(dataRow);
   }, [dataRow]);
-
   const [frozenShifts, setFrozenShifts] = useState<[number, number][]>([]);
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
+  const [previousDirectionKey, setPreviousDirectionKey] = useState("");
 
   useEffect(() => {
     if (!selectionMode) {
@@ -54,7 +54,13 @@ export function ScheduleRowComponent({
   }
   function saveValue(newValue: string) {
     if (sectionKey)
-      scheduleLogic?.updateRow(sectionKey, index - 1, [pointerPosition], newValue, setDataRowState);
+      scheduleLogic?.updateRow(
+        sectionKey,
+        index - 1,
+        [...selectedCells, pointerPosition],
+        newValue,
+        setDataRowState
+      );
     setSelectedCells([]);
   }
 
@@ -81,7 +87,13 @@ export function ScheduleRowComponent({
 
     if (event.ctrlKey && DirectionKey[event.key]) {
       !selectionMode && setSelectionMode(true);
-      toggleSelection(cellIndex);
+      // TODO: refactor. It solves problem with wrong elements selection on the ends when direction changes
+      // Issue could be solved, if make logic to react on onKeyDown event from cell in which
+      // we enter, not from cell which we leave
+      if (previousDirectionKey == DirectionKey[event.key] || !selectionMode) {
+        toggleSelection(cellIndex);
+      }
+      setPreviousDirectionKey(DirectionKey[event.key]);
     } else if (
       DirectionKey[event.key] || // if moves in any direction withour CTRL - disable selection
       event.key === CellManagementKeys.Escape

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { DataRow } from "../../../logic/real-schedule-logic/data-row";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { WorkerType } from "../../../state/models/schedule-data/employee-info.model";
+import { EmptyRowComponent } from "./schedule-parts/empty-cell.component";
 import { ScheduleRowComponent } from "./schedule-parts/schedule-row.component";
 import "./schedule.component.css";
 import { ChildrenSectionComponent } from "./sections/children-section/children-section.components";
@@ -32,11 +33,11 @@ export function ScheduleComponent() {
             <ScheduleLogicContext.Provider value={scheduleLocalState.scheduleLogic}>
               <DateSectionComponent data={scheduleLocalState.dateSection} />
 
-              <ScheduleRowComponent index={0} dataRow={new DataRow("", [])} />
+              <EmptyRowComponent />
 
               <ChildrenSectionComponent data={scheduleLocalState.childrenSection} />
 
-              <ScheduleRowComponent index={0} dataRow={new DataRow("", [])} />
+              <EmptyRowComponent />
 
               <ExtraWorkersSection
                 data={scheduleState.extraWorkersSection}
@@ -54,7 +55,7 @@ export function ScheduleComponent() {
                 data={scheduleLocalState.nurseShiftsSection}
               />
 
-              <ScheduleRowComponent index={0} dataRow={new DataRow("", [])} />
+              <EmptyRowComponent />
 
               <ShiftsSectionComponent
                 workerType={WorkerType.OTHER}

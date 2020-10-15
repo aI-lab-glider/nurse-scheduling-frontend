@@ -31,6 +31,10 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
     return Object.values(this.shifts);
   }
 
+  public set sectionData(dataRows: DataRow[]) {
+    this.shifts = DataRowHelper.dataRowsAsDataRowDict<DataRow>(dataRows);
+  }
+
   public get workersCount(): number {
     return this.sectionData.length;
   }
