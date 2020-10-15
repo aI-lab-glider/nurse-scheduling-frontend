@@ -36,8 +36,10 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
       ? scheduleLogic?.nurseInfoProvider.sectionKey || ""
       : scheduleLogic?.babysitterInfoProvider.sectionKey || "";
 
-  function addDataRow(newRow: DataRow) {
-    scheduleLogic?.addRow(sectionKey, newRow, (newState) => setDataState([...newState]));
+  function addWorker(newRow: DataRow, workerTime: number) {
+    scheduleLogic?.addWorker(sectionKey, newRow, workerTime, (newState) =>
+      setDataState([...newState])
+    );
   }
 
   function onAddButtonClicked() {
@@ -47,7 +49,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
   function submit(name: string, time: number) {
     if (data.length > 0) {
       const dataRow = new DataRow(name, new Array(data[0].length - 1).fill(ShiftCode.W));
-      addDataRow(dataRow);
+      addWorker(dataRow, time);
     }
   }
 

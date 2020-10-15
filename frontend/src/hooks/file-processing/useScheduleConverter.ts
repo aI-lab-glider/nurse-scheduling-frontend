@@ -55,7 +55,7 @@ export const useScheduleConverter = (): useScheduleConverterOutput => {
         defval: null,
         header: 1,
       }) as Array<object>;
-
+      console.log(scheduleSheet);
       return cropToData(scheduleSheet);
     };
 

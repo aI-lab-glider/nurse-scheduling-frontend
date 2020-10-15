@@ -14,7 +14,7 @@ export interface MetadataProvider {
 export interface ShiftsProvider {
   errors: ScheduleErrorModel[];
   getWorkerShifts(): { [workerName: string]: ShiftCode[] };
-  mockEmployeeWorkTime(): { [key: string]: number };
+  employeeWorkTime(): { [key: string]: number };
   workersCount: number;
 }
 
@@ -65,8 +65,8 @@ export class Schedule {
         babysitterCount: this.provider.babysitterInfoProvider.workersCount || 0,
         nurseCount: this.provider.nurseInfoProvider.workersCount || 0,
         time: {
-          ...this.provider.babysitterInfoProvider.mockEmployeeWorkTime(),
-          ...this.provider.nurseInfoProvider.mockEmployeeWorkTime(),
+          ...this.provider.babysitterInfoProvider.employeeWorkTime(),
+          ...this.provider.nurseInfoProvider.employeeWorkTime(),
         },
       },
     };

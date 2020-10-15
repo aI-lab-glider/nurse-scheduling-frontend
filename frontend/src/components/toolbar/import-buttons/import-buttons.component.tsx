@@ -13,6 +13,7 @@ import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-
 import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
+import { MonthLogic } from "../../../logic/real-schedule-logic/month.logic";
 
 export function ImportButtonsComponent() {
   //#region members
@@ -55,7 +56,12 @@ export function ImportButtonsComponent() {
   };
 
   function writeScheduleToFile(scheduleModel: ScheduleDataModel) {
-    let titleSection = ["GRAFIK", "MIESIĄC " + scheduleModel?.schedule_info?.month_number];
+    let titleSection = [
+      "GRAFIK",
+      "MIESIĄC " +
+        Object.keys(MonthLogic.monthTranslations)[scheduleModel?.schedule_info?.month_number || 0],
+      "ROK " + scheduleModel?.schedule_info?.year,
+    ];
     let daysSection = ["Dni miesiąca", ...scheduleModel?.month_info?.dates!];
     let emptyRow = Array<null>(daysSection.length);
     let childrenSection = [
@@ -85,6 +91,11 @@ export function ImportButtonsComponent() {
       emptyRow,
       ...shiftSection,
     ];
+
+    for (let emptyRowCount = 0; emptyRowCount < 5; ++emptyRowCount) {
+      scheduleArray.push(emptyRow);
+    }
+    scheduleArray.push([""]);
 
     let worksheet = XLSX.utils.aoa_to_sheet(scheduleArray);
     let workbook = XLSX.utils.book_new();

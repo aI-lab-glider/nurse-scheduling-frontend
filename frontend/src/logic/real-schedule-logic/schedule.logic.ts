@@ -198,6 +198,22 @@ export class ScheduleLogic implements ScheduleProvider {
     this.extraWorkersInfoProvider = new ExtraWorkersLogic({ ...data });
   }
 
+  public addWorker(
+    sectionKey: string,
+    newWorkerRow: DataRow,
+    workerWorkTime: number,
+    updateLocalState: (dataRow: DataRow[]) => void
+  ) {
+    const shiftsProvider = [this.nurseInfoProvider, this.babysitterInfoProvider];
+    const newSectionContent = shiftsProvider
+      ?.find((provider) => provider.sectionKey === sectionKey)
+      ?.addWorker(newWorkerRow, workerWorkTime);
+    if (newSectionContent) {
+      updateLocalState(newSectionContent);
+      this.updateGlobalState();
+    }
+  }
+
   public addRow(
     sectionKey: string,
     newRow: DataRow,

@@ -9,6 +9,7 @@ import { BaseSectionLogic } from "./section-logic.model";
 export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider {
   sectionKey: string;
   private shifts: { [nurseName: string]: DataRow } = {};
+  private _employeeWorkTime: { [nurseName: string]: number } = {};
   private _scheduleErrors: ScheduleErrorModel[] = [];
 
   constructor(shiftSection: ShiftInfoModel, workerType: WorkerType) {
@@ -17,6 +18,11 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
       this.shifts[key] = new DataRow(key, shiftSection[key]);
     });
     this.sectionKey = `${workerType}Section`;
+    this._employeeWorkTime = this.mockEmployeeWorkTime();
+  }
+
+  employeeWorkTime(): { [key: string]: number } {
+    return this._employeeWorkTime;
   }
 
   public get errors(): ScheduleErrorModel[] {
@@ -59,5 +65,10 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
       return true;
     }
     return false;
+  }
+
+  public addWorker(worker: DataRow, workerWorkTime: number) {
+    this._employeeWorkTime[worker.rowKey] = workerWorkTime;
+    return this.addDataRow(worker);
   }
 }

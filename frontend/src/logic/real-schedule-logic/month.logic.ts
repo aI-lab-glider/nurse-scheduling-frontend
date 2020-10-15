@@ -10,7 +10,7 @@ export interface VerboseDate {
 
 export class MonthLogic {
   //#region transltaions
-  private static monthTranslations = {
+  public static monthTranslations = {
     styczeń: "january",
     luty: "february",
     marzec: "march",

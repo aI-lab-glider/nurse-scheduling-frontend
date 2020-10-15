@@ -40,6 +40,10 @@ export class ShiftsInfoParser implements ShiftsProvider {
     return employeeDict;
   }
 
+  public employeeWorkTime() {
+    return this.mockEmployeeWorkTime();
+  }
+
   public get workersCount(): number {
     return this.data.length;
   }

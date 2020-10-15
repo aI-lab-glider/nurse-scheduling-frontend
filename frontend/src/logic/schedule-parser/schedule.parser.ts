@@ -88,12 +88,11 @@ export class ScheduleParser implements ScheduleProvider {
   //#region find shift section logic
   private findShiftSection(rawData: DataRowParser[]): [DataRowParser[], number] {
     const sectionData: DataRowParser[] = [];
-
     let sectionDataIdx = rawData.findIndex((rawData) => rawData.isShiftRow);
     if (sectionDataIdx === -1) {
       throw new Error("Cannot find section beginning");
     }
-    while (rawData[sectionDataIdx].isShiftRow) {
+    while (sectionDataIdx < rawData.length && rawData[sectionDataIdx].isShiftRow) {
       sectionData.push(rawData[sectionDataIdx]);
       sectionDataIdx++;
     }
