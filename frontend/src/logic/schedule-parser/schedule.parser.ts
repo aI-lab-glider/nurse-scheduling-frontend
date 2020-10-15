@@ -5,6 +5,7 @@ import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { ShiftsInfoParser } from "./shifts-info.parser";
 import { ScheduleProvider, Schedule } from "../schedule-provider";
+import { ExtraWorkersParser } from "./extra-workers.parser";
 
 export class ScheduleParser implements ScheduleProvider {
   //#region members
@@ -12,6 +13,7 @@ export class ScheduleParser implements ScheduleProvider {
   readonly babysitterInfoProvider: ShiftsInfoParser;
   readonly childrenInfoProvider: ChildrenInfoParser;
   readonly metadataProvider: MetaDataParser;
+  readonly extraWorkersInfoProvider: ExtraWorkersParser;
 
   readonly schedule: Schedule;
 
@@ -23,6 +25,7 @@ export class ScheduleParser implements ScheduleProvider {
       this.nurseInfoProvider,
       this.babysitterInfoProvider,
     ] = this.initSections(schedule as DataRowParser[], this.metadataProvider);
+    this.extraWorkersInfoProvider = new ExtraWorkersParser(this.metadataProvider.dayCount);
     this.schedule = new Schedule(this);
   }
 
