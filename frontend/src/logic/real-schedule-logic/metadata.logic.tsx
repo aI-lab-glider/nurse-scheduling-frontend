@@ -20,7 +20,7 @@ export class MetadataLogic extends BaseSectionLogic implements MetadataProvider 
       (pair) => pair[0] === workerIndex && pair[1] === index
     );
     if (blockedPairInd !== -1) {
-      this._frozenShifts = this._frozenShifts.filter((v, index) => index != blockedPairInd);
+      this._frozenShifts = this._frozenShifts.filter((v, index) => index !== blockedPairInd);
     } else {
       this._frozenShifts.push([workerIndex, index]);
     }

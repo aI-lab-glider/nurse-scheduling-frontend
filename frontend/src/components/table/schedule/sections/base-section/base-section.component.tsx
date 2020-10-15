@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BaseCellComponent } from "../../schedule-parts/base-cell.component";
 import { ScheduleRowComponent } from "../../schedule-parts/schedule-row.component";
-import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
 import { BaseSectionOptions } from "./base-section.options";
 
 export enum DirectionKey {

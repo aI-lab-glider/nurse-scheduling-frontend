@@ -24,15 +24,14 @@ export const useScheduleConverter = (): useScheduleConverterOutput => {
   //#region logic
 
   const findDataEnd = (scheduleSheet: Array<object>) => {
-    // empty row is a pattern
-    let stopPatternLen = 4;
-    let actualPatternLen = 0;
-    for (var i = 0; actualPatternLen < stopPatternLen; ++i) {
+    let stopEmptyRowsCount = 4;
+    let actualEmptyRowsCount = 0;
+    for (var i = 0; actualEmptyRowsCount < stopEmptyRowsCount; ++i) {
       let row = new DataRowParser(scheduleSheet[i]);
-      if (row.isEmpty) actualPatternLen += 1;
-      else actualPatternLen = 0;
+      if (row.isEmpty) actualEmptyRowsCount += 1;
+      else actualEmptyRowsCount = 0;
     }
-    return i - stopPatternLen;
+    return i - stopEmptyRowsCount;
   };
 
   //#endregion
@@ -55,7 +54,6 @@ export const useScheduleConverter = (): useScheduleConverterOutput => {
         defval: null,
         header: 1,
       }) as Array<object>;
-      console.log(scheduleSheet);
       return cropToData(scheduleSheet);
     };
 

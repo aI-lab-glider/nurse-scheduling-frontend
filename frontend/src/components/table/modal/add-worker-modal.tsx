@@ -54,7 +54,7 @@ export function AddWorkerModal({
       actionName,
       isNewWorker,
     }));
-  }, [workerInfo]);
+  }, [workerInfo, workerType]);
 
   const clearState = () => {
     setState({ ...initialState });

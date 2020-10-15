@@ -1,4 +1,4 @@
-import { BaseSectionLogic, SectionLogic } from "./section-logic.model";
+import { BaseSectionLogic } from "./section-logic.model";
 import { DataRow } from "./data-row";
 import { ExtraWorkersInfoProvider } from "../schedule-provider";
 

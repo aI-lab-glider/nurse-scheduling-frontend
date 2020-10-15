@@ -81,7 +81,9 @@ export function ScheduleRowComponent({
 
   function toggleSelection(cellIndex: number) {
     if (selectedCells.includes(cellIndex)) {
-      setSelectedCells(selectedCells.filter((selectedCellIndex) => cellIndex != selectedCellIndex));
+      setSelectedCells(
+        selectedCells.filter((selectedCellIndex) => cellIndex !== selectedCellIndex)
+      );
     } else {
       setSelectedCells([...selectedCells, cellIndex]);
     }
@@ -97,7 +99,7 @@ export function ScheduleRowComponent({
       // TODO: refactor. It solves problem with wrong elements selection on the ends when direction changes
       // Issue could be solved, if make logic to react on onKeyDown event from cell in which
       // we enter, not from cell which we leave
-      if (previousDirectionKey == DirectionKey[event.key] || !selectionMode) {
+      if (previousDirectionKey === DirectionKey[event.key] || !selectionMode) {
         toggleSelection(cellIndex);
       }
       setPreviousDirectionKey(DirectionKey[event.key]);

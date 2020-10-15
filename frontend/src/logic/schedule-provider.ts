@@ -32,7 +32,7 @@ export interface ScheduleProvider {
   readonly babysitterInfoProvider: ShiftsProvider;
   readonly childrenInfoProvider: ChildrenInfoProvider;
   readonly extraWorkersInfoProvider: ExtraWorkersInfoProvider;
-  getWorkerTypes(): { [workerName: string]: WorkerType[] };
+  getWorkerTypes(): { [workerName: string]: WorkerType };
 }
 
 export class Schedule {

@@ -5,7 +5,7 @@ import { ActionModel } from "../../state/models/action.model";
 import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ScheduleDataActionType } from "../../state/reducers/schedule-data.reducer";
-import { ExtraWorkersInfoProvider, Schedule, ScheduleProvider } from "../schedule-provider";
+import { Schedule, ScheduleProvider } from "../schedule-provider";
 import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row";
 import { ExtraWorkersLogic } from "./extra-workers.logic";

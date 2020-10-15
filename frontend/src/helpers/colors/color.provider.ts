@@ -14,7 +14,7 @@ export class ColorProvider {
   }
 
   static getShiftColor(
-    shift?: ShiftCode,
+    shift: ShiftCode,
     day?: VerboseDate,
     isFrozen?: boolean,
     ignoreFrozenState: boolean = false

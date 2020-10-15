@@ -73,7 +73,7 @@ export class ShiftsInfoParser implements ShiftsProvider {
     return row.rowData(true, false).map((cellValue, cellInd) => {
       let currentShiftValue = this.getShiftFromCell(cellValue);
       if (!currentShiftValue) {
-        if (cellValue) {
+        if (cellValue && cellValue.trim()) {
           this._parseErrors.push({
             code: ParseErrorCode.UNKNOWN_SHIFT,
             day: this.metaData.dates[cellInd],

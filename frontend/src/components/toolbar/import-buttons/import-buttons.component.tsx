@@ -3,7 +3,6 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Popper from "@material-ui/core/Popper";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import XLSX from "xlsx";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useScheduleConverter } from "../../../hooks/file-processing/useScheduleConverter";
@@ -13,8 +12,7 @@ import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-
 import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
-import { MonthLogic } from "../../../logic/real-schedule-logic/month.logic";
-
+import { ExportFormatter } from "../../../helpers/export/export-formatter";
 export function ImportButtonsComponent() {
   //#region members
   const [open, setOpen] = useState(false);
@@ -51,57 +49,9 @@ export function ImportButtonsComponent() {
 
   const handleExport = () => {
     if (stateScheduleModel) {
-      writeScheduleToFile(stateScheduleModel);
+      new ExportFormatter(stateScheduleModel).formatAndSave();
     }
   };
-
-  function writeScheduleToFile(scheduleModel: ScheduleDataModel) {
-    let titleSection = [
-      "GRAFIK",
-      "MIESIĄC " +
-        Object.keys(MonthLogic.monthTranslations)[scheduleModel?.schedule_info?.month_number || 0],
-      "ROK " + scheduleModel?.schedule_info?.year,
-    ];
-    let daysSection = ["Dni miesiąca", ...scheduleModel?.month_info?.dates!];
-    let emptyRow = Array<null>(daysSection.length);
-    let childrenSection = [
-      "Liczba dzieci zarejestrowanych",
-      ...scheduleModel?.month_info?.children_number!,
-    ];
-
-    let shiftSection = Array<Array<any>>();
-    for (let worker in scheduleModel?.shifts) {
-      // add empty row between different worker type shifts
-      if (
-        worker.match(/[O|o]piekunka/) &&
-        shiftSection[shiftSection.length - 1][0].match(/[P|p]iel[ę|e]gniarka/)
-      ) {
-        shiftSection.push(emptyRow);
-      }
-      let shifts = scheduleModel.shifts[worker].map((shift) => (shift === "W" ? null : shift));
-      let shiftRow = [worker, ...shifts, 1, 1, 1];
-      shiftSection.push(shiftRow);
-    }
-
-    let scheduleArray = [
-      titleSection,
-      daysSection,
-      emptyRow,
-      childrenSection,
-      emptyRow,
-      ...shiftSection,
-    ];
-
-    for (let emptyRowCount = 0; emptyRowCount < 5; ++emptyRowCount) {
-      scheduleArray.push(emptyRow);
-    }
-    scheduleArray.push([""]);
-
-    let worksheet = XLSX.utils.aoa_to_sheet(scheduleArray);
-    let workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Grafik");
-    XLSX.writeFile(workbook, "grafik.xlsx", { bookType: "xlsx" });
-  }
 
   const handleToggle = () => {
     setOpen((prevVal) => !prevVal);

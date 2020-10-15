@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { DataRow } from "../../../../logic/real-schedule-logic/data-row";
-import { MetadataLogic } from "../../../../logic/real-schedule-logic/metadata.logic";
 import { CellOptions } from "./cell-options.model";
 import { ScheduleRowComponent, ScheduleRowOptions } from "./schedule-row.component";
 import { shiftCodeToWorkTime } from "../../../../helpers/shift-time.helper";
 import { ShiftCellComponent } from "./shift-cell.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
-import { BaseCellComponent } from "./base-cell.component";
 import { ShiftsInfoLogic } from "../../../../logic/real-schedule-logic/shifts-info.logic";
 
 const WORK_HOURS_PER_DAY = 8;
@@ -20,7 +18,7 @@ export interface ShiftRowOptions extends ScheduleRowOptions {
 export const ShiftRowComponent: React.FC<ShiftRowOptions> = (options) => {
   const { dataRow, index, sectionKey } = options;
   const scheduleLogic = useContext(ScheduleLogicContext);
-
+  // TODO: Move to logic
   function calculateExtraHours(dataRow: DataRow) {
     const rowData = dataRow?.rowData(true, false) ?? [];
     const monthLogic = scheduleLogic?.metadataProvider?.monthLogic;

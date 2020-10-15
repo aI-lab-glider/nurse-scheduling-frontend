@@ -12,7 +12,6 @@ class Backend {
   }
 
   getErrors(schedule: ScheduleDataModel): Promise<ScheduleErrorModel[]> {
-    console.log(schedule);
     return this.axios.post("/schedule_errors", schedule).then((resp) => resp.data);
   }
 

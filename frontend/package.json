@@ -18,6 +18,8 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.20.0",
     "date-fns": "^2.15.0",
+    "exceljs": "^4.1.1",
+    "file-saver": "^2.0.2",
     "react": "^16.13.1",
     "react-datasheet": "^1.4.8",
     "react-dom": "^16.13.1",
