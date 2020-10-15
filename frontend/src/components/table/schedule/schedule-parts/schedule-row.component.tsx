@@ -20,6 +20,7 @@ export interface ScheduleRowOptions {
   onClick?: (cellIndex: number) => void;
   onStateUpdate?: (row: DataRow) => void;
   pointerPosition?: number;
+  onRowKeyClick?: () => void;
 }
 
 export function ScheduleRowComponent({
@@ -31,6 +32,7 @@ export function ScheduleRowComponent({
   onKeyDown,
   onClick,
   onStateUpdate,
+  onRowKeyClick,
 }: ScheduleRowOptions) {
   const scheduleLogic = useContext(ScheduleLogicContext);
   const [dataRowState, setDataRowState] = useState<DataRow>(dataRow);
@@ -117,6 +119,7 @@ export function ScheduleRowComponent({
         isBlocked={false}
         onContextMenu={() => {}}
         isPointerOn={false}
+        onClick={() => onRowKeyClick && onRowKeyClick()}
       />
       {dataRowState.rowData(false).map((cellData, cellIndex) => {
         return (

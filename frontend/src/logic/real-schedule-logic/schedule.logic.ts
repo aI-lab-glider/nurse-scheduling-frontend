@@ -1,32 +1,25 @@
 import { Dispatch } from "redux";
+import { DataRowHelper } from "../../helpers/row.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { ActionModel } from "../../state/models/action.model";
 import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ScheduleDataActionType } from "../../state/reducers/schedule-data.reducer";
-import { Schedule, ScheduleProvider } from "../schedule-provider";
+import { ExtraWorkersInfoProvider, Schedule, ScheduleProvider } from "../schedule-provider";
 import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row";
+import { ExtraWorkersLogic } from "./extra-workers.logic";
 import { MetadataLogic } from "./metadata.logic";
 import { SectionLogic } from "./section-logic.model";
 import { ShiftsInfoLogic } from "./shifts-info.logic";
-<<<<<<< HEAD
-import { Schedule, ScheduleProvider } from "../schedule-provider";
-import { ExtraWorkersLogic } from "./extra-workers.logic";
-=======
->>>>>>> 7985e24... NS-24
 
 export class ScheduleLogic implements ScheduleProvider {
   private providers: SectionLogic[];
   nurseInfoProvider: ShiftsInfoLogic;
   babysitterInfoProvider: ShiftsInfoLogic;
   childrenInfoProvider: ChildrenInfoLogic;
-<<<<<<< HEAD
-  extraWorkersInfoProvider: ExtraWorkersLogic;
-
-=======
->>>>>>> 7985e24... NS-24
   readonly metadataProvider?: MetadataLogic;
+  extraWorkersInfoProvider: ExtraWorkersLogic;
 
   readonly schedule: Schedule;
 
@@ -43,10 +36,14 @@ export class ScheduleLogic implements ScheduleProvider {
     this.childrenInfoProvider = new ChildrenInfoLogic({
       "liczba dzieci zarejestrowanych": scheduleModel.month_info?.children_number || [],
     });
+    this.extraWorkersInfoProvider = new ExtraWorkersLogic({
+      "liczba dodatkowych pracowników": scheduleModel.month_info?.extra_workers || [],
+    });
     this.providers = [
       this.nurseInfoProvider,
       this.babysitterInfoProvider,
       this.childrenInfoProvider,
+      this.extraWorkersInfoProvider,
     ];
     // not include metadata
     this.metadataProvider =
@@ -58,9 +55,7 @@ export class ScheduleLogic implements ScheduleProvider {
         scheduleModel.month_info.dates,
         scheduleModel.schedule_info.daysFromPreviousMonthExists
       );
-    this.extraWorkersInfoProvider = new ExtraWorkersLogic({
-      "liczba dodatkowych pracowników": scheduleModel.month_info?.extra_workers || [],
-    });
+
     this.schedule = new Schedule(this);
   }
 
@@ -155,27 +150,6 @@ export class ScheduleLogic implements ScheduleProvider {
     return [data, index];
   }
 
-<<<<<<< HEAD
-  public updateRow(row: DataRow) {
-    this.nurseInfoProvider.tryUpdate(row);
-    this.babysitterInfoProvider.tryUpdate(row);
-    this.childrenInfoProvider.tryUpdate(row);
-  }
-
-  public updateChildrenSection(newSectionData: DataRow[]) {
-    let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
-    this.childrenInfoProvider = new ChildrenInfoLogic({ ...data });
-  }
-
-  public updateNurseSection(newSectionData: DataRow[]) {
-    let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
-    this.nurseInfoProvider = new ShiftsInfoLogic({ ...data });
-  }
-
-  public updateBabysitterSection(newSectionData: DataRow[]) {
-    let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
-    this.babysitterInfoProvider = new ShiftsInfoLogic({ ...data });
-=======
   public updateRow(
     sectionKey: string,
     rowIndex: number,
@@ -190,7 +164,6 @@ export class ScheduleLogic implements ScheduleProvider {
       updateLocalState(newDataRow);
       this.updateGlobalState();
     }
->>>>>>> 7985e24... NS-24
   }
 
   public updateExtraWorkersSection(newSectionData: DataRow[]) {
@@ -226,5 +199,8 @@ export class ScheduleLogic implements ScheduleProvider {
       updateLocalState(newSectionContent);
       this.updateGlobalState();
     }
+  }
+  public getProvider(providerKey: string): SectionLogic | undefined {
+    return this.providers.find((provider) => provider.sectionKey === providerKey);
   }
 }

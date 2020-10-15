@@ -22,6 +22,7 @@ export function useScheduleState(): useScheduleStateReturn {
       nurseShiftsSection: logic.getNurseInfo().sectionData,
       babysitterShiftsSection: logic.getBabySitterInfo().sectionData,
       childrenSection: logic.getChildrenInfo().sectionData,
+      extraWorkersSection: logic.getExtraWorkersInfo().sectionData,
       dateSection: logic.getMetadata().sectionData,
       isInitialized: true,
       scheduleLogic: logic,

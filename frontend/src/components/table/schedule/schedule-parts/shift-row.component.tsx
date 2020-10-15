@@ -7,6 +7,7 @@ import { shiftCodeToWorkTime } from "../../../../helpers/shift-time.helper";
 import { ShiftCellComponent } from "./shift-cell.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
 import { BaseCellComponent } from "./base-cell.component";
+import { ShiftsInfoLogic } from "../../../../logic/real-schedule-logic/shifts-info.logic";
 
 const WORK_HOURS_PER_DAY = 8;
 
@@ -17,13 +18,18 @@ export interface ShiftRowOptions extends ScheduleRowOptions {
 }
 
 export const ShiftRowComponent: React.FC<ShiftRowOptions> = (options) => {
-  const { dataRow, index } = options;
+  const { dataRow, index, sectionKey } = options;
   const scheduleLogic = useContext(ScheduleLogicContext);
 
   function calculateExtraHours(dataRow: DataRow) {
     const rowData = dataRow?.rowData(true, false) ?? [];
     const monthLogic = scheduleLogic?.metadataProvider?.monthLogic;
-    const workingNorm = (monthLogic?.workingDaysNumber || 0) * WORK_HOURS_PER_DAY; // TODO uwzględnić etat pracownika
+    const workingNorm =
+      (monthLogic?.workingDaysNumber || 0) *
+      WORK_HOURS_PER_DAY *
+      ((scheduleLogic?.getProvider(sectionKey ?? "") as ShiftsInfoLogic)?.employeeWorkTime()[
+        dataRow.rowKey
+      ] || 1);
     const numberOfPreviousMonthDays = monthLogic?.numberOfPreviousMonthDays;
     const workingHours = rowData
       .slice(numberOfPreviousMonthDays)

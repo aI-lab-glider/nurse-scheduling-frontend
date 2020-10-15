@@ -21,6 +21,10 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
     this._employeeWorkTime = this.mockEmployeeWorkTime();
   }
 
+  workerWorkTime(workerName: string) {
+    return this._employeeWorkTime[workerName];
+  }
+
   employeeWorkTime(): { [key: string]: number } {
     return this._employeeWorkTime;
   }

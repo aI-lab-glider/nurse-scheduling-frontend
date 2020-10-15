@@ -6,7 +6,7 @@ export enum ScheduleActionType {
   UpdateBabysitterShiftSection = "updateBabysitterShiftSection",
   UpdateFullState = "updateFullState",
   UpdateChildrenShiftSection = "updateChildrenShiftSection",
-  UpdateExtraWorkersSection = "updateExtraWorkersSection"
+  UpdateExtraWorkersSection = "updateExtraWorkersSection",
 }
 
 export interface ScheduleComponentState {

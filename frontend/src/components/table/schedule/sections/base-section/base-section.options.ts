@@ -8,4 +8,5 @@ export interface BaseSectionOptions {
   cellComponent?: (cellOptions: CellOptions) => JSX.Element;
   rowComponent?: React.FC<ShiftRowOptions>;
   sectionKey?: string;
+  onRowKeyClicked?: (rowIndex: number) => void;
 }

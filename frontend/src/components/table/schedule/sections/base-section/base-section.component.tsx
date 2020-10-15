@@ -18,6 +18,7 @@ export function BaseSectionComponent({
   cellComponent = BaseCellComponent,
   rowComponent: RowComponent = ScheduleRowComponent,
   sectionKey,
+  onRowKeyClicked,
 }: BaseSectionOptions) {
   const [pointerPosition, setPointerPosition] = useState<PointerPosition>({ row: -1, cell: -1 });
 
@@ -59,6 +60,7 @@ export function BaseSectionComponent({
           pointerPosition={pointerPosition.row === index ? pointerPosition.cell : -1}
           onKeyDown={movePointer}
           onClick={(cellIndex) => setPointerPosition({ row: index, cell: cellIndex })}
+          onRowKeyClick={() => onRowKeyClicked && onRowKeyClicked(index)}
         />
       ))}
     </React.Fragment>

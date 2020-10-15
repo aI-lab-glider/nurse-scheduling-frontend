@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { DataRow } from "../../../logic/real-schedule-logic/data-row";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { WorkerType } from "../../../state/models/schedule-data/employee-info.model";
 import { EmptyRowComponent } from "./schedule-parts/empty-cell.component";
-import { ScheduleRowComponent } from "./schedule-parts/schedule-row.component";
 import "./schedule.component.css";
 import { ChildrenSectionComponent } from "./sections/children-section/children-section.components";
 import { DateSectionComponent } from "./sections/date-section/date-section.component";
 import { ShiftsSectionComponent } from "./sections/shifts-section/shifts-section";
 import { ScheduleLogicContext, useScheduleState } from "./use-schedule-state";
+import { ExtraWorkersSection } from "./sections/extra-workers-section/extra-workers-section.components";
 
 export function ScheduleComponent() {
   const scheduleModel = useSelector(
@@ -39,16 +38,7 @@ export function ScheduleComponent() {
 
               <EmptyRowComponent />
 
-              <ExtraWorkersSection
-                data={scheduleState.extraWorkersSection}
-                metaDataLogic={scheduleLogic?.getMetadata()}
-                onSectionUpdated={(newSectionData) =>
-                  dispatchScheduleState({
-                    type: ScheduleActionType.UpdateExtraWorkersSection,
-                    payload: { extraWorkersSection: newSectionData },
-                  })
-                }
-              />
+              <ExtraWorkersSection data={scheduleLocalState.extraWorkersSection} />
 
               <ShiftsSectionComponent
                 workerType={WorkerType.NURSE}
