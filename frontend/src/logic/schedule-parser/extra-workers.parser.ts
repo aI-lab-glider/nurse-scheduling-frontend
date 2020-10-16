@@ -6,7 +6,7 @@ export class ExtraWorkersParser implements ExtraWorkersInfoProvider {
   private extraWorkersInfoAsDataRows: { [key: string]: DataRow } = {};
 
   constructor(numberOfDays: number) {
-    const extraWorkers = new Array(numberOfDays).fill(0);
+    const extraWorkers = new Array(numberOfDays).fill(4);
     this.extraWorkersInfoAsDataRows = { [this.key]: new DataRow(this.key, extraWorkers) };
   }
 

@@ -65,7 +65,7 @@ export function ScheduleRowComponent({
         sectionKey,
         index - 1,
         [...selectedCells, pointerPosition],
-        ShiftCode[newValue] || ShiftCode.W,
+        newValue,
         (newDataRow) => {
           setDataRowState(newDataRow);
           onStateUpdate && onStateUpdate(newDataRow);
