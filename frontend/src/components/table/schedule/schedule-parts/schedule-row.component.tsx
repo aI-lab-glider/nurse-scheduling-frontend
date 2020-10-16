@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ColorProvider } from "../../../../helpers/colors/color.provider";
-import { DataRow } from "../../../../logic/real-schedule-logic/data-row";
+import { ColorHelper } from "../../../../helpers/colors/color.helper";
+import { DataRow } from "../../../../logic/schedule-logic/data-row";
+import { ShiftCode } from "../../../../state/models/schedule-data/shift-info.model";
 import { DirectionKey } from "../sections/base-section/base-section.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
 import { BaseCellComponent } from "./base-cell.component";
@@ -64,7 +65,7 @@ export function ScheduleRowComponent({
         sectionKey,
         index - 1,
         [...selectedCells, pointerPosition],
-        newValue,
+        ShiftCode[newValue] || ShiftCode.W,
         (newDataRow) => {
           setDataRowState(newDataRow);
           onStateUpdate && onStateUpdate(newDataRow);
@@ -132,7 +133,7 @@ export function ScheduleRowComponent({
             key={`${dataRowState.rowKey}_${cellData}${cellIndex}${isFrozen(cellIndex)}_${uuid}}`}
             value={cellData}
             isSelected={selectedCells.includes(cellIndex)}
-            style={ColorProvider.getShiftColor(
+            style={ColorHelper.getShiftColor(
               cellData,
               verboseDates?.[cellIndex],
               isFrozen(cellIndex)

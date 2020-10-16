@@ -1,5 +1,6 @@
 import { Dispatch } from "redux";
-import { DataRowHelper } from "../../helpers/row.helper";
+import { DataRowHelper } from "../../helpers/data-row.helper";
+import { groupShiftsByEmployeeType } from "../../helpers/shifts.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { ActionModel } from "../../state/models/action.model";
 import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
@@ -27,7 +28,13 @@ export class ScheduleLogic implements ScheduleProvider {
     scheduleModel: ScheduleDataModel,
     private dispatchScheduleUpdate: Dispatch<ActionModel<ScheduleDataModel>>
   ) {
-    const [nurseShifts, babysitterShifts] = this.parseShiftsBasedOnEmployeeType(scheduleModel);
+    const {
+      [WorkerType.NURSE]: nurseShifts,
+      [WorkerType.OTHER]: babysitterShifts,
+    } = groupShiftsByEmployeeType(
+      scheduleModel.shifts || {},
+      scheduleModel.employee_info?.type || {}
+    );
 
     this.nurseInfoProvider = new ShiftsInfoLogic(nurseShifts || {}, WorkerType.NURSE);
 
@@ -76,25 +83,6 @@ export class ScheduleLogic implements ScheduleProvider {
       type: ScheduleDataActionType.UPDATE,
       payload: model,
     });
-  }
-
-  private parseShiftsBasedOnEmployeeType(scheduleModel: ScheduleDataModel) {
-    const grouped = {
-      [WorkerType.NURSE]: {},
-      [WorkerType.OTHER]: {},
-    };
-    const shiftEnrties = Object.entries(scheduleModel.shifts || {}).map((a) => ({
-      workerName: a[0],
-      shifts: a[1],
-    }));
-    const shifts = shiftEnrties.sort(({ workerName: wn1 }, { workerName: wn2 }) =>
-      wn1 > wn2 ? 1 : wn1 < wn2 ? -1 : 0
-    );
-    shifts.forEach(({ workerName, shifts }) => {
-      const category = scheduleModel.employee_info?.type[workerName] || "";
-      grouped[category][workerName] = shifts;
-    });
-    return [grouped[WorkerType.NURSE], grouped[WorkerType.OTHER]];
   }
 
   getWorkerTypes() {

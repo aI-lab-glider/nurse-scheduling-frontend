@@ -8,8 +8,17 @@ function getShiftCode(value: string | number): ShiftCode {
 }
 
 export function ShiftCellComponent(options: CellOptions) {
-  const value = getShiftCode(options.value);
+  const shiftValue = getShiftCode(options.value);
+
+  function _onKeyDown(inputValue: string, key: React.KeyboardEvent) {
+    const { onKeyDown } = options;
+    onKeyDown && onKeyDown(getShiftCode(inputValue), key);
+  }
   return (
-    <BaseCellComponent {...options} value={value === ShiftCode.W ? "" : value}></BaseCellComponent>
+    <BaseCellComponent
+      {...options}
+      onKeyDown={_onKeyDown}
+      value={shiftValue === ShiftCode.W ? "" : shiftValue}
+    ></BaseCellComponent>
   );
 }

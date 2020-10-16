@@ -1,5 +1,5 @@
-import { DataRow } from "../../../logic/real-schedule-logic/data-row";
-import { ScheduleLogic } from "../../../logic/real-schedule-logic/schedule.logic";
+import { DataRow } from "../../../logic/schedule-logic/data-row";
+import { ScheduleLogic } from "../../../logic/schedule-logic/schedule.logic";
 
 export enum ScheduleActionType {
   UpdateNurseShiftSection = "updateNurseShiftSection",

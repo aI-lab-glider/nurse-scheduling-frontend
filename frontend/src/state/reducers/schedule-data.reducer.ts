@@ -1,4 +1,4 @@
-import { MonthLogicActionType } from "../../logic/real-schedule-logic/metadata.logic";
+import { MonthLogicActionType } from "../../logic/schedule-logic/metadata.logic";
 import { ActionModel } from "../models/action.model";
 import { MonthInfoModel } from "../models/schedule-data/month-info.model";
 import { ScheduleDataModel } from "../models/schedule-data/schedule-data.model";

@@ -1,4 +1,4 @@
-import { DataRow } from "../real-schedule-logic/data-row";
+import { DataRow } from "../schedule-logic/data-row";
 import { ExtraWorkersInfoProvider } from "../schedule-provider";
 
 export class ExtraWorkersParser implements ExtraWorkersInfoProvider {

@@ -1,7 +1,7 @@
 import { Button } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
 import { StringHelper } from "../../../../../helpers/string.helper";
-import { DataRow } from "../../../../../logic/real-schedule-logic/data-row";
+import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import {
   WorkerType,
   WorkerTypeHelper,

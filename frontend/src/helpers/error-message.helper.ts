@@ -8,7 +8,7 @@ import {
   ScheduleErrorModel,
 } from "../state/models/schedule-data/schedule-error.model";
 
-export class ErrorMessageProvider {
+export class ErrorMessageHelper {
   public static getErrorMessage(error: ScheduleErrorModel): ScheduleErrorMessageModel {
     const dayTimeTranslations = {
       MORNING: "porannej",

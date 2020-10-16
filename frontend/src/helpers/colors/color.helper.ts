@@ -1,10 +1,10 @@
-import { VerboseDate } from "../../logic/real-schedule-logic/month.logic";
+import { VerboseDate } from "../../logic/schedule-logic/month.logic";
 import { WeekDay } from "../../state/models/schedule-data/month-info.model";
 import { ShiftCode } from "../../state/models/schedule-data/shift-info.model";
 import { CellColorSet } from "./cell-color-set.model";
 import { Colors } from "./colors";
 
-export class ColorProvider {
+export class ColorHelper {
   static get DEFAULT_COLOR_SET(): CellColorSet {
     return { textColor: Colors.BLACK, backgroundColor: Colors.WHITE };
   }
@@ -19,7 +19,7 @@ export class ColorProvider {
     isFrozen?: boolean,
     ignoreFrozenState: boolean = false
   ): CellColorSet {
-    let colorSet: CellColorSet = ColorProvider.DEFAULT_COLOR_SET;
+    let colorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET;
     switch (shift) {
       case ShiftCode.D:
         colorSet.textColor = Colors.DARK_GREEN;
@@ -40,13 +40,13 @@ export class ColorProvider {
     }
     return {
       ...colorSet,
-      ...ColorProvider.getDayColor(day, colorSet, isFrozen, ignoreFrozenState),
+      ...ColorHelper.getDayColor(day, colorSet, isFrozen, ignoreFrozenState),
     };
   }
 
   static getDayColor(
     day?: VerboseDate,
-    defaultColorSet: CellColorSet = ColorProvider.DEFAULT_COLOR_SET,
+    defaultColorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET,
     isFrozen: boolean = false,
     ignoreFrozenState: boolean = false
   ): CellColorSet {

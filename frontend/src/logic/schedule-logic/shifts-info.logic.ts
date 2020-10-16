@@ -1,4 +1,4 @@
-import { DataRowHelper } from "../../helpers/row.helper";
+import { DataRowHelper } from "../../helpers/data-row.helper";
 import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
 import { ScheduleErrorModel } from "../../state/models/schedule-data/schedule-error.model";
 import { ShiftCode, ShiftInfoModel } from "../../state/models/schedule-data/shift-info.model";

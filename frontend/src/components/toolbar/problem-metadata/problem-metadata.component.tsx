@@ -7,14 +7,29 @@ import plLocale from "date-fns/locale/pl";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import backend from "../../../api/backend";
-import { MonthLogic } from "../../../logic/real-schedule-logic/month.logic";
+import { groupShiftsByEmployeeType } from "../../../helpers/shifts.helper";
+import { MonthLogic } from "../../../logic/schedule-logic/month.logic";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { WorkerType } from "../../../state/models/schedule-data/employee-info.model";
+import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-data.model";
 import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
 import "./problem-metadata.css";
 import { SnackbarComponent } from "./snackbar.component";
+
+function getWorkersCount(scheduleModel: ScheduleDataModel) {
+  const {
+    [WorkerType.NURSE]: nurseShifts,
+    [WorkerType.OTHER]: babysitterShifts,
+  } = groupShiftsByEmployeeType(
+    scheduleModel.shifts || {},
+    scheduleModel.employee_info?.type || {}
+  );
+
+  return [Object.keys(babysitterShifts).length, Object.keys(nurseShifts).length];
+}
 
 export function ProblemMetadataComponent() {
   //#region members
@@ -30,12 +45,10 @@ export function ProblemMetadataComponent() {
   const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData);
 
   const dispatcher = useDispatch();
-
   useEffect(() => {
     if (schedule) {
-      let { year, month_number } = schedule.schedule_info || {};
-      let { babysitterCount, nurseCount } = schedule.employee_info || {};
-
+      const { year, month_number } = schedule.schedule_info || {};
+      const [babysitterCount, nurseCount] = getWorkersCount(schedule);
       if (month_number && year) {
         handleDateChange(MonthLogic.convertToDate(month_number, year));
       }
@@ -57,7 +70,7 @@ export function ProblemMetadataComponent() {
   }
 
   function handleNumberOfNursesChange() {
-    let { nurseCount } = schedule?.employee_info || {};
+    const [babysitterCount, nurseCount] = getWorkersCount(schedule || {});
 
     if (!nurseCount) {
       return;
@@ -70,7 +83,7 @@ export function ProblemMetadataComponent() {
   }
 
   function handleNumberOfSittersChange() {
-    let { babysitterCount } = schedule?.employee_info || {};
+    const [babysitterCount, nurseCount] = getWorkersCount(schedule || {});
 
     if (!babysitterCount) {
       return;

@@ -1,12 +1,12 @@
 import React from "react";
-import { ColorProvider } from "../../../../helpers/colors/color.provider";
+import { ColorHelper } from "../../../../helpers/colors/color.helper";
 import "./base-cell.css";
 import { CellOptions } from "./cell-options.model";
 
 export function BaseCellComponent({
   index,
   value,
-  style = ColorProvider.DEFAULT_COLOR_SET,
+  style = ColorHelper.DEFAULT_COLOR_SET,
   isBlocked,
   isSelected,
   isPointerOn,
@@ -31,7 +31,7 @@ export function BaseCellComponent({
         color: style.textColor.toString(),
         backgroundColor:
           isSelected || isPointerOn
-            ? ColorProvider.getHighlightColor().toString()
+            ? ColorHelper.getHighlightColor().toString()
             : style.backgroundColor.toString(),
       }}
       onKeyDown={(e) => {

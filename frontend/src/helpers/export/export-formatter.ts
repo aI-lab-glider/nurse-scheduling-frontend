@@ -2,10 +2,10 @@ import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-dat
 import fs from "file-saver";
 import xlsx from "exceljs";
 import { ShiftCode } from "../../state/models/schedule-data/shift-info.model";
-import { MonthLogic } from "../../logic/real-schedule-logic/month.logic";
+import { MonthLogic, VerboseDate } from "../../logic/schedule-logic/month.logic";
 import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
 import { Color } from "../colors/color.model";
-import { ColorProvider } from "../colors/color.provider";
+import { ColorHelper } from "../colors/color.helper";
 
 const EMPTY_ROW = Array(100).fill("");
 
@@ -20,7 +20,7 @@ export class ExportFormatter {
 
   public formatAndSave() {
     const [workbook, workSheet] = this.createWorkArea();
-    this.addConditionalFormatting(workSheet);
+    // this.addConditionalFormatting(workSheet);
     const headerRow = this.createHeader(this.scheduleModel);
     const datesSection = this.createDatesSection(this.scheduleModel);
     const childrenInfoSection = this.createChildrenInfoSection(this.scheduleModel);
@@ -40,7 +40,8 @@ export class ExportFormatter {
       EMPTY_ROW,
       EMPTY_ROW,
     ];
-    this.saveToFile(workbook, workSheet, schedule);
+    this.addStyles(workSheet, schedule);
+    this.saveToFile(workbook);
   }
 
   private createWorkArea(): [xlsx.Workbook, xlsx.Worksheet] {
@@ -48,33 +49,55 @@ export class ExportFormatter {
     return [workbook, workbook.addWorksheet("grafik", { properties: { defaultColWidth: 5 } })];
   }
 
-  private addConditionalFormatting(worksheet: xlsx.Worksheet) {
-    const cellRules = Object.values(ShiftCode).map((code) =>
-      this.createShiftConditionalFormattingRule(code)
+  private addStyles(workSheet: xlsx.Worksheet, rows: any[]) {
+    const monthInfo = this.scheduleModel.schedule_info;
+    const monthLogic = new MonthLogic(
+      monthInfo?.month_number || 0,
+      monthInfo?.year + "" || "",
+      this.scheduleModel.month_info?.dates || [],
+      true
     );
-    worksheet.addConditionalFormatting({
-      ref: "A1:AZ1000",
-      rules: [...cellRules],
+    const verboseDates = monthLogic.verboseDates;
+    console.log(verboseDates);
+    workSheet.addRows(rows);
+    workSheet.getColumn(1).width = 20;
+    workSheet.eachRow((row) => {
+      let isShiftRow = false;
+      row.eachCell((cell, colNumber) => {
+        const cellValue = cell.value?.toString() || "";
+        if ((cellValue && ShiftCode[cellValue]) || isShiftRow) {
+          isShiftRow = true;
+          // colNumber - 1, because first column is key column
+          cell.style = this.getShiftStyle(
+            ShiftCode[cellValue] || ShiftCode.W,
+            verboseDates[colNumber - 1]
+          );
+        }
+      });
     });
   }
 
-  private createShiftConditionalFormattingRule(code: ShiftCode): xlsx.ConditionalFormattingRule {
-    const shiftFillColor = ColorProvider.getShiftColor(code).backgroundColor;
+  private getShiftStyle(code: ShiftCode, verboseDate?: VerboseDate): Partial<xlsx.Style> {
+    const shiftFillColor = ColorHelper.getShiftColor(code, verboseDate).backgroundColor;
+    const borderColor: Partial<xlsx.Border> = {
+      color: { argb: this.rgbaToArgbHex(new Color(218, 218, 218)) },
+      style: "thin",
+    };
     return {
-      type: "cellIs",
-      operator: "equal",
-      formulae: [`UPPER("${code}")`],
-      priority: 0,
-      style: {
-        alignment: {
-          horizontal: "center",
-          vertical: "middle",
-        },
-        fill: {
-          type: "pattern",
-          pattern: "solid",
-          fgColor: { argb: this.rgbaToArgbHex(shiftFillColor) },
-        },
+      alignment: {
+        horizontal: "center",
+        vertical: "middle",
+      },
+      fill: {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: this.rgbaToArgbHex(shiftFillColor) },
+      },
+      border: {
+        top: borderColor,
+        bottom: borderColor,
+        left: borderColor,
+        right: borderColor,
       },
     };
   }
@@ -119,9 +142,7 @@ export class ExportFormatter {
     return [["Dni miesiąca", ...(scheduleModel?.month_info?.dates || [])]];
   }
 
-  private saveToFile(workbook: xlsx.Workbook, workSheet: xlsx.Worksheet, rows: any[]) {
-    workSheet.addRows(rows);
-    workSheet.getColumn(1).width = 20;
+  private saveToFile(workbook: xlsx.Workbook) {
     workbook.xlsx.writeBuffer().then((buffer) => {
       const blob = new Blob([buffer]);
       fs.saveAs(blob, "grafik.xlsx");

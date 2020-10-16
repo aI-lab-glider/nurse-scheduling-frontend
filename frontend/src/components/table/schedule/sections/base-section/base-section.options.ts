@@ -1,4 +1,4 @@
-import { DataRow } from "../../../../../logic/real-schedule-logic/data-row";
+import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import { CellOptions } from "../../schedule-parts/cell-options.model";
 import { ScheduleRowOptions } from "../../schedule-parts/schedule-row.component";
 import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";

@@ -62,8 +62,6 @@ export class Schedule {
       },
       employee_info: {
         type: this.provider.getWorkerTypes(),
-        babysitterCount: this.provider.babysitterInfoProvider.workersCount || 0,
-        nurseCount: this.provider.nurseInfoProvider.workersCount || 0,
         time: {
           ...this.provider.babysitterInfoProvider.employeeWorkTime(),
           ...this.provider.nurseInfoProvider.employeeWorkTime(),

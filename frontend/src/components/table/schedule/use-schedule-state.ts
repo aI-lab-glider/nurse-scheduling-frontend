@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { ScheduleLogic } from "../../../logic/real-schedule-logic/schedule.logic";
+import { ScheduleLogic } from "../../../logic/schedule-logic/schedule.logic";
 import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-data.model";
 import { ScheduleComponentState, scheduleInitialState } from "./schedule-state.model";
 
