@@ -12,6 +12,7 @@ enum CellManagementKeys {
   Escape = "Escape",
 }
 export interface ScheduleRowOptions {
+  uuid: string;
   index: number;
   dataRow: DataRow;
   sectionKey?: string;
@@ -33,12 +34,13 @@ export function ScheduleRowComponent({
   onClick,
   onStateUpdate,
   onRowKeyClick,
+  uuid,
 }: ScheduleRowOptions) {
   const scheduleLogic = useContext(ScheduleLogicContext);
   const [dataRowState, setDataRowState] = useState<DataRow>(dataRow);
   useEffect(() => {
     setDataRowState(dataRow);
-  }, [dataRow]);
+  }, [dataRow, uuid]);
   const [frozenShifts, setFrozenShifts] = useState<[number, number][]>([]);
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
@@ -116,7 +118,7 @@ export function ScheduleRowComponent({
     <tr className="row">
       <BaseCellComponent
         index={0}
-        value={dataRow.rowKey || ""}
+        value={dataRowState.rowKey || ""}
         isSelected={false}
         isBlocked={false}
         onContextMenu={() => {}}
@@ -127,7 +129,7 @@ export function ScheduleRowComponent({
         return (
           <CellComponent
             index={cellIndex}
-            key={`${cellData}${cellIndex}${isFrozen(cellIndex)}`}
+            key={`${dataRowState.rowKey}_${cellData}${cellIndex}${isFrozen(cellIndex)}_${uuid}}`}
             value={cellData}
             isSelected={selectedCells.includes(cellIndex)}
             style={ColorProvider.getShiftColor(

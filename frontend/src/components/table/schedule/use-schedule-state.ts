@@ -26,6 +26,7 @@ export function useScheduleState(): useScheduleStateReturn {
       dateSection: logic.getMetadata().sectionData,
       isInitialized: true,
       scheduleLogic: logic,
+      uuid: scheduleModel.schedule_info?.UUID?.toString() || "",
     });
   };
 

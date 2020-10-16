@@ -79,19 +79,22 @@ export class ScheduleLogic implements ScheduleProvider {
   }
 
   private parseShiftsBasedOnEmployeeType(scheduleModel: ScheduleDataModel) {
-    let nursesShifts = {};
-    let babysitterShifts = {};
-    if (scheduleModel.shifts) {
-      let { nurseCount, babysitterCount } = scheduleModel.employee_info || {
-        nurseCount: 0,
-        babysitterCount: 0,
-      };
-      nursesShifts = Object.fromEntries(Object.entries(scheduleModel.shifts).slice(0, nurseCount));
-      babysitterShifts = Object.fromEntries(
-        Object.entries(scheduleModel.shifts).slice(nurseCount, nurseCount + babysitterCount)
-      );
-    }
-    return [nursesShifts, babysitterShifts];
+    const grouped = {
+      [WorkerType.NURSE]: {},
+      [WorkerType.OTHER]: {},
+    };
+    const shiftEnrties = Object.entries(scheduleModel.shifts || {}).map((a) => ({
+      workerName: a[0],
+      shifts: a[1],
+    }));
+    const shifts = shiftEnrties.sort(({ workerName: wn1 }, { workerName: wn2 }) =>
+      wn1 > wn2 ? 1 : wn1 < wn2 ? -1 : 0
+    );
+    shifts.forEach(({ workerName, shifts }) => {
+      const category = scheduleModel.employee_info?.type[workerName] || "";
+      grouped[category][workerName] = shifts;
+    });
+    return [grouped[WorkerType.NURSE], grouped[WorkerType.OTHER]];
   }
 
   getWorkerTypes() {

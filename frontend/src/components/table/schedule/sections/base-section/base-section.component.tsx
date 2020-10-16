@@ -13,6 +13,7 @@ export enum DirectionKey {
 type PointerPosition = { row: number; cell: number };
 
 export function BaseSectionComponent({
+  uuid,
   data = [],
   cellComponent = BaseCellComponent,
   rowComponent: RowComponent = ScheduleRowComponent,
@@ -51,8 +52,9 @@ export function BaseSectionComponent({
     <React.Fragment>
       {data.map((dataRow, index) => (
         <RowComponent
+          uuid={uuid}
           sectionKey={sectionKey}
-          key={`${dataRow.rowKey}${index}`}
+          key={`${dataRow.rowKey}${index}_${uuid}`}
           index={index + 1}
           dataRow={dataRow}
           cellComponent={cellComponent}

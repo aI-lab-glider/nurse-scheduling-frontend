@@ -30,17 +30,27 @@ export function ScheduleComponent() {
         <table className="table">
           <tbody>
             <ScheduleLogicContext.Provider value={scheduleLocalState.scheduleLogic}>
-              <DateSectionComponent data={scheduleLocalState.dateSection} />
+              <DateSectionComponent
+                uuid={scheduleLocalState.uuid}
+                data={scheduleLocalState.dateSection}
+              />
 
               <EmptyRowComponent />
 
-              <ChildrenSectionComponent data={scheduleLocalState.childrenSection} />
+              <ChildrenSectionComponent
+                uuid={scheduleLocalState.uuid}
+                data={scheduleLocalState.childrenSection}
+              />
 
               <EmptyRowComponent />
 
-              <ExtraWorkersSection data={scheduleLocalState.extraWorkersSection} />
+              <ExtraWorkersSection
+                uuid={scheduleLocalState.uuid}
+                data={scheduleLocalState.extraWorkersSection}
+              />
 
               <ShiftsSectionComponent
+                uuid={scheduleLocalState.uuid}
                 workerType={WorkerType.NURSE}
                 data={scheduleLocalState.nurseShiftsSection}
               />
@@ -48,6 +58,7 @@ export function ScheduleComponent() {
               <EmptyRowComponent />
 
               <ShiftsSectionComponent
+                uuid={scheduleLocalState.uuid}
                 workerType={WorkerType.OTHER}
                 data={scheduleLocalState.babysitterShiftsSection}
               />

@@ -16,7 +16,7 @@ export interface ShiftRowOptions extends ScheduleRowOptions {
 }
 
 export const ShiftRowComponent: React.FC<ShiftRowOptions> = (options) => {
-  const { dataRow, index, sectionKey } = options;
+  const { dataRow, index, sectionKey, uuid } = options;
   const scheduleLogic = useContext(ScheduleLogicContext);
   // TODO: Move to logic
   function calculateExtraHours(dataRow: DataRow) {
@@ -45,11 +45,12 @@ export const ShiftRowComponent: React.FC<ShiftRowOptions> = (options) => {
   const [extendedDataRow, setExtendedDataRow] = useState(extendDataRowWithHoursInfo(dataRow));
   useEffect(() => {
     dataRow && setExtendedDataRow(extendDataRowWithHoursInfo(dataRow));
-  }, [dataRow]);
+  }, [dataRow, uuid]);
 
   return (
     <ScheduleRowComponent
       {...options}
+      uuid={uuid}
       index={index}
       dataRow={extendedDataRow}
       cellComponent={ShiftCellComponent}

@@ -1,5 +1,5 @@
 import { Button } from "@material-ui/core";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StringHelper } from "../../../../../helpers/string.helper";
 import { DataRow } from "../../../../../logic/real-schedule-logic/data-row";
 import {
@@ -16,9 +16,12 @@ import { ShiftsSectionOptions } from "./shifts-section.options";
 import { ShiftRowComponent } from "../../schedule-parts/shift-row.component";
 
 export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
-  const { data = [], workerType } = options;
+  const { data = [], workerType, uuid } = options;
   const scheduleLogic = useContext(ScheduleLogicContext);
   const [dataState, setDataState] = useState(data);
+  useEffect(() => {
+    setDataState(data);
+  }, [data, uuid]);
   const [isOpened, setIsOpened] = useState(false);
   const [workerInfo, setWorkerInfo] = useState({});
 
@@ -64,7 +67,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
 
   return (
     <React.Fragment>
-      {data.length > 0 && (
+      {dataState.length > 0 && (
         <tr className="section-header">
           <td>
             <h3>{StringHelper.capitalize(WorkerTypeHelper.translate(workerType, true))}</h3>
@@ -80,6 +83,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
 
       <BaseSectionComponent
         {...options}
+        key={uuid}
         data={dataState}
         sectionKey={sectionInfoProvider?.sectionKey || ""}
         cellComponent={ShiftCellComponent}

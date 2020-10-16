@@ -17,6 +17,7 @@ export interface ScheduleComponentState {
   dateSection?: DataRow[];
   isInitialized?: boolean;
   scheduleLogic: ScheduleLogic | null;
+  uuid: string;
 }
 
 export const scheduleInitialState: ScheduleComponentState = {
@@ -27,4 +28,5 @@ export const scheduleInitialState: ScheduleComponentState = {
   dateSection: [],
   isInitialized: false,
   scheduleLogic: null,
+  uuid: "",
 };
