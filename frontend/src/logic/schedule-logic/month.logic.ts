@@ -132,7 +132,8 @@ export class MonthLogic {
       verboseDates.push({
         date: day,
         dayOfWeek: weekDays[date.getDay()],
-        isFrozen: this.isDateFrozen(date, daysFromPreviousMonthExists),
+        isFrozen: false,
+        // this.isDateFrozen(date, daysFromPreviousMonthExists),
         month: month,
       });
     }
