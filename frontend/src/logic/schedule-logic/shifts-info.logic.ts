@@ -1,18 +1,32 @@
-import { DataRowHelper } from "../../helpers/row.helper";
+import { DataRowHelper } from "../../helpers/data-row.helper";
+import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
 import { ScheduleErrorModel } from "../../state/models/schedule-data/schedule-error.model";
 import { ShiftCode, ShiftInfoModel } from "../../state/models/schedule-data/shift-info.model";
 import { ShiftsProvider } from "../schedule-provider";
 import { DataRow } from "./data-row";
-import { SectionLogic } from "./section-logic.model";
+import { BaseSectionLogic } from "./section-logic.model";
 
-export class ShiftsInfoLogic implements SectionLogic, ShiftsProvider {
+export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider {
+  sectionKey: string;
   private shifts: { [nurseName: string]: DataRow } = {};
+  private _employeeWorkTime: { [nurseName: string]: number } = {};
   private _scheduleErrors: ScheduleErrorModel[] = [];
 
-  constructor(shiftSection: ShiftInfoModel) {
+  constructor(shiftSection: ShiftInfoModel, workerType: WorkerType) {
+    super();
     Object.keys(shiftSection).forEach((key) => {
       this.shifts[key] = new DataRow(key, shiftSection[key]);
     });
+    this.sectionKey = `${workerType}Section`;
+    this._employeeWorkTime = this.mockEmployeeWorkTime();
+  }
+
+  workerWorkTime(workerName: string) {
+    return this._employeeWorkTime[workerName];
+  }
+
+  employeeWorkTime(): { [key: string]: number } {
+    return this._employeeWorkTime;
   }
 
   public get errors(): ScheduleErrorModel[] {
@@ -27,6 +41,10 @@ export class ShiftsInfoLogic implements SectionLogic, ShiftsProvider {
     return Object.values(this.shifts);
   }
 
+  public set sectionData(dataRows: DataRow[]) {
+    this.shifts = DataRowHelper.dataRowsAsDataRowDict<DataRow>(dataRows);
+  }
+
   public get workersCount(): number {
     return this.sectionData.length;
   }
@@ -38,6 +56,7 @@ export class ShiftsInfoLogic implements SectionLogic, ShiftsProvider {
   public getWorkers(): string[] {
     return Object.keys(this.shifts);
   }
+
   public mockEmployeeWorkTime(): { [key: string]: number } {
     let employeeDict = {};
     Object.keys(this.shifts).forEach((key) => (employeeDict[key] = 1.0));
@@ -50,5 +69,10 @@ export class ShiftsInfoLogic implements SectionLogic, ShiftsProvider {
       return true;
     }
     return false;
+  }
+
+  public addWorker(worker: DataRow, workerWorkTime: number) {
+    this._employeeWorkTime[worker.rowKey] = workerWorkTime;
+    return this.addDataRow(worker);
   }
 }

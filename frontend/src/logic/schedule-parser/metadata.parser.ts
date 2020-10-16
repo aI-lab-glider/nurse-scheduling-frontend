@@ -1,5 +1,5 @@
 import { WeekDay } from "../../state/models/schedule-data/month-info.model";
-import { MonthLogic } from "../real-schedule-logic/month.logic";
+import { MonthLogic } from "../schedule-logic/month.logic";
 import { MetadataProvider } from "../schedule-provider";
 import { DataRowParser } from "./data-row.parser";
 
@@ -27,6 +27,7 @@ export class MetaDataParser implements MetadataProvider {
         year_label,
         hour_amount_label
       );
+      daysRow.rowKey = "monthDates";
       this.monthLogic = new MonthLogic(
         this.month,
         this._year,

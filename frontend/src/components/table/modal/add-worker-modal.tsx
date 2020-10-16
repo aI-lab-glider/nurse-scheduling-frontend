@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, TextField } from "@material-ui/core";
 import "./add-worker-modal.css";
-import { WorkerTypeHelper } from "../../../state/models/schedule-data/employee-info.model";
+import {
+  WorkerType,
+  WorkerTypeHelper,
+} from "../../../state/models/schedule-data/employee-info.model";
 import Button from "@material-ui/core/Button";
 
 const initialState = {
@@ -9,24 +12,61 @@ const initialState = {
   nameError: false,
   time: "",
   timeError: false,
+  actionName: "Dodaj nowego pracownika do sekcji",
+  isNewWorker: false,
 };
 
+export interface WorkerInfo {
+  name?: string;
+  time?: number;
+}
+
+interface AddWorkerModalOptions {
+  isOpened: boolean;
+  setIsOpened: (status: boolean) => void;
+  submit: (workerInfo: WorkerInfo) => void;
+  workerType: WorkerType;
+  workerInfo?: WorkerInfo;
+}
 const NAME_MIN_LENGTH = 5;
 
-export function AddWorkerModal({ isOpened, setIsOpened, submit, workerType }) {
-  const [{ name, nameError, time, timeError }, setState] = useState(initialState);
+export function AddWorkerModal({
+  isOpened,
+  setIsOpened,
+  submit,
+  workerType,
+  workerInfo,
+}: AddWorkerModalOptions) {
+  const [{ name, nameError, time, timeError, actionName, isNewWorker }, setState] = useState(
+    initialState
+  );
+
+  useEffect(() => {
+    const { name = "", time = 0 } = workerInfo || {};
+    const isNewWorker = name.length === 0;
+    const actionName = isNewWorker
+      ? `Dodaj nowego pracownika do sekcji ${WorkerTypeHelper.translate(workerType, true)}`
+      : `Edytuj pracownika: ${name}`;
+    setState((prev) => ({
+      ...prev,
+      name,
+      time: time + "",
+      actionName,
+      isNewWorker,
+    }));
+  }, [workerInfo, workerType]);
 
   const clearState = () => {
     setState({ ...initialState });
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setState((prevState) => ({ ...prevState, [name]: value }));
+    const { name: controlName, value } = e.target;
+    setState((prevState) => ({ ...prevState, [controlName]: value }));
   };
 
   const parseTimeIfPossible = (time) => {
-    if (new RegExp("([0].[0-9])|(1.0)").test(time)) {
+    if (new RegExp("([0].[0-9])|(1.0)|(1)").test(time)) {
       return { isTimeFormatValid: true, parsedTime: Number(time) };
     }
     if (new RegExp("[1-9]/[0-9]").test(time)) {
@@ -35,7 +75,7 @@ export function AddWorkerModal({ isOpened, setIsOpened, submit, workerType }) {
         return { isTimeFormatValid: true, parsedTime: Number(timerArray[0] / timerArray[1]) };
       }
     }
-    return { isTimeFormatValid: false, parsedTime: null };
+    return { isTimeFormatValid: false };
   };
 
   const validateName = (name) => {
@@ -49,7 +89,7 @@ export function AddWorkerModal({ isOpened, setIsOpened, submit, workerType }) {
     if (isTimeFormatValid) {
       setState((prevState) => ({ ...prevState, timeError: false }));
       if (isNameValid) {
-        submit(name, parsedTime);
+        submit({ name, time: parsedTime });
         handleClose();
       } else {
         setState((prevState) => ({ ...prevState, nameError: true }));
@@ -66,15 +106,16 @@ export function AddWorkerModal({ isOpened, setIsOpened, submit, workerType }) {
 
   const body = (
     <div className="worker-modal">
-      <h2 id="modal-title">
-        Dodaj nowego pracownika do sekcji {WorkerTypeHelper.translate(workerType, true)}
-      </h2>
+      <h2 id="modal-title">{actionName}</h2>
       <form>
         <TextField
           id="name-input"
           label="Imię i nazwisko"
           value={name}
           name="name"
+          inputProps={{
+            readOnly: !isNewWorker,
+          }}
           onChange={onChange}
           required
           error={nameError}

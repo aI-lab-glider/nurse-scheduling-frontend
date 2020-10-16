@@ -1,46 +1,62 @@
-import React from "react";
-import { DataRow } from "../../../../logic/real-schedule-logic/data-row";
-import { MetadataLogic } from "../../../../logic/real-schedule-logic/metadata.logic";
+import React, { useContext, useEffect, useState } from "react";
+import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { CellOptions } from "./cell-options.model";
-import { ScheduleRowComponent } from "./schedule-row.component";
-import { shiftCodeToWorkTime } from "../../../../helpers/shift-time.helper";
+import { ScheduleRowComponent, ScheduleRowOptions } from "./schedule-row.component";
+import { shiftCodeToWorkTime } from "../../../../helpers/shifts.helper";
+import { ShiftCellComponent } from "./shift-cell.component";
+import { ScheduleLogicContext } from "../use-schedule-state";
+import { ShiftsInfoLogic } from "../../../../logic/schedule-logic/shifts-info.logic";
 
 const WORK_HOURS_PER_DAY = 8;
 
-export interface ShiftRowOptions {
-  dataRow?: DataRow;
-  metaDataLogic?: MetadataLogic;
+export interface ShiftRowOptions extends ScheduleRowOptions {
+  dataRow: DataRow;
   onRowUpdated?: (row: DataRow) => void;
   cellComponent?: (cellOptions: CellOptions) => JSX.Element;
 }
 
-export const ShiftRowComponent: React.FC<ShiftRowOptions> = ({
-  dataRow,
-  cellComponent,
-  onRowUpdated,
-  metaDataLogic,
-}) => {
-  const rowData = dataRow?.rowData(true, false) ?? [];
-  const workingNorm = (metaDataLogic ? metaDataLogic.workingDaysNumber : 0) * WORK_HOURS_PER_DAY; // TODO uwzględnić etat pracownika
-  const numberOfPreviousMonthDays = metaDataLogic?.numberOfPreviousMonthDays;
-  const workingHours = rowData.slice(numberOfPreviousMonthDays).reduce((previousValue, currentValue) => {
-    return previousValue + shiftCodeToWorkTime(currentValue);
-  }, 0);
-  const newDataRows =
-    dataRow &&
-    new DataRow(dataRow.rowKey, [
-      ...rowData,
-      workingNorm,
-      workingHours,
-      workingHours - workingNorm,
-    ]);
+export const ShiftRowComponent: React.FC<ShiftRowOptions> = (options) => {
+  const { dataRow, index, sectionKey, uuid } = options;
+  const scheduleLogic = useContext(ScheduleLogicContext);
+  // TODO: Move to logic
+  function calculateExtraHours(dataRow: DataRow) {
+    const rowData = dataRow?.rowData(true, false) ?? [];
+    const monthLogic = scheduleLogic?.metadataProvider?.monthLogic;
+    const workingNorm =
+      (monthLogic?.workingDaysNumber || 0) *
+      WORK_HOURS_PER_DAY *
+      ((scheduleLogic?.getProvider(sectionKey ?? "") as ShiftsInfoLogic)?.employeeWorkTime()[
+        dataRow.rowKey
+      ] || 1);
+    const numberOfPreviousMonthDays = monthLogic?.numberOfPreviousMonthDays;
+    const workingHours = rowData
+      .slice(numberOfPreviousMonthDays)
+      .reduce((previousValue, currentValue) => {
+        return previousValue + shiftCodeToWorkTime(currentValue);
+      }, 0);
+    return [workingNorm, workingHours, workingHours - workingNorm];
+  }
+
+  function extendDataRowWithHoursInfo(dataRow: DataRow) {
+    const extraHours = calculateExtraHours(dataRow);
+    return new DataRow(dataRow.rowKey, [...dataRow.rowData(true, false), ...extraHours]);
+  }
+
+  const [extendedDataRow, setExtendedDataRow] = useState(extendDataRowWithHoursInfo(dataRow));
+  useEffect(() => {
+    dataRow && setExtendedDataRow(extendDataRowWithHoursInfo(dataRow));
+  }, [dataRow, uuid]);
 
   return (
     <ScheduleRowComponent
-      dataRow={newDataRows}
-      cellComponent={cellComponent}
-      onRowUpdated={onRowUpdated}
-      metaDataLogic={metaDataLogic}
+      {...options}
+      uuid={uuid}
+      index={index}
+      dataRow={extendedDataRow}
+      cellComponent={ShiftCellComponent}
+      onStateUpdate={(newDataRow) => {
+        setExtendedDataRow(extendDataRowWithHoursInfo(newDataRow));
+      }}
     />
   );
 };

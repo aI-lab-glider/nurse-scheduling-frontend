@@ -1,11 +1,12 @@
-import { DataRow } from "../../../logic/real-schedule-logic/data-row";
+import { DataRow } from "../../../logic/schedule-logic/data-row";
+import { ScheduleLogic } from "../../../logic/schedule-logic/schedule.logic";
 
 export enum ScheduleActionType {
   UpdateNurseShiftSection = "updateNurseShiftSection",
   UpdateBabysitterShiftSection = "updateBabysitterShiftSection",
   UpdateFullState = "updateFullState",
   UpdateChildrenShiftSection = "updateChildrenShiftSection",
-  UpdateExtraWorkersSection = "updateExtraWorkersSection"
+  UpdateExtraWorkersSection = "updateExtraWorkersSection",
 }
 
 export interface ScheduleComponentState {
@@ -14,7 +15,9 @@ export interface ScheduleComponentState {
   nurseShiftsSection?: DataRow[];
   babysitterShiftsSection?: DataRow[];
   dateSection?: DataRow[];
-  isScheduleModified?: boolean;
+  isInitialized?: boolean;
+  scheduleLogic: ScheduleLogic | null;
+  uuid: string;
 }
 
 export const scheduleInitialState: ScheduleComponentState = {
@@ -22,5 +25,8 @@ export const scheduleInitialState: ScheduleComponentState = {
   babysitterShiftsSection: [],
   extraWorkersSection: [],
   childrenSection: [],
-  isScheduleModified: false,
+  dateSection: [],
+  isInitialized: false,
+  scheduleLogic: null,
+  uuid: "",
 };

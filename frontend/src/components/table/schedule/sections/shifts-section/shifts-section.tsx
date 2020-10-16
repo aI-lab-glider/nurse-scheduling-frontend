@@ -1,22 +1,29 @@
 import { Button } from "@material-ui/core";
-import React, { useState } from "react";
-import { DataRowHelper } from "../../../../../helpers/row.helper";
+import React, { useContext, useEffect, useState } from "react";
 import { StringHelper } from "../../../../../helpers/string.helper";
-import { DataRow } from "../../../../../logic/real-schedule-logic/data-row";
-import { ShiftsInfoLogic } from "../../../../../logic/real-schedule-logic/shifts-info.logic";
-import { WorkerTypeHelper } from "../../../../../state/models/schedule-data/employee-info.model";
+import { DataRow } from "../../../../../logic/schedule-logic/data-row";
+import {
+  WorkerType,
+  WorkerTypeHelper,
+} from "../../../../../state/models/schedule-data/employee-info.model";
 import { ShiftCode } from "../../../../../state/models/schedule-data/shift-info.model";
-import { AddWorkerModal } from "../../../modal/add-worker-modal";
+import { AddWorkerModal, WorkerInfo } from "../../../modal/add-worker-modal";
 import { ShiftCellComponent } from "../../schedule-parts/shift-cell.component";
+import { ScheduleLogicContext } from "../../use-schedule-state";
+import { BaseSectionComponent } from "../base-section/base-section.component";
 import "./shifts-section.css";
 import { ShiftsSectionOptions } from "./shifts-section.options";
-import {BaseShiftsSectionComponent} from "../base-shifts-section/base-shifts-section.component";
+import { ShiftRowComponent } from "../../schedule-parts/shift-row.component";
 
 export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
-  const { onSectionUpdated, data = [], workerType, metaDataLogic } = options;
-  const logic = new ShiftsInfoLogic(DataRowHelper.dataRowsAsValueDict<ShiftCode>(data, true));
-
+  const { data = [], workerType, uuid } = options;
+  const scheduleLogic = useContext(ScheduleLogicContext);
+  const [dataState, setDataState] = useState(data);
+  useEffect(() => {
+    setDataState(data);
+  }, [data, uuid]);
   const [isOpened, setIsOpened] = useState(false);
+  const [workerInfo, setWorkerInfo] = useState({});
 
   const modal = (
     <AddWorkerModal
@@ -24,27 +31,43 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
       setIsOpened={setIsOpened}
       submit={submit}
       workerType={workerType}
+      workerInfo={workerInfo}
     />
   );
 
-  function addDataRow(newRow: DataRow) {
-    onSectionUpdated([...logic.sectionData, newRow]);
+  const sectionInfoProvider =
+    workerType === WorkerType.NURSE
+      ? scheduleLogic?.nurseInfoProvider
+      : scheduleLogic?.babysitterInfoProvider;
+
+  function addOrUpdateWorker(newRow: DataRow, workerTime: number) {
+    if (sectionInfoProvider)
+      scheduleLogic?.addWorker(sectionInfoProvider.sectionKey, newRow, workerTime, (newState) =>
+        setDataState([...newState])
+      );
   }
 
-  function onAddButtonClicked() {
+  function openWorkerModal(workerName?: string) {
+    let workerInfo = {};
+    if (workerName && sectionInfoProvider) {
+      workerInfo = { name: workerName, time: sectionInfoProvider.workerWorkTime(workerName) };
+    }
+    setWorkerInfo(workerInfo);
     setIsOpened(true);
   }
 
-  function submit(name: string, time: number) {
-    if (data.length > 0) {
-      const dataRow = new DataRow(name, new Array(data[0].length - 1).fill(ShiftCode.W));
-      addDataRow(dataRow);
+  function submit({ name, time }: WorkerInfo) {
+    if (!name || !time) return;
+    let dataRow = dataState.find((row) => row.rowKey === name);
+    if (!dataRow) {
+      dataRow = new DataRow(name, new Array(data[0].length - 1).fill(ShiftCode.W));
     }
+    addOrUpdateWorker(dataRow, time || 0);
   }
 
   return (
     <React.Fragment>
-      {data.length > 0 && (
+      {dataState.length > 0 && (
         <tr className="section-header">
           <td>
             <h3>{StringHelper.capitalize(WorkerTypeHelper.translate(workerType, true))}</h3>
@@ -52,19 +75,20 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
 
           <td>
             <div className="add-button">
-              <Button onClick={onAddButtonClicked}>Dodaj</Button>
+              <Button onClick={() => openWorkerModal()}>Dodaj</Button>
             </div>
           </td>
         </tr>
       )}
 
-      <BaseShiftsSectionComponent
+      <BaseSectionComponent
         {...options}
-        data={data}
-        onSectionUpdated={onSectionUpdated}
+        key={uuid}
+        data={dataState}
+        sectionKey={sectionInfoProvider?.sectionKey || ""}
         cellComponent={ShiftCellComponent}
-        metaDataLogic={metaDataLogic}
-        logic={logic}
+        rowComponent={ShiftRowComponent}
+        onRowKeyClicked={(rowIndex) => openWorkerModal(dataState[rowIndex].rowKey)}
       />
       {modal}
     </React.Fragment>

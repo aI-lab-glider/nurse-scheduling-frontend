@@ -1,41 +1,24 @@
-import React, { useState } from "react";
-import { ColorProvider } from "../../../../helpers/colors/color.provider";
-import { VerboseDate } from "../../../../logic/real-schedule-logic/month.logic";
+import React from "react";
 import { ShiftCode } from "../../../../state/models/schedule-data/shift-info.model";
 import { BaseCellComponent } from "./base-cell.component";
 import { CellOptions } from "./cell-options.model";
 
-function getShiftCode(value: string): ShiftCode {
-  return ShiftCode[value] || ShiftCode.W;
+function getShiftCode(value: string | number): ShiftCode {
+  return typeof value === "number" ? value.toString() : ShiftCode[value] || ShiftCode.W;
 }
+
 export function ShiftCellComponent(options: CellOptions) {
-  const { verboseDate, value, className, onDataChanged, onContextMenu } = options;
-  const [shift, setShift] = useState<ShiftCode>(getShiftCode(value));
-  const [verboseDateState, setverboseDateState] = useState<VerboseDate | undefined>(verboseDate);
+  const shiftValue = getShiftCode(options.value);
 
-  function onBaseCellUpdate(newShift: string) {
-    setShift(getShiftCode(newShift));
-    if (onDataChanged) {
-      onDataChanged(newShift);
-    }
+  function _onKeyDown(inputValue: string, key: React.KeyboardEvent) {
+    const { onKeyDown } = options;
+    onKeyDown && onKeyDown(getShiftCode(inputValue), key);
   }
-
-  function toggleFrozenState(index: number, isCellEditable: boolean) {
-    if (verboseDate) {
-      setverboseDateState({ ...verboseDate, isFrozen: !isCellEditable });
-    }
-    onContextMenu && onContextMenu(index, verboseDateState?.isFrozen || false);
-  }
-
   return (
     <BaseCellComponent
       {...options}
-      value={value === ShiftCode.W ? "" : value}
-      className={className}
-      style={ColorProvider.getShiftColor(shift, verboseDateState)}
-      onDataChanged={onBaseCellUpdate}
-      isEditable={verboseDateState?.isFrozen}
-      onContextMenu={toggleFrozenState}
+      onKeyDown={_onKeyDown}
+      value={shiftValue === ShiftCode.W ? "" : shiftValue}
     ></BaseCellComponent>
   );
 }

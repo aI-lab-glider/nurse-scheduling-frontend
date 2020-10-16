@@ -2,10 +2,10 @@ import { Colors } from "./colors";
 
 export class Color {
   constructor(
-    private readonly r: number,
-    private readonly g: number,
-    private readonly b: number,
-    private a: number = 1
+    public readonly r: number,
+    public readonly g: number,
+    public readonly b: number,
+    public a: number = 1
   ) {}
 
   public fade(opacity: number = 0.7) {

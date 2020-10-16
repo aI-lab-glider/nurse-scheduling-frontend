@@ -10,7 +10,7 @@ export interface VerboseDate {
 
 export class MonthLogic {
   //#region transltaions
-  private static monthTranslations = {
+  public static monthTranslations = {
     styczeń: "january",
     luty: "february",
     marzec: "march",
@@ -132,7 +132,8 @@ export class MonthLogic {
       verboseDates.push({
         date: day,
         dayOfWeek: weekDays[date.getDay()],
-        isFrozen: this.isDateFrozen(date, daysFromPreviousMonthExists),
+        isFrozen: false,
+        // this.isDateFrozen(date, daysFromPreviousMonthExists),
         month: month,
       });
     }
