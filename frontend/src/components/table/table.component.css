@@ -1,3 +1,10 @@
-.table {
-  min-width: 60%;
+.table-container {
+  overflow: auto;
+  height: 65vh;
+  margin: 5px;
+  width: 100%;
+}
+
+.table-container table {
+  width: 100%;
 }

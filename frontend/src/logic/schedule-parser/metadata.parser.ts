@@ -1,8 +1,9 @@
-import { DayOfWeek } from "../../state/models/schedule-data/month-info.model";
-import { MonthLogic } from "../real-schedule-logic/month.logic";
+import { WeekDay } from "../../state/models/schedule-data/month-info.model";
+import { MonthLogic } from "../schedule-logic/month.logic";
+import { MetadataProvider } from "../schedule-provider";
 import { DataRowParser } from "./data-row.parser";
 
-export class MetaDataParser {
+export class MetaDataParser implements MetadataProvider {
   //#region  translations
   private translations = {
     month_label: "miesiąc",
@@ -18,26 +19,47 @@ export class MetaDataParser {
   private _year: string;
   private monthLogic: MonthLogic;
 
-  constructor(dataRow?: DataRowParser) {
-    let {
-      no_metadata_info_msg,
-      year_label,
-      hour_amount_label,
-      month_label,
-      ..._
-    } = this.translations;
-    if (dataRow) {
-      [this.month, this._year, this.hours] = dataRow.findValues(
+  constructor(headerRow: DataRowParser, private daysRow: DataRowParser) {
+    let { no_metadata_info_msg, year_label, hour_amount_label, month_label } = this.translations;
+    if (headerRow) {
+      [this.month, this._year, this.hours] = headerRow.findValues(
         month_label,
         year_label,
         hour_amount_label
       );
-      this.monthLogic = new MonthLogic(this.month, this._year);
+      daysRow.rowKey = "monthDates";
+      this.monthLogic = new MonthLogic(
+        this.month,
+        this._year,
+        daysRow
+          .rowData(false, false)
+          .map((i) => parseInt(i))
+          .filter((i) => i <= 31),
+        this.daysFromPreviousMonthExists
+      );
     } else {
       throw new Error(no_metadata_info_msg);
     }
   }
 
+  public get daysFromPreviousMonthExists() {
+    return this._daysFromPreviousMonthExists(this.daysRow);
+  }
+
+  public get dates() {
+    return this.monthLogic.dates;
+  }
+  private _daysFromPreviousMonthExists(daysRow?: DataRowParser) {
+    if (!daysRow) throw new Error(this.translations["no_metadata_info_msg"]);
+    let firstDayIndex = daysRow.rowData(true, false).map(parseInt).indexOf(1);
+    return firstDayIndex !== 0;
+  }
+
+  public get frozenDays(): [number, number][] {
+    return this.monthLogic.verboseDates
+      .filter((date) => date.isFrozen)
+      .map((date, index) => [0, index + 1]);
+  }
   public get monthNumber() {
     return this.monthLogic.monthNumber;
   }
@@ -49,7 +71,7 @@ export class MetaDataParser {
     return parseInt(this._year);
   }
 
-  public get daysOfWeek(): DayOfWeek[] {
+  public get daysOfWeek(): WeekDay[] {
     return this.monthLogic.daysOfWeek;
   }
 
@@ -58,7 +80,7 @@ export class MetaDataParser {
   }
 
   public get dayNumbersAsDataRow(): DataRowParser {
-    let { dates_key, ..._ } = this.translations;
+    let { dates_key } = this.translations;
     let datesAsObject = this.monthLogic.dates.reduce(
       (storage, date, index) => {
         return { ...storage, [index + " "]: date };
@@ -70,14 +92,14 @@ export class MetaDataParser {
   /**
    * Counts from 0
    */
-  public get firsMondayDate() {
-    return this.monthLogic.dates[0] - 1;
+  public get validaDataStart() {
+    return 0;
   }
 
   /**
    * Counts from 0
    */
-  public get lastSundayDate() {
-    return this.monthLogic.dates[this.monthLogic.dayCount - 1] - 1;
+  public get validaDataEnd() {
+    return this.monthLogic.dates.length - 1;
   }
 }

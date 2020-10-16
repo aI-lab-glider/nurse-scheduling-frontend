@@ -10,3 +10,16 @@ export class ArrayHelper {
     return longer.map((v: any, index: number) => [v, shorter[index]]);
   }
 }
+
+export function arrayToObject<TIn, TOut extends Object>(
+  array: TIn[],
+  keySelector: (item: TIn) => string,
+  valueSelector: (key: any, item: TIn) => TOut = (key, item) => ({} as any)
+): { [key: string]: TOut } {
+  return array
+    .map((obj) => {
+      const key = keySelector(obj);
+      return { [key]: valueSelector(key, obj) };
+    })
+    .reduce((acc, curr) => ({ ...acc, ...curr }), {});
+}

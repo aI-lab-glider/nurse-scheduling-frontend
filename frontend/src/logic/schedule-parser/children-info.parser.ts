@@ -1,7 +1,8 @@
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
+import { ChildrenInfoProvider } from "../schedule-provider";
 
-export class ChildrenInfoParser {
+export class ChildrenInfoParser implements ChildrenInfoProvider {
   //#region translations
   // TODO refactor
   private traslations = {
@@ -19,7 +20,7 @@ export class ChildrenInfoParser {
 
   constructor(childrenInfoSection: DataRowParser[], metaData: MetaDataParser) {
     let data = childrenInfoSection.map((row) => {
-      row.cropData(metaData.firsMondayDate, metaData.lastSundayDate + 1);
+      row.cropData(metaData.validaDataStart, metaData.validaDataEnd + 1);
       return row;
     });
     data.forEach((row) => {

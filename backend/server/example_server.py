@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -9,6 +9,10 @@ CORS(app)
 def hello():
     return 'hello'
 
+
+@app.route('/fix_schedule/', methods=['POST'])
+def fix_schedule():
+    return request.data
 
 @app.route('/schedule_errors/',  methods=['POST'])
 def hello_world():

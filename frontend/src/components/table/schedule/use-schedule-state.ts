@@ -1,60 +1,34 @@
-import { Dispatch, useReducer, useState } from "react";
-import { ScheduleLogic } from "../../../logic/real-schedule-logic/schedule.logic";
-import { ActionModel } from "../../../state/models/action.model";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { ScheduleLogic } from "../../../logic/schedule-logic/schedule.logic";
 import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-data.model";
-import {
-  ScheduleActionType,
-  ScheduleComponentState,
-  scheduleInitialState,
-} from "./schedule-state.model";
+import { ScheduleComponentState, scheduleInitialState } from "./schedule-state.model";
 
-export function useScheduleState(): [
-  ScheduleComponentState,
-  Dispatch<ActionModel<ScheduleComponentState>>,
-  (scheduleData: ScheduleDataModel) => void,
-  ScheduleLogic?
-] {
-  const [scheduleLogic, setScheduleLogic] = useState<ScheduleLogic>();
-  const [scheduleState, dispatchScheduleState] = useReducer(
-    (state: ScheduleComponentState, action: ActionModel<ScheduleComponentState>) => {
-      let data;
-      switch (action.type) {
-        case ScheduleActionType.UpdateFullState:
-          return { ...action.payload, isScheduleModified: false };
-        case ScheduleActionType.UpdateNurseShiftSection:
-          data = action.payload.nurseShiftsSection;
-          scheduleLogic && scheduleLogic.updateSection("nurseInfo", data);
-          return { ...state, nurseShiftsSection: data, isScheduleModified: true };
-        case ScheduleActionType.UpdateBabysitterShiftSection:
-          data = action.payload.babysitterShiftsSection;
-          scheduleLogic && scheduleLogic.updateSection("babysitterInfo", data);
-          return { ...state, babysitterShiftsSection: data, isScheduleModified: true };
-        case ScheduleActionType.UpdateChildrenShiftSection:
-          data = action.payload.childrenSection;
-          scheduleLogic && scheduleLogic.updateSection("childrenInfo", data);
-          return { ...state, childrenSection: data, isScheduleModified: true };
-        default:
-          return state;
-      }
-    },
+export interface useScheduleStateReturn {
+  scheduleLocalState: ScheduleComponentState;
+  setNewSchedule: (scheduleModel: ScheduleDataModel) => void;
+}
+
+export const ScheduleLogicContext = React.createContext<ScheduleLogic | null>(null);
+
+export function useScheduleState(): useScheduleStateReturn {
+  const dispatchGlobalState = useDispatch();
+  const [scheduleLocalState, setScheduleLocalState] = useState<ScheduleComponentState>(
     scheduleInitialState
   );
-
   const setNewSchedule = (scheduleModel: ScheduleDataModel) => {
-    const logic = new ScheduleLogic(scheduleModel);
-    const newState = {
+    const logic = new ScheduleLogic(scheduleModel, dispatchGlobalState);
+    setScheduleLocalState({
       nurseShiftsSection: logic.getNurseInfo().sectionData,
       babysitterShiftsSection: logic.getBabySitterInfo().sectionData,
       childrenSection: logic.getChildrenInfo().sectionData,
+      extraWorkersSection: logic.getExtraWorkersInfo().sectionData,
       dateSection: logic.getMetadata().sectionData,
-    };
-
-    setScheduleLogic(logic);
-    dispatchScheduleState({
-      type: ScheduleActionType.UpdateFullState,
-      payload: newState,
+      isInitialized: true,
+      scheduleLogic: logic,
+      uuid: scheduleModel.schedule_info?.UUID?.toString() || "",
     });
   };
 
-  return [scheduleState, dispatchScheduleState, setNewSchedule, scheduleLogic];
+  return { scheduleLocalState, setNewSchedule };
 }

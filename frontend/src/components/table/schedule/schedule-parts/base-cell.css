@@ -1,31 +1,24 @@
 .cell {
-  /* padding: 5px 15px; */
-  border: 1px solid black;
+  border: 1px solid rgb(185, 184, 184);
+  width: 30px;
+  height: 20px;
+  text-align: center;
 }
 
 .cell > span {
-  margin: 5px 15px;
+  margin: 5px;
   font-size: 15px;
 }
 
 .cell-input {
   font-size: 14px;
-  width: 80%;
+  width: 100%;
   height: 100%;
   border: none;
   box-sizing: border-box;
-  margin: 5px;
 }
 
-.hidden {
+.empty {
   border: 0px solid white;
   opacity: 0;
-}
-
-.SU {
-  background-color: rgba(219, 219, 4, 0.945);
-}
-
-.SA {
-  background-color: rgba(3, 3, 219, 0.904);
 }

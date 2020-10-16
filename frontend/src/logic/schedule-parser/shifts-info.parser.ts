@@ -1,16 +1,22 @@
-import { Shift } from "../../state/models/schedule-data/shift-info.model";
+import {
+  ParseErrorCode,
+  ScheduleErrorModel,
+} from "../../state/models/schedule-data/schedule-error.model";
+import { ShiftCode } from "../../state/models/schedule-data/shift-info.model";
+import { ShiftsProvider } from "../schedule-provider";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
 
-export class ShiftsInfoParser {
+export class ShiftsInfoParser implements ShiftsProvider {
   //#region  members
   private rowByKeys: { [key: string]: DataRowParser } = {};
+  private _parseErrors: ScheduleErrorModel[] = [];
 
   constructor(scheduleInfoSection: DataRowParser[], private metaData: MetaDataParser) {
     let data = scheduleInfoSection.map((row) => {
-      row.processRow(this.fillRowWithShifts);
       // lastSundayData + 1 because slice not include last index
-      row.cropData(this.metaData.firsMondayDate, this.metaData.lastSundayDate + 1);
+      row.cropData(this.metaData.validaDataStart, this.metaData.validaDataEnd + 1);
+      row.processRow((dataRow) => this.fillRowWithShifts(dataRow));
       return row;
     });
     data.forEach((row) => {
@@ -18,10 +24,24 @@ export class ShiftsInfoParser {
     });
   }
 
+  public get errors(): ScheduleErrorModel[] {
+    return [...this._parseErrors];
+  }
+
   //#endregion
   //#region logic
   public get sectionData(): DataRowParser[] {
     return this.data;
+  }
+
+  public mockEmployeeWorkTime(): { [key: string]: number } {
+    let employeeDict = {};
+    Object.keys(this.getWorkerShifts()).forEach((key) => (employeeDict[key] = 1.0));
+    return employeeDict;
+  }
+
+  public employeeWorkTime() {
+    return this.mockEmployeeWorkTime();
   }
 
   public get workersCount(): number {
@@ -32,10 +52,10 @@ export class ShiftsInfoParser {
     return Object.values(this.rowByKeys);
   }
 
-  public getWorkerShifts(): { [workerName: string]: Shift[] } {
+  public getWorkerShifts(): { [workerName: string]: ShiftCode[] } {
     return this.data
       .map((row) => ({
-        [row.rowKey]: this.fillRowWithShifts(row.rowData(true)),
+        [row.rowKey]: this.fillRowWithShifts(row),
       }))
       .reduce((prev, curr) => ({ ...prev, ...curr }));
   }
@@ -43,29 +63,30 @@ export class ShiftsInfoParser {
   //#endregion
 
   //#region parser
+  private getShiftFromCell(cell: string): ShiftCode | null {
+    return ShiftCode[cell?.trim().slice(0, 2).trim()];
+  }
 
-  private fillRowWithShifts(row: string[]): Shift[] {
-    let previousShift: Shift = null;
-    return row.map((i) => {
-      if (typeof i == "number") {
-        return i;
+  private fillRowWithShifts(row: DataRowParser): ShiftCode[] {
+    const continuousShifts = [ShiftCode.L4, ShiftCode.U];
+    let previousShift: ShiftCode = ShiftCode.W;
+    return row.rowData(true, false).map((cellValue, cellInd) => {
+      let currentShiftValue = this.getShiftFromCell(cellValue);
+      if (!currentShiftValue) {
+        if (cellValue && cellValue.trim()) {
+          this._parseErrors.push({
+            code: ParseErrorCode.UNKNOWN_SHIFT,
+            day: this.metaData.dates[cellInd],
+            worker: row.rowKey,
+            actual: cellValue,
+          });
+        }
+        currentShiftValue = continuousShifts.includes(previousShift) ? previousShift : ShiftCode.W;
       }
-      if (i === null || i === "*") {
-        return previousShift || "W";
-      }
-      switch (i.trim().slice(0, 2).trim()) {
-        case "L4":
-          previousShift = previousShift === "L4" ? null : "L4";
-          break;
-        case "U":
-          previousShift = previousShift === "U" ? null : "U";
-          break;
-        default:
-          previousShift = null;
-          break;
-      }
-      return previousShift || (i?.trim().slice(0, 2).trim() as Shift);
+      previousShift = currentShiftValue;
+      return currentShiftValue;
     });
   }
+
   //#endregion
 }

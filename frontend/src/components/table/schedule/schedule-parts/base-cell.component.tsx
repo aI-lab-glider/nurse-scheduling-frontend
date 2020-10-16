@@ -1,65 +1,52 @@
-import React, { useState } from "react";
-import { StringHelper } from "../../../../helpers/string.helper";
+import React from "react";
+import { ColorHelper } from "../../../../helpers/colors/color.helper";
 import "./base-cell.css";
-import { CellOptions, CellState } from "./cell-options.model";
+import { CellOptions } from "./cell-options.model";
 
 export function BaseCellComponent({
+  index,
   value,
-  className = "",
-  dayType = "",
-  isEditable = true,
-  onDataChanged,
-  onStateChange,
+  style = ColorHelper.DEFAULT_COLOR_SET,
+  isBlocked,
+  isSelected,
+  isPointerOn,
+  onKeyDown,
+  onContextMenu,
+  onClick,
+  onBlur,
 }: CellOptions) {
-  const [cellValue, setCellValue] = useState(value);
-
-  let isEditing = false;
-
   const inputRef = React.createRef<HTMLInputElement>();
-  const notEditableContent = (value) => <span>{value}</span>;
-  const editableContent = (
-    <input
-      defaultValue={cellValue}
-      autoFocus={true}
-      onBlur={(e) => onCellValueSave(e.target.value)}
-      onKeyPress={(e) => handleKeyPress(e.key, inputRef.current?.value || "")}
-      ref={inputRef}
-      className="cell-input"
-    />
-  );
-  const [content, setContent] = useState<JSX.Element>(notEditableContent(value));
 
-  function onCellClicked(_e: any) {
-    if (!isEditing && isEditable) {
-      isEditing = true;
-      setContent(editableContent);
-    }
-    if (onStateChange) {
-      onStateChange(CellState.START_EDITING);
-    }
+  function handleContextMenu(e: React.MouseEvent) {
+    e.preventDefault();
+    onContextMenu && onContextMenu();
   }
 
-  function onCellValueSave(newValue: string) {
-    isEditing = false;
-    setCellValue(newValue);
-    if (onDataChanged && newValue != cellValue) {
-      onDataChanged(newValue);
-    }
-    if (onStateChange) {
-      onStateChange(CellState.STOP_EDITING);
-    }
-    setContent(notEditableContent(newValue));
-  }
-
-  function handleKeyPress(key: string, currentInputValue) {
-    if (isEditing && StringHelper.getRawValue(key) === "enter") {
-      onCellValueSave(currentInputValue);
-    }
-  }
   //  #region view
   return (
-    <td className={`cell ${className || ""} ${dayType}`} onClick={onCellClicked}>
-      {content}
+    <td
+      className={`cell`}
+      onClick={() => !isBlocked && onClick && onClick()}
+      onContextMenu={handleContextMenu}
+      style={{
+        color: style.textColor.toString(),
+        backgroundColor:
+          isSelected || isPointerOn
+            ? ColorHelper.getHighlightColor().toString()
+            : style.backgroundColor.toString(),
+      }}
+      onKeyDown={(e) => {
+        onKeyDown && onKeyDown(inputRef.current?.value || value, e);
+      }}
+      onBlur={(e) => {
+        onBlur && onBlur();
+      }}
+    >
+      {isPointerOn && !isBlocked && (
+        <input defaultValue={value} autoFocus={true} ref={inputRef} className="cell-input" />
+      )}
+
+      {(!isPointerOn || (isPointerOn && isBlocked)) && <span>{value}</span>}
     </td>
   );
   //#endregion

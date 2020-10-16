@@ -4,17 +4,21 @@ import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Popper from "@material-ui/core/Popper";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useScheduleConverter } from "../../../hooks/file-processing/useScheduleConverter";
 import { ActionModel } from "../../../state/models/action.model";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-data.model";
+import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
-
+import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
+import { ExportFormatter } from "../../../helpers/export/export-formatter";
 export function ImportButtonsComponent() {
   //#region members
   const [open, setOpen] = useState(false);
-  const [convertedSchedule, xlxsSheet, setSrcFile] = useScheduleConverter();
+  const { scheduleModel, setSrcFile, scheduleErrors } = useScheduleConverter();
   const anchorRef = useRef(null);
+  const stateScheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData);
 
   //#endregion
 
@@ -22,13 +26,17 @@ export function ImportButtonsComponent() {
   const scheduleDipatcher = useDispatch();
 
   useEffect(() => {
-    if (convertedSchedule) {
+    if (scheduleModel) {
       scheduleDipatcher({
         type: ScheduleDataActionType.ADD_NEW,
-        payload: convertedSchedule,
+        payload: scheduleModel,
       } as ActionModel<ScheduleDataModel>);
+      scheduleDipatcher({
+        type: ScheduleErrorActionType.UPDATE,
+        payload: scheduleErrors,
+      } as ActionModel<ScheduleErrorModel[]>);
     }
-  }, [convertedSchedule, scheduleDipatcher]);
+  }, [scheduleModel, scheduleDipatcher, scheduleErrors]);
   //#endregion
 
   //#region logic
@@ -40,7 +48,9 @@ export function ImportButtonsComponent() {
   };
 
   const handleExport = () => {
-    console.log("Export clicked");
+    if (stateScheduleModel) {
+      new ExportFormatter(stateScheduleModel).formatAndSave();
+    }
   };
 
   const handleToggle = () => {
@@ -52,7 +62,7 @@ export function ImportButtonsComponent() {
   return (
     <div>
       <Button onClick={() => handleToggle()} ref={anchorRef}>
-        File
+        Plik
         <ArrowDropDownIcon />
       </Button>
       <Popper open={open} anchorEl={anchorRef.current}>
@@ -63,7 +73,7 @@ export function ImportButtonsComponent() {
         >
           <ButtonGroup orientation="vertical">
             <Button component="label">
-              Select a file
+              Wczytaj
               <input
                 onChange={(event) => handleImport(event)}
                 style={{ display: "none" }}
@@ -71,7 +81,7 @@ export function ImportButtonsComponent() {
               />
             </Button>
 
-            <Button onClick={() => handleExport()}>Save file as ...</Button>
+            <Button onClick={() => handleExport()}>Zapisz jako...</Button>
           </ButtonGroup>
         </ClickAwayListener>
       </Popper>

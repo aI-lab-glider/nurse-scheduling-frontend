@@ -1,27 +1,34 @@
 import { StringHelper } from "../../helpers/string.helper";
 import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
-import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ChildrenInfoParser } from "./children-info.parser";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { ShiftsInfoParser } from "./shifts-info.parser";
+import { ScheduleProvider, Schedule } from "../schedule-provider";
+import { ExtraWorkersParser } from "./extra-workers.parser";
 
-export class ScheduleParser {
+export class ScheduleParser implements ScheduleProvider {
   //#region members
-  private nurseShiftsParser: ShiftsInfoParser;
-  private babysitterShiftsParser: ShiftsInfoParser;
-  private childrenInfoParser: ChildrenInfoParser;
-  private metaData: MetaDataParser;
+  readonly nurseInfoProvider: ShiftsInfoParser;
+  readonly babysitterInfoProvider: ShiftsInfoParser;
+  readonly childrenInfoProvider: ChildrenInfoParser;
+  readonly metadataProvider: MetaDataParser;
+  readonly extraWorkersInfoProvider: ExtraWorkersParser;
+
+  readonly schedule: Schedule;
 
   constructor(schedule: Array<Object>) {
     schedule = schedule.map((i) => new DataRowParser(i));
-    [this.metaData, schedule] = this.initMetadataAndCleanUp(schedule as DataRowParser[]);
+    [this.metadataProvider, schedule] = this.initMetadataAndCleanUp(schedule as DataRowParser[]);
     [
-      this.childrenInfoParser,
-      this.nurseShiftsParser,
-      this.babysitterShiftsParser,
-    ] = this.initSections(schedule as DataRowParser[], this.metaData);
+      this.childrenInfoProvider,
+      this.nurseInfoProvider,
+      this.babysitterInfoProvider,
+    ] = this.initSections(schedule as DataRowParser[], this.metadataProvider);
+    this.extraWorkersInfoProvider = new ExtraWorkersParser(this.metadataProvider.dayCount);
+    this.schedule = new Schedule(this);
   }
+
   //#endregion
 
   public findRowByKey(schedule, key: string): [DataRowParser | undefined, number] {
@@ -33,48 +40,32 @@ export class ScheduleParser {
     return [data, index];
   }
 
-  public getScheduleModel(): ScheduleDataModel {
-    return {
-      schedule_info: {
-        month_number: this.metaData.monthNumber,
-        year: this.metaData.year,
-      },
-      shifts: {
-        ...this.nurseShiftsParser.getWorkerShifts(),
-        ...this.babysitterShiftsParser.getWorkerShifts(),
-      },
-      month_info: {
-        first_day: this.metaData.dayNumbers[0],
-        children_number: this.childrenInfoParser.registeredChildrenNumber,
-      },
-      employee_info: {
-        type: this.getWorkerTypes(),
-        babysitterCount: this.babysitterShiftsParser.workersCount,
-        nurseCount: this.nurseShiftsParser.workersCount,
-      },
-    };
-  }
-
-  private getWorkerTypes() {
+  getWorkerTypes() {
     let result = {};
-    Object.keys(this.babysitterShiftsParser.getWorkerShifts()).forEach((babysitter) => {
+    Object.keys(this.babysitterInfoProvider.getWorkerShifts()).forEach((babysitter) => {
       result[babysitter] = WorkerType.OTHER;
     });
-    Object.keys(this.babysitterShiftsParser.getWorkerShifts()).forEach((nurse) => {
+    Object.keys(this.nurseInfoProvider.getWorkerShifts()).forEach((nurse) => {
       result[nurse] = WorkerType.NURSE;
     });
 
     return result;
   }
+
   //#endregion
 
   //#region parser
-  private initMetadataAndCleanUp(rawData: DataRowParser[]): [MetaDataParser, DataRowParser[]] {
+  private initMetadataAndCleanUp(schedule: DataRowParser[]): [MetaDataParser, DataRowParser[]] {
     let metaDataKey = "Grafik";
-    let [dataRow, start] = this.findRowByKey(rawData, metaDataKey);
+    let [dataRow, start] = this.findRowByKey(schedule, metaDataKey);
+    if (!dataRow) {
+      throw new Error("No metadata provided");
+    }
+    // Assumption made, that days always go after metadata
+    let daysRow = schedule[start + 1];
     let notSectionsRowsCountFromBeginning = 3;
-    let schedule = rawData.slice(start + notSectionsRowsCountFromBeginning);
-    return [new MetaDataParser(dataRow), schedule];
+    schedule = schedule.slice(start + notSectionsRowsCountFromBeginning);
+    return [new MetaDataParser(dataRow, daysRow), schedule];
   }
 
   private initSections(
@@ -91,23 +82,24 @@ export class ScheduleParser {
       new ShiftsInfoParser(babysitterData, metaData),
     ];
   }
+
   //#endregion
 
   //#region find shift section logic
   private findShiftSection(rawData: DataRowParser[]): [DataRowParser[], number] {
     const sectionData: DataRowParser[] = [];
-
     let sectionDataIdx = rawData.findIndex((rawData) => rawData.isShiftRow);
     if (sectionDataIdx === -1) {
       throw new Error("Cannot find section beginning");
     }
-    while (rawData[sectionDataIdx].isShiftRow) {
+    while (sectionDataIdx < rawData.length && rawData[sectionDataIdx].isShiftRow) {
       sectionData.push(rawData[sectionDataIdx]);
       sectionDataIdx++;
     }
     const dataEndIdx = sectionDataIdx;
     return [sectionData, dataEndIdx];
   }
+
   //#endregion
 
   //#region find children section

@@ -1,12 +1,13 @@
-import { DataRow } from "../../../../../logic/real-schedule-logic/data-row";
-import { MetadataLogic } from "../../../../../logic/real-schedule-logic/metadata.logic";
-import { SectionLogic } from "../../../../../logic/real-schedule-logic/section-logic.model";
+import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import { CellOptions } from "../../schedule-parts/cell-options.model";
+import { ScheduleRowOptions } from "../../schedule-parts/schedule-row.component";
+import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
 
 export interface BaseSectionOptions {
+  uuid: string;
   data?: DataRow[];
-  onSectionUpdated: (sectionData: DataRow[]) => void;
-  logic?: SectionLogic;
   cellComponent?: (cellOptions: CellOptions) => JSX.Element;
-  metaDataLogic?: MetadataLogic;
+  rowComponent?: React.FC<ShiftRowOptions>;
+  sectionKey?: string;
+  onRowKeyClicked?: (rowIndex: number) => void;
 }

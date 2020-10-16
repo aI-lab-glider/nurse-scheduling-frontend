@@ -6,7 +6,7 @@ export class DataRowParser {
   public isShiftRow: boolean;
 
   constructor(data: Object) {
-    this.data = Object.values(data);
+    this.data = Object.values(data).map((x) => x?.toString() || null);
     this.isShiftRow = this.checkShiftRowPattern();
   }
 
@@ -22,6 +22,14 @@ export class DataRowParser {
     return StringHelper.getRawValue(this.rowData(false, true)[0]);
   }
 
+  public set rowKey(value: string) {
+    if (this.data) {
+      this.data[0] = value;
+    } else {
+      this.data = [value];
+    }
+  }
+
   public rowData(includeNulls = false, includeKey = false) {
     let key_position = 1;
     return includeKey
@@ -29,10 +37,9 @@ export class DataRowParser {
       : this.data.filter((c) => includeNulls || c != null).slice(key_position);
   }
 
-  public processRow(processingFunction: (row: string[]) => any[]) {
+  public processRow(processingFunction: (row: DataRowParser) => any[]) {
     let rowKey = this.rowKey;
-    let rowContent = this.rowData(true);
-    this.data = [rowKey, ...processingFunction(rowContent)];
+    this.data = [rowKey, ...processingFunction(this)];
   }
 
   public cropData(from: number, to: number) {
@@ -66,7 +73,7 @@ export class DataRowParser {
     }
     let containsHoursInfo = true;
     for (let i = 1; i < hoursCellsNumber + 1; i++) {
-      if (typeof this.data[dataLen - i] !== "number") {
+      if (typeof parseInt(this.data[dataLen - i]) !== "number") {
         containsHoursInfo = false;
       }
     }

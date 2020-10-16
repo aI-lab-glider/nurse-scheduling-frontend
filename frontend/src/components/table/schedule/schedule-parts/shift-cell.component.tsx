@@ -1,41 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { ShiftCode } from "../../../../state/models/schedule-data/shift-info.model";
 import { BaseCellComponent } from "./base-cell.component";
-import { CellOptions, CellState } from "./cell-options.model";
-import "./shift-cell.css";
+import { CellOptions } from "./cell-options.model";
 
-export function ShiftCellComponent({ value, className = "", dayType ,onDataChanged }: CellOptions) {
-  const [shift, setShift] = useState(value);
-  const [style, setStyle] = useState(`${className} ${shift}`);
+function getShiftCode(value: string | number): ShiftCode {
+  return typeof value === "number" ? value.toString() : ShiftCode[value] || ShiftCode.W;
+}
 
-  function onStateChange(newState: CellState) {
-    switch (newState) {
-      case CellState.START_EDITING:
-        setStyle(style.replace(shift as string, ""));
-        break;
-      case CellState.STOP_EDITING:
-        setStyle(style);
-        break;
-    }
+export function ShiftCellComponent(options: CellOptions) {
+  const shiftValue = getShiftCode(options.value);
+
+  function _onKeyDown(inputValue: string, key: React.KeyboardEvent) {
+    const { onKeyDown } = options;
+    onKeyDown && onKeyDown(getShiftCode(inputValue), key);
   }
-
-  function onBaseCellUpdate(newShift: string) {
-    setShift(newShift);
-    if (onDataChanged) {
-      onDataChanged(newShift);
-    }
-  }
-
-  useEffect(() => {
-    setStyle(`${className} ${shift}`);
-  }, [shift, className]);
-
   return (
     <BaseCellComponent
-      dayType= {dayType}
-      value={value === "W" ? "" : value}
-      className={style}
-      onStateChange={onStateChange}
-      onDataChanged={onBaseCellUpdate}
+      {...options}
+      onKeyDown={_onKeyDown}
+      value={shiftValue === ShiftCode.W ? "" : shiftValue}
     ></BaseCellComponent>
   );
 }
