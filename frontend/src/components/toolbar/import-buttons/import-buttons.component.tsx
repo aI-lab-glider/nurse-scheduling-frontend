@@ -40,28 +40,28 @@ export function ImportButtonsComponent() {
   //#endregion
 
   //#region logic
-  const handleImport = (event: ChangeEvent<HTMLInputElement>) => {
+  function handleImport(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target?.files && event.target?.files[0];
     if (file) {
       setSrcFile(file);
     }
-  };
+  }
 
-  const handleExport = () => {
+  function handleExport() {
     if (stateScheduleModel) {
       new ExportFormatter(stateScheduleModel).formatAndSave();
     }
-  };
+  }
 
-  const handleToggle = () => {
+  function handleToggle() {
     setOpen((prevVal) => !prevVal);
-  };
+  }
   //#endregion
 
   // #region view
   return (
     <div>
-      <Button onClick={() => handleToggle()} ref={anchorRef}>
+      <Button onClick={handleToggle} ref={anchorRef}>
         Plik
         <ArrowDropDownIcon />
       </Button>

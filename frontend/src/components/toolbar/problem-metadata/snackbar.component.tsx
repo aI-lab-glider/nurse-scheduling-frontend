@@ -7,13 +7,11 @@ function Alert(props: AlertProps) {
 }
 
 export function SnackbarComponent({ alertMessage, open, setOpen }) {
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
+  function handleClose(event?: React.SyntheticEvent, reason?: string) {
+    if (reason === "clickaway") return;
 
     setOpen(false);
-  };
+  }
 
   return (
     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>

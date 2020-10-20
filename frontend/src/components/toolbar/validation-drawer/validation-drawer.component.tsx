@@ -44,23 +44,23 @@ export default function ValidationDrawerComponent() {
     return Colors.WHITE.toString();
   }
   //#region handlers
-  const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+  function toggleDrawer(open: boolean): void {
     setOpen(open);
-  };
+  }
   //#endregion
 
   //#region view
   return (
     <div>
       <Button
-        onClick={toggleDrawer(true)}
+        onClick={() => toggleDrawer(true)}
         style={{
           backgroundColor: getColor(),
         }}
       >
         Pokaż błędy
       </Button>
-      <Drawer open={open} onClose={toggleDrawer(false)} anchor={"right"}>
+      <Drawer open={open} onClose={() => toggleDrawer(false)} anchor={"right"}>
         <List>
           {errors?.map((error, index) => (
             <ListItem key={index + error.message.slice(0, 5)}>
