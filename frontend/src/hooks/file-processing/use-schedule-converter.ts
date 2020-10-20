@@ -1,16 +1,15 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { useEffect, useState } from "react";
-import XLSXParser from "xlsx";
 import Excel from 'exceljs'
-import { DataRowParser } from "../../logic/schedule-parser/data-row.parser";
 import { ScheduleParser } from "../../logic/schedule-parser/schedule.parser";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ScheduleErrorModel } from "../../state/models/schedule-data/schedule-error.model";
+// eslint-disable-next-line import/extensions
 import { useFileReader } from "./use-file-reader";
 
 // eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface useScheduleConverterOutput {
   scheduleModel?: ScheduleDataModel;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   scheduleSheet?: Array<Record<string, any>>;
   setSrcFile: (srcFile: File) => void;
   scheduleErrors: ScheduleErrorModel[];
@@ -22,52 +21,35 @@ export function useScheduleConverter(): useScheduleConverterOutput {
   const [fileContent, setSrcFile] = useFileReader();
   const [scheduleModel, setScheduleModel] = useState<ScheduleDataModel>();
 
-  function findDataEnd(scheduleSheet: Array<object>): number {
-    const stopEmptyRowsCount = 4;
-    let actualEmptyRowsCount = 0;
-    let i;
-    for (i = 0; actualEmptyRowsCount < stopEmptyRowsCount; ++i) {
-      const row = new DataRowParser(scheduleSheet[i]);
-      if (row.isEmpty) actualEmptyRowsCount += 1;
-      else actualEmptyRowsCount = 0;
-    }
-    return i - stopEmptyRowsCount;
-  }
-
   useEffect(() => {
-    const cropToData = (scheduleSheet: Array<object>): object[] => {
-      const end = findDataEnd(scheduleSheet);
-      return scheduleSheet.slice(0, end);
-    };
-
-    const convertBinaryToObjectArray = (
-      content: ArrayBuffer | undefined
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ): Array<Record<string, any>> => {
-      if (!content) {
-        return [];
-      }
-
-      const workbook = XLSXParser.read(content, { type: "array" });
-
-      const scheduleSheet = XLSXParser.utils.sheet_to_json(Object.values(workbook.Sheets)[0], {
-        defval: null,
-        header: 1,
-      }) as Array<object>;
-      return cropToData(scheduleSheet);
-    };
-
-    const parsedFileContent = convertBinaryToObjectArray(fileContent);
-    setScheduleSheet(parsedFileContent);
-    if (Object.keys(parsedFileContent).length !== 0) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const parser = new ScheduleParser(parsedFileContent as Array<Record<string, any>>);
-      setScheduleErrors([
-        ...parser.nurseInfoProvider.errors,
-        ...parser.babysitterInfoProvider.errors,
-      ]);
-      setScheduleModel(parser.schedule.getDataModel());
+    if(!fileContent) {
+      return
     }
+
+    const workbook = new Excel.Workbook();
+    workbook.xlsx.load(fileContent)
+      .then(() => {
+        const sheet = workbook.getWorksheet(1)
+        const parsedFileContent = Array<Array<Object>>()
+        sheet.eachRow((row, _) => {
+          parsedFileContent.push(row.values as Array<Object>)
+        })
+        parsedFileContent.forEach(a => a.shift())
+
+        while(parsedFileContent[parsedFileContent.length - 1][0] === "") {
+          parsedFileContent.pop()
+        }
+        
+        setScheduleSheet(parsedFileContent);
+        if (Object.keys(parsedFileContent).length !== 0) {
+          const parser = new ScheduleParser(parsedFileContent as Array<Object>);
+          setScheduleErrors([
+            ...parser.nurseInfoProvider.errors,
+            ...parser.babysitterInfoProvider.errors,
+          ]);
+          setScheduleModel(parser.schedule.getDataModel());
+        }
+    })
   }, [fileContent]);
 
   return {
