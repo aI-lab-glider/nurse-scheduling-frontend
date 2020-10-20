@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import XLSXParser from "xlsx";
+import Excel from 'exceljs'
 import { DataRowParser } from "../../logic/schedule-parser/data-row.parser";
 import { ScheduleParser } from "../../logic/schedule-parser/schedule.parser";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
