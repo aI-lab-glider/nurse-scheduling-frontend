@@ -31,10 +31,10 @@ export class DataRowParser {
   }
 
   public rowData(includeNulls = false, includeKey = false) {
-    let key_position = 1;
+    let keyPosition = 1;
     return includeKey
       ? this.data.filter((c) => includeNulls || c != null)
-      : this.data.filter((c) => includeNulls || c != null).slice(key_position);
+      : this.data.filter((c) => includeNulls || c != null).slice(keyPosition);
   }
 
   public processRow(processingFunction: (row: DataRowParser) => any[]) {

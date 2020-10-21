@@ -6,10 +6,10 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
   //#region translations
   // TODO refactor
   private traslations = {
-    "liczba dzieci zarejestrowanych": "registered_children_count",
-    "liczba dzieci hospitalizowanych": "hospitalized_children_count",
-    "liczba dzieci urlopowanych": "vacationers_children_count",
-    "liczba dzieci konsultowanych": "consulted_children_count",
+    "liczba dzieci zarejestrowanych": "registeredChildrenCount",
+    "liczba dzieci hospitalizowanych": "hospitalizedChildrenCount",
+    "liczba dzieci urlopowanych": "vacationersChildrenCount",
+    "liczba dzieci konsultowanych": "consultedChildrenCount",
   };
   //#endregion
 
