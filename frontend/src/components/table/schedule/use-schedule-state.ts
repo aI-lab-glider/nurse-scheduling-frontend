@@ -16,7 +16,8 @@ export function useScheduleState(): useScheduleStateReturn {
   const [scheduleLocalState, setScheduleLocalState] = useState<ScheduleComponentState>(
     scheduleInitialState
   );
-  const setNewSchedule = (scheduleModel: ScheduleDataModel) => {
+
+  function setNewSchedule(scheduleModel: ScheduleDataModel) {
     const logic = new ScheduleLogic(scheduleModel, dispatchGlobalState);
     setScheduleLocalState({
       nurseShiftsSection: logic.getNurseInfo().sectionData,
@@ -28,7 +29,7 @@ export function useScheduleState(): useScheduleStateReturn {
       scheduleLogic: logic,
       uuid: scheduleModel.schedule_info?.UUID?.toString() || "",
     });
-  };
+  }
 
   return { scheduleLocalState, setNewSchedule };
 }

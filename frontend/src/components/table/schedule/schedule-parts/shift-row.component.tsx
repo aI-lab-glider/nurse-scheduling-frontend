@@ -15,7 +15,7 @@ export interface ShiftRowOptions extends ScheduleRowOptions {
   cellComponent?: (cellOptions: CellOptions) => JSX.Element;
 }
 
-export const ShiftRowComponent: React.FC<ShiftRowOptions> = (options) => {
+export function ShiftRowComponent(options: ShiftRowOptions) {
   const { dataRow, index, sectionKey, uuid } = options;
   const scheduleLogic = useContext(ScheduleLogicContext);
   // TODO: Move to logic
@@ -59,4 +59,4 @@ export const ShiftRowComponent: React.FC<ShiftRowOptions> = (options) => {
       }}
     />
   );
-};
+}

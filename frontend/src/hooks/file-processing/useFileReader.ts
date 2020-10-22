@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useFileReader = (): [ArrayBuffer | undefined, (srcFile: File) => void] => {
+export function useFileReader(): [ArrayBuffer | undefined, (srcFile: File) => void] {
   //#region members
   const fileReader: FileReader = new FileReader();
   const [content, setContent] = useState<ArrayBuffer>();
@@ -18,10 +18,10 @@ export const useFileReader = (): [ArrayBuffer | undefined, (srcFile: File) => vo
   //#endregion
 
   //#region logic
-  const setSrcFile = (file: File) => {
+  function setSrcFile(file: File) {
     fileReader.readAsArrayBuffer(file);
-  };
+  }
   //#endregion
 
   return [content, setSrcFile];
-};
+}

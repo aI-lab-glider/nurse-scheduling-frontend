@@ -13,7 +13,7 @@ export interface useScheduleConverterOutput {
   scheduleErrors: ScheduleErrorModel[];
 }
 
-export const useScheduleConverter = (): useScheduleConverterOutput => {
+export function useScheduleConverter(): useScheduleConverterOutput {
   //#region members
   const [scheduleErrors, setScheduleErrors] = useState<ScheduleErrorModel[]>([]);
   const [scheduleSheet, setScheduleSheet] = useState<Array<object>>();
@@ -23,7 +23,7 @@ export const useScheduleConverter = (): useScheduleConverterOutput => {
 
   //#region logic
 
-  const findDataEnd = (scheduleSheet: Array<object>) => {
+  function findDataEnd(scheduleSheet: Array<object>) {
     let stopEmptyRowsCount = 4;
     let actualEmptyRowsCount = 0;
     for (var i = 0; actualEmptyRowsCount < stopEmptyRowsCount; ++i) {
@@ -32,7 +32,7 @@ export const useScheduleConverter = (): useScheduleConverterOutput => {
       else actualEmptyRowsCount = 0;
     }
     return i - stopEmptyRowsCount;
-  };
+  }
 
   //#endregion
 
@@ -76,4 +76,4 @@ export const useScheduleConverter = (): useScheduleConverterOutput => {
     setSrcFile: setSrcFile,
     scheduleErrors: scheduleErrors,
   };
-};
+}
