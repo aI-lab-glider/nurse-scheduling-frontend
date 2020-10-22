@@ -3,5 +3,5 @@ export enum MetaDataSectionKey {
   Month = "miesiąc",
   Year = "rok",
   MonthDays = "Dni miesiąca",
-  RequiredavailableEmployeesWorkTime = "ilość godz",
+  RequiredavailableWorkersWorkTime = "ilość godz",
 }

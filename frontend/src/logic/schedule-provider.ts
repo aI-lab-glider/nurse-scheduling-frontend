@@ -1,4 +1,4 @@
-import { WorkerType } from "../state/models/schedule-data/employee-info.model";
+import { WorkerType } from "../state/models/schedule-data/worker-info.model";
 import { ScheduleDataModel } from "../state/models/schedule-data/schedule-data.model";
 import { ScheduleErrorModel } from "../state/models/schedule-data/schedule-error.model";
 import { ShiftCode } from "../state/models/schedule-data/shift-info.model";
@@ -14,7 +14,7 @@ export interface MetadataProvider {
 export interface ShiftsProvider {
   errors: ScheduleErrorModel[];
   getWorkerShifts(): { [workerName: string]: ShiftCode[] };
-  availableEmployeesWorkTime(): { [key: string]: number };
+  availableWorkersWorkTime(): { [key: string]: number };
   workersCount: number;
 }
 
@@ -60,11 +60,11 @@ export class Schedule {
         dates: this.provider.metadataProvider?.dates ?? [],
         extra_workers: this.provider.extraWorkersInfoProvider.extraWorkers ?? [],
       },
-      employee_info: {
+      worker_info: {
         type: this.provider.getWorkerTypes(),
         time: {
-          ...this.provider.babysitterInfoProvider.availableEmployeesWorkTime(),
-          ...this.provider.nurseInfoProvider.availableEmployeesWorkTime(),
+          ...this.provider.babysitterInfoProvider.availableWorkersWorkTime(),
+          ...this.provider.nurseInfoProvider.availableWorkersWorkTime(),
         },
       },
     };

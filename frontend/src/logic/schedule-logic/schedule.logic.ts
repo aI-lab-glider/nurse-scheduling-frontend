@@ -1,9 +1,9 @@
 import { Dispatch } from "redux";
 import { DataRowHelper } from "../../helpers/data-row.helper";
-import { groupShiftsByEmployeeType } from "../../helpers/shifts.helper";
+import { groupShiftsByWorkerType } from "../../helpers/shifts.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { ActionModel } from "../../state/models/action.model";
-import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
+import { WorkerType } from "../../state/models/schedule-data/worker-info.model";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ScheduleDataActionType } from "../../state/reducers/schedule-data.reducer";
 import { ChildrenSectionKey } from "../models/children-section.model";
@@ -33,10 +33,7 @@ export class ScheduleLogic implements ScheduleProvider {
     const {
       [WorkerType.NURSE]: nurseShifts,
       [WorkerType.OTHER]: babysitterShifts,
-    } = groupShiftsByEmployeeType(
-      scheduleModel.shifts || {},
-      scheduleModel.employee_info?.type || {}
-    );
+    } = groupShiftsByWorkerType(scheduleModel.shifts || {}, scheduleModel.worker_info?.type || {});
 
     this.nurseInfoProvider = new ShiftsInfoLogic(nurseShifts || {}, WorkerType.NURSE);
 
@@ -164,16 +161,16 @@ export class ScheduleLogic implements ScheduleProvider {
     this.extraWorkersInfoProvider = new ExtraWorkersLogic({ ...data });
   }
 
-  public addEmployee(
+  public addWorker(
     sectionKey: string,
     newWorkerRow: DataRow,
-    employeeWorkTime: number,
+    workerWorkTime: number,
     updateLocalState: (dataRow: DataRow[]) => void
   ) {
     const shiftsProvider = [this.nurseInfoProvider, this.babysitterInfoProvider];
     const newSectionContent = shiftsProvider
       ?.find((provider) => provider.sectionKey === sectionKey)
-      ?.addEmployee(newWorkerRow, employeeWorkTime);
+      ?.addWorker(newWorkerRow, workerWorkTime);
     if (newSectionContent) {
       updateLocalState(newSectionContent);
       this.updateGlobalState();

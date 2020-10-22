@@ -1,4 +1,4 @@
-import { WorkerType } from "../state/models/schedule-data/employee-info.model";
+import { WorkerType } from "../state/models/schedule-data/worker-info.model";
 import { ShiftCode, ShiftInfoModel } from "../state/models/schedule-data/shift-info.model";
 import { ArrayHelper } from "./array.helper";
 
@@ -21,7 +21,7 @@ export function shiftCodeToWorkTime(shiftCode: ShiftCode): number {
   }
 }
 
-export function groupShiftsByEmployeeType(
+export function groupShiftsByWorkerType(
   shifts: ShiftInfoModel,
   workerTypes: { [workerName: string]: WorkerType }
 ) {

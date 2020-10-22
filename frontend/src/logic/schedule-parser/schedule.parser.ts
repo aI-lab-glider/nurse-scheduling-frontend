@@ -1,5 +1,5 @@
 import { StringHelper } from "../../helpers/string.helper";
-import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
+import { WorkerType } from "../../state/models/schedule-data/worker-info.model";
 import { ChildrenInfoParser } from "./children-info.parser";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";

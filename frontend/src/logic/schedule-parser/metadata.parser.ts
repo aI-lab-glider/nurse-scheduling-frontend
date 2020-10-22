@@ -11,7 +11,7 @@ export class MetaDataParser implements MetadataProvider {
     const [month, year, hours] = headerRow.findValues(
       MetaDataSectionKey.Month,
       MetaDataSectionKey.Year,
-      MetaDataSectionKey.RequiredavailableEmployeesWorkTime
+      MetaDataSectionKey.RequiredavailableWorkersWorkTime
     );
     daysRow.rowKey = MetaDataSectionKey.MonthDays;
     this.monthLogic = new MonthLogic(

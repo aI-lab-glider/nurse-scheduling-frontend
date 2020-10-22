@@ -31,15 +31,15 @@ export class ShiftsInfoParser implements ShiftsProvider {
     return Object.values(this._sectionRows);
   }
 
-  private mockavailableEmployeesWorkTime(): { [key: string]: number } {
-    let employeeDict = {};
-    Object.keys(this.getWorkerShifts()).forEach((key) => (employeeDict[key] = 1.0));
-    return employeeDict;
+  private mockAvailableWorkersWorkTime(): { [key: string]: number } {
+    let workerDict = {};
+    Object.keys(this.getWorkerShifts()).forEach((key) => (workerDict[key] = 1.0));
+    return workerDict;
   }
 
-  public availableEmployeesWorkTime() {
-    // TODO: implement actual parsing of employee work time
-    return this.mockavailableEmployeesWorkTime();
+  public availableWorkersWorkTime() {
+    // TODO: implement actual parsing of worker work time
+    return this.mockAvailableWorkersWorkTime();
   }
 
   public get workersCount(): number {

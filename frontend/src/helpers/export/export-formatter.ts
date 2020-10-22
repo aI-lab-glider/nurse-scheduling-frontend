@@ -3,7 +3,7 @@ import fs from "file-saver";
 import xlsx from "exceljs";
 import { ShiftCode } from "../../state/models/schedule-data/shift-info.model";
 import { MonthLogic, VerboseDate } from "../../logic/schedule-logic/month.logic";
-import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
+import { WorkerType } from "../../state/models/schedule-data/worker-info.model";
 import { Color } from "../colors/color.model";
 import { ColorHelper } from "../colors/color.helper";
 import { TranslationHelper } from "../tranlsations.helper";
@@ -110,7 +110,7 @@ export class ExportFormatter {
       [WorkerType.OTHER]: [] as string[],
     };
     Object.keys(scheduleModel.shifts || {}).forEach((key) => {
-      const category = scheduleModel.employee_info?.type[key] ?? "";
+      const category = scheduleModel.worker_info?.type[key] ?? "";
       grouped[category].push([
         key,
         ...(scheduleModel?.shifts?.[key].map((s) => (s === ShiftCode.W ? " " : s)) || []),
@@ -126,7 +126,7 @@ export class ExportFormatter {
     ];
     headerRow[MetaDataSectionKey.Year] = scheduleModel?.schedule_info?.year || 0;
     // TODO implement work time calculation
-    headerRow[MetaDataSectionKey.RequiredavailableEmployeesWorkTime] = 0;
+    headerRow[MetaDataSectionKey.RequiredavailableWorkersWorkTime] = 0;
     return Object.keys(headerRow).map((key) => `${key} ${headerRow[key]}`);
   }
 
