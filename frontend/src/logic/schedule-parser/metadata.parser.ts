@@ -6,11 +6,11 @@ import { DataRowParser } from "./data-row.parser";
 export class MetaDataParser implements MetadataProvider {
   //#region  translations
   private translations = {
-    month_label: "miesiąc",
-    year_label: "rok",
-    hour_amount_label: "ilość godz",
-    dates_key: "Dni miesiąca",
-    no_metadata_info_msg: "W harmonogramie nie podano danych o roku i miesiącu",
+    monthLabel: "miesiąc",
+    yearLabel: "rok",
+    hourAmountLabel: "ilość godz",
+    datesKey:  "Dni miesiąca",
+    noMetadataInfoMsg: "W harmonogramie nie podano danych o roku i miesiącu",
   };
   //#endregion
 
@@ -20,12 +20,12 @@ export class MetaDataParser implements MetadataProvider {
   private monthLogic: MonthLogic;
 
   constructor(headerRow: DataRowParser, private daysRow: DataRowParser) {
-    let { no_metadata_info_msg, year_label, hour_amount_label, month_label } = this.translations;
+    let { noMetadataInfoMsg, yearLabel, hourAmountLabel, monthLabel } = this.translations;
     if (headerRow) {
       [this.month, this._year, this.hours] = headerRow.findValues(
-        month_label,
-        year_label,
-        hour_amount_label
+        monthLabel,
+        yearLabel,
+        hourAmountLabel
       );
       daysRow.rowKey = "monthDates";
       this.monthLogic = new MonthLogic(
@@ -38,7 +38,7 @@ export class MetaDataParser implements MetadataProvider {
         this.daysFromPreviousMonthExists
       );
     } else {
-      throw new Error(no_metadata_info_msg);
+      throw new Error(noMetadataInfoMsg);
     }
   }
 
@@ -50,7 +50,7 @@ export class MetaDataParser implements MetadataProvider {
     return this.monthLogic.dates;
   }
   private _daysFromPreviousMonthExists(daysRow?: DataRowParser) {
-    if (!daysRow) throw new Error(this.translations["no_metadata_info_msg"]);
+    if (!daysRow) throw new Error(this.translations["noMetadataInfoMsg"]);
     let firstDayIndex = daysRow.rowData(true, false).map(parseInt).indexOf(1);
     return firstDayIndex !== 0;
   }
@@ -80,12 +80,12 @@ export class MetaDataParser implements MetadataProvider {
   }
 
   public get dayNumbersAsDataRow(): DataRowParser {
-    let { dates_key } = this.translations;
+    let { datesKey } = this.translations;
     let datesAsObject = this.monthLogic.dates.reduce(
       (storage, date, index) => {
         return { ...storage, [index + " "]: date };
       },
-      { key: dates_key }
+      { key: datesKey }
     );
     return new DataRowParser(datesAsObject);
   }
