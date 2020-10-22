@@ -21,10 +21,9 @@ export function BaseCellComponent({
     onContextMenu && onContextMenu();
   }
 
-  //  #region view
   return (
     <td
-      className={`cell`}
+      className={"cell"}
       onClick={() => !isBlocked && onClick && onClick()}
       onContextMenu={handleContextMenu}
       style={{
@@ -45,5 +44,4 @@ export function BaseCellComponent({
       {(!isPointerOn || (isPointerOn && isBlocked)) && <span>{value}</span>}
     </td>
   );
-  //#endregion
 }

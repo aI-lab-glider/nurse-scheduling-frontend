@@ -1,54 +1,40 @@
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { ChildrenInfoProvider } from "../schedule-provider";
+import { ChildrenSectionKey } from "../models/children-section.model";
+import { DataRowHelper } from "../../helpers/data-row.helper";
 
 export class ChildrenInfoParser implements ChildrenInfoProvider {
-  //#region translations
-  // TODO refactor
-  private traslations = {
-    "liczba dzieci zarejestrowanych": "registered_children_count",
-    "liczba dzieci hospitalizowanych": "hospitalized_children_count",
-    "liczba dzieci urlopowanych": "vacationers_children_count",
-    "liczba dzieci konsultowanych": "consulted_children_count",
-  };
-  //#endregion
+  private readonly _sectionData: { [rowKey in ChildrenSectionKey]?: DataRowParser };
 
-  //#region members
-  private childrenData: { [key: string]: number[] };
-  private rowByKeys: { [key: string]: DataRowParser } = {};
-  //#endregion
+  constructor(childrenInfoSectionRows: DataRowParser[], metaData: MetaDataParser) {
+    const processedSection = childrenInfoSectionRows
+      .map((row) => row.cropData(metaData.validDataStart, metaData.validDataEnd + 1))
+      .filter((row) => this.isValidRow(row));
 
-  constructor(childrenInfoSection: DataRowParser[], metaData: MetaDataParser) {
-    let data = childrenInfoSection.map((row) => {
-      row.cropData(metaData.validaDataStart, metaData.validaDataEnd + 1);
-      return row;
-    });
-    data.forEach((row) => {
-      this.rowByKeys[row.rowKey] = row;
-    });
-    this.childrenData = this.parseInfoSection(this.sectionData, metaData);
+    this._sectionData = DataRowHelper.dataRowsAsDataRowDict(processedSection);
   }
 
   public get registeredChildrenNumber() {
-    // TODO refactor
-    return this.rowByKeys["liczba dzieci zarejestrowanych"]
-      .rowData(true, false)
-      .map((i) => parseInt(i));
+    return (
+      this._sectionData[ChildrenSectionKey.RegisteredChildrenCount]
+        ?.rowData(true, false)
+        .map((i) => parseInt(i)) ?? []
+    );
   }
 
-  public get sectionData() {
-    return Object.values(this.rowByKeys);
+  public get sectionData(): DataRowParser[] {
+    const values = Object.values(this._sectionData).filter((row) => !!row) as DataRowParser[];
+    return values;
   }
 
-  //#region parser
-  private parseInfoSection(
-    childrenInfoSection: DataRowParser[],
-    metaData: MetaDataParser
-  ): { [key: string]: number[] } {
-    return childrenInfoSection.reduce((storage, row) => {
-      storage[this.traslations[row.rowKey]] = row.rowData(true, false);
-      return storage;
-    }, {});
+  private isValidRow(row: DataRowParser): boolean {
+    const validKey = Object.values(ChildrenSectionKey).find((k) => k === row.rowKey);
+    if (validKey) {
+      return true;
+    } else {
+      // TODO Add logger
+      return false;
+    }
   }
-  //#endregion
 }

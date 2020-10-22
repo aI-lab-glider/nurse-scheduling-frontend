@@ -6,6 +6,8 @@ import { ActionModel } from "../../state/models/action.model";
 import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ScheduleDataActionType } from "../../state/reducers/schedule-data.reducer";
+import { ChildrenSectionKey } from "../models/children-section.model";
+import { ExtraWorkersSectionKey } from "../models/extra-workers-section.model";
 import { Schedule, ScheduleProvider } from "../schedule-provider";
 import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row";
@@ -41,10 +43,10 @@ export class ScheduleLogic implements ScheduleProvider {
     this.babysitterInfoProvider = new ShiftsInfoLogic(babysitterShifts || {}, WorkerType.OTHER);
 
     this.childrenInfoProvider = new ChildrenInfoLogic({
-      "liczba dzieci zarejestrowanych": scheduleModel.month_info?.children_number || [],
+      [ChildrenSectionKey.RegisteredChildrenCount]: scheduleModel.month_info?.children_number || [],
     });
     this.extraWorkersInfoProvider = new ExtraWorkersLogic({
-      "liczba dodatkowych pracowników": scheduleModel.month_info?.extra_workers || [],
+      [ExtraWorkersSectionKey.ExtraWorkersCount]: scheduleModel.month_info?.extra_workers || [],
     });
     this.providers = [
       this.nurseInfoProvider,
@@ -162,16 +164,16 @@ export class ScheduleLogic implements ScheduleProvider {
     this.extraWorkersInfoProvider = new ExtraWorkersLogic({ ...data });
   }
 
-  public addWorker(
+  public addEmployee(
     sectionKey: string,
     newWorkerRow: DataRow,
-    workerWorkTime: number,
+    employeeWorkTime: number,
     updateLocalState: (dataRow: DataRow[]) => void
   ) {
     const shiftsProvider = [this.nurseInfoProvider, this.babysitterInfoProvider];
     const newSectionContent = shiftsProvider
       ?.find((provider) => provider.sectionKey === sectionKey)
-      ?.addWorker(newWorkerRow, workerWorkTime);
+      ?.addEmployee(newWorkerRow, employeeWorkTime);
     if (newSectionContent) {
       updateLocalState(newSectionContent);
       this.updateGlobalState();

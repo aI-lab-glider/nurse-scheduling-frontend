@@ -43,7 +43,7 @@ export class ErrorMessageHelper {
       case AlgorithmErrorCode.WOH:
         message = `Pracownik ${error.worker} ma ${error.hours} nadgodzin`;
         break;
-      case ParseErrorCode.UNKNOWN_SHIFT:
+      case ParseErrorCode.UNKNOWN_VALUE:
         message = `Niedozwolona wartość zmiany: ${error.actual}, w dniu ${error.day} u pracownika ${error.worker}`;
         break;
       default:

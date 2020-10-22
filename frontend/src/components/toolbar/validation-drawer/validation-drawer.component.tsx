@@ -10,12 +10,8 @@ import {
 } from "../../../state/models/schedule-data/schedule-error-message.model";
 
 export default function ValidationDrawerComponent() {
-  //#region members
   const [errors, setErrors] = useState<ScheduleErrorMessageModel[]>();
   const [open, setOpen] = useState<boolean>(false);
-  //#endregion
-
-  //#region state interaction
   const errorsReceived = useSelector((state: ApplicationStateModel) => state.scheduleErrors);
 
   useEffect(() => {
@@ -28,7 +24,6 @@ export default function ValidationDrawerComponent() {
       setErrors(noErrorsFound);
     }
   }, [errorsReceived]);
-  //#endregion
 
   function errorLevelInErrors(errorLevel: ScheduleErrorLevel) {
     return errors && errors.filter((e) => e.level === errorLevel).length !== 0;
@@ -43,24 +38,20 @@ export default function ValidationDrawerComponent() {
     }
     return Colors.WHITE.toString();
   }
-  //#region handlers
-  const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+  function toggleDrawer(open: boolean): void {
     setOpen(open);
-  };
-  //#endregion
-
-  //#region view
+  }
   return (
     <div>
       <Button
-        onClick={toggleDrawer(true)}
+        onClick={() => toggleDrawer(true)}
         style={{
           backgroundColor: getColor(),
         }}
       >
         Pokaż błędy
       </Button>
-      <Drawer open={open} onClose={toggleDrawer(false)} anchor={"right"}>
+      <Drawer open={open} onClose={() => toggleDrawer(false)} anchor={"right"}>
         <List>
           {errors?.map((error, index) => (
             <ListItem key={index + error.message.slice(0, 5)}>
@@ -74,5 +65,4 @@ export default function ValidationDrawerComponent() {
       </Drawer>
     </div>
   );
-  //#endregion
 }

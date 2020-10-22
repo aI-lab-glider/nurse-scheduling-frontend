@@ -9,7 +9,7 @@ import { BaseSectionLogic } from "./section-logic.model";
 export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider {
   sectionKey: string;
   private shifts: { [nurseName: string]: DataRow } = {};
-  private _employeeWorkTime: { [nurseName: string]: number } = {};
+  private _availableEmployeesWorkTime: { [nurseName: string]: number } = {};
   private _scheduleErrors: ScheduleErrorModel[] = [];
 
   constructor(shiftSection: ShiftInfoModel, workerType: WorkerType) {
@@ -18,15 +18,15 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
       this.shifts[key] = new DataRow(key, shiftSection[key]);
     });
     this.sectionKey = `${workerType}Section`;
-    this._employeeWorkTime = this.mockEmployeeWorkTime();
+    this._availableEmployeesWorkTime = this.mockEmployeesWorkTime();
   }
 
-  workerWorkTime(workerName: string) {
-    return this._employeeWorkTime[workerName];
+  employeeWorkTime(workerName: string) {
+    return this._availableEmployeesWorkTime[workerName];
   }
 
-  employeeWorkTime(): { [key: string]: number } {
-    return this._employeeWorkTime;
+  availableEmployeesWorkTime(): { [key: string]: number } {
+    return this._availableEmployeesWorkTime;
   }
 
   public get errors(): ScheduleErrorModel[] {
@@ -57,7 +57,7 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
     return Object.keys(this.shifts);
   }
 
-  public mockEmployeeWorkTime(): { [key: string]: number } {
+  private mockEmployeesWorkTime(): { [key: string]: number } {
     let employeeDict = {};
     Object.keys(this.shifts).forEach((key) => (employeeDict[key] = 1.0));
     return employeeDict;
@@ -71,8 +71,8 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
     return false;
   }
 
-  public addWorker(worker: DataRow, workerWorkTime: number) {
-    this._employeeWorkTime[worker.rowKey] = workerWorkTime;
+  public addEmployee(worker: DataRow, employeeWorkTime: number) {
+    this._availableEmployeesWorkTime[worker.rowKey] = employeeWorkTime;
     return this.addDataRow(worker);
   }
 }

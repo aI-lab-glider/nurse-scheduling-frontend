@@ -42,7 +42,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
 
   function addOrUpdateWorker(newRow: DataRow, workerTime: number) {
     if (sectionInfoProvider)
-      scheduleLogic?.addWorker(sectionInfoProvider.sectionKey, newRow, workerTime, (newState) =>
+      scheduleLogic?.addEmployee(sectionInfoProvider.sectionKey, newRow, workerTime, (newState) =>
         setDataState([...newState])
       );
   }
@@ -50,7 +50,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
   function openWorkerModal(workerName?: string) {
     let workerInfo = {};
     if (workerName && sectionInfoProvider) {
-      workerInfo = { name: workerName, time: sectionInfoProvider.workerWorkTime(workerName) };
+      workerInfo = { name: workerName, time: sectionInfoProvider.employeeWorkTime(workerName) };
     }
     setWorkerInfo(workerInfo);
     setIsOpened(true);

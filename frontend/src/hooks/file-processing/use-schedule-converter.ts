@@ -4,7 +4,7 @@ import { DataRowParser } from "../../logic/schedule-parser/data-row.parser";
 import { ScheduleParser } from "../../logic/schedule-parser/schedule.parser";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ScheduleErrorModel } from "../../state/models/schedule-data/schedule-error.model";
-import { useFileReader } from "./useFileReader";
+import { useFileReader } from "./use-file-reader";
 
 export interface useScheduleConverterOutput {
   scheduleModel?: ScheduleDataModel;
@@ -13,17 +13,13 @@ export interface useScheduleConverterOutput {
   scheduleErrors: ScheduleErrorModel[];
 }
 
-export const useScheduleConverter = (): useScheduleConverterOutput => {
-  //#region members
+export function useScheduleConverter(): useScheduleConverterOutput {
   const [scheduleErrors, setScheduleErrors] = useState<ScheduleErrorModel[]>([]);
   const [scheduleSheet, setScheduleSheet] = useState<Array<object>>();
   const [fileContent, setSrcFile] = useFileReader();
   const [scheduleModel, setScheduleModel] = useState<ScheduleDataModel>();
-  //#endregion
 
-  //#region logic
-
-  const findDataEnd = (scheduleSheet: Array<object>) => {
+  function findDataEnd(scheduleSheet: Array<object>) {
     let stopEmptyRowsCount = 4;
     let actualEmptyRowsCount = 0;
     for (var i = 0; actualEmptyRowsCount < stopEmptyRowsCount; ++i) {
@@ -32,11 +28,8 @@ export const useScheduleConverter = (): useScheduleConverterOutput => {
       else actualEmptyRowsCount = 0;
     }
     return i - stopEmptyRowsCount;
-  };
+  }
 
-  //#endregion
-
-  //#region effects
   useEffect(() => {
     const cropToData = (scheduleSheet: Array<object>) => {
       let end = findDataEnd(scheduleSheet);
@@ -68,7 +61,6 @@ export const useScheduleConverter = (): useScheduleConverterOutput => {
       setScheduleModel(parser.schedule.getDataModel());
     }
   }, [fileContent]);
-  //#endregion
 
   return {
     scheduleModel: scheduleModel,
@@ -76,4 +68,4 @@ export const useScheduleConverter = (): useScheduleConverterOutput => {
     setSrcFile: setSrcFile,
     scheduleErrors: scheduleErrors,
   };
-};
+}

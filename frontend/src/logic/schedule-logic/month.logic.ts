@@ -1,4 +1,5 @@
 import { StringHelper } from "../../helpers/string.helper";
+import { TranslationHelper } from "../../helpers/tranlsations.helper";
 import { WeekDay } from "../../state/models/schedule-data/month-info.model";
 
 export interface VerboseDate {
@@ -9,28 +10,9 @@ export interface VerboseDate {
 }
 
 export class MonthLogic {
-  //#region transltaions
-  public static monthTranslations = {
-    styczeń: "january",
-    luty: "february",
-    marzec: "march",
-    kwiecień: "april",
-    maj: "may",
-    czerwiec: "june",
-    lipiec: "july",
-    sierpień: "august",
-    wrzesień: "september",
-    październik: "october",
-    listopad: "november",
-    grudzień: "december",
-  };
-  //#endregion
-
-  //#region members
   public monthNumber: number;
   private _verboseDates: VerboseDate[] = [];
   private monthDates: number[];
-  //#endregion
 
   public get dates() {
     return this._verboseDates.map((d) => d.date);
@@ -46,13 +28,12 @@ export class MonthLogic {
 
   constructor(
     monthId: string | number,
-    year: string,
+    public year: string,
     monthDates: number[],
     daysFromPreviousMonthExists: boolean
   ) {
     if (typeof monthId == "string") {
-      // this.month = MonthLogic.monthTranslations[StringHelper.getRawValue(monthId)];
-      monthId = Object.keys(MonthLogic.monthTranslations).findIndex(
+      monthId = Object.keys(TranslationHelper.monthTranslations).findIndex(
         (month) => StringHelper.getRawValue(month) === monthId
       );
     }
@@ -67,10 +48,9 @@ export class MonthLogic {
     this._verboseDates = this.createCalendar(this.monthNumber, year, daysFromPreviousMonthExists);
   }
 
-  //#region logic
   private generateMonthDates(monthNumber: number, year: string): number[] {
     let dates: number[] = [];
-    const month = Object.values(MonthLogic.monthTranslations)[monthNumber];
+    const month = Object.values(TranslationHelper.monthTranslations)[monthNumber];
     let day = 1;
     while (this.isDateBelongsToMonth(day, month, year)) {
       dates.push(day);
@@ -89,19 +69,19 @@ export class MonthLogic {
   }
 
   public get workingDaysNumber(): number {
-    const month = Object.values(MonthLogic.monthTranslations)[this.monthNumber];
+    const month = Object.values(TranslationHelper.monthTranslations)[this.monthNumber];
     return this._verboseDates.filter(
       (date) => date.month === month && MonthLogic.isWorkingDay(date.dayOfWeek)
     ).length;
   }
 
   public get numberOfPreviousMonthDays(): number {
-    const month = Object.values(MonthLogic.monthTranslations)[this.monthNumber];
+    const month = Object.values(TranslationHelper.monthTranslations)[this.monthNumber];
     return this._verboseDates.filter((date) => date.month !== month).length;
   }
 
   public static convertToDate(monthNumber: number, year) {
-    return new Date(`1 ${Object.values(MonthLogic.monthTranslations)[monthNumber]} ${year}`);
+    return new Date(`1 ${Object.values(TranslationHelper.monthTranslations)[monthNumber]} ${year}`);
   }
 
   private createCalendar(
@@ -125,7 +105,7 @@ export class MonthLogic {
       if (day === 1) {
         daysFromPreviousMonthExists = false;
       }
-      const month = Object.values(MonthLogic.monthTranslations)[
+      const month = Object.values(TranslationHelper.monthTranslations)[
         daysFromPreviousMonthExists ? monthNumber - 1 : monthNumber
       ];
       let date = new Date(`${day} ${month} ${year}`);
@@ -133,6 +113,7 @@ export class MonthLogic {
         date: day,
         dayOfWeek: weekDays[date.getDay()],
         isFrozen: false,
+        // TODO: handle automatic frozen state
         // this.isDateFrozen(date, daysFromPreviousMonthExists),
         month: month,
       });
@@ -150,11 +131,9 @@ export class MonthLogic {
 
   private isDateBelongsToMonth(date: number, month: string, year: string) {
     return (
-      Object.values(MonthLogic.monthTranslations)[
+      Object.values(TranslationHelper.monthTranslations)[
         new Date(`${date} ${month} ${year}`).getMonth()
       ] === month
     );
   }
-
-  //#endregion
 }

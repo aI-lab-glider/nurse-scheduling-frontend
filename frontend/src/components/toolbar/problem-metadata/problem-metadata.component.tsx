@@ -32,16 +32,12 @@ function getWorkersCount(scheduleModel: ScheduleDataModel) {
 }
 
 export function ProblemMetadataComponent() {
-  //#region members
-
   const [selectedDate, handleDateChange] = useState<Date>(new Date());
   const [numberOfNurses, setNumberOfNurses] = useState<number>(0);
   const [numberOfSitters, setNumberOfSitters] = useState<number>(0);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
-  //#endregion
 
-  //#region state interaction
   const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData);
 
   const dispatcher = useDispatch();
@@ -61,9 +57,7 @@ export function ProblemMetadataComponent() {
       }
     }
   }, [schedule]);
-  //#endregion
 
-  //#region handlers
   function showSnackbar(message) {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
@@ -116,9 +110,6 @@ export function ProblemMetadataComponent() {
     }
   }
 
-  //#endregion
-
-  //#region  view
   function textField(id, label, value, setFunction, onTextFieldBlur?) {
     return (
       <TextField
@@ -197,5 +188,4 @@ export function ProblemMetadataComponent() {
       />
     </form>
   );
-  //#endregion
 }

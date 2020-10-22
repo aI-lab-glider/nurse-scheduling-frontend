@@ -6,21 +6,17 @@ import { MonthLogic, VerboseDate } from "../../logic/schedule-logic/month.logic"
 import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
 import { Color } from "../colors/color.model";
 import { ColorHelper } from "../colors/color.helper";
+import { TranslationHelper } from "../tranlsations.helper";
+import { ChildrenSectionKey } from "../../logic/models/children-section.model";
+import { MetaDataRowLabel, MetaDataSectionKey } from "../../logic/models/metadata-section.model";
 
 const EMPTY_ROW = Array(100).fill("");
 
 export class ExportFormatter {
-  private headerRow = {
-    GRAFIK: "",
-    MIESIĄC: "",
-    ROK: 0,
-  };
-
   constructor(private scheduleModel: ScheduleDataModel) {}
 
   public formatAndSave() {
     const [workbook, workSheet] = this.createWorkArea();
-    // this.addConditionalFormatting(workSheet);
     const headerRow = this.createHeader(this.scheduleModel);
     const datesSection = this.createDatesSection(this.scheduleModel);
     const childrenInfoSection = this.createChildrenInfoSection(this.scheduleModel);
@@ -124,22 +120,28 @@ export class ExportFormatter {
   }
 
   private createHeader(scheduleModel: ScheduleDataModel) {
-    this.headerRow.MIESIĄC = Object.keys(MonthLogic.monthTranslations)[
+    const headerRow = { [MetaDataRowLabel]: "" };
+    headerRow[MetaDataSectionKey.Month] = Object.keys(TranslationHelper.monthTranslations)[
       scheduleModel?.schedule_info?.month_number || 0
     ];
-    this.headerRow.ROK = scheduleModel?.schedule_info?.year || 0;
-    return Object.keys(this.headerRow).map((key) => `${key} ${this.headerRow[key]}`);
+    headerRow[MetaDataSectionKey.Year] = scheduleModel?.schedule_info?.year || 0;
+    // TODO implement work time calculation
+    headerRow[MetaDataSectionKey.RequiredavailableEmployeesWorkTime] = 0;
+    return Object.keys(headerRow).map((key) => `${key} ${headerRow[key]}`);
   }
 
   private createChildrenInfoSection(scheduleModel: ScheduleDataModel) {
     // in case if it will be more complecated section
     return [
-      ["Liczba dzieci zarejestrowanych", ...(scheduleModel.month_info?.children_number || [])],
+      [
+        ChildrenSectionKey.RegisteredChildrenCount,
+        ...(scheduleModel.month_info?.children_number || []),
+      ],
     ];
   }
 
   private createDatesSection(scheduleModel: ScheduleDataModel) {
-    return [["Dni miesiąca", ...(scheduleModel?.month_info?.dates || [])]];
+    return [[MetaDataSectionKey.MonthDays, ...(scheduleModel?.month_info?.dates || [])]];
   }
 
   private saveToFile(workbook: xlsx.Workbook) {

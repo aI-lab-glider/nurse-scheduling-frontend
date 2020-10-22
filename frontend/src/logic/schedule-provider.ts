@@ -14,7 +14,7 @@ export interface MetadataProvider {
 export interface ShiftsProvider {
   errors: ScheduleErrorModel[];
   getWorkerShifts(): { [workerName: string]: ShiftCode[] };
-  employeeWorkTime(): { [key: string]: number };
+  availableEmployeesWorkTime(): { [key: string]: number };
   workersCount: number;
 }
 
@@ -63,8 +63,8 @@ export class Schedule {
       employee_info: {
         type: this.provider.getWorkerTypes(),
         time: {
-          ...this.provider.babysitterInfoProvider.employeeWorkTime(),
-          ...this.provider.nurseInfoProvider.employeeWorkTime(),
+          ...this.provider.babysitterInfoProvider.availableEmployeesWorkTime(),
+          ...this.provider.nurseInfoProvider.availableEmployeesWorkTime(),
         },
       },
     };

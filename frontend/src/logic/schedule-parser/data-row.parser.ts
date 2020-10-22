@@ -10,7 +10,6 @@ export class DataRowParser {
     this.isShiftRow = this.checkShiftRowPattern();
   }
 
-  //#public methods
   public get isEmpty() {
     return this.rowData(false, true).length === 0;
   }
@@ -37,14 +36,16 @@ export class DataRowParser {
       : this.data.filter((c) => includeNulls || c != null).slice(key_position);
   }
 
-  public processRow(processingFunction: (row: DataRowParser) => any[]) {
-    let rowKey = this.rowKey;
-    this.data = [rowKey, ...processingFunction(this)];
+  public processRow(processingFunction: (row: DataRowParser) => any[]): DataRowParser {
+    const rowKey = this.rowKey;
+    const data = [rowKey, ...processingFunction(this)];
+    return new DataRowParser(data);
   }
 
-  public cropData(from: number, to: number) {
-    let key = this.rowKey;
-    this.data = [key, ...this.rowData(true, false).slice(from, to)];
+  public cropData(from: number, to: number): DataRowParser {
+    const key = this.rowKey;
+    const data = [key, ...this.rowData(true, false).slice(from, to)];
+    return new DataRowParser(data);
   }
 
   public findValue(key: string) {
@@ -57,9 +58,7 @@ export class DataRowParser {
   public findValues(...args: string[]): string[] {
     return args.map((arg) => this.findValue(arg));
   }
-  //#endregion
 
-  //#region row check region
   private checkShiftRowPattern(): boolean {
     const containsNotEmptyKey = this.data[0] !== null && this.data[0] !== "";
 
@@ -80,5 +79,4 @@ export class DataRowParser {
 
     return containsNotEmptyKey && containsShiftCode && containsHoursInfo;
   }
-  //#endregion
 }

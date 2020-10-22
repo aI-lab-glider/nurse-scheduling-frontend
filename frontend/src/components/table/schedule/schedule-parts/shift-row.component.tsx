@@ -15,7 +15,7 @@ export interface ShiftRowOptions extends ScheduleRowOptions {
   cellComponent?: (cellOptions: CellOptions) => JSX.Element;
 }
 
-export const ShiftRowComponent: React.FC<ShiftRowOptions> = (options) => {
+export function ShiftRowComponent(options: ShiftRowOptions) {
   const { dataRow, index, sectionKey, uuid } = options;
   const scheduleLogic = useContext(ScheduleLogicContext);
   // TODO: Move to logic
@@ -25,9 +25,9 @@ export const ShiftRowComponent: React.FC<ShiftRowOptions> = (options) => {
     const workingNorm =
       (monthLogic?.workingDaysNumber || 0) *
       WORK_HOURS_PER_DAY *
-      ((scheduleLogic?.getProvider(sectionKey ?? "") as ShiftsInfoLogic)?.employeeWorkTime()[
-        dataRow.rowKey
-      ] || 1);
+      ((scheduleLogic?.getProvider(
+        sectionKey ?? ""
+      ) as ShiftsInfoLogic)?.availableEmployeesWorkTime()[dataRow.rowKey] || 1);
     const numberOfPreviousMonthDays = monthLogic?.numberOfPreviousMonthDays;
     const workingHours = rowData
       .slice(numberOfPreviousMonthDays)
@@ -59,4 +59,4 @@ export const ShiftRowComponent: React.FC<ShiftRowOptions> = (options) => {
       }}
     />
   );
-};
+}

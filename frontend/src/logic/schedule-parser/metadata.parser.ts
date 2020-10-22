@@ -2,44 +2,31 @@ import { WeekDay } from "../../state/models/schedule-data/month-info.model";
 import { MonthLogic } from "../schedule-logic/month.logic";
 import { MetadataProvider } from "../schedule-provider";
 import { DataRowParser } from "./data-row.parser";
+import { MetaDataSectionKey } from "../models/metadata-section.model";
 
 export class MetaDataParser implements MetadataProvider {
-  //#region  translations
-  private translations = {
-    month_label: "miesiąc",
-    year_label: "rok",
-    hour_amount_label: "ilość godz",
-    dates_key: "Dni miesiąca",
-    no_metadata_info_msg: "W harmonogramie nie podano danych o roku i miesiącu",
-  };
-  //#endregion
-
-  private month: string;
-  private hours: string;
-  private _year: string;
   private monthLogic: MonthLogic;
 
   constructor(headerRow: DataRowParser, private daysRow: DataRowParser) {
-    let { no_metadata_info_msg, year_label, hour_amount_label, month_label } = this.translations;
-    if (headerRow) {
-      [this.month, this._year, this.hours] = headerRow.findValues(
-        month_label,
-        year_label,
-        hour_amount_label
-      );
-      daysRow.rowKey = "monthDates";
-      this.monthLogic = new MonthLogic(
-        this.month,
-        this._year,
-        daysRow
-          .rowData(false, false)
-          .map((i) => parseInt(i))
-          .filter((i) => i <= 31),
-        this.daysFromPreviousMonthExists
-      );
-    } else {
-      throw new Error(no_metadata_info_msg);
-    }
+    const [month, year, hours] = headerRow.findValues(
+      MetaDataSectionKey.Month,
+      MetaDataSectionKey.Year,
+      MetaDataSectionKey.RequiredavailableEmployeesWorkTime
+    );
+    daysRow.rowKey = MetaDataSectionKey.MonthDays;
+    this.monthLogic = new MonthLogic(
+      month,
+      year,
+      this.extractDates(daysRow),
+      this.daysFromPreviousMonthExists
+    );
+  }
+
+  private extractDates(dataRowParser: DataRowParser): number[] {
+    return dataRowParser
+      .rowData(false, false)
+      .map((i) => parseInt(i))
+      .filter((i) => i <= 31);
   }
 
   public get daysFromPreviousMonthExists() {
@@ -50,7 +37,10 @@ export class MetaDataParser implements MetadataProvider {
     return this.monthLogic.dates;
   }
   private _daysFromPreviousMonthExists(daysRow?: DataRowParser) {
-    if (!daysRow) throw new Error(this.translations["no_metadata_info_msg"]);
+    if (!daysRow) {
+      // TODO implement logger
+      return false;
+    }
     let firstDayIndex = daysRow.rowData(true, false).map(parseInt).indexOf(1);
     return firstDayIndex !== 0;
   }
@@ -68,7 +58,7 @@ export class MetaDataParser implements MetadataProvider {
   }
 
   public get year(): number {
-    return parseInt(this._year);
+    return parseInt(this.monthLogic.year);
   }
 
   public get daysOfWeek(): WeekDay[] {
@@ -80,26 +70,20 @@ export class MetaDataParser implements MetadataProvider {
   }
 
   public get dayNumbersAsDataRow(): DataRowParser {
-    let { dates_key } = this.translations;
     let datesAsObject = this.monthLogic.dates.reduce(
       (storage, date, index) => {
         return { ...storage, [index + " "]: date };
       },
-      { key: dates_key }
+      { key: MetaDataSectionKey.MonthDays }
     );
     return new DataRowParser(datesAsObject);
   }
-  /**
-   * Counts from 0
-   */
-  public get validaDataStart() {
+
+  public get validDataStart() {
     return 0;
   }
 
-  /**
-   * Counts from 0
-   */
-  public get validaDataEnd() {
+  public get validDataEnd() {
     return this.monthLogic.dates.length - 1;
   }
 }

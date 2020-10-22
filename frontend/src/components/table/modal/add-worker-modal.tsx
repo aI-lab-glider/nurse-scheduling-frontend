@@ -56,16 +56,16 @@ export function AddWorkerModal({
     }));
   }, [workerInfo, workerType]);
 
-  const clearState = () => {
+  function clearState() {
     setState({ ...initialState });
-  };
+  }
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name: controlName, value } = e.target;
     setState((prevState) => ({ ...prevState, [controlName]: value }));
-  };
+  }
 
-  const parseTimeIfPossible = (time) => {
+  function parseTimeIfPossible(time) {
     if (new RegExp("([0].[0-9])|(1.0)|(1)").test(time)) {
       return { isTimeFormatValid: true, parsedTime: Number(time) };
     }
@@ -76,13 +76,13 @@ export function AddWorkerModal({
       }
     }
     return { isTimeFormatValid: false };
-  };
+  }
 
-  const validateName = (name) => {
+  function validateName(name) {
     return name.length >= NAME_MIN_LENGTH;
-  };
+  }
 
-  const handleSubmit = () => {
+  function handleSubmit() {
     const { isTimeFormatValid, parsedTime } = parseTimeIfPossible(time);
     const isNameValid = validateName(name);
 
@@ -97,12 +97,12 @@ export function AddWorkerModal({
     } else {
       setState((prevState) => ({ ...prevState, timeError: true }));
     }
-  };
+  }
 
-  const handleClose = () => {
+  function handleClose() {
     clearState();
     setIsOpened(false);
-  };
+  }
 
   const body = (
     <div className="worker-modal">

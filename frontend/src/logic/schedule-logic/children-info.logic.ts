@@ -1,3 +1,4 @@
+import { ChildrenSectionKey } from "../models/children-section.model";
 import { ChildrenInfoProvider } from "../schedule-provider";
 import { DataRow } from "./data-row";
 import { BaseSectionLogic } from "./section-logic.model";
@@ -23,10 +24,10 @@ export class ChildrenInfoLogic extends BaseSectionLogic implements ChildrenInfoP
 
   public get registeredChildrenNumber() {
     // TODO refactor
-    // In current schedules, there are more thna one field, that provides information about children.
+    // In current schedules, there are more then one field, that provides information about children.
     //  Nevertheless, in model used by alghorythm - only one.
     // So this function  (and the model that we send to the backend ) should be reviewed after we will receive new schedules
-    return this.childrenInfoAsDataRows["liczba dzieci zarejestrowanych"]
+    return this.childrenInfoAsDataRows[ChildrenSectionKey.RegisteredChildrenCount]
       .rowData(true, false)
       .map((i) => parseInt(i));
   }

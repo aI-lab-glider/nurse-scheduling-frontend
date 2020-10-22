@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ColorHelper } from "../../../../helpers/colors/color.helper";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
-import { ShiftCode } from "../../../../state/models/schedule-data/shift-info.model";
 import { DirectionKey } from "../sections/base-section/base-section.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
 import { BaseCellComponent } from "./base-cell.component";
