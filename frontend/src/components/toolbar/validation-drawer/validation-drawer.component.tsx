@@ -9,7 +9,7 @@ import {
   ScheduleErrorMessageModel,
 } from "../../../state/models/schedule-data/schedule-error-message.model";
 
-export default function ValidationDrawerComponent() {
+export default function ValidationDrawerComponent(): JSX.Element {
   const [errors, setErrors] = useState<ScheduleErrorMessageModel[]>();
   const [open, setOpen] = useState<boolean>(false);
   const errorsReceived = useSelector((state: ApplicationStateModel) => state.scheduleErrors);
@@ -25,8 +25,8 @@ export default function ValidationDrawerComponent() {
     }
   }, [errorsReceived]);
 
-  function errorLevelInErrors(errorLevel: ScheduleErrorLevel) {
-    return errors && errors.filter((e) => e.level === errorLevel).length !== 0;
+  function errorLevelInErrors(errorLevel: ScheduleErrorLevel): boolean {
+    return (errors && errors.filter((e) => e.level === errorLevel).length !== 0) ?? false;
   }
 
   function getColor(): string {
@@ -38,29 +38,33 @@ export default function ValidationDrawerComponent() {
     }
     return Colors.WHITE.toString();
   }
+
   function toggleDrawer(open: boolean): void {
     setOpen(open);
   }
+
   return (
     <div>
       <Button
-        onClick={() => toggleDrawer(true)}
+        onClick={(): void => toggleDrawer(true)}
         style={{
           backgroundColor: getColor(),
         }}
       >
         Pokaż błędy
       </Button>
-      <Drawer open={open} onClose={() => toggleDrawer(false)} anchor={"right"}>
+      <Drawer open={open} onClose={(): void => toggleDrawer(false)} anchor={"right"}>
         <List>
-          {errors?.map((error, index) => (
-            <ListItem key={index + error.message.slice(0, 5)}>
-              <ListItemIcon>
-                <ErrorOutlineIcon />
-              </ListItemIcon>
-              <ListItemText primary={error.message} />
-            </ListItem>
-          ))}
+          {errors?.map(
+            (error, index): JSX.Element => (
+              <ListItem key={index + error.message.slice(0, 5)}>
+                <ListItemIcon>
+                  <ErrorOutlineIcon />
+                </ListItemIcon>
+                <ListItemText primary={error.message} />
+              </ListItem>
+            )
+          )}
         </List>
       </Drawer>
     </div>

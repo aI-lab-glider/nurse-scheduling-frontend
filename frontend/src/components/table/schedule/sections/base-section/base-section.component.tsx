@@ -19,15 +19,15 @@ export function BaseSectionComponent({
   rowComponent: RowComponent = ScheduleRowComponent,
   sectionKey,
   onRowKeyClicked,
-}: BaseSectionOptions) {
+}: BaseSectionOptions): JSX.Element {
   const [pointerPosition, setPointerPosition] = useState<PointerPosition>({ row: -1, cell: -1 });
 
-  function isInRange(position: PointerPosition) {
+  function isInRange(position: PointerPosition): boolean {
     return !!data[position.row] && !!data[position.row].rowData(false)[position.cell];
   }
 
-  function movePointer(cellIndex: number, event: React.KeyboardEvent) {
-    let newPosition;
+  function movePointer(cellIndex: number, event: React.KeyboardEvent): void {
+    let newPosition: PointerPosition;
     switch (event.key) {
       case DirectionKey.ArrowDown:
         newPosition = { row: pointerPosition.row + 1, cell: pointerPosition.cell };
@@ -65,9 +65,9 @@ export function BaseSectionComponent({
           cellComponent={cellComponent}
           pointerPosition={pointerPosition.row === index ? pointerPosition.cell : -1}
           onKeyDown={movePointer}
-          onClick={(cellIndex) => setPointerPosition({ row: index, cell: cellIndex })}
-          onRowKeyClick={() => onRowKeyClicked && onRowKeyClicked(index)}
-          onBlur={() => setPointerPosition({ row: -1, cell: -1 })}
+          onClick={(cellIndex): void => setPointerPosition({ row: index, cell: cellIndex })}
+          onRowKeyClick={(): void => onRowKeyClicked && onRowKeyClicked(index)}
+          onBlur={(): void => setPointerPosition({ row: -1, cell: -1 })}
         />
       ))}
     </React.Fragment>

@@ -11,11 +11,11 @@ class Backend {
     });
   }
 
-  getErrors(schedule: ScheduleDataModel): Promise<ScheduleErrorModel[]> {
+  public getErrors(schedule: ScheduleDataModel): Promise<ScheduleErrorModel[]> {
     return this.axios.post("/schedule_errors", schedule).then((resp) => resp.data);
   }
 
-  fixSchedule(schedule: ScheduleDataModel): Promise<ScheduleDataModel[]> {
+  public fixSchedule(schedule: ScheduleDataModel): Promise<ScheduleDataModel[]> {
     return this.axios.post("/fix_schedule", schedule).then((resp) => resp.data);
   }
 }

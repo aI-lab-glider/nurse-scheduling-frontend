@@ -17,7 +17,7 @@ export class ArrayHelper {
     array: TIn[],
     keySelector: (item: TIn) => string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    valueSelector: (key: any, item: TIn) => TOut = (key, item) => ({} as any)
+    valueSelector: (key: any, item: TIn) => TOut = (key, item): TOut => ({} as TOut)
   ): { [key: string]: TOut } {
     return array
       .map((obj) => {

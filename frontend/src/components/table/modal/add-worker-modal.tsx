@@ -21,6 +21,10 @@ export interface WorkerInfo {
   time?: number;
 }
 
+interface ParseTimeModel {
+  isTimeFormatValid: boolean;
+  parsedTime?: number;
+}
 interface AddWorkerModalOptions {
   isOpened: boolean;
   setIsOpened: (status: boolean) => void;
@@ -36,7 +40,7 @@ export function AddWorkerModal({
   submit,
   workerType,
   workerInfo,
-}: AddWorkerModalOptions) {
+}: AddWorkerModalOptions): JSX.Element {
   const [{ name, nameError, time, timeError, actionName, isNewWorker }, setState] = useState(
     initialState
   );
@@ -56,21 +60,21 @@ export function AddWorkerModal({
     }));
   }, [workerInfo, workerType]);
 
-  function clearState() {
+  function clearState(): void {
     setState({ ...initialState });
   }
 
-  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function onChange(e: React.ChangeEvent<HTMLInputElement>): void {
     const { name: controlName, value } = e.target;
     setState((prevState) => ({ ...prevState, [controlName]: value }));
   }
 
-  function parseTimeIfPossible(time) {
+  function parseTimeIfPossible(time: string): ParseTimeModel {
     if (new RegExp("([0].[0-9])|(1.0)|(1)").test(time)) {
       return { isTimeFormatValid: true, parsedTime: Number(time) };
     }
     if (new RegExp("[1-9]/[0-9]").test(time)) {
-      const timerArray = time.split("/");
+      const timerArray = time.split("/").map(parseInt);
       if (timerArray[0] <= timerArray[1]) {
         return { isTimeFormatValid: true, parsedTime: Number(timerArray[0] / timerArray[1]) };
       }
@@ -78,11 +82,11 @@ export function AddWorkerModal({
     return { isTimeFormatValid: false };
   }
 
-  function validateName(name) {
+  function validateName(name: string): boolean {
     return name.length >= NAME_MIN_LENGTH;
   }
 
-  function handleSubmit() {
+  function handleSubmit(): void {
     const { isTimeFormatValid, parsedTime } = parseTimeIfPossible(time);
     const isNameValid = validateName(name);
 
@@ -99,7 +103,7 @@ export function AddWorkerModal({
     }
   }
 
-  function handleClose() {
+  function handleClose(): void {
     clearState();
     setIsOpened(false);
   }

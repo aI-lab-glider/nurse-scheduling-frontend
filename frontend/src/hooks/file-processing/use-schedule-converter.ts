@@ -21,7 +21,7 @@ export function useScheduleConverter(): useScheduleConverterOutput {
   const [fileContent, setSrcFile] = useFileReader();
   const [scheduleModel, setScheduleModel] = useState<ScheduleDataModel>();
 
-  function findDataEnd(scheduleSheet: Array<object>) {
+  function findDataEnd(scheduleSheet: Array<object>): number {
     const stopEmptyRowsCount = 4;
     let actualEmptyRowsCount = 0;
     let i;
@@ -34,7 +34,7 @@ export function useScheduleConverter(): useScheduleConverterOutput {
   }
 
   useEffect(() => {
-    const cropToData = (scheduleSheet: Array<object>) => {
+    const cropToData = (scheduleSheet: Array<object>): object[] => {
       const end = findDataEnd(scheduleSheet);
       return scheduleSheet.slice(0, end);
     };

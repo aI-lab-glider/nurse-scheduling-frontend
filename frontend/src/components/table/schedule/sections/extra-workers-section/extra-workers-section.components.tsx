@@ -3,7 +3,7 @@ import { BaseSectionComponent } from "../base-section/base-section.component";
 import { ExtraWorkersSectionOptions } from "./extra-workers-section.options";
 import { ScheduleLogicContext } from "../../use-schedule-state";
 
-export function ExtraWorkersSection(options: ExtraWorkersSectionOptions) {
+export function ExtraWorkersSection(options: ExtraWorkersSectionOptions): JSX.Element {
   const { data = [] } = options;
   const scheduleLogic = useContext(ScheduleLogicContext);
   const sectionKey = scheduleLogic?.extraWorkersInfoProvider.sectionKey;

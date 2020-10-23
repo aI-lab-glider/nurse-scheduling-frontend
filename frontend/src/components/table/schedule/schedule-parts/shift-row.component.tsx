@@ -15,11 +15,11 @@ export interface ShiftRowOptions extends ScheduleRowOptions {
   cellComponent?: (cellOptions: CellOptions) => JSX.Element;
 }
 
-export function ShiftRowComponent(options: ShiftRowOptions) {
+export function ShiftRowComponent(options: ShiftRowOptions): JSX.Element {
   const { dataRow, index, sectionKey, uuid } = options;
   const scheduleLogic = useContext(ScheduleLogicContext);
   // TODO: Move to logic
-  function calculateExtraHours(dataRow: DataRow) {
+  function calculateExtraHours(dataRow: DataRow): [number, number, number] {
     const rowData = dataRow?.rowData(true, false) ?? [];
     const monthLogic = scheduleLogic?.metadataProvider?.monthLogic;
     const workingNorm =
@@ -37,7 +37,7 @@ export function ShiftRowComponent(options: ShiftRowOptions) {
     return [workingNorm, workingHours, workingHours - workingNorm];
   }
 
-  function extendDataRowWithHoursInfo(dataRow: DataRow) {
+  function extendDataRowWithHoursInfo(dataRow: DataRow): DataRow {
     const extraHours = calculateExtraHours(dataRow);
     return new DataRow(dataRow.rowKey, [...dataRow.rowData(true, false), ...extraHours]);
   }
@@ -54,7 +54,7 @@ export function ShiftRowComponent(options: ShiftRowOptions) {
       index={index}
       dataRow={extendedDataRow}
       cellComponent={ShiftCellComponent}
-      onStateUpdate={(newDataRow) => {
+      onStateUpdate={(newDataRow): void => {
         setExtendedDataRow(extendDataRowWithHoursInfo(newDataRow));
       }}
     />

@@ -14,10 +14,10 @@ export function BaseCellComponent({
   onContextMenu,
   onClick,
   onBlur,
-}: CellOptions) {
+}: CellOptions): JSX.Element {
   const inputRef = React.createRef<HTMLInputElement>();
 
-  function handleContextMenu(e: React.MouseEvent) {
+  function handleContextMenu(e: React.MouseEvent): void {
     e.preventDefault();
     onContextMenu && onContextMenu();
   }
@@ -25,7 +25,11 @@ export function BaseCellComponent({
   return (
     <td
       className={"cell"}
-      onClick={() => !isBlocked && onClick && onClick()}
+      onClick={(): void => {
+        if (!isBlocked && onClick) {
+          onClick();
+        }
+      }}
       onContextMenu={handleContextMenu}
       style={{
         color: style.textColor.toString(),
@@ -34,10 +38,10 @@ export function BaseCellComponent({
             ? ColorHelper.getHighlightColor().toString()
             : style.backgroundColor.toString(),
       }}
-      onKeyDown={(e) => {
+      onKeyDown={(e): void => {
         onKeyDown && onKeyDown(inputRef.current?.value || value, e);
       }}
-      onBlur={(e) => {
+      onBlur={(e): void => {
         onBlur && onBlur();
       }}
     >
