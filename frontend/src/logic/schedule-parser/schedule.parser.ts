@@ -39,7 +39,7 @@ export class ScheduleParser implements ScheduleProvider {
     return [data, index];
   }
 
-  getWorkerTypes() {
+  getWorkerTypes(): {} {
     const result = {};
     Object.keys(this.babysitterInfoProvider.getWorkerShifts()).forEach((babysitter) => {
       result[babysitter] = WorkerType.OTHER;

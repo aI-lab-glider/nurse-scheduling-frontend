@@ -13,7 +13,7 @@ export enum ScheduleDataActionType {
 export function scheduleDataReducer(
   state: ScheduleDataModel = {},
   action: ActionModel<ScheduleDataModel>
-) {
+): ScheduleDataModel {
   const scheduleModel = action.payload;
   switch (action.type) {
     case ScheduleDataActionType.ADD_NEW:

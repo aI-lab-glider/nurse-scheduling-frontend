@@ -69,14 +69,14 @@ export class ScheduleLogic implements ScheduleProvider {
     rowind: number,
     shiftIndex: number,
     updateLocalState: (updatedShifts: [number, number][]) => void
-  ) {
+  ): void {
     if (!this.metadataProvider) return;
     const updatedShifts = this.metadataProvider.changeShiftFrozenState(rowind, shiftIndex);
     updateLocalState && updateLocalState(updatedShifts);
     this.updateGlobalState();
   }
 
-  private updateGlobalState() {
+  private updateGlobalState(): void {
     const model = this.schedule.getDataModel();
     this.dispatchScheduleUpdate({
       type: ScheduleDataActionType.UPDATE,
@@ -84,7 +84,7 @@ export class ScheduleLogic implements ScheduleProvider {
     });
   }
 
-  getWorkerTypes() {
+  getWorkerTypes(): {} {
     const result = {};
     this.babysitterInfoProvider.getWorkers().forEach((babysitter) => {
       result[babysitter] = WorkerType.OTHER;
@@ -146,7 +146,7 @@ export class ScheduleLogic implements ScheduleProvider {
     updateIndexes: number[],
     newValue: string,
     updateLocalState: (dataRow: DataRow) => void
-  ) {
+  ): void {
     const newDataRow = this.providers
       ?.find((provider) => provider.sectionKey === sectionKey)
       ?.updateDataRow(rowIndex, updateIndexes, newValue);
@@ -156,7 +156,7 @@ export class ScheduleLogic implements ScheduleProvider {
     }
   }
 
-  public updateExtraWorkersSection(newSectionData: DataRow[]) {
+  public updateExtraWorkersSection(newSectionData: DataRow[]): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
     this.extraWorkersInfoProvider = new ExtraWorkersLogic({ ...data });
@@ -167,7 +167,7 @@ export class ScheduleLogic implements ScheduleProvider {
     newWorkerRow: DataRow,
     workerWorkTime: number,
     updateLocalState: (dataRow: DataRow[]) => void
-  ) {
+  ): void {
     const shiftsProvider = [this.nurseInfoProvider, this.babysitterInfoProvider];
     const newSectionContent = shiftsProvider
       ?.find((provider) => provider.sectionKey === sectionKey)
@@ -182,7 +182,7 @@ export class ScheduleLogic implements ScheduleProvider {
     sectionKey: string,
     newRow: DataRow,
     updateLocalState: (dataRow: DataRow[]) => void
-  ) {
+  ): void {
     const newSectionContent = this.providers
       ?.find((provider) => provider.sectionKey === sectionKey)
       ?.addDataRow(newRow);

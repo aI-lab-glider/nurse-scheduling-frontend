@@ -14,21 +14,21 @@ export class ExtraWorkersLogic extends BaseSectionLogic implements ExtraWorkersI
   }
   sectionKey: string = ExtraWorkersLogic.name;
 
-  public get data() {
+  public get data(): DataRow[] {
     return Object.values(this.extraWorkersInfoAsDataRows);
   }
 
-  public get sectionData() {
+  public get sectionData(): DataRow[] {
     return this.data;
   }
 
-  public get extraWorkers() {
+  public get extraWorkers(): number[] {
     return this.extraWorkersInfoAsDataRows[ExtraWorkersSectionKey.ExtraWorkersCount]
       .rowData(true, false)
       .map((i) => parseInt(i));
   }
 
-  public tryUpdate(row: DataRow) {
+  public tryUpdate(row: DataRow): boolean {
     if (Object.keys(this.extraWorkersInfoAsDataRows).includes(row.rowKey)) {
       this.extraWorkersInfoAsDataRows[row.rowKey] = row;
       return true;

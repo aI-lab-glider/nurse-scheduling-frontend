@@ -11,7 +11,7 @@ export enum MonthLogicActionType {
 export class MetadataLogic extends BaseSectionLogic implements MetadataProvider {
   sectionKey = MetadataLogic.name;
   private _frozenShifts: [number, number][] = [];
-  public changeShiftFrozenState(workerIndex: number, index: number) {
+  public changeShiftFrozenState(workerIndex: number, index: number): [number, number][] {
     const blockedPairInd = this._frozenShifts.findIndex(
       (pair) => pair[0] === workerIndex && pair[1] === index
     );
@@ -47,10 +47,10 @@ export class MetadataLogic extends BaseSectionLogic implements MetadataProvider 
       ...this._frozenShifts,
     ];
   }
-  public get monthNumber() {
+  public get monthNumber(): number {
     return this.monthLogic.monthNumber;
   }
-  public get dayCount() {
+  public get dayCount(): number {
     return this.monthLogic.dayCount;
   }
 

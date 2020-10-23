@@ -24,7 +24,7 @@ export function shiftCodeToWorkTime(shiftCode: ShiftCode): number {
 export function groupShiftsByWorkerType(
   shifts: ShiftInfoModel,
   workerTypes: { [workerName: string]: WorkerType }
-) {
+): { [key: string]: ShiftInfoModel } {
   const grouped = ArrayHelper.arrayToObject<WorkerType, ShiftInfoModel>(
     Object.values(WorkerType),
     (wt) => wt
