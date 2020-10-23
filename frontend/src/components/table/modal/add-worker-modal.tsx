@@ -1,10 +1,10 @@
-import React, {JSXElementConstructor, useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, TextField } from "@material-ui/core";
 import "./add-worker-modal.css";
 import {
   WorkerType,
   WorkerTypeHelper,
-} from "../../../state/models/schedule-data/employee-info.model";
+} from "../../../state/models/schedule-data/worker-info.model";
 import Button from "@material-ui/core/Button";
 
 const initialState = {

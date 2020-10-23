@@ -11,7 +11,7 @@ export enum AlgorithmErrorCode {
 }
 
 export enum ParseErrorCode {
-  UNKNOWN_SHIFT = "unknownSymbol",
+  UNKNOWN_VALUE = "unknownSymbol",
 }
 
 export type DayTime = "MORNING" | "AFTERNOON" | "NIGHT";

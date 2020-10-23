@@ -25,9 +25,9 @@ export function ShiftRowComponent(options: ShiftRowOptions) {
     const workingNorm =
       (monthLogic?.workingDaysNumber || 0) *
       WORK_HOURS_PER_DAY *
-      ((scheduleLogic?.getProvider(sectionKey ?? "") as ShiftsInfoLogic)?.employeeWorkTime()[
-        dataRow.rowKey
-      ] || 1);
+      ((scheduleLogic?.getProvider(
+        sectionKey ?? ""
+      ) as ShiftsInfoLogic)?.availableWorkersWorkTime()[dataRow.rowKey] || 1);
     const numberOfPreviousMonthDays = monthLogic?.numberOfPreviousMonthDays;
     const workingHours = rowData
       .slice(numberOfPreviousMonthDays)

@@ -4,7 +4,7 @@ import { DataRowParser } from "../../logic/schedule-parser/data-row.parser";
 import { ScheduleParser } from "../../logic/schedule-parser/schedule.parser";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ScheduleErrorModel } from "../../state/models/schedule-data/schedule-error.model";
-import { useFileReader } from "./useFileReader";
+import { useFileReader } from "./use-file-reader";
 
 export interface useScheduleConverterOutput {
   scheduleModel?: ScheduleDataModel;
@@ -14,14 +14,10 @@ export interface useScheduleConverterOutput {
 }
 
 export function useScheduleConverter(): useScheduleConverterOutput {
-  //#region members
   const [scheduleErrors, setScheduleErrors] = useState<ScheduleErrorModel[]>([]);
   const [scheduleSheet, setScheduleSheet] = useState<Array<object>>();
   const [fileContent, setSrcFile] = useFileReader();
   const [scheduleModel, setScheduleModel] = useState<ScheduleDataModel>();
-  //#endregion
-
-  //#region logic
 
   function findDataEnd(scheduleSheet: Array<object>) {
     let stopEmptyRowsCount = 4;
@@ -34,9 +30,6 @@ export function useScheduleConverter(): useScheduleConverterOutput {
     return i - stopEmptyRowsCount;
   }
 
-  //#endregion
-
-  //#region effects
   useEffect(() => {
     const cropToData = (scheduleSheet: Array<object>) => {
       let end = findDataEnd(scheduleSheet);
@@ -68,7 +61,6 @@ export function useScheduleConverter(): useScheduleConverterOutput {
       setScheduleModel(parser.schedule.getDataModel());
     }
   }, [fileContent]);
-  //#endregion
 
   return {
     scheduleModel: scheduleModel,

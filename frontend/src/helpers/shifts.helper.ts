@@ -1,6 +1,6 @@
-import { WorkerType } from "../state/models/schedule-data/employee-info.model";
+import { WorkerType } from "../state/models/schedule-data/worker-info.model";
 import { ShiftCode, ShiftInfoModel } from "../state/models/schedule-data/shift-info.model";
-import { arrayToObject } from "./array.helper";
+import { ArrayHelper } from "./array.helper";
 
 export function shiftCodeToWorkTime(shiftCode: ShiftCode): number {
   switch (shiftCode) {
@@ -21,11 +21,14 @@ export function shiftCodeToWorkTime(shiftCode: ShiftCode): number {
   }
 }
 
-export function groupShiftsByEmployeeType(
+export function groupShiftsByWorkerType(
   shifts: ShiftInfoModel,
   workerTypes: { [workerName: string]: WorkerType }
 ) {
-  const grouped = arrayToObject<WorkerType, ShiftInfoModel>(Object.values(WorkerType), (wt) => wt);
+  const grouped = ArrayHelper.arrayToObject<WorkerType, ShiftInfoModel>(
+    Object.values(WorkerType),
+    (wt) => wt
+  );
   const shiftEntries = Object.entries(shifts).map((a) => ({
     workerName: a[0],
     shifts: a[1],

@@ -5,7 +5,7 @@ import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import {
   WorkerType,
   WorkerTypeHelper,
-} from "../../../../../state/models/schedule-data/employee-info.model";
+} from "../../../../../state/models/schedule-data/worker-info.model";
 import { ShiftCode } from "../../../../../state/models/schedule-data/shift-info.model";
 import { AddWorkerModal, WorkerInfo } from "../../../modal/add-worker-modal";
 import { ShiftCellComponent } from "../../schedule-parts/shift-cell.component";

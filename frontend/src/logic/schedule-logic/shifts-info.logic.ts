@@ -1,5 +1,5 @@
 import { DataRowHelper } from "../../helpers/data-row.helper";
-import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
+import { WorkerType } from "../../state/models/schedule-data/worker-info.model";
 import { ScheduleErrorModel } from "../../state/models/schedule-data/schedule-error.model";
 import { ShiftCode, ShiftInfoModel } from "../../state/models/schedule-data/shift-info.model";
 import { ShiftsProvider } from "../schedule-provider";
@@ -9,7 +9,7 @@ import { BaseSectionLogic } from "./section-logic.model";
 export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider {
   sectionKey: string;
   private shifts: { [nurseName: string]: DataRow } = {};
-  private _employeeWorkTime: { [nurseName: string]: number } = {};
+  private _availableWorkersWorkTime: { [nurseName: string]: number } = {};
   private _scheduleErrors: ScheduleErrorModel[] = [];
 
   constructor(shiftSection: ShiftInfoModel, workerType: WorkerType) {
@@ -18,15 +18,15 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
       this.shifts[key] = new DataRow(key, shiftSection[key]);
     });
     this.sectionKey = `${workerType}Section`;
-    this._employeeWorkTime = this.mockEmployeeWorkTime();
+    this._availableWorkersWorkTime = this.mockWorkersWorkTime();
   }
 
   workerWorkTime(workerName: string) {
-    return this._employeeWorkTime[workerName];
+    return this._availableWorkersWorkTime[workerName];
   }
 
-  employeeWorkTime(): { [key: string]: number } {
-    return this._employeeWorkTime;
+  availableWorkersWorkTime(): { [key: string]: number } {
+    return this._availableWorkersWorkTime;
   }
 
   public get errors(): ScheduleErrorModel[] {
@@ -57,10 +57,10 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
     return Object.keys(this.shifts);
   }
 
-  public mockEmployeeWorkTime(): { [key: string]: number } {
-    let employeeDict = {};
-    Object.keys(this.shifts).forEach((key) => (employeeDict[key] = 1.0));
-    return employeeDict;
+  private mockWorkersWorkTime(): { [key: string]: number } {
+    let workerDict = {};
+    Object.keys(this.shifts).forEach((key) => (workerDict[key] = 1.0));
+    return workerDict;
   }
 
   public tryUpdate(row: DataRow) {
@@ -72,7 +72,7 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
   }
 
   public addWorker(worker: DataRow, workerWorkTime: number) {
-    this._employeeWorkTime[worker.rowKey] = workerWorkTime;
+    this._availableWorkersWorkTime[worker.rowKey] = workerWorkTime;
     return this.addDataRow(worker);
   }
 }

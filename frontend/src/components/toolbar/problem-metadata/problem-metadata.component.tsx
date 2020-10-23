@@ -7,11 +7,11 @@ import plLocale from "date-fns/locale/pl";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import backend from "../../../api/backend";
-import { groupShiftsByEmployeeType } from "../../../helpers/shifts.helper";
+import { groupShiftsByWorkerType } from "../../../helpers/shifts.helper";
 import { MonthLogic } from "../../../logic/schedule-logic/month.logic";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { WorkerType } from "../../../state/models/schedule-data/employee-info.model";
+import { WorkerType } from "../../../state/models/schedule-data/worker-info.model";
 import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-data.model";
 import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
@@ -23,25 +23,18 @@ function getWorkersCount(scheduleModel: ScheduleDataModel) {
   const {
     [WorkerType.NURSE]: nurseShifts,
     [WorkerType.OTHER]: babysitterShifts,
-  } = groupShiftsByEmployeeType(
-    scheduleModel.shifts || {},
-    scheduleModel.employee_info?.type || {}
-  );
+  } = groupShiftsByWorkerType(scheduleModel.shifts || {}, scheduleModel.worker_info?.type || {});
 
   return [Object.keys(babysitterShifts).length, Object.keys(nurseShifts).length];
 }
 
 export function ProblemMetadataComponent() {
-  //#region members
-
   const [selectedDate, handleDateChange] = useState<Date>(new Date());
   const [numberOfNurses, setNumberOfNurses] = useState<number>(0);
   const [numberOfSitters, setNumberOfSitters] = useState<number>(0);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
-  //#endregion
 
-  //#region state interaction
   const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData);
 
   const dispatcher = useDispatch();
@@ -61,9 +54,7 @@ export function ProblemMetadataComponent() {
       }
     }
   }, [schedule]);
-  //#endregion
 
-  //#region handlers
   function showSnackbar(message) {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
@@ -116,9 +107,6 @@ export function ProblemMetadataComponent() {
     }
   }
 
-  //#endregion
-
-  //#region  view
   function textField(id, label, value, setFunction, onTextFieldBlur?) {
     return (
       <TextField
@@ -197,5 +185,4 @@ export function ProblemMetadataComponent() {
       />
     </form>
   );
-  //#endregion
 }

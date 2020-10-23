@@ -1,11 +1,13 @@
 import { Dispatch } from "redux";
 import { DataRowHelper } from "../../helpers/data-row.helper";
-import { groupShiftsByEmployeeType } from "../../helpers/shifts.helper";
+import { groupShiftsByWorkerType } from "../../helpers/shifts.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { ActionModel } from "../../state/models/action.model";
-import { WorkerType } from "../../state/models/schedule-data/employee-info.model";
+import { WorkerType } from "../../state/models/schedule-data/worker-info.model";
 import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
 import { ScheduleDataActionType } from "../../state/reducers/schedule-data.reducer";
+import { ChildrenSectionKey } from "../models/children-section.model";
+import { ExtraWorkersSectionKey } from "../models/extra-workers-section.model";
 import { Schedule, ScheduleProvider } from "../schedule-provider";
 import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row";
@@ -31,20 +33,17 @@ export class ScheduleLogic implements ScheduleProvider {
     const {
       [WorkerType.NURSE]: nurseShifts,
       [WorkerType.OTHER]: babysitterShifts,
-    } = groupShiftsByEmployeeType(
-      scheduleModel.shifts || {},
-      scheduleModel.employee_info?.type || {}
-    );
+    } = groupShiftsByWorkerType(scheduleModel.shifts || {}, scheduleModel.worker_info?.type || {});
 
     this.nurseInfoProvider = new ShiftsInfoLogic(nurseShifts || {}, WorkerType.NURSE);
 
     this.babysitterInfoProvider = new ShiftsInfoLogic(babysitterShifts || {}, WorkerType.OTHER);
 
     this.childrenInfoProvider = new ChildrenInfoLogic({
-      "liczba dzieci zarejestrowanych": scheduleModel.month_info?.children_number || [],
+      [ChildrenSectionKey.RegisteredChildrenCount]: scheduleModel.month_info?.children_number || [],
     });
     this.extraWorkersInfoProvider = new ExtraWorkersLogic({
-      "liczba dodatkowych pracowników": scheduleModel.month_info?.extra_workers || [],
+      [ExtraWorkersSectionKey.ExtraWorkersCount]: scheduleModel.month_info?.extra_workers || [],
     });
     this.providers = [
       this.nurseInfoProvider,

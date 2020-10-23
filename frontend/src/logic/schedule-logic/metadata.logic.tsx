@@ -1,4 +1,5 @@
 import { WeekDay } from "../../state/models/schedule-data/month-info.model";
+import { MetaDataSectionKey } from "../models/metadata-section.model";
 import { MetadataProvider } from "../schedule-provider";
 import { DataRow } from "./data-row";
 import { MonthLogic, VerboseDate } from "./month.logic";
@@ -9,11 +10,6 @@ export enum MonthLogicActionType {
 
 export class MetadataLogic extends BaseSectionLogic implements MetadataProvider {
   sectionKey = MetadataLogic.name;
-
-  private translations = {
-    dates_key: "Dni miesiąca",
-  };
-
   private _frozenShifts: [number, number][] = [];
   public changeShiftFrozenState(workerIndex: number, index: number) {
     let blockedPairInd = this._frozenShifts.findIndex(
@@ -37,10 +33,6 @@ export class MetadataLogic extends BaseSectionLogic implements MetadataProvider 
   ) {
     super();
     this.monthLogic = new MonthLogic(this.month, _year, monthDates, daysFromPreviousMonthExists);
-  }
-
-  tryUpdate(dataRow: DataRow) {
-    throw new Error("Method not implemented.");
   }
 
   public get verboseDates(): VerboseDate[] {
@@ -79,6 +71,6 @@ export class MetadataLogic extends BaseSectionLogic implements MetadataProvider 
   }
 
   public get sectionData(): DataRow[] {
-    return [new DataRow(this.translations.dates_key, this.dayNumbers)];
+    return [new DataRow(MetaDataSectionKey.MonthDays, this.dayNumbers)];
   }
 }
