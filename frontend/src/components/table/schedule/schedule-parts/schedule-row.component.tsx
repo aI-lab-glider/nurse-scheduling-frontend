@@ -127,7 +127,9 @@ export function ScheduleRowComponent({
         value={dataRowState.rowKey || ""}
         isSelected={false}
         isBlocked={false}
-        onContextMenu={() => {}}
+        onContextMenu={() => {
+          console.log("Show context menu");
+        }}
         isPointerOn={false}
         onClick={() => onRowKeyClick && onRowKeyClick()}
       />

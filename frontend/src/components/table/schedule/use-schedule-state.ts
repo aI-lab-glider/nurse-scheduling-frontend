@@ -4,6 +4,7 @@ import { ScheduleLogic } from "../../../logic/schedule-logic/schedule.logic";
 import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-data.model";
 import { ScheduleComponentState, scheduleInitialState } from "./schedule-state.model";
 
+// eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface useScheduleStateReturn {
   scheduleLocalState: ScheduleComponentState;
   setNewSchedule: (scheduleModel: ScheduleDataModel) => void;

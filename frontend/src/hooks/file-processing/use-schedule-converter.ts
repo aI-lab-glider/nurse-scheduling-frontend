@@ -6,6 +6,7 @@ import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-dat
 import { ScheduleErrorModel } from "../../state/models/schedule-data/schedule-error.model";
 import { useFileReader } from "./use-file-reader";
 
+// eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface useScheduleConverterOutput {
   scheduleModel?: ScheduleDataModel;
   scheduleSheet?: Array<Object>;
