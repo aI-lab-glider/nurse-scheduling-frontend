@@ -12,7 +12,8 @@ export class ArrayHelper {
     /* eslint-enable @typescript-eslint/no-explicit-any */
   }
 
-  public static arrayToObject<TIn, TOut extends Object>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public static arrayToObject<TIn, TOut extends Record<string, any>>(
     array: TIn[],
     keySelector: (item: TIn) => string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

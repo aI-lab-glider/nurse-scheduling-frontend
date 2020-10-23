@@ -17,7 +17,8 @@ export class ScheduleParser implements ScheduleProvider {
 
   readonly schedule: Schedule;
 
-  constructor(schedule: Array<Object>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(schedule: Array<Record<string, any>>) {
     schedule = schedule.map((i) => new DataRowParser(i));
     [this.metadataProvider, schedule] = this.initMetadataAndCleanUp(schedule as DataRowParser[]);
     [

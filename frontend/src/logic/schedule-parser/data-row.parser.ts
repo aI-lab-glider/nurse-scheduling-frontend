@@ -5,7 +5,8 @@ export class DataRowParser {
   private data: string[];
   public isShiftRow: boolean;
 
-  constructor(data: Object) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(data: Record<string, any>) {
     this.data = Object.values(data).map((x) => x?.toString() || null);
     this.isShiftRow = this.checkShiftRowPattern();
   }

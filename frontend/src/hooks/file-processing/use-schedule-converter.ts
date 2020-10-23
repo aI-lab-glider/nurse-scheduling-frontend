@@ -9,7 +9,8 @@ import { useFileReader } from "./use-file-reader";
 // eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface useScheduleConverterOutput {
   scheduleModel?: ScheduleDataModel;
-  scheduleSheet?: Array<Object>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  scheduleSheet?: Array<Record<string, any>>;
   setSrcFile: (srcFile: File) => void;
   scheduleErrors: ScheduleErrorModel[];
 }
@@ -38,7 +39,10 @@ export function useScheduleConverter(): useScheduleConverterOutput {
       return scheduleSheet.slice(0, end);
     };
 
-    const convertBinaryToObjectArray = (content: ArrayBuffer | undefined): Array<Object> => {
+    const convertBinaryToObjectArray = (
+      content: ArrayBuffer | undefined
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ): Array<Record<string, any>> => {
       if (!content) {
         return [];
       }
@@ -55,7 +59,8 @@ export function useScheduleConverter(): useScheduleConverterOutput {
     const parsedFileContent = convertBinaryToObjectArray(fileContent);
     setScheduleSheet(parsedFileContent);
     if (Object.keys(parsedFileContent).length !== 0) {
-      const parser = new ScheduleParser(parsedFileContent as Array<Object>);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const parser = new ScheduleParser(parsedFileContent as Array<Record<string, any>>);
       setScheduleErrors([
         ...parser.nurseInfoProvider.errors,
         ...parser.babysitterInfoProvider.errors,
