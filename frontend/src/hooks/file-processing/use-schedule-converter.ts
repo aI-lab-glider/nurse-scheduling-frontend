@@ -20,10 +20,11 @@ export function useScheduleConverter(): useScheduleConverterOutput {
   const [scheduleModel, setScheduleModel] = useState<ScheduleDataModel>();
 
   function findDataEnd(scheduleSheet: Array<object>) {
-    let stopEmptyRowsCount = 4;
+    const stopEmptyRowsCount = 4;
     let actualEmptyRowsCount = 0;
-    for (var i = 0; actualEmptyRowsCount < stopEmptyRowsCount; ++i) {
-      let row = new DataRowParser(scheduleSheet[i]);
+    let i;
+    for (i = 0; actualEmptyRowsCount < stopEmptyRowsCount; ++i) {
+      const row = new DataRowParser(scheduleSheet[i]);
       if (row.isEmpty) actualEmptyRowsCount += 1;
       else actualEmptyRowsCount = 0;
     }
@@ -32,7 +33,7 @@ export function useScheduleConverter(): useScheduleConverterOutput {
 
   useEffect(() => {
     const cropToData = (scheduleSheet: Array<object>) => {
-      let end = findDataEnd(scheduleSheet);
+      const end = findDataEnd(scheduleSheet);
       return scheduleSheet.slice(0, end);
     };
 
@@ -41,16 +42,16 @@ export function useScheduleConverter(): useScheduleConverterOutput {
         return [];
       }
 
-      let workbook = XLSXParser.read(content, { type: "array" });
+      const workbook = XLSXParser.read(content, { type: "array" });
 
-      let scheduleSheet = XLSXParser.utils.sheet_to_json(Object.values(workbook.Sheets)[0], {
+      const scheduleSheet = XLSXParser.utils.sheet_to_json(Object.values(workbook.Sheets)[0], {
         defval: null,
         header: 1,
       }) as Array<object>;
       return cropToData(scheduleSheet);
     };
 
-    let parsedFileContent = convertBinaryToObjectArray(fileContent);
+    const parsedFileContent = convertBinaryToObjectArray(fileContent);
     setScheduleSheet(parsedFileContent);
     if (Object.keys(parsedFileContent).length !== 0) {
       const parser = new ScheduleParser(parsedFileContent as Array<Object>);

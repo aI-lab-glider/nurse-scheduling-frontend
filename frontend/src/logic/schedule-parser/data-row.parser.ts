@@ -30,7 +30,7 @@ export class DataRowParser {
   }
 
   public rowData(includeNulls = false, includeKey = false) {
-    let keyPosition = 1;
+    const keyPosition = 1;
     return includeKey
       ? this.data.filter((c) => includeNulls || c != null)
       : this.data.filter((c) => includeNulls || c != null).slice(keyPosition);
@@ -62,7 +62,7 @@ export class DataRowParser {
   private checkShiftRowPattern(): boolean {
     const containsNotEmptyKey = this.data[0] !== null && this.data[0] !== "";
 
-    let containsShiftCode = this.data.filter((c) => c in ShiftCode).length !== 0;
+    const containsShiftCode = this.data.filter((c) => c in ShiftCode).length !== 0;
 
     // TODO: Validate constraint with new schedules
     const dataLen = this.data.length;

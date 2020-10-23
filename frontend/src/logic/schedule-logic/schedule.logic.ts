@@ -85,7 +85,7 @@ export class ScheduleLogic implements ScheduleProvider {
   }
 
   getWorkerTypes() {
-    let result = {};
+    const result = {};
     this.babysitterInfoProvider.getWorkers().forEach((babysitter) => {
       result[babysitter] = WorkerType.OTHER;
     });
@@ -132,11 +132,11 @@ export class ScheduleLogic implements ScheduleProvider {
   }
 
   public findRowByKey(schedule, key: string): [DataRow | undefined, number] {
-    let index = schedule.findIndex(
+    const index = schedule.findIndex(
       (row: DataRow) =>
         !row.isEmpty && StringHelper.getRawValue(row.rowKey) === StringHelper.getRawValue(key)
     );
-    let data = schedule[index];
+    const data = schedule[index];
     return [data, index];
   }
 
@@ -157,7 +157,7 @@ export class ScheduleLogic implements ScheduleProvider {
   }
 
   public updateExtraWorkersSection(newSectionData: DataRow[]) {
-    let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
+    const data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
     this.extraWorkersInfoProvider = new ExtraWorkersLogic({ ...data });
   }
 

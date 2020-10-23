@@ -12,19 +12,19 @@ export class DataRow implements DataRowModel {
   }
 
   public rowData(includeNulls = false, includeKey = false) {
-    let filteredRow = this.data.filter((c) => includeNulls || c != null);
+    const filteredRow = this.data.filter((c) => includeNulls || c != null);
     return includeKey ? [this.key, ...filteredRow] : filteredRow;
   }
 
   public updateData(updateCallback: (row: string[]) => any[]): DataRow {
-    let data = this.rowData(true, false);
+    const data = this.rowData(true, false);
     this.data = updateCallback(data);
     return this;
   }
 
   public setValue(indexes: number[], value: string) {
-    let data = this.rowData(true, false);
-    for (let index of indexes) {
+    const data = this.rowData(true, false);
+    for (const index of indexes) {
       data[index] = value;
     }
     this.data = [...data];

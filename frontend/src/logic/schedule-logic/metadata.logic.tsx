@@ -12,7 +12,7 @@ export class MetadataLogic extends BaseSectionLogic implements MetadataProvider 
   sectionKey = MetadataLogic.name;
   private _frozenShifts: [number, number][] = [];
   public changeShiftFrozenState(workerIndex: number, index: number) {
-    let blockedPairInd = this._frozenShifts.findIndex(
+    const blockedPairInd = this._frozenShifts.findIndex(
       (pair) => pair[0] === workerIndex && pair[1] === index
     );
     if (blockedPairInd !== -1) {

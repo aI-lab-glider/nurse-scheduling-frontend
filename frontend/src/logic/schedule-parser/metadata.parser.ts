@@ -41,7 +41,7 @@ export class MetaDataParser implements MetadataProvider {
       // TODO implement logger
       return false;
     }
-    let firstDayIndex = daysRow.rowData(true, false).map(parseInt).indexOf(1);
+    const firstDayIndex = daysRow.rowData(true, false).map(parseInt).indexOf(1);
     return firstDayIndex !== 0;
   }
 
@@ -70,7 +70,7 @@ export class MetaDataParser implements MetadataProvider {
   }
 
   public get dayNumbersAsDataRow(): DataRowParser {
-    let datesAsObject = this.monthLogic.dates.reduce(
+    const datesAsObject = this.monthLogic.dates.reduce(
       (storage, date, index) => {
         return { ...storage, [index + " "]: date };
       },

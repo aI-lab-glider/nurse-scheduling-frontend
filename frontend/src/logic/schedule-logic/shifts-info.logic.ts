@@ -58,7 +58,7 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
   }
 
   private mockWorkersWorkTime(): { [key: string]: number } {
-    let workerDict = {};
+    const workerDict = {};
     Object.keys(this.shifts).forEach((key) => (workerDict[key] = 1.0));
     return workerDict;
   }

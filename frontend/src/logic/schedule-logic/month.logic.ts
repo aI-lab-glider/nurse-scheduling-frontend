@@ -49,7 +49,7 @@ export class MonthLogic {
   }
 
   private generateMonthDates(monthNumber: number, year: string): number[] {
-    let dates: number[] = [];
+    const dates: number[] = [];
     const month = Object.values(TranslationHelper.monthTranslations)[monthNumber];
     let day = 1;
     while (this.isDateBelongsToMonth(day, month, year)) {
@@ -89,7 +89,7 @@ export class MonthLogic {
     year: string,
     daysFromPreviousMonthExists: boolean
   ): VerboseDate[] {
-    let verboseDates: VerboseDate[] = [];
+    const verboseDates: VerboseDate[] = [];
     // declare array by hand instead of using Object.values(WeekDay), to be sure
     // that order of day will always be consistent with js-function Date.getDay()
     const weekDays = [
@@ -101,14 +101,14 @@ export class MonthLogic {
       WeekDay.FR,
       WeekDay.SA,
     ];
-    for (let day of this.monthDates) {
+    for (const day of this.monthDates) {
       if (day === 1) {
         daysFromPreviousMonthExists = false;
       }
       const month = Object.values(TranslationHelper.monthTranslations)[
         daysFromPreviousMonthExists ? monthNumber - 1 : monthNumber
       ];
-      let date = new Date(`${day} ${month} ${year}`);
+      const date = new Date(`${day} ${month} ${year}`);
       verboseDates.push({
         date: day,
         dayOfWeek: weekDays[date.getDay()],
@@ -121,7 +121,7 @@ export class MonthLogic {
     return verboseDates;
   }
   private isDateFrozen(date: Date, dayBelongToPreviousMonth: boolean) {
-    let today = new Date();
+    const today = new Date();
     return (
       (date.getDate() < today.getDate() && date.getMonth() <= today.getMonth()) ||
       date.getFullYear() < today.getFullYear() ||

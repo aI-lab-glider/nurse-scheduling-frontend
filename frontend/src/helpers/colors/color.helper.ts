@@ -19,7 +19,7 @@ export class ColorHelper {
     isFrozen?: boolean,
     ignoreFrozenState: boolean = false
   ): CellColorSet {
-    let colorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET;
+    const colorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET;
     switch (shift) {
       case ShiftCode.D:
         colorSet.textColor = Colors.DARK_GREEN;

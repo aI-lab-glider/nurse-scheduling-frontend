@@ -32,7 +32,7 @@ export class ShiftsInfoParser implements ShiftsProvider {
   }
 
   private mockAvailableWorkersWorkTime(): { [key: string]: number } {
-    let workerDict = {};
+    const workerDict = {};
     Object.keys(this.getWorkerShifts()).forEach((key) => (workerDict[key] = 1.0));
     return workerDict;
   }
