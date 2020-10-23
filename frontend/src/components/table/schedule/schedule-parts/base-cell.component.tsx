@@ -13,6 +13,7 @@ export function BaseCellComponent({
   onKeyDown,
   onContextMenu,
   onClick,
+  onBlur,
 }: CellOptions) {
   const inputRef = React.createRef<HTMLInputElement>();
 
@@ -35,6 +36,9 @@ export function BaseCellComponent({
       }}
       onKeyDown={(e) => {
         onKeyDown && onKeyDown(inputRef.current?.value || value, e);
+      }}
+      onBlur={(e) => {
+        onBlur && onBlur();
       }}
     >
       {isPointerOn && !isBlocked && (

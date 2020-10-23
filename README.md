@@ -1,4 +1,4 @@
-# Nurse Scheduling Problem Solver
+# Nurse Scheduling Problem 
 
 The algorithm implementation is a part of solution created for [Fundacja Rodzin Adopcyjnych](https://adopcja.org.pl), the adoption foundation in Warsaw (Poland) during Project Summer [AILab](http://www.ailab.agh.edu.pl) & [Glider](http://www.glider.agh.edu.pl) 2020 event. The aim of the system is to improve the operation of the foundation by easily and quickly creating work schedules for its employees and volunteers. So far, this has been done manually in spreadsheets, which is a cumbersome and tedious job.
 
@@ -12,24 +12,22 @@ The system consists of three components which are on two GitHub repositories:
 
 This repository contains the frontend web application, and also a mock backend server created for testing purposes.
 
-## Installing Web App
+## Running an app
 
-`npm install`
-
-## Running Web App
-
-`npm start`
-
-## Preparing Mock Backend Server
-
+```
+git clone https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend.git nurse-scheduling
+cd nurse-scheduling/frontend
+npm install
+npm start
+```
+## Running Mock Backend Server
 Have python, pip and venv installed, cd into backend/server, then
 
-`python3 -m venv venv`
-`source venv/bin/activate`
-`pip install -r requirements.txt`
-
-## Running Mock Backend Server
-
-`source venv/bin/activate`
-`export FLASK_APP=example_server.py`
-`python -m flask run`
+```
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+source venv/bin/activate
+export FLASK_APP=example_server.py
+python -m flask run
+```

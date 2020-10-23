@@ -15,4 +15,5 @@ export interface CellOptions {
   onClick?: () => void;
   onContextMenu: () => void;
   onKeyDown?: (cellValue: string, event: React.KeyboardEvent) => void;
+  onBlur?: () => void;
 }

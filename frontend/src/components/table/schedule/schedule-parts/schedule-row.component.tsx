@@ -16,12 +16,14 @@ export interface ScheduleRowOptions {
   index: number;
   dataRow: DataRow;
   sectionKey?: string;
+  showSelectedCells?: boolean;
   cellComponent?: (cellOptions: CellOptions) => JSX.Element;
   onKeyDown?: (cellIndex: number, event: React.KeyboardEvent) => void;
   onClick?: (cellIndex: number) => void;
   onStateUpdate?: (row: DataRow) => void;
   pointerPosition?: number;
   onRowKeyClick?: () => void;
+  onBlur?: () => void;
 }
 
 export function ScheduleRowComponent({
@@ -29,11 +31,13 @@ export function ScheduleRowComponent({
   dataRow,
   sectionKey,
   cellComponent: CellComponent = BaseCellComponent,
+  showSelectedCells,
   pointerPosition = -1,
   onKeyDown,
   onClick,
   onStateUpdate,
   onRowKeyClick,
+  onBlur,
   uuid,
 }: ScheduleRowOptions) {
   const scheduleLogic = useContext(ScheduleLogicContext);
@@ -106,9 +110,11 @@ export function ScheduleRowComponent({
       }
       setPreviousDirectionKey(DirectionKey[event.key]);
     } else if (
-      DirectionKey[event.key] || // if moves in any direction withour CTRL - disable selection
+      event.key === DirectionKey.ArrowRight ||
+      event.key === DirectionKey.ArrowLeft || // if moves in any direction withour CTRL - disable selection
       event.key === CellManagementKeys.Escape
     ) {
+      setSelectedCells([]);
       setSelectionMode(false);
     }
     onKeyDown && onKeyDown(cellIndex, event);
@@ -131,17 +137,18 @@ export function ScheduleRowComponent({
             index={cellIndex}
             key={`${dataRowState.rowKey}_${cellData}${cellIndex}${isFrozen(cellIndex)}_${uuid}}`}
             value={cellData}
-            isSelected={selectedCells.includes(cellIndex)}
+            isSelected={(showSelectedCells || false) && selectedCells.includes(cellIndex)}
             style={ColorHelper.getShiftColor(
               cellData,
               verboseDates?.[cellIndex],
               isFrozen(cellIndex)
             )}
-            isPointerOn={cellIndex === pointerPosition}
+            isPointerOn={(showSelectedCells || false) && cellIndex === pointerPosition}
             isBlocked={isFrozen(cellIndex)}
             onKeyDown={(cellValue, event) => handleKeyPress(cellIndex, cellValue, event)}
             onContextMenu={() => onContextMenu(cellIndex)}
             onClick={() => onClick && onClick(cellIndex)}
+            onBlur={() => onBlur && onBlur()}
           />
         );
       })}
