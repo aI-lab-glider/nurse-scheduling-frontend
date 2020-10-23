@@ -10,7 +10,7 @@ import { ShiftsSectionComponent } from "./sections/shifts-section/shifts-section
 import { ScheduleLogicContext, useScheduleState } from "./use-schedule-state";
 import { ExtraWorkersSection } from "./sections/extra-workers-section/extra-workers-section.components";
 
-export function ScheduleComponent() {
+export function ScheduleComponent(): JSX.Element {
   const scheduleModel = useSelector(
     (state: ApplicationStateModel) => state.scheduleData,
     (left, right) => left?.schedule_info?.UUID === right?.schedule_info?.UUID
@@ -22,7 +22,7 @@ export function ScheduleComponent() {
     if (scheduleModel?.isNew) {
       setNewSchedule(scheduleModel);
     }
-  }, [scheduleModel]);
+  }, [scheduleModel, setNewSchedule]);
 
   return (
     <React.Fragment>

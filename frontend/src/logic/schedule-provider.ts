@@ -42,6 +42,7 @@ export class Schedule {
     this.provider = provider;
   }
 
+  /* eslint-disable @typescript-eslint/camelcase */
   public getDataModel(): ScheduleDataModel {
     return {
       schedule_info: {
@@ -60,7 +61,7 @@ export class Schedule {
         dates: this.provider.metadataProvider?.dates ?? [],
         extra_workers: this.provider.extraWorkersInfoProvider.extraWorkers ?? [],
       },
-      worker_info: {
+      employee_info: {
         type: this.provider.getWorkerTypes(),
         time: {
           ...this.provider.babysitterInfoProvider.availableWorkersWorkTime(),
@@ -69,4 +70,5 @@ export class Schedule {
       },
     };
   }
+  /* eslint-enable @typescript-eslint/camelcase */
 }

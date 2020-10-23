@@ -8,6 +8,7 @@ export class MetaDataParser implements MetadataProvider {
   private monthLogic: MonthLogic;
 
   constructor(headerRow: DataRowParser, private daysRow: DataRowParser) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [month, year, hours] = headerRow.findValues(
       MetaDataSectionKey.Month,
       MetaDataSectionKey.Year,
@@ -29,19 +30,19 @@ export class MetaDataParser implements MetadataProvider {
       .filter((i) => i <= 31);
   }
 
-  public get daysFromPreviousMonthExists() {
+  public get daysFromPreviousMonthExists(): boolean {
     return this._daysFromPreviousMonthExists(this.daysRow);
   }
 
-  public get dates() {
+  public get dates(): number[] {
     return this.monthLogic.dates;
   }
-  private _daysFromPreviousMonthExists(daysRow?: DataRowParser) {
+  private _daysFromPreviousMonthExists(daysRow?: DataRowParser): boolean {
     if (!daysRow) {
       // TODO implement logger
       return false;
     }
-    let firstDayIndex = daysRow.rowData(true, false).map(parseInt).indexOf(1);
+    const firstDayIndex = daysRow.rowData(true, false).map(parseInt).indexOf(1);
     return firstDayIndex !== 0;
   }
 
@@ -50,10 +51,12 @@ export class MetaDataParser implements MetadataProvider {
       .filter((date) => date.isFrozen)
       .map((date, index) => [0, index + 1]);
   }
-  public get monthNumber() {
+
+  public get monthNumber(): number {
     return this.monthLogic.monthNumber;
   }
-  public get dayCount() {
+
+  public get dayCount(): number {
     return this.monthLogic.dayCount;
   }
 
@@ -70,7 +73,7 @@ export class MetaDataParser implements MetadataProvider {
   }
 
   public get dayNumbersAsDataRow(): DataRowParser {
-    let datesAsObject = this.monthLogic.dates.reduce(
+    const datesAsObject = this.monthLogic.dates.reduce(
       (storage, date, index) => {
         return { ...storage, [index + " "]: date };
       },
@@ -79,11 +82,11 @@ export class MetaDataParser implements MetadataProvider {
     return new DataRowParser(datesAsObject);
   }
 
-  public get validDataStart() {
+  public get validDataStart(): number {
     return 0;
   }
 
-  public get validDataEnd() {
+  public get validDataEnd(): number {
     return this.monthLogic.dates.length - 1;
   }
 }

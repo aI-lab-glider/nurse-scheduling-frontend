@@ -6,9 +6,11 @@ import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-dat
 import { ScheduleErrorModel } from "../../state/models/schedule-data/schedule-error.model";
 import { useFileReader } from "./use-file-reader";
 
+// eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface useScheduleConverterOutput {
   scheduleModel?: ScheduleDataModel;
-  scheduleSheet?: Array<Object>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  scheduleSheet?: Array<Record<string, any>>;
   setSrcFile: (srcFile: File) => void;
   scheduleErrors: ScheduleErrorModel[];
 }
@@ -19,11 +21,12 @@ export function useScheduleConverter(): useScheduleConverterOutput {
   const [fileContent, setSrcFile] = useFileReader();
   const [scheduleModel, setScheduleModel] = useState<ScheduleDataModel>();
 
-  function findDataEnd(scheduleSheet: Array<object>) {
-    let stopEmptyRowsCount = 4;
+  function findDataEnd(scheduleSheet: Array<object>): number {
+    const stopEmptyRowsCount = 4;
     let actualEmptyRowsCount = 0;
-    for (var i = 0; actualEmptyRowsCount < stopEmptyRowsCount; ++i) {
-      let row = new DataRowParser(scheduleSheet[i]);
+    let i;
+    for (i = 0; actualEmptyRowsCount < stopEmptyRowsCount; ++i) {
+      const row = new DataRowParser(scheduleSheet[i]);
       if (row.isEmpty) actualEmptyRowsCount += 1;
       else actualEmptyRowsCount = 0;
     }
@@ -31,29 +34,33 @@ export function useScheduleConverter(): useScheduleConverterOutput {
   }
 
   useEffect(() => {
-    const cropToData = (scheduleSheet: Array<object>) => {
-      let end = findDataEnd(scheduleSheet);
+    const cropToData = (scheduleSheet: Array<object>): object[] => {
+      const end = findDataEnd(scheduleSheet);
       return scheduleSheet.slice(0, end);
     };
 
-    const convertBinaryToObjectArray = (content: ArrayBuffer | undefined): Array<Object> => {
+    const convertBinaryToObjectArray = (
+      content: ArrayBuffer | undefined
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ): Array<Record<string, any>> => {
       if (!content) {
         return [];
       }
 
-      let workbook = XLSXParser.read(content, { type: "array" });
+      const workbook = XLSXParser.read(content, { type: "array" });
 
-      let scheduleSheet = XLSXParser.utils.sheet_to_json(Object.values(workbook.Sheets)[0], {
+      const scheduleSheet = XLSXParser.utils.sheet_to_json(Object.values(workbook.Sheets)[0], {
         defval: null,
         header: 1,
       }) as Array<object>;
       return cropToData(scheduleSheet);
     };
 
-    let parsedFileContent = convertBinaryToObjectArray(fileContent);
+    const parsedFileContent = convertBinaryToObjectArray(fileContent);
     setScheduleSheet(parsedFileContent);
     if (Object.keys(parsedFileContent).length !== 0) {
-      const parser = new ScheduleParser(parsedFileContent as Array<Object>);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const parser = new ScheduleParser(parsedFileContent as Array<Record<string, any>>);
       setScheduleErrors([
         ...parser.nurseInfoProvider.errors,
         ...parser.babysitterInfoProvider.errors,

@@ -10,7 +10,7 @@ export enum ScheduleErrorActionType {
 export function scheduleErrorsReducer(
   state: ScheduleErrorMessageModel[] = [],
   action: ActionModel<ScheduleErrorModel[]>
-) {
+): ScheduleErrorMessageModel[] {
   switch (action.type) {
     case ScheduleErrorActionType.UPDATE:
       return [...action.payload.map((e) => ErrorMessageHelper.getErrorMessage(e))];

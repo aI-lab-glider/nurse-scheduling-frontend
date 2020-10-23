@@ -19,16 +19,16 @@ import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors
 import "./problem-metadata.css";
 import { SnackbarComponent } from "./snackbar.component";
 
-function getWorkersCount(scheduleModel: ScheduleDataModel) {
+function getWorkersCount(scheduleModel: ScheduleDataModel): number[] {
   const {
     [WorkerType.NURSE]: nurseShifts,
     [WorkerType.OTHER]: babysitterShifts,
-  } = groupShiftsByWorkerType(scheduleModel.shifts || {}, scheduleModel.worker_info?.type || {});
+  } = groupShiftsByWorkerType(scheduleModel.shifts || {}, scheduleModel.employee_info?.type || {});
 
   return [Object.keys(babysitterShifts).length, Object.keys(nurseShifts).length];
 }
 
-export function ProblemMetadataComponent() {
+export function ProblemMetadataComponent(): JSX.Element {
   const [selectedDate, handleDateChange] = useState<Date>(new Date());
   const [numberOfNurses, setNumberOfNurses] = useState<number>(0);
   const [numberOfSitters, setNumberOfSitters] = useState<number>(0);
@@ -40,10 +40,10 @@ export function ProblemMetadataComponent() {
   const dispatcher = useDispatch();
   useEffect(() => {
     if (schedule) {
-      const { year, month_number } = schedule.schedule_info || {};
+      const { year, month_number: monthNumber } = schedule.schedule_info || {};
       const [babysitterCount, nurseCount] = getWorkersCount(schedule);
-      if (month_number && year) {
-        handleDateChange(MonthLogic.convertToDate(month_number, year));
+      if (monthNumber && year) {
+        handleDateChange(MonthLogic.convertToDate(monthNumber, year));
       }
 
       if (babysitterCount) {
@@ -55,13 +55,13 @@ export function ProblemMetadataComponent() {
     }
   }, [schedule]);
 
-  function showSnackbar(message) {
+  function showSnackbar(message: string): void {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
   }
 
-  function handleNumberOfNursesChange() {
-    const [babysitterCount, nurseCount] = getWorkersCount(schedule || {});
+  function handleNumberOfNursesChange(): void {
+    const nurseCount = getWorkersCount(schedule || {})[1];
 
     if (!nurseCount) {
       return;
@@ -73,8 +73,8 @@ export function ProblemMetadataComponent() {
     }
   }
 
-  function handleNumberOfSittersChange() {
-    const [babysitterCount, nurseCount] = getWorkersCount(schedule || {});
+  function handleNumberOfSittersChange(): void {
+    const babysitterCount = getWorkersCount(schedule || {})[0];
 
     if (!babysitterCount) {
       return;
@@ -86,9 +86,9 @@ export function ProblemMetadataComponent() {
     }
   }
 
-  async function onFixScheduleClicked() {
+  async function onFixScheduleClicked(): Promise<void> {
     if (schedule) {
-      const response = await backend.fixSchedule(schedule!);
+      const response = await backend.fixSchedule(schedule);
       dispatcher({
         type: ScheduleDataActionType.ADD_NEW,
         payload: response,
@@ -97,9 +97,9 @@ export function ProblemMetadataComponent() {
     }
   }
 
-  async function onShowErrorsClicked() {
+  async function onShowErrorsClicked(): Promise<void> {
     if (schedule) {
-      const response = await backend.getErrors(schedule!);
+      const response = await backend.getErrors(schedule);
       dispatcher({
         type: ScheduleErrorActionType.UPDATE,
         payload: response,
@@ -107,14 +107,20 @@ export function ProblemMetadataComponent() {
     }
   }
 
-  function textField(id, label, value, setFunction, onTextFieldBlur?) {
+  function textField(
+    id: string,
+    label: string,
+    value: number,
+    setFunction: (value: number) => void,
+    onTextFieldBlur?: () => void
+  ): JSX.Element {
     return (
       <TextField
         required
         id={id}
         label={label}
         value={value}
-        onChange={(e) => setFunction(e.target.value)}
+        onChange={(e): void => setFunction(parseInt(e.target.value))}
         onBlur={onTextFieldBlur}
       />
     );
@@ -130,7 +136,7 @@ export function ProblemMetadataComponent() {
           views={["year", "month"]}
           label="Z miesiąca"
           value={selectedDate}
-          onChange={(date) => {
+          onChange={(date): void => {
             if (date) {
               handleDateChange(date);
             }

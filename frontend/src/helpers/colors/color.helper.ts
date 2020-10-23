@@ -3,13 +3,14 @@ import { WeekDay } from "../../state/models/schedule-data/month-info.model";
 import { ShiftCode } from "../../state/models/schedule-data/shift-info.model";
 import { CellColorSet } from "./cell-color-set.model";
 import { Colors } from "./colors";
+import { Color } from "./color.model";
 
 export class ColorHelper {
   static get DEFAULT_COLOR_SET(): CellColorSet {
     return { textColor: Colors.BLACK, backgroundColor: Colors.WHITE };
   }
 
-  static getHighlightColor() {
+  static getHighlightColor(): Color {
     return Colors.LIGHT_BLUE.fade(0.4);
   }
 
@@ -17,9 +18,9 @@ export class ColorHelper {
     shift: ShiftCode,
     day?: VerboseDate,
     isFrozen?: boolean,
-    ignoreFrozenState: boolean = false
+    ignoreFrozenState = false
   ): CellColorSet {
-    let colorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET;
+    const colorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET;
     switch (shift) {
       case ShiftCode.D:
         colorSet.textColor = Colors.DARK_GREEN;
@@ -35,6 +36,7 @@ export class ColorHelper {
         break;
       case ShiftCode.U:
         colorSet.backgroundColor = Colors.LIME_GREEN;
+        break;
       case (ShiftCode.P, ShiftCode.PN, ShiftCode.R, ShiftCode.W):
         break;
     }
@@ -47,8 +49,8 @@ export class ColorHelper {
   static getDayColor(
     day?: VerboseDate,
     defaultColorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET,
-    isFrozen: boolean = false,
-    ignoreFrozenState: boolean = false
+    isFrozen = false,
+    ignoreFrozenState = false
   ): CellColorSet {
     if (!day) {
       return defaultColorSet;

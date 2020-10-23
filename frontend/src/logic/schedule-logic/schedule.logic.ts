@@ -33,7 +33,10 @@ export class ScheduleLogic implements ScheduleProvider {
     const {
       [WorkerType.NURSE]: nurseShifts,
       [WorkerType.OTHER]: babysitterShifts,
-    } = groupShiftsByWorkerType(scheduleModel.shifts || {}, scheduleModel.worker_info?.type || {});
+    } = groupShiftsByWorkerType(
+      scheduleModel.shifts || {},
+      scheduleModel.employee_info?.type || {}
+    );
 
     this.nurseInfoProvider = new ShiftsInfoLogic(nurseShifts || {}, WorkerType.NURSE);
 
@@ -69,14 +72,14 @@ export class ScheduleLogic implements ScheduleProvider {
     rowind: number,
     shiftIndex: number,
     updateLocalState: (updatedShifts: [number, number][]) => void
-  ) {
+  ): void {
     if (!this.metadataProvider) return;
     const updatedShifts = this.metadataProvider.changeShiftFrozenState(rowind, shiftIndex);
     updateLocalState && updateLocalState(updatedShifts);
     this.updateGlobalState();
   }
 
-  private updateGlobalState() {
+  private updateGlobalState(): void {
     const model = this.schedule.getDataModel();
     this.dispatchScheduleUpdate({
       type: ScheduleDataActionType.UPDATE,
@@ -84,8 +87,8 @@ export class ScheduleLogic implements ScheduleProvider {
     });
   }
 
-  getWorkerTypes() {
-    let result = {};
+  getWorkerTypes(): {} {
+    const result = {};
     this.babysitterInfoProvider.getWorkers().forEach((babysitter) => {
       result[babysitter] = WorkerType.OTHER;
     });
@@ -132,11 +135,11 @@ export class ScheduleLogic implements ScheduleProvider {
   }
 
   public findRowByKey(schedule, key: string): [DataRow | undefined, number] {
-    let index = schedule.findIndex(
+    const index = schedule.findIndex(
       (row: DataRow) =>
         !row.isEmpty && StringHelper.getRawValue(row.rowKey) === StringHelper.getRawValue(key)
     );
-    let data = schedule[index];
+    const data = schedule[index];
     return [data, index];
   }
 
@@ -146,7 +149,7 @@ export class ScheduleLogic implements ScheduleProvider {
     updateIndexes: number[],
     newValue: string,
     updateLocalState: (dataRow: DataRow) => void
-  ) {
+  ): void {
     const newDataRow = this.providers
       ?.find((provider) => provider.sectionKey === sectionKey)
       ?.updateDataRow(rowIndex, updateIndexes, newValue);
@@ -156,8 +159,9 @@ export class ScheduleLogic implements ScheduleProvider {
     }
   }
 
-  public updateExtraWorkersSection(newSectionData: DataRow[]) {
-    let data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
+  public updateExtraWorkersSection(newSectionData: DataRow[]): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
     this.extraWorkersInfoProvider = new ExtraWorkersLogic({ ...data });
   }
 
@@ -166,7 +170,7 @@ export class ScheduleLogic implements ScheduleProvider {
     newWorkerRow: DataRow,
     workerWorkTime: number,
     updateLocalState: (dataRow: DataRow[]) => void
-  ) {
+  ): void {
     const shiftsProvider = [this.nurseInfoProvider, this.babysitterInfoProvider];
     const newSectionContent = shiftsProvider
       ?.find((provider) => provider.sectionKey === sectionKey)
@@ -181,7 +185,7 @@ export class ScheduleLogic implements ScheduleProvider {
     sectionKey: string,
     newRow: DataRow,
     updateLocalState: (dataRow: DataRow[]) => void
-  ) {
+  ): void {
     const newSectionContent = this.providers
       ?.find((provider) => provider.sectionKey === sectionKey)
       ?.addDataRow(newRow);

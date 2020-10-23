@@ -2,7 +2,7 @@ import React from "react";
 import "./app.css";
 import { TableComponent } from "./components/table/table.component";
 import { ToolbarComponent } from "./components/toolbar/toolbar.component";
-function App() {
+function App(): JSX.Element {
   return (
     <React.Fragment>
       <div className="header">

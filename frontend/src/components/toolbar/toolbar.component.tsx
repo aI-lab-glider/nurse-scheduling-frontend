@@ -4,7 +4,7 @@ import { ProblemMetadataComponent } from "./problem-metadata/problem-metadata.co
 import "./toolbar.component.css";
 import ValidationDrawerComponent from "./validation-drawer/validation-drawer.component";
 
-export function ToolbarComponent() {
+export function ToolbarComponent(): JSX.Element {
   return (
     <div className="header">
       <ImportButtonsComponent />

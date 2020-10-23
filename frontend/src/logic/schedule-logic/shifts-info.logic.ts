@@ -21,7 +21,7 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
     this._availableWorkersWorkTime = this.mockWorkersWorkTime();
   }
 
-  workerWorkTime(workerName: string) {
+  workerWorkTime(workerName: string): number {
     return this._availableWorkersWorkTime[workerName];
   }
 
@@ -58,12 +58,12 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
   }
 
   private mockWorkersWorkTime(): { [key: string]: number } {
-    let workerDict = {};
+    const workerDict = {};
     Object.keys(this.shifts).forEach((key) => (workerDict[key] = 1.0));
     return workerDict;
   }
 
-  public tryUpdate(row: DataRow) {
+  public tryUpdate(row: DataRow): boolean {
     if (Object.keys(this.shifts).includes(row.rowKey)) {
       this.shifts[row.rowKey] = row;
       return true;
@@ -71,7 +71,7 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
     return false;
   }
 
-  public addWorker(worker: DataRow, workerWorkTime: number) {
+  public addWorker(worker: DataRow, workerWorkTime: number): DataRow[] {
     this._availableWorkersWorkTime[worker.rowKey] = workerWorkTime;
     return this.addDataRow(worker);
   }

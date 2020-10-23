@@ -5,16 +5,17 @@ export class DataRowParser {
   private data: string[];
   public isShiftRow: boolean;
 
-  constructor(data: Object) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(data: Record<string, any>) {
     this.data = Object.values(data).map((x) => x?.toString() || null);
     this.isShiftRow = this.checkShiftRowPattern();
   }
 
-  public get isEmpty() {
+  public get isEmpty(): boolean {
     return this.rowData(false, true).length === 0;
   }
 
-  public get rowKey() {
+  public get rowKey(): string {
     if (this.isEmpty) {
       throw new Error("Trying to access key from an empty row");
     }
@@ -29,13 +30,14 @@ export class DataRowParser {
     }
   }
 
-  public rowData(includeNulls = false, includeKey = false) {
-    let keyPosition = 1;
+  public rowData(includeNulls = false, includeKey = false): string[] {
+    const keyPosition = 1;
     return includeKey
       ? this.data.filter((c) => includeNulls || c != null)
       : this.data.filter((c) => includeNulls || c != null).slice(keyPosition);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public processRow(processingFunction: (row: DataRowParser) => any[]): DataRowParser {
     const rowKey = this.rowKey;
     const data = [rowKey, ...processingFunction(this)];
@@ -48,7 +50,7 @@ export class DataRowParser {
     return new DataRowParser(data);
   }
 
-  public findValue(key: string) {
+  public findValue(key: string): string {
     let data = this.data.find((cell) => StringHelper.includesEquvivalent(cell, key));
     data = StringHelper.getRawValue(data);
     key = StringHelper.getRawValue(key);
@@ -62,7 +64,7 @@ export class DataRowParser {
   private checkShiftRowPattern(): boolean {
     const containsNotEmptyKey = this.data[0] !== null && this.data[0] !== "";
 
-    let containsShiftCode = this.data.filter((c) => c in ShiftCode).length !== 0;
+    const containsShiftCode = this.data.filter((c) => c in ShiftCode).length !== 0;
 
     // TODO: Validate constraint with new schedules
     const dataLen = this.data.length;

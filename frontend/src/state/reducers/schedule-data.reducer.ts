@@ -13,8 +13,8 @@ export enum ScheduleDataActionType {
 export function scheduleDataReducer(
   state: ScheduleDataModel = {},
   action: ActionModel<ScheduleDataModel>
-) {
-  let scheduleModel = action.payload;
+): ScheduleDataModel {
+  const scheduleModel = action.payload;
   switch (action.type) {
     case ScheduleDataActionType.ADD_NEW:
       scheduleModel.isNew = true;
@@ -27,10 +27,12 @@ export function scheduleDataReducer(
     case MonthLogicActionType.UpdateFrozenDates:
       scheduleModel.isNew = false;
       return Object.assign({}, state, {
+        /* eslint-disable @typescript-eslint/camelcase */
         month_info: {
           ...state.month_info,
           frozen_shifts: action.payload,
         } as MonthInfoModel,
+        /* eslint-enable @typescript-eslint/camelcase */
       });
     default:
       return state;

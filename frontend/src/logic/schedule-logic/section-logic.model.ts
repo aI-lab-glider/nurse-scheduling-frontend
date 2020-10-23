@@ -10,17 +10,16 @@ export interface SectionLogic {
 export abstract class BaseSectionLogic implements SectionLogic {
   abstract sectionKey: string;
 
-  addDataRow(newRow: DataRow) {
+  addDataRow(newRow: DataRow): DataRow[] {
     this.sectionData = [...this.sectionData, newRow];
     return this.sectionData;
   }
 
   updateDataRow(rowIndex: number, updateIndexes: number[], newValue: string): DataRow {
-    const updatedDataRow = this.sectionData[rowIndex].updateData((data) => {
+    return this.sectionData[rowIndex].updateData((data) => {
       updateIndexes.forEach((ind) => (data[ind] = newValue));
       return data;
     });
-    return updatedDataRow;
   }
   abstract get sectionData(): DataRow[];
   abstract set sectionData(dataRows: DataRow[]);

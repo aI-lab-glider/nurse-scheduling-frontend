@@ -13,7 +13,7 @@ import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
 import { ExportFormatter } from "../../../helpers/export/export-formatter";
-export function ImportButtonsComponent() {
+export function ImportButtonsComponent(): JSX.Element {
   const [open, setOpen] = useState(false);
   const { scheduleModel, setSrcFile, scheduleErrors } = useScheduleConverter();
   const anchorRef = useRef(null);
@@ -34,20 +34,20 @@ export function ImportButtonsComponent() {
     }
   }, [scheduleModel, scheduleDipatcher, scheduleErrors]);
 
-  function handleImport(event: ChangeEvent<HTMLInputElement>) {
+  function handleImport(event: ChangeEvent<HTMLInputElement>): void {
     const file = event.target?.files && event.target?.files[0];
     if (file) {
       setSrcFile(file);
     }
   }
 
-  function handleExport() {
+  function handleExport(): void {
     if (stateScheduleModel) {
       new ExportFormatter(stateScheduleModel).formatAndSave();
     }
   }
 
-  function handleToggle() {
+  function handleToggle(): void {
     setOpen((prevVal) => !prevVal);
   }
 
@@ -59,7 +59,7 @@ export function ImportButtonsComponent() {
       </Button>
       <Popper open={open} anchorEl={anchorRef.current}>
         <ClickAwayListener
-          onClickAway={() => {
+          onClickAway={(): void => {
             setOpen(false);
           }}
         >
@@ -67,13 +67,13 @@ export function ImportButtonsComponent() {
             <Button component="label">
               Wczytaj
               <input
-                onChange={(event) => handleImport(event)}
+                onChange={(event): void => handleImport(event)}
                 style={{ display: "none" }}
                 type="file"
               />
             </Button>
 
-            <Button onClick={() => handleExport()}>Zapisz jako...</Button>
+            <Button onClick={(): void => handleExport()}>Zapisz jako...</Button>
           </ButtonGroup>
         </ClickAwayListener>
       </Popper>

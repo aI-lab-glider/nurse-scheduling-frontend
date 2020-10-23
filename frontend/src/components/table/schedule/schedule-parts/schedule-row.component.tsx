@@ -39,7 +39,7 @@ export function ScheduleRowComponent({
   onRowKeyClick,
   onBlur,
   uuid,
-}: ScheduleRowOptions) {
+}: ScheduleRowOptions): JSX.Element {
   const scheduleLogic = useContext(ScheduleLogicContext);
   const [dataRowState, setDataRowState] = useState<DataRow>(dataRow);
   useEffect(() => {
@@ -57,12 +57,12 @@ export function ScheduleRowComponent({
   }, [selectionMode]);
   const verboseDates = scheduleLogic?.metadataProvider?.verboseDates;
 
-  function onContextMenu(cellIndex: number) {
+  function onContextMenu(cellIndex: number): void {
     if (scheduleLogic) {
       scheduleLogic.changeShiftFrozenState(index, cellIndex, setFrozenShifts);
     }
   }
-  function saveValue(newValue: string) {
+  function saveValue(newValue: string): void {
     if (sectionKey)
       scheduleLogic?.updateRow(
         sectionKey,
@@ -77,7 +77,7 @@ export function ScheduleRowComponent({
     setSelectedCells([]);
   }
 
-  function isFrozen(cellInd: number) {
+  function isFrozen(cellInd: number): boolean {
     return (
       verboseDates?.[cellInd]?.isFrozen ||
       !!frozenShifts.find((fS) => fS[0] === index && fS[1] === cellInd) ||
@@ -85,7 +85,7 @@ export function ScheduleRowComponent({
     );
   }
 
-  function toggleSelection(cellIndex: number) {
+  function toggleSelection(cellIndex: number): void {
     if (selectedCells.includes(cellIndex)) {
       setSelectedCells(
         selectedCells.filter((selectedCellIndex) => cellIndex !== selectedCellIndex)
@@ -95,7 +95,7 @@ export function ScheduleRowComponent({
     }
   }
 
-  function handleKeyPress(cellIndex: number, cellValue: string, event: React.KeyboardEvent) {
+  function handleKeyPress(cellIndex: number, cellValue: string, event: React.KeyboardEvent): void {
     if (event.key === CellManagementKeys.Enter) {
       saveValue(cellValue);
     }
@@ -127,9 +127,11 @@ export function ScheduleRowComponent({
         value={dataRowState.rowKey || ""}
         isSelected={false}
         isBlocked={false}
-        onContextMenu={() => {}}
+        onContextMenu={(): void => {
+          console.log("Show context menu");
+        }}
         isPointerOn={false}
-        onClick={() => onRowKeyClick && onRowKeyClick()}
+        onClick={(): void => onRowKeyClick && onRowKeyClick()}
       />
       {dataRowState.rowData(false).map((cellData, cellIndex) => {
         return (
@@ -145,10 +147,10 @@ export function ScheduleRowComponent({
             )}
             isPointerOn={(showSelectedCells || false) && cellIndex === pointerPosition}
             isBlocked={isFrozen(cellIndex)}
-            onKeyDown={(cellValue, event) => handleKeyPress(cellIndex, cellValue, event)}
-            onContextMenu={() => onContextMenu(cellIndex)}
-            onClick={() => onClick && onClick(cellIndex)}
-            onBlur={() => onBlur && onBlur()}
+            onKeyDown={(cellValue, event): void => handleKeyPress(cellIndex, cellValue, event)}
+            onContextMenu={(): void => onContextMenu(cellIndex)}
+            onClick={(): void => onClick && onClick(cellIndex)}
+            onBlur={(): void => onBlur && onBlur()}
           />
         );
       })}

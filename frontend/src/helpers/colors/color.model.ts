@@ -8,13 +8,14 @@ export class Color {
     public a: number = 1
   ) {}
 
-  public fade(opacity: number = 0.7) {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  public fade(opacity = 0.7): any {
     if (this.toString() === Colors.WHITE.toString()) return Colors.LIGHT_GREY.fade();
     this.a = opacity;
     return this;
   }
 
-  public toString() {
+  public toString(): string {
     return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
   }
 }

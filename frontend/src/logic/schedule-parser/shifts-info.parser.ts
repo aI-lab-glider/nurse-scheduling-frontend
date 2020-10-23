@@ -32,12 +32,12 @@ export class ShiftsInfoParser implements ShiftsProvider {
   }
 
   private mockAvailableWorkersWorkTime(): { [key: string]: number } {
-    let workerDict = {};
+    const workerDict = {};
     Object.keys(this.getWorkerShifts()).forEach((key) => (workerDict[key] = 1.0));
     return workerDict;
   }
 
-  public availableWorkersWorkTime() {
+  public availableWorkersWorkTime(): { [key: string]: number } {
     // TODO: implement actual parsing of worker work time
     return this.mockAvailableWorkersWorkTime();
   }
@@ -75,7 +75,8 @@ export class ShiftsInfoParser implements ShiftsProvider {
     });
   }
 
-  private logUnknownValue(date: number, worker: string, value: any) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private logUnknownValue(date: number, worker: string, value: any): void {
     this._parseErrors.push({
       code: ParseErrorCode.UNKNOWN_VALUE,
       day: date,

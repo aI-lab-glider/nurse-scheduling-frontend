@@ -17,7 +17,8 @@ export class ScheduleParser implements ScheduleProvider {
 
   readonly schedule: Schedule;
 
-  constructor(schedule: Array<Object>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(schedule: Array<Record<string, any>>) {
     schedule = schedule.map((i) => new DataRowParser(i));
     [this.metadataProvider, schedule] = this.initMetadataAndCleanUp(schedule as DataRowParser[]);
     [
@@ -30,16 +31,16 @@ export class ScheduleParser implements ScheduleProvider {
   }
 
   public findRowByKey(schedule, key: string): [DataRowParser | undefined, number] {
-    let index = schedule.findIndex(
+    const index = schedule.findIndex(
       (row) =>
         !row.isEmpty && StringHelper.getRawValue(row.rowKey) === StringHelper.getRawValue(key)
     );
-    let data = schedule[index];
+    const data = schedule[index];
     return [data, index];
   }
 
-  getWorkerTypes() {
-    let result = {};
+  getWorkerTypes(): {} {
+    const result = {};
     Object.keys(this.babysitterInfoProvider.getWorkerShifts()).forEach((babysitter) => {
       result[babysitter] = WorkerType.OTHER;
     });
@@ -50,13 +51,13 @@ export class ScheduleParser implements ScheduleProvider {
     return result;
   }
   private initMetadataAndCleanUp(schedule: DataRowParser[]): [MetaDataParser, DataRowParser[]] {
-    let [dataRow, start] = this.findRowByKey(schedule, MetaDataRowLabel);
+    const [dataRow, start] = this.findRowByKey(schedule, MetaDataRowLabel);
     if (!dataRow) {
       throw new Error("No metadata provided");
     }
     // Assumption made, that days are always go after metadata
-    let daysRow = schedule[start + 1];
-    let notSectionsRowsCountFromBeginning = 3;
+    const daysRow = schedule[start + 1];
+    const notSectionsRowsCountFromBeginning = 3;
     schedule = schedule.slice(start + notSectionsRowsCountFromBeginning);
     return [new MetaDataParser(dataRow, daysRow), schedule];
   }
@@ -91,8 +92,8 @@ export class ScheduleParser implements ScheduleProvider {
   }
 
   private findChildrenSection(schedule: DataRowParser[]): DataRowParser[] {
-    let start = schedule.findIndex((r) => !r.isEmpty);
-    let end = schedule.findIndex((r, index) => index > start && r.isEmpty);
+    const start = schedule.findIndex((r) => !r.isEmpty);
+    const end = schedule.findIndex((r, index) => index > start && r.isEmpty);
     return schedule.slice(start, end);
   }
 }

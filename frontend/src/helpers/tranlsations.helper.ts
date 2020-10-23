@@ -1,5 +1,5 @@
 export class TranslationHelper {
-  public static get monthTranslations() {
+  public static get monthTranslations(): { [key: string]: string } {
     return {
       styczeń: "january",
       luty: "february",

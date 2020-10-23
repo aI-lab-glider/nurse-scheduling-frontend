@@ -15,7 +15,7 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
     this._sectionData = DataRowHelper.dataRowsAsDataRowDict(processedSection);
   }
 
-  public get registeredChildrenNumber() {
+  public get registeredChildrenNumber(): number[] {
     return (
       this._sectionData[ChildrenSectionKey.RegisteredChildrenCount]
         ?.rowData(true, false)
@@ -24,17 +24,11 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
   }
 
   public get sectionData(): DataRowParser[] {
-    const values = Object.values(this._sectionData).filter((row) => !!row) as DataRowParser[];
-    return values;
+    return Object.values(this._sectionData).filter((row) => !!row) as DataRowParser[];
   }
 
   private isValidRow(row: DataRowParser): boolean {
     const validKey = Object.values(ChildrenSectionKey).find((k) => k === row.rowKey);
-    if (validKey) {
-      return true;
-    } else {
-      // TODO Add logger
-      return false;
-    }
+    return !!validKey;
   }
 }

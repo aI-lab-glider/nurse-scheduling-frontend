@@ -15,7 +15,7 @@ import "./shifts-section.css";
 import { ShiftsSectionOptions } from "./shifts-section.options";
 import { ShiftRowComponent } from "../../schedule-parts/shift-row.component";
 
-export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
+export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Element {
   const { data = [], workerType, uuid } = options;
   const scheduleLogic = useContext(ScheduleLogicContext);
   const [dataState, setDataState] = useState(data);
@@ -40,14 +40,14 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
       ? scheduleLogic?.nurseInfoProvider
       : scheduleLogic?.babysitterInfoProvider;
 
-  function addOrUpdateWorker(newRow: DataRow, workerTime: number) {
+  function addOrUpdateWorker(newRow: DataRow, workerTime: number): void {
     if (sectionInfoProvider)
       scheduleLogic?.addWorker(sectionInfoProvider.sectionKey, newRow, workerTime, (newState) =>
         setDataState([...newState])
       );
   }
 
-  function openWorkerModal(workerName?: string) {
+  function openWorkerModal(workerName?: string): void {
     let workerInfo = {};
     if (workerName && sectionInfoProvider) {
       workerInfo = { name: workerName, time: sectionInfoProvider.workerWorkTime(workerName) };
@@ -56,7 +56,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
     setIsOpened(true);
   }
 
-  function submit({ name, time }: WorkerInfo) {
+  function submit({ name, time }: WorkerInfo): void {
     if (!name || !time) return;
     let dataRow = dataState.find((row) => row.rowKey === name);
     if (!dataRow) {
@@ -75,7 +75,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
 
           <td>
             <div className="add-button">
-              <Button onClick={() => openWorkerModal()}>Dodaj</Button>
+              <Button onClick={(): void => openWorkerModal()}>Dodaj</Button>
             </div>
           </td>
         </tr>
@@ -88,7 +88,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions) {
         sectionKey={sectionInfoProvider?.sectionKey || ""}
         cellComponent={ShiftCellComponent}
         rowComponent={ShiftRowComponent}
-        onRowKeyClicked={(rowIndex) => openWorkerModal(dataState[rowIndex].rowKey)}
+        onRowKeyClicked={(rowIndex): void => openWorkerModal(dataState[rowIndex].rowKey)}
       />
       {modal}
     </React.Fragment>
