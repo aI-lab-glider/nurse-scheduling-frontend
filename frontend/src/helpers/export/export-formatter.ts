@@ -110,7 +110,7 @@ export class ExportFormatter {
       [WorkerType.OTHER]: [] as string[],
     };
     Object.keys(scheduleModel.shifts || {}).forEach((key) => {
-      const category = scheduleModel.worker_info?.type[key] ?? "";
+      const category = scheduleModel.employee_info?.type[key] ?? "";
       grouped[category].push([
         key,
         ...(scheduleModel?.shifts?.[key].map((s) => (s === ShiftCode.W ? " " : s)) || []),

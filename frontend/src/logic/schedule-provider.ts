@@ -61,7 +61,7 @@ export class Schedule {
         dates: this.provider.metadataProvider?.dates ?? [],
         extra_workers: this.provider.extraWorkersInfoProvider.extraWorkers ?? [],
       },
-      worker_info: {
+      employee_info: {
         type: this.provider.getWorkerTypes(),
         time: {
           ...this.provider.babysitterInfoProvider.availableWorkersWorkTime(),

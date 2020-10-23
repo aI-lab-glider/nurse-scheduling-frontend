@@ -6,7 +6,7 @@ import { ShiftInfoModel } from "./shift-info.model";
 export interface ScheduleDataModel {
   schedule_info?: ScheduleInfoModel;
   month_info?: MonthInfoModel;
-  worker_info?: WorkerInfoModel;
+  employee_info?: WorkerInfoModel;
   shifts?: ShiftInfoModel;
   isNew?: boolean;
 }

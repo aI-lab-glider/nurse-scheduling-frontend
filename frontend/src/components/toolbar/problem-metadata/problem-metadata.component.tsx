@@ -23,7 +23,7 @@ function getWorkersCount(scheduleModel: ScheduleDataModel): number[] {
   const {
     [WorkerType.NURSE]: nurseShifts,
     [WorkerType.OTHER]: babysitterShifts,
-  } = groupShiftsByWorkerType(scheduleModel.shifts || {}, scheduleModel.worker_info?.type || {});
+  } = groupShiftsByWorkerType(scheduleModel.shifts || {}, scheduleModel.employee_info?.type || {});
 
   return [Object.keys(babysitterShifts).length, Object.keys(nurseShifts).length];
 }

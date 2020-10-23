@@ -33,7 +33,10 @@ export class ScheduleLogic implements ScheduleProvider {
     const {
       [WorkerType.NURSE]: nurseShifts,
       [WorkerType.OTHER]: babysitterShifts,
-    } = groupShiftsByWorkerType(scheduleModel.shifts || {}, scheduleModel.worker_info?.type || {});
+    } = groupShiftsByWorkerType(
+      scheduleModel.shifts || {},
+      scheduleModel.employee_info?.type || {}
+    );
 
     this.nurseInfoProvider = new ShiftsInfoLogic(nurseShifts || {}, WorkerType.NURSE);
 
