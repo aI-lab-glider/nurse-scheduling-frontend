@@ -22,7 +22,7 @@ export function ScheduleComponent(): JSX.Element {
     if (scheduleModel?.isNew) {
       setNewSchedule(scheduleModel);
     }
-  }, [scheduleModel]);
+  }, [scheduleModel, setNewSchedule]);
 
   return (
     <React.Fragment>

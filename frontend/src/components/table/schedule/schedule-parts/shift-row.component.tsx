@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { CellOptions } from "./cell-options.model";
 import { ScheduleRowComponent, ScheduleRowOptions } from "./schedule-row.component";
@@ -19,33 +19,39 @@ export function ShiftRowComponent(options: ShiftRowOptions): JSX.Element {
   const { dataRow, index, sectionKey, uuid } = options;
   const scheduleLogic = useContext(ScheduleLogicContext);
   // TODO: Move to logic
-  function calculateExtraHours(dataRow: DataRow): [number, number, number] {
-    const rowData = dataRow?.rowData(true, false) ?? [];
-    const monthLogic = scheduleLogic?.metadataProvider?.monthLogic;
-    const workingNorm =
-      (monthLogic?.workingDaysNumber || 0) *
-      WORK_HOURS_PER_DAY *
-      ((scheduleLogic?.getProvider(
-        sectionKey ?? ""
-      ) as ShiftsInfoLogic)?.availableWorkersWorkTime()[dataRow.rowKey] || 1);
-    const numberOfPreviousMonthDays = monthLogic?.numberOfPreviousMonthDays;
-    const workingHours = rowData
-      .slice(numberOfPreviousMonthDays)
-      .reduce((previousValue, currentValue) => {
-        return previousValue + shiftCodeToWorkTime(currentValue);
-      }, 0);
-    return [workingNorm, workingHours, workingHours - workingNorm];
-  }
+  const calculateExtraHours = useCallback(
+    (dataRow: DataRow): [number, number, number] => {
+      const rowData = dataRow?.rowData(true, false) ?? [];
+      const monthLogic = scheduleLogic?.metadataProvider?.monthLogic;
+      const workingNorm =
+        (monthLogic?.workingDaysNumber || 0) *
+        WORK_HOURS_PER_DAY *
+        ((scheduleLogic?.getProvider(
+          sectionKey ?? ""
+        ) as ShiftsInfoLogic)?.availableWorkersWorkTime()[dataRow.rowKey] || 1);
+      const numberOfPreviousMonthDays = monthLogic?.numberOfPreviousMonthDays;
+      const workingHours = rowData
+        .slice(numberOfPreviousMonthDays)
+        .reduce((previousValue, currentValue) => {
+          return previousValue + shiftCodeToWorkTime(currentValue);
+        }, 0);
+      return [workingNorm, workingHours, workingHours - workingNorm];
+    },
+    [scheduleLogic, sectionKey]
+  );
 
-  function extendDataRowWithHoursInfo(dataRow: DataRow): DataRow {
-    const extraHours = calculateExtraHours(dataRow);
-    return new DataRow(dataRow.rowKey, [...dataRow.rowData(true, false), ...extraHours]);
-  }
+  const extendDataRowWithHoursInfo = useCallback(
+    (dataRow: DataRow): DataRow => {
+      const extraHours = calculateExtraHours(dataRow);
+      return new DataRow(dataRow.rowKey, [...dataRow.rowData(true, false), ...extraHours]);
+    },
+    [calculateExtraHours]
+  );
 
   const [extendedDataRow, setExtendedDataRow] = useState(extendDataRowWithHoursInfo(dataRow));
   useEffect(() => {
     dataRow && setExtendedDataRow(extendDataRowWithHoursInfo(dataRow));
-  }, [dataRow, uuid]);
+  }, [dataRow, extendDataRowWithHoursInfo, uuid]);
 
   return (
     <ScheduleRowComponent
