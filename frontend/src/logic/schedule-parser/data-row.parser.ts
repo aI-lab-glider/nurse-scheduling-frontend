@@ -36,6 +36,7 @@ export class DataRowParser {
       : this.data.filter((c) => includeNulls || c != null).slice(keyPosition);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public processRow(processingFunction: (row: DataRowParser) => any[]): DataRowParser {
     const rowKey = this.rowKey;
     const data = [rowKey, ...processingFunction(this)];

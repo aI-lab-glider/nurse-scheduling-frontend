@@ -75,6 +75,7 @@ export class ShiftsInfoParser implements ShiftsProvider {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private logUnknownValue(date: number, worker: string, value: any) {
     this._parseErrors.push({
       code: ParseErrorCode.UNKNOWN_VALUE,

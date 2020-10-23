@@ -1,6 +1,7 @@
 import { DataRowModel } from "../../state/models/data-row.model";
 
 export class DataRow implements DataRowModel {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(private key: string, private data: any[] = []) {}
 
   public get isEmpty() {
@@ -16,6 +17,7 @@ export class DataRow implements DataRowModel {
     return includeKey ? [this.key, ...filteredRow] : filteredRow;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public updateData(updateCallback: (row: string[]) => any[]): DataRow {
     const data = this.rowData(true, false);
     this.data = updateCallback(data);

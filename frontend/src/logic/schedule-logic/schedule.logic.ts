@@ -157,6 +157,7 @@ export class ScheduleLogic implements ScheduleProvider {
   }
 
   public updateExtraWorkersSection(newSectionData: DataRow[]) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
     this.extraWorkersInfoProvider = new ExtraWorkersLogic({ ...data });
   }

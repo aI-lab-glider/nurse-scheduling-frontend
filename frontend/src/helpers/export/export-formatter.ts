@@ -45,7 +45,7 @@ export class ExportFormatter {
     return [workbook, workbook.addWorksheet("grafik", { properties: { defaultColWidth: 5 } })];
   }
 
-  private addStyles(workSheet: xlsx.Worksheet, rows: any[]) {
+  private addStyles(workSheet: xlsx.Worksheet, rows: unknown[]) {
     const monthInfo = this.scheduleModel.schedule_info;
     const monthLogic = new MonthLogic(
       monthInfo?.month_number || 0,
