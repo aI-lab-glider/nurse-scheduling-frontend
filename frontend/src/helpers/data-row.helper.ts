@@ -13,7 +13,7 @@ export class DataRowHelper {
     );
   }
 
-  public static dataRowsAsDataRowDict<T extends DataRowModel>(dataRows: T[]) {
+  public static dataRowsAsDataRowDict<T extends DataRowModel>(dataRows: T[]): { [key: string]: T } {
     return ArrayHelper.arrayToObject(
       dataRows,
       (item) => item.rowKey,

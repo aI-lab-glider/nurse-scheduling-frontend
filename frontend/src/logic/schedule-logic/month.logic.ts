@@ -14,15 +14,15 @@ export class MonthLogic {
   private _verboseDates: VerboseDate[] = [];
   private monthDates: number[];
 
-  public get dates() {
+  public get dates(): number[] {
     return this._verboseDates.map((d) => d.date);
   }
 
-  public get dayCount() {
+  public get dayCount(): number {
     return this._verboseDates.length;
   }
 
-  public get daysOfWeek() {
+  public get daysOfWeek(): WeekDay[] {
     return this._verboseDates.map((d) => d.dayOfWeek);
   }
 
@@ -80,7 +80,7 @@ export class MonthLogic {
     return this._verboseDates.filter((date) => date.month !== month).length;
   }
 
-  public static convertToDate(monthNumber: number, year) {
+  public static convertToDate(monthNumber: number, year): Date {
     return new Date(`1 ${Object.values(TranslationHelper.monthTranslations)[monthNumber]} ${year}`);
   }
 
@@ -120,7 +120,7 @@ export class MonthLogic {
     }
     return verboseDates;
   }
-  private isDateFrozen(date: Date, dayBelongToPreviousMonth: boolean) {
+  private isDateFrozen(date: Date, dayBelongToPreviousMonth: boolean): boolean {
     const today = new Date();
     return (
       (date.getDate() < today.getDate() && date.getMonth() <= today.getMonth()) ||
@@ -129,7 +129,7 @@ export class MonthLogic {
     );
   }
 
-  private isDateBelongsToMonth(date: number, month: string, year: string) {
+  private isDateBelongsToMonth(date: number, month: string, year: string): boolean {
     return (
       Object.values(TranslationHelper.monthTranslations)[
         new Date(`${date} ${month} ${year}`).getMonth()

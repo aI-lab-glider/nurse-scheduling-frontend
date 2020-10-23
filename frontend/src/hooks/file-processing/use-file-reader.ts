@@ -5,12 +5,12 @@ export function useFileReader(): [ArrayBuffer | undefined, (srcFile: File) => vo
   const [content, setContent] = useState<ArrayBuffer>();
 
   useEffect(() => {
-    const updateContent = () => setContent(fileReader.result as ArrayBuffer);
+    const updateContent = (): void => setContent(fileReader.result as ArrayBuffer);
     fileReader.addEventListener("loadend", updateContent);
-    return () => fileReader.removeEventListener("loadend", updateContent);
+    return (): void => fileReader.removeEventListener("loadend", updateContent);
   }, [fileReader]);
 
-  function setSrcFile(file: File) {
+  function setSrcFile(file: File): void {
     fileReader.readAsArrayBuffer(file);
   }
   return [content, setSrcFile];

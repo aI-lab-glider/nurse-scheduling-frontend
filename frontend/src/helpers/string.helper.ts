@@ -1,11 +1,11 @@
 export class StringHelper {
-  static areEquvivalent(string1: string | null, string2: string | null) {
+  static areEquvivalent(string1: string | null, string2: string | null): boolean | "" | null {
     return (
       string1 && string2 && StringHelper.getRawValue(string1) === StringHelper.getRawValue(string2)
     );
   }
 
-  static includesEquvivalent(value: string, substring: string) {
+  static includesEquvivalent(value: string, substring: string): boolean {
     return StringHelper.getRawValue(value).includes(StringHelper.getRawValue(substring));
   }
 

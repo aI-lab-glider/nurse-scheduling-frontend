@@ -37,7 +37,7 @@ export class ShiftsInfoParser implements ShiftsProvider {
     return workerDict;
   }
 
-  public availableWorkersWorkTime() {
+  public availableWorkersWorkTime(): { [key: string]: number } {
     // TODO: implement actual parsing of worker work time
     return this.mockAvailableWorkersWorkTime();
   }
@@ -76,7 +76,7 @@ export class ShiftsInfoParser implements ShiftsProvider {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private logUnknownValue(date: number, worker: string, value: any) {
+  private logUnknownValue(date: number, worker: string, value: any): void {
     this._parseErrors.push({
       code: ParseErrorCode.UNKNOWN_VALUE,
       day: date,

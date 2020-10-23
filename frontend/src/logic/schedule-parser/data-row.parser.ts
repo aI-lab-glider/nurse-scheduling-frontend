@@ -11,11 +11,11 @@ export class DataRowParser {
     this.isShiftRow = this.checkShiftRowPattern();
   }
 
-  public get isEmpty() {
+  public get isEmpty(): boolean {
     return this.rowData(false, true).length === 0;
   }
 
-  public get rowKey() {
+  public get rowKey(): string {
     if (this.isEmpty) {
       throw new Error("Trying to access key from an empty row");
     }
@@ -30,7 +30,7 @@ export class DataRowParser {
     }
   }
 
-  public rowData(includeNulls = false, includeKey = false) {
+  public rowData(includeNulls = false, includeKey = false): string[] {
     const keyPosition = 1;
     return includeKey
       ? this.data.filter((c) => includeNulls || c != null)
@@ -50,7 +50,7 @@ export class DataRowParser {
     return new DataRowParser(data);
   }
 
-  public findValue(key: string) {
+  public findValue(key: string): string {
     let data = this.data.find((cell) => StringHelper.includesEquvivalent(cell, key));
     data = StringHelper.getRawValue(data);
     key = StringHelper.getRawValue(key);

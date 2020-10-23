@@ -15,7 +15,7 @@ const EMPTY_ROW = Array(100).fill("");
 export class ExportFormatter {
   constructor(private scheduleModel: ScheduleDataModel) {}
 
-  public formatAndSave() {
+  public formatAndSave(): void {
     const [workbook, workSheet] = this.createWorkArea();
     const headerRow = this.createHeader(this.scheduleModel);
     const datesSection = this.createDatesSection(this.scheduleModel);
@@ -45,7 +45,7 @@ export class ExportFormatter {
     return [workbook, workbook.addWorksheet("grafik", { properties: { defaultColWidth: 5 } })];
   }
 
-  private addStyles(workSheet: xlsx.Worksheet, rows: unknown[]) {
+  private addStyles(workSheet: xlsx.Worksheet, rows: unknown[]): void {
     const monthInfo = this.scheduleModel.schedule_info;
     const monthLogic = new MonthLogic(
       monthInfo?.month_number || 0,
@@ -99,12 +99,12 @@ export class ExportFormatter {
   }
 
   private rgbaToArgbHex(color: Color): string {
-    const toHex = (num) => ("0" + num.toString(16)).slice(-2);
+    const toHex = (num): string => ("0" + num.toString(16)).slice(-2);
     const c = color;
     return `${toHex(c.a)}${toHex(c.r)}${toHex(c.g)}${toHex(c.b)}`;
   }
 
-  private createShiftsSections(scheduleModel: ScheduleDataModel) {
+  private createShiftsSections(scheduleModel: ScheduleDataModel): string[][] {
     const grouped = {
       [WorkerType.NURSE]: [] as string[],
       [WorkerType.OTHER]: [] as string[],
@@ -119,7 +119,7 @@ export class ExportFormatter {
     return [grouped[WorkerType.NURSE], grouped[WorkerType.OTHER]];
   }
 
-  private createHeader(scheduleModel: ScheduleDataModel) {
+  private createHeader(scheduleModel: ScheduleDataModel): string[] {
     const headerRow = { [MetaDataRowLabel]: "" };
     headerRow[MetaDataSectionKey.Month] = Object.keys(TranslationHelper.monthTranslations)[
       scheduleModel?.schedule_info?.month_number || 0
@@ -130,7 +130,9 @@ export class ExportFormatter {
     return Object.keys(headerRow).map((key) => `${key} ${headerRow[key]}`);
   }
 
-  private createChildrenInfoSection(scheduleModel: ScheduleDataModel) {
+  private createChildrenInfoSection(
+    scheduleModel: ScheduleDataModel
+  ): (number | ChildrenSectionKey)[][] {
     // in case if it will be more complecated section
     return [
       [
@@ -140,11 +142,11 @@ export class ExportFormatter {
     ];
   }
 
-  private createDatesSection(scheduleModel: ScheduleDataModel) {
+  private createDatesSection(scheduleModel: ScheduleDataModel): (number | MetaDataSectionKey)[][] {
     return [[MetaDataSectionKey.MonthDays, ...(scheduleModel?.month_info?.dates || [])]];
   }
 
-  private saveToFile(workbook: xlsx.Workbook) {
+  private saveToFile(workbook: xlsx.Workbook): void {
     workbook.xlsx.writeBuffer().then((buffer) => {
       const blob = new Blob([buffer]);
       fs.saveAs(blob, "grafik.xlsx");

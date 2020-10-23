@@ -4,15 +4,16 @@ export class DataRow implements DataRowModel {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(private key: string, private data: any[] = []) {}
 
-  public get isEmpty() {
+  public get isEmpty(): boolean {
     return this.data.filter((i) => i !== null).length === 0;
   }
 
-  public get rowKey() {
+  public get rowKey(): string {
     return this.key;
   }
 
-  public rowData(includeNulls = false, includeKey = false) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public rowData(includeNulls = false, includeKey = false): any[] {
     const filteredRow = this.data.filter((c) => includeNulls || c != null);
     return includeKey ? [this.key, ...filteredRow] : filteredRow;
   }
@@ -24,7 +25,7 @@ export class DataRow implements DataRowModel {
     return this;
   }
 
-  public setValue(indexes: number[], value: string) {
+  public setValue(indexes: number[], value: string): void {
     const data = this.rowData(true, false);
     for (const index of indexes) {
       data[index] = value;
@@ -32,7 +33,7 @@ export class DataRow implements DataRowModel {
     this.data = [...data];
   }
 
-  public get length() {
+  public get length(): number {
     // data + key
     return this.data.length + 1;
   }

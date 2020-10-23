@@ -3,13 +3,14 @@ import { WeekDay } from "../../state/models/schedule-data/month-info.model";
 import { ShiftCode } from "../../state/models/schedule-data/shift-info.model";
 import { CellColorSet } from "./cell-color-set.model";
 import { Colors } from "./colors";
+import { Color } from "./color.model";
 
 export class ColorHelper {
   static get DEFAULT_COLOR_SET(): CellColorSet {
     return { textColor: Colors.BLACK, backgroundColor: Colors.WHITE };
   }
 
-  static getHighlightColor() {
+  static getHighlightColor(): Color {
     return Colors.LIGHT_BLUE.fade(0.4);
   }
 

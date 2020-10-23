@@ -19,7 +19,7 @@ import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors
 import "./problem-metadata.css";
 import { SnackbarComponent } from "./snackbar.component";
 
-function getWorkersCount(scheduleModel: ScheduleDataModel) {
+function getWorkersCount(scheduleModel: ScheduleDataModel): number[] {
   const {
     [WorkerType.NURSE]: nurseShifts,
     [WorkerType.OTHER]: babysitterShifts,
@@ -28,7 +28,7 @@ function getWorkersCount(scheduleModel: ScheduleDataModel) {
   return [Object.keys(babysitterShifts).length, Object.keys(nurseShifts).length];
 }
 
-export function ProblemMetadataComponent() {
+export function ProblemMetadataComponent(): JSX.Element {
   const [selectedDate, handleDateChange] = useState<Date>(new Date());
   const [numberOfNurses, setNumberOfNurses] = useState<number>(0);
   const [numberOfSitters, setNumberOfSitters] = useState<number>(0);
@@ -55,12 +55,12 @@ export function ProblemMetadataComponent() {
     }
   }, [schedule]);
 
-  function showSnackbar(message) {
+  function showSnackbar(message: string): void {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
   }
 
-  function handleNumberOfNursesChange() {
+  function handleNumberOfNursesChange(): void {
     const nurseCount = getWorkersCount(schedule || {})[1];
 
     if (!nurseCount) {
@@ -73,7 +73,7 @@ export function ProblemMetadataComponent() {
     }
   }
 
-  function handleNumberOfSittersChange() {
+  function handleNumberOfSittersChange(): void {
     const babysitterCount = getWorkersCount(schedule || {})[0];
 
     if (!babysitterCount) {
@@ -86,7 +86,7 @@ export function ProblemMetadataComponent() {
     }
   }
 
-  async function onFixScheduleClicked() {
+  async function onFixScheduleClicked(): Promise<void> {
     if (schedule) {
       const response = await backend.fixSchedule(schedule);
       dispatcher({
@@ -97,7 +97,7 @@ export function ProblemMetadataComponent() {
     }
   }
 
-  async function onShowErrorsClicked() {
+  async function onShowErrorsClicked(): Promise<void> {
     if (schedule) {
       const response = await backend.getErrors(schedule);
       dispatcher({
@@ -107,14 +107,20 @@ export function ProblemMetadataComponent() {
     }
   }
 
-  function textField(id, label, value, setFunction, onTextFieldBlur?) {
+  function textField(
+    id: string,
+    label: string,
+    value: number,
+    setFunction: (value: number) => void,
+    onTextFieldBlur?: () => void
+  ): JSX.Element {
     return (
       <TextField
         required
         id={id}
         label={label}
         value={value}
-        onChange={(e) => setFunction(e.target.value)}
+        onChange={(e): void => setFunction(parseInt(e.target.value))}
         onBlur={onTextFieldBlur}
       />
     );
@@ -130,7 +136,7 @@ export function ProblemMetadataComponent() {
           views={["year", "month"]}
           label="Z miesiąca"
           value={selectedDate}
-          onChange={(date) => {
+          onChange={(date): void => {
             if (date) {
               handleDateChange(date);
             }

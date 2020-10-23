@@ -15,13 +15,13 @@ export class ExtraWorkersParser implements ExtraWorkersInfoProvider {
     };
   }
 
-  public get extraWorkers() {
+  public get extraWorkers(): number[] {
     return this.extraWorkersInfoAsDataRows[ExtraWorkersSectionKey.ExtraWorkersCount]
       .rowData(true, false)
       .map((i) => parseInt(i));
   }
 
-  public get sectionData() {
+  public get sectionData(): DataRow[] {
     return Object.values(this.extraWorkersInfoAsDataRows);
   }
 }

@@ -14,15 +14,15 @@ export class ChildrenInfoLogic extends BaseSectionLogic implements ChildrenInfoP
     });
   }
 
-  public get data() {
+  public get data(): DataRow[] {
     return Object.values(this.childrenInfoAsDataRows);
   }
 
-  public get sectionData() {
+  public get sectionData(): DataRow[] {
     return this.data;
   }
 
-  public get registeredChildrenNumber() {
+  public get registeredChildrenNumber(): number[] {
     // TODO refactor
     // In current schedules, there are more then one field, that provides information about children.
     //  Nevertheless, in model used by alghorythm - only one.
@@ -32,7 +32,7 @@ export class ChildrenInfoLogic extends BaseSectionLogic implements ChildrenInfoP
       .map((i) => parseInt(i));
   }
 
-  public tryUpdate(row: DataRow) {
+  public tryUpdate(row: DataRow): boolean {
     if (Object.keys(this.childrenInfoAsDataRows).includes(row.rowKey)) {
       this.childrenInfoAsDataRows[row.rowKey] = row;
       return true;

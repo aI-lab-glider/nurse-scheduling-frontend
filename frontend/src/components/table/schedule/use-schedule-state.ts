@@ -18,7 +18,7 @@ export function useScheduleState(): useScheduleStateReturn {
     scheduleInitialState
   );
 
-  function setNewSchedule(scheduleModel: ScheduleDataModel) {
+  function setNewSchedule(scheduleModel: ScheduleDataModel): void {
     const logic = new ScheduleLogic(scheduleModel, dispatchGlobalState);
     setScheduleLocalState({
       nurseShiftsSection: logic.getNurseInfo().sectionData,

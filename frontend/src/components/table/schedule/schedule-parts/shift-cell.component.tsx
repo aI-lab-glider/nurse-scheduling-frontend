@@ -7,10 +7,10 @@ function getShiftCode(value: string | number): ShiftCode {
   return typeof value === "number" ? value.toString() : ShiftCode[value] || ShiftCode.W;
 }
 
-export function ShiftCellComponent(options: CellOptions) {
+export function ShiftCellComponent(options: CellOptions): JSX.Element {
   const shiftValue = getShiftCode(options.value);
 
-  function _onKeyDown(inputValue: string, key: React.KeyboardEvent) {
+  function _onKeyDown(inputValue: string, key: React.KeyboardEvent): void {
     const { onKeyDown } = options;
     onKeyDown && onKeyDown(getShiftCode(inputValue), key);
   }

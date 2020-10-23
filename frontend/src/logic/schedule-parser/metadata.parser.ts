@@ -30,14 +30,14 @@ export class MetaDataParser implements MetadataProvider {
       .filter((i) => i <= 31);
   }
 
-  public get daysFromPreviousMonthExists() {
+  public get daysFromPreviousMonthExists(): boolean {
     return this._daysFromPreviousMonthExists(this.daysRow);
   }
 
-  public get dates() {
+  public get dates(): number[] {
     return this.monthLogic.dates;
   }
-  private _daysFromPreviousMonthExists(daysRow?: DataRowParser) {
+  private _daysFromPreviousMonthExists(daysRow?: DataRowParser): boolean {
     if (!daysRow) {
       // TODO implement logger
       return false;
@@ -51,10 +51,12 @@ export class MetaDataParser implements MetadataProvider {
       .filter((date) => date.isFrozen)
       .map((date, index) => [0, index + 1]);
   }
-  public get monthNumber() {
+
+  public get monthNumber(): number {
     return this.monthLogic.monthNumber;
   }
-  public get dayCount() {
+
+  public get dayCount(): number {
     return this.monthLogic.dayCount;
   }
 
@@ -80,11 +82,11 @@ export class MetaDataParser implements MetadataProvider {
     return new DataRowParser(datesAsObject);
   }
 
-  public get validDataStart() {
+  public get validDataStart(): number {
     return 0;
   }
 
-  public get validDataEnd() {
+  public get validDataEnd(): number {
     return this.monthLogic.dates.length - 1;
   }
 }
