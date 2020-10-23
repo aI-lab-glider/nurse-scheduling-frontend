@@ -35,6 +35,7 @@ export class ColorHelper {
         break;
       case ShiftCode.U:
         colorSet.backgroundColor = Colors.LIME_GREEN;
+        break;
       case (ShiftCode.P, ShiftCode.PN, ShiftCode.R, ShiftCode.W):
         break;
     }

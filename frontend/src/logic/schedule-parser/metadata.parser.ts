@@ -8,6 +8,7 @@ export class MetaDataParser implements MetadataProvider {
   private monthLogic: MonthLogic;
 
   constructor(headerRow: DataRowParser, private daysRow: DataRowParser) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [month, year, hours] = headerRow.findValues(
       MetaDataSectionKey.Month,
       MetaDataSectionKey.Year,

@@ -61,7 +61,7 @@ export function ProblemMetadataComponent() {
   }
 
   function handleNumberOfNursesChange() {
-    const [babysitterCount, nurseCount] = getWorkersCount(schedule || {});
+    const nurseCount = getWorkersCount(schedule || {})[1];
 
     if (!nurseCount) {
       return;
@@ -74,7 +74,7 @@ export function ProblemMetadataComponent() {
   }
 
   function handleNumberOfSittersChange() {
-    const [babysitterCount, nurseCount] = getWorkersCount(schedule || {});
+    const babysitterCount = getWorkersCount(schedule || {})[0];
 
     if (!babysitterCount) {
       return;
@@ -88,7 +88,7 @@ export function ProblemMetadataComponent() {
 
   async function onFixScheduleClicked() {
     if (schedule) {
-      const response = await backend.fixSchedule(schedule!);
+      const response = await backend.fixSchedule(schedule);
       dispatcher({
         type: ScheduleDataActionType.ADD_NEW,
         payload: response,
@@ -99,7 +99,7 @@ export function ProblemMetadataComponent() {
 
   async function onShowErrorsClicked() {
     if (schedule) {
-      const response = await backend.getErrors(schedule!);
+      const response = await backend.getErrors(schedule);
       dispatcher({
         type: ScheduleErrorActionType.UPDATE,
         payload: response,
