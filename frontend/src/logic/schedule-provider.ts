@@ -42,6 +42,7 @@ export class Schedule {
     this.provider = provider;
   }
 
+  /* eslint-disable @typescript-eslint/camelcase */
   public getDataModel(): ScheduleDataModel {
     return {
       schedule_info: {
@@ -69,4 +70,5 @@ export class Schedule {
       },
     };
   }
+  /* eslint-enable @typescript-eslint/camelcase */
 }

@@ -27,10 +27,12 @@ export function scheduleDataReducer(
     case MonthLogicActionType.UpdateFrozenDates:
       scheduleModel.isNew = false;
       return Object.assign({}, state, {
+        /* eslint-disable @typescript-eslint/camelcase */
         month_info: {
           ...state.month_info,
           frozen_shifts: action.payload,
         } as MonthInfoModel,
+        /* eslint-enable @typescript-eslint/camelcase */
       });
     default:
       return state;

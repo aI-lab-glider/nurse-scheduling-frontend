@@ -40,10 +40,10 @@ export function ProblemMetadataComponent() {
   const dispatcher = useDispatch();
   useEffect(() => {
     if (schedule) {
-      const { year, month_number } = schedule.schedule_info || {};
+      const { year, month_number: monthNumber } = schedule.schedule_info || {};
       const [babysitterCount, nurseCount] = getWorkersCount(schedule);
-      if (month_number && year) {
-        handleDateChange(MonthLogic.convertToDate(month_number, year));
+      if (monthNumber && year) {
+        handleDateChange(MonthLogic.convertToDate(monthNumber, year));
       }
 
       if (babysitterCount) {
