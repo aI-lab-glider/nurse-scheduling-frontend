@@ -17,7 +17,7 @@ export class ColorHelper {
     shift: ShiftCode,
     day?: VerboseDate,
     isFrozen?: boolean,
-    ignoreFrozenState: boolean = false
+    ignoreFrozenState = false
   ): CellColorSet {
     const colorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET;
     switch (shift) {
@@ -48,8 +48,8 @@ export class ColorHelper {
   static getDayColor(
     day?: VerboseDate,
     defaultColorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET,
-    isFrozen: boolean = false,
-    ignoreFrozenState: boolean = false
+    isFrozen = false,
+    ignoreFrozenState = false
   ): CellColorSet {
     if (!day) {
       return defaultColorSet;

@@ -54,7 +54,6 @@
       "@typescript-eslint/explicit-function-return-type": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/ban-types": "off",
-      "@typescript-eslint/no-inferrable-types": "off",
       "react-hooks/exhaustive-deps": "off"
     },
     "overrides": [
