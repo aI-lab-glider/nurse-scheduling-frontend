@@ -1,15 +1,8 @@
 import { StringHelper } from "../../helpers/string.helper";
 import { TranslationHelper } from "../../helpers/tranlsations.helper";
-import { WeekDay } from "../../state/models/schedule-data/month-info.model";
+import { VerboseDate, WeekDay } from "../../common-models/month-info.model";
 
-export interface VerboseDate {
-  date: number;
-  dayOfWeek: WeekDay;
-  isFrozen?: boolean;
-  month: string;
-}
-
-export class MonthLogic {
+export class MonthInfoLogic {
   public monthNumber: number;
   private _verboseDates: VerboseDate[] = [];
   private monthDates: number[];
@@ -71,7 +64,7 @@ export class MonthLogic {
   public get workingDaysNumber(): number {
     const month = Object.values(TranslationHelper.monthTranslations)[this.monthNumber];
     return this._verboseDates.filter(
-      (date) => date.month === month && MonthLogic.isWorkingDay(date.dayOfWeek)
+      (date) => date.month === month && MonthInfoLogic.isWorkingDay(date.dayOfWeek)
     ).length;
   }
 

@@ -1,9 +1,9 @@
-import { WeekDay } from "../../state/models/schedule-data/month-info.model";
-import { MetaDataSectionKey } from "../models/metadata-section.model";
+import { VerboseDate, WeekDay } from "../../common-models/month-info.model";
 import { MetadataProvider } from "../schedule-provider";
 import { DataRow } from "./data-row";
-import { MonthLogic, VerboseDate } from "./month.logic";
+import { MonthInfoLogic } from "./month-info.logic";
 import { BaseSectionLogic } from "./section-logic.model";
+import { MetaDataSectionKey } from "../section.model";
 export enum MonthLogicActionType {
   UpdateFrozenDates = "updateFrozenDates",
 }
@@ -23,7 +23,7 @@ export class MetadataLogic extends BaseSectionLogic implements MetadataProvider 
     return this.frozenDates;
   }
 
-  public monthLogic: MonthLogic;
+  public monthLogic: MonthInfoLogic;
 
   constructor(
     private _year: string,
@@ -32,7 +32,12 @@ export class MetadataLogic extends BaseSectionLogic implements MetadataProvider 
     public daysFromPreviousMonthExists: boolean
   ) {
     super();
-    this.monthLogic = new MonthLogic(this.month, _year, monthDates, daysFromPreviousMonthExists);
+    this.monthLogic = new MonthInfoLogic(
+      this.month,
+      _year,
+      monthDates,
+      daysFromPreviousMonthExists
+    );
   }
 
   public get verboseDates(): VerboseDate[] {

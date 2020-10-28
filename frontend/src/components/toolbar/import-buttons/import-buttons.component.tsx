@@ -5,15 +5,16 @@ import Popper from "@material-ui/core/Popper";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useScheduleConverter } from "../../../hooks/file-processing/use-schedule-converter";
+import { useScheduleConverter } from "./hooks/use-schedule-converter";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-data.model";
-import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
+import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
+import { ScheduleErrorModel } from "../../../common-models/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
-import { ExportFormatter } from "../../../helpers/export/export-formatter";
+import { ScheduleExportLogic } from "../../../logic/schedule-exporter/schedule-export.logic";
 export function ImportButtonsComponent(): JSX.Element {
+  const DEFAULT_FILENAME = "grafik.xlsx";
   const [open, setOpen] = useState(false);
   const { scheduleModel, setSrcFile, scheduleErrors } = useScheduleConverter();
   const anchorRef = useRef(null);
@@ -43,7 +44,7 @@ export function ImportButtonsComponent(): JSX.Element {
 
   function handleExport(): void {
     if (stateScheduleModel) {
-      new ExportFormatter(stateScheduleModel).formatAndSave();
+      new ScheduleExportLogic(stateScheduleModel).formatAndSave(DEFAULT_FILENAME);
     }
   }
 
@@ -72,7 +73,6 @@ export function ImportButtonsComponent(): JSX.Element {
                 type="file"
               />
             </Button>
-
             <Button onClick={(): void => handleExport()}>Zapisz jako...</Button>
           </ButtonGroup>
         </ClickAwayListener>

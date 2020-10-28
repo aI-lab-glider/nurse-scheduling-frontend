@@ -1,6 +1,6 @@
 import { DataRow } from "../schedule-logic/data-row";
 import { ExtraWorkersInfoProvider } from "../schedule-provider";
-import { ExtraWorkersSectionKey } from "../models/extra-workers-section.model";
+import { ExtraWorkersSectionKey } from "../section.model";
 
 export class ExtraWorkersParser implements ExtraWorkersInfoProvider {
   private extraWorkersInfoAsDataRows: { [key: string]: DataRow } = {};

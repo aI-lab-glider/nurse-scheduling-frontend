@@ -1,11 +1,11 @@
-import { WeekDay } from "../../state/models/schedule-data/month-info.model";
-import { MetaDataSectionKey } from "../models/metadata-section.model";
-import { MonthLogic } from "../schedule-logic/month.logic";
+import { WeekDay } from "../../common-models/month-info.model";
+import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
 import { MetadataProvider } from "../schedule-provider";
+import { MetaDataSectionKey } from "../section.model";
 import { DataRowParser } from "./data-row.parser";
 
 export class MetaDataParser implements MetadataProvider {
-  private monthLogic: MonthLogic;
+  private monthLogic: MonthInfoLogic;
 
   constructor(headerRow: DataRowParser, private daysRow: DataRowParser) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,7 +15,7 @@ export class MetaDataParser implements MetadataProvider {
       MetaDataSectionKey.RequiredavailableWorkersWorkTime
     );
     daysRow.rowKey = MetaDataSectionKey.MonthDays;
-    this.monthLogic = new MonthLogic(
+    this.monthLogic = new MonthInfoLogic(
       month,
       year,
       this.extractDates(daysRow),

@@ -1,14 +1,6 @@
 import { DataRow } from "../../../logic/schedule-logic/data-row";
 import { ScheduleLogic } from "../../../logic/schedule-logic/schedule.logic";
 
-export enum ScheduleActionType {
-  UpdateNurseShiftSection = "updateNurseShiftSection",
-  UpdateBabysitterShiftSection = "updateBabysitterShiftSection",
-  UpdateFullState = "updateFullState",
-  UpdateChildrenShiftSection = "updateChildrenShiftSection",
-  UpdateExtraWorkersSection = "updateExtraWorkersSection",
-}
-
 export interface ScheduleComponentState {
   childrenSection?: DataRow[];
   extraWorkersSection?: DataRow[];

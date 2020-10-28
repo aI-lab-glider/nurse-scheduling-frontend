@@ -2,12 +2,13 @@ import { Button, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@mat
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Colors } from "../../../helpers/colors/colors";
+import { ColorHelper } from "../../../helpers/colors/color.helper";
+import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import {
   ScheduleErrorLevel,
   ScheduleErrorMessageModel,
-} from "../../../state/models/schedule-data/schedule-error-message.model";
+} from "../../../common-models/schedule-error-message.model";
 
 export default function ValidationDrawerComponent(): JSX.Element {
   const [errors, setErrors] = useState<ScheduleErrorMessageModel[]>();
@@ -31,12 +32,12 @@ export default function ValidationDrawerComponent(): JSX.Element {
 
   function getColor(): string {
     if (errorLevelInErrors(ScheduleErrorLevel.CRITICAL_ERROR)) {
-      return Colors.DARK_RED.fade(0.4).toString();
+      return ErrorMessageHelper.getErrorColor(ScheduleErrorLevel.CRITICAL_ERROR).toString();
     }
     if (errorLevelInErrors(ScheduleErrorLevel.WARNING)) {
-      return Colors.TUSCANY.fade(0.4).toString();
+      return ErrorMessageHelper.getErrorColor(ScheduleErrorLevel.WARNING).toString();
     }
-    return Colors.WHITE.toString();
+    return ColorHelper.getDefaultColor().toString();
   }
 
   function toggleDrawer(open: boolean): void {

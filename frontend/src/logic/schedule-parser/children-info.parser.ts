@@ -1,8 +1,8 @@
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { ChildrenInfoProvider } from "../schedule-provider";
-import { ChildrenSectionKey } from "../models/children-section.model";
 import { DataRowHelper } from "../../helpers/data-row.helper";
+import { ChildrenSectionKey } from "../section.model";
 
 export class ChildrenInfoParser implements ChildrenInfoProvider {
   private readonly _sectionData: { [rowKey in ChildrenSectionKey]?: DataRowParser };

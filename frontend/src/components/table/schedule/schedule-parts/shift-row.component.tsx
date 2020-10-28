@@ -1,11 +1,11 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
-import { BaseCellOptions } from "./base-cell-options.model";
 import { ScheduleRowComponent, ScheduleRowOptions } from "./schedule-row.component";
-import { shiftCodeToWorkTime } from "../../../../helpers/shifts.helper";
 import { ShiftCellComponent } from "./shift-cell.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
 import { ShiftsInfoLogic } from "../../../../logic/schedule-logic/shifts-info.logic";
+import { BaseCellOptions } from "./base-cell.component";
+import { ShiftHelper } from "../../../../helpers/shifts.helper";
 
 const WORK_HOURS_PER_DAY = 8;
 
@@ -33,7 +33,7 @@ export function ShiftRowComponent(options: ShiftRowOptions): JSX.Element {
       const workingHours = rowData
         .slice(numberOfPreviousMonthDays)
         .reduce((previousValue, currentValue) => {
-          return previousValue + shiftCodeToWorkTime(currentValue);
+          return previousValue + ShiftHelper.shiftCodeToWorkTime(currentValue);
         }, 0);
       return [workingNorm, workingHours, workingHours - workingNorm];
     },

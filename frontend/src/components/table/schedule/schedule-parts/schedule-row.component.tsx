@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ColorHelper } from "../../../../helpers/colors/color.helper";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { DirectionKey } from "../sections/base-section/base-section.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
-import { BaseCellComponent } from "./base-cell.component";
-import { BaseCellOptions } from "./base-cell-options.model";
+import { BaseCellComponent, BaseCellOptions } from "./base-cell.component";
 import "./schedule-row.component.css";
+import { ShiftHelper } from "../../../../helpers/shifts.helper";
 
 enum CellManagementKeys {
   Enter = "Enter",
   Escape = "Escape",
 }
+
 export interface ScheduleRowOptions {
   uuid: string;
   index: number;
@@ -137,7 +137,7 @@ export function ScheduleRowComponent({
             key={`${dataRowState.rowKey}_${cellData}${cellIndex}${isFrozen(cellIndex)}_${uuid}}`}
             value={cellData}
             isSelected={(showSelectedCells || false) && selectedCells.includes(cellIndex)}
-            style={ColorHelper.getShiftColor(
+            style={ShiftHelper.getShiftColor(
               cellData,
               verboseDates?.[cellIndex],
               isFrozen(cellIndex)

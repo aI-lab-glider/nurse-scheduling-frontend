@@ -1,4 +1,4 @@
-export interface ScheduleInfoModel {
+export interface ScheduleModel {
   UUID?: string;
   month_number: number;
   year: number;
