@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { BaseCellComponent } from "../../schedule-parts/base-cell.component";
 import { ScheduleRowComponent } from "../../schedule-parts/schedule-row.component";
-import { BaseSectionOptions } from "./base-section.options";
+import { DataRow } from "../../../../../logic/schedule-logic/data-row";
+import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
+import { BaseCellOptions } from "../../schedule-parts/base-cell.component";
 
 export enum DirectionKey {
   ArrowRight = "ArrowRight",
@@ -11,6 +13,15 @@ export enum DirectionKey {
 }
 
 type PointerPosition = { row: number; cell: number };
+
+export interface BaseSectionOptions {
+  uuid: string;
+  data?: DataRow[];
+  cellComponent?: (BaseCellOptions: BaseCellOptions) => JSX.Element;
+  rowComponent?: React.FC<ShiftRowOptions>;
+  sectionKey?: string;
+  onRowKeyClicked?: (rowIndex: number) => void;
+}
 
 export function BaseSectionComponent({
   uuid,

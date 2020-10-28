@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import { ScheduleLogicContext } from "../../use-schedule-state";
-import { BaseSectionComponent } from "../base-section/base-section.component";
-import { ChildrenSectionOptions } from "./children-section.options";
+import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-section.component";
+
+export type ChildrenSectionOptions = BaseSectionOptions;
 
 export function ChildrenSectionComponent(options: ChildrenSectionOptions): JSX.Element {
   const { data = [] } = options;

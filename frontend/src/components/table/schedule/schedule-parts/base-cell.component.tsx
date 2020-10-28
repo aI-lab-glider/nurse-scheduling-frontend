@@ -1,10 +1,22 @@
 import React from "react";
 import { ColorHelper } from "../../../../helpers/colors/color.helper";
 import "./base-cell.css";
-import { BaseCellOptions } from "./base-cell-options.model";
+import { CellColorSet } from "../../../../helpers/colors/cell-color-set.model";
+
+export interface BaseCellOptions {
+  index: number;
+  value: string;
+  style?: CellColorSet;
+  isBlocked: boolean;
+  isPointerOn: boolean;
+  isSelected: boolean;
+  onClick?: () => void;
+  onContextMenu?: () => void;
+  onKeyDown?: (cellValue: string, event: React.KeyboardEvent) => void;
+  onBlur?: () => void;
+}
 
 export function BaseCellComponent({
-  index,
   value,
   style = ColorHelper.DEFAULT_COLOR_SET,
   isBlocked,

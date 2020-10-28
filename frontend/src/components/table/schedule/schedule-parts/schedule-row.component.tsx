@@ -3,14 +3,14 @@ import { ColorHelper } from "../../../../helpers/colors/color.helper";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { DirectionKey } from "../sections/base-section/base-section.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
-import { BaseCellComponent } from "./base-cell.component";
-import { BaseCellOptions } from "./base-cell-options.model";
+import { BaseCellComponent, BaseCellOptions } from "./base-cell.component";
 import "./schedule-row.component.css";
 
 enum CellManagementKeys {
   Enter = "Enter",
   Escape = "Escape",
 }
+
 export interface ScheduleRowOptions {
   uuid: string;
   index: number;

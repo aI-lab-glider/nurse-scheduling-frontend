@@ -1,13 +1,14 @@
 import React from "react";
 import { ShiftCode } from "../../../../state/models/schedule-data/shift-info.model";
-import { BaseCellComponent } from "./base-cell.component";
-import { BaseCellOptions } from "./base-cell-options.model";
+import { BaseCellComponent, BaseCellOptions } from "./base-cell.component";
 
 function getShiftCode(value: string | number): ShiftCode {
   return typeof value === "number" ? value.toString() : ShiftCode[value] || ShiftCode.W;
 }
 
-export function ShiftCellComponent(options: BaseCellOptions): JSX.Element {
+type ShiftCellOptions = BaseCellOptions;
+
+export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
   const shiftValue = getShiftCode(options.value);
 
   function _onKeyDown(inputValue: string, key: React.KeyboardEvent): void {
@@ -19,6 +20,6 @@ export function ShiftCellComponent(options: BaseCellOptions): JSX.Element {
       {...options}
       onKeyDown={_onKeyDown}
       value={shiftValue === ShiftCode.W ? "" : shiftValue}
-    ></BaseCellComponent>
+    />
   );
 }
