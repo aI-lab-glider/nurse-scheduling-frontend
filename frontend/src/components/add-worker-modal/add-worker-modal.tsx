@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, TextField } from "@material-ui/core";
 import "./add-worker-modal.css";
-import {
-  WorkerType,
-  WorkerTypeHelper,
-} from "../../../state/models/schedule-data/worker-info.model";
+import { WorkerType, WorkerTypeHelper } from "../../state/models/schedule-data/worker-info.model";
 import Button from "@material-ui/core/Button";
 
 const initialState = {
@@ -70,15 +67,16 @@ export function AddWorkerModal({
   }
 
   function parseTimeIfPossible(time: string): ParseTimeModel {
-    if (new RegExp("([0].[0-9])|(1.0)|(1)").test(time)) {
-      return { isTimeFormatValid: true, parsedTime: Number(time) };
-    }
-    if (new RegExp("[1-9]/[0-9]").test(time)) {
-      const timerArray = time.split("/").map(parseInt);
+    if (new RegExp("^([1-9]/[1-9])$").test(time)) {
+      const timerArray = time.split("/").map((t) => parseInt(t));
       if (timerArray[0] <= timerArray[1]) {
         return { isTimeFormatValid: true, parsedTime: Number(timerArray[0] / timerArray[1]) };
       }
     }
+    if (new RegExp("^([0].[l0-9])|(1.0)|(1)$").test(time)) {
+      return { isTimeFormatValid: true, parsedTime: Number(time) };
+    }
+
     return { isTimeFormatValid: false };
   }
 

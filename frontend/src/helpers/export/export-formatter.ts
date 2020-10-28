@@ -54,7 +54,6 @@ export class ExportFormatter {
       true
     );
     const verboseDates = monthLogic.verboseDates;
-    console.log(verboseDates);
     workSheet.addRows(rows);
     workSheet.getColumn(1).width = 20;
     workSheet.eachRow((row) => {

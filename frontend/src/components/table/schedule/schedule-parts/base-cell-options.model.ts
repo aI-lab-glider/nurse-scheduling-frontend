@@ -5,7 +5,7 @@ export enum CellState {
   STOP_EDITING = "stopEditing",
 }
 
-export interface CellOptions {
+export interface BaseCellOptions {
   index: number;
   value: string;
   style?: CellColorSet;
@@ -13,7 +13,7 @@ export interface CellOptions {
   isPointerOn: boolean;
   isSelected: boolean;
   onClick?: () => void;
-  onContextMenu: () => void;
+  onContextMenu?: () => void;
   onKeyDown?: (cellValue: string, event: React.KeyboardEvent) => void;
   onBlur?: () => void;
 }
