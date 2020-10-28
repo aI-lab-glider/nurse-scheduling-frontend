@@ -8,6 +8,13 @@ export enum WeekDay {
   SU = "SU",
 }
 
+export interface VerboseDate {
+  date: number;
+  dayOfWeek: WeekDay;
+  isFrozen?: boolean;
+  month: string;
+}
+
 export interface MonthInfoModel {
   children_number?: number[];
   extra_workers?: number[];

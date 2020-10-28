@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import Excel from "exceljs";
-import { ScheduleParser } from "../../logic/schedule-parser/schedule.parser";
-
+import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
+import { ScheduleErrorModel } from "../../../../common-models/schedule-error.model";
+import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
 import { useFileReader } from "./use-file-reader";
-import { ScheduleDataModel } from "../../common-models/schedule-data.model";
-import { ScheduleErrorModel } from "../../common-models/schedule-error.model";
 
 export interface UseScheduleConverterOutput {
   scheduleModel?: ScheduleDataModel;

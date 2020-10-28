@@ -2,6 +2,7 @@ import React from "react";
 import { ShiftCode } from "../../../../common-models/shift-info.model";
 import { BaseCellComponent, BaseCellOptions } from "./base-cell.component";
 
+// extract
 function getShiftCode(value: string | number): ShiftCode {
   return typeof value === "number" ? value.toString() : ShiftCode[value] || ShiftCode.W;
 }
