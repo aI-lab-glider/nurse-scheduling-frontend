@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
-import { BaseSectionComponent } from "../base-section/base-section.component";
-import { ExtraWorkersSectionOptions } from "./extra-workers-section.options";
+import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-section.component";
 import { ScheduleLogicContext } from "../../use-schedule-state";
+
+export type ExtraWorkersSectionOptions = BaseSectionOptions;
 
 export function ExtraWorkersSection(options: ExtraWorkersSectionOptions): JSX.Element {
   const { data = [] } = options;

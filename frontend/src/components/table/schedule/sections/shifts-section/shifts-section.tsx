@@ -3,17 +3,21 @@ import React, { useContext, useEffect, useState } from "react";
 import { StringHelper } from "../../../../../helpers/string.helper";
 import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import {
+  WorkerInfo,
   WorkerType,
   WorkerTypeHelper,
 } from "../../../../../state/models/schedule-data/worker-info.model";
 import { ShiftCode } from "../../../../../state/models/schedule-data/shift-info.model";
-import { AddWorkerModal, WorkerInfo } from "../../../../add-worker-modal/add-worker-modal";
+import { AddWorkerModal } from "../../../../add-worker-modal/add-worker-modal";
 import { ShiftCellComponent } from "../../schedule-parts/shift-cell.component";
 import { ScheduleLogicContext } from "../../use-schedule-state";
-import { BaseSectionComponent } from "../base-section/base-section.component";
+import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-section.component";
 import "./shifts-section.css";
-import { ShiftsSectionOptions } from "./shifts-section.options";
 import { ShiftRowComponent } from "../../schedule-parts/shift-row.component";
+
+export interface ShiftsSectionOptions extends BaseSectionOptions {
+  workerType: WorkerType;
+}
 
 export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Element {
   const { data = [], workerType, uuid } = options;

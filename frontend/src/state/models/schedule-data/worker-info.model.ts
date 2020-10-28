@@ -18,3 +18,8 @@ export interface WorkerInfoModel {
   time: { [key: string]: number };
   type: { [workerName: string]: WorkerType };
 }
+
+export interface WorkerInfo {
+  name?: string;
+  time?: number;
+}
