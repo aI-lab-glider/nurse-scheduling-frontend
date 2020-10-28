@@ -7,7 +7,7 @@ import { ApplicationStateModel } from "../../../state/models/application-state.m
 import {
   ScheduleErrorLevel,
   ScheduleErrorMessageModel,
-} from "../../../state/models/schedule-data/schedule-error-message.model";
+} from "../../../common-models/schedule-error-message.model";
 
 export default function ValidationDrawerComponent(): JSX.Element {
   const [errors, setErrors] = useState<ScheduleErrorMessageModel[]>();

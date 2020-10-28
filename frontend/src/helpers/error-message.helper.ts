@@ -1,12 +1,12 @@
 import {
   ScheduleErrorLevel,
   ScheduleErrorMessageModel,
-} from "../state/models/schedule-data/schedule-error-message.model";
+} from "../common-models/schedule-error-message.model";
 import {
   AlgorithmErrorCode,
   ParseErrorCode,
   ScheduleErrorModel,
-} from "../state/models/schedule-data/schedule-error.model";
+} from "../common-models/schedule-error.model";
 
 export class ErrorMessageHelper {
   public static getErrorMessage(error: ScheduleErrorModel): ScheduleErrorMessageModel {

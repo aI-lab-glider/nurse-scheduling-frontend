@@ -3,11 +3,9 @@ import { DataRowHelper } from "../../helpers/data-row.helper";
 import { groupShiftsByWorkerType } from "../../helpers/shifts.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { ActionModel } from "../../state/models/action.model";
-import { WorkerType } from "../../state/models/schedule-data/worker-info.model";
-import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
+import { WorkerType } from "../../common-models/worker-info.model";
+import { ScheduleDataModel } from "../../common-models/schedule-data.model";
 import { ScheduleDataActionType } from "../../state/reducers/schedule-data.reducer";
-import { ChildrenSectionKey } from "../models/children-section.model";
-import { ExtraWorkersSectionKey } from "../models/extra-workers-section.model";
 import { Schedule, ScheduleProvider } from "../schedule-provider";
 import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row";
@@ -15,6 +13,7 @@ import { ExtraWorkersLogic } from "./extra-workers.logic";
 import { MetadataLogic } from "./metadata.logic";
 import { SectionLogic } from "./section-logic.model";
 import { ShiftsInfoLogic } from "./shifts-info.logic";
+import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../section.model";
 
 export class ScheduleLogic implements ScheduleProvider {
   private providers: SectionLogic[];

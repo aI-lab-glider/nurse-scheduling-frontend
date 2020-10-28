@@ -1,4 +1,4 @@
-import { DataRowModel } from "../../state/models/data-row.model";
+import { DataRowModel } from "../../common-models/data-row.model";
 
 export class DataRow implements DataRowModel {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
