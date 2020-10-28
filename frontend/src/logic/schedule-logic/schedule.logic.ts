@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import { DataRowHelper } from "../../helpers/data-row.helper";
-import { groupShiftsByWorkerType } from "../../helpers/shifts.helper";
+import { ShiftHelper } from "../../helpers/shifts.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { ActionModel } from "../../state/models/action.model";
 import { WorkerType } from "../../common-models/worker-info.model";
@@ -32,7 +32,7 @@ export class ScheduleLogic implements ScheduleProvider {
     const {
       [WorkerType.NURSE]: nurseShifts,
       [WorkerType.OTHER]: babysitterShifts,
-    } = groupShiftsByWorkerType(
+    } = ShiftHelper.groupShiftsByWorkerType(
       scheduleModel.shifts || {},
       scheduleModel.employee_info?.type || {}
     );

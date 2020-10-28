@@ -7,6 +7,10 @@ import {
   ParseErrorCode,
   ScheduleErrorModel,
 } from "../common-models/schedule-error.model";
+import { ColorHelper } from "./colors/color.helper";
+import { Color, Colors } from "./colors/color.model";
+
+type Error = ScheduleErrorLevel;
 
 export class ErrorMessageHelper {
   public static getErrorMessage(error: ScheduleErrorModel): ScheduleErrorMessageModel {
@@ -54,5 +58,14 @@ export class ErrorMessageHelper {
       ? ScheduleErrorLevel.CRITICAL_ERROR
       : ScheduleErrorLevel.WARNING;
     return { code, message, worker: error.worker, day: error.day, week: error.week, level };
+  }
+
+  public static getErrorColor(error: Error): Color {
+    return (
+      {
+        [ScheduleErrorLevel.INFO]: Colors.DARK_RED.fade(0.4),
+        [ScheduleErrorLevel.WARNING]: Colors.TUSCANY.fade(0.4),
+      }[error] ?? ColorHelper.getDefaultColor()
+    );
   }
 }

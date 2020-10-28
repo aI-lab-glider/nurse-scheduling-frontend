@@ -4,21 +4,22 @@ import xlsx from "exceljs";
 import { ShiftCode } from "../../common-models/shift-info.model";
 import { MonthInfoLogic, VerboseDate } from "../../logic/schedule-logic/month-info.logic";
 import { WorkerType } from "../../common-models/worker-info.model";
-import { Color } from "../colors/color.model";
-import { ColorHelper } from "../colors/color.helper";
-import { TranslationHelper } from "../tranlsations.helper";
 import {
   ChildrenSectionKey,
   MetaDataRowLabel,
   MetaDataSectionKey,
 } from "../../logic/section.model";
+import { ShiftHelper } from "../../helpers/shifts.helper";
+import { ColorHelper } from "../../helpers/colors/color.helper";
+import { Color } from "../../helpers/colors/color.model";
+import { TranslationHelper } from "../../helpers/tranlsations.helper";
 
 const EMPTY_ROW = Array(100).fill("");
 
-export class ExportFormatter {
+export class ScheduleExportLogic {
   constructor(private scheduleModel: ScheduleDataModel) {}
-
-  public formatAndSave(): void {
+  static readonly WORKSHEET_NAME = "grafik";
+  public formatAndSave(filename: string): void {
     const [workbook, workSheet] = this.createWorkArea();
     const headerRow = this.createHeader(this.scheduleModel);
     const datesSection = this.createDatesSection(this.scheduleModel);
@@ -40,12 +41,17 @@ export class ExportFormatter {
       EMPTY_ROW,
     ];
     this.addStyles(workSheet, schedule);
-    this.saveToFile(workbook);
+    this.saveToFile(workbook, filename);
   }
 
   private createWorkArea(): [xlsx.Workbook, xlsx.Worksheet] {
     const workbook = new xlsx.Workbook();
-    return [workbook, workbook.addWorksheet("grafik", { properties: { defaultColWidth: 5 } })];
+    return [
+      workbook,
+      workbook.addWorksheet(ScheduleExportLogic.WORKSHEET_NAME, {
+        properties: { defaultColWidth: 5 },
+      }),
+    ];
   }
 
   private addStyles(workSheet: xlsx.Worksheet, rows: unknown[]): void {
@@ -76,9 +82,9 @@ export class ExportFormatter {
   }
 
   private getShiftStyle(code: ShiftCode, verboseDate?: VerboseDate): Partial<xlsx.Style> {
-    const shiftFillColor = ColorHelper.getShiftColor(code, verboseDate).backgroundColor;
+    const shiftFillColor = ShiftHelper.getShiftColor(code, verboseDate).backgroundColor;
     const borderColor: Partial<xlsx.Border> = {
-      color: { argb: this.rgbaToArgbHex(new Color(218, 218, 218)) },
+      color: { argb: this.rgbaToArgbHex(ColorHelper.getBorderColor()) },
       style: "thin",
     };
     return {
@@ -101,7 +107,7 @@ export class ExportFormatter {
   }
 
   private rgbaToArgbHex(color: Color): string {
-    const toHex = (num): string => ("0" + num.toString(16)).slice(-2);
+    const toHex = (num: number): string => ("0" + num.toString(16)).slice(-2);
     const c = color;
     return `${toHex(c.a)}${toHex(c.r)}${toHex(c.g)}${toHex(c.b)}`;
   }
@@ -148,10 +154,10 @@ export class ExportFormatter {
     return [[MetaDataSectionKey.MonthDays, ...(scheduleModel?.month_info?.dates || [])]];
   }
 
-  private saveToFile(workbook: xlsx.Workbook): void {
+  private saveToFile(workbook: xlsx.Workbook, filename: string): void {
     workbook.xlsx.writeBuffer().then((buffer) => {
       const blob = new Blob([buffer]);
-      fs.saveAs(blob, "grafik.xlsx");
+      fs.saveAs(blob, filename);
     });
   }
 }

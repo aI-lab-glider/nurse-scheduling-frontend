@@ -7,7 +7,6 @@ import plLocale from "date-fns/locale/pl";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import backend from "../../../api/backend";
-import { groupShiftsByWorkerType } from "../../../helpers/shifts.helper";
 import { MonthInfoLogic } from "../../../logic/schedule-logic/month-info.logic";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
@@ -18,12 +17,16 @@ import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.re
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
 import "./problem-metadata.css";
 import { SnackbarComponent } from "./snackbar.component";
+import { ShiftHelper } from "../../../helpers/shifts.helper";
 
 function getWorkersCount(scheduleModel: ScheduleDataModel): number[] {
   const {
     [WorkerType.NURSE]: nurseShifts,
     [WorkerType.OTHER]: babysitterShifts,
-  } = groupShiftsByWorkerType(scheduleModel.shifts || {}, scheduleModel.employee_info?.type || {});
+  } = ShiftHelper.groupShiftsByWorkerType(
+    scheduleModel.shifts || {},
+    scheduleModel.employee_info?.type || {}
+  );
 
   return [Object.keys(babysitterShifts).length, Object.keys(nurseShifts).length];
 }

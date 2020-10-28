@@ -12,9 +12,9 @@ import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ScheduleErrorModel } from "../../../common-models/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
-import { ExportFormatter } from "../../../helpers/export/export-formatter";
-
+import { ScheduleExportLogic } from "../../../logic/schedule-exporter/schedule-export.logic";
 export function ImportButtonsComponent(): JSX.Element {
+  const DEFAULT_FILENAME = "grafik.xlsx";
   const [open, setOpen] = useState(false);
   const { scheduleModel, setSrcFile, scheduleErrors } = useScheduleConverter();
   const anchorRef = useRef(null);
@@ -44,7 +44,7 @@ export function ImportButtonsComponent(): JSX.Element {
 
   function handleExport(): void {
     if (stateScheduleModel) {
-      new ExportFormatter(stateScheduleModel).formatAndSave();
+      new ScheduleExportLogic(stateScheduleModel).formatAndSave(DEFAULT_FILENAME);
     }
   }
 
