@@ -5,7 +5,7 @@ import Popper from "@material-ui/core/Popper";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useScheduleConverter } from "../../../hooks/file-processing/use-schedule-converter";
+import { useScheduleConverter } from "./hooks/use-schedule-converter";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
@@ -73,7 +73,6 @@ export function ImportButtonsComponent(): JSX.Element {
                 type="file"
               />
             </Button>
-
             <Button onClick={(): void => handleExport()}>Zapisz jako...</Button>
           </ButtonGroup>
         </ClickAwayListener>

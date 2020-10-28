@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import XLSXParser from "xlsx";
-import { DataRowParser } from "../../logic/schedule-parser/data-row.parser";
-import { ScheduleParser } from "../../logic/schedule-parser/schedule.parser";
-
+import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
+import { ScheduleErrorModel } from "../../../../common-models/schedule-error.model";
+import { DataRowParser } from "../../../../logic/schedule-parser/data-row.parser";
+import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
 import { useFileReader } from "./use-file-reader";
-import { ScheduleDataModel } from "../../common-models/schedule-data.model";
-import { ScheduleErrorModel } from "../../common-models/schedule-error.model";
 
 // eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface useScheduleConverterOutput {
