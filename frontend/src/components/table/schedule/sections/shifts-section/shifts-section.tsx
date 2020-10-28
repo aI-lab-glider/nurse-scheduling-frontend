@@ -7,7 +7,7 @@ import {
   WorkerTypeHelper,
 } from "../../../../../state/models/schedule-data/worker-info.model";
 import { ShiftCode } from "../../../../../state/models/schedule-data/shift-info.model";
-import { AddWorkerModal, WorkerInfo } from "../../../modal/add-worker-modal";
+import { AddWorkerModal, WorkerInfo } from "../../../../add-worker-modal/add-worker-modal";
 import { ShiftCellComponent } from "../../schedule-parts/shift-cell.component";
 import { ScheduleLogicContext } from "../../use-schedule-state";
 import { BaseSectionComponent } from "../base-section/base-section.component";

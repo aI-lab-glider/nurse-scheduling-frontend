@@ -51,7 +51,9 @@
       "plugin:@typescript-eslint/eslint-recommended",
       "plugin:@typescript-eslint/recommended"
     ],
-    "rules": {},
+    "rules": {
+      "no-console": "warn"
+    },
     "overrides": [
       {
         "files": [
@@ -109,9 +111,12 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+    "src/**/*.{js,jsx,ts,tsx}": [
       "prettier --write",
-      "eslint \"src/**/*.ts*\" "
+      "eslint"
+    ],
+    "src/**/*.{json,css,scss,md}": [
+      "prettier --write"
     ]
   }
 }
