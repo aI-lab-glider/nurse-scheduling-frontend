@@ -1,14 +1,17 @@
-import { ScheduleDataModel } from "../../state/models/schedule-data/schedule-data.model";
+import { ScheduleDataModel } from "../../common-models/schedule-data.model";
 import fs from "file-saver";
 import xlsx from "exceljs";
-import { ShiftCode } from "../../state/models/schedule-data/shift-info.model";
-import { MonthLogic, VerboseDate } from "../../logic/schedule-logic/month.logic";
-import { WorkerType } from "../../state/models/schedule-data/worker-info.model";
+import { ShiftCode } from "../../common-models/shift-info.model";
+import { MonthInfoLogic, VerboseDate } from "../../logic/schedule-logic/month-info.logic";
+import { WorkerType } from "../../common-models/worker-info.model";
 import { Color } from "../colors/color.model";
 import { ColorHelper } from "../colors/color.helper";
 import { TranslationHelper } from "../tranlsations.helper";
-import { ChildrenSectionKey } from "../../logic/models/children-section.model";
-import { MetaDataRowLabel, MetaDataSectionKey } from "../../logic/models/metadata-section.model";
+import {
+  ChildrenSectionKey,
+  MetaDataRowLabel,
+  MetaDataSectionKey,
+} from "../../logic/section.model";
 
 const EMPTY_ROW = Array(100).fill("");
 
@@ -47,7 +50,7 @@ export class ExportFormatter {
 
   private addStyles(workSheet: xlsx.Worksheet, rows: unknown[]): void {
     const monthInfo = this.scheduleModel.schedule_info;
-    const monthLogic = new MonthLogic(
+    const monthLogic = new MonthInfoLogic(
       monthInfo?.month_number || 0,
       monthInfo?.year + "" || "",
       this.scheduleModel.month_info?.dates || [],

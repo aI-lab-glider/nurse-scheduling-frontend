@@ -1,7 +1,7 @@
-import { ChildrenSectionKey } from "../models/children-section.model";
 import { ChildrenInfoProvider } from "../schedule-provider";
 import { DataRow } from "./data-row";
 import { BaseSectionLogic } from "./section-logic.model";
+import { ChildrenSectionKey } from "../section.model";
 
 export class ChildrenInfoLogic extends BaseSectionLogic implements ChildrenInfoProvider {
   sectionKey = ChildrenInfoLogic.name;

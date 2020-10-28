@@ -8,12 +8,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import backend from "../../../api/backend";
 import { groupShiftsByWorkerType } from "../../../helpers/shifts.helper";
-import { MonthLogic } from "../../../logic/schedule-logic/month.logic";
+import { MonthInfoLogic } from "../../../logic/schedule-logic/month-info.logic";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { WorkerType } from "../../../state/models/schedule-data/worker-info.model";
-import { ScheduleDataModel } from "../../../state/models/schedule-data/schedule-data.model";
-import { ScheduleErrorModel } from "../../../state/models/schedule-data/schedule-error.model";
+import { WorkerType } from "../../../common-models/worker-info.model";
+import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
+import { ScheduleErrorModel } from "../../../common-models/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
 import "./problem-metadata.css";
@@ -43,7 +43,7 @@ export function ProblemMetadataComponent(): JSX.Element {
       const { year, month_number: monthNumber } = schedule.schedule_info || {};
       const [babysitterCount, nurseCount] = getWorkersCount(schedule);
       if (monthNumber && year) {
-        handleDateChange(MonthLogic.convertToDate(monthNumber, year));
+        handleDateChange(MonthInfoLogic.convertToDate(monthNumber, year));
       }
 
       if (babysitterCount) {

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
-import { ScheduleDataModel } from "../state/models/schedule-data/schedule-data.model";
-import { ScheduleErrorModel } from "../state/models/schedule-data/schedule-error.model";
+import { ScheduleDataModel } from "../common-models/schedule-data.model";
+import { ScheduleErrorModel } from "../common-models/schedule-error.model";
 
 class Backend {
   axios: AxiosInstance;

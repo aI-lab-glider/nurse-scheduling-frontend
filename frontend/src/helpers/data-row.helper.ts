@@ -1,4 +1,4 @@
-import { DataRowModel } from "../state/models/data-row.model";
+import { DataRowModel } from "../common-models/data-row.model";
 import { ArrayHelper } from "./array.helper";
 
 export class DataRowHelper {

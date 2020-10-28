@@ -1,7 +1,7 @@
-import { WorkerType } from "../state/models/schedule-data/worker-info.model";
-import { ScheduleDataModel } from "../state/models/schedule-data/schedule-data.model";
-import { ScheduleErrorModel } from "../state/models/schedule-data/schedule-error.model";
-import { ShiftCode } from "../state/models/schedule-data/shift-info.model";
+import { WorkerType } from "../common-models/worker-info.model";
+import { ScheduleDataModel } from "../common-models/schedule-data.model";
+import { ScheduleErrorModel } from "../common-models/schedule-error.model";
+import { ShiftCode } from "../common-models/shift-info.model";
 
 export interface MetadataProvider {
   monthNumber: number;

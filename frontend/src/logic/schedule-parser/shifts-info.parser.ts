@@ -1,8 +1,5 @@
-import {
-  ParseErrorCode,
-  ScheduleErrorModel,
-} from "../../state/models/schedule-data/schedule-error.model";
-import { ShiftCode } from "../../state/models/schedule-data/shift-info.model";
+import { ParseErrorCode, ScheduleErrorModel } from "../../common-models/schedule-error.model";
+import { ShiftCode } from "../../common-models/shift-info.model";
 import { ShiftsProvider } from "../schedule-provider";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";

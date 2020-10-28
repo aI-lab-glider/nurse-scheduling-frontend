@@ -1,7 +1,7 @@
 import { MonthLogicActionType } from "../../logic/schedule-logic/metadata.logic";
 import { ActionModel } from "../models/action.model";
-import { MonthInfoModel } from "../models/schedule-data/month-info.model";
-import { ScheduleDataModel } from "../models/schedule-data/schedule-data.model";
+import { MonthInfoModel } from "../../common-models/month-info.model";
+import { ScheduleDataModel } from "../../common-models/schedule-data.model";
 
 let uuid = 0;
 

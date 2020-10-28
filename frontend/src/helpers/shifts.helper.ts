@@ -1,5 +1,5 @@
-import { WorkerType } from "../state/models/schedule-data/worker-info.model";
-import { ShiftCode, ShiftInfoModel } from "../state/models/schedule-data/shift-info.model";
+import { WorkerType } from "../common-models/worker-info.model";
+import { ShiftCode, ShiftInfoModel } from "../common-models/shift-info.model";
 import { ArrayHelper } from "./array.helper";
 
 export function shiftCodeToWorkTime(shiftCode: ShiftCode): number {

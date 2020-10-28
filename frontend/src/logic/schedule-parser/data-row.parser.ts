@@ -1,5 +1,5 @@
 import { StringHelper } from "../../helpers/string.helper";
-import { ShiftCode } from "../../state/models/schedule-data/shift-info.model";
+import { ShiftCode } from "../../common-models/shift-info.model";
 
 export class DataRowParser {
   private data: string[];

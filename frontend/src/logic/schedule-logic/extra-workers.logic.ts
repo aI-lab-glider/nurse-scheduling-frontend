@@ -1,7 +1,7 @@
 import { BaseSectionLogic } from "./section-logic.model";
 import { DataRow } from "./data-row";
 import { ExtraWorkersInfoProvider } from "../schedule-provider";
-import { ExtraWorkersSectionKey } from "../models/extra-workers-section.model";
+import { ExtraWorkersSectionKey } from "../section.model";
 
 export class ExtraWorkersLogic extends BaseSectionLogic implements ExtraWorkersInfoProvider {
   private extraWorkersInfoAsDataRows: { [key: string]: DataRow } = {};

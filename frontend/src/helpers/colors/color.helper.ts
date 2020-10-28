@@ -1,6 +1,6 @@
-import { VerboseDate } from "../../logic/schedule-logic/month.logic";
-import { WeekDay } from "../../state/models/schedule-data/month-info.model";
-import { ShiftCode } from "../../state/models/schedule-data/shift-info.model";
+import { VerboseDate } from "../../logic/schedule-logic/month-info.logic";
+import { WeekDay } from "../../common-models/month-info.model";
+import { ShiftCode } from "../../common-models/shift-info.model";
 import { CellColorSet } from "./cell-color-set.model";
 import { Colors } from "./colors";
 import { Color } from "./color.model";

@@ -1,12 +1,12 @@
 import { StringHelper } from "../../helpers/string.helper";
-import { WorkerType } from "../../state/models/schedule-data/worker-info.model";
+import { WorkerType } from "../../common-models/worker-info.model";
 import { ChildrenInfoParser } from "./children-info.parser";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { ShiftsInfoParser } from "./shifts-info.parser";
 import { ScheduleProvider, Schedule } from "../schedule-provider";
 import { ExtraWorkersParser } from "./extra-workers.parser";
-import { MetaDataRowLabel } from "../models/metadata-section.model";
+import { MetaDataRowLabel } from "../section.model";
 
 export class ScheduleParser implements ScheduleProvider {
   readonly nurseInfoProvider: ShiftsInfoParser;
