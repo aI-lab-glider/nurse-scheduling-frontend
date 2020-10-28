@@ -1,8 +1,8 @@
 import { WeekDay } from "../../state/models/schedule-data/month-info.model";
+import { MetaDataSectionKey } from "../models/metadata-section.model";
 import { MonthLogic } from "../schedule-logic/month.logic";
 import { MetadataProvider } from "../schedule-provider";
 import { DataRowParser } from "./data-row.parser";
-import { MetaDataSectionKey } from "../models/metadata-section.model";
 
 export class MetaDataParser implements MetadataProvider {
   private monthLogic: MonthLogic;
