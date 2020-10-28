@@ -1,7 +1,7 @@
 import React from "react";
 import { ColorHelper } from "../../../../helpers/colors/color.helper";
 import "./base-cell.css";
-import { CellOptions } from "./cell-options.model";
+import { BaseCellOptions } from "./base-cell-options.model";
 
 export function BaseCellComponent({
   index,
@@ -14,7 +14,7 @@ export function BaseCellComponent({
   onContextMenu,
   onClick,
   onBlur,
-}: CellOptions): JSX.Element {
+}: BaseCellOptions): JSX.Element {
   const inputRef = React.createRef<HTMLInputElement>();
 
   function handleContextMenu(e: React.MouseEvent): void {

@@ -4,7 +4,7 @@ import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { DirectionKey } from "../sections/base-section/base-section.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
 import { BaseCellComponent } from "./base-cell.component";
-import { CellOptions } from "./cell-options.model";
+import { BaseCellOptions } from "./base-cell-options.model";
 import "./schedule-row.component.css";
 
 enum CellManagementKeys {
@@ -17,7 +17,7 @@ export interface ScheduleRowOptions {
   dataRow: DataRow;
   sectionKey?: string;
   showSelectedCells?: boolean;
-  cellComponent?: (cellOptions: CellOptions) => JSX.Element;
+  cellComponent?: (BaseCellOptions: BaseCellOptions) => JSX.Element;
   onKeyDown?: (cellIndex: number, event: React.KeyboardEvent) => void;
   onClick?: (cellIndex: number) => void;
   onStateUpdate?: (row: DataRow) => void;
@@ -127,9 +127,6 @@ export function ScheduleRowComponent({
         value={dataRowState.rowKey || ""}
         isSelected={false}
         isBlocked={false}
-        onContextMenu={(): void => {
-          console.log("Show context menu");
-        }}
         isPointerOn={false}
         onClick={(): void => onRowKeyClick && onRowKeyClick()}
       />

@@ -68,7 +68,6 @@ export function AddWorkerModal({
 
   function parseTimeIfPossible(time: string): ParseTimeModel {
     if (new RegExp("^([1-9]/[1-9])$").test(time)) {
-      console.log("dsasd");
       const timerArray = time.split("/").map((t) => parseInt(t));
       if (timerArray[0] <= timerArray[1]) {
         return { isTimeFormatValid: true, parsedTime: Number(timerArray[0] / timerArray[1]) };

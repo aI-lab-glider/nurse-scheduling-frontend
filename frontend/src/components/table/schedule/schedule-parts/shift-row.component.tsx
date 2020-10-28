@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
-import { CellOptions } from "./cell-options.model";
+import { BaseCellOptions } from "./base-cell-options.model";
 import { ScheduleRowComponent, ScheduleRowOptions } from "./schedule-row.component";
 import { shiftCodeToWorkTime } from "../../../../helpers/shifts.helper";
 import { ShiftCellComponent } from "./shift-cell.component";
@@ -12,7 +12,7 @@ const WORK_HOURS_PER_DAY = 8;
 export interface ShiftRowOptions extends ScheduleRowOptions {
   dataRow: DataRow;
   onRowUpdated?: (row: DataRow) => void;
-  cellComponent?: (cellOptions: CellOptions) => JSX.Element;
+  cellComponent?: (BaseCellOptions: BaseCellOptions) => JSX.Element;
 }
 
 export function ShiftRowComponent(options: ShiftRowOptions): JSX.Element {
