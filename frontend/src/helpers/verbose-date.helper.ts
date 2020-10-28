@@ -1,5 +1,4 @@
-import { VerboseDate } from "../logic/schedule-logic/month.logic";
-import { WeekDay } from "../state/models/schedule-data/month-info.model";
+import { VerboseDate, WeekDay } from "../common-models/month-info.model";
 import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Colors } from "./colors/color.model";

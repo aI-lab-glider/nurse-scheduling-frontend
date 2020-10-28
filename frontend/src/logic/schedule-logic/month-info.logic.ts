@@ -1,13 +1,6 @@
 import { StringHelper } from "../../helpers/string.helper";
 import { TranslationHelper } from "../../helpers/tranlsations.helper";
-import { WeekDay } from "../../common-models/month-info.model";
-
-export interface VerboseDate {
-  date: number;
-  dayOfWeek: WeekDay;
-  isFrozen?: boolean;
-  month: string;
-}
+import { VerboseDate, WeekDay } from "../../common-models/month-info.model";
 
 export class MonthInfoLogic {
   public monthNumber: number;

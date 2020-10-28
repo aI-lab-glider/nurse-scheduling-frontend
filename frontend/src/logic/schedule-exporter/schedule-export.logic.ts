@@ -2,7 +2,7 @@ import { ScheduleDataModel } from "../../common-models/schedule-data.model";
 import fs from "file-saver";
 import xlsx from "exceljs";
 import { ShiftCode } from "../../common-models/shift-info.model";
-import { MonthInfoLogic, VerboseDate } from "../../logic/schedule-logic/month-info.logic";
+import { MonthInfoLogic } from "../../logic/schedule-logic/month-info.logic";
 import { WorkerType } from "../../common-models/worker-info.model";
 import {
   ChildrenSectionKey,
@@ -13,6 +13,7 @@ import { ShiftHelper } from "../../helpers/shifts.helper";
 import { ColorHelper } from "../../helpers/colors/color.helper";
 import { Color } from "../../helpers/colors/color.model";
 import { TranslationHelper } from "../../helpers/tranlsations.helper";
+import { VerboseDate } from "../../common-models/month-info.model";
 
 const EMPTY_ROW = Array(100).fill("");
 

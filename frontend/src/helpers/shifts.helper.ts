@@ -1,11 +1,11 @@
 import { WorkerType } from "../common-models/worker-info.model";
 import { ShiftCode, ShiftInfoModel } from "../common-models/shift-info.model";
 import { ArrayHelper } from "./array.helper";
-import { VerboseDate } from "../logic/schedule-logic/month.logic";
 import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Colors } from "./colors/color.model";
 import { VerboseDateHelper } from "./verbose-date.helper";
+import { VerboseDate } from "../common-models/month-info.model";
 
 export class ShiftHelper {
   public static shiftCodeToWorkTime(shiftCode: ShiftCode): number {
