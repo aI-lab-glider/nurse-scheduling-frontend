@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Modal, TextField } from "@material-ui/core";
-import "./add-worker-modal.css";
 import { WorkerInfo, WorkerType, WorkerTypeHelper } from "../../common-models/worker-info.model";
 import Button from "@material-ui/core/Button";
 

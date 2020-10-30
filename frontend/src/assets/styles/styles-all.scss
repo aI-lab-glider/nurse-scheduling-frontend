@@ -1,0 +1,21 @@
+//$asset-base-path: '../assets' !default;
+
+// Core
+
+@import "styles/bootstrap/functions";
+
+@import "styles/custom/variables";
+@import "styles/bootstrap/variables";
+
+@import "styles/bootstrap/mixins";
+
+// Bootstrap components
+
+@import "styles/bootstrap/reboot";
+@import "styles/bootstrap/code";
+
+// Custom components
+
+@import "styles/custom/tables";
+@import "styles/custom/toolbar";
+@import "styles/custom/add-worker-modal";

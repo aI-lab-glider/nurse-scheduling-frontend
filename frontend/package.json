@@ -22,6 +22,7 @@
     "date-fns": "^2.15.0",
     "exceljs": "^4.1.1",
     "file-saver": "^2.0.2",
+    "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-datasheet": "^1.4.8",
     "react-dom": "^16.13.1",

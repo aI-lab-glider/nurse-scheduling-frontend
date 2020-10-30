@@ -5,7 +5,7 @@ import { createStore } from "redux";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import App from "./app";
-import "./index.css";
+import "./assets/styles/styles-all.scss";
 import * as serviceWorker from "./serviceWorker";
 import { appReducer } from "./state/app-reducer";
 

@@ -1,6 +1,5 @@
 import React from "react";
 import { ColorHelper } from "../../../../helpers/colors/color.helper";
-import "./base-cell.css";
 import { CellColorSet } from "../../../../helpers/colors/cell-color-set.model";
 
 export interface BaseCellOptions {

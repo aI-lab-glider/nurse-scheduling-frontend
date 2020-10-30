@@ -12,7 +12,6 @@ import { AddWorkerModal } from "../../../../add-worker-modal/add-worker-modal";
 import { ShiftCellComponent } from "../../schedule-parts/shift-cell.component";
 import { ScheduleLogicContext } from "../../use-schedule-state";
 import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-section.component";
-import "./shifts-section.css";
 import { ShiftRowComponent } from "../../schedule-parts/shift-row.component";
 
 export interface ShiftsSectionOptions extends BaseSectionOptions {
@@ -78,7 +77,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
           </td>
 
           <td>
-            <div className="add-button">
+            <div>
               <Button onClick={(): void => openWorkerModal()}>Dodaj</Button>
             </div>
           </td>
