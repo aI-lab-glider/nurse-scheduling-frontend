@@ -1,5 +1,4 @@
 import React from "react";
-import "./app.css";
 import { TableComponent } from "./components/table/table.component";
 import { ToolbarComponent } from "./components/toolbar/toolbar.component";
 function App(): JSX.Element {
