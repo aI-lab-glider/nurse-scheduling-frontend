@@ -35,12 +35,14 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint \"src/**/*.ts*\""
+    "lint": "eslint \"src/**/*.ts*\"",
+    "cypress:open": "cypress open"
   },
   "devDependencies": {
     "@types/react": "^16.9.46",
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.9",
+    "cypress": "^5.4.0",
     "eslint-import-resolver-typescript": "^2.3.0",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.2",
