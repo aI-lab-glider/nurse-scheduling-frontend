@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-context("Example", () => {
+context("Menu 'plik'", () => {
   beforeEach(() => {
     cy.visit(`${Cypress.env("baseUrl")}`);
   });
