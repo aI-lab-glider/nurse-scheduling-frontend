@@ -2,7 +2,7 @@
 
 context("Example", () => {
   beforeEach(() => {
-    cy.visit("localhost:3002");
+    cy.visit(`${Cypress.env("baseUrl")}`);
   });
 
   describe("File button", () => {
