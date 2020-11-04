@@ -11,6 +11,7 @@ export enum WeekDay {
 export interface VerboseDate {
   date: number;
   dayOfWeek: WeekDay;
+  isPublicHoliday: boolean;
   isFrozen?: boolean;
   month: string;
 }
