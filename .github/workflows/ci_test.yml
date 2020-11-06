@@ -20,9 +20,8 @@ jobs:
         working-directory: ${{env.frontend-folder}}
 
       - name: Run application
-        run: npm start
+        run: npm start &
         working-directory: ${{env.frontend-folder}}
-        background: true
 
       - name: Run cypress
         run: npx cypress run
