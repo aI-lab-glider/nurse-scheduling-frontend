@@ -1,21 +1,22 @@
-// dates as represented here follow [day, month] pattern
 // months as used here are human-readable i.e. go from 1 to 12 (hence + 1)
 
+type CustomDate = { day: number; month: number };
+
 export class PublicHolidaysLogic {
-  private publicHolidayDates: number[][];
+  private publicHolidayDates: CustomDate[];
 
   constructor(year: string) {
     this.publicHolidayDates = [
       // fixed holidays (święta stałe)
-      [1, 1],
-      [6, 1],
-      [1, 5],
-      [3, 5],
-      [15, 8],
-      [1, 11],
-      [11, 11],
-      [25, 12],
-      [26, 12],
+      { day: 1, month: 1 },
+      { day: 6, month: 1 },
+      { day: 1, month: 5 },
+      { day: 3, month: 5 },
+      { day: 15, month: 8 },
+      { day: 1, month: 11 },
+      { day: 11, month: 11 },
+      { day: 25, month: 12 },
+      { day: 26, month: 12 },
       // moveable holidays (święta ruchome)
       ...this.moveableHolidays(parseInt(year)),
     ];
@@ -23,14 +24,15 @@ export class PublicHolidaysLogic {
 
   public isPublicHoliday(day: number, month: number): boolean {
     return (
-      this.publicHolidayDates.find((holiday) => holiday[0] === day && holiday[1] === month + 1) !==
-      undefined
+      this.publicHolidayDates.find(
+        (holiday) => holiday.day === day && holiday.month === month + 1
+      ) !== undefined
     );
   }
 
-  private moveableHolidays(year: number): number[][] {
-    function dateToDayMonth(date: Date): number[] {
-      return [date.getDate(), date.getMonth() + 1];
+  private moveableHolidays(year: number): CustomDate[] {
+    function dateToDayMonth(date: Date): CustomDate {
+      return { day: date.getDate(), month: date.getMonth() + 1 };
     }
 
     // Easter
