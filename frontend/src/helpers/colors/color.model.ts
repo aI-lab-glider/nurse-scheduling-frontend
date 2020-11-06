@@ -57,4 +57,7 @@ export class Colors {
   public static get DARK_SLATE_BLUE(): Color {
     return new Color(72, 61, 139);
   }
+  public static get PINK(): Color {
+    return new Color(255, 56, 152);
+  }
 }

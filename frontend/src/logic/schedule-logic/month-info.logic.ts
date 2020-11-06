@@ -1,11 +1,13 @@
 import { StringHelper } from "../../helpers/string.helper";
 import { TranslationHelper } from "../../helpers/tranlsations.helper";
 import { VerboseDate, WeekDay } from "../../common-models/month-info.model";
+import { PublicHolidaysLogic } from "./public-holidays.logic";
 
 export class MonthInfoLogic {
   public monthNumber: number;
   private _verboseDates: VerboseDate[] = [];
   private monthDates: number[];
+  private publicHolidaysLogic: PublicHolidaysLogic;
 
   public get dates(): number[] {
     return this._verboseDates.map((d) => d.date);
@@ -37,6 +39,8 @@ export class MonthInfoLogic {
     }
 
     this.monthNumber = monthId;
+
+    this.publicHolidaysLogic = new PublicHolidaysLogic(year);
 
     this._verboseDates = this.createCalendar(this.monthNumber, year, daysFromPreviousMonthExists);
   }
@@ -98,17 +102,18 @@ export class MonthInfoLogic {
       if (day === 1) {
         daysFromPreviousMonthExists = false;
       }
-      const month = Object.values(TranslationHelper.monthTranslations)[
-        daysFromPreviousMonthExists ? monthNumber - 1 : monthNumber
-      ];
-      const date = new Date(`${day} ${month} ${year}`);
+      const month = daysFromPreviousMonthExists ? monthNumber - 1 : monthNumber;
+      const isPublicHoliday = this.publicHolidaysLogic.isPublicHoliday(day, month);
+      const monthName = Object.values(TranslationHelper.monthTranslations)[month];
+      const date = new Date(`${day} ${monthName} ${year}`);
       verboseDates.push({
         date: day,
         dayOfWeek: weekDays[date.getDay()],
+        isPublicHoliday: isPublicHoliday,
         isFrozen: false,
         // TODO: handle automatic frozen state
         // this.isDateFrozen(date, daysFromPreviousMonthExists),
-        month: month,
+        month: monthName,
       });
     }
     return verboseDates;
