@@ -23,6 +23,10 @@ jobs:
         run: npm start &
         working-directory: ${{env.frontend-folder}}
 
+      - name: Run lint
+          run: npm run lint
+          working-directory: ${{env.frontend-folder}}
+
       - name: Run cypress
         run: npx cypress run
         working-directory: ${{env.frontend-folder}}
