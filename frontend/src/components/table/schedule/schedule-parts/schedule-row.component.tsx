@@ -3,7 +3,6 @@ import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { DirectionKey } from "../sections/base-section/base-section.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
 import { BaseCellComponent, BaseCellOptions } from "./base-cell.component";
-import "./schedule-row.component.css";
 import { ShiftHelper } from "../../../../helpers/shifts.helper";
 
 enum CellManagementKeys {

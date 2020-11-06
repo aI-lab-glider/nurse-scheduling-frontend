@@ -15,7 +15,6 @@ import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ScheduleErrorModel } from "../../../common-models/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
-import "./problem-metadata.css";
 import { SnackbarComponent } from "./snackbar.component";
 import { ShiftHelper } from "../../../helpers/shifts.helper";
 
@@ -162,25 +161,15 @@ export function ProblemMetadataComponent(): JSX.Element {
         handleNumberOfSittersChange
       )}
       <br />
-      <div className="submit-button-container">
+      <div id="submit-button-container">
         <Box>
-          <Button
-            size="small"
-            className="submit-button"
-            variant="outlined"
-            onClick={onFixScheduleClicked}
-          >
+          <Button size="small" id="submit-button" variant="outlined" onClick={onFixScheduleClicked}>
             Popraw
           </Button>
         </Box>
 
         <Box>
-          <Button
-            size="small"
-            className="submit-button"
-            variant="outlined"
-            onClick={onShowErrorsClicked}
-          >
+          <Button size="small" id="submit-button" variant="outlined" onClick={onShowErrorsClicked}>
             Sprawdź
           </Button>
         </Box>

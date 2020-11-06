@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { WorkerType } from "../../../common-models/worker-info.model";
 import { EmptyRowComponent } from "./schedule-parts/empty-cell.component";
-import "./schedule.component.css";
 import { ChildrenSectionComponent } from "./sections/children-section/children-section.components";
 import { DateSectionComponent } from "./sections/date-section/date-section.component";
 import { ShiftsSectionComponent } from "./sections/shifts-section/shifts-section";
