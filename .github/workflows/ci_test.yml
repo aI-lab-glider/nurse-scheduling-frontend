@@ -31,3 +31,4 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run cypress
         run: npx cypress run
+        working-directory: ${{env.frontend-folder}}
