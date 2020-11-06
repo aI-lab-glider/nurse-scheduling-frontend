@@ -28,6 +28,12 @@ export class VerboseDateHelper {
         };
         break;
     }
+    if (day.isPublicHoliday) {
+      colorSet = {
+        backgroundColor: Colors.PINK,
+        textColor: Colors.BLACK,
+      };
+    }
     return isFrozen && !ignoreFrozenState
       ? { ...colorSet, backgroundColor: colorSet.backgroundColor.fade() }
       : colorSet;
