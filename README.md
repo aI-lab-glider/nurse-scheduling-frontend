@@ -16,18 +16,7 @@ This repository contains the frontend web application, and also a mock backend s
 
 ```
 git clone https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend.git nurse-scheduling
-cd nurse-scheduling/frontend
+cd nurse-scheduling
 npm install
 npm start
-```
-## Running Mock Backend Server
-Have python, pip and venv installed, cd into backend/server, then
-
-```
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-source venv/bin/activate
-export FLASK_APP=example_server.py
-python -m flask run
 ```
