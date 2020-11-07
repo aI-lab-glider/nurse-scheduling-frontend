@@ -12,4 +12,10 @@ context("Menu 'plik'", () => {
       cy.contains("Zapisz jako...");
     });
   });
+
+  describe("Test should fail and block PR", () => {
+    it("Should faile", () =>  {
+      cy.contains("Not existing button");
+    })
+  })
 });
