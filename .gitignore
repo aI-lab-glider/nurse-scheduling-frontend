@@ -23,3 +23,6 @@ yarn-error.log*
 .env*.local
 cypress.env.json
 .idea/*
+
+# needed in tests
+/cypress/fixtures/grafik.xlsx
