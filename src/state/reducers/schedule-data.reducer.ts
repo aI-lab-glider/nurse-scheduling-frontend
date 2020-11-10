@@ -2,6 +2,7 @@ import { MonthLogicActionType } from "../../logic/schedule-logic/metadata.logic"
 import { ActionModel } from "../models/action.model";
 import { MonthInfoModel } from "../../common-models/month-info.model";
 import { ScheduleDataModel } from "../../common-models/schedule-data.model";
+import undoable from "redux-undo";
 
 let uuid = 0;
 
@@ -10,7 +11,7 @@ export enum ScheduleDataActionType {
   ADD_NEW = "addNew",
 }
 
-export function scheduleDataReducer(
+function scheduleDataReducer(
   state: ScheduleDataModel = {},
   action: ActionModel<ScheduleDataModel>
 ): ScheduleDataModel {
@@ -38,3 +39,5 @@ export function scheduleDataReducer(
       return state;
   }
 }
+
+export default undoable(scheduleDataReducer);

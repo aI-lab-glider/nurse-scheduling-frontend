@@ -11,7 +11,7 @@ import { ExtraWorkersSection } from "./sections/extra-workers-section/extra-work
 
 export function ScheduleComponent(): JSX.Element {
   const scheduleModel = useSelector(
-    (state: ApplicationStateModel) => state.scheduleData,
+    (state: ApplicationStateModel) => state.scheduleData?.present,
     (left, right) => left?.schedule_info?.UUID === right?.schedule_info?.UUID
   );
 
