@@ -37,7 +37,7 @@ export function ProblemMetadataComponent(): JSX.Element {
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
 
-  const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData);
+  const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData?.present);
 
   const dispatcher = useDispatch();
   useEffect(() => {

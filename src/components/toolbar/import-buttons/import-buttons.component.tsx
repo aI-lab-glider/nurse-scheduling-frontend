@@ -18,7 +18,9 @@ export function ImportButtonsComponent(): JSX.Element {
   const [open, setOpen] = useState(false);
   const { scheduleModel, setSrcFile, scheduleErrors } = useScheduleConverter();
   const anchorRef = useRef(null);
-  const stateScheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData);
+  const stateScheduleModel = useSelector(
+    (state: ApplicationStateModel) => state.scheduleData?.present
+  );
 
   const scheduleDipatcher = useDispatch();
 
