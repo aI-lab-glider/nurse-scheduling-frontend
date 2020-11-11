@@ -15,7 +15,7 @@ export interface BaseCellOptions {
   onBlur?: () => void;
 }
 
-export function BaseCellComponent({
+function BaseCellComponentF({
   value,
   style = ColorHelper.DEFAULT_COLOR_SET,
   isBlocked,
@@ -64,3 +64,14 @@ export function BaseCellComponent({
     </td>
   );
 }
+
+export const BaseCellComponent: React.FC<BaseCellOptions> = React.memo(
+  BaseCellComponentF,
+  (prev, next) => {
+    const areEqual =
+      prev.value === next.value &&
+      prev.isSelected === next.isSelected &&
+      next.isPointerOn === prev.isPointerOn;
+    return areEqual;
+  }
+);

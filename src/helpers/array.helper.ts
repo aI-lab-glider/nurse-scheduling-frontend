@@ -1,3 +1,4 @@
+type Primitive = undefined | null | boolean | number | string | bigint | symbol;
 export class ArrayHelper {
   public static zip<T>(array1: T[], array2: T[]): [T, T][] {
     let longer: T[];
@@ -22,5 +23,15 @@ export class ArrayHelper {
         return { [key]: valueSelector(key, obj) };
       })
       .reduce((acc, curr) => ({ ...acc, ...curr }), {});
+  }
+
+  public static arePrimitiveArraysEqual(array1: Primitive[], array2: Primitive[]): boolean {
+    if (array1.length !== array2.length) return false;
+    for (let ind = 0; ind < array1.length; ++ind) {
+      if (array1[ind] !== array2[ind]) {
+        return false;
+      }
+    }
+    return true;
   }
 }

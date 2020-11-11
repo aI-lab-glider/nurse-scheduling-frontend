@@ -3,6 +3,6 @@ import { ScheduleErrorMessageModel } from "../../common-models/schedule-error-me
 import { StateWithHistory } from "redux-undo";
 
 export interface ApplicationStateModel {
-  scheduleData?: StateWithHistory<ScheduleDataModel>;
+  scheduleData: StateWithHistory<ScheduleDataModel>;
   scheduleErrors?: ScheduleErrorMessageModel[];
 }

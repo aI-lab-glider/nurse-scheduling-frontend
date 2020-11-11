@@ -2,7 +2,7 @@ import { VerboseDate, WeekDay } from "../../common-models/month-info.model";
 import { Sections } from "../providers/schedule-provider.model";
 import { DataRow } from "./data-row";
 import { MonthInfoLogic } from "./month-info.logic";
-import { BaseSectionLogic } from "./section-logic.model";
+import { BaseSectionLogic } from "./base-section-logic.model";
 import { MetaDataSectionKey } from "../section.model";
 import { MetadataProvider } from "../providers/metadata-provider.model";
 export enum MonthLogicActionType {
