@@ -32,6 +32,7 @@ export class DataRowHelper {
     dataRowArray1: DataRow[] = [],
     dataRowArray2: DataRow[] = []
   ): boolean {
+    if (dataRowArray1.length !== dataRowArray2.length) return false;
     for (let ind = 0; ind < dataRowArray1.length; ++ind) {
       if (!DataRowHelper.areDataRowsEqual(dataRowArray1[ind], dataRowArray2[ind])) return false;
     }

@@ -20,7 +20,7 @@ export function monthInfoReducer(
     case ScheduleDataActionType.ADD_NEW:
       return { ...data };
     case ScheduleDataActionType.UPDATE:
-      return { ...data };
+      return { ...state, ...data };
     default:
       return state;
   }

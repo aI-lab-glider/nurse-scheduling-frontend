@@ -73,16 +73,10 @@ export function BaseRowComponentF({
     setSelectedCells([]);
   }
 
-  const isFrozen = useCallback(
-    (cellInd: number): boolean => {
-      return (
-        verboseDates?.[cellInd]?.isFrozen ||
-        // !!frozenShifts.find((fS) => fS[0] === index && fS[1] === cellInd) ||
-        false
-      );
-    },
-    [verboseDates]
-  );
+  const isFrozen = useCallback((cellInd: number): boolean => {
+    // TODO handle frozen dates
+    return false;
+  }, []);
 
   function toggleSelection(cellIndex: number): void {
     if (selectedCells.includes(cellIndex)) {

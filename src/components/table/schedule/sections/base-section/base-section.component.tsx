@@ -89,6 +89,6 @@ function BaseSectionComponentF({
 
 export const BaseSectionComponent = React.memo(BaseSectionComponentF, (prev, next) => {
   const areEqual =
-    DataRowHelper.areDataRowArraysEqual(prev.data, next.data) && prev.uuid === next.uuid;
+    prev.uuid === next.uuid && DataRowHelper.areDataRowArraysEqual(prev.data, next.data);
   return areEqual;
 });

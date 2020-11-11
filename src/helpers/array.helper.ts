@@ -25,7 +25,7 @@ export class ArrayHelper {
       .reduce((acc, curr) => ({ ...acc, ...curr }), {});
   }
 
-  public static arePrimitiveArraysEqual<T>(array1: Primitive[], array2: Primitive[]): boolean {
+  public static arePrimitiveArraysEqual(array1: Primitive[], array2: Primitive[]): boolean {
     if (array1.length !== array2.length) return false;
     for (let ind = 0; ind < array1.length; ++ind) {
       if (array1[ind] !== array2[ind]) {

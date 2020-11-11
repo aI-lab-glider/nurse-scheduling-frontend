@@ -12,12 +12,14 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
   const { onKeyDown, value } = options;
   const shiftValue = getShiftCode(value);
 
+  function _onKeyDown(inputValue: string, key: React.KeyboardEvent): void {
+    onKeyDown && onKeyDown(getShiftCode(inputValue), key);
+  }
+
   return (
     <BaseCellComponent
       {...options}
-      onKeyDown={(inputValue: string, key: React.KeyboardEvent): void => {
-        onKeyDown && onKeyDown(getShiftCode(inputValue), key);
-      }}
+      onKeyDown={_onKeyDown}
       value={shiftValue === ShiftCode.W ? "" : shiftValue}
     />
   );

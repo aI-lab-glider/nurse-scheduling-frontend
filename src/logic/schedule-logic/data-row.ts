@@ -21,7 +21,7 @@ export class DataRow implements DataRowModel {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public updateData(updateCallback: (row: string[]) => any[]): DataRow {
     const data = this.rowData(true, false);
-    this.data = [...updateCallback(data)];
+    this.data = updateCallback(data);
     return this;
   }
 

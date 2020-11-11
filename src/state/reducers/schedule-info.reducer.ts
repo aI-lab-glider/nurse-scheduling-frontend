@@ -7,7 +7,6 @@ const initialState: ScheduleModel = {
   month_number: -1,
   year: -1,
   daysFromPreviousMonthExists: false,
-  isInitialized: false,
 };
 
 export function scheduleInfoReducer(
@@ -19,7 +18,7 @@ export function scheduleInfoReducer(
   switch (action.type) {
     case ScheduleDataActionType.ADD_NEW:
       uuid += 1;
-      return { ...data, UUID: uuid.toString(), isInitialized: true };
+      return { ...data, UUID: uuid.toString() };
     case ScheduleDataActionType.UPDATE:
       return { ...state, ...data };
     default:
