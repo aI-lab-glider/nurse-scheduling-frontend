@@ -1,5 +1,7 @@
 import { PublicHolidaysLogic } from "../../../../../src/logic/schedule-logic/public-holidays.logic";
 
+type CustomDate = { day: number; month: number };
+
 // source: https://www.kalendarzswiat.pl/swieta/wolne_od_pracy/{year}
 const FIXED_HOLIDAYS = [
   { day: 1, month: 1 },
@@ -88,28 +90,30 @@ function testYear(year: string): void {
     const logic = new PublicHolidaysLogic(year);
 
     it("should correctly see fixed holidays as holidays", () => {
-      FIXED_HOLIDAYS.forEach((fixedHoliday) => {
-        const { day, month } = fixedHoliday;
-        const got = logic.isPublicHoliday(day, monthToInputFormat(month));
-        expect(got).to.equal(true, `${formatDate(day, month, year)} is a holiday`);
-      });
+      testDates(logic, year, FIXED_HOLIDAYS, true);
     });
 
     it("should correctly see moveable holidays as holidays", () => {
-      MOVEABLE_HOLIDAYS[year].forEach((movableHoliday) => {
-        const { day, month } = movableHoliday;
-        const got = logic.isPublicHoliday(day, monthToInputFormat(month));
-        expect(got).to.equal(true, `${formatDate(day, month, year)} is a holiday`);
-      });
+      testDates(logic, year, MOVEABLE_HOLIDAYS[year], true);
     });
 
     it("shouldn't see non-holidays as holidays", () => {
-      NON_HOLIDAYS[year].forEach((nonHoliday) => {
-        const { day, month } = nonHoliday;
-        const got = logic.isPublicHoliday(day, monthToInputFormat(month));
-        expect(got).to.equal(false, `${formatDate(day, month, year)} is not a holiday`);
-      });
+      testDates(logic, year, NON_HOLIDAYS[year], false);
     });
+  });
+}
+
+function testDates(
+  logic: PublicHolidaysLogic,
+  year: string,
+  dates: CustomDate[],
+  shouldBeHolidays: boolean
+): void {
+  dates.forEach((date) => {
+    const { day, month } = date;
+    const got = logic.isPublicHoliday(day, monthToInputFormat(month));
+    const message = `${formatDate(day, month, year)} is ${shouldBeHolidays ? "" : "not"} a holiday`;
+    expect(got).to.equal(shouldBeHolidays, message);
   });
 }
 
