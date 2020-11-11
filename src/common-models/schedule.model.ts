@@ -3,4 +3,5 @@ export interface ScheduleModel {
   month_number: number;
   year: number;
   daysFromPreviousMonthExists: boolean;
+  isInitialized?: boolean;
 }

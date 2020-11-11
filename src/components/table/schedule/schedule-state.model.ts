@@ -1,5 +1,4 @@
 import { DataRow } from "../../../logic/schedule-logic/data-row";
-import { ScheduleLogic } from "../../../logic/schedule-logic/schedule.logic";
 
 export interface ScheduleComponentState {
   childrenSection?: DataRow[];
@@ -8,7 +7,6 @@ export interface ScheduleComponentState {
   babysitterShiftsSection?: DataRow[];
   dateSection?: DataRow[];
   isInitialized?: boolean;
-  scheduleLogic: ScheduleLogic | null;
   uuid: string;
 }
 
@@ -19,6 +17,5 @@ export const scheduleInitialState: ScheduleComponentState = {
   childrenSection: [],
   dateSection: [],
   isInitialized: false,
-  scheduleLogic: null,
   uuid: "",
 };

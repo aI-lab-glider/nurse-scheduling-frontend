@@ -1,4 +1,5 @@
 import { DataRowModel } from "../common-models/data-row.model";
+import { DataRow } from "../logic/schedule-logic/data-row";
 import { ArrayHelper } from "./array.helper";
 
 export class DataRowHelper {
@@ -19,5 +20,21 @@ export class DataRowHelper {
       (item) => item.rowKey,
       (key, row) => row
     );
+  }
+
+  public static areDataRowsEqual(dataRow1: DataRow, dataRow2: DataRow): boolean {
+    const rowData1 = dataRow1.rowData(true, true);
+    const rowData2 = dataRow2.rowData(true, true);
+    return ArrayHelper.arePrimitiveArraysEqual(rowData1, rowData2);
+  }
+
+  public static areDataRowArraysEqual(
+    dataRowArray1: DataRow[] = [],
+    dataRowArray2: DataRow[] = []
+  ): boolean {
+    for (let ind = 0; ind < dataRowArray1.length; ++ind) {
+      if (!DataRowHelper.areDataRowsEqual(dataRowArray1[ind], dataRowArray2[ind])) return false;
+    }
+    return true;
   }
 }

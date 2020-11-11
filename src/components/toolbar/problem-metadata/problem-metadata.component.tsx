@@ -42,9 +42,9 @@ export function ProblemMetadataComponent(): JSX.Element {
   const dispatcher = useDispatch();
   useEffect(() => {
     if (schedule) {
-      const { year, month_number: monthNumber } = schedule.schedule_info || {};
+      const { year, month_number: monthNumber, isInitialized } = schedule.schedule_info || {};
       const [babysitterCount, nurseCount] = getWorkersCount(schedule);
-      if (monthNumber && year) {
+      if (isInitialized) {
         handleDateChange(MonthInfoLogic.convertToDate(monthNumber, year));
       }
 

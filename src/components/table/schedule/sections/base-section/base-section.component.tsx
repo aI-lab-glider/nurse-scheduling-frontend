@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { BaseCellComponent } from "../../schedule-parts/base-cell.component";
-import { ScheduleRowComponent } from "../../schedule-parts/schedule-row.component";
+import { BaseRowComponent } from "../../schedule-parts/base-row.component";
 import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
 import { BaseCellOptions } from "../../schedule-parts/base-cell.component";
 import { Sections } from "../../../../../logic/providers/schedule-provider.model";
+import { DataRowHelper } from "../../../../../helpers/data-row.helper";
 
 export enum DirectionKey {
   ArrowRight = "ArrowRight",
@@ -18,17 +19,17 @@ type PointerPosition = { row: number; cell: number };
 export interface BaseSectionOptions {
   uuid: string;
   data?: DataRow[];
-  cellComponent?: (BaseCellOptions: BaseCellOptions) => JSX.Element;
+  cellComponent?: React.FC<BaseCellOptions>;
   rowComponent?: React.FC<ShiftRowOptions>;
   sectionKey?: keyof Sections;
   onRowKeyClicked?: (rowIndex: number) => void;
 }
 
-export function BaseSectionComponent({
+function BaseSectionComponentF({
   uuid,
   data = [],
   cellComponent = BaseCellComponent,
-  rowComponent: RowComponent = ScheduleRowComponent,
+  rowComponent: RowComponent = BaseRowComponent,
   sectionKey,
   onRowKeyClicked,
 }: BaseSectionOptions): JSX.Element {
@@ -85,3 +86,9 @@ export function BaseSectionComponent({
     </React.Fragment>
   );
 }
+
+export const BaseSectionComponent = React.memo(BaseSectionComponentF, (prev, next) => {
+  const areEqual =
+    DataRowHelper.areDataRowArraysEqual(prev.data, next.data) && prev.uuid === next.uuid;
+  return areEqual;
+});

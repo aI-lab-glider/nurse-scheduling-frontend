@@ -1,23 +1,24 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { DirectionKey } from "../sections/base-section/base-section.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
 import { BaseCellComponent, BaseCellOptions } from "./base-cell.component";
 import { ShiftHelper } from "../../../../helpers/shifts.helper";
 import { Sections } from "../../../../logic/providers/schedule-provider.model";
+import { DataRowHelper } from "../../../../helpers/data-row.helper";
 
 enum CellManagementKeys {
   Enter = "Enter",
   Escape = "Escape",
 }
 
-export interface ScheduleRowOptions {
+export interface BaseRowOptions {
   uuid: string;
   index: number;
   dataRow: DataRow;
   sectionKey?: keyof Sections;
   showSelectedCells?: boolean;
-  cellComponent?: (BaseCellOptions: BaseCellOptions) => JSX.Element;
+  cellComponent?: React.FC<BaseCellOptions>;
   onKeyDown?: (cellIndex: number, event: React.KeyboardEvent) => void;
   onClick?: (cellIndex: number) => void;
   onStateUpdate?: (row: DataRow) => void;
@@ -26,7 +27,7 @@ export interface ScheduleRowOptions {
   onBlur?: () => void;
 }
 
-export function ScheduleRowComponent({
+export function BaseRowComponentF({
   index,
   dataRow,
   sectionKey,
@@ -35,17 +36,11 @@ export function ScheduleRowComponent({
   pointerPosition = -1,
   onKeyDown,
   onClick,
-  onStateUpdate,
   onRowKeyClick,
   onBlur,
   uuid,
-}: ScheduleRowOptions): JSX.Element {
+}: BaseRowOptions): JSX.Element {
   const scheduleLogic = useContext(ScheduleLogicContext);
-  const [dataRowState, setDataRowState] = useState<DataRow>(dataRow);
-  useEffect(() => {
-    setDataRowState(dataRow);
-  }, [dataRow, uuid]);
-  const [frozenShifts, setFrozenShifts] = useState<[number, number][]>([]);
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
   const [selectionMode, setSelectionMode] = useState(false);
   const [previousDirectionKey, setPreviousDirectionKey] = useState("");
@@ -55,35 +50,39 @@ export function ScheduleRowComponent({
       setSelectedCells([]);
     }
   }, [selectionMode]);
+
   const verboseDates = scheduleLogic?.sections.Metadata?.verboseDates;
 
-  function onContextMenu(cellIndex: number): void {
-    if (scheduleLogic) {
-      scheduleLogic.changeShiftFrozenState(index, cellIndex, setFrozenShifts);
-    }
-  }
+  const onContextMenu = useCallback(
+    (cellIndex: number): void => {
+      if (scheduleLogic) {
+        scheduleLogic.changeShiftFrozenState(index, cellIndex);
+      }
+    },
+    [scheduleLogic, index]
+  );
+
   function saveValue(newValue: string): void {
     if (sectionKey)
       scheduleLogic?.updateRow(
         sectionKey,
         index - 1,
         [...selectedCells, pointerPosition],
-        newValue,
-        (newDataRow) => {
-          setDataRowState(newDataRow);
-          onStateUpdate && onStateUpdate(newDataRow);
-        }
+        newValue
       );
     setSelectedCells([]);
   }
 
-  function isFrozen(cellInd: number): boolean {
-    return (
-      verboseDates?.[cellInd]?.isFrozen ||
-      !!frozenShifts.find((fS) => fS[0] === index && fS[1] === cellInd) ||
-      false
-    );
-  }
+  const isFrozen = useCallback(
+    (cellInd: number): boolean => {
+      return (
+        verboseDates?.[cellInd]?.isFrozen ||
+        // !!frozenShifts.find((fS) => fS[0] === index && fS[1] === cellInd) ||
+        false
+      );
+    },
+    [verboseDates]
+  );
 
   function toggleSelection(cellIndex: number): void {
     if (selectedCells.includes(cellIndex)) {
@@ -102,9 +101,6 @@ export function ScheduleRowComponent({
 
     if (event.ctrlKey && DirectionKey[event.key]) {
       !selectionMode && setSelectionMode(true);
-      // TODO: refactor. It solves problem with wrong elements selection on the ends when direction changes
-      // Issue could be solved, if make logic to react on onKeyDown event from cell in which
-      // we enter, not from cell which we leave
       if (previousDirectionKey === DirectionKey[event.key] || !selectionMode) {
         toggleSelection(cellIndex);
       }
@@ -120,21 +116,24 @@ export function ScheduleRowComponent({
     onKeyDown && onKeyDown(cellIndex, event);
   }
 
+  const data = useMemo(() => dataRow.rowData(false), [dataRow]);
   return (
     <tr className="row">
-      <BaseCellComponent
-        index={0}
-        value={dataRowState.rowKey || ""}
-        isSelected={false}
-        isBlocked={false}
-        isPointerOn={false}
-        onClick={(): void => onRowKeyClick && onRowKeyClick()}
-      />
-      {dataRowState.rowData(false).map((cellData, cellIndex) => {
+      {data.length !== 0 && (
+        <BaseCellComponent
+          index={0}
+          value={dataRow.rowKey || ""}
+          isSelected={false}
+          isBlocked={false}
+          isPointerOn={false}
+          onClick={(): void => onRowKeyClick && onRowKeyClick()}
+        />
+      )}
+      {data.map((cellData, cellIndex) => {
         return (
           <CellComponent
             index={cellIndex}
-            key={`${dataRowState.rowKey}_${cellData}${cellIndex}${isFrozen(cellIndex)}_${uuid}}`}
+            key={`${dataRow.rowKey}_${cellData}${cellIndex}${isFrozen(cellIndex)}_${uuid}}`}
             value={cellData}
             isSelected={(showSelectedCells || false) && selectedCells.includes(cellIndex)}
             style={ShiftHelper.getShiftColor(
@@ -154,3 +153,10 @@ export function ScheduleRowComponent({
     </tr>
   );
 }
+
+export const BaseRowComponent = React.memo(BaseRowComponentF, (prev, next) => {
+  return (
+    DataRowHelper.areDataRowsEqual(prev.dataRow, next.dataRow) &&
+    prev.pointerPosition === next.pointerPosition
+  );
+});

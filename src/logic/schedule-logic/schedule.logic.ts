@@ -15,14 +15,18 @@ import { ShiftsInfoLogic } from "./shifts-info.logic";
 import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../section.model";
 
 export class ScheduleLogic implements ScheduleProvider {
-  readonly schedule: Schedule;
-  readonly sections: Sections;
+  schedule!: Schedule;
+  sections!: Sections;
 
   constructor(
-    scheduleModel: ScheduleDataModel,
-    private dispatchScheduleUpdate: Dispatch<ActionModel<ScheduleDataModel>>
+    private dispatchScheduleUpdate: Dispatch<ActionModel<ScheduleDataModel>>,
+    scheduleModel: ScheduleDataModel
   ) {
-    this.sections = this.createSections(scheduleModel);
+    this.update(scheduleModel);
+  }
+
+  public update(schedule: ScheduleDataModel): void {
+    this.sections = this.createSections(schedule);
     this.schedule = new Schedule(this);
   }
 
@@ -55,26 +59,13 @@ export class ScheduleLogic implements ScheduleProvider {
     };
   }
 
-  public changeShiftFrozenState(
-    rowind: number,
-    shiftIndex: number,
-    updateLocalState: (updatedShifts: [number, number][]) => void
-  ): void {
+  public changeShiftFrozenState(rowind: number, shiftIndex: number): void {
     if (!this.sections.Metadata) return;
-    const updatedShifts = this.sections.Metadata.changeShiftFrozenState(rowind, shiftIndex);
-    updateLocalState && updateLocalState(updatedShifts);
+    this.sections.Metadata.changeShiftFrozenState(rowind, shiftIndex);
     this.updateGlobalState();
   }
 
-  private updateGlobalState(): void {
-    const model = this.schedule.getDataModel();
-    this.dispatchScheduleUpdate({
-      type: ScheduleDataActionType.UPDATE,
-      payload: model,
-    });
-  }
-
-  getWorkerTypes(): {} {
+  public getWorkerTypes(): {} {
     const result = {};
     this.sections.BabysitterInfo.workers.forEach((babysitter) => {
       result[babysitter] = WorkerType.OTHER;
@@ -98,14 +89,12 @@ export class ScheduleLogic implements ScheduleProvider {
     sectionKey: string,
     rowIndex: number,
     updateIndexes: number[],
-    newValue: string,
-    updateLocalState: (dataRow: DataRow) => void
+    newValue: string
   ): void {
     const newDataRow = Object.values(this.sections)
       ?.find((provider) => provider.sectionKey === sectionKey)
       ?.updateDataRow(rowIndex, updateIndexes, newValue);
     if (newDataRow) {
-      updateLocalState(newDataRow);
       this.updateGlobalState();
     }
   }
@@ -119,33 +108,34 @@ export class ScheduleLogic implements ScheduleProvider {
   public addWorker(
     sectionKey: keyof Sections,
     newWorkerRow: DataRow,
-    workerWorkTime: number,
-    updateLocalState: (dataRow: DataRow[]) => void
+    workerWorkTime: number
   ): void {
-    const newSectionContent = Object.values(this.sections)
-      ?.find((provider) => provider.sectionKey === sectionKey)
-      ?.addWorker(newWorkerRow, workerWorkTime);
+    const newSectionContent = (Object.values(this.sections)?.find(
+      (provider) => provider.sectionKey === sectionKey
+    ) as ShiftsInfoLogic)?.addWorker(newWorkerRow, workerWorkTime);
     if (newSectionContent) {
-      updateLocalState(newSectionContent);
       this.updateGlobalState();
     }
   }
 
-  public addRow(
-    sectionKey: keyof Sections,
-    newRow: DataRow,
-    updateLocalState: (dataRow: DataRow[]) => void
-  ): void {
+  public addRow(sectionKey: keyof Sections, newRow: DataRow): void {
     const newSectionContent = Object.values(this.sections)
       ?.find((provider) => provider.sectionKey === sectionKey)
       ?.addDataRow(newRow);
     if (newSectionContent) {
-      updateLocalState(newSectionContent);
       this.updateGlobalState();
     }
   }
 
   public getSection<T>(sectionKey: keyof Sections): T | undefined {
     return Object.values(this.sections).find((provider) => provider.sectionKey === sectionKey);
+  }
+
+  private updateGlobalState(): void {
+    const model = this.schedule.getDataModel();
+    this.dispatchScheduleUpdate({
+      type: ScheduleDataActionType.UPDATE,
+      payload: model,
+    });
   }
 }

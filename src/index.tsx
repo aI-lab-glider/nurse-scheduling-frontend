@@ -7,7 +7,7 @@ import { Integrations } from "@sentry/tracing";
 import App from "./app";
 import "./assets/styles/styles-all.scss";
 import * as serviceWorker from "./serviceWorker";
-import { appReducer } from "./state/app-reducer";
+import { appReducer } from "./state/app.reducer";
 
 type WindowWithDevTools = Window & {
   __REDUX_DEVTOOLS_EXTENSION__: () => StoreEnhancer<unknown, {}>;

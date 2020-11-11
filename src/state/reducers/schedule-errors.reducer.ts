@@ -13,7 +13,8 @@ export function scheduleErrorsReducer(
 ): ScheduleErrorMessageModel[] {
   switch (action.type) {
     case ScheduleErrorActionType.UPDATE:
-      return [...action.payload.map((e) => ErrorMessageHelper.getErrorMessage(e))];
+      if (!action.payload) action.payload = [];
+      return [...action.payload?.map((e) => ErrorMessageHelper.getErrorMessage(e))];
     default:
       return state;
   }

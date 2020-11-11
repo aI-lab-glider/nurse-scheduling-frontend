@@ -1,6 +1,6 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext } from "react";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
-import { ScheduleRowComponent, ScheduleRowOptions } from "./schedule-row.component";
+import { BaseRowComponent, BaseRowOptions } from "./base-row.component";
 import { ShiftCellComponent } from "./shift-cell.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
 import { ShiftsInfoLogic } from "../../../../logic/schedule-logic/shifts-info.logic";
@@ -9,16 +9,17 @@ import { ShiftHelper } from "../../../../helpers/shifts.helper";
 
 const WORK_HOURS_PER_DAY = 8;
 
-export interface ShiftRowOptions extends ScheduleRowOptions {
+export interface ShiftRowOptions extends BaseRowOptions {
   dataRow: DataRow;
   onRowUpdated?: (row: DataRow) => void;
-  cellComponent?: (BaseCellOptions: BaseCellOptions) => JSX.Element;
+  cellComponent?: React.FC<BaseCellOptions>;
 }
 
 export function ShiftRowComponent(options: ShiftRowOptions): JSX.Element {
-  const { dataRow, index, sectionKey, uuid } = options;
+  const { dataRow, sectionKey } = options;
   const scheduleLogic = useContext(ScheduleLogicContext);
   // TODO: Move to logic
+
   const calculateExtraHours = useCallback(
     (dataRow: DataRow): [number, number, number] => {
       if (!sectionKey) return [0, 0, 0];
@@ -49,21 +50,11 @@ export function ShiftRowComponent(options: ShiftRowOptions): JSX.Element {
     [calculateExtraHours]
   );
 
-  const [extendedDataRow, setExtendedDataRow] = useState(extendDataRowWithHoursInfo(dataRow));
-  useEffect(() => {
-    dataRow && setExtendedDataRow(extendDataRowWithHoursInfo(dataRow));
-  }, [dataRow, extendDataRowWithHoursInfo, uuid]);
-
   return (
-    <ScheduleRowComponent
+    <BaseRowComponent
       {...options}
-      uuid={uuid}
-      index={index}
-      dataRow={extendedDataRow}
+      dataRow={extendDataRowWithHoursInfo(dataRow)}
       cellComponent={ShiftCellComponent}
-      onStateUpdate={(newDataRow): void => {
-        setExtendedDataRow(extendDataRowWithHoursInfo(newDataRow));
-      }}
     />
   );
 }
