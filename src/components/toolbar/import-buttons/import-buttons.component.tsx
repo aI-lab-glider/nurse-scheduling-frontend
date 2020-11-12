@@ -68,6 +68,7 @@ export function ImportButtonsComponent(): JSX.Element {
             <Button component="label">
               Wczytaj
               <input
+                data-cy="file-input"
                 onChange={(event): void => handleImport(event)}
                 style={{ display: "none" }}
                 type="file"
