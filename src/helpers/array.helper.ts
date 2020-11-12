@@ -1,14 +1,14 @@
 type Primitive = undefined | null | boolean | number | string | bigint | symbol;
 export class ArrayHelper {
-  public static zip<T>(array1: T[], array2: T[]): [T, T][] {
-    let longer: T[];
-    let shorter: T[];
-    if (array1.length >= array2.length) {
-      [longer, shorter] = [array1, array2];
-    } else {
-      [longer, shorter] = [array2, array1];
+  public static zip<T1, T2>(
+    array1: (T1 | null)[],
+    array2: (T2 | null)[]
+  ): [T1 | null, T2 | null][] {
+    if (array1.length < array2.length) {
+      const count = array2.length - array1.length;
+      array1 = Array(count).fill(null);
     }
-    return longer.map((v: T, index: number) => [v, shorter[index]]);
+    return array1.map((v, index: number) => [v, array2[index]]);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
