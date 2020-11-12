@@ -4,7 +4,7 @@ export enum ScheduleErrorLevel {
   CRITICAL_ERROR = "error",
 }
 export interface ScheduleErrorMessageModel {
-  code: string;
+  kind: string;
   message: string;
   worker?: string;
   day?: number;

@@ -4,9 +4,24 @@ import { ChildrenInfoParser } from "./children-info.parser";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { ShiftsInfoParser } from "./shifts-info.parser";
-import { ScheduleProvider, Schedule, Sections } from "../providers/schedule-provider.model";
+import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
 import { ExtraWorkersParser } from "./extra-workers.parser";
-import { MetaDataRowLabel } from "../section.model";
+import { ChildrenSectionKey, MetaDataRowLabel, MetaDataSectionKey } from "../section.model";
+
+export enum MONTHS {
+  STYCZEN = "styczeń",
+  LUTY = "luty",
+  MARZEC = "marzec",
+  KWIECIEN = "kwiecień",
+  MAJ = "maj",
+  CZERWIEC = "czerwiec",
+  LIPIEC = "lipiec",
+  SIERPIEN = "sierpień",
+  WRZESIEN = "wrzesień",
+  PAZDZIERNIK = "październik",
+  LISTOPAD = "listopad",
+  GRUDZIEN = "grudzień",
+}
 
 export class ScheduleParser implements ScheduleProvider {
   readonly sections: Sections;
@@ -52,11 +67,40 @@ export class ScheduleParser implements ScheduleProvider {
 
     return result;
   }
+
   private initMetadataAndCleanUp(rowParsers: DataRowParser[]): [MetaDataParser, DataRowParser[]] {
     const [dataRow, start] = this.findRowByKey(rowParsers, MetaDataRowLabel);
+
     if (!dataRow) {
-      throw new Error("No metadata provided");
+      throw new Error("INVALID_METADATA");
     }
+
+    if (dataRow.rowData().length === 4) {
+      throw new Error("INVALID_METADATA");
+    }
+
+    const monthTimeRegx = new RegExp(
+      MetaDataSectionKey.Month + " [" + Object.values(MONTHS).join("|") + "]"
+    );
+
+    if (!monthTimeRegx.test(dataRow.rowData()[0])) {
+      throw new Error("INVALID_METADATA");
+    }
+
+    const yearTimeRegx = new RegExp(MetaDataSectionKey.Year + " [0-9]{4}");
+
+    if (!yearTimeRegx.test(dataRow.rowData()[1])) {
+      throw new Error("INVALID_METADATA");
+    }
+
+    const workersTimeRegx = new RegExp(
+      MetaDataSectionKey.RequiredavailableWorkersWorkTime + " [0-9]+"
+    );
+
+    if (!workersTimeRegx.test(dataRow.rowData()[2])) {
+      throw new Error("INVALID_METADATA");
+    }
+
     // + 1, because in first row goes metadata
     const daysRow = rowParsers[start + 1];
     const notSectionsRowsCountFromBeginning = 3;
@@ -69,8 +113,18 @@ export class ScheduleParser implements ScheduleProvider {
     metaData: MetaDataParser
   ): Omit<Sections, "Metadata" | "ExtraWorkersInfo"> {
     const childrenSectionData = this.findChildrenSection(schedule);
+
     const [nurseSectionData, nurseEndIdx] = this.findShiftSection(schedule);
+
+    if (nurseSectionData.length === 0) {
+      throw new Error("NO_NURSE_SECTION");
+    }
+
     const [babysitterData] = this.findShiftSection(schedule.slice(nurseEndIdx + 1));
+
+    if (babysitterData.length === 0) {
+      throw new Error("NO_CARETAKER_SECTION");
+    }
 
     return {
       ChildrenInfo: new ChildrenInfoParser(childrenSectionData, metaData),
@@ -83,7 +137,7 @@ export class ScheduleParser implements ScheduleProvider {
     const sectionData: DataRowParser[] = [];
     let sectionDataIdx = rowParsers.findIndex((rowParser) => rowParser.isShiftRow);
     if (sectionDataIdx === -1) {
-      throw new Error("Cannot find section beginning");
+      return [sectionData, 0];
     }
     while (sectionDataIdx < rowParsers.length && rowParsers[sectionDataIdx].isShiftRow) {
       sectionData.push(rowParsers[sectionDataIdx]);
@@ -96,6 +150,21 @@ export class ScheduleParser implements ScheduleProvider {
   private findChildrenSection(rowParsers: DataRowParser[]): DataRowParser[] {
     const start = rowParsers.findIndex((r) => !r.isEmpty);
     const end = rowParsers.findIndex((r, index) => index > start && r.isEmpty);
-    return rowParsers.slice(start, end);
+
+    const children = rowParsers.slice(start, end);
+
+    if (children.length === 0) {
+      throw new Error("NO_CHILDREN_SECTION");
+    }
+
+    if (!children[0].includes(ChildrenSectionKey.RegisteredChildrenCount)) {
+      throw new Error("NO_CHILDREN_SECTION");
+    }
+
+    if (children[0].rowData().length === 0) {
+      throw new Error("NO_CHILDREN_QUANTITY");
+    }
+
+    return children;
   }
 }

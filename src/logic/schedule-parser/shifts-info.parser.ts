@@ -1,4 +1,4 @@
-import { ParseErrorCode, ScheduleErrorModel } from "../../common-models/schedule-error.model";
+import { ParseErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
 import { ShiftsProvider } from "../providers/shifts-provider.model";
 import { DataRowParser } from "./data-row.parser";
@@ -6,7 +6,7 @@ import { MetaDataParser } from "./metadata.parser";
 
 export class ShiftsInfoParser extends ShiftsProvider {
   private _sectionRows: { [key: string]: DataRowParser } = {};
-  private _parseErrors: ScheduleErrorModel[] = [];
+  private _parseErrors: ScheduleError[] = [];
 
   constructor(scheduleInfoSection: DataRowParser[], private metaData: MetaDataParser) {
     super();
@@ -21,7 +21,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
       });
   }
 
-  public get errors(): ScheduleErrorModel[] {
+  public get errors(): ScheduleError[] {
     return [...this._parseErrors];
   }
 
@@ -76,7 +76,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private logUnknownValue(date: number, worker: string, value: any): void {
     this._parseErrors.push({
-      code: ParseErrorCode.UNKNOWN_VALUE,
+      kind: ParseErrorCode.UNKNOWN_VALUE,
       day: date,
       worker: worker,
       actual: value,

@@ -9,14 +9,15 @@ import { useScheduleConverter } from "./hooks/use-schedule-converter";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
-import { ScheduleErrorModel } from "../../../common-models/schedule-error.model";
+import { ScheduleError } from "../../../common-models/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
 import { ScheduleExportLogic } from "../../../logic/schedule-exporter/schedule-export.logic";
+
 export function ImportButtonsComponent(): JSX.Element {
   const DEFAULT_FILENAME = "grafik.xlsx";
   const [open, setOpen] = useState(false);
-  const { scheduleModel, setSrcFile, scheduleErrors } = useScheduleConverter();
+  const { scheduleModel, setSrcFile, scheduleErrors, errorOccurred } = useScheduleConverter();
   const anchorRef = useRef(null);
   const stateScheduleModel = useSelector(
     (state: ApplicationStateModel) => state.scheduleData?.present
@@ -30,12 +31,15 @@ export function ImportButtonsComponent(): JSX.Element {
         type: ScheduleDataActionType.ADD_NEW,
         payload: scheduleModel,
       } as ActionModel<ScheduleDataModel>);
-      scheduleDipatcher({
-        type: ScheduleErrorActionType.UPDATE,
-        payload: scheduleErrors,
-      } as ActionModel<ScheduleErrorModel[]>);
+    } else if (errorOccurred) {
+      //todo display message
     }
-  }, [scheduleModel, scheduleDipatcher, scheduleErrors]);
+
+    scheduleDipatcher({
+      type: ScheduleErrorActionType.UPDATE,
+      payload: scheduleErrors,
+    } as ActionModel<ScheduleError[]>);
+  }, [scheduleModel, scheduleDipatcher, scheduleErrors, errorOccurred]);
 
   function handleImport(event: ChangeEvent<HTMLInputElement>): void {
     const file = event.target?.files && event.target?.files[0];
@@ -74,6 +78,7 @@ export function ImportButtonsComponent(): JSX.Element {
                 onChange={(event): void => handleImport(event)}
                 style={{ display: "none" }}
                 type="file"
+                accept=".xlsx"
               />
             </Button>
             <Button onClick={(): void => handleExport()}>Zapisz jako...</Button>

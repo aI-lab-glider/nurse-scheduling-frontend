@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Excel from "exceljs";
 import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
-import { ScheduleErrorModel } from "../../../../common-models/schedule-error.model";
+import { InputFileErrorCode, ScheduleError } from "../../../../common-models/schedule-error.model";
 import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
 import { useFileReader } from "./use-file-reader";
 
@@ -9,14 +9,16 @@ export interface UseScheduleConverterOutput {
   scheduleModel?: ScheduleDataModel;
   scheduleSheet?: Array<object>;
   setSrcFile: (srcFile: File) => void;
-  scheduleErrors: ScheduleErrorModel[];
+  scheduleErrors: ScheduleError[];
+  errorOccurred: boolean;
 }
 
 export function useScheduleConverter(): UseScheduleConverterOutput {
-  const [scheduleErrors, setScheduleErrors] = useState<ScheduleErrorModel[]>([]);
+  const [scheduleErrors, setScheduleErrors] = useState<ScheduleError[]>([]);
   const [scheduleSheet, setScheduleSheet] = useState<Array<object>>();
   const [fileContent, setSrcFile] = useFileReader();
   const [scheduleModel, setScheduleModel] = useState<ScheduleDataModel>();
+  const [errorOccurred, setErrorOccurredFlag] = useState<boolean>(false);
 
   useEffect(() => {
     if (!fileContent) {
@@ -25,25 +27,18 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
 
     const workbook = new Excel.Workbook();
     workbook.xlsx.load(fileContent).then(() => {
-      const sheet = workbook.getWorksheet(1);
-      const parsedFileContent = Array<Array<string>>();
-      sheet.eachRow((row, _) => {
-        parsedFileContent.push(row.values as Array<string>);
-      });
-      parsedFileContent.forEach((a) => a.shift());
+      try {
+        readFileContent(workbook);
+      } catch (e) {
+        setErrorOccurredFlag(true);
 
-      while (parsedFileContent[parsedFileContent.length - 1][0] === "") {
-        parsedFileContent.pop();
-      }
-
-      setScheduleSheet(parsedFileContent);
-      if (Object.keys(parsedFileContent).length !== 0) {
-        const parser = new ScheduleParser(parsedFileContent);
         setScheduleErrors([
-          ...parser.sections.NurseInfo.errors,
-          ...parser.sections.BabysitterInfo.errors,
+          {
+            kind: InputFileErrorCode[e.message as keyof typeof InputFileErrorCode],
+          },
         ]);
-        setScheduleModel(parser.schedule.getDataModel());
+
+        setScheduleModel({});
       }
     });
   }, [fileContent]);
@@ -53,5 +48,34 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
     scheduleSheet: scheduleSheet,
     setSrcFile: setSrcFile,
     scheduleErrors: scheduleErrors,
+    errorOccurred: errorOccurred,
   };
+
+  function readFileContent(workbook): void {
+    const sheet = workbook.getWorksheet(1);
+    if (sheet.rowCount === 0) {
+      throw new Error("EMPTY_FILE");
+    }
+
+    const parsedFileContent = Array<Array<string>>();
+    sheet.eachRow((row, _) => {
+      parsedFileContent.push(row.values as Array<string>);
+    });
+    parsedFileContent.forEach((a) => a.shift());
+
+    while (parsedFileContent[parsedFileContent.length - 1][0] === "") {
+      parsedFileContent.pop();
+    }
+
+    setScheduleSheet(parsedFileContent);
+    if (Object.keys(parsedFileContent).length !== 0) {
+      const parser = new ScheduleParser(parsedFileContent);
+      setScheduleErrors([
+        ...parser.sections.NurseInfo.errors,
+        ...parser.sections.BabysitterInfo.errors,
+      ]);
+      setScheduleModel(parser.schedule.getDataModel());
+    }
+    return;
+  }
 }

@@ -1,8 +1,8 @@
-import { ScheduleErrorModel } from "../../common-models/schedule-error.model";
+import { ScheduleError } from "../../common-models/schedule-error.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
 
 export abstract class ShiftsProvider {
-  abstract get errors(): ScheduleErrorModel[];
+  abstract get errors(): ScheduleError[];
   abstract get workerShifts(): { [workerName: string]: ShiftCode[] };
   abstract get availableWorkersWorkTime(): { [key: string]: number };
   abstract get workersCount(): number;

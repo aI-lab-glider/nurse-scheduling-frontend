@@ -17,7 +17,7 @@ export default function ValidationDrawerComponent(): JSX.Element {
 
   useEffect(() => {
     const noErrorsFound = [
-      { code: "", message: "Nie znaleziono błędów", level: ScheduleErrorLevel.INFO },
+      { kind: "", message: "Nie znaleziono błędów", level: ScheduleErrorLevel.INFO },
     ];
     if (errorsReceived?.length) {
       setErrors(errorsReceived);
