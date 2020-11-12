@@ -12,7 +12,7 @@ import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { WorkerType } from "../../../common-models/worker-info.model";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
-import { ScheduleErrorModel } from "../../../common-models/schedule-error.model";
+import { ScheduleError } from "../../../common-models/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
 import { SnackbarComponent } from "./snackbar.component";
@@ -105,7 +105,7 @@ export function ProblemMetadataComponent(): JSX.Element {
       dispatcher({
         type: ScheduleErrorActionType.UPDATE,
         payload: response,
-      } as ActionModel<ScheduleErrorModel[]>);
+      } as ActionModel<ScheduleError[]>);
     }
   }
 

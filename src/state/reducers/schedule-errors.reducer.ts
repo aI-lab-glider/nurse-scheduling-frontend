@@ -1,7 +1,7 @@
 import { ErrorMessageHelper } from "../../helpers/error-message.helper";
 import { ActionModel } from "../models/action.model";
 import { ScheduleErrorMessageModel } from "../../common-models/schedule-error-message.model";
-import { ScheduleErrorModel } from "../../common-models/schedule-error.model";
+import { ScheduleError } from "../../common-models/schedule-error.model";
 
 export enum ScheduleErrorActionType {
   UPDATE = "updateScheduleError",
@@ -9,7 +9,7 @@ export enum ScheduleErrorActionType {
 
 export function scheduleErrorsReducer(
   state: ScheduleErrorMessageModel[] = [],
-  action: ActionModel<ScheduleErrorModel[]>
+  action: ActionModel<ScheduleError[]>
 ): ScheduleErrorMessageModel[] {
   switch (action.type) {
     case ScheduleErrorActionType.UPDATE:
