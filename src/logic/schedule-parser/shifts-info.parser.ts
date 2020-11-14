@@ -14,7 +14,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
       .map((row) =>
         row
           .cropData(this.metaData.validDataStart, this.metaData.validDataEnd + 1)
-          .processRow((dataRow) => this.fillRowWithShifts(dataRow))
+          .processRow(this.fillRowWithShifts)
       )
       .forEach((row) => {
         this._sectionRows[row.rowKey] = row;
@@ -52,7 +52,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
       .reduce((prev, curr) => ({ ...prev, ...curr }));
   }
 
-  private getShiftFromCell(cell: string): ShiftCode | null {
+  private static getShiftFromCell(cell: string): ShiftCode | null {
     return ShiftCode[cell?.trim().slice(0, 2).trim()];
   }
 
@@ -60,7 +60,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
     const continuousShifts = [ShiftCode.L4, ShiftCode.U];
     let previousShift: ShiftCode = ShiftCode.W;
     return row.rowData(true, false).map((cellValue, cellInd) => {
-      let currentShiftValue = this.getShiftFromCell(cellValue);
+      let currentShiftValue = ShiftsInfoParser.getShiftFromCell(cellValue);
       if (!currentShiftValue) {
         if (cellValue && cellValue.trim()) {
           const currDate = this.metaData.dates[cellInd];
