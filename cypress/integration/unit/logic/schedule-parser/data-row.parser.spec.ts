@@ -77,4 +77,52 @@ describe("DataRowParser", () => {
       ]);
     });
   });
+
+  describe("processRow", () => {
+    const dataRowParser = new DataRowParser(dataRow);
+    const processingFunctionMock = (row: DataRowParser) => {
+      return ["alice", "has", "a", "cat"];
+    };
+
+    it("should return new DataRowParser with returned value of processing function appended to row key", () => {
+      expect(dataRowParser.processRow(processingFunctionMock)).to.be.a("Object");
+      expect(dataRowParser.processRow(processingFunctionMock).rowData(true, true)).to.eql([
+        "schedule",
+        "alice",
+        "has",
+        "a",
+        "cat",
+      ]);
+    });
+  });
+
+  describe("cropData", () => {
+    const dataRowParser = new DataRowParser(dataRow);
+
+    it("should return new DataRowParser with cropped data", () => {
+      expect(dataRowParser.cropData(0, -1).rowData(true, true)).to.eql([
+        "schedule",
+        "november",
+        "year 2020",
+        null,
+      ]);
+      expect(dataRowParser.cropData(2, 4).rowData(true, true)).to.eql([
+        "schedule",
+        null,
+        "number of hours 10",
+      ]);
+    });
+  });
+
+  describe("findValue", () => {
+    const dataRowParser = new DataRowParser(dataRow);
+
+    it("should return empty string when finds value", () => {
+      expect(dataRowParser.findValue("emb")).to.eql("nover");
+    });
+
+    it("should return empty string when does not find value", () => {
+      expect(dataRowParser.findValue("alice")).to.eql("");
+    });
+  });
 });

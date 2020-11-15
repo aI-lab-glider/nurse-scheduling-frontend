@@ -51,7 +51,7 @@ export class DataRowParser {
   }
 
   public findValue(key: string): string {
-    let data = this.data.find((cell) => StringHelper.includesEquvivalent(cell, key));
+    let data = this.data.find((cell) => StringHelper.includesEquivalent(cell, key));
     data = StringHelper.getRawValue(data);
     key = StringHelper.getRawValue(key);
     return StringHelper.getRawValue(data.replace(key, ""));
