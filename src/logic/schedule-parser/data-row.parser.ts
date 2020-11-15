@@ -38,13 +38,13 @@ export class DataRowParser {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public processRow(processingFunction: (row: DataRowParser) => any[]): DataRowParser {
+  public createWithProcessedRow(processingFunction: (row: DataRowParser) => any[]): DataRowParser {
     const rowKey = this.rowKey;
     const data = [rowKey, ...processingFunction(this)];
     return new DataRowParser(data);
   }
 
-  public cropData(from: number, to: number): DataRowParser {
+  public createWithCroppedData(from: number, to: number): DataRowParser {
     const key = this.rowKey;
     const data = [key, ...this.rowData(true, false).slice(from, to)];
     return new DataRowParser(data);
@@ -53,8 +53,7 @@ export class DataRowParser {
   public findValue(key: string): string {
     let data = this.data.find((cell) => StringHelper.includesEquivalent(cell, key));
     data = StringHelper.getRawValue(data);
-    key = StringHelper.getRawValue(key);
-    return StringHelper.getRawValue(data.replace(key, ""));
+    return data;
   }
 
   public findValues(...args: string[]): string[] {

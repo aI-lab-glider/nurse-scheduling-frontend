@@ -13,8 +13,8 @@ export class ShiftsInfoParser extends ShiftsProvider {
     scheduleInfoSection
       .map((row) =>
         row
-          .cropData(this.metaData.validDataStart, this.metaData.validDataEnd + 1)
-          .processRow((dataRow) => this.fillRowWithShifts(dataRow))
+          .createWithCroppedData(this.metaData.validDataStart, this.metaData.validDataEnd + 1)
+          .createWithProcessedRow((dataRow) => this.fillRowWithShifts(dataRow))
       )
       .forEach((row) => {
         this._sectionRows[row.rowKey] = row;
