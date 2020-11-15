@@ -14,7 +14,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
       .map((row) =>
         row
           .cropData(this.metaData.validDataStart, this.metaData.validDataEnd + 1)
-          .processRow(this.fillRowWithShifts)
+          .processRow((dataRow) => this.fillRowWithShifts(dataRow))
       )
       .forEach((row) => {
         this._sectionRows[row.rowKey] = row;
