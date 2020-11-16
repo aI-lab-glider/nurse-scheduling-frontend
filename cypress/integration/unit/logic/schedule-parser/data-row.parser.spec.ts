@@ -121,4 +121,12 @@ describe("DataRowParser", () => {
       expect(dataRowParser.findValue("alice")).to.eql("");
     });
   });
+
+  describe("findValues", () => {
+    const dataRowParser = new DataRowParser(dataRow);
+
+    it("should return array of strings when finds value in corresponding argument", () => {
+      expect(dataRowParser.findValues("number", "alice")).to.eql(["number of hours 10", ""]);
+    });
+  });
 });
