@@ -10,34 +10,41 @@ import { MetadataLogic } from "../../../logic/schedule-logic/metadata.logic";
 
 // eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface useScheduleStateReturn {
+  scheduleLogic: ScheduleLogic;
   scheduleLocalState: ScheduleComponentState;
   setNewSchedule: (scheduleModel: ScheduleDataModel) => void;
 }
 
 export const ScheduleLogicContext = React.createContext<ScheduleLogic | null>(null);
 
-export function useScheduleState(): useScheduleStateReturn {
+export function useScheduleState(
+  initialScheduleModelState: ScheduleDataModel
+): useScheduleStateReturn {
   const dispatchGlobalState = useDispatch();
   const [scheduleLocalState, setScheduleLocalState] = useState<ScheduleComponentState>(
     scheduleInitialState
   );
+  const scheduleLogic = useState<ScheduleLogic>(
+    new ScheduleLogic(dispatchGlobalState, initialScheduleModelState)
+  )[0];
 
   const setNewSchedule = useCallback(
     (scheduleModel: ScheduleDataModel): void => {
-      const logic = new ScheduleLogic(scheduleModel, dispatchGlobalState);
+      scheduleLogic.update(scheduleModel);
       setScheduleLocalState({
-        nurseShiftsSection: (logic.sections.NurseInfo as ShiftsInfoLogic).sectionData,
-        babysitterShiftsSection: (logic.sections.BabysitterInfo as ShiftsInfoLogic).sectionData,
-        childrenSection: (logic.sections.ChildrenInfo as ChildrenInfoLogic).sectionData,
-        extraWorkersSection: (logic.sections.ExtraWorkersInfo as ExtraWorkersLogic).sectionData,
-        dateSection: (logic.sections.Metadata as MetadataLogic).sectionData,
+        nurseShiftsSection: (scheduleLogic.sections.NurseInfo as ShiftsInfoLogic).sectionData,
+        babysitterShiftsSection: (scheduleLogic.sections.BabysitterInfo as ShiftsInfoLogic)
+          .sectionData,
+        childrenSection: (scheduleLogic.sections.ChildrenInfo as ChildrenInfoLogic).sectionData,
+        extraWorkersSection: (scheduleLogic.sections.ExtraWorkersInfo as ExtraWorkersLogic)
+          .sectionData,
+        dateSection: (scheduleLogic.sections.Metadata as MetadataLogic).sectionData,
         isInitialized: true,
-        scheduleLogic: logic,
         uuid: scheduleModel.schedule_info?.UUID?.toString() || "",
       });
     },
-    [dispatchGlobalState]
+    [scheduleLogic]
   );
 
-  return { scheduleLocalState, setNewSchedule };
+  return { scheduleLogic, scheduleLocalState, setNewSchedule };
 }

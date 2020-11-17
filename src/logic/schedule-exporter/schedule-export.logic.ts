@@ -113,17 +113,18 @@ export class ScheduleExportLogic {
     return `${toHex(c.a)}${toHex(c.r)}${toHex(c.g)}${toHex(c.b)}`;
   }
 
-  private createShiftsSections(scheduleModel: ScheduleDataModel): string[][] {
+  private createShiftsSections(scheduleModel: ScheduleDataModel): string[][][] {
     const grouped = {
-      [WorkerType.NURSE]: [] as string[],
-      [WorkerType.OTHER]: [] as string[],
+      [WorkerType.NURSE]: [] as string[][],
+      [WorkerType.OTHER]: [] as string[][],
     };
-    Object.keys(scheduleModel.shifts || {}).forEach((key) => {
-      const category = scheduleModel.employee_info?.type[key] ?? "";
-      grouped[category].push([
+    Object.keys(scheduleModel.shifts || {}).forEach((key: string) => {
+      const category = scheduleModel.employee_info.type[key] ?? "";
+      const shiftsRow: string[] = [
         key,
-        ...(scheduleModel?.shifts?.[key].map((s) => (s === ShiftCode.W ? " " : s)) || []),
-      ]);
+        ...scheduleModel.shifts[key]?.map((s) => (s === ShiftCode.W ? " " : s)),
+      ];
+      grouped[category].push(shiftsRow);
     });
     return [grouped[WorkerType.NURSE], grouped[WorkerType.OTHER]];
   }

@@ -2,25 +2,20 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { WorkerType } from "../../../common-models/worker-info.model";
-import { EmptyRowComponent } from "./schedule-parts/empty-cell.component";
+import { EmptyRowComponent } from "./schedule-parts/empty-row.component";
 import { ChildrenSectionComponent } from "./sections/children-section/children-section.components";
 import { DateSectionComponent } from "./sections/date-section/date-section.component";
-import { ShiftsSectionComponent } from "./sections/shifts-section/shifts-section";
+import { ShiftsSectionComponent } from "./sections/shifts-section/shifts-section.component";
 import { ScheduleLogicContext, useScheduleState } from "./use-schedule-state";
 import { ExtraWorkersSection } from "./sections/extra-workers-section/extra-workers-section.components";
 
 export function ScheduleComponent(): JSX.Element {
-  const scheduleModel = useSelector(
-    (state: ApplicationStateModel) => state.scheduleData,
-    (left, right) => left?.schedule_info?.UUID === right?.schedule_info?.UUID
-  );
+  const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
 
-  const { scheduleLocalState, setNewSchedule } = useScheduleState();
+  const { scheduleLogic, scheduleLocalState, setNewSchedule } = useScheduleState(scheduleModel);
 
   useEffect(() => {
-    if (scheduleModel?.isNew) {
-      setNewSchedule(scheduleModel);
-    }
+    setNewSchedule(scheduleModel);
   }, [scheduleModel, setNewSchedule]);
 
   return (
@@ -28,7 +23,7 @@ export function ScheduleComponent(): JSX.Element {
       {scheduleLocalState.isInitialized && (
         <table className="table">
           <tbody>
-            <ScheduleLogicContext.Provider value={scheduleLocalState.scheduleLogic}>
+            <ScheduleLogicContext.Provider value={scheduleLogic}>
               <DateSectionComponent
                 uuid={scheduleLocalState.uuid}
                 data={scheduleLocalState.dateSection}

@@ -37,14 +37,14 @@ export function ProblemMetadataComponent(): JSX.Element {
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
 
-  const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData);
+  const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData?.present);
 
   const dispatcher = useDispatch();
   useEffect(() => {
     if (schedule) {
-      const { year, month_number: monthNumber } = schedule.schedule_info || {};
+      const { year, month_number: monthNumber, UUID } = schedule.schedule_info || {};
       const [babysitterCount, nurseCount] = getWorkersCount(schedule);
-      if (monthNumber && year) {
+      if (UUID) {
         handleDateChange(MonthInfoLogic.convertToDate(monthNumber, year));
       }
 

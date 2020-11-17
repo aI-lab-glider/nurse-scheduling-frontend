@@ -1,40 +1,22 @@
-import { MonthLogicActionType } from "../../logic/schedule-logic/metadata.logic";
 import { ActionModel } from "../models/action.model";
-import { MonthInfoModel } from "../../common-models/month-info.model";
 import { ScheduleDataModel } from "../../common-models/schedule-data.model";
-
-let uuid = 0;
+import { combineReducers } from "redux";
+import { scheduleInfoReducer } from "./schedule-info.reducer";
+import { shiftsInfoReducer } from "./shifts-info.reducer";
+import { monthInfoReducer } from "./month-info.reducer";
+import { employeeInfoReducer } from "./employee-info.reducer";
 
 export enum ScheduleDataActionType {
   UPDATE = "updateScheduleData",
   ADD_NEW = "addNew",
 }
 
-export function scheduleDataReducer(
-  state: ScheduleDataModel = {},
-  action: ActionModel<ScheduleDataModel>
-): ScheduleDataModel {
-  const scheduleModel = action.payload;
-  switch (action.type) {
-    case ScheduleDataActionType.ADD_NEW:
-      scheduleModel.isNew = true;
-      uuid += 1;
-      if (scheduleModel.schedule_info) scheduleModel.schedule_info.UUID = uuid.toString();
-      return Object.assign({}, state, scheduleModel);
-    case ScheduleDataActionType.UPDATE:
-      scheduleModel.isNew = false;
-      return Object.assign({}, state, scheduleModel);
-    case MonthLogicActionType.UpdateFrozenDates:
-      scheduleModel.isNew = false;
-      return Object.assign({}, state, {
-        /* eslint-disable @typescript-eslint/camelcase */
-        month_info: {
-          ...state.month_info,
-          frozen_shifts: action.payload,
-        } as MonthInfoModel,
-        /* eslint-enable @typescript-eslint/camelcase */
-      });
-    default:
-      return state;
-  }
-}
+export type ScheduleActionModel = ActionModel<ScheduleDataModel>;
+/* eslint-disable @typescript-eslint/camelcase */
+export const scheduleDataReducer = combineReducers({
+  schedule_info: scheduleInfoReducer,
+  shifts: shiftsInfoReducer,
+  month_info: monthInfoReducer,
+  employee_info: employeeInfoReducer,
+} as { [key in keyof ScheduleDataModel]: <T, U>(state: T, action: ActionModel<U>) => T });
+/* eslint-enable @typescript-eslint/camelcase */

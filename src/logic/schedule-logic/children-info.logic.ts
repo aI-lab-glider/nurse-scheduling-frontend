@@ -1,5 +1,5 @@
 import { DataRow } from "./data-row";
-import { BaseSectionLogic } from "./section-logic.model";
+import { BaseSectionLogic } from "./base-section-logic.model";
 import { ChildrenSectionKey } from "../section.model";
 import { ChildrenInfoProvider } from "../providers/children-info-provider.model";
 import { Sections } from "../providers/schedule-provider.model";

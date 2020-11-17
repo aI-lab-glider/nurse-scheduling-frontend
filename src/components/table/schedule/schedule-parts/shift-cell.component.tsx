@@ -9,12 +9,13 @@ function getShiftCode(value: string | number): ShiftCode {
 type ShiftCellOptions = BaseCellOptions;
 
 export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
-  const shiftValue = getShiftCode(options.value);
+  const { onKeyDown, value } = options;
+  const shiftValue = getShiftCode(value);
 
   function _onKeyDown(inputValue: string, key: React.KeyboardEvent): void {
-    const { onKeyDown } = options;
     onKeyDown && onKeyDown(getShiftCode(inputValue), key);
   }
+
   return (
     <BaseCellComponent
       {...options}

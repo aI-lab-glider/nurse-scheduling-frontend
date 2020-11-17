@@ -4,7 +4,7 @@ import { ScheduleErrorModel } from "../../common-models/schedule-error.model";
 import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
 import { Sections } from "../providers/schedule-provider.model";
 import { DataRow } from "./data-row";
-import { BaseSectionLogic } from "./section-logic.model";
+import { BaseSectionLogic } from "./base-section-logic.model";
 import { ShiftsProvider } from "../providers/shifts-provider.model";
 
 export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider {
