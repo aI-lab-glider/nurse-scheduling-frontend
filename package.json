@@ -2,6 +2,13 @@
   "name": "nurse-scheduling-problem",
   "version": "0.1.0",
   "private": true,
+  "description": "<your project description>",
+  "author": "<author of app>",
+  "build": {
+    "appId": "<com.your_app>"
+  },
+  "main": "public/electron.js",
+  "homepage": "./",
   "prettier": {
     "tabWidth": 2,
     "useTabs": false,
@@ -29,13 +36,21 @@
     "react-redux": "^7.2.1",
     "react-scripts": "^3.4.3",
     "redux": "^4.0.5",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "concurrently": "^5.3.0",
+    "cross-env": "^7.0.2",
+    "electron-is-dev": "^1.2.0",
+    "wait-on": "^5.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
+    "electron-build": "electron-builder",
+    "release": "npm build && electron-builder --publish=always",
+    "e-build": "npm build && npm electron-build",
+    "e-start": "concurrently \"cross-env BROWSER=none npm start\" \"node scripts/await.js && electron .\"",
     "lint": "eslint \"src/**/*.ts*\"",
     "cypress:open": "cypress open"
   },
@@ -45,6 +60,9 @@
     "@types/react-redux": "^7.1.9",
     "cypress": "^5.4.0",
     "cypress-file-upload": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "electron": "^10.1.5",
+    "electron-builder": "^22.9.1",
     "eslint-import-resolver-typescript": "^2.3.0",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.2",
