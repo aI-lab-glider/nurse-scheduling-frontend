@@ -6,17 +6,21 @@ describe("StringHelper", () => {
   describe("areEquivalent", () => {
     it("should return true when equivalent", () => {
       expect(StringHelper.areEquivalent("str", "str")).to.equal(true);
-      expect(StringHelper.areEquivalent("   str", "str   ")).to.equal(true);
+      expect(StringHelper.areEquivalent("   str", "STR   ")).to.equal(true);
 
     });
-    it( "should return null when comparing null values with strings", () => {
-      expect(StringHelper.areEquivalent(null, "str")).to.equal(null);
-      expect(StringHelper.areEquivalent(null, null)).to.equal(null);
+    it("should return false when not equivalent", () => {
+      expect(StringHelper.areEquivalent("int", "str")).to.equal(false);
+      expect(StringHelper.areEquivalent("straight", "string")).to.equal(false);
+    });
+    it( "should return false when comparing null values with strings", () => {
+      expect(StringHelper.areEquivalent(null, "str")).to.equal(false);
+      expect(StringHelper.areEquivalent(null, null)).to.equal(false);
     });
     it( "should return empty string when comparing empty strings", () => {
-      expect(StringHelper.areEquivalent("", "")).to.equal("");
-      expect(StringHelper.areEquivalent("alice", "")).to.equal("");
-      expect(StringHelper.areEquivalent("", "alice")).to.equal("");
+      expect(StringHelper.areEquivalent("", "")).to.equal(false);
+      expect(StringHelper.areEquivalent("alice", "")).to.equal(false);
+      expect(StringHelper.areEquivalent("", "alice")).to.equal(false);
     });
   });
 
