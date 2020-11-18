@@ -53,7 +53,8 @@ export class DataRowParser {
   public findValue(key: string): string {
     let data = this.data.find((cell) => StringHelper.includesEquivalent(cell, key));
     data = StringHelper.getRawValue(data);
-    return data;
+    key = StringHelper.getRawValue(key);
+    return StringHelper.getRawValue(data.replace(key, ""));
   }
 
   public findValues(...args: string[]): string[] {
