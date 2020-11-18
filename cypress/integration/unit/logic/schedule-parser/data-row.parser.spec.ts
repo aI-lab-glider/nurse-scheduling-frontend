@@ -113,8 +113,8 @@ describe("DataRowParser", () => {
   describe("findValue", () => {
     const dataRowParser = new DataRowParser(dataRow);
 
-    it("should return empty string when finds value", () => {
-      expect(dataRowParser.findValue("number")).to.eql("number of hours 10");
+    it("should return string without a key when finds cell with this key", () => {
+      expect(dataRowParser.findValue("nuMBer")).to.eql("of hours 10");
     });
 
     it("should return empty string when does not find value", () => {
@@ -126,7 +126,7 @@ describe("DataRowParser", () => {
     const dataRowParser = new DataRowParser(dataRow);
 
     it("should return array of strings when finds value in corresponding argument", () => {
-      expect(dataRowParser.findValues("number", "alice")).to.eql(["number of hours 10", ""]);
+      expect(dataRowParser.findValues("nuMBer", "alice")).to.eql(["of hours 10", ""]);
     });
   });
 });
