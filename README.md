@@ -20,3 +20,7 @@ cd nurse-scheduling
 npm install
 npm start
 ```
+## Electron
+```
+npm run e-start
+```
