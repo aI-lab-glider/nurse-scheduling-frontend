@@ -9,7 +9,7 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
 
   constructor(childrenInfoSectionRows: DataRowParser[], metaData: MetaDataParser) {
     const processedSection = childrenInfoSectionRows
-      .map((row) => row.cropData(metaData.validDataStart, metaData.validDataEnd + 1))
+      .map((row) => row.createWithCroppedData(metaData.validDataStart, metaData.validDataEnd + 1))
       .filter((row) => this.isValidRow(row));
 
     this._sectionData = DataRowHelper.dataRowsAsDataRowDict(processedSection);
