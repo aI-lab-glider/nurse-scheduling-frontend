@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useMemo, useState } from "react";
 import { StringHelper } from "../../../../../helpers/string.helper";
 import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import {
-  WorkerInfo,
+  WorkerInfoModel,
   WorkerType,
   WorkerTypeHelper,
 } from "../../../../../common-models/worker-info.model";
@@ -37,7 +37,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
   );
 
   const submit = useCallback(
-    ({ name, time }: WorkerInfo): void => {
+    ({ name, time }: WorkerInfoModel): void => {
       if (!name || !time) return;
       let dataRow = data.find((row) => row.rowKey === name);
       if (!dataRow) {

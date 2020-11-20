@@ -1,11 +1,11 @@
-import { WorkerInfoModel } from "../../common-models/worker-info.model";
+import { WorkersInfoModel } from "../../common-models/worker-info.model";
 import { ScheduleActionModel, ScheduleDataActionType } from "./schedule-data.reducer";
 
-const initialState: WorkerInfoModel = { time: {}, type: {} };
+const initialState: WorkersInfoModel = { time: {}, type: {} };
 export function employeeInfoReducer(
-  state: WorkerInfoModel = initialState,
+  state: WorkersInfoModel = initialState,
   action: ScheduleActionModel
-): WorkerInfoModel {
+): WorkersInfoModel {
   const data = action.payload?.employee_info;
   if (!data) return state;
   switch (action.type) {

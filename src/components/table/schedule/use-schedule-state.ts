@@ -7,6 +7,7 @@ import { ShiftsInfoLogic } from "../../../logic/schedule-logic/shifts-info.logic
 import { ChildrenInfoLogic } from "../../../logic/schedule-logic/children-info.logic";
 import { ExtraWorkersLogic } from "../../../logic/schedule-logic/extra-workers.logic";
 import { MetadataLogic } from "../../../logic/schedule-logic/metadata.logic";
+import { LocalStorageProvider } from "../../../api/local-storage.provider";
 
 // eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface useScheduleStateReturn {
@@ -24,8 +25,9 @@ export function useScheduleState(
   const [scheduleLocalState, setScheduleLocalState] = useState<ScheduleComponentState>(
     scheduleInitialState
   );
+
   const scheduleLogic = useState<ScheduleLogic>(
-    new ScheduleLogic(dispatchGlobalState, initialScheduleModelState)
+    new ScheduleLogic(dispatchGlobalState, new LocalStorageProvider(), initialScheduleModelState)
   )[0];
 
   const setNewSchedule = useCallback(

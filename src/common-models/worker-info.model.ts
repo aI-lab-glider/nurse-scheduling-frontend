@@ -1,3 +1,5 @@
+import { TimeUnit } from "../api/persistance-store.model";
+
 export enum WorkerType {
   NURSE = "NURSE",
   OTHER = "OTHER",
@@ -14,12 +16,14 @@ export class WorkerTypeHelper {
   }
 }
 
-export interface WorkerInfoModel {
+export interface WorkersInfoModel {
   time: { [key: string]: number };
   type: { [workerName: string]: WorkerType };
 }
 
-export interface WorkerInfo {
+export interface WorkerInfoModel {
   name?: string;
   time?: number;
+  startWorking?: TimeUnit;
+  stopWorking?: TimeUnit;
 }

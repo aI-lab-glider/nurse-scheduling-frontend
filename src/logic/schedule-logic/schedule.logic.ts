@@ -5,7 +5,6 @@ import { StringHelper } from "../../helpers/string.helper";
 import { ActionModel } from "../../state/models/action.model";
 import { WorkerType } from "../../common-models/worker-info.model";
 import { ScheduleDataModel } from "../../common-models/schedule-data.model";
-import { ScheduleDataActionType } from "../../state/reducers/schedule-data.reducer";
 import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
 import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row";
@@ -13,13 +12,14 @@ import { ExtraWorkersLogic } from "./extra-workers.logic";
 import { MetadataLogic } from "./metadata.logic";
 import { ShiftsInfoLogic } from "./shifts-info.logic";
 import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../section.model";
-
+import { PersistanceStoreProvider, ScheduleRevision } from "../../api/persistance-store.model";
 export class ScheduleLogic implements ScheduleProvider {
   schedule!: Schedule;
   sections!: Sections;
 
   constructor(
-    private dispatchScheduleUpdate: Dispatch<ActionModel<ScheduleDataModel>>,
+    private dispatchScheduleUpdate: Dispatch<ActionModel<ScheduleDataModel> | any>,
+    private storeProvider: PersistanceStoreProvider,
     scheduleModel: ScheduleDataModel
   ) {
     this.update(scheduleModel);
@@ -133,9 +133,14 @@ export class ScheduleLogic implements ScheduleProvider {
 
   private updateGlobalState(): void {
     const model = this.schedule.getDataModel();
-    this.dispatchScheduleUpdate({
-      type: ScheduleDataActionType.UPDATE,
-      payload: model,
-    });
+    const revision: ScheduleRevision = {
+      data: model,
+      validityPeriod: {
+        month: this.sections.Metadata.monthNumber,
+        year: this.sections.Metadata.year,
+      },
+      revisionType: "primary",
+    };
+    this.dispatchScheduleUpdate(this.storeProvider.saveScheduleRevision(revision));
   }
 }

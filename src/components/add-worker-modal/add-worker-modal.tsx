@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Modal, TextField } from "@material-ui/core";
-import { WorkerInfo, WorkerType, WorkerTypeHelper } from "../../common-models/worker-info.model";
+import {
+  WorkerInfoModel,
+  WorkerType,
+  WorkerTypeHelper,
+} from "../../common-models/worker-info.model";
 import Button from "@material-ui/core/Button";
 
 const initialState = {
@@ -20,9 +24,9 @@ interface ParseTimeModel {
 interface AddWorkerModalOptions {
   isOpened: boolean;
   setIsOpened: (status: boolean) => void;
-  submit: (workerInfo: WorkerInfo) => void;
+  submit: (workerInfo: WorkerInfoModel) => void;
   workerType: WorkerType;
-  workerInfo?: WorkerInfo;
+  workerInfo?: WorkerInfoModel;
 }
 const NAME_MIN_LENGTH = 5;
 
