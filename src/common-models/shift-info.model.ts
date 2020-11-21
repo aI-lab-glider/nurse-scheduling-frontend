@@ -1,4 +1,4 @@
-import { TimeUnit } from "../api/persistance-store.model";
+import { ScheduleKey } from "../api/persistance-store.model";
 
 export enum ShiftCode {
   R = "R",
@@ -21,5 +21,5 @@ export interface ShiftModel {
   code: string;
   duration: number;
   color?: string;
-  validityPeriod: TimeUnit;
+  validityPeriod: ScheduleKey;
 }

@@ -7,7 +7,7 @@ import { ShiftsInfoLogic } from "../../../logic/schedule-logic/shifts-info.logic
 import { ChildrenInfoLogic } from "../../../logic/schedule-logic/children-info.logic";
 import { ExtraWorkersLogic } from "../../../logic/schedule-logic/extra-workers.logic";
 import { MetadataLogic } from "../../../logic/schedule-logic/metadata.logic";
-import { LocalStorageProvider } from "../../../api/local-storage.provider";
+import { LocalStorageProvider } from "../../../api/local-storage-provider.model";
 
 // eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface useScheduleStateReturn {

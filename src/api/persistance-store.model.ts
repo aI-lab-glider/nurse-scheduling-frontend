@@ -11,25 +11,33 @@ export type ThunkFunction<T> = (
   getState: () => ApplicationStateModel
 ) => Promise<unknown>;
 
-export interface TimeUnit {
+export interface ScheduleKey {
   month: number;
   year: number;
 }
 
-export interface RevisionDescription {
-  validityPeriod: TimeUnit;
-  revisionType: "primary" | "actual";
+type RevisionType = "primary" | "actual";
+export interface RevisionFilter {
+  revisionType: RevisionType;
+  validityPeriod: ScheduleKey;
 }
 
-export interface ScheduleRevision extends RevisionDescription {
+export interface ScheduleRevision {
+  revisionType: RevisionType;
   data: ScheduleDataModel;
 }
 
+export interface ScheduleRecord {
+  primaryRevision: ScheduleRevision;
+  actualRevision: ScheduleRevision;
+  validityPeriod: ScheduleKey;
+  workersInfo: WorkerInfoModel[];
+}
 export interface PersistanceStoreProvider {
   saveScheduleRevision(schedule: ScheduleRevision): ThunkFunction<ScheduleDataModel>;
-  getScheduleRevision(revision: RevisionDescription): ThunkFunction<ScheduleDataModel>;
+  getScheduleRevision(filter: RevisionFilter): ThunkFunction<ScheduleDataModel>;
   addNewWorker(worker: WorkerInfoModel): ThunkFunction<WorkerInfoModel>;
-  getWorkers(period: TimeUnit): ThunkFunction<WorkersInfoModel>;
+  getWorkers(period: ScheduleKey): ThunkFunction<WorkersInfoModel>;
   addNewShift(shift: ShiftModel): ThunkFunction<ShiftModel>;
-  getShifts(period: TimeUnit): ThunkFunction<ShiftModel>;
+  getShifts(period: ScheduleKey): ThunkFunction<ShiftModel>;
 }
