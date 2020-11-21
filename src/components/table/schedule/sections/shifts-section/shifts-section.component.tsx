@@ -27,7 +27,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
     workerType === WorkerType.NURSE ? "NurseInfo" : "BabysitterInfo";
   const sectionInfoProvider = scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey);
   const [isOpened, setIsOpened] = useState(false);
-  const [workerInfo, setWorkerInfo] = useState({});
+  const [workerInfo, setWorkerInfo] = useState({ name: "", time: 0 });
 
   const addOrUpdateWorker = useCallback(
     (newRow: DataRow, workerTime: number): void => {
@@ -63,7 +63,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
 
   const openWorkerModal = useCallback(
     (workerName?: string): void => {
-      let workerInfo = {};
+      let workerInfo = { name: "", time: 0 };
       if (workerName && sectionInfoProvider) {
         workerInfo = { name: workerName, time: sectionInfoProvider.workerWorkTime(workerName) };
       }

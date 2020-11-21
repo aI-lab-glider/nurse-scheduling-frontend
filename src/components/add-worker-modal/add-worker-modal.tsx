@@ -90,7 +90,7 @@ export function AddWorkerModal({
     if (isTimeFormatValid) {
       setState((prevState) => ({ ...prevState, timeError: false }));
       if (isNameValid) {
-        submit({ name, time: parsedTime });
+        submit({ name, time: parsedTime ?? 0 });
         handleClose();
       } else {
         setState((prevState) => ({ ...prevState, nameError: true }));

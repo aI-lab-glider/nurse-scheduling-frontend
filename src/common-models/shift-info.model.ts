@@ -19,7 +19,8 @@ export interface ShiftInfoModel {
 
 export interface ShiftModel {
   code: string;
-  duration: number;
+  from: string;
+  to: string;
   color?: string;
   validityPeriod: ScheduleKey;
 }

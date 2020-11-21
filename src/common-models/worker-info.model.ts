@@ -1,5 +1,3 @@
-import { ScheduleKey } from "../api/persistance-store.model";
-
 export enum WorkerType {
   NURSE = "NURSE",
   OTHER = "OTHER",
@@ -22,8 +20,6 @@ export interface WorkersInfoModel {
 }
 
 export interface WorkerInfoModel {
-  name?: string;
-  time?: number;
-  startWorking?: ScheduleKey;
-  stopWorking?: ScheduleKey;
+  name: string;
+  time: number;
 }
