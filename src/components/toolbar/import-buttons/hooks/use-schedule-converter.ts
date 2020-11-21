@@ -54,7 +54,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
   function readFileContent(workbook): void {
     const sheet = workbook.getWorksheet(1);
     if (sheet.rowCount === 0) {
-      throw new Error("EMPTY_FILE");
+      throw new Error(InputFileErrorCode.EMPTY_FILE);
     }
 
     const parsedFileContent = Array<Array<string>>();

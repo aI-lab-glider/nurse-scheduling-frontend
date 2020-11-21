@@ -130,9 +130,8 @@ export class ScheduleExportLogic {
 
   private createHeader(scheduleModel: ScheduleDataModel): string[] {
     const headerRow = { [MetaDataRowLabel]: "" };
-    headerRow[MetaDataSectionKey.Month] = Object.keys(TranslationHelper.monthTranslations)[
-      scheduleModel?.schedule_info?.month_number || 0
-    ];
+    headerRow[MetaDataSectionKey.Month] =
+      TranslationHelper.polishMonths[scheduleModel?.schedule_info?.month_number || 0];
     headerRow[MetaDataSectionKey.Year] = scheduleModel?.schedule_info?.year || 0;
     // TODO implement work time calculation
     headerRow[MetaDataSectionKey.RequiredavailableWorkersWorkTime] = 0;
