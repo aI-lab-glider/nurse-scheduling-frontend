@@ -2,7 +2,7 @@
 
 context("Menu 'plik'", () => {
   beforeEach(() => {
-    cy.visit(`${Cypress.env("baseUrl")}`);
+    cy.visit(`http://localhost:3000/`);
   });
 
   describe("File button", () => {
