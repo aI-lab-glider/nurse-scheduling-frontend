@@ -15,12 +15,12 @@ export enum ParseErrorCode {
 }
 
 export enum InputFileErrorCode {
-  EMPTY_FILE = "emptyFile",
-  NO_CARETAKER_SECTION = "noCaretakerSection",
-  NO_NURSE_SECTION = "noNurseSection",
-  NO_CHILDREN_SECTION = "noChildrenSection",
-  INVALID_METADATA = "invalidMetadata",
-  NO_CHILDREN_QUANTITY = "noChildrenQuantity",
+  EMPTY_FILE = "EMPTY_FILE",
+  NO_BABYSITTER_SECTION = "NO_BABYSITTER_SECTION",
+  NO_NURSE_SECTION = "NO_NURSE_SECTION",
+  NO_CHILDREN_SECTION = "NO_CHILDREN_SECTION",
+  INVALID_METADATA = "INVALID_METADATA",
+  NO_CHILDREN_QUANTITY = "NO_CHILDREN_QUANTITY",
 }
 
 export type ScheduleError = UnknownValueError | InputFileError | AlgorithmError;

@@ -28,7 +28,7 @@ export class MonthInfoLogic {
     daysFromPreviousMonthExists: boolean
   ) {
     if (typeof monthId == "string") {
-      monthId = Object.keys(TranslationHelper.monthTranslations).findIndex(
+      monthId = TranslationHelper.polishMonths.findIndex(
         (month) => StringHelper.getRawValue(month) === monthId
       );
     }
@@ -47,7 +47,7 @@ export class MonthInfoLogic {
 
   private generateMonthDates(monthNumber: number, year: string): number[] {
     const dates: number[] = [];
-    const month = Object.values(TranslationHelper.monthTranslations)[monthNumber];
+    const month = TranslationHelper.englishMonths[monthNumber];
     let day = 1;
     while (this.isDateBelongsToMonth(day, month, year)) {
       dates.push(day);
@@ -66,19 +66,19 @@ export class MonthInfoLogic {
   }
 
   public get workingDaysNumber(): number {
-    const month = Object.values(TranslationHelper.monthTranslations)[this.monthNumber];
+    const month = TranslationHelper.englishMonths[this.monthNumber];
     return this._verboseDates.filter(
       (date) => date.month === month && MonthInfoLogic.isWorkingDay(date.dayOfWeek)
     ).length;
   }
 
   public get numberOfPreviousMonthDays(): number {
-    const month = Object.values(TranslationHelper.monthTranslations)[this.monthNumber];
+    const month = TranslationHelper.englishMonths[this.monthNumber];
     return this._verboseDates.filter((date) => date.month !== month).length;
   }
 
   public static convertToDate(monthNumber: number, year): Date {
-    return new Date(`1 ${Object.values(TranslationHelper.monthTranslations)[monthNumber]} ${year}`);
+    return new Date(`1 ${TranslationHelper.englishMonths[monthNumber]} ${year}`);
   }
 
   private createCalendar(
@@ -104,7 +104,7 @@ export class MonthInfoLogic {
       }
       const month = daysFromPreviousMonthExists ? monthNumber - 1 : monthNumber;
       const isPublicHoliday = this.publicHolidaysLogic.isPublicHoliday(day, month);
-      const monthName = Object.values(TranslationHelper.monthTranslations)[month];
+      const monthName = TranslationHelper.englishMonths[month];
       const date = new Date(`${day} ${monthName} ${year}`);
       verboseDates.push({
         date: day,
@@ -129,9 +129,7 @@ export class MonthInfoLogic {
 
   private isDateBelongsToMonth(date: number, month: string, year: string): boolean {
     return (
-      Object.values(TranslationHelper.monthTranslations)[
-        new Date(`${date} ${month} ${year}`).getMonth()
-      ] === month
+      TranslationHelper.englishMonths[new Date(`${date} ${month} ${year}`).getMonth()] === month
     );
   }
 }
