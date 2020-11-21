@@ -38,7 +38,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
           },
         ]);
 
-        setScheduleModel({});
+        setScheduleModel(undefined);
       }
     });
   }, [fileContent]);

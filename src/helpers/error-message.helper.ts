@@ -55,7 +55,7 @@ export class ErrorMessageHelper {
         message = `Błąd podczas wczytywania pliku wejściowego: Pusty plik`;
         break;
       case InputFileErrorCode.NO_BABYSITTER_SECTION:
-        message = `Błąd podczas wczytywania pliku wejściowego: Nie znaleziono sekcji "opiekuni"`;
+        message = `Błąd podczas wczytywania pliku wejściowego: Nie znaleziono sekcji "opiekunki"`;
         break;
       case InputFileErrorCode.NO_NURSE_SECTION:
         message = `Błąd podczas wczytywania pliku wejściowego: Nie znaleziono sekcji "pielęgniarki"`;
