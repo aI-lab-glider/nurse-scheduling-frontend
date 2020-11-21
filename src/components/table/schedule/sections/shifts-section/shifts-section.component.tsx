@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useMemo, useState } from "react";
 import { StringHelper } from "../../../../../helpers/string.helper";
 import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import {
-  WorkerInfo,
+  WorkerInfoModel,
   WorkerType,
   WorkerTypeHelper,
 } from "../../../../../common-models/worker-info.model";
@@ -27,7 +27,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
     workerType === WorkerType.NURSE ? "NurseInfo" : "BabysitterInfo";
   const sectionInfoProvider = scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey);
   const [isOpened, setIsOpened] = useState(false);
-  const [workerInfo, setWorkerInfo] = useState({});
+  const [workerInfo, setWorkerInfo] = useState({ name: "", time: 0 });
 
   const addOrUpdateWorker = useCallback(
     (newRow: DataRow, workerTime: number): void => {
@@ -37,7 +37,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
   );
 
   const submit = useCallback(
-    ({ name, time }: WorkerInfo): void => {
+    ({ name, time }: WorkerInfoModel): void => {
       if (!name || !time) return;
       let dataRow = data.find((row) => row.rowKey === name);
       if (!dataRow) {
@@ -63,7 +63,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
 
   const openWorkerModal = useCallback(
     (workerName?: string): void => {
-      let workerInfo = {};
+      let workerInfo = { name: "", time: 0 };
       if (workerName && sectionInfoProvider) {
         workerInfo = { name: workerName, time: sectionInfoProvider.workerWorkTime(workerName) };
       }

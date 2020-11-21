@@ -14,12 +14,12 @@ export class WorkerTypeHelper {
   }
 }
 
-export interface WorkerInfoModel {
+export interface WorkersInfoModel {
   time: { [key: string]: number };
   type: { [workerName: string]: WorkerType };
 }
 
-export interface WorkerInfo {
-  name?: string;
-  time?: number;
+export interface WorkerInfoModel {
+  name: string;
+  time: number;
 }

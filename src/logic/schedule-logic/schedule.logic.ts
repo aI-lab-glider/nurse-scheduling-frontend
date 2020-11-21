@@ -5,7 +5,6 @@ import { StringHelper } from "../../helpers/string.helper";
 import { ActionModel } from "../../state/models/action.model";
 import { WorkerType } from "../../common-models/worker-info.model";
 import { ScheduleDataModel } from "../../common-models/schedule-data.model";
-import { ScheduleDataActionType } from "../../state/reducers/schedule-data.reducer";
 import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
 import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row";
@@ -13,13 +12,15 @@ import { ExtraWorkersLogic } from "./extra-workers.logic";
 import { MetadataLogic } from "./metadata.logic";
 import { ShiftsInfoLogic } from "./shifts-info.logic";
 import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../section.model";
-
+import { PersistanceStoreProvider } from "../../api/persistance-store.model";
+import { ScheduleDataActionType } from "../../state/reducers/schedule-data.reducer";
 export class ScheduleLogic implements ScheduleProvider {
   schedule!: Schedule;
   sections!: Sections;
 
   constructor(
     private dispatchScheduleUpdate: Dispatch<ActionModel<ScheduleDataModel>>,
+    private storeProvider: PersistanceStoreProvider,
     scheduleModel: ScheduleDataModel
   ) {
     this.update(scheduleModel);

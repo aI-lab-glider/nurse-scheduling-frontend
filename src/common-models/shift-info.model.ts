@@ -1,3 +1,5 @@
+import { ScheduleKey } from "../api/persistance-store.model";
+
 export enum ShiftCode {
   R = "R",
   P = "P",
@@ -13,4 +15,12 @@ export enum ShiftCode {
 export interface ShiftInfoModel {
   // eslint-disable-next-line @typescript-eslint/camelcase
   [nurse_name: string]: ShiftCode[];
+}
+
+export interface ShiftModel {
+  code: string;
+  from: string;
+  to: string;
+  color?: string;
+  validityPeriod: ScheduleKey;
 }
