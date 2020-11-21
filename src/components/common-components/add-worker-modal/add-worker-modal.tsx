@@ -4,7 +4,7 @@ import {
   WorkerInfoModel,
   WorkerType,
   WorkerTypeHelper,
-} from "../../common-models/worker-info.model";
+} from "../../../common-models/worker-info.model";
 import Button from "@material-ui/core/Button";
 
 const initialState = {

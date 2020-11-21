@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { WorkerType } from "../../../common-models/worker-info.model";
+import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { WorkerType } from "../../../../common-models/worker-info.model";
 import { EmptyRowComponent } from "./schedule-parts/empty-row.component";
 import { ChildrenSectionComponent } from "./sections/children-section/children-section.components";
 import { DateSectionComponent } from "./sections/date-section/date-section.component";

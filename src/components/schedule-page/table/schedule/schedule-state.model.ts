@@ -1,4 +1,4 @@
-import { DataRow } from "../../../logic/schedule-logic/data-row";
+import { DataRow } from "../../../../logic/schedule-logic/data-row";
 
 export interface ScheduleComponentState {
   childrenSection?: DataRow[];

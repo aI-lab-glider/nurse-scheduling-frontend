@@ -1,5 +1,5 @@
 import React from "react";
-import { ShiftCode } from "../../../../common-models/shift-info.model";
+import { ShiftCode } from "../../../../../common-models/shift-info.model";
 import { BaseCellComponent, BaseCellOptions } from "./base-cell.component";
 
 function getShiftCode(value: string | number): ShiftCode {

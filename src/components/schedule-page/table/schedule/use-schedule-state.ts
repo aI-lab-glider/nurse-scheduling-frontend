@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ScheduleLogic } from "../../../logic/schedule-logic/schedule.logic";
-import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
+import { ScheduleLogic } from "../../../../logic/schedule-logic/schedule.logic";
+import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 import { ScheduleComponentState, scheduleInitialState } from "./schedule-state.model";
-import { ShiftsInfoLogic } from "../../../logic/schedule-logic/shifts-info.logic";
-import { ChildrenInfoLogic } from "../../../logic/schedule-logic/children-info.logic";
-import { ExtraWorkersLogic } from "../../../logic/schedule-logic/extra-workers.logic";
-import { MetadataLogic } from "../../../logic/schedule-logic/metadata.logic";
-import { LocalStorageProvider } from "../../../api/local-storage-provider.model";
+import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
+import { ShiftsInfoLogic } from "../../../../logic/schedule-logic/shifts-info.logic";
+import { ChildrenInfoLogic } from "../../../../logic/schedule-logic/children-info.logic";
+import { ExtraWorkersLogic } from "../../../../logic/schedule-logic/extra-workers.logic";
+import { MetadataLogic } from "../../../../logic/schedule-logic/metadata.logic";
 
 // eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface useScheduleStateReturn {
