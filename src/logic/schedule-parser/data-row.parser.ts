@@ -57,6 +57,10 @@ export class DataRowParser {
     return StringHelper.getRawValue(data.replace(key, ""));
   }
 
+  public includes(key: string): boolean {
+    return this.data.includes(key);
+  }
+
   public findValues(...args: string[]): string[] {
     return args.map((arg) => this.findValue(arg));
   }

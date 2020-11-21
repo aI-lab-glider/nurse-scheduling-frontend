@@ -1,6 +1,6 @@
 import { DataRowHelper } from "../../helpers/data-row.helper";
 import { WorkerType } from "../../common-models/worker-info.model";
-import { ScheduleErrorModel } from "../../common-models/schedule-error.model";
+import { ScheduleError } from "../../common-models/schedule-error.model";
 import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
 import { Sections } from "../providers/schedule-provider.model";
 import { DataRow } from "./data-row";
@@ -14,7 +14,7 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
 
   private shifts: { [nurseName: string]: DataRow } = {};
   private _availableWorkersWorkTime: { [nurseName: string]: number } = {};
-  private _scheduleErrors: ScheduleErrorModel[] = [];
+  private _scheduleErrors: ScheduleError[] = [];
 
   constructor(shiftSection: ShiftInfoModel = {}, private workerType: WorkerType) {
     super();
@@ -32,11 +32,11 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
     return this._availableWorkersWorkTime;
   }
 
-  public get errors(): ScheduleErrorModel[] {
+  public get errors(): ScheduleError[] {
     return [...this._scheduleErrors];
   }
 
-  public set errors(value: ScheduleErrorModel[]) {
+  public set errors(value: ScheduleError[]) {
     this._scheduleErrors = value;
   }
 
