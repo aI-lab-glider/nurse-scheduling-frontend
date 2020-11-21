@@ -1,11 +1,11 @@
 import React, { useCallback, useContext } from "react";
-import { DataRow } from "../../../../logic/schedule-logic/data-row";
+import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import { BaseRowComponent, BaseRowOptions } from "./base-row.component";
 import { ShiftCellComponent } from "./shift-cell.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
-import { ShiftsInfoLogic } from "../../../../logic/schedule-logic/shifts-info.logic";
+import { ShiftsInfoLogic } from "../../../../../logic/schedule-logic/shifts-info.logic";
 import { BaseCellOptions } from "./base-cell.component";
-import { ShiftHelper } from "../../../../helpers/shifts.helper";
+import { ShiftHelper } from "../../../../../helpers/shifts.helper";
 
 const WORK_HOURS_PER_DAY = 8;
 

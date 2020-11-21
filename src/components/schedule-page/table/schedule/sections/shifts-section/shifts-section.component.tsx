@@ -1,20 +1,20 @@
 import { Button } from "@material-ui/core";
 import React, { useCallback, useContext, useMemo, useState } from "react";
-import { StringHelper } from "../../../../../helpers/string.helper";
-import { DataRow } from "../../../../../logic/schedule-logic/data-row";
+import { StringHelper } from "../../../../../../helpers/string.helper";
+import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
 import {
   WorkerInfoModel,
   WorkerType,
   WorkerTypeHelper,
-} from "../../../../../common-models/worker-info.model";
-import { ShiftCode } from "../../../../../common-models/shift-info.model";
-import { AddWorkerModal } from "../../../../add-worker-modal/add-worker-modal";
+} from "../../../../../../common-models/worker-info.model";
+import { ShiftCode } from "../../../../../../common-models/shift-info.model";
+import { AddWorkerModal } from "../../../../../common-components/add-worker-modal/add-worker-modal";
 import { ShiftCellComponent } from "../../schedule-parts/shift-cell.component";
 import { ScheduleLogicContext } from "../../use-schedule-state";
 import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-section.component";
 import { ShiftRowComponent } from "../../schedule-parts/shift-row.component";
-import { Sections } from "../../../../../logic/providers/schedule-provider.model";
-import { ShiftsInfoLogic } from "../../../../../logic/schedule-logic/shifts-info.logic";
+import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
+import { ShiftsInfoLogic } from "../../../../../../logic/schedule-logic/shifts-info.logic";
 
 export interface ShiftsSectionOptions extends BaseSectionOptions {
   workerType: WorkerType;

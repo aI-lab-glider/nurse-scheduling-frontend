@@ -1,11 +1,11 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { DataRow } from "../../../../logic/schedule-logic/data-row";
+import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import { DirectionKey } from "../sections/base-section/base-section.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
 import { BaseCellComponent, BaseCellOptions } from "./base-cell.component";
-import { ShiftHelper } from "../../../../helpers/shifts.helper";
-import { Sections } from "../../../../logic/providers/schedule-provider.model";
-import { DataRowHelper } from "../../../../helpers/data-row.helper";
+import { ShiftHelper } from "../../../../../helpers/shifts.helper";
+import { Sections } from "../../../../../logic/providers/schedule-provider.model";
+import { DataRowHelper } from "../../../../../helpers/data-row.helper";
 
 enum CellManagementKeys {
   Enter = "Enter",

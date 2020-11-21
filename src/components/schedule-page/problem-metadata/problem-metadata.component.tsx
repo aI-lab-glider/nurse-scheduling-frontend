@@ -15,7 +15,7 @@ import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ScheduleError } from "../../../common-models/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
-import { SnackbarComponent } from "./snackbar.component";
+import { SnackbarComponent } from "../../common-components/snackbar/snackbar.component";
 import { ShiftHelper } from "../../../helpers/shifts.helper";
 
 function getWorkersCount(scheduleModel: ScheduleDataModel): number[] {

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { BaseCellComponent } from "../../schedule-parts/base-cell.component";
 import { BaseRowComponent } from "../../schedule-parts/base-row.component";
-import { DataRow } from "../../../../../logic/schedule-logic/data-row";
+import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
 import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
 import { BaseCellOptions } from "../../schedule-parts/base-cell.component";
-import { Sections } from "../../../../../logic/providers/schedule-provider.model";
-import { DataRowHelper } from "../../../../../helpers/data-row.helper";
+import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
+import { DataRowHelper } from "../../../../../../helpers/data-row.helper";
 
 export enum DirectionKey {
   ArrowRight = "ArrowRight",
