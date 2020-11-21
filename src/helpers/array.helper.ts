@@ -6,7 +6,7 @@ export class ArrayHelper {
   ): [T1 | null, T2 | null][] {
     if (array1.length < array2.length) {
       const count = array2.length - array1.length;
-      array1 = Array(count).fill(null);
+      array1 = [...array1, ...Array.from(Array(count))];
     }
     return array1.map((v, index: number) => [v, array2[index]]);
   }
