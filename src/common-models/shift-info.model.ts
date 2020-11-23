@@ -13,8 +13,7 @@ export enum ShiftCode {
 }
 
 export interface ShiftInfoModel {
-  // eslint-disable-next-line @typescript-eslint/camelcase
-  [nurse_name: string]: ShiftCode[];
+  [nurseName: string]: ShiftCode[];
 }
 
 export interface ShiftModel {

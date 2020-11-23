@@ -44,7 +44,7 @@ export function ProblemMetadataComponent(): JSX.Element {
     if (schedule) {
       const { year, month_number: monthNumber, UUID } = schedule.schedule_info || {};
       const [babysitterCount, nurseCount] = getWorkersCount(schedule);
-      if (UUID) {
+      if (UUID && monthNumber && year) {
         handleDateChange(MonthInfoLogic.convertToDate(monthNumber, year));
       }
 

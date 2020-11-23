@@ -4,8 +4,6 @@ import { ScheduleActionModel, ScheduleDataActionType } from "./schedule-data.red
 let uuid = 0;
 /* eslint-disable @typescript-eslint/camelcase */
 const initialState: ScheduleModel = {
-  month_number: -1,
-  year: -1,
   daysFromPreviousMonthExists: false,
 };
 
