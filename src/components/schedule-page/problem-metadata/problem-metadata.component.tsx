@@ -163,13 +163,23 @@ export function ProblemMetadataComponent(): JSX.Element {
       <br />
       <div id="submit-button-container">
         <Box>
-          <Button size="small" id="submit-button" variant="outlined" onClick={onFixScheduleClicked}>
+          <Button
+            size="small"
+            className="submit-button"
+            variant="outlined"
+            onClick={onFixScheduleClicked}
+          >
             Popraw
           </Button>
         </Box>
 
         <Box>
-          <Button size="small" id="submit-button" variant="outlined" onClick={onShowErrorsClicked}>
+          <Button
+            size="small"
+            className="submit-button"
+            variant="outlined"
+            onClick={onShowErrorsClicked}
+          >
             Sprawdź
           </Button>
         </Box>
