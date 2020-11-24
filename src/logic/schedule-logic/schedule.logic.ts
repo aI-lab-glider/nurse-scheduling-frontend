@@ -51,10 +51,10 @@ export class ScheduleLogic implements ScheduleProvider {
       NurseInfo: new ShiftsInfoLogic(nurseShifts, WorkerType.NURSE),
       ChildrenInfo: new ChildrenInfoLogic(childrenSectionData),
       Metadata: new MetadataLogic(
-        scheduleInfo?.year.toString(),
-        scheduleInfo?.month_number,
+        scheduleInfo.year?.toString(),
+        scheduleInfo.month_number,
         scheduleModel.month_info?.dates,
-        scheduleInfo?.daysFromPreviousMonthExists
+        scheduleInfo.daysFromPreviousMonthExists
       ),
       ExtraWorkersInfo: new ExtraWorkersLogic(extraWorkerSectionData),
     };

@@ -1,0 +1,15 @@
+#month-switch {
+  font-family: "Roboto";
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 1px;
+  * {
+    color: $primary-text-color;
+  }
+  span {
+    margin: 5px;
+  }
+  .arrow-button {
+    outline: none;
+  }
+}
