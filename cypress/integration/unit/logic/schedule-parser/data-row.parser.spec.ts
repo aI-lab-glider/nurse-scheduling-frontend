@@ -80,7 +80,7 @@ describe("DataRowParser", () => {
 
   describe("createWithProcessedRow", () => {
     const dataRowParser = new DataRowParser(dataRow);
-    const processingFunctionMock = (row: DataRowParser) => {
+    const processingFunctionMock = (row: DataRowParser): [string, string, string, string] => {
       return ["alice", "has", "a", "cat"];
     };
 

@@ -1,4 +1,3 @@
-import SelectInput from "@material-ui/core/Select/SelectInput";
 import { Dispatch } from "react";
 import { ScheduleDataModel } from "../common-models/schedule-data.model";
 import { ShiftModel } from "../common-models/shift-info.model";
