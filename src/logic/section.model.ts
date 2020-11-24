@@ -6,7 +6,22 @@ export enum ChildrenSectionKey {
 }
 
 export enum ExtraWorkersSectionKey {
-  ExtraWorkersCount = "liczba dodatkowych pracowników",
+  ExtraWorkersCount = "pracownicy dzienni",
+}
+
+export class FoundationSectionKey {
+  static get ChildrenCount() {
+    return ChildrenSectionKey.RegisteredChildrenCount;
+  }
+  static get ExtraWorkersCount() {
+    return ExtraWorkersSectionKey.ExtraWorkersCount;
+  }
+  static get NurseCount() {
+    return "pielęgniarki";
+  }
+  static get BabysittersCount() {
+    return "opiekunki";
+  }
 }
 
 export enum MetaDataSectionKey {

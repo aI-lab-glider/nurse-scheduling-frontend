@@ -8,6 +8,7 @@ import { ShiftsInfoLogic } from "../../../../logic/schedule-logic/shifts-info.lo
 import { ChildrenInfoLogic } from "../../../../logic/schedule-logic/children-info.logic";
 import { ExtraWorkersLogic } from "../../../../logic/schedule-logic/extra-workers.logic";
 import { MetadataLogic } from "../../../../logic/schedule-logic/metadata.logic";
+import { FoundationInfoLogic } from "../../../../logic/schedule-logic/foundation-info.logic";
 
 // eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface useScheduleStateReturn {
@@ -37,8 +38,7 @@ export function useScheduleState(
         nurseShiftsSection: (scheduleLogic.sections.NurseInfo as ShiftsInfoLogic).sectionData,
         babysitterShiftsSection: (scheduleLogic.sections.BabysitterInfo as ShiftsInfoLogic)
           .sectionData,
-        childrenSection: (scheduleLogic.sections.ChildrenInfo as ChildrenInfoLogic).sectionData,
-        extraWorkersSection: (scheduleLogic.sections.ExtraWorkersInfo as ExtraWorkersLogic)
+        foundationInfoSection: (scheduleLogic.sections.FoundationInfo as FoundationInfoLogic)
           .sectionData,
         dateSection: (scheduleLogic.sections.Metadata as MetadataLogic).sectionData,
         isInitialized: true,

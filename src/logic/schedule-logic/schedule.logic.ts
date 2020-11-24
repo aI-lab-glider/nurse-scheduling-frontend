@@ -14,6 +14,8 @@ import { ShiftsInfoLogic } from "./shifts-info.logic";
 import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../section.model";
 import { PersistanceStoreProvider } from "../../api/persistance-store.model";
 import { ScheduleDataActionType } from "../../state/reducers/schedule-data.reducer";
+import { FoundationInfoLogic } from "./foundation-info.logic";
+import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
 export class ScheduleLogic implements ScheduleProvider {
   schedule!: Schedule;
   sections!: Sections;
@@ -45,19 +47,22 @@ export class ScheduleLogic implements ScheduleProvider {
     const extraWorkerSectionData = {
       [ExtraWorkersSectionKey.ExtraWorkersCount]: scheduleModel.month_info?.extra_workers || [],
     };
-    const scheduleInfo = scheduleModel.schedule_info;
-    return {
+
+    const logics: FoundationInfoOptions = {
       BabysitterInfo: new ShiftsInfoLogic(babysitterShifts, WorkerType.OTHER),
       NurseInfo: new ShiftsInfoLogic(nurseShifts, WorkerType.NURSE),
-      ChildrenInfo: new ChildrenInfoLogic(childrenSectionData),
-      Metadata: new MetadataLogic(
-        scheduleInfo?.year.toString(),
-        scheduleInfo?.month_number,
-        scheduleModel.month_info?.dates,
-        scheduleInfo?.daysFromPreviousMonthExists
-      ),
       ExtraWorkersInfo: new ExtraWorkersLogic(extraWorkerSectionData),
+      ChildrenInfo: new ChildrenInfoLogic(childrenSectionData),
     };
+    const scheduleInfo = scheduleModel.schedule_info;
+    const metadata = new MetadataLogic(
+      scheduleInfo?.year.toString(),
+      scheduleInfo?.month_number,
+      scheduleModel.month_info?.dates,
+      scheduleInfo?.daysFromPreviousMonthExists
+    );
+    const foundationLogic = new FoundationInfoLogic(logics);
+    return { ...logics, FoundationInfo: foundationLogic, Metadata: metadata };
   }
 
   public changeShiftFrozenState(rowind: number, shiftIndex: number): void {
@@ -98,12 +103,6 @@ export class ScheduleLogic implements ScheduleProvider {
     if (newDataRow) {
       this.updateGlobalState();
     }
-  }
-
-  public updateExtraWorkersSection(newSectionData: DataRow[]): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = DataRowHelper.dataRowsAsValueDict<any>(newSectionData, true);
-    this.sections.ExtraWorkersInfo = new ExtraWorkersLogic({ ...data });
   }
 
   public addWorker(

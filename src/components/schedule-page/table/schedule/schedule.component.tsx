@@ -31,14 +31,8 @@ export function ScheduleComponent(): JSX.Element {
               <EmptyRowComponent />
 
               <ShiftInfoSectionComponent
-                childrenOptions={{
-                  uuid: scheduleLocalState.uuid,
-                  data: scheduleLocalState.childrenSection,
-                }}
-                workersOptions={{
-                  uuid: scheduleLocalState.uuid,
-                  data: scheduleLocalState.extraWorkersSection,
-                }}
+                uuid={scheduleLocalState.uuid}
+                data={scheduleLocalState.foundationInfoSection}
               />
 
               <ShiftsSectionComponent

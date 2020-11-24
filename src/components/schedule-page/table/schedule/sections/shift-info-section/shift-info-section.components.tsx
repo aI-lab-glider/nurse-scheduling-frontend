@@ -4,24 +4,12 @@ import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-s
 export type ChildrenSectionOptions = BaseSectionOptions;
 export type ExtraWorkersSectionOptions = BaseSectionOptions;
 
-export type ShiftInfoSectionOptions = {
-  childrenOptions: ChildrenSectionOptions;
-  workersOptions: ExtraWorkersSectionOptions;
-};
+export type ShiftInfoSectionOptions = BaseSectionOptions;
 
 export function ShiftInfoSectionComponent(options: ShiftInfoSectionOptions): JSX.Element {
   return (
     <React.Fragment>
-      <BaseSectionComponent
-        {...options.childrenOptions}
-        sectionKey={"ChildrenInfo"}
-        data={options.childrenOptions.data}
-      />
-      <BaseSectionComponent
-        {...options.workersOptions}
-        sectionKey={"ExtraWorkersInfo"}
-        data={options.workersOptions.data}
-      />
+      <BaseSectionComponent {...options} sectionKey={"FoundationInfo"} />
     </React.Fragment>
   );
 }

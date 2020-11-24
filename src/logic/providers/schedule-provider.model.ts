@@ -2,17 +2,14 @@ import { WorkerType } from "../../common-models/worker-info.model";
 import { ScheduleDataModel } from "../../common-models/schedule-data.model";
 import { ShiftsProvider } from "./shifts-provider.model";
 import { MetadataProvider } from "./metadata-provider.model";
-import { ChildrenInfoProvider } from "./children-info-provider.model";
-import { ExtraWorkersInfoProvider } from "./extra-workers-info-provider.model";
+import { FoundationInfoProvider } from "./foundation-info-provider.model";
 
 export interface Sections {
   Metadata: MetadataProvider;
   NurseInfo: ShiftsProvider;
   BabysitterInfo: ShiftsProvider;
-  ChildrenInfo: ChildrenInfoProvider;
-  ExtraWorkersInfo: ExtraWorkersInfoProvider;
+  FoundationInfo: FoundationInfoProvider;
 }
-
 export interface ScheduleProvider {
   readonly sections: Sections;
   getWorkerTypes(): { [workerName: string]: WorkerType };
@@ -40,9 +37,9 @@ export class Schedule {
       },
       month_info: {
         frozen_shifts: sections.Metadata.frozenDates ?? [],
-        children_number: sections.ChildrenInfo.registeredChildrenNumber,
+        children_number: sections.FoundationInfo.childrenInfo,
         dates: sections.Metadata.dates ?? [],
-        extra_workers: sections.ExtraWorkersInfo.extraWorkers ?? [],
+        extra_workers: sections.FoundationInfo.extraWorkersInfo ?? [],
       },
       employee_info: {
         type: this.provider.getWorkerTypes(),

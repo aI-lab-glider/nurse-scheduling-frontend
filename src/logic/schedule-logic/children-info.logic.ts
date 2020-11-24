@@ -3,16 +3,12 @@ import { BaseSectionLogic } from "./base-section-logic.model";
 import { ChildrenSectionKey } from "../section.model";
 import { ChildrenInfoProvider } from "../providers/children-info-provider.model";
 import { Sections } from "../providers/schedule-provider.model";
+import { Omit } from "@material-ui/core";
 
-export class ChildrenInfoLogic extends BaseSectionLogic implements ChildrenInfoProvider {
-  get sectionKey(): keyof Sections {
-    return "ChildrenInfo";
-  }
-
+export class ChildrenInfoLogic implements ChildrenInfoProvider {
   private childrenInfoAsDataRows: { [key: string]: DataRow } = {};
 
   constructor(private childrenInfo: { [key: string]: number[] }) {
-    super();
     Object.keys(childrenInfo).forEach((key) => {
       this.childrenInfoAsDataRows[key] = new DataRow(key, childrenInfo[key]);
     });
