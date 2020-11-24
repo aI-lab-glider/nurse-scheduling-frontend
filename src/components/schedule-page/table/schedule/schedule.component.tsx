@@ -3,11 +3,10 @@ import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 import { WorkerType } from "../../../../common-models/worker-info.model";
 import { EmptyRowComponent } from "./schedule-parts/empty-row.component";
-import { ChildrenSectionComponent } from "./sections/children-section/children-section.components";
 import { DateSectionComponent } from "./sections/date-section/date-section.component";
 import { ShiftsSectionComponent } from "./sections/shifts-section/shifts-section.component";
 import { ScheduleLogicContext, useScheduleState } from "./use-schedule-state";
-import { ExtraWorkersSection } from "./sections/extra-workers-section/extra-workers-section.components";
+import { ShiftInfoSectionComponent } from "./sections/shift-info-section/shift-info-section.components";
 
 export function ScheduleComponent(): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
@@ -31,16 +30,15 @@ export function ScheduleComponent(): JSX.Element {
 
               <EmptyRowComponent />
 
-              <ChildrenSectionComponent
-                uuid={scheduleLocalState.uuid}
-                data={scheduleLocalState.childrenSection}
-              />
-
-              <EmptyRowComponent />
-
-              <ExtraWorkersSection
-                uuid={scheduleLocalState.uuid}
-                data={scheduleLocalState.extraWorkersSection}
+              <ShiftInfoSectionComponent
+                childrenOptions={{
+                  uuid: scheduleLocalState.uuid,
+                  data: scheduleLocalState.childrenSection,
+                }}
+                workersOptions={{
+                  uuid: scheduleLocalState.uuid,
+                  data: scheduleLocalState.extraWorkersSection,
+                }}
               />
 
               <ShiftsSectionComponent
