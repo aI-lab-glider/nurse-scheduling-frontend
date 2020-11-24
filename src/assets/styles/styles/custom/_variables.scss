@@ -10,8 +10,9 @@ $enable-print-styles: true !default;
 
 // Color system
 
-$app-font-color: #1d3557 !default;
-$body-color: #fafafa !default;
+$primary: #1d3557 !default;
+$primary-text-color: $primary !default;
+$primary-background: #e5e5e5 !default;
 $white: #ffffff !default;
 $gray-100: #f6f9fc !default;
 $gray-200: #e9ecef !default;
@@ -97,7 +98,6 @@ $default-color-opacity: rgba(182, 182, 182, 0.6) !default;
 $orange-color: #f96332 !default;
 
 $default: #344675 !default;
-$primary: #e14eca !default;
 $secondary: #f4f5f7 !default;
 $success: #00f2c3 !default;
 $info: #1d8cf8 !default;

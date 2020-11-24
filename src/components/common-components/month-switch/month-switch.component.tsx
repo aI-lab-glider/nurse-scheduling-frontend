@@ -16,9 +16,6 @@ export function MonthSwitchComponent(options: MonthSwitchOpions) {
     (state: ApplicationStateModel) => state.scheduleData.present.schedule_info
   );
 
-  function switchMonth() {
-    console.log("Switching month");
-  }
   let actualMonth = "";
   if (month_number && year) {
     actualMonth = StringHelper.capitalize(
@@ -29,11 +26,11 @@ export function MonthSwitchComponent(options: MonthSwitchOpions) {
     <>
       {actualMonth && (
         <div id="month-switch">
-          <IconButton className="arrow-button" size={arrowSize} onClick={switchMonth}>
+          <IconButton className="arrow-button" size={arrowSize}>
             <IoIosArrowBack />
           </IconButton>
           <span>{actualMonth}</span>
-          <IconButton className="arrow-button" size={arrowSize} onClick={switchMonth}>
+          <IconButton className="arrow-button" size={arrowSize}>
             <IoIosArrowForward />
           </IconButton>
         </div>
