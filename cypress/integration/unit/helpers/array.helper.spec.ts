@@ -2,7 +2,7 @@
 import { ArrayHelper } from "../../../../src/helpers/array.helper";
 
 type TestCase = { arr1: number[]; arr2: number[]; exp: [number, number][] };
-var testCases: TestCase[] = [
+const testCases: TestCase[] = [
   {
     arr1: [1, 2],
     arr2: [1, 2, 3],

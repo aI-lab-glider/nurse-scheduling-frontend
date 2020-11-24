@@ -56,7 +56,7 @@
     "release": "npm build && electron-builder --publish=always",
     "e-build": "npm build && npm electron-build",
     "e-start": "concurrently \"cross-env BROWSER=none npm start\" \"node scripts/await.js && electron .\"",
-    "lint": "eslint \"src/**/*.ts*\"",
+    "lint": "eslint src/**/*.ts* cypress/**/*.ts*",
     "cypress:open": "cypress open"
   },
   "devDependencies": {
@@ -140,6 +140,10 @@
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint"
+    ],
+    "cypress/**/*.{js,jsx,ts,tsx}": [
       "prettier --write",
       "eslint"
     ],
