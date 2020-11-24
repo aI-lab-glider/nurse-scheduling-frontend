@@ -6,18 +6,17 @@ import { ColorHelper } from "./colors/color.helper";
 import { Colors } from "./colors/color.model";
 import { VerboseDateHelper } from "./verbose-date.helper";
 import { VerboseDate } from "../common-models/month-info.model";
-import { DataRow } from "../logic/schedule-logic/data-row";
 
 export class ShiftHelper {
-  public static getWorkersCount(day: number, data: DataRow[]): number {
-    const shifts = data.map((d) => d.rowData(false, false));
-    let count = 0;
-    for (let j = 0; j < shifts.length; j++) {
-      if (this.shiftCodeToWorkTime(shifts[j][day]) !== 0) {
-        count++;
-      }
+  public static getWorkersCount(shifts: ShiftInfoModel): Array<number> {
+    const shiftsArray = Object.values(shifts);
+    const workersPerDays: Array<number> = [];
+    for (let i = 0; i < shiftsArray.length; i++) {
+      workersPerDays.push(
+        shiftsArray.reduce((a, b) => a + (this.shiftCodeToWorkTime(b[i]) ? 1 : 0), 0)
+      );
     }
-    return count;
+    return workersPerDays;
   }
 
   public static shiftCodeToWorkTime(shiftCode: ShiftCode): number {
