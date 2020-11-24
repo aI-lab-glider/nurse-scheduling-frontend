@@ -10,10 +10,10 @@ import { DataRow } from "../logic/schedule-logic/data-row";
 
 export class ShiftHelper {
   public static getWorkersCount(day: number, data: DataRow[]): number {
-    const matrix = data.map((d) => d.rowData(false, false));
+    const shifts = data.map((d) => d.rowData(false, false));
     let count = 0;
-    for (let j = 0; j < matrix.length; j++) {
-      if (this.shiftCodeToWorkTime(matrix[j][day]) != 0) {
+    for (let j = 0; j < shifts.length; j++) {
+      if (this.shiftCodeToWorkTime(shifts[j][day]) !== 0) {
         count++;
       }
     }

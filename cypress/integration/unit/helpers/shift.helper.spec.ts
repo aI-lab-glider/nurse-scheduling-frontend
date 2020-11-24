@@ -10,7 +10,7 @@ const testData = [
     new DataRow("", ["D","W","W"])
     ]
 
-var testCases: TestCase[] = [
+const testCases: TestCase[] = [
     {
         arr: testData,
         day: 0,
@@ -31,8 +31,8 @@ var testCases: TestCase[] = [
 describe("ShiftHelper", () => {
     testCases.forEach((testCase) => {
         describe("getWorkersCount", () => {
-            const matrix = testCase.arr.map(d => d.rowData(false, false));
-            it(`should return ${testCase.exp} for day ${testCase.day} and array ${matrix}`, () => {
+            const shifts = testCase.arr.map(d => d.rowData(false, false));
+            it(`should return ${testCase.exp} for day ${testCase.day} and array ${shifts}`, () => {
                 const amount = ShiftHelper.getWorkersCount(testCase.day, testData);
                 expect(amount).to.equal(testCase.exp);
             });
