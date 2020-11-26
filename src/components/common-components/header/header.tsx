@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { MonthSwitchComponent } from "../month-switch/month-switch.component";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 
 export default function Header(): JSX.Element {
@@ -7,17 +7,7 @@ export default function Header(): JSX.Element {
     <>
       <div id={"header"}>
         <AssignmentIndIcon id={"AssignmentIndIcon"} />
-
-        <ul>
-          <li className={"active"}>
-            <Link to="/">Plan</Link>
-          </li>
-
-          <li>
-            <Link to="/workers/">Zarządzanie</Link>
-          </li>
-        </ul>
-
+        <MonthSwitchComponent />
         <div className={"filler"} />
       </div>
     </>
