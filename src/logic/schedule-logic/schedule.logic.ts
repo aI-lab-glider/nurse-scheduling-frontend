@@ -50,15 +50,16 @@ export class ScheduleLogic implements ScheduleProvider {
     const logics: FoundationInfoOptions = {
       BabysitterInfo: new ShiftsInfoLogic(babysitterShifts, WorkerType.OTHER),
       NurseInfo: new ShiftsInfoLogic(nurseShifts, WorkerType.NURSE),
-      ExtraWorkersInfo: new ExtraWorkersLogic(extraWorkerSectionData),
       ChildrenInfo: new ChildrenInfoLogic(childrenSectionData),
+      ExtraWorkersInfo: new ExtraWorkersLogic(extraWorkerSectionData),
     };
+
     const scheduleInfo = scheduleModel.schedule_info;
     const metadata = new MetadataLogic(
-      scheduleInfo?.year.toString(),
-      scheduleInfo?.month_number,
+      scheduleInfo.year?.toString(),
+      scheduleInfo.month_number,
       scheduleModel.month_info?.dates,
-      scheduleInfo?.daysFromPreviousMonthExists
+      scheduleInfo.daysFromPreviousMonthExists
     );
     const foundationLogic = new FoundationInfoLogic(logics);
     return { ...logics, FoundationInfo: foundationLogic, Metadata: metadata };

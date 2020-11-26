@@ -8,6 +8,17 @@ import { VerboseDateHelper } from "./verbose-date.helper";
 import { VerboseDate } from "../common-models/month-info.model";
 
 export class ShiftHelper {
+  public static getWorkersCount(shifts: ShiftInfoModel): Array<number> {
+    const shiftsArray = Object.values(shifts);
+    const workersPerDays: Array<number> = [];
+    for (let i = 0; i < shiftsArray.length; i++) {
+      workersPerDays.push(
+        shiftsArray.reduce((a, b) => a + (this.shiftCodeToWorkTime(b[i]) ? 1 : 0), 0)
+      );
+    }
+    return workersPerDays;
+  }
+
   public static shiftCodeToWorkTime(shiftCode: ShiftCode): number {
     switch (shiftCode) {
       case ShiftCode.R:
