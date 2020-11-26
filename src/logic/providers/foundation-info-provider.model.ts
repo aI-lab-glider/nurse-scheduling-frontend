@@ -1,6 +1,7 @@
 import { ShiftInfoModel } from "../../common-models/shift-info.model";
 import { WorkerType } from "../../common-models/worker-info.model";
 import { ArrayHelper } from "../../helpers/array.helper";
+import { ShiftHelper } from "../../helpers/shifts.helper";
 import { ChildrenInfoProvider } from "./children-info-provider.model";
 import { ExtraWorkersInfoProvider } from "./extra-workers-info-provider.model";
 import { Sections } from "./schedule-provider.model";
@@ -27,10 +28,7 @@ export abstract class FoundationInfoProvider {
     return this.sections.ExtraWorkersInfo.extraWorkers;
   }
   getWorkersCount(workerType: WorkerType): number[] {
-    return ArrayHelper.arrayOfCount(
-      (Object.values(this.sections.NurseInfo.workerShifts)[0] ?? []).length,
-      7
-    );
+    return ShiftHelper.getWorkersCount(this.workersShifts);
   }
 
   constructor(protected sections: FoundationInfoOptions) {}
