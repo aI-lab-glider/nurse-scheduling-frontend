@@ -10,16 +10,16 @@ export enum ExtraWorkersSectionKey {
 }
 
 export class FoundationSectionKey {
-  static get ChildrenCount() {
+  static get ChildrenCount(): string {
     return ChildrenSectionKey.RegisteredChildrenCount;
   }
-  static get ExtraWorkersCount() {
+  static get ExtraWorkersCount(): string {
     return ExtraWorkersSectionKey.ExtraWorkersCount;
   }
-  static get NurseCount() {
+  static get NurseCount(): string {
     return "pielęgniarki";
   }
-  static get BabysittersCount() {
+  static get BabysittersCount(): string {
     return "opiekunki";
   }
 }

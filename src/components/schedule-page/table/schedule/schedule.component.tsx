@@ -6,7 +6,7 @@ import { EmptyRowComponent } from "./schedule-parts/empty-row.component";
 import { DateSectionComponent } from "./sections/date-section/date-section.component";
 import { ShiftsSectionComponent } from "./sections/shifts-section/shifts-section.component";
 import { ScheduleLogicContext, useScheduleState } from "./use-schedule-state";
-import { ShiftInfoSectionComponent } from "./sections/shift-info-section/shift-info-section.components";
+import { FoundationInfoComponent } from "./sections/foundation-info-section/foundation-info.component";
 
 export function ScheduleComponent(): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
@@ -30,7 +30,7 @@ export function ScheduleComponent(): JSX.Element {
 
               <EmptyRowComponent />
 
-              <ShiftInfoSectionComponent
+              <FoundationInfoComponent
                 uuid={scheduleLocalState.uuid}
                 data={scheduleLocalState.foundationInfoSection}
               />

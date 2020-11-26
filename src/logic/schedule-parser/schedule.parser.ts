@@ -111,9 +111,6 @@ export class ScheduleParser implements ScheduleProvider {
     if (babysitterData.length === 0) {
       throw new Error(InputFileErrorCode.NO_BABYSITTER_SECTION);
     }
-
-    const extraWorkersInfoProvider = new ExtraWorkersParser(metaData.dayCount);
-
     const parsers: FoundationInfoOptions = {
       ChildrenInfo: new ChildrenInfoParser(childrenSectionData, metaData),
       NurseInfo: new ShiftsInfoParser(nurseSectionData, metaData),

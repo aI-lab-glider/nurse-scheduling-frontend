@@ -5,8 +5,6 @@ import { ScheduleDataModel } from "../../../../common-models/schedule-data.model
 import { ScheduleComponentState, scheduleInitialState } from "./schedule-state.model";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import { ShiftsInfoLogic } from "../../../../logic/schedule-logic/shifts-info.logic";
-import { ChildrenInfoLogic } from "../../../../logic/schedule-logic/children-info.logic";
-import { ExtraWorkersLogic } from "../../../../logic/schedule-logic/extra-workers.logic";
 import { MetadataLogic } from "../../../../logic/schedule-logic/metadata.logic";
 import { FoundationInfoLogic } from "../../../../logic/schedule-logic/foundation-info.logic";
 

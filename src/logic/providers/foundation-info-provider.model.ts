@@ -3,9 +3,10 @@ import { WorkerType } from "../../common-models/worker-info.model";
 import { ArrayHelper } from "../../helpers/array.helper";
 import { ChildrenInfoProvider } from "./children-info-provider.model";
 import { ExtraWorkersInfoProvider } from "./extra-workers-info-provider.model";
+import { Sections } from "./schedule-provider.model";
 import { ShiftsProvider } from "./shifts-provider.model";
 
-export interface FoundationInfoOptions {
+export interface FoundationInfoOptions extends Pick<Sections, "NurseInfo" | "BabysitterInfo"> {
   NurseInfo: ShiftsProvider;
   BabysitterInfo: ShiftsProvider;
   ChildrenInfo: ChildrenInfoProvider;
@@ -25,7 +26,7 @@ export abstract class FoundationInfoProvider {
   get extraWorkersInfo(): number[] {
     return this.sections.ExtraWorkersInfo.extraWorkers;
   }
-  getWorkersCount(workerType: WorkerType) {
+  getWorkersCount(workerType: WorkerType): number[] {
     return ArrayHelper.arrayOfCount(
       (Object.values(this.sections.NurseInfo.workerShifts)[0] ?? []).length,
       7
