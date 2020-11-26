@@ -17,7 +17,7 @@ export default function Header(): JSX.Element {
           </li>
         </ul>
 
-        <div className={"filler"}></div>
+        <div className={"filler"} />
 
         <ul>
           <li>
