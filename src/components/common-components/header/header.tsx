@@ -1,11 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 
 export default function Header(): JSX.Element {
   return (
     <>
       <div id={"header"}>
-        <img src={require("../../../assets/images/header-logo.png")} title={""} alt={""} />
+        <AssignmentIndIcon id={"AssignmentIndIcon"} />
 
         <ul>
           <li className={"active"}>
@@ -18,16 +19,6 @@ export default function Header(): JSX.Element {
         </ul>
 
         <div className={"filler"} />
-
-        <ul>
-          <li>
-            <Link to="/">Imię i nazwisko</Link>
-          </li>
-        </ul>
-
-        <Link to={"/"}>
-          <img src={require("../../../assets/images/arrow.png")} title={""} alt={""} />
-        </Link>
       </div>
     </>
   );
