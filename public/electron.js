@@ -11,6 +11,7 @@ const env = dotenv.config().parsed;
 function createWindow() {
     mainWindow = new BrowserWindow({show: false});
     mainWindow.maximize();
+    mainWindow.removeMenu();
     mainWindow.show();
     mainWindow.loadURL(isDev ? `http://localhost:${env.PORT}` : `file://${path.join(__dirname, "../build/index.html")}`);
     mainWindow.on("closed", () => (mainWindow = null));
