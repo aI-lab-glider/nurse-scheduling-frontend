@@ -6,6 +6,11 @@ import { ColorHelper } from "./colors/color.helper";
 import { Colors } from "./colors/color.model";
 import { VerboseDateHelper } from "./verbose-date.helper";
 import { VerboseDate } from "../common-models/month-info.model";
+import { DataRow } from "../logic/schedule-logic/data-row";
+import { ScheduleLogic } from "../logic/schedule-logic/schedule.logic";
+import { ShiftsInfoLogic } from "../logic/schedule-logic/shifts-info.logic";
+
+const WORK_HOURS_PER_DAY = 8;
 
 export class ShiftHelper {
   public static getWorkersCount(shifts: ShiftInfoModel): Array<number> {
@@ -57,6 +62,29 @@ export class ShiftHelper {
       grouped[category][workerName] = shifts;
     });
     return grouped;
+  }
+
+  public static rowWorkHoursInfo(
+    dataRow: DataRow,
+    scheduleLogic: ScheduleLogic | null,
+    sectionKey
+  ): [number, number, number] {
+    if (!sectionKey) return [0, 0, 0];
+    const rowData = dataRow?.rowData(true, false) ?? [];
+    const monthLogic = scheduleLogic?.sections.Metadata?.monthLogic;
+    const workingNorm =
+      (monthLogic?.workingDaysNumber || 0) *
+      WORK_HOURS_PER_DAY *
+      (scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey)?.availableWorkersWorkTime[
+        dataRow.rowKey
+      ] || 1);
+    const numberOfPreviousMonthDays = monthLogic?.numberOfPreviousMonthDays;
+    const workingHours = rowData
+      .slice(numberOfPreviousMonthDays)
+      .reduce((previousValue, currentValue) => {
+        return previousValue + ShiftHelper.shiftCodeToWorkTime(currentValue);
+      }, 0);
+    return [workingNorm, workingHours, workingHours - workingNorm];
   }
 
   static getShiftColor(
