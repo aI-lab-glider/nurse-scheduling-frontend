@@ -2,15 +2,14 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from "re
 import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import { DirectionKey } from "../sections/base-section/base-section.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
-import { BaseCellComponent, BaseCellOptions } from "./base-cell.component";
+import {
+  BaseCellComponent,
+  BaseCellOptions,
+  CellManagementKeys,
+} from "./base-cell/base-cell.component";
 import { ShiftHelper } from "../../../../../helpers/shifts.helper";
 import { Sections } from "../../../../../logic/providers/schedule-provider.model";
 import { DataRowHelper } from "../../../../../helpers/data-row.helper";
-
-enum CellManagementKeys {
-  Enter = "Enter",
-  Escape = "Escape",
-}
 
 export interface BaseRowOptions {
   uuid: string;
@@ -25,6 +24,7 @@ export interface BaseRowOptions {
   pointerPosition?: number;
   onRowKeyClick?: () => void;
   onBlur?: () => void;
+  resetPointer?: () => void;
 }
 
 export function BaseRowComponentF({
@@ -39,6 +39,7 @@ export function BaseRowComponentF({
   onRowKeyClick,
   onBlur,
   uuid,
+  resetPointer,
 }: BaseRowOptions): JSX.Element {
   const scheduleLogic = useContext(ScheduleLogicContext);
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
@@ -70,7 +71,7 @@ export function BaseRowComponentF({
         [...selectedCells, pointerPosition],
         newValue
       );
-    setSelectedCells([]);
+    clearSelection();
   }
 
   const isFrozen = useCallback((cellInd: number): boolean => {
@@ -88,11 +89,7 @@ export function BaseRowComponentF({
     }
   }
 
-  function handleKeyPress(cellIndex: number, cellValue: string, event: React.KeyboardEvent): void {
-    if (event.key === CellManagementKeys.Enter) {
-      saveValue(cellValue);
-    }
-
+  function handleKeyPress(cellIndex: number, event: React.KeyboardEvent): void {
     if (event.ctrlKey && DirectionKey[event.key]) {
       !selectionMode && setSelectionMode(true);
       if (previousDirectionKey === DirectionKey[event.key] || !selectionMode) {
@@ -104,10 +101,15 @@ export function BaseRowComponentF({
       event.key === DirectionKey.ArrowLeft || // if moves in any direction withour CTRL - disable selection
       event.key === CellManagementKeys.Escape
     ) {
-      setSelectedCells([]);
-      setSelectionMode(false);
+      clearSelection();
     }
     onKeyDown && onKeyDown(cellIndex, event);
+  }
+
+  function clearSelection(): void {
+    resetPointer && resetPointer();
+    setSelectedCells([]);
+    setSelectionMode(false);
   }
 
   const data = useMemo(() => dataRow.rowData(false), [dataRow]);
@@ -137,7 +139,8 @@ export function BaseRowComponentF({
             )}
             isPointerOn={(showSelectedCells || false) && cellIndex === pointerPosition}
             isBlocked={isFrozen(cellIndex)}
-            onKeyDown={(cellValue, event): void => handleKeyPress(cellIndex, cellValue, event)}
+            onKeyDown={(event): void => handleKeyPress(cellIndex, event)}
+            onValueChange={saveValue}
             onContextMenu={(): void => onContextMenu(cellIndex)}
             onClick={(): void => onClick && onClick(cellIndex)}
             onBlur={(): void => onBlur && onBlur()}

@@ -9,7 +9,7 @@ import { StringHelper } from "../../../helpers/string.helper";
 interface MonthSwitchOpions {
   key?: string;
 }
-export function MonthSwitchComponent(options: MonthSwitchOpions) {
+export function MonthSwitchComponent(options: MonthSwitchOpions): JSX.Element {
   const arrowSize = "small";
   /* eslint-disable @typescript-eslint/camelcase */
   const { month_number, year } = useSelector(

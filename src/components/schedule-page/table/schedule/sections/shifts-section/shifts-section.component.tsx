@@ -9,7 +9,7 @@ import {
 } from "../../../../../../common-models/worker-info.model";
 import { ShiftCode } from "../../../../../../common-models/shift-info.model";
 import { AddWorkerModal } from "../../../../../common-components/add-worker-modal/add-worker-modal";
-import { ShiftCellComponent } from "../../schedule-parts/shift-cell.component";
+import { ShiftCellComponent } from "../../schedule-parts/shift-cell/shift-cell.component";
 import { ScheduleLogicContext } from "../../use-schedule-state";
 import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-section.component";
 import { ShiftRowComponent } from "../../schedule-parts/shift-row.component";
