@@ -6,7 +6,7 @@ import { CustomGlobalHotKeys } from "./components/common-components/tools/global
 import HeaderComponent from "./components/common-components/header/header.component";
 import RouteButtonsComponent from "./components/common-components/route-buttons/route-buttons.component";
 
-const routes = { Plan: SchedulePage, Zarządzanie: WorkersPage };
+const routes = { Plan: SchedulePage, Zarządzanie: ManagementPage };
 
 function App(): JSX.Element {
   return (
