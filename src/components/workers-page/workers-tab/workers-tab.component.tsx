@@ -35,7 +35,7 @@ export default function WorkersTab(): JSX.Element {
     <>
       <Button>Stanowisko</Button>
       <TableContainer>
-        <Table aria-label="simple table">
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>Imię i nazwisko</TableCell>

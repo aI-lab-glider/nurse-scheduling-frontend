@@ -15,7 +15,9 @@ $header-text-color: #ffffff !default;
 // Color system
 
 $primary: #1d3557 !default;
+$secondary: #000000 !default;
 $primary-text-color: $primary !default;
+$secondary-text-color: $secondary !default;
 $primary-background: #e5e5e5 !default;
 $white: #ffffff !default;
 $gray-100: #f6f9fc !default;
@@ -102,7 +104,6 @@ $default-color-opacity: rgba(182, 182, 182, 0.6) !default;
 $orange-color: #f96332 !default;
 
 $default: #344675 !default;
-$secondary: #f4f5f7 !default;
 $success: #00f2c3 !default;
 $info: #1d8cf8 !default;
 $warning: #ff8d72 !default;
