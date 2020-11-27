@@ -50,14 +50,14 @@
     "wait-on": "^5.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "b-start": "react-scripts start",
+    "b-build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron-build": "electron-builder",
     "release": "npm build && electron-builder --publish=always",
-    "e-build": "npm build && npm electron-build",
-    "e-start": "concurrently \"cross-env BROWSER=none npm start\" \"node scripts/await.js && electron .\"",
+    "build": "npm build && npm electron-build",
+    "start": "concurrently \"cross-env BROWSER=none npm run b-start\" \"node scripts/await.js && electron .\"",
     "lint": "eslint src/**/*.ts* cypress/**/*.ts*",
     "cypress:open": "cypress open"
   },
