@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { BaseCellComponent } from "../../schedule-parts/base-cell.component";
+import { BaseCellComponent } from "../../schedule-parts/base-cell/base-cell.component";
 import { BaseRowComponent } from "../../schedule-parts/base-row.component";
 import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
 import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
-import { BaseCellOptions } from "../../schedule-parts/base-cell.component";
+import { BaseCellOptions } from "../../schedule-parts/base-cell/base-cell.component";
 import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
 import { DataRowHelper } from "../../../../../../helpers/data-row.helper";
 
@@ -65,6 +65,9 @@ function BaseSectionComponentF({
       setPointerPosition(newPosition);
     }
   }
+  function resetPointer(): void {
+    setPointerPosition({ row: -1, cell: -1 });
+  }
   return (
     <React.Fragment>
       {data.map((dataRow, index) => (
@@ -76,11 +79,12 @@ function BaseSectionComponentF({
           dataRow={dataRow}
           showSelectedCells={pointerPosition.row === index}
           cellComponent={cellComponent}
+          resetPointer={resetPointer}
           pointerPosition={pointerPosition.row === index ? pointerPosition.cell : -1}
           onKeyDown={movePointer}
           onClick={(cellIndex): void => setPointerPosition({ row: index, cell: cellIndex })}
           onRowKeyClick={(): void => onRowKeyClicked && onRowKeyClicked(index)}
-          onBlur={(): void => setPointerPosition({ row: -1, cell: -1 })}
+          onBlur={resetPointer}
         />
       ))}
     </React.Fragment>

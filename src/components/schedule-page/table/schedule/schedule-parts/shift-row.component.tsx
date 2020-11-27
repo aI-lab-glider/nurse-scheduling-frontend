@@ -1,9 +1,9 @@
 import React, { useCallback, useContext } from "react";
 import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import { BaseRowComponent, BaseRowOptions } from "./base-row.component";
-import { ShiftCellComponent } from "./shift-cell.component";
+import { ShiftCellComponent } from "./shift-cell/shift-cell.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
-import { BaseCellOptions } from "./base-cell.component";
+import { BaseCellOptions } from "./base-cell/base-cell.component";
 import { ShiftHelper } from "../../../../../helpers/shifts.helper";
 
 export interface ShiftRowOptions extends BaseRowOptions {
