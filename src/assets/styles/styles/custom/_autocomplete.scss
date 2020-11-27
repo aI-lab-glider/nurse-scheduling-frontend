@@ -1,0 +1,21 @@
+.listbox {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+  background-color: $white;
+  list-style: none;
+  overflow: auto;
+  max-height: 200;
+  & li {
+    &:active {
+      background-color: "#2977f5";
+      color: "white";
+    }
+    &[data-focus="true"] {
+      background-color: "#4a8df6";
+      color: "white";
+      cursor: "pointer";
+    }
+  }
+}
