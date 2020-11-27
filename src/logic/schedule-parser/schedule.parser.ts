@@ -9,6 +9,8 @@ import { ExtraWorkersParser } from "./extra-workers.parser";
 import { ChildrenSectionKey, MetaDataRowLabel, MetaDataSectionKey } from "../section.model";
 import { TranslationHelper } from "../../helpers/tranlsations.helper";
 import { InputFileErrorCode } from "../../common-models/schedule-error.model";
+import { FoundationInfoParser } from "./foundation-info.parser";
+import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
 export class ScheduleParser implements ScheduleProvider {
   readonly sections: Sections;
   readonly schedule: Schedule;
@@ -22,11 +24,10 @@ export class ScheduleParser implements ScheduleProvider {
     const parsers: DataRowParser[] = rawSchedule.map((i) => new DataRowParser(i));
     const [metadataProvider, sectionParsers] = this.initMetadataAndCleanUp(parsers);
     const sections = this.groupParsersBySections(sectionParsers, metadataProvider);
-    const extraWorkersInfoProvider = new ExtraWorkersParser(metadataProvider.dayCount);
     return {
       ...sections,
       Metadata: metadataProvider,
-      ExtraWorkersInfo: extraWorkersInfoProvider,
+      FoundationInfo: sections.FoundationInfo,
     };
   }
 
@@ -96,7 +97,7 @@ export class ScheduleParser implements ScheduleProvider {
   private groupParsersBySections(
     schedule: DataRowParser[],
     metaData: MetaDataParser
-  ): Omit<Sections, "Metadata" | "ExtraWorkersInfo"> {
+  ): Omit<Sections, "Metadata"> {
     const childrenSectionData = this.findChildrenSection(schedule);
 
     const [nurseSectionData, nurseEndIdx] = this.findShiftSection(schedule);
@@ -110,12 +111,14 @@ export class ScheduleParser implements ScheduleProvider {
     if (babysitterData.length === 0) {
       throw new Error(InputFileErrorCode.NO_BABYSITTER_SECTION);
     }
-
-    return {
+    const parsers: FoundationInfoOptions = {
       ChildrenInfo: new ChildrenInfoParser(childrenSectionData, metaData),
       NurseInfo: new ShiftsInfoParser(nurseSectionData, metaData),
       BabysitterInfo: new ShiftsInfoParser(babysitterData, metaData),
+      ExtraWorkersInfo: new ExtraWorkersParser(metaData.dayCount),
     };
+    const foundationParser = new FoundationInfoParser(parsers);
+    return { ...parsers, FoundationInfo: foundationParser };
   }
 
   private findShiftSection(rowParsers: DataRowParser[]): [DataRowParser[], number] {

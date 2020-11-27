@@ -1,18 +1,11 @@
-import { BaseSectionLogic } from "./base-section-logic.model";
 import { DataRow } from "./data-row";
-import { Sections } from "../providers/schedule-provider.model";
 import { ExtraWorkersSectionKey } from "../section.model";
 import { ExtraWorkersInfoProvider } from "../providers/extra-workers-info-provider.model";
 
-export class ExtraWorkersLogic extends BaseSectionLogic implements ExtraWorkersInfoProvider {
-  get sectionKey(): keyof Sections {
-    return "ExtraWorkersInfo";
-  }
-
+export class ExtraWorkersLogic implements ExtraWorkersInfoProvider {
   private extraWorkersInfoAsDataRows: { [key: string]: DataRow } = {};
 
-  constructor(private extraWorkersData: { [key: string]: number[] }) {
-    super();
+  constructor(extraWorkersData: { [key: string]: number[] }) {
     Object.keys(extraWorkersData).forEach((key) => {
       this.extraWorkersInfoAsDataRows[key] = new DataRow(key, extraWorkersData[key]);
     });
