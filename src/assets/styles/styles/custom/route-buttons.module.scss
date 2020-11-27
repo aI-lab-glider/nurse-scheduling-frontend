@@ -1,0 +1,9 @@
+// Route Buttons
+
+$indicator-color: #1d3557;
+$route-text-color: #000000;
+
+:export {
+  ic: $indicator-color;
+  tc: $route-text-color;
+}
