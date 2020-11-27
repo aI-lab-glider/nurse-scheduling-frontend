@@ -6,16 +6,14 @@ import { CustomGlobalHotKeys } from "./components/common-components/tools/global
 import Header from "./components/common-components/header/header";
 import RouteButtonsComponent from "./components/common-components/route-buttons/route-buttons.component";
 
+const routes = { Plan: SchedulePage, Zarządzanie: WorkersPage };
+
 function App(): JSX.Element {
   return (
     <React.Fragment>
       <CustomGlobalHotKeys />
       <Header />
-      <RouteButtonsComponent />
-      <Switch>
-        <Route path="/" component={SchedulePage} exact />
-        <Route path="/management" component={ManagementPage} />
-      </Switch>
+      <RouteButtonsComponent components={routes} />
     </React.Fragment>
   );
 }
