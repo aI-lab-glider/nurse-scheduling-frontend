@@ -1,4 +1,3 @@
-import { Route, Switch } from "react-router-dom";
 import React from "react";
 import SchedulePage from "./components/schedule-page/schedule-page.component";
 import ManagementPage from "./components/workers-page/management-page.component";
