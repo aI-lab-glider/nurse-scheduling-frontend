@@ -21,8 +21,8 @@ export class FoundationInfoLogic
         FoundationSectionKey.ChildrenCount,
         this.sections.ChildrenInfo.registeredChildrenNumber
       ),
-      new DataRow(FoundationSectionKey.NurseCount, this.getWorkersCount(WorkerType.NURSE)),
-      new DataRow(FoundationSectionKey.BabysittersCount, this.getWorkersCount(WorkerType.OTHER)),
+      new DataRow(FoundationSectionKey.NurseCount, this.getWorkersCount()),
+      new DataRow(FoundationSectionKey.BabysittersCount, this.getWorkersCount()),
       new DataRow(
         FoundationSectionKey.ExtraWorkersCount,
         this.sections.ExtraWorkersInfo.extraWorkers
