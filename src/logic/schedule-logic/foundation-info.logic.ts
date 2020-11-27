@@ -1,4 +1,3 @@
-import { WorkerType } from "../../common-models/worker-info.model";
 import { FoundationInfoProvider } from "../providers/foundation-info-provider.model";
 import { Sections } from "../providers/schedule-provider.model";
 import { FoundationSectionKey } from "../section.model";
