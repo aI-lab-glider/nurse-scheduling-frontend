@@ -1,5 +1,5 @@
 import React from "react";
-import { Tab, withStyles } from "@material-ui/core";
+import { Divider, Tab, withStyles } from "@material-ui/core";
 import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
 import TabPanel from "@material-ui/lab/TabPanel";
@@ -61,6 +61,7 @@ export default function RouteButtonsComponent({ tabs }: { tabs: Tabs[] }): JSX.E
   return (
     <>
       <div>
+        <Divider />
         <TabContext value={tab}>
           <TabList classes={{ indicator: classes.indicatorStyle }} onChange={handleChange}>
             {tabs.map((tab) => (
@@ -72,6 +73,7 @@ export default function RouteButtonsComponent({ tabs }: { tabs: Tabs[] }): JSX.E
               />
             ))}
           </TabList>
+          <Divider />
 
           {tabs.map((tab) => (
             <TabPanel value={tab.label}>{tab.component}</TabPanel>
