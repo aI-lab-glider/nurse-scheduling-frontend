@@ -9,9 +9,9 @@ export default function SchedulePage(): JSX.Element {
       <div className="header">
         <ToolbarComponent />
       </div>
-      <div style={{ margin: "150px" }}>
+      {/* <div style={{ margin: "150px" }}>
         <TimeTableComponent />
-      </div>
+      </div> */}
       <div className="cols-3-to-1">
         <TableComponent />
       </div>

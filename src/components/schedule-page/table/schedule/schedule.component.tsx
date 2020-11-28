@@ -7,6 +7,7 @@ import { DateSectionComponent } from "./sections/date-section/date-section.compo
 import { ShiftsSectionComponent } from "./sections/shifts-section/shifts-section.component";
 import { ScheduleLogicContext, useScheduleState } from "./use-schedule-state";
 import { FoundationInfoComponent } from "./sections/foundation-info-section/foundation-info.component";
+import { TimeTableSection } from "../../../timetable/timetable-section.component";
 
 export function ScheduleComponent(): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
@@ -20,13 +21,10 @@ export function ScheduleComponent(): JSX.Element {
   return (
     <React.Fragment>
       {scheduleLocalState.isInitialized && (
-        <table className="table">
+        <table className="timetable">
           <tbody>
             <ScheduleLogicContext.Provider value={scheduleLogic}>
-              <DateSectionComponent
-                uuid={scheduleLocalState.uuid}
-                data={scheduleLocalState.dateSection}
-              />
+              <TimeTableSection />
 
               <EmptyRowComponent />
 

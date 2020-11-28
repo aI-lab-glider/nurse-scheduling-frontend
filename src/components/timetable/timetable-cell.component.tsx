@@ -29,7 +29,7 @@ function TimeTableCellF({ value, currMonth }: TimeTableCellOptions): JSX.Element
   const [today, circle] = isToday();
 
   return (
-    <td className="timetableCell" id={getId()}>
+    <td className={`timetableCell ${getId()}`}>
       <span>{TranslationHelper.weekDaysTranslations[value.dayOfWeek]}</span>
       <span className={circle}>
         <span className={today}>{value.date}</span>
