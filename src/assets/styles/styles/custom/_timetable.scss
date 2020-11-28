@@ -1,0 +1,87 @@
+#thisMonth {
+  color: $table-color;
+}
+
+#otherMonth {
+  color: $opacity-table-color-5;
+}
+
+.timetable {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  margin-top: 80px; //eventually to delete
+
+  position: absolute;
+  width: 1156px;
+  height: 70px;
+  left: 142px;
+  top: 127px;
+
+  background: $white;
+  border: 1px solid $table-border-color-grey;
+  box-sizing: border-box;
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  .timetableRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+
+    position: static;
+    width: 1156px;
+    height: 70px;
+    left: 0;
+    top: 0;
+
+    .timetableCell {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50%;
+      padding-bottom: 50%;
+      width: 100%;
+      background: $opacity-table-background;
+      border: 0.5px solid $table-border-color-grey;
+
+      //text
+      text-align: center;
+      letter-spacing: 0.75px;
+      font-family: $font-family-table;
+      font-style: normal;
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 24px;
+    }
+  }
+}
+
+span {
+  &.circle {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    margin-bottom: -10%;
+    padding-top: 10%;
+    background: $primary;
+  }
+
+  &.today {
+    font-family: $font-family-base;
+    font-weight: 600;
+    font-size: 16px;
+    color: $white;
+    margin-bottom: 10%;
+  }
+
+  &.bolded {
+    font-family: $font-family-base;
+    font-weight: 600;
+    font-size: 16px;
+  }
+}

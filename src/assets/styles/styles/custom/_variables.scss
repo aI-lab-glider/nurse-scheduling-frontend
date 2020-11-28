@@ -34,6 +34,9 @@ $transparent-bg: transparent !default;
 $light-bg: #f5f6fa !default;
 $dark-background: #555555 !default;
 
+$table-color: #14142b !default;
+$table-border-color-grey: #d6d8e7 !default;
+
 $grays: () !default;
 $grays: map-merge(
   (
@@ -75,6 +78,9 @@ $opacity-8: rgba(255, 255, 255, 0.8) !default;
 
 $opacity-1: rgba(255, 255, 255, 0.1) !default;
 $opacity-2: rgba(255, 255, 255, 0.2) !default;
+
+$opacity-table-color-5: rgba(20, 20, 43, 0.5) !default;
+$opacity-table-background: rgba(239, 240, 247, 0.5) !default;
 
 // end beniamin
 
@@ -404,6 +410,7 @@ $general-transition-time: 300ms !default;
 
 $font-family-base: "Poppins", sans-serif !default;
 $font-family-alt: "Poppins", sans-serif !default;
+$font-family-table: "Roboto", sans-serif !default;
 
 $font-size-dash: 0.875rem !default;
 

@@ -22,4 +22,16 @@ export class TranslationHelper {
       grudzień: "december",
     };
   }
+
+  public static get weekDaysTranslations(): { [key: string]: string } {
+    return {
+      MO: "pon",
+      TU: "wt",
+      WE: "śr",
+      TH: "czw",
+      FR: "pt",
+      SA: "sb",
+      SU: "nd",
+    };
+  }
 }
