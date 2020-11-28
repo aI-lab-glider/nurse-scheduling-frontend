@@ -6,8 +6,9 @@ import TabPanel from "@material-ui/lab/TabPanel";
 import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/route-buttons.module.scss";
 
-interface RouteButtonsComponent {
-  components: { [key: string]: React.FC };
+interface Tabs {
+  label: string;
+  component: JSX.Element;
 }
 
 const useStyles = makeStyles(() => ({
@@ -50,37 +51,31 @@ const StyledTab: any = withStyles((theme) => ({
   },
 }))((props) => <Tab disableRipple {...props} />);
 
-export default function RouteButtonsComponent({ components }: RouteButtonsComponent): JSX.Element {
-  const [value, setValue] = React.useState("0");
+export default function RouteButtonsComponent({ tabs }: { tabs: Tabs[] }): JSX.Element {
+  const [tab, setTab] = React.useState(tabs[0].label);
   const classes = useStyles();
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string): void => {
-    setValue(newValue);
+    setTab(newValue);
   };
 
   return (
     <>
       <div>
-        <TabContext value={value}>
+        <TabContext value={tab}>
           <TabList classes={{ indicator: classes.indicatorStyle }} onChange={handleChange}>
-            {Object.keys(components).map((name, index) => {
-              return (
-                <StyledTab
-                  className={classes.tabStyle}
-                  key={name}
-                  label={name}
-                  value={index.toString()}
-                />
-              );
-            })}
+            {tabs.map((tab) => (
+              <StyledTab
+                className={classes.tabStyle}
+                key={tab.label}
+                label={tab.label}
+                value={tab.label}
+              />
+            ))}
           </TabList>
 
-          {Object.keys(components).map((name, index) => {
-            return (
-              <TabPanel key={name} value={index.toString()}>
-                {React.createElement(components[name])}
-              </TabPanel>
-            );
-          })}
+          {tabs.map((tab) => (
+            <TabPanel value={tab.label}>{tab.component}</TabPanel>
+          ))}
         </TabContext>
       </div>
     </>
