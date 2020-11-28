@@ -12,7 +12,7 @@ interface RouteButtonsComponent {
 
 const useStyles = makeStyles(() => ({
   indicatorStyle: {
-    backgroundColor: ScssVars.ic,
+    backgroundColor: ScssVars.indicatorColor,
     height: 3,
     opacity: 1,
     outline: "none",
@@ -27,19 +27,19 @@ const useStyles = makeStyles(() => ({
 const StyledTab: any = withStyles((theme) => ({
   root: {
     textTransform: "none",
-    color: ScssVars.tc,
+    color: ScssVars.routeTextColor,
     outline: "none",
     fontWeight: theme.typography.fontWeightMedium,
     fontSize: "16",
     opacity: 1,
     fontFamily: ["Roboto"].join(","),
     "&:hover": {
-      color: ScssVars.ic,
+      color: ScssVars.indicatorColor,
       opacity: 1,
       outline: "none",
     },
     "&$selected": {
-      color: ScssVars.tc,
+      color: ScssVars.routeTextColor,
       outline: "none",
       fontWeight: theme.typography.fontWeightBold,
     },
