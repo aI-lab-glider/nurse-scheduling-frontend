@@ -31,6 +31,7 @@ export function AutocompleteComponent<T>({
   } = useAutocomplete({
     options,
     getOptionLabel,
+    open: true,
   });
 
   return (

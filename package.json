@@ -71,15 +71,20 @@
     "electron": "^10.1.5",
     "electron-builder": "^22.9.1",
     "eslint-import-resolver-typescript": "^2.3.0",
+    "eslint-plugin-cypress": "^2.11.2",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.2",
     "prettier": "^2.1.2"
   },
   "eslintConfig": {
+    "plugins": [
+      "cypress"
+    ],
     "extends": [
       "react-app",
       "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended"
+      "plugin:@typescript-eslint/recommended",
+      "plugin:cypress/recommended"
     ],
     "rules": {
       "no-console": "warn"
