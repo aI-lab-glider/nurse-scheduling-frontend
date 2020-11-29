@@ -13,7 +13,8 @@ export class ShiftHelper {
   public static getWorkersCount(shifts: ShiftInfoModel): Array<number> {
     const shiftsArray = Object.values(shifts);
     const workersPerDays: Array<number> = [];
-    for (let i = 0; i < shiftsArray.length; i++) {
+    if (shiftsArray.length === 0) return [];
+    for (let i = 0; i < shiftsArray[0].length; i++) {
       workersPerDays.push(
         shiftsArray.reduce((a, b) => a + (this.shiftCodeToWorkTime(b[i]) ? 1 : 0), 0)
       );
