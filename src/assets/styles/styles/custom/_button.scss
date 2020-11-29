@@ -1,7 +1,19 @@
 .btn {
   background: none;
   border: none;
-  padding: 5px;
+  padding: 5px 20px 5px;
+  border-radius: 20px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial,
+    sans-serif;
+  font-size: 15px;
+  font-weight: medium;
+  text-align: center;
+  transition: background-color 0.5s, color 0.5s;
+  &:hover {
+    cursor: pointer;
+    background-color: gold;
+    color: white;
+  }
 }
 
 .btn-primary {
@@ -11,8 +23,11 @@
 
 .btn-secondary {
   background-color: $gray-100;
+  color: $secondary;
 }
 
 .btn-outlined {
   border: 1px solid $primary;
+  background-color: getColor();
+  color: $primary;
 }

@@ -47,13 +47,7 @@ export default function ValidationDrawerComponent(): JSX.Element {
 
   return (
     <div>
-      <Button
-        variant="outlined"
-        onClick={(): void => toggleDrawer(true)}
-        style={{
-          backgroundColor: getColor(),
-        }}
-      >
+      <Button variant="outlined" onClick={(): void => toggleDrawer(true)}>
         Pokaż błędy
       </Button>
       <Drawer open={open} onClose={(): void => toggleDrawer(false)} anchor={"right"}>

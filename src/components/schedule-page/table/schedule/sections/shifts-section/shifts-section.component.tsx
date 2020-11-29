@@ -83,7 +83,9 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
 
           <td>
             <div>
-              <Button onClick={(): void => openWorkerModal()}>Dodaj</Button>
+              <Button variant="outlined" onClick={(): void => openWorkerModal()}>
+                Dodaj
+              </Button>
             </div>
           </td>
         </tr>

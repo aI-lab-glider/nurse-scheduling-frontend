@@ -61,7 +61,7 @@ export function ImportButtonsComponent(): JSX.Element {
 
   return (
     <div>
-      <Button onClick={handleToggle} ref={anchorRef}>
+      <Button variant="primary" onClick={handleToggle} ref={anchorRef}>
         Plik
         <ArrowDropDownIcon />
       </Button>
