@@ -1,0 +1,18 @@
+.btn {
+  background: none;
+  border: none;
+  padding: 5px;
+}
+
+.btn-primary {
+  background-color: $primary;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: $gray-100;
+}
+
+.btn-outlined {
+  border: 1px solid $primary;
+}

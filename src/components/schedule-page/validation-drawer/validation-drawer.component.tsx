@@ -1,4 +1,4 @@
-import { Button, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import {
   ScheduleErrorLevel,
   ScheduleErrorMessageModel,
 } from "../../../common-models/schedule-error-message.model";
+import { Button } from "../../common-components";
 
 export default function ValidationDrawerComponent(): JSX.Element {
   const [errors, setErrors] = useState<ScheduleErrorMessageModel[]>();
@@ -47,6 +48,7 @@ export default function ValidationDrawerComponent(): JSX.Element {
   return (
     <div>
       <Button
+        variant="outlined"
         onClick={(): void => toggleDrawer(true)}
         style={{
           backgroundColor: getColor(),

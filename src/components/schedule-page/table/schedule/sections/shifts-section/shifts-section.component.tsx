@@ -8,13 +8,13 @@ import {
   WorkerTypeHelper,
 } from "../../../../../../common-models/worker-info.model";
 import { ShiftCode } from "../../../../../../common-models/shift-info.model";
-import { AddWorkerModal } from "../../../../../common-components/add-worker-modal/add-worker-modal";
 import { ShiftCellComponent } from "../../schedule-parts/shift-cell/shift-cell.component";
 import { ScheduleLogicContext } from "../../use-schedule-state";
 import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-section.component";
 import { ShiftRowComponent } from "../../schedule-parts/shift-row.component";
 import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
 import { ShiftsInfoLogic } from "../../../../../../logic/schedule-logic/shifts-info.logic";
+import { AddWorkerModal } from "../../../../../common-components";
 
 export interface ShiftsSectionOptions extends BaseSectionOptions {
   workerType: WorkerType;

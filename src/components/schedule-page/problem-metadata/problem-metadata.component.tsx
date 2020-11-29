@@ -1,6 +1,5 @@
 import DateFnsUtils from "@date-io/date-fns";
 import { Box } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import plLocale from "date-fns/locale/pl";
@@ -15,8 +14,8 @@ import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ScheduleError } from "../../../common-models/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
-import { SnackbarComponent } from "../../common-components/snackbar/snackbar.component";
 import { ShiftHelper } from "../../../helpers/shifts.helper";
+import { Button, SnackbarComponent } from "../../common-components";
 
 function getWorkersCount(scheduleModel: ScheduleDataModel): number[] {
   const {

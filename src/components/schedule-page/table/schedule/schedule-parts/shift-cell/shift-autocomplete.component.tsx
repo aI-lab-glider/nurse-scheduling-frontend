@@ -1,6 +1,6 @@
 import React from "react";
 import { ShiftCode } from "../../../../../../common-models/shift-info.model";
-import { AutocompleteComponent } from "../../../../../common-components/autocomplete/autocomplete.component";
+import { AutocompleteComponent } from "../../../../../common-components";
 import { BaseCellInputOptions } from "../base-cell/base-cell-input.component";
 const ShiftCodeSelectItems = [
   { name: "rano: 7-15", symbol: "R", code: ShiftCode.R },
