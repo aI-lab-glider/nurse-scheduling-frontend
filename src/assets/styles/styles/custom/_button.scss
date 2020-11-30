@@ -12,12 +12,14 @@
   transition: box-shadow 0.5s;
   &:hover {
     cursor: pointer;
-    font-style: italic;
     font-weight: 600;
     box-shadow: 1px 3px $gray-500;
   }
   &:focus {
     outline: none;
+  }
+  @media (max-width: 945px) {
+    line-height: 1.2;
   }
 }
 
