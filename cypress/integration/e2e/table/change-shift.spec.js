@@ -2,7 +2,7 @@
 
 context("Change shift", () => {
   beforeEach(() => {
-    cy.visit(`http://localhost:3000/`);
+    cy.visit(Cypress.env("baseUrl"));
     cy.contains("Plik").click();
     cy.get('[data-cy="file-input"]').attachFile("example.xlsx");
     cy.contains("pielęgniarka 1").parent().parent().children('td[class="cell"]').eq(1).as("cell");
