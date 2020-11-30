@@ -2,17 +2,22 @@
   background: none;
   border: none;
   padding: 5px 20px 5px;
-  border-radius: 20px;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial,
-    sans-serif;
-  font-size: 15px;
-  font-weight: medium;
-  text-align: center;
-  transition: background-color 0.5s, color 0.5s;
+  border-radius: $btn-border-radius;
+  font-family: $btn-font-family;
+  font-size: $btn-font-size-lg;
+  font-weight: $btn-font-weight;
+  line-height: $btn-line-height;
+  letter-spacing: $btn-letter-spacing;
+  text-align: $btn-text-align;
+  transition: box-shadow 0.5s;
   &:hover {
     cursor: pointer;
-    background-color: gold;
-    color: white;
+    font-style: italic;
+    font-weight: 600;
+    box-shadow: 1px 3px $gray-500;
+  }
+  &:focus {
+    outline: none;
   }
 }
 
