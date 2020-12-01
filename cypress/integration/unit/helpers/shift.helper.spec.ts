@@ -47,7 +47,6 @@ type CaclulateWorkHoursInfoTestData = {
   shifts: ShiftCode[];
   workerNorm: number;
   expectedActualWorkHours: number;
-  expectedOvertime: number;
   expectedRequiredHours: number;
 };
 
@@ -74,6 +73,7 @@ const verboseDates: VerboseDate[] = [
   },
 ];
 
+const requiredWorkTime = 8;
 const commonParams = {
   dates: verboseDates,
   currentMonth: currentMonth,
@@ -85,36 +85,27 @@ const CaclulateWorkHoursInfoTestCases: CaclulateWorkHoursInfoTestData[] = [
     workerNorm: 1,
     expectedActualWorkHours: 0,
     expectedRequiredHours: 0,
-    expectedOvertime: 0,
   },
   {
     ...commonParams,
     shifts: [ShiftCode.R, ShiftCode.U, ShiftCode.U],
     workerNorm: 1,
     expectedActualWorkHours: ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
-    expectedRequiredHours: ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
-    expectedOvertime: 0,
+    expectedRequiredHours: requiredWorkTime,
   },
   {
     ...commonParams,
     shifts: [ShiftCode.R, ShiftCode.R, ShiftCode.R],
     workerNorm: 1,
     expectedActualWorkHours: 3 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
-    expectedRequiredHours: ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
-    expectedOvertime:
-      3 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R) -
-      ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
+    expectedRequiredHours: requiredWorkTime,
   },
   {
     ...commonParams,
     shifts: [ShiftCode.R, ShiftCode.R, ShiftCode.U],
     workerNorm: 0.5,
     expectedActualWorkHours: 0.5 * 2 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
-    expectedRequiredHours: 0.5 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
-    expectedOvertime:
-      0.5 *
-      (2 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R) -
-        ShiftHelper.shiftCodeToWorkTime(ShiftCode.R)),
+    expectedRequiredHours: 0.5 * requiredWorkTime,
   },
 ];
 //#endregion
@@ -136,6 +127,7 @@ describe("ShiftHelper", () => {
         testCase.shifts
       } in days ${testCase.dates.map((d) => `${d.dayOfWeek}, is holiday: ${d.isPublicHoliday}`)}`;
       it(message, () => {
+        const expectedOvertime = testCase.expectedActualWorkHours - testCase.expectedRequiredHours;
         const hours = ShiftHelper.caclulateWorkHoursInfo(
           testCase.shifts,
           testCase.workerNorm,
@@ -145,7 +137,7 @@ describe("ShiftHelper", () => {
         expect(hours).to.eql([
           testCase.expectedRequiredHours,
           testCase.expectedActualWorkHours,
-          testCase.expectedOvertime,
+          expectedOvertime,
         ]);
       });
     });
