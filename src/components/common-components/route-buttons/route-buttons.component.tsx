@@ -9,6 +9,7 @@ import ScssVars from "../../../assets/styles/styles/custom/route-buttons.module.
 interface Tabs {
   label: string;
   component: JSX.Element;
+  right_side_buttons?: JSX.Element;
 }
 
 const useStyles = makeStyles(() => ({
@@ -59,27 +60,32 @@ export default function RouteButtonsComponent({ tabs }: { tabs: Tabs[] }): JSX.E
   };
 
   return (
-    <>
-      <div>
-        <Divider />
-        <TabContext value={tab}>
-          <TabList classes={{ indicator: classes.indicatorStyle }} onChange={handleChange}>
-            {tabs.map((tab) => (
-              <StyledTab
-                className={classes.tabStyle}
-                key={tab.label}
-                label={tab.label}
-                value={tab.label}
-              />
-            ))}
-          </TabList>
-          <Divider />
-
+    <div className={"tabs-and-buttons"}>
+      <TabContext value={tab}>
+        <div className={"tabs-row"}>
+          <div className={"tabs-and-buttons"}>
+            <TabList classes={{ indicator: classes.indicatorStyle }} onChange={handleChange}>
+              {tabs.map((tab) => (
+                <StyledTab
+                  className={classes.tabStyle}
+                  key={tab.label}
+                  label={tab.label}
+                  value={tab.label}
+                />
+              ))}
+            </TabList>
+            <Divider />
+          </div>
+          <div className="filler" />
           {tabs.map((tab) => (
-            <TabPanel value={tab.label}>{tab.component}</TabPanel>
+            <TabPanel value={tab.label}>{tab.right_side_buttons}</TabPanel>
           ))}
-        </TabContext>
-      </div>
-    </>
+        </div>
+
+        {tabs.map((tab) => (
+          <TabPanel value={tab.label}>{tab.component}</TabPanel>
+        ))}
+      </TabContext>
+    </div>
   );
 }

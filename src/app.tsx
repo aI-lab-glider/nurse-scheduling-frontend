@@ -1,25 +1,15 @@
 import React from "react";
-import SchedulePage from "./components/schedule-page/schedule-page.component";
-import ManagementPage from "./components/workers-page/management-page.component";
-import RouteButtonsComponent from "./components/common-components/route-buttons/route-buttons.component";
 import { CustomGlobalHotKeys, HeaderComponent } from "./components/common-components";
-
-interface TabData {
-  label: string;
-  component: JSX.Element;
-}
-
-const tabs: TabData[] = [
-  { label: "Plan", component: <SchedulePage /> },
-  { label: "Zarządzanie", component: <ManagementPage /> },
-];
+import { ToolbarComponent } from "./components/schedule-page/toolbar/toolbar.component";
 
 function App(): JSX.Element {
   return (
     <React.Fragment>
-      <CustomGlobalHotKeys />
-      <HeaderComponent />
-      <RouteButtonsComponent tabs={tabs} />
+      <div>
+        <CustomGlobalHotKeys />
+        <HeaderComponent />
+        <ToolbarComponent EditMode={false} />
+      </div>
     </React.Fragment>
   );
 }

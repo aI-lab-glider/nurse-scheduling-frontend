@@ -7,3 +7,16 @@ $route-text-color: #000000;
   indicatorColor: $indicator-color;
   routeTextColor: $route-text-color;
 }
+
+.tabs-and-buttons {
+  width: 100%;
+}
+
+.tabs-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  .filler {
+    flex-grow: 1;
+  }
+}

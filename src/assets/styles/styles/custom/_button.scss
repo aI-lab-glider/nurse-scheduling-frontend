@@ -1,7 +1,9 @@
 .btn {
   background: none;
   border: none;
-  padding: 5px 20px 5px;
+  padding: 5px 35px 5px;
+  margin: 5px 10px 0 10px;
+  white-space: nowrap;
   border-radius: $btn-border-radius;
   font-family: $btn-font-family;
   font-size: $btn-font-size-lg;
@@ -17,9 +19,6 @@
   }
   &:focus {
     outline: none;
-  }
-  @media (max-width: 945px) {
-    line-height: 1.2;
   }
 }
 
