@@ -12,29 +12,60 @@ interface TabData {
   right_side_buttons: JSX.Element;
 }
 
-function Buttons(): JSX.Element {
-  return (
-    <>
-      <div className={"buttons"}>
-        <ImportButtonsComponent />
-        <Box>
-          <Button size="small" className="submit-button" variant="primary">
-            Edytuj
-          </Button>
-        </Box>
-      </div>
-    </>
-  );
-}
+// function Buttons(): JSX.Element {
+//   return (
+//     <>
+//       <div className={"buttons"}>
+//         <ImportButtonsComponent />
+//         <Box>
+//           <Button size="small" className="submit-button" variant="primary" >
+//             Edytuj
+//           </Button>
+//         </Box>
+//       </div>
+//     </>
+//   );
+// }
+//
+// const tabs: TabData[] = [
+//   // eslint-disable-next-line @typescript-eslint/camelcase
+//   { label: "Plan", component: <SchedulePage />, right_side_buttons: Buttons() },
+//   // eslint-disable-next-line @typescript-eslint/camelcase
+//   { label: "Zarządzanie", component: <ManagementPage />, right_side_buttons: <div /> },
+// ];
 
-const tabs: TabData[] = [
-  // eslint-disable-next-line @typescript-eslint/camelcase
-  { label: "Plan", component: <SchedulePage />, right_side_buttons: Buttons() },
-  // eslint-disable-next-line @typescript-eslint/camelcase
-  { label: "Zarządzanie", component: <ManagementPage />, right_side_buttons: <div /> },
-];
+export function ToolbarViewingComponent(props): JSX.Element {
+  const handleEditMode = props.editModeChange;
 
-export function ToolbarViewingComponent(): JSX.Element {
+  function toggleEdit(open: boolean): void {
+    handleEditMode(open);
+  }
+
+  function Buttons(): JSX.Element {
+    return (
+      <>
+        <div className={"buttons"}>
+          <ImportButtonsComponent />
+          <Box>
+            <Button
+              size="small"
+              className="submit-button"
+              variant="primary"
+              onClick={() => toggleEdit(true)}
+            >
+              Edytuj
+            </Button>
+          </Box>
+        </div>
+      </>
+    );
+  }
+  const tabs: TabData[] = [
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    { label: "Plan", component: <SchedulePage />, right_side_buttons: Buttons() },
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    { label: "Zarządzanie", component: <ManagementPage />, right_side_buttons: <div /> },
+  ];
   return (
     <>
       <RouteButtonsComponent tabs={tabs} />

@@ -1,14 +1,37 @@
 import React from "react";
-import { MonthSwitchComponent } from "../../common-components";
+import { Button, MonthSwitchComponent } from "../../common-components";
 import { ImportButtonsComponent } from "../import-buttons/import-buttons.component";
-import ValidationDrawerComponent from "../validation-drawer/validation-drawer.component";
+import { Box } from "@material-ui/core";
 
-export function ToolbarEditingComponent(): JSX.Element {
+export function ToolbarEditingComponent(props): JSX.Element {
+  const handleEditMode = props.editModeChange;
+
+  function toggleEdit(open: boolean): void {
+    handleEditMode(open);
+  }
+
+  function Buttons(): JSX.Element {
+    return (
+      <>
+        <div className={"buttons"}>
+          <Box>
+            <Button
+              size="small"
+              className="submit-button"
+              variant="primary"
+              onClick={(): void => toggleEdit(false)}
+            >
+              Pogląd
+            </Button>
+          </Box>
+        </div>
+      </>
+    );
+  }
+
   return (
     <div className="toolbar-container">
-      <ImportButtonsComponent />
-      <ValidationDrawerComponent />
-      <MonthSwitchComponent />
+      <Buttons />
     </div>
   );
 }
