@@ -8,7 +8,7 @@ function App(): JSX.Element {
       <div>
         <CustomGlobalHotKeys />
         <HeaderComponent />
-        <ToolbarComponent EditMode={false} />
+        <ToolbarComponent />
       </div>
     </React.Fragment>
   );
