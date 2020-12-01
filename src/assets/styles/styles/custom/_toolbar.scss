@@ -14,26 +14,22 @@
     flex-grow: 1;
   }
 
-  //form {
-  //  margin-left: auto;
-  //  margin-right: 15px;
-  //  border: 1px solid rgba($black, 0.37);
-  //  border-radius: 5px;
-  //  padding: 15px;
-  //
-  //  * {
-  //    margin: 3px;
-  //  }
-  //
-  //  .submit-button {
-  //    margin-top: 10px;
-  //    font-size: 15px;
-  //  }
-  //
-  //  #submit-button-container {
-  //    display: flex;
-  //    flex-direction: row;
-  //    justify-content: flex-start;
-  //  }
-  //}
+  .editing-row {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    width: 100%;
+    margin: 0;
+    padding: 24px;
+  }
+
+  #edit-page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #schedule-editing {
+    margin: 24px;
+  }
 }
