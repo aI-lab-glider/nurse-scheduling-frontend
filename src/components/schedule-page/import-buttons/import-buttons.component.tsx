@@ -1,4 +1,3 @@
-import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Popper from "@material-ui/core/Popper";
@@ -13,16 +12,18 @@ import { ScheduleError } from "../../../common-models/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
 import { ScheduleExportLogic } from "../../../logic/schedule-exporter/schedule-export.logic";
+import { Button } from "../../common-components";
 
 export function ImportButtonsComponent(): JSX.Element {
   const DEFAULT_FILENAME = "grafik.xlsx";
   const [open, setOpen] = useState(false);
   const { scheduleModel, setSrcFile, scheduleErrors, errorOccurred } = useScheduleConverter();
   const anchorRef = useRef(null);
+  const fileUpload = useRef<HTMLInputElement>(null);
+
   const stateScheduleModel = useSelector(
     (state: ApplicationStateModel) => state.scheduleData?.present
   );
-
   const scheduleDipatcher = useDispatch();
 
   useEffect(() => {
@@ -60,7 +61,7 @@ export function ImportButtonsComponent(): JSX.Element {
 
   return (
     <div>
-      <Button onClick={handleToggle} ref={anchorRef}>
+      <Button variant="primary" onClick={handleToggle} ref={anchorRef}>
         Plik
         <ArrowDropDownIcon />
       </Button>
@@ -71,9 +72,11 @@ export function ImportButtonsComponent(): JSX.Element {
           }}
         >
           <ButtonGroup orientation="vertical">
-            <Button component="label">
+            <Button onClick={() => fileUpload.current?.click()}>
               Wczytaj
               <input
+                ref={fileUpload}
+                id="file-input"
                 data-cy="file-input"
                 onChange={(event): void => handleImport(event)}
                 style={{ display: "none" }}

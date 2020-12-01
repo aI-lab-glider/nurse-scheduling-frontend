@@ -1,0 +1,40 @@
+.btn {
+  background: none;
+  border: none;
+  padding: 5px 20px 5px;
+  border-radius: $btn-border-radius;
+  font-family: $btn-font-family;
+  font-size: $btn-font-size-lg;
+  font-weight: $btn-font-weight;
+  line-height: $btn-line-height;
+  letter-spacing: $btn-letter-spacing;
+  text-align: $btn-text-align;
+  transition: box-shadow 0.5s;
+  &:hover {
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 1px 3px $gray-500;
+  }
+  &:focus {
+    outline: none;
+  }
+  @media (max-width: 945px) {
+    line-height: 1.2;
+  }
+}
+
+.btn-primary {
+  background-color: $primary;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: $gray-100;
+  color: $secondary;
+}
+
+.btn-outlined {
+  border: 1px solid $primary;
+  background-color: getColor();
+  color: $primary;
+}

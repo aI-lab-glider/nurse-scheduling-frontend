@@ -554,7 +554,7 @@ $input-padding-horizontal: 19px !default;
 
 $btn-padding-y: 11px !default;
 $btn-padding-x: 40px !default;
-$btn-line-height: $line-height !default;
+$btn-line-height: 28px !default;
 
 $btn-padding-y-sm: 5px !default;
 $btn-padding-x-sm: 15px !default;
@@ -568,6 +568,9 @@ $btn-border-width: $input-btn-border-width !default;
 
 $btn-font-size-lg: 1em !default;
 $btn-font-weight: 400 !default;
+$btn-border-radius: 20px !default;
+$btn-font-family: "Roboto" !default;
+$btn-text-align: center !default;
 $btn-text-transform: uppercase !default;
 $btn-letter-spacing: 0.025em !default;
 $btn-box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);

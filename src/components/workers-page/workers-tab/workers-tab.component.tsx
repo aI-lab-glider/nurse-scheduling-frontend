@@ -6,9 +6,9 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { WorkerType, WorkerTypeHelper } from "../../../common-models/worker-info.model";
-import { Button } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { Button } from "../../common-components";
 
 interface WorkerData {
   name: string;
@@ -33,7 +33,7 @@ export default function WorkersTab(): JSX.Element {
 
   return (
     <>
-      <Button>Stanowisko</Button>
+      <Button variant="secondary">Stanowisko</Button>
       <TableContainer>
         <Table>
           <TableHead>
@@ -52,10 +52,10 @@ export default function WorkersTab(): JSX.Element {
                 <TableCell align="left">{WorkerTypeHelper.translate(worker.type)}</TableCell>
                 <TableCell align="left">{worker.time}</TableCell>
                 <TableCell align="right">
-                  <Button>Edytuj</Button>
+                  <Button variant="secondary">Edytuj</Button>
                 </TableCell>
                 <TableCell align="right">
-                  <Button>Usuń</Button>
+                  <Button variant="secondary">Usuń</Button>
                 </TableCell>
               </TableRow>
             ))}
