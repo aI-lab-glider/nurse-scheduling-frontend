@@ -16,7 +16,7 @@ import { ShiftRowComponent } from "../../schedule-parts/shift-row.component";
 import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
 import { ShiftsInfoLogic } from "../../../../../../logic/schedule-logic/shifts-info.logic";
 
-export interface ShiftsSectionOptions extends BaseSectionOptions {
+export interface ShiftsSectionOptions extends Omit<BaseSectionOptions, "sectionKey"> {
   workerType: WorkerType;
 }
 

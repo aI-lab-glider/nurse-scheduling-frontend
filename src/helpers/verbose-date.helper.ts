@@ -4,6 +4,12 @@ import { ColorHelper } from "./colors/color.helper";
 import { Colors } from "./colors/color.model";
 
 export class VerboseDateHelper {
+  static isWorkingDay(date: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek">) {
+    return (
+      !date.isPublicHoliday && !(date.dayOfWeek === WeekDay.SA || date.dayOfWeek === WeekDay.SU)
+    );
+  }
+
   static getDayColor(
     day?: VerboseDate,
     defaultColorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET,

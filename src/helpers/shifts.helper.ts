@@ -1,4 +1,4 @@
-import { WorkerType } from "../common-models/worker-info.model";
+import { WorkerInfoModel, WorkersInfoModel, WorkerType } from "../common-models/worker-info.model";
 import { ShiftCode, ShiftInfoModel } from "../common-models/shift-info.model";
 import { ArrayHelper } from "./array.helper";
 import { CellColorSet } from "./colors/cell-color-set.model";
@@ -22,6 +22,10 @@ export class ShiftHelper {
       );
     }
     return workersPerDays;
+  }
+
+  public static isNotWorkingShift(shiftCode: ShiftCode): boolean {
+    return [ShiftCode.L4, ShiftCode.U].includes(shiftCode);
   }
 
   public static shiftCodeToWorkTime(shiftCode: ShiftCode): number {
@@ -58,33 +62,33 @@ export class ShiftHelper {
       wn1 > wn2 ? 1 : wn1 < wn2 ? -1 : 0
     );
     sortedShifts.forEach(({ workerName, shifts }) => {
-      const category = workerTypes[workerName] || "";
+      const category = workerTypes[workerName] ?? "";
       grouped[category][workerName] = shifts;
     });
     return grouped;
   }
+  public static isWorkingShift(shift: ShiftCode) {
+    return this.shiftCodeToWorkTime(shift) === 0;
+  }
 
-  public static rowWorkHoursInfo(
-    dataRow: DataRow,
-    scheduleLogic: ScheduleLogic | null,
-    sectionKey
-  ): [number, number, number] {
-    if (!sectionKey) return [0, 0, 0];
-    const rowData = dataRow?.rowData(true, false) ?? [];
-    const monthLogic = scheduleLogic?.sections.Metadata?.monthLogic;
-    const workingNorm =
-      (monthLogic?.workingDaysNumber || 0) *
-      WORK_HOURS_PER_DAY *
-      (scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey)?.availableWorkersWorkTime[
-        dataRow.rowKey
-      ] || 1);
-    const numberOfPreviousMonthDays = monthLogic?.numberOfPreviousMonthDays;
-    const workingHours = rowData
-      .slice(numberOfPreviousMonthDays)
-      .reduce((previousValue, currentValue) => {
-        return previousValue + ShiftHelper.shiftCodeToWorkTime(currentValue);
-      }, 0);
-    return [workingNorm, workingHours, workingHours - workingNorm];
+  public static caclulateWorkHoursInfo(
+    shifts: ShiftCode[],
+    workerNorm: number,
+    dates: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek" | "month">[],
+    currentMonth: string
+  ) {
+    if (shifts.length !== dates.length) {
+      throw Error("Shifts should be defined for each day");
+    }
+    const firstDayOfCurrentMonth = dates.findIndex((d) => d.month === currentMonth);
+    const monthData = ArrayHelper.zip(shifts, dates).slice(firstDayOfCurrentMonth);
+    const workingData = monthData.filter(
+      (d) => VerboseDateHelper.isWorkingDay(d[1]!) && !this.isNotWorkingShift(d[0]!)
+    );
+    const requiredHours = workerNorm * WORK_HOURS_PER_DAY * workingData.length;
+    const actualHours = workingData.reduce((a, s) => a + this.shiftCodeToWorkTime(s[0]!), 0);
+    const overtime = actualHours - requiredHours;
+    return [requiredHours, actualHours, overtime];
   }
 
   static getShiftColor(

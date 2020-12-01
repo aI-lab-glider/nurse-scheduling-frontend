@@ -1,9 +1,10 @@
 /// <reference types="cypress" />
-import { DataRow } from "../../../../src/logic/schedule-logic/data-row";
 import { ShiftHelper } from "../../../../src/helpers/shifts.helper";
 import { ShiftCode, ShiftInfoModel } from "../../../../src/common-models/shift-info.model";
+import { VerboseDate, WeekDay } from "../../../../src/common-models/month-info.model";
 
-type TestCase = { arr: ShiftInfoModel; exp: Array<number> };
+//#region getWorkersCount data
+type GetWorkersCountTestCase = { arr: ShiftInfoModel; exp: Array<number> };
 
 const testData1: ShiftInfoModel = {
   "0": ["R", "DN", "W"].map((d) => ShiftCode[d]),
@@ -23,7 +24,7 @@ const testData3: ShiftInfoModel = {
   "2": ["R", "R", "R"].map((d) => ShiftCode[d]),
 };
 
-const testCases: TestCase[] = [
+const GetWorkersCountTestCases: GetWorkersCountTestCase[] = [
   {
     arr: testData1,
     exp: [3, 2, 0],
@@ -37,14 +38,110 @@ const testCases: TestCase[] = [
     exp: [3, 3, 3],
   },
 ];
+//#endregion
+
+//#region caclulateWorkHoursInfo
+type CaclulateWorkHoursInfoTestData = {
+  dates: VerboseDate[];
+  currentMonth: string;
+  shifts: ShiftCode[];
+  workerNorm: number;
+  expectedWorkHours: number;
+  expectedOvertime: number;
+  expectedRequiredHours: number;
+};
+
+const currentMonth = "month";
+const currentDate = 0;
+const verboseDates: VerboseDate[] = [
+  {
+    isPublicHoliday: false,
+    dayOfWeek: WeekDay.TH,
+    month: currentMonth,
+    date: currentDate,
+  },
+  {
+    isPublicHoliday: true,
+    dayOfWeek: WeekDay.FR,
+    month: currentMonth,
+    date: currentDate + 1,
+  },
+  {
+    isPublicHoliday: false,
+    dayOfWeek: WeekDay.SA,
+    month: currentMonth,
+    date: currentDate + 2,
+  },
+];
+
+const commonParams = {
+  dates: verboseDates,
+  currentMonth: currentMonth,
+};
+const CaclulateWorkHoursInfoTestCases: CaclulateWorkHoursInfoTestData[] = [
+  {
+    ...commonParams,
+    shifts: [ShiftCode.U, ShiftCode.U, ShiftCode.U],
+    workerNorm: 1,
+    expectedWorkHours: 0,
+    expectedRequiredHours: 0,
+    expectedOvertime: 0,
+  },
+  {
+    ...commonParams,
+    shifts: [ShiftCode.R, ShiftCode.U, ShiftCode.U],
+    workerNorm: 1,
+    expectedWorkHours: ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
+    expectedRequiredHours: ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
+    expectedOvertime: 0,
+  },
+  {
+    ...commonParams,
+    shifts: [ShiftCode.R, ShiftCode.R, ShiftCode.R],
+    workerNorm: 1,
+    expectedWorkHours: ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
+    expectedRequiredHours: ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
+    expectedOvertime: 0,
+  },
+  {
+    ...commonParams,
+    shifts: [ShiftCode.R, ShiftCode.R, ShiftCode.U],
+    workerNorm: 0.5,
+    expectedWorkHours: 0.5 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
+    expectedRequiredHours: 0.5 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
+    expectedOvertime: 0,
+  },
+];
+//#endregion
 
 describe("ShiftHelper", () => {
-  testCases.forEach((testCase) => {
+  GetWorkersCountTestCases.forEach((testCase) => {
     describe("getWorkersCount", () => {
       const shifts = Object.values(testCase.arr);
       it(`should return ${testCase.exp} for all days and array ${shifts}`, () => {
         const amount = ShiftHelper.getWorkersCount(testCase.arr);
         expect(amount).to.eql(testCase.exp);
+      });
+    });
+  });
+
+  CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
+    describe("caclulateWorkHoursInfo", () => {
+      const message = `should calculate correct work hours for ${
+        testCase.shifts
+      } in days ${testCase.dates.map((d) => `${d.dayOfWeek}, is holiday: ${d.isPublicHoliday}`)}`;
+      it(message, () => {
+        const hours = ShiftHelper.caclulateWorkHoursInfo(
+          testCase.shifts,
+          testCase.workerNorm,
+          testCase.dates,
+          testCase.currentMonth
+        );
+        expect(hours).to.eql([
+          testCase.expectedRequiredHours,
+          testCase.expectedWorkHours,
+          testCase.expectedOvertime,
+        ]);
       });
     });
   });

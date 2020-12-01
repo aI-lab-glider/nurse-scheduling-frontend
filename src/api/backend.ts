@@ -2,6 +2,9 @@ import axios, { AxiosInstance } from "axios";
 import { ScheduleDataModel } from "../common-models/schedule-data.model";
 import { ScheduleError } from "../common-models/schedule-error.model";
 
+interface BackendErrorObject extends Omit<ScheduleError, "kind"> {
+  code: string;
+}
 class Backend {
   axios: AxiosInstance;
 
@@ -12,7 +15,9 @@ class Backend {
   }
 
   public getErrors(schedule: ScheduleDataModel): Promise<ScheduleError[]> {
-    return this.axios.post("/schedule_errors", schedule).then((resp) => resp.data);
+    return this.axios
+      .post("/schedule_errors", schedule)
+      .then((resp) => resp.data.map((el: BackendErrorObject) => ({ ...el, kind: el.code })));
   }
 
   public fixSchedule(schedule: ScheduleDataModel): Promise<ScheduleDataModel[]> {
