@@ -86,7 +86,10 @@ export class ShiftHelper {
       (d) => VerboseDateHelper.isWorkingDay(d[1]!) && !this.isNotWorkingShift(d[0]!)
     );
     const requiredHours = workerNorm * WORK_HOURS_PER_DAY * workingData.length;
-    const actualHours = workingData.reduce((a, s) => a + this.shiftCodeToWorkTime(s[0]!), 0);
+    const actualHours = monthData.reduce(
+      (a, s) => a + workerNorm * this.shiftCodeToWorkTime(s[0]!),
+      0
+    );
     const overtime = actualHours - requiredHours;
     return [requiredHours, actualHours, overtime];
   }

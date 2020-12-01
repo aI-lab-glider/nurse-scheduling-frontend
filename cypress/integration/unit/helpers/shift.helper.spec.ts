@@ -46,7 +46,7 @@ type CaclulateWorkHoursInfoTestData = {
   currentMonth: string;
   shifts: ShiftCode[];
   workerNorm: number;
-  expectedWorkHours: number;
+  expectedActualWorkHours: number;
   expectedOvertime: number;
   expectedRequiredHours: number;
 };
@@ -83,7 +83,7 @@ const CaclulateWorkHoursInfoTestCases: CaclulateWorkHoursInfoTestData[] = [
     ...commonParams,
     shifts: [ShiftCode.U, ShiftCode.U, ShiftCode.U],
     workerNorm: 1,
-    expectedWorkHours: 0,
+    expectedActualWorkHours: 0,
     expectedRequiredHours: 0,
     expectedOvertime: 0,
   },
@@ -91,7 +91,7 @@ const CaclulateWorkHoursInfoTestCases: CaclulateWorkHoursInfoTestData[] = [
     ...commonParams,
     shifts: [ShiftCode.R, ShiftCode.U, ShiftCode.U],
     workerNorm: 1,
-    expectedWorkHours: ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
+    expectedActualWorkHours: ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
     expectedRequiredHours: ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
     expectedOvertime: 0,
   },
@@ -99,17 +99,22 @@ const CaclulateWorkHoursInfoTestCases: CaclulateWorkHoursInfoTestData[] = [
     ...commonParams,
     shifts: [ShiftCode.R, ShiftCode.R, ShiftCode.R],
     workerNorm: 1,
-    expectedWorkHours: ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
+    expectedActualWorkHours: 3 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
     expectedRequiredHours: ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
-    expectedOvertime: 0,
+    expectedOvertime:
+      3 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R) -
+      ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
   },
   {
     ...commonParams,
     shifts: [ShiftCode.R, ShiftCode.R, ShiftCode.U],
     workerNorm: 0.5,
-    expectedWorkHours: 0.5 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
+    expectedActualWorkHours: 0.5 * 2 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
     expectedRequiredHours: 0.5 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
-    expectedOvertime: 0,
+    expectedOvertime:
+      0.5 *
+      (2 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R) -
+        ShiftHelper.shiftCodeToWorkTime(ShiftCode.R)),
   },
 ];
 //#endregion
@@ -139,7 +144,7 @@ describe("ShiftHelper", () => {
         );
         expect(hours).to.eql([
           testCase.expectedRequiredHours,
-          testCase.expectedWorkHours,
+          testCase.expectedActualWorkHours,
           testCase.expectedOvertime,
         ]);
       });
