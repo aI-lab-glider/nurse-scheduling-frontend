@@ -1,39 +1,182 @@
-.table-container {
-  overflow: auto;
-  height: 65vh;
-  width: 100%;
-  padding: 20px;
-
-  table {
-    width: 100%;
-  }
-}
-
-.row {
-  min-height: 5px;
-}
-
-.cell {
-  border: 1px solid $gray-500;
-  width: 30px;
-  height: 20px;
-  text-align: center;
-  font-size: 14px;
-
-  span {
-    margin: 5px;
-    font-size: 15px;
-  }
-
-  .cell-input {
-    width: 100%;
-    height: 100%;
-    border: none;
-    box-sizing: border-box;
-  }
-}
-
-.section-header {
+.table {
   display: flex;
-  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+
+  background: $white;
+  border: 2px solid $table-border-color-grey;
+  box-sizing: border-box;
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+
+    position: static;
+
+    //text
+    text-align: center;
+    letter-spacing: 0.75px;
+    font-family: $font-family-table;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 24px;
+
+    .mainCell {
+      flex: 1 1 auto;
+      align-items: center;
+      height: 103%;
+      width: 120%;
+      padding-top: 0.7%;
+
+      border: 1px solid $table-border-color-grey;
+    }
+
+    .summaryCell {
+      flex: 1 1 auto;
+      align-items: center;
+      height: 103%;
+      width: 120%;
+      border: 0.25px solid $table-border-color-grey;
+
+      padding-top: 8%;
+
+      color: $cell-color;
+      background: $white;
+    }
+
+    #thisMonth {
+      color: $cell-color;
+      background: $white;
+    }
+
+    #otherMonth {
+      color: $cell-other-color;
+      background: $cell-other-month-background-color;
+    }
+
+    #weekend {
+      color: $cell-other-color;
+      background: $cell-weekend-background-color;
+    }
+
+    .timetableCell {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50%;
+      padding-bottom: 50%;
+      width: 100%;
+      border: 0.5px solid $table-border-color-grey;
+    }
+
+    #thisMonthHeader {
+      color: $table-color;
+      background: $header-curr-month-background-color;
+    }
+
+    #otherMonthHeader {
+      color: $opacity-table-color-5;
+      background: $opacity-table-background;
+    }
+
+    .cell-input {
+      flex-direction: column;
+      width: 100%;
+      height: 35px;
+
+      margin-top: -5px;
+    }
+  }
+
+  #summaryRow {
+    width: 102px;
+    height: 40px;
+  }
+
+  #mainRow {
+    width: 1156px;
+    height: 40px;
+  }
+
+  #timetableRow {
+    width: 1156px;
+    height: 70px;
+  }
+}
+
+#summaryTable {
+  width: 102px;
+}
+
+#mainTable {
+  width: 1156px;
+}
+
+span.tick {
+  transform: rotate(90deg);
+  display: inline-block;
+}
+
+.middleSection {
+  height: 50px;
+
+  hr.middle {
+    width: 102%;
+    border: 1px solid $table-border-color-grey;
+  }
+
+  .middleCell {
+    width: 110px;
+
+    font-family: $font-family-table;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+
+    letter-spacing: 0.75px;
+
+    color: $primary;
+  }
+}
+
+.summaryContainer {
+  padding-left: 2%;
+}
+
+.sectionContainer {
+  margin-bottom: 100px;
+}
+
+span {
+  &.circle {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    margin-bottom: -10%;
+    padding-top: 10%;
+    background: $primary;
+  }
+
+  &.today {
+    font-family: $font-family-base;
+    font-weight: 600;
+    font-size: 16px;
+    color: $white;
+    margin-bottom: 10%;
+  }
+
+  &.bolded {
+    font-family: $font-family-base;
+    font-weight: 600;
+    font-size: 16px;
+  }
 }

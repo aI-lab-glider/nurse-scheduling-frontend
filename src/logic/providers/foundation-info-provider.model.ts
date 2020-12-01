@@ -1,6 +1,4 @@
 import { ShiftInfoModel } from "../../common-models/shift-info.model";
-import { WorkerType } from "../../common-models/worker-info.model";
-import { ArrayHelper } from "../../helpers/array.helper";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { ChildrenInfoProvider } from "./children-info-provider.model";
 import { ExtraWorkersInfoProvider } from "./extra-workers-info-provider.model";

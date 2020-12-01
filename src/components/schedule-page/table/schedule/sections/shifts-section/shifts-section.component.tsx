@@ -1,12 +1,6 @@
-import { Button } from "@material-ui/core";
 import React, { useCallback, useContext, useMemo, useState } from "react";
-import { StringHelper } from "../../../../../../helpers/string.helper";
 import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
-import {
-  WorkerInfoModel,
-  WorkerType,
-  WorkerTypeHelper,
-} from "../../../../../../common-models/worker-info.model";
+import { WorkerInfoModel, WorkerType } from "../../../../../../common-models/worker-info.model";
 import { ShiftCode } from "../../../../../../common-models/shift-info.model";
 import { AddWorkerModal } from "../../../../../common-components/add-worker-modal/add-worker-modal";
 import { ShiftCellComponent } from "../../schedule-parts/shift-cell/shift-cell.component";
@@ -75,19 +69,6 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
 
   return (
     <React.Fragment>
-      {data.length > 0 && (
-        <tr className="section-header">
-          <td>
-            <h3>{StringHelper.capitalize(WorkerTypeHelper.translate(workerType, true))}</h3>
-          </td>
-
-          <td>
-            <div>
-              <Button onClick={(): void => openWorkerModal()}>Dodaj</Button>
-            </div>
-          </td>
-        </tr>
-      )}
       <BaseSectionComponent
         {...options}
         key={uuid}

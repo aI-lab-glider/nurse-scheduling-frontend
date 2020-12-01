@@ -10,9 +10,9 @@ export interface TimeTableCellOptions {
 function TimeTableCellF({ value, currMonth }: TimeTableCellOptions): JSX.Element {
   function getId(): string {
     if (value.month === TranslationHelper.englishMonths[currMonth]) {
-      return "thisMonth";
+      return "thisMonthHeader";
     }
-    return "otherMonth";
+    return "otherMonthHeader";
   }
 
   function isToday(): [string, string] {
@@ -41,7 +41,6 @@ function TimeTableCellF({ value, currMonth }: TimeTableCellOptions): JSX.Element
 export const TimeTableCell: React.FC<TimeTableCellOptions> = React.memo(
   TimeTableCellF,
   (prev, next) => {
-    const areEqual = prev.value === next.value;
-    return areEqual;
+    return prev.value === next.value;
   }
 );
