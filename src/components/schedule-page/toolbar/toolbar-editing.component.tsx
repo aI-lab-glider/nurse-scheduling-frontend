@@ -19,7 +19,7 @@ export function ToolbarEditingComponent(props): JSX.Element {
     handleEditMode(open);
   }
 
-  async function onShowErrorsClicked(): Promise<void> {
+  async function updateScheduleErrors(): Promise<void> {
     if (schedule) {
       const response = await backend.getErrors(schedule);
       dispatcher({
@@ -54,7 +54,7 @@ export function ToolbarEditingComponent(props): JSX.Element {
               size="small"
               className="submit-button"
               variant="outlined"
-              onClick={onShowErrorsClicked}
+              onClick={updateScheduleErrors}
             >
               Sprawdź Plan
             </Button>
