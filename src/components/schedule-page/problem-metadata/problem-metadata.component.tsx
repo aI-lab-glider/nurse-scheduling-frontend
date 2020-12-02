@@ -128,7 +128,7 @@ export function ProblemMetadataComponent(): JSX.Element {
   }
 
   return (
-    <form className="form" autoComplete="off">
+    <form className="form" autoComplete="off" onSubmit={(e) => e.preventDefault()}>
       <MuiPickersUtilsProvider utils={DateFnsUtils} locale={plLocale}>
         <DatePicker
           required
