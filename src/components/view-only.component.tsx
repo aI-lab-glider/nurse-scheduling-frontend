@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button } from "../../common-components";
-import { ImportButtonsComponent } from "../import-buttons/import-buttons.component";
-import RouteButtonsComponent from "../../common-components/route-buttons/route-buttons.component";
-import ManagementPage from "../../workers-page/management-page.component";
+import { Button } from "./common-components";
+import { ImportButtonsComponent } from "./schedule-page/import-buttons/import-buttons.component";
+import RouteButtonsComponent from "./common-components/route-buttons/route-buttons.component";
+import ManagementPage from "./workers-page/management-page.component";
 import { Box } from "@material-ui/core";
-import { ScheduleComponent } from "../table/schedule/schedule.component";
+import { ScheduleComponent } from "./schedule-page/table/schedule/schedule.component";
 
 interface TabData {
   label: string;
@@ -13,7 +13,7 @@ interface TabData {
   rightSideButtons: JSX.Element;
 }
 
-export function ScheduleViewingComponent(): JSX.Element {
+export function ViewOnlyComponent(): JSX.Element {
   function Buttons(): JSX.Element {
     return (
       <>

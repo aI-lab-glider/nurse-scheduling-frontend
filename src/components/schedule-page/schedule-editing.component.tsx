@@ -1,15 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button } from "../../common-components";
+import { Button } from "../common-components";
 import { Box } from "@material-ui/core";
-import ValidationDrawerComponent from "../validation-drawer/validation-drawer.component";
-import backend from "../../../api/backend";
-import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
-import { ActionModel } from "../../../state/models/action.model";
-import { ScheduleError } from "../../../common-models/schedule-error.model";
+import ValidationDrawerComponent from "./validation-drawer/validation-drawer.component";
+import backend from "../../api/backend";
+import { ScheduleErrorActionType } from "../../state/reducers/schedule-errors.reducer";
+import { ActionModel } from "../../state/models/action.model";
+import { ScheduleError } from "../../common-models/schedule-error.model";
 import { useDispatch, useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { ScheduleComponent } from "../table/schedule/schedule.component";
+import { ApplicationStateModel } from "../../state/models/application-state.model";
+import { ScheduleComponent } from "./table/schedule/schedule.component";
 
 export function ScheduleEditingComponent(): JSX.Element {
   const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData?.present);
