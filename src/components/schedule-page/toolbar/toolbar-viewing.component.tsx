@@ -44,7 +44,7 @@ export function ToolbarViewingComponent(props: ToolbarOptions): JSX.Element {
   }
 
   const tabs: TabData[] = [
-    { label: "Plan", component: <SchedulePage />, rightSideButtons: Buttons() },
+    { label: "Plan", component: <SchedulePage />, rightSideButtons: <Buttons /> },
     { label: "Zarządzanie", component: <ManagementPage />, rightSideButtons: <div /> },
   ];
 
