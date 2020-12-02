@@ -10,7 +10,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import SchedulePage from "../schedule-page.component";
 
-export function ToolbarEditingComponent(props): JSX.Element {
+interface ToolbarOptions {
+  editModeChange: (setEditMode: boolean) => void;
+}
+
+export function ToolbarEditingComponent(props: ToolbarOptions): JSX.Element {
   const handleEditMode = props.editModeChange;
   const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData?.present);
   const dispatcher = useDispatch();

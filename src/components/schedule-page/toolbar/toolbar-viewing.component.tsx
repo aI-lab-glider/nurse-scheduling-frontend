@@ -12,7 +12,11 @@ interface TabData {
   right_side_buttons: JSX.Element;
 }
 
-export function ToolbarViewingComponent(props): JSX.Element {
+interface ToolbarOptions {
+  editModeChange: (setEditMode: boolean) => void;
+}
+
+export function ToolbarViewingComponent(props: ToolbarOptions): JSX.Element {
   const handleEditMode = props.editModeChange;
 
   function toggleEdit(open: boolean): void {
