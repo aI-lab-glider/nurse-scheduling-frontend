@@ -19,10 +19,6 @@ interface ToolbarOptions {
 export function ToolbarViewingComponent(props: ToolbarOptions): JSX.Element {
   const handleEditMode = props.editModeChange;
 
-  function toggleEdit(open: boolean): void {
-    handleEditMode(open);
-  }
-
   function Buttons(): JSX.Element {
     return (
       <>
@@ -33,7 +29,7 @@ export function ToolbarViewingComponent(props: ToolbarOptions): JSX.Element {
               size="small"
               className="submit-button"
               variant="primary"
-              onClick={() => toggleEdit(true)}
+              onClick={() => handleEditMode(true)}
             >
               Edytuj
             </Button>
