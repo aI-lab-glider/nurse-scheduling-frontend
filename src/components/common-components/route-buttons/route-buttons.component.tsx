@@ -9,7 +9,7 @@ import ScssVars from "../../../assets/styles/styles/custom/route-buttons.module.
 interface Tabs {
   label: string;
   component: JSX.Element;
-  right_side_buttons?: JSX.Element;
+  rightSideButtons?: JSX.Element;
 }
 
 const useStyles = makeStyles(() => ({
@@ -78,7 +78,7 @@ export default function RouteButtonsComponent({ tabs }: { tabs: Tabs[] }): JSX.E
           </div>
           <div className="filler" />
           {tabs.map((tab) => (
-            <TabPanel value={tab.label}>{tab.right_side_buttons}</TabPanel>
+            <TabPanel value={tab.label}>{tab.rightSideButtons}</TabPanel>
           ))}
         </div>
 

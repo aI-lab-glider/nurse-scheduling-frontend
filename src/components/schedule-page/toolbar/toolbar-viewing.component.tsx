@@ -9,7 +9,7 @@ import { Box } from "@material-ui/core";
 interface TabData {
   label: string;
   component: JSX.Element;
-  right_side_buttons: JSX.Element;
+  rightSideButtons: JSX.Element;
 }
 
 interface ToolbarOptions {
@@ -44,10 +44,8 @@ export function ToolbarViewingComponent(props: ToolbarOptions): JSX.Element {
   }
 
   const tabs: TabData[] = [
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    { label: "Plan", component: <SchedulePage />, right_side_buttons: Buttons() },
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    { label: "Zarządzanie", component: <ManagementPage />, right_side_buttons: <div /> },
+    { label: "Plan", component: <SchedulePage />, rightSideButtons: Buttons() },
+    { label: "Zarządzanie", component: <ManagementPage />, rightSideButtons: <div /> },
   ];
 
   return (
