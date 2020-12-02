@@ -18,9 +18,11 @@ export function NameTableSection({ dataRow }: NameTableCellOptions): JSX.Element
         <tbody>
           {data.map((cellData) => {
             return (
-              <tr className="nametableRow">
-                <span>{cellData}</span>
-                <span className="underline"></span>
+              <tr key={cellData} className="nametableRow">
+                <td>
+                  <span>{cellData}</span>
+                  <span className="underline"></span>
+                </td>
               </tr>
             );
           })}

@@ -99,7 +99,7 @@ export function ScheduleComponent(): JSX.Element {
                     <tbody className="table" id="mainTable">
                       <ShiftsSectionComponent
                         uuid={scheduleLocalState.uuid}
-                        workerType={WorkerType.NURSE}
+                        workerType={WorkerType.OTHER}
                         data={scheduleLocalState.babysitterShiftsSection}
                       />
                     </tbody>

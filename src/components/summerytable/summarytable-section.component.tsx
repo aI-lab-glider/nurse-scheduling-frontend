@@ -27,7 +27,13 @@ export function SummaryTableSection({ dataRow }: NameTableCellOptions): JSX.Elem
         <tbody>
           <ScheduleLogicContext.Provider value={scheduleLogic}>
             {dataRow.map((cellData) => {
-              return <SummaryTableRow uuid={scheduleLocalState.uuid} dataRow={cellData} />;
+              return (
+                <SummaryTableRow
+                  key={`${scheduleLocalState.uuid}_${cellData.rowKey}`}
+                  uuid={scheduleLocalState.uuid}
+                  dataRow={cellData}
+                />
+              );
             })}
           </ScheduleLogicContext.Provider>
         </tbody>
