@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button } from "../../common-components";
 import { Box } from "@material-ui/core";
 import ValidationDrawerComponent from "../validation-drawer/validation-drawer.component";
@@ -10,18 +11,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import SchedulePage from "../schedule-page.component";
 
-interface ToolbarOptions {
-  editModeChange: (setEditMode: boolean) => void;
-}
-
-export function ToolbarEditingComponent(props: ToolbarOptions): JSX.Element {
-  const handleEditMode = props.editModeChange;
+export function ToolbarEditingComponent(): JSX.Element {
   const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData?.present);
   const dispatcher = useDispatch();
-
-  function toggleEdit(open: boolean): void {
-    handleEditMode(open);
-  }
 
   async function updateScheduleErrors(): Promise<void> {
     if (schedule) {
@@ -63,14 +55,11 @@ export function ToolbarEditingComponent(props: ToolbarOptions): JSX.Element {
               Sprawdź Plan
             </Button>
             <Box>
-              <Button
-                size="small"
-                className="submit-button"
-                variant="primary"
-                onClick={(): void => toggleEdit(false)}
-              >
-                Pogląd
-              </Button>
+              <Link to={"/"}>
+                <Button size="small" className="submit-button" variant="primary">
+                  Pogląd
+                </Button>
+              </Link>
             </Box>
           </div>
         </div>

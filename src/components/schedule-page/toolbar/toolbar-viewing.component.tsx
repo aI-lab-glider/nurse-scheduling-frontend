@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button } from "../../common-components";
 import { ImportButtonsComponent } from "../import-buttons/import-buttons.component";
 import RouteButtonsComponent from "../../common-components/route-buttons/route-buttons.component";
@@ -12,27 +13,18 @@ interface TabData {
   rightSideButtons: JSX.Element;
 }
 
-interface ToolbarOptions {
-  editModeChange: (setEditMode: boolean) => void;
-}
-
-export function ToolbarViewingComponent(props: ToolbarOptions): JSX.Element {
-  const handleEditMode = props.editModeChange;
-
+export function ToolbarViewingComponent(): JSX.Element {
   function Buttons(): JSX.Element {
     return (
       <>
         <div className={"buttons"}>
           <ImportButtonsComponent />
           <Box>
-            <Button
-              size="small"
-              className="submit-button"
-              variant="primary"
-              onClick={() => handleEditMode(true)}
-            >
-              Edytuj
-            </Button>
+            <Link to={"/schedule-editing"}>
+              <Button size="small" className="submit-button" variant="primary">
+                Edytuj
+              </Button>
+            </Link>
           </Box>
         </div>
       </>
@@ -45,8 +37,8 @@ export function ToolbarViewingComponent(props: ToolbarOptions): JSX.Element {
   ];
 
   return (
-    <>
+    <div className="toolbar-container">
       <RouteButtonsComponent tabs={tabs} />
-    </>
+    </div>
   );
 }
