@@ -78,12 +78,16 @@ export default function RouteButtonsComponent({ tabs }: { tabs: Tabs[] }): JSX.E
           </div>
           <div className="filler" />
           {tabs.map((tab) => (
-            <TabPanel value={tab.label}>{tab.rightSideButtons}</TabPanel>
+            <TabPanel value={tab.label} key={tab.label}>
+              {tab.rightSideButtons}
+            </TabPanel>
           ))}
         </div>
 
         {tabs.map((tab) => (
-          <TabPanel value={tab.label}>{tab.component}</TabPanel>
+          <TabPanel value={tab.label} key={tab.label}>
+            {tab.component}
+          </TabPanel>
         ))}
       </TabContext>
     </div>
