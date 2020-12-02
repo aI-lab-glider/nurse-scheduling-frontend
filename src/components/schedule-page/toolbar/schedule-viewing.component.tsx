@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { Button } from "../../common-components";
 import { ImportButtonsComponent } from "../import-buttons/import-buttons.component";
 import RouteButtonsComponent from "../../common-components/route-buttons/route-buttons.component";
-import SchedulePage from "../schedule-page.component";
 import ManagementPage from "../../workers-page/management-page.component";
 import { Box } from "@material-ui/core";
+import { ScheduleComponent } from "../table/schedule/schedule.component";
 
 interface TabData {
   label: string;
@@ -13,7 +13,7 @@ interface TabData {
   rightSideButtons: JSX.Element;
 }
 
-export function ToolbarViewingComponent(): JSX.Element {
+export function ScheduleViewingComponent(): JSX.Element {
   function Buttons(): JSX.Element {
     return (
       <>
@@ -32,7 +32,7 @@ export function ToolbarViewingComponent(): JSX.Element {
   }
 
   const tabs: TabData[] = [
-    { label: "Plan", component: <SchedulePage />, rightSideButtons: <Buttons /> },
+    { label: "Plan", component: <ScheduleComponent />, rightSideButtons: <Buttons /> },
     { label: "Zarządzanie", component: <ManagementPage />, rightSideButtons: <div /> },
   ];
 

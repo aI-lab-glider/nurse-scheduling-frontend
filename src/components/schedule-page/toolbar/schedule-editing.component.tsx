@@ -9,9 +9,9 @@ import { ActionModel } from "../../../state/models/action.model";
 import { ScheduleError } from "../../../common-models/schedule-error.model";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import SchedulePage from "../schedule-page.component";
+import { ScheduleComponent } from "../table/schedule/schedule.component";
 
-export function ToolbarEditingComponent(): JSX.Element {
+export function ScheduleEditingComponent(): JSX.Element {
   const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData?.present);
   const dispatcher = useDispatch();
 
@@ -64,7 +64,7 @@ export function ToolbarEditingComponent(): JSX.Element {
           </div>
         </div>
         <div id={"schedule-editing"}>
-          <SchedulePage />
+          <ScheduleComponent />
         </div>
       </div>
     );
