@@ -14,6 +14,8 @@ import { ColorHelper } from "../../helpers/colors/color.helper";
 import { Color } from "../../helpers/colors/color.model";
 import { TranslationHelper } from "../../helpers/tranlsations.helper";
 import { VerboseDate } from "../../common-models/month-info.model";
+import { ShiftsInfoLogic } from "../schedule-logic/shifts-info.logic";
+import { MetadataLogic } from "../schedule-logic/metadata.logic";
 
 const EMPTY_ROW = Array(100).fill("");
 
@@ -114,6 +116,8 @@ export class ScheduleExportLogic {
   }
 
   private createShiftsSections(scheduleModel: ScheduleDataModel): string[][][] {
+    const shiftInfoLogics = this.shiftInfoLogics(scheduleModel);
+
     const grouped = {
       [WorkerType.NURSE]: [] as string[][],
       [WorkerType.OTHER]: [] as string[][],
@@ -123,6 +127,7 @@ export class ScheduleExportLogic {
       const shiftsRow: string[] = [
         key,
         ...scheduleModel.shifts[key]?.map((s) => (s === ShiftCode.W ? " " : s)),
+        ...shiftInfoLogics[category].calculateWorkerHourInfo(key).map((e) => e.toString()),
       ];
       grouped[category].push(shiftsRow);
     });
@@ -160,5 +165,33 @@ export class ScheduleExportLogic {
       const blob = new Blob([buffer]);
       fs.saveAs(blob, filename);
     });
+  }
+
+  private shiftInfoLogics(
+    scheduleModel: ScheduleDataModel
+  ): { [WorkerType.NURSE]: ShiftsInfoLogic; [WorkerType.OTHER]: ShiftsInfoLogic } {
+    const metadataLogic = new MetadataLogic(
+      scheduleModel.schedule_info.year?.toString(),
+      scheduleModel.schedule_info.month_number,
+      scheduleModel.month_info.dates,
+      scheduleModel.schedule_info.daysFromPreviousMonthExists
+    );
+    const nurseShiftsInfoLogic = new ShiftsInfoLogic(
+      scheduleModel.shifts,
+      WorkerType.NURSE,
+      metadataLogic
+    );
+    const otherShiftsInfoLogic = new ShiftsInfoLogic(
+      scheduleModel.shifts,
+      WorkerType.OTHER,
+      metadataLogic
+    );
+
+    const shiftInfoLogic = {
+      [WorkerType.NURSE]: nurseShiftsInfoLogic,
+      [WorkerType.OTHER]: otherShiftsInfoLogic,
+    };
+
+    return shiftInfoLogic;
   }
 }
