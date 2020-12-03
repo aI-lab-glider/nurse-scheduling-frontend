@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../common-components";
-import { Box } from "@material-ui/core";
 import ValidationDrawerComponent from "./validation-drawer/validation-drawer.component";
 import backend from "../../api/backend";
 import { ScheduleErrorActionType } from "../../state/reducers/schedule-errors.reducer";
@@ -32,6 +31,10 @@ export function ScheduleEditingComponent(): JSX.Element {
           <div className={"buttons"}>
             <div className={"filler"} />
 
+            <div id={"edit-panel-text-container"}>
+              <p>Tryb edycji aktywny</p>
+            </div>
+
             <Button size="small" className="submit-button" variant="outlined">
               ReDo
             </Button>
@@ -54,13 +57,11 @@ export function ScheduleEditingComponent(): JSX.Element {
             >
               Sprawdź Plan
             </Button>
-            <Box>
-              <Link to={"/"}>
-                <Button size="small" className="submit-button" variant="primary">
-                  Pogląd
-                </Button>
-              </Link>
-            </Box>
+            <Link to={"/"}>
+              <Button size="small" className="submit-button" variant="primary">
+                Pogląd
+              </Button>
+            </Link>
           </div>
         </div>
         <div id={"schedule-editing"}>

@@ -4,7 +4,6 @@ import { Button } from "./common-components";
 import { ImportButtonsComponent } from "./schedule-page/import-buttons/import-buttons.component";
 import RouteButtonsComponent from "./common-components/route-buttons/route-buttons.component";
 import ManagementPage from "./workers-page/management-page.component";
-import { Box } from "@material-ui/core";
 import { ScheduleComponent } from "./schedule-page/table/schedule/schedule.component";
 
 interface TabData {
@@ -19,13 +18,11 @@ export function ViewOnlyComponent(): JSX.Element {
       <>
         <div className={"buttons"}>
           <ImportButtonsComponent />
-          <Box>
-            <Link to={"/schedule-editing"}>
-              <Button size="small" className="submit-button" variant="primary">
-                Edytuj
-              </Button>
-            </Link>
-          </Box>
+          <Link to={"/schedule-editing"}>
+            <Button size="small" className="submit-button" variant="primary">
+              Edytuj
+            </Button>
+          </Link>
         </div>
       </>
     );

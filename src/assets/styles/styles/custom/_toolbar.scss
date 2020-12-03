@@ -14,6 +14,24 @@
     flex-grow: 1;
   }
 
+  #edit-panel-text-container {
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    p {
+      margin: auto;
+      color: $primary;
+      border-radius: $btn-border-radius;
+      font-family: $btn-font-family;
+      font-size: $btn-font-size-lg;
+      font-weight: $btn-font-weight;
+      line-height: $btn-line-height;
+      letter-spacing: $btn-letter-spacing;
+      text-align: $btn-text-align;
+      white-space: nowrap;
+    }
+  }
+
   .editing-row {
     display: flex;
     justify-content: flex-end;
