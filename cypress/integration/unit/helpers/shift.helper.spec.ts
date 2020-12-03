@@ -42,70 +42,119 @@ const GetWorkersCountTestCases: GetWorkersCountTestCase[] = [
 
 //#region caclulateWorkHoursInfo
 type CaclulateWorkHoursInfoTestData = {
-  dates: VerboseDate[];
-  currentMonth: string;
+  dates: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek" | "month">[];
   shifts: ShiftCode[];
   workerNorm: number;
   expectedActualWorkHours: number;
   expectedRequiredHours: number;
 };
 
-const currentMonth = "month";
-const currentDate = 0;
-const verboseDates: VerboseDate[] = [
-  {
-    isPublicHoliday: false,
-    dayOfWeek: WeekDay.TH,
-    month: currentMonth,
-    date: currentDate,
-  },
-  {
-    isPublicHoliday: true,
-    dayOfWeek: WeekDay.FR,
-    month: currentMonth,
-    date: currentDate + 1,
-  },
-  {
-    isPublicHoliday: false,
-    dayOfWeek: WeekDay.SA,
-    month: currentMonth,
-    date: currentDate + 2,
-  },
-];
+// December 2019
+const month = "December";
+const dayCount = 31;
+const holidayCount = 2; // 25 december, 26 december
+const weekendCount = 9;
+const workdayCount = dayCount - holidayCount - weekendCount;
 
-const requiredWorkTime = 8;
-const commonParams = {
-  dates: verboseDates,
-  currentMonth: currentMonth,
+const weekendTemplate = {
+  month: month,
+  dayOfWeek: WeekDay.SU,
+  isPublicHoliday: false,
 };
+
+const holidayTemplate = {
+  month: month,
+  dayOfWeek: WeekDay.SU,
+  isPublicHoliday: true,
+};
+const workDayTemplate = {
+  month: month,
+  dayOfWeek: WeekDay.MO,
+  isPublicHoliday: false,
+};
+
+const weekends = [...Array.from(Array(weekendCount))].map((_) => weekendTemplate);
+const holidays = [...Array.from(Array(holidayCount))].map((_) => holidayTemplate);
+const workDays = [...Array.from(Array(workdayCount))].map((_) => workDayTemplate);
+const dates = [...weekends, ...holidays, ...workDays];
 const CaclulateWorkHoursInfoTestCases: CaclulateWorkHoursInfoTestData[] = [
   {
-    ...commonParams,
-    shifts: [ShiftCode.U, ShiftCode.U, ShiftCode.U],
+    dates: dates,
+    shifts: [
+      ShiftCode.D,
+      ShiftCode.PN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.D,
+      ShiftCode.N,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.N,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.D,
+      ShiftCode.N,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.D,
+      ShiftCode.W,
+    ],
     workerNorm: 1,
-    expectedActualWorkHours: 0,
-    expectedRequiredHours: 0,
+    expectedActualWorkHours: 268,
+    expectedRequiredHours: 160,
   },
   {
-    ...commonParams,
-    shifts: [ShiftCode.R, ShiftCode.U, ShiftCode.U],
+    dates: dates,
+    shifts: [
+      ShiftCode.D,
+      ShiftCode.PN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.D,
+      ShiftCode.N,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.N,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.D,
+      ShiftCode.N,
+      ShiftCode.U,
+      ShiftCode.U,
+      ShiftCode.U,
+      ShiftCode.U,
+    ],
     workerNorm: 1,
-    expectedActualWorkHours: ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
-    expectedRequiredHours: requiredWorkTime,
-  },
-  {
-    ...commonParams,
-    shifts: [ShiftCode.R, ShiftCode.R, ShiftCode.R],
-    workerNorm: 1,
-    expectedActualWorkHours: 3 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
-    expectedRequiredHours: requiredWorkTime,
-  },
-  {
-    ...commonParams,
-    shifts: [ShiftCode.R, ShiftCode.R, ShiftCode.U],
-    workerNorm: 0.5,
-    expectedActualWorkHours: 0.5 * 2 * ShiftHelper.shiftCodeToWorkTime(ShiftCode.R),
-    expectedRequiredHours: 0.5 * requiredWorkTime,
+    expectedActualWorkHours: 256,
+    expectedRequiredHours: 128, // 160 - 4 vacation days
   },
 ];
 //#endregion
@@ -123,16 +172,14 @@ describe("ShiftHelper", () => {
 
   CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
     describe("caclulateWorkHoursInfo", () => {
-      const message = `should calculate correct work hours for ${
-        testCase.shifts
-      } in days ${testCase.dates.map((d) => `${d.dayOfWeek}, is holiday: ${d.isPublicHoliday}`)}`;
+      const message = `${testCase.dates.length} ${testCase.shifts.length}  should calculate correct work hours for ${testCase.shifts}`;
       it(message, () => {
         const expectedOvertime = testCase.expectedActualWorkHours - testCase.expectedRequiredHours;
         const hours = ShiftHelper.caclulateWorkHoursInfo(
           testCase.shifts,
           testCase.workerNorm,
           testCase.dates,
-          testCase.currentMonth
+          month
         );
         expect(hours).to.eql([
           testCase.expectedRequiredHours,
