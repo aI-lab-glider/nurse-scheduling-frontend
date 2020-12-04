@@ -1,13 +1,18 @@
 import React from "react";
 import { SummaryTableSection } from "./summarytable-section.component";
 import { BaseSectionOptions } from "../schedule-page/table/schedule/sections/base-section/base-section.component";
+import { WorkerType } from "../../common-models/worker-info.model";
 
-export function SummaryTableComponent(options: BaseSectionOptions): JSX.Element {
-  const { data = [] } = options;
+interface SummaryTableOptions extends Partial<BaseSectionOptions> {
+  workerType: WorkerType;
+}
+
+export function SummaryTableComponent(options: SummaryTableOptions): JSX.Element {
+  const { data = [], workerType } = options;
 
   return (
     <div>
-      <SummaryTableSection dataRow={data} />
+      <SummaryTableSection dataRows={data} workerType={workerType} />
     </div>
   );
 }

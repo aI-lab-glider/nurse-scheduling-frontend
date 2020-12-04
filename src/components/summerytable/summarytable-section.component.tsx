@@ -7,15 +7,23 @@ import {
 } from "../schedule-page/table/schedule/use-schedule-state";
 import { SummaryTableRow } from "./summarytable-row.component";
 import { DataRow } from "../../logic/schedule-logic/data-row";
+import { WorkerType } from "../../common-models/worker-info.model";
+import { ShiftsInfoLogic } from "../../logic/schedule-logic/shifts-info.logic";
 
-export interface NameTableCellOptions {
-  dataRow: DataRow[];
+export interface SummaryTableSectionOptions {
+  dataRows: DataRow[];
+  workerType: WorkerType;
 }
 
-export function SummaryTableSection({ dataRow }: NameTableCellOptions): JSX.Element {
+export function SummaryTableSection({
+  dataRows,
+  workerType,
+}: SummaryTableSectionOptions): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
-
   const { scheduleLogic, scheduleLocalState, setNewSchedule } = useScheduleState(scheduleModel);
+
+  const sectionKey = workerType === WorkerType.NURSE ? "NurseInfo" : "BabysitterInfo";
+  const shiftLogic = scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey);
 
   useEffect(() => {
     setNewSchedule(scheduleModel);
@@ -26,12 +34,12 @@ export function SummaryTableSection({ dataRow }: NameTableCellOptions): JSX.Elem
       <table className="table" id="summaryTable">
         <tbody>
           <ScheduleLogicContext.Provider value={scheduleLogic}>
-            {dataRow.map((cellData) => {
+            {dataRows.map((dataRow) => {
               return (
                 <SummaryTableRow
-                  key={`${scheduleLocalState.uuid}_${cellData.rowKey}`}
+                  key={`${scheduleLocalState.uuid}_${dataRow.rowKey}`}
                   uuid={scheduleLocalState.uuid}
-                  dataRow={cellData}
+                  data={shiftLogic?.calculateWorkerHourInfo(dataRow.rowKey) ?? []}
                 />
               );
             })}

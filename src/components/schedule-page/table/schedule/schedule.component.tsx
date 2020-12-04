@@ -83,6 +83,7 @@ export function ScheduleComponent(): JSX.Element {
                   <SummaryTableComponent
                     uuid={scheduleLocalState.uuid}
                     data={scheduleLocalState.nurseShiftsSection}
+                    workerType={WorkerType.NURSE}
                   />
                 </td>
               </tr>
@@ -109,6 +110,7 @@ export function ScheduleComponent(): JSX.Element {
                   <SummaryTableComponent
                     uuid={scheduleLocalState.uuid}
                     data={scheduleLocalState.babysitterShiftsSection}
+                    workerType={WorkerType.OTHER}
                   />
                 </td>
               </tr>
