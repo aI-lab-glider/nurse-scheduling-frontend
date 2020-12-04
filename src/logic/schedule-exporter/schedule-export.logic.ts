@@ -14,6 +14,8 @@ import { ColorHelper } from "../../helpers/colors/color.helper";
 import { Color } from "../../helpers/colors/color.model";
 import { TranslationHelper } from "../../helpers/tranlsations.helper";
 import { VerboseDate } from "../../common-models/month-info.model";
+import { ShiftsInfoLogic } from "../schedule-logic/shifts-info.logic";
+import { MetadataLogic } from "../schedule-logic/metadata.logic";
 
 const EMPTY_ROW = Array(100).fill("");
 
@@ -25,13 +27,14 @@ export class ScheduleExportLogic {
     const headerRow = this.createHeader(this.scheduleModel);
     const datesSection = this.createDatesSection(this.scheduleModel);
     const childrenInfoSection = this.createChildrenInfoSection(this.scheduleModel);
+    const overtimeInfoHeader = this.createWorkHoursInfoHeader(childrenInfoSection[0].length);
     const [nurseShifts, babysitterShifts] = this.createShiftsSections(this.scheduleModel);
     const schedule = [
       headerRow,
       ...datesSection,
       EMPTY_ROW,
       ...childrenInfoSection,
-      EMPTY_ROW,
+      overtimeInfoHeader,
       ...nurseShifts,
       EMPTY_ROW,
       ...babysitterShifts,
@@ -114,6 +117,8 @@ export class ScheduleExportLogic {
   }
 
   private createShiftsSections(scheduleModel: ScheduleDataModel): string[][][] {
+    const shiftInfoLogics = this.shiftInfoLogics(scheduleModel);
+
     const grouped = {
       [WorkerType.NURSE]: [] as string[][],
       [WorkerType.OTHER]: [] as string[][],
@@ -123,6 +128,7 @@ export class ScheduleExportLogic {
       const shiftsRow: string[] = [
         key,
         ...scheduleModel.shifts[key]?.map((s) => (s === ShiftCode.W ? " " : s)),
+        ...shiftInfoLogics[category].calculateWorkerHourInfo(key).map((e) => e.toString()),
       ];
       grouped[category].push(shiftsRow);
     });
@@ -151,6 +157,15 @@ export class ScheduleExportLogic {
     ];
   }
 
+  private createWorkHoursInfoHeader(startIndex: number): string[] {
+    const header = Array(startIndex + 3).fill("");
+
+    header[startIndex] = TranslationHelper.workHoursInfoHeader.requiredHours;
+    header[startIndex + 1] = TranslationHelper.workHoursInfoHeader.actualHours;
+    header[startIndex + 2] = TranslationHelper.workHoursInfoHeader.overtime;
+    return header;
+  }
+
   private createDatesSection(scheduleModel: ScheduleDataModel): (number | MetaDataSectionKey)[][] {
     return [[MetaDataSectionKey.MonthDays, ...(scheduleModel?.month_info?.dates || [])]];
   }
@@ -160,5 +175,33 @@ export class ScheduleExportLogic {
       const blob = new Blob([buffer]);
       fs.saveAs(blob, filename);
     });
+  }
+
+  private shiftInfoLogics(
+    scheduleModel: ScheduleDataModel
+  ): { [WorkerType.NURSE]: ShiftsInfoLogic; [WorkerType.OTHER]: ShiftsInfoLogic } {
+    const metadataLogic = new MetadataLogic(
+      scheduleModel.schedule_info.year?.toString(),
+      scheduleModel.schedule_info.month_number,
+      scheduleModel.month_info.dates,
+      scheduleModel.schedule_info.daysFromPreviousMonthExists
+    );
+    const nurseShiftsInfoLogic = new ShiftsInfoLogic(
+      scheduleModel.shifts,
+      WorkerType.NURSE,
+      metadataLogic
+    );
+    const otherShiftsInfoLogic = new ShiftsInfoLogic(
+      scheduleModel.shifts,
+      WorkerType.OTHER,
+      metadataLogic
+    );
+
+    const shiftInfoLogic = {
+      [WorkerType.NURSE]: nurseShiftsInfoLogic,
+      [WorkerType.OTHER]: otherShiftsInfoLogic,
+    };
+
+    return shiftInfoLogic;
   }
 }
