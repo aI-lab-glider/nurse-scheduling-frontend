@@ -15,7 +15,7 @@ export interface BaseRowOptions {
   uuid: string;
   index: number;
   dataRow: DataRow;
-  sectionKey?: keyof Sections;
+  sectionKey: keyof Sections;
   showSelectedCells?: boolean;
   cellComponent?: React.FC<BaseCellOptions>;
   onKeyDown?: (cellIndex: number, event: React.KeyboardEvent) => void;

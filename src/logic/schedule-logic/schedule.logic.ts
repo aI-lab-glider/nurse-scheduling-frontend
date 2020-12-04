@@ -46,14 +46,6 @@ export class ScheduleLogic implements ScheduleProvider {
     const extraWorkerSectionData = {
       [ExtraWorkersSectionKey.ExtraWorkersCount]: scheduleModel.month_info?.extra_workers || [],
     };
-
-    const logics: FoundationInfoOptions = {
-      BabysitterInfo: new ShiftsInfoLogic(babysitterShifts, WorkerType.OTHER),
-      NurseInfo: new ShiftsInfoLogic(nurseShifts, WorkerType.NURSE),
-      ChildrenInfo: new ChildrenInfoLogic(childrenSectionData),
-      ExtraWorkersInfo: new ExtraWorkersLogic(extraWorkerSectionData),
-    };
-
     const scheduleInfo = scheduleModel.schedule_info;
     const metadata = new MetadataLogic(
       scheduleInfo.year?.toString(),
@@ -61,6 +53,14 @@ export class ScheduleLogic implements ScheduleProvider {
       scheduleModel.month_info?.dates,
       scheduleInfo.daysFromPreviousMonthExists
     );
+
+    const logics: FoundationInfoOptions = {
+      BabysitterInfo: new ShiftsInfoLogic(babysitterShifts, WorkerType.OTHER, metadata),
+      NurseInfo: new ShiftsInfoLogic(nurseShifts, WorkerType.NURSE, metadata),
+      ChildrenInfo: new ChildrenInfoLogic(childrenSectionData),
+      ExtraWorkersInfo: new ExtraWorkersLogic(extraWorkerSectionData),
+    };
+
     const foundationLogic = new FoundationInfoLogic(logics);
     return { ...logics, FoundationInfo: foundationLogic, Metadata: metadata };
   }
