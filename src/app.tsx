@@ -1,19 +1,35 @@
+import React, { useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
-import React from "react";
-import SchedulePage from "./components/schedule-page/schedule-page.component";
-import ManagementPage from "./components/workers-page/management-page.component";
-import { CustomGlobalHotKeys } from "./components/common-components/tools/globalhotkeys.component";
-import Header from "./components/common-components/header/header";
+import { CustomGlobalHotKeys, HeaderComponent } from "./components/common-components";
+import { ViewOnlyComponent } from "./components/view-only.component";
+import { ScheduleEditingComponent } from "./components/schedule-page/schedule-editing.component";
+import { useDispatch } from "react-redux";
+import schedule from "./assets/devMode/schedule.js";
+import { ScheduleDataActionType } from "./state/reducers/schedule-data.reducer";
+import { ActionModel } from "./state/models/action.model";
+import { ScheduleDataModel } from "./common-models/schedule-data.model";
 
 function App(): JSX.Element {
+  const scheduleDispatcher = useDispatch();
+  useEffect(() => {
+    if (process.env.REACT_APP_DEV_MODE === "true") {
+      scheduleDispatcher({
+        type: ScheduleDataActionType.ADD_NEW,
+        payload: schedule,
+      } as ActionModel<ScheduleDataModel>);
+    }
+  }, [scheduleDispatcher]);
+
   return (
     <React.Fragment>
-      <CustomGlobalHotKeys />
-      <Header />
-      <Switch>
-        <Route path="/" component={SchedulePage} exact />
-        <Route path="/management" component={ManagementPage} />
-      </Switch>
+      <div>
+        <CustomGlobalHotKeys />
+        <HeaderComponent />
+        <Switch>
+          <Route path="/" component={ViewOnlyComponent} exact />
+          <Route path="/schedule-editing" component={ScheduleEditingComponent} />
+        </Switch>
+      </div>
     </React.Fragment>
   );
 }
