@@ -9,6 +9,8 @@ import { ScheduleError } from "../../common-models/schedule-error.model";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
 import { ScheduleComponent } from "./table/schedule/schedule.component";
+import UndoIcon from "@material-ui/icons/Undo";
+import RedoIcon from "@material-ui/icons/Redo";
 
 export function ScheduleEditingComponent(): JSX.Element {
   const schedule = useSelector((state: ApplicationStateModel) => state.scheduleData?.present);
@@ -34,13 +36,11 @@ export function ScheduleEditingComponent(): JSX.Element {
             <div id={"edit-panel-text-container"}>
               <p>Tryb edycji aktywny</p>
             </div>
-
-            <Button size="small" className="submit-button" variant="outlined">
-              ReDo
+            <Button variant="circle-outlined">
+              <RedoIcon className={"edit-icons"} />
             </Button>
-
-            <Button size="small" className="submit-button" variant="outlined">
-              UnDo
+            <Button variant="circle-outlined">
+              <UndoIcon className={"edit-icons"} />
             </Button>
 
             <Button size="small" className="submit-button" variant="outlined">

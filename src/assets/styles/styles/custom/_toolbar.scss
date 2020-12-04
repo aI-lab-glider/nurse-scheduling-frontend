@@ -18,6 +18,7 @@
     margin: 5px;
     display: flex;
     flex-direction: column;
+
     p {
       margin: auto;
       color: $primary;
@@ -30,6 +31,12 @@
       text-align: $btn-text-align;
       white-space: nowrap;
     }
+  }
+
+  .edit-icons {
+    color: $primary;
+    margin: auto;
+    font-size: $icon-font-size-lg;
   }
 
   .editing-row {

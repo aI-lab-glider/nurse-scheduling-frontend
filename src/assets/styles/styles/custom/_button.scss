@@ -12,11 +12,13 @@
   letter-spacing: $btn-letter-spacing;
   text-align: $btn-text-align;
   transition: box-shadow 0.5s;
+
   &:hover {
     cursor: pointer;
     font-weight: 600;
     box-shadow: 1px 3px $gray-500;
   }
+
   &:focus {
     outline: none;
   }
@@ -36,4 +38,17 @@
   border: 1px solid $primary;
   background-color: $white;
   color: $primary;
+}
+
+.btn-circle-outlined {
+  padding: 0;
+  height: $btn-circle-outlined-size;
+  width: $btn-circle-outlined-size;
+  margin: auto 10px;
+  border-radius: 50%;
+  border: 1px solid $primary;
+  background-color: $white;
+  color: $primary;
+  display: flex;
+  justify-content: center;
 }
