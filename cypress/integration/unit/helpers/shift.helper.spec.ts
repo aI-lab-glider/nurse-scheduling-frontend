@@ -24,6 +24,19 @@ const testData3: ShiftInfoModel = {
   "2": ["R", "R", "R"].map((d) => ShiftCode[d]),
 };
 
+const testData4: ShiftInfoModel = {
+  "0": ["R", "W", "R", "W"].map((d) => ShiftCode[d]),
+  "1": ["R", "R", "R", "W"].map((d) => ShiftCode[d]),
+  "2": ["R", "W", "R", "R"].map((d) => ShiftCode[d]),
+};
+const testData5: ShiftInfoModel = {
+  "0": ["R", "W", "R", "W"].map((d) => ShiftCode[d]),
+  "1": ["R", "R", "R", "W"].map((d) => ShiftCode[d]),
+  "2": ["P", "R", "R", "R"].map((d) => ShiftCode[d]),
+  "3": ["R", "W", "P", "R"].map((d) => ShiftCode[d]),
+  "4": ["D", "W", "R", "R"].map((d) => ShiftCode[d]),
+};
+
 const GetWorkersCountTestCases: GetWorkersCountTestCase[] = [
   {
     arr: testData1,
@@ -36,6 +49,14 @@ const GetWorkersCountTestCases: GetWorkersCountTestCase[] = [
   {
     arr: testData3,
     exp: [3, 3, 3],
+  },
+  {
+    arr: testData4,
+    exp: [3, 1, 3, 1],
+  },
+  {
+    arr: testData5,
+    exp: [5, 2, 5, 3],
   },
 ];
 //#endregion
