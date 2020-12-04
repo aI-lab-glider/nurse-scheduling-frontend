@@ -1,9 +1,10 @@
 /// <reference types="cypress" />
-import { DataRow } from "../../../../src/logic/schedule-logic/data-row";
 import { ShiftHelper } from "../../../../src/helpers/shifts.helper";
 import { ShiftCode, ShiftInfoModel } from "../../../../src/common-models/shift-info.model";
+import { VerboseDate, WeekDay } from "../../../../src/common-models/month-info.model";
 
-type TestCase = { arr: ShiftInfoModel; exp: Array<number> };
+//#region getWorkersCount data
+type GetWorkersCountTestCase = { arr: ShiftInfoModel; exp: Array<number> };
 
 const testData1: ShiftInfoModel = {
   "0": ["R", "DN", "W"].map((d) => ShiftCode[d]),
@@ -23,7 +24,7 @@ const testData3: ShiftInfoModel = {
   "2": ["R", "R", "R"].map((d) => ShiftCode[d]),
 };
 
-const testCases: TestCase[] = [
+const GetWorkersCountTestCases: GetWorkersCountTestCase[] = [
   {
     arr: testData1,
     exp: [3, 2, 0],
@@ -37,14 +38,154 @@ const testCases: TestCase[] = [
     exp: [3, 3, 3],
   },
 ];
+//#endregion
+
+//#region caclulateWorkHoursInfo
+type CaclulateWorkHoursInfoTestData = {
+  dates: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek" | "month">[];
+  shifts: ShiftCode[];
+  workerNorm: number;
+  expectedActualWorkHours: number;
+  expectedRequiredHours: number;
+};
+
+// December 2019
+const month = "December";
+const dayCount = 31;
+const holidayCount = 2; // 25 december, 26 december
+const weekendCount = 9;
+const workdayCount = dayCount - holidayCount - weekendCount;
+
+const weekendTemplate = {
+  month: month,
+  dayOfWeek: WeekDay.SU,
+  isPublicHoliday: false,
+};
+
+const holidayTemplate = {
+  month: month,
+  dayOfWeek: WeekDay.SU,
+  isPublicHoliday: true,
+};
+const workDayTemplate = {
+  month: month,
+  dayOfWeek: WeekDay.MO,
+  isPublicHoliday: false,
+};
+
+const weekends = [...Array.from(Array(weekendCount))].map((_) => weekendTemplate);
+const holidays = [...Array.from(Array(holidayCount))].map((_) => holidayTemplate);
+const workDays = [...Array.from(Array(workdayCount))].map((_) => workDayTemplate);
+const dates = [...weekends, ...holidays, ...workDays];
+const CaclulateWorkHoursInfoTestCases: CaclulateWorkHoursInfoTestData[] = [
+  {
+    dates: dates,
+    shifts: [
+      ShiftCode.D,
+      ShiftCode.PN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.D,
+      ShiftCode.N,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.N,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.D,
+      ShiftCode.N,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.D,
+      ShiftCode.W,
+    ],
+    workerNorm: 1,
+    expectedActualWorkHours: 268,
+    expectedRequiredHours: 160,
+  },
+  {
+    dates: dates,
+    shifts: [
+      ShiftCode.D,
+      ShiftCode.PN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.D,
+      ShiftCode.N,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.N,
+      ShiftCode.W,
+      ShiftCode.DN,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.D,
+      ShiftCode.N,
+      ShiftCode.U,
+      ShiftCode.U,
+      ShiftCode.U,
+      ShiftCode.U,
+    ],
+    workerNorm: 1,
+    expectedActualWorkHours: 256,
+    expectedRequiredHours: 128, // 160 - 4 vacation days
+  },
+];
+//#endregion
 
 describe("ShiftHelper", () => {
-  testCases.forEach((testCase) => {
+  GetWorkersCountTestCases.forEach((testCase) => {
     describe("getWorkersCount", () => {
       const shifts = Object.values(testCase.arr);
       it(`should return ${testCase.exp} for all days and array ${shifts}`, () => {
         const amount = ShiftHelper.getWorkersCount(testCase.arr);
         expect(amount).to.eql(testCase.exp);
+      });
+    });
+  });
+
+  CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
+    describe("caclulateWorkHoursInfo", () => {
+      const message = `${testCase.dates.length} ${testCase.shifts.length}  should calculate correct work hours for ${testCase.shifts}`;
+      it(message, () => {
+        const expectedOvertime = testCase.expectedActualWorkHours - testCase.expectedRequiredHours;
+        const hours = ShiftHelper.caclulateWorkHoursInfo(
+          testCase.shifts,
+          testCase.workerNorm,
+          testCase.dates,
+          month
+        );
+        expect(hours).to.eql([
+          testCase.expectedRequiredHours,
+          testCase.expectedActualWorkHours,
+          expectedOvertime,
+        ]);
       });
     });
   });

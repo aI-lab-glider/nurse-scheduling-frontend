@@ -21,7 +21,7 @@ export interface BaseSectionOptions {
   data?: DataRow[];
   cellComponent?: React.FC<BaseCellOptions>;
   rowComponent?: React.FC<ShiftRowOptions>;
-  sectionKey?: keyof Sections;
+  sectionKey: keyof Sections;
   onRowKeyClicked?: (rowIndex: number) => void;
 }
 

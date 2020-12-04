@@ -6,6 +6,9 @@ import { Sections } from "../providers/schedule-provider.model";
 import { DataRow } from "./data-row";
 import { BaseSectionLogic } from "./base-section-logic.model";
 import { ShiftsProvider } from "../providers/shifts-provider.model";
+import { MetadataLogic } from "./metadata.logic";
+import { TranslationHelper } from "../../helpers/tranlsations.helper";
+import { ShiftHelper } from "../../helpers/shifts.helper";
 
 export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider {
   get sectionKey(): keyof Sections {
@@ -16,7 +19,11 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
   private _availableWorkersWorkTime: { [nurseName: string]: number } = {};
   private _scheduleErrors: ScheduleError[] = [];
 
-  constructor(shiftSection: ShiftInfoModel = {}, private workerType: WorkerType) {
+  constructor(
+    shiftSection: ShiftInfoModel = {},
+    private workerType: WorkerType,
+    private metadata: MetadataLogic
+  ) {
     super();
     Object.keys(shiftSection).forEach((key) => {
       this.shifts[key] = new DataRow(key, shiftSection[key]);
@@ -30,6 +37,14 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
 
   get availableWorkersWorkTime(): { [key: string]: number } {
     return this._availableWorkersWorkTime;
+  }
+
+  public calculateWorkerHourInfo(workerName: string) {
+    const shifts = this.shifts[workerName].rowData(false, false) as ShiftCode[];
+    const workerNorm = this._availableWorkersWorkTime[workerName];
+    const verboseDate = this.metadata.verboseDates;
+    const currentMonth = TranslationHelper.englishMonths[this.metadata.monthNumber];
+    return ShiftHelper.caclulateWorkHoursInfo(shifts, workerNorm, verboseDate, currentMonth);
   }
 
   public get errors(): ScheduleError[] {

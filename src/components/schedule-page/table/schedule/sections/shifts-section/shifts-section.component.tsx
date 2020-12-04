@@ -16,7 +16,7 @@ import { Sections } from "../../../../../../logic/providers/schedule-provider.mo
 import { ShiftsInfoLogic } from "../../../../../../logic/schedule-logic/shifts-info.logic";
 import { AddWorkerModal } from "../../../../../common-components";
 
-export interface ShiftsSectionOptions extends BaseSectionOptions {
+export interface ShiftsSectionOptions extends Omit<BaseSectionOptions, "sectionKey"> {
   workerType: WorkerType;
 }
 
