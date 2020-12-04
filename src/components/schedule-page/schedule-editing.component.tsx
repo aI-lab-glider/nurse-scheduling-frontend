@@ -36,11 +36,13 @@ export function ScheduleEditingComponent(): JSX.Element {
             <div id={"edit-panel-text-container"}>
               <p>Tryb edycji aktywny</p>
             </div>
-            <Button variant="circle-outlined">
-              <RedoIcon className={"edit-icons"} />
-            </Button>
+
             <Button variant="circle-outlined">
               <UndoIcon className={"edit-icons"} />
+            </Button>
+
+            <Button variant="circle-outlined">
+              <RedoIcon className={"edit-icons"} />
             </Button>
 
             <Button size="small" className="submit-button" variant="outlined">
