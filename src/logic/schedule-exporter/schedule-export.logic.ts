@@ -27,13 +27,14 @@ export class ScheduleExportLogic {
     const headerRow = this.createHeader(this.scheduleModel);
     const datesSection = this.createDatesSection(this.scheduleModel);
     const childrenInfoSection = this.createChildrenInfoSection(this.scheduleModel);
+    const overtimeInfoHeader = this.createWorkHoursInfoHeader(childrenInfoSection[0].length);
     const [nurseShifts, babysitterShifts] = this.createShiftsSections(this.scheduleModel);
     const schedule = [
       headerRow,
       ...datesSection,
       EMPTY_ROW,
       ...childrenInfoSection,
-      EMPTY_ROW,
+      overtimeInfoHeader,
       ...nurseShifts,
       EMPTY_ROW,
       ...babysitterShifts,
@@ -154,6 +155,15 @@ export class ScheduleExportLogic {
         ...(scheduleModel.month_info?.children_number || []),
       ],
     ];
+  }
+
+  private createWorkHoursInfoHeader(startIndex: number): string[] {
+    const header = Array(startIndex + 3).fill("");
+
+    header[startIndex] = TranslationHelper.workHoursInfoHeader.requiredHours;
+    header[startIndex + 1] = TranslationHelper.workHoursInfoHeader.actualHours;
+    header[startIndex + 2] = TranslationHelper.workHoursInfoHeader.overtime;
+    return header;
   }
 
   private createDatesSection(scheduleModel: ScheduleDataModel): (number | MetaDataSectionKey)[][] {
