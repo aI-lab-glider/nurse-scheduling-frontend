@@ -1,7 +1,9 @@
 .btn {
   background: none;
   border: none;
-  padding: 5px 20px 5px;
+  padding: 5px 35px 5px;
+  margin: 5px 10px 0 10px;
+  white-space: nowrap;
   border-radius: $btn-border-radius;
   font-family: $btn-font-family;
   font-size: $btn-font-size-lg;
@@ -10,16 +12,15 @@
   letter-spacing: $btn-letter-spacing;
   text-align: $btn-text-align;
   transition: box-shadow 0.5s;
+
   &:hover {
     cursor: pointer;
     font-weight: 600;
     box-shadow: 1px 3px $gray-500;
   }
+
   &:focus {
     outline: none;
-  }
-  @media (max-width: 945px) {
-    line-height: 1.2;
   }
 }
 
@@ -35,6 +36,19 @@
 
 .btn-outlined {
   border: 1px solid $primary;
-  background-color: getColor();
+  background-color: $white;
   color: $primary;
+}
+
+.btn-circle-outlined {
+  padding: 0;
+  height: $btn-circle-outlined-size;
+  width: $btn-circle-outlined-size;
+  margin: auto 10px;
+  border-radius: 50%;
+  border: 1px solid $primary;
+  background-color: $white;
+  color: $primary;
+  display: flex;
+  justify-content: center;
 }
