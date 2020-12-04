@@ -10,9 +10,6 @@ export class ArrayHelper {
     }
     return array1.map((v, index: number) => [v, array2[index]]);
   }
-  public static arrayOfCount(count: number, element?: any): any[] {
-    return Array.from(Array(count)).map((x) => element ?? 0);
-  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static arrayToObject<TIn, TOut extends Record<string, any>>(

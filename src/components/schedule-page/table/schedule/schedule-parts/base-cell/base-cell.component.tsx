@@ -2,6 +2,8 @@ import React from "react";
 import { ColorHelper } from "../../../../../../helpers/colors/color.helper";
 import { CellColorSet } from "../../../../../../helpers/colors/cell-color-set.model";
 import { BaseCellInputComponent, BaseCellInputOptions } from "./base-cell-input.component";
+import { VerboseDate, WeekDay } from "../../../../../../common-models/month-info.model";
+import { TranslationHelper } from "../../../../../../helpers/tranlsations.helper";
 
 export enum CellManagementKeys {
   Enter = "Enter",
@@ -21,6 +23,8 @@ export interface BaseCellOptions {
   onValueChange?: (value: string) => void;
   onBlur?: () => void;
   input?: React.FC<BaseCellInputOptions>;
+  monthNumber?: number;
+  verboseDate?: VerboseDate;
 }
 
 export function BaseCellComponent({
@@ -36,6 +40,8 @@ export function BaseCellComponent({
   onClick,
   onBlur,
   input: InputComponent = BaseCellInputComponent,
+  monthNumber,
+  verboseDate,
 }: BaseCellOptions): JSX.Element {
   function handleContextMenu(e: React.MouseEvent): void {
     e.preventDefault();
@@ -52,21 +58,30 @@ export function BaseCellComponent({
     onValueChange && onValueChange(newValue);
   }
 
+  function getId(): string {
+    if (verboseDate && monthNumber) {
+      if (verboseDate.month !== TranslationHelper.englishMonths[monthNumber]) {
+        return "otherMonth";
+      }
+      if (
+        verboseDate.isPublicHoliday ||
+        verboseDate.dayOfWeek === WeekDay.SA ||
+        verboseDate.dayOfWeek === WeekDay.SU
+      ) {
+        return "weekend";
+      }
+    }
+    return "thisMonth";
+  }
   //  #region view
   return (
     <td
-      className="cell"
+      className="mainCell"
+      id={getId()}
       onClick={(): void => {
         !isBlocked && onClick && onClick();
       }}
       onContextMenu={handleContextMenu}
-      style={{
-        color: style.textColor.toString(),
-        backgroundColor:
-          isSelected || isPointerOn
-            ? ColorHelper.getHighlightColor().toString()
-            : style.backgroundColor.toString(),
-      }}
       onBlur={(e): void => {
         onBlur && onBlur();
       }}

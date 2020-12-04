@@ -2,11 +2,13 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 import { WorkerType } from "../../../../common-models/worker-info.model";
-import { EmptyRowComponent } from "./schedule-parts/empty-row.component";
-import { DateSectionComponent } from "./sections/date-section/date-section.component";
 import { ShiftsSectionComponent } from "./sections/shifts-section/shifts-section.component";
 import { ScheduleLogicContext, useScheduleState } from "./use-schedule-state";
 import { FoundationInfoComponent } from "./sections/foundation-info-section/foundation-info.component";
+import { TimeTableComponent } from "../../../timetable/timetable.component";
+import { NameTableComponent } from "../../../namestable/nametable.component";
+import { SummaryTableComponent } from "../../../summerytable/summarytable.component";
+import { TableMiddleLine } from "../../table-middleline";
 
 export function ScheduleComponent(): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
@@ -17,37 +19,119 @@ export function ScheduleComponent(): JSX.Element {
     setNewSchedule(scheduleModel);
   }, [scheduleModel, setNewSchedule]);
 
+  function isPresent(): boolean {
+    if (scheduleLocalState.isInitialized) {
+      const a = scheduleLocalState.dateSection?.length;
+      const b = scheduleLocalState.nurseShiftsSection?.length;
+      const c = scheduleLocalState.babysitterShiftsSection?.length;
+
+      if (a && b && b && c && a * b * c) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   return (
     <React.Fragment>
-      {scheduleLocalState.isInitialized && (
-        <table className="table">
+      {!isPresent() && (
+        <table>
+          <tbody>
+            <tr>
+              <td></td>
+              <td>
+                <div className="c" style={{ marginLeft: 126, marginTop: 20 }}>
+                  <TimeTableComponent />
+                </div>
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      )}
+      {isPresent() && (
+        <table style={{ margin: 20 }}>
           <tbody>
             <ScheduleLogicContext.Provider value={scheduleLogic}>
-              <DateSectionComponent
-                uuid={scheduleLocalState.uuid}
-                data={scheduleLocalState.dateSection}
-              />
-
-              <EmptyRowComponent />
-
-              <FoundationInfoComponent
-                uuid={scheduleLocalState.uuid}
-                data={scheduleLocalState.foundationInfoSection}
-              />
-
-              <ShiftsSectionComponent
-                uuid={scheduleLocalState.uuid}
-                workerType={WorkerType.NURSE}
-                data={scheduleLocalState.nurseShiftsSection}
-              />
-
-              <EmptyRowComponent />
-
-              <ShiftsSectionComponent
-                uuid={scheduleLocalState.uuid}
-                workerType={WorkerType.OTHER}
-                data={scheduleLocalState.babysitterShiftsSection}
-              />
+              <tr className="sectionContainer">
+                <td></td>
+                <td>
+                  <TimeTableComponent />
+                </td>
+                <td></td>
+              </tr>
+              <TableMiddleLine name={"Pielęgniarki"} />
+              <tr className="sectionContainer">
+                <td>
+                  <NameTableComponent
+                    uuid={scheduleLocalState.uuid}
+                    data={scheduleLocalState.nurseShiftsSection}
+                  />
+                </td>
+                <td>
+                  <table>
+                    <tbody className="table" id="mainTable">
+                      <ShiftsSectionComponent
+                        uuid={scheduleLocalState.uuid}
+                        workerType={WorkerType.NURSE}
+                        data={scheduleLocalState.nurseShiftsSection}
+                      />
+                    </tbody>
+                  </table>
+                </td>
+                <td className="summaryContainer">
+                  <SummaryTableComponent
+                    uuid={scheduleLocalState.uuid}
+                    data={scheduleLocalState.nurseShiftsSection}
+                  />
+                </td>
+              </tr>
+              <TableMiddleLine name={"Opiekunowie"} />
+              <tr className="sectionContainer">
+                <td>
+                  <NameTableComponent
+                    uuid={scheduleLocalState.uuid}
+                    data={scheduleLocalState.babysitterShiftsSection}
+                  />
+                </td>
+                <td>
+                  <table>
+                    <tbody className="table" id="mainTable">
+                      <ShiftsSectionComponent
+                        uuid={scheduleLocalState.uuid}
+                        workerType={WorkerType.OTHER}
+                        data={scheduleLocalState.babysitterShiftsSection}
+                      />
+                    </tbody>
+                  </table>
+                </td>
+                <td className="summaryContainer">
+                  <SummaryTableComponent
+                    uuid={scheduleLocalState.uuid}
+                    data={scheduleLocalState.babysitterShiftsSection}
+                  />
+                </td>
+              </tr>
+              <TableMiddleLine name={"Informacje"} />
+              <tr className="sectionContainer">
+                <td>
+                  <NameTableComponent
+                    uuid={scheduleLocalState.uuid}
+                    data={scheduleLocalState.foundationInfoSection}
+                  />
+                </td>
+                <td>
+                  <table>
+                    <tbody className="table" id="mainTable">
+                      <FoundationInfoComponent
+                        uuid={scheduleLocalState.uuid}
+                        data={scheduleLocalState.foundationInfoSection}
+                      />
+                    </tbody>
+                  </table>
+                </td>
+                <td></td>
+              </tr>
             </ScheduleLogicContext.Provider>
           </tbody>
         </table>
