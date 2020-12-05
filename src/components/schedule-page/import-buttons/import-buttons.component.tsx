@@ -1,4 +1,3 @@
-import ButtonGroup from "@material-ui/core/ButtonGroup";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Popper from "@material-ui/core/Popper";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
@@ -13,6 +12,8 @@ import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.re
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
 import { ScheduleExportLogic } from "../../../logic/schedule-exporter/schedule-export.logic";
 import { Button } from "../../common-components";
+import DropdownButtonsComponent from "../../common-components/dropdown-buttons/dropdown-buttons.component";
+import { ButtonData } from "../../common-components/dropdown-buttons/dropdown-buttons.component";
 
 export function ImportButtonsComponent(): JSX.Element {
   const DEFAULT_FILENAME = "grafik.xlsx";
@@ -25,6 +26,11 @@ export function ImportButtonsComponent(): JSX.Element {
     (state: ApplicationStateModel) => state.scheduleData?.present
   );
   const scheduleDipatcher = useDispatch();
+
+  const btnData1: ButtonData = { label: "Wczytaj", action: () => fileUpload.current?.click() };
+  const btnData2: ButtonData = { label: "Zapisz jako...", action: (): void => handleExport() };
+
+  const btnData = [btnData1, btnData2];
 
   useEffect(() => {
     if (scheduleModel) {
@@ -61,7 +67,7 @@ export function ImportButtonsComponent(): JSX.Element {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleToggle} ref={anchorRef}>
+      <Button variant="primary" onClick={handleToggle} ref={anchorRef}>
         Plik
         <ArrowDropDownIcon />
       </Button>
@@ -71,21 +77,18 @@ export function ImportButtonsComponent(): JSX.Element {
             setOpen(false);
           }}
         >
-          <ButtonGroup orientation="vertical">
-            <Button onClick={(): void => fileUpload.current?.click()}>
-              Wczytaj
-              <input
-                ref={fileUpload}
-                id="file-input"
-                data-cy="file-input"
-                onChange={(event): void => handleImport(event)}
-                style={{ display: "none" }}
-                type="file"
-                accept=".xlsx"
-              />
-            </Button>
-            <Button onClick={(): void => handleExport()}>Zapisz jako...</Button>
-          </ButtonGroup>
+          <div>
+            {DropdownButtonsComponent(btnData)}
+            <input
+              ref={fileUpload}
+              id="file-input"
+              data-cy="file-input"
+              onChange={(event): void => handleImport(event)}
+              style={{ display: "none" }}
+              type="file"
+              accept=".xlsx"
+            />
+          </div>
         </ClickAwayListener>
       </Popper>
     </div>
