@@ -3,6 +3,7 @@ import { MetaDataParser } from "./metadata.parser";
 import { DataRowHelper } from "../../helpers/data-row.helper";
 import { ChildrenSectionKey } from "../section.model";
 import { ChildrenInfoProvider } from "../providers/children-info-provider.model";
+import { StringHelper } from "../../helpers/string.helper";
 
 export class ChildrenInfoParser implements ChildrenInfoProvider {
   private readonly _sectionData: { [rowKey in ChildrenSectionKey]?: DataRowParser };
@@ -16,11 +17,8 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
   }
 
   public get registeredChildrenNumber(): number[] {
-    return (
-      this._sectionData[ChildrenSectionKey.RegisteredChildrenCount]
-        ?.rowData(true, false)
-        .map((i) => parseInt(i)) ?? []
-    );
+    const key = StringHelper.getRawValue(ChildrenSectionKey.RegisteredChildrenCount);
+    return this._sectionData[key]?.rowData(true, false).map((i) => parseInt(i)) ?? [];
   }
 
   public get sectionData(): DataRowParser[] {
@@ -28,7 +26,9 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
   }
 
   private isValidRow(row: DataRowParser): boolean {
-    const validKey = Object.values(ChildrenSectionKey).find((k) => k === row.rowKey);
+    const validKey = Object.values(ChildrenSectionKey).find((k) =>
+      StringHelper.areEquivalent(k, row.rowKey)
+    );
     return !!validKey;
   }
 }
