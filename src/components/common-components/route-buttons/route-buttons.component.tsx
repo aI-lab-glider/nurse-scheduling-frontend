@@ -4,7 +4,7 @@ import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
 import TabPanel from "@material-ui/lab/TabPanel";
 import { makeStyles } from "@material-ui/core/styles";
-import ScssVars from "../../../assets/styles/styles/custom/route-buttons.module.scss";
+import ScssVars from "../../../assets/styles/styles/custom/_route-buttons.module.scss";
 
 interface Tabs {
   label: string;

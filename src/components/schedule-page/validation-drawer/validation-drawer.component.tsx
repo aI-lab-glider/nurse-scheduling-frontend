@@ -8,6 +8,7 @@ import {
   ScheduleErrorMessageModel,
 } from "../../../common-models/schedule-error-message.model";
 import { Button } from "../../common-components";
+import { SpanErrors } from "./span-errors.component";
 
 export default function ValidationDrawerComponent(): JSX.Element {
   const [errors, setErrors] = useState<ScheduleErrorMessageModel[]>();
@@ -35,6 +36,7 @@ export default function ValidationDrawerComponent(): JSX.Element {
         Pokaż błędy
       </Button>
       <Drawer open={open} onClose={(): void => toggleDrawer(false)} anchor={"right"}>
+        <SpanErrors errors={errors} />
         <List>
           {errors?.map(
             (error, index): JSX.Element => (

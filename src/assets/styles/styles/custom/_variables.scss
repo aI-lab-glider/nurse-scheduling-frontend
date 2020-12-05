@@ -412,10 +412,10 @@ $select-coordinates: 50% -40px !default;
 $general-transition-time: 300ms !default;
 
 // Fonts
-
 $font-family-base: "Poppins", sans-serif !default;
 $font-family-alt: "Poppins", sans-serif !default;
-$font-family-table: "Roboto", sans-serif !default;
+$font-family-primary: "Roboto", sans-serif !default;
+$font-family-table: $font-family-primary;
 
 $font-size-dash: 0.875rem !default;
 
