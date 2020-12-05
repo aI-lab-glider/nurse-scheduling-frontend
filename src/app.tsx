@@ -9,7 +9,7 @@ import { ScheduleDataActionType } from "./state/reducers/schedule-data.reducer";
 import { ActionModel } from "./state/models/action.model";
 import { ScheduleDataModel } from "./common-models/schedule-data.model";
 
-function App(): JSX.Element {
+function App() {
   const scheduleDispatcher = useDispatch();
   useEffect(() => {
     if (process.env.REACT_APP_DEV_MODE === "true") {
