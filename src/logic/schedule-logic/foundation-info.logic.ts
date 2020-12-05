@@ -1,3 +1,4 @@
+import { WorkerType } from "../../common-models/worker-info.model";
 import { FoundationInfoProvider } from "../providers/foundation-info-provider.model";
 import { Sections } from "../providers/schedule-provider.model";
 import { FoundationSectionKey } from "../section.model";
@@ -20,8 +21,8 @@ export class FoundationInfoLogic
         FoundationSectionKey.ChildrenCount,
         this.sections.ChildrenInfo.registeredChildrenNumber
       ),
-      new DataRow(FoundationSectionKey.NurseCount, this.getWorkersCount()),
-      new DataRow(FoundationSectionKey.BabysittersCount, this.getWorkersCount()),
+      new DataRow(FoundationSectionKey.NurseCount, this.getWorkersCount(WorkerType.NURSE)),
+      new DataRow(FoundationSectionKey.BabysittersCount, this.getWorkersCount(WorkerType.OTHER)),
       new DataRow(
         FoundationSectionKey.ExtraWorkersCount,
         this.sections.ExtraWorkersInfo.extraWorkers
