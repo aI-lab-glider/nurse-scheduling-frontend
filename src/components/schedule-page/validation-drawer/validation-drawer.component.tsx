@@ -2,8 +2,6 @@ import { Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { ColorHelper } from "../../../helpers/colors/color.helper";
-import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import {
   ScheduleErrorLevel,
@@ -26,20 +24,6 @@ export default function ValidationDrawerComponent(): JSX.Element {
       setErrors(noErrorsFound);
     }
   }, [errorsReceived]);
-
-  function errorLevelInErrors(errorLevel: ScheduleErrorLevel): boolean {
-    return (errors && errors.filter((e) => e.level === errorLevel).length !== 0) ?? false;
-  }
-
-  function getColor(): string {
-    if (errorLevelInErrors(ScheduleErrorLevel.CRITICAL_ERROR)) {
-      return ErrorMessageHelper.getErrorColor(ScheduleErrorLevel.CRITICAL_ERROR).toString();
-    }
-    if (errorLevelInErrors(ScheduleErrorLevel.WARNING)) {
-      return ErrorMessageHelper.getErrorColor(ScheduleErrorLevel.WARNING).toString();
-    }
-    return ColorHelper.getDefaultColor().toString();
-  }
 
   function toggleDrawer(open: boolean): void {
     setOpen(open);

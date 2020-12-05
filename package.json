@@ -59,6 +59,7 @@
     "build": "npm build && npm electron-build",
     "start": "concurrently \"cross-env BROWSER=none npm run b-start\" \"node scripts/await.js && electron .\"",
     "lint": "eslint src/**/*.ts* cypress/**/*.ts*",
+    "lint-warn": "eslint src/**/*.ts* cypress/**/*.ts* --max-warnings=0",
     "cypress:open": "cypress open"
   },
   "devDependencies": {
@@ -87,7 +88,8 @@
       "plugin:cypress/recommended"
     ],
     "rules": {
-      "no-console": "warn"
+      "no-console": "warn",
+      "@typescript-eslint/no-non-null-assertion": "off"
     },
     "overrides": [
       {
@@ -142,7 +144,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run lint-warn"
     }
   },
   "lint-staged": {

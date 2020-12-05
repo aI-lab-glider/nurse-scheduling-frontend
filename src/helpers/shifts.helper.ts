@@ -64,16 +64,13 @@ export class ShiftHelper {
     });
     return grouped;
   }
-  public static isWorkingShift(shift: ShiftCode) {
-    return this.shiftCodeToWorkTime(shift) === 0;
-  }
 
   public static caclulateWorkHoursInfo(
     shifts: ShiftCode[],
     workerNorm: number,
     dates: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek" | "month">[],
     currentMonth: string
-  ) {
+  ): number[] {
     if (shifts.length !== dates.length) {
       throw Error("Shifts should be defined for each day");
     }
@@ -114,7 +111,7 @@ export class ShiftHelper {
       case ShiftCode.U:
         colorSet.backgroundColor = Colors.LIME_GREEN;
         break;
-      case (ShiftCode.P, ShiftCode.PN, ShiftCode.R, ShiftCode.W):
+      default:
         break;
     }
     return {
