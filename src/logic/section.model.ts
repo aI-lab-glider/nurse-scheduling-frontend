@@ -1,12 +1,12 @@
 export enum ChildrenSectionKey {
-  RegisteredChildrenCount = "liczba dzieci zarejestrowanych",
+  RegisteredChildrenCount = "Dzieci",
   HospitalizedChildrenCount = "liczba dzieci hospitalizowanych",
   VacationersChildrenCount = "liczba dzieci urlopowanych",
   ConsultedChildrenCount = "liczba dzieci konsultowanych",
 }
 
 export enum ExtraWorkersSectionKey {
-  ExtraWorkersCount = "pracownicy dzienni",
+  ExtraWorkersCount = "Pracownicy dzienni",
 }
 
 export class FoundationSectionKey {
@@ -17,10 +17,10 @@ export class FoundationSectionKey {
     return ExtraWorkersSectionKey.ExtraWorkersCount;
   }
   static get NurseCount(): string {
-    return "pielęgniarki";
+    return "Pielęgniarki";
   }
   static get BabysittersCount(): string {
-    return "opiekunki";
+    return "Opiekunowie";
   }
 }
 

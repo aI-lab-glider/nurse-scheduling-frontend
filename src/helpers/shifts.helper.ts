@@ -1,4 +1,4 @@
-import { WorkerInfoModel, WorkersInfoModel, WorkerType } from "../common-models/worker-info.model";
+import { WorkerType } from "../common-models/worker-info.model";
 import { ShiftCode, ShiftInfoModel } from "../common-models/shift-info.model";
 import { ArrayHelper } from "./array.helper";
 import { CellColorSet } from "./colors/cell-color-set.model";
@@ -6,9 +6,6 @@ import { ColorHelper } from "./colors/color.helper";
 import { Colors } from "./colors/color.model";
 import { VerboseDateHelper } from "./verbose-date.helper";
 import { VerboseDate } from "../common-models/month-info.model";
-import { DataRow } from "../logic/schedule-logic/data-row";
-import { ScheduleLogic } from "../logic/schedule-logic/schedule.logic";
-import { ShiftsInfoLogic } from "../logic/schedule-logic/shifts-info.logic";
 
 const WORK_HOURS_PER_DAY = 8;
 
@@ -67,16 +64,13 @@ export class ShiftHelper {
     });
     return grouped;
   }
-  public static isWorkingShift(shift: ShiftCode) {
-    return this.shiftCodeToWorkTime(shift) === 0;
-  }
 
   public static caclulateWorkHoursInfo(
     shifts: ShiftCode[],
     workerNorm: number,
     dates: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek" | "month">[],
     currentMonth: string
-  ) {
+  ): number[] {
     if (shifts.length !== dates.length) {
       throw Error("Shifts should be defined for each day");
     }
@@ -117,7 +111,7 @@ export class ShiftHelper {
       case ShiftCode.U:
         colorSet.backgroundColor = Colors.LIME_GREEN;
         break;
-      case (ShiftCode.P, ShiftCode.PN, ShiftCode.R, ShiftCode.W):
+      default:
         break;
     }
     return {

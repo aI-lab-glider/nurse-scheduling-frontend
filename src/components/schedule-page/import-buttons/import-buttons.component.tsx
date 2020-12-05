@@ -72,7 +72,7 @@ export function ImportButtonsComponent(): JSX.Element {
           }}
         >
           <ButtonGroup orientation="vertical">
-            <Button onClick={() => fileUpload.current?.click()}>
+            <Button onClick={(): void => fileUpload.current?.click()}>
               Wczytaj
               <input
                 ref={fileUpload}

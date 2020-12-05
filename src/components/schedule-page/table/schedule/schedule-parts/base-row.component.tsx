@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import { DirectionKey } from "../sections/base-section/base-section.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
@@ -53,6 +53,10 @@ export function BaseRowComponentF({
   }, [selectionMode]);
 
   const verboseDates = scheduleLogic?.sections.Metadata?.verboseDates;
+
+  const currMonthNumber = scheduleLogic?.sections.Metadata.monthNumber;
+
+  const numberOfDays = verboseDates?.length;
 
   const onContextMenu = useCallback(
     (cellIndex: number): void => {
@@ -112,19 +116,15 @@ export function BaseRowComponentF({
     setSelectionMode(false);
   }
 
-  const data = useMemo(() => dataRow.rowData(false), [dataRow]);
+  let data = dataRow.rowData(false);
+
+  if (numberOfDays && data.length !== numberOfDays) {
+    const diff = numberOfDays - data.length;
+    data = [...data, ...Array.from(Array(diff))];
+  }
+
   return (
-    <tr className="row">
-      {data.length !== 0 && (
-        <BaseCellComponent
-          index={0}
-          value={dataRow.rowKey || ""}
-          isSelected={false}
-          isBlocked={false}
-          isPointerOn={false}
-          onClick={(): void => onRowKeyClick && onRowKeyClick()}
-        />
-      )}
+    <tr className="row" id="mainRow">
       {data.map((cellData, cellIndex) => {
         return (
           <CellComponent
@@ -144,6 +144,8 @@ export function BaseRowComponentF({
             onContextMenu={(): void => onContextMenu(cellIndex)}
             onClick={(): void => onClick && onClick(cellIndex)}
             onBlur={(): void => onBlur && onBlur()}
+            monthNumber={currMonthNumber}
+            verboseDate={verboseDates?.[cellIndex]}
           />
         );
       })}

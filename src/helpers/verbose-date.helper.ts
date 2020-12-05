@@ -4,7 +4,10 @@ import { ColorHelper } from "./colors/color.helper";
 import { Colors } from "./colors/color.model";
 
 export class VerboseDateHelper {
-  static isWorkingDay(date: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek">) {
+  static isWorkingDay(date?: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek">): boolean {
+    if (!date) {
+      return false;
+    }
     return (
       !date.isPublicHoliday && !(date.dayOfWeek === WeekDay.SA || date.dayOfWeek === WeekDay.SU)
     );

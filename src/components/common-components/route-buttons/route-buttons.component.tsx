@@ -26,6 +26,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const StyledTab: any = withStyles((theme) => ({
   root: {
     textTransform: "none",

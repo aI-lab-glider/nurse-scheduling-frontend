@@ -5,32 +5,15 @@ context("Change shift", () => {
     cy.visit(Cypress.env("baseUrl"));
     cy.contains("Plik").click();
     cy.get('[data-cy="file-input"]').attachFile("example.xlsx");
-    cy.contains("pielęgniarka 1").parent().parent().children('td[class="cell"]').eq(1).as("cell");
+    cy.get("#cyTestedSection").children().children().children().eq(0).as("cell");
     cy.get("@cell").contains("DN");
   });
 
   it("Should be able to change shift using dropdown", () => {
     cy.get("@cell").click();
-    cy.contains("rano").click();
+    cy.contains("popołudnie").click();
 
     // https://github.com/cypress-io/cypress/issues/7413
-    cy.contains("pielęgniarka 1")
-      .parent()
-      .parent()
-      .children('td[class="cell"]')
-      .eq(1)
-      .contains("R");
-  });
-
-  it("Should be able to change shift using keyboard", () => {
-    cy.get("@cell").click().type("R{enter}");
-
-    // https://github.com/cypress-io/cypress/issues/7413
-    cy.contains("pielęgniarka 1")
-      .parent()
-      .parent()
-      .children('td[class="cell"]')
-      .eq(1)
-      .contains("R");
+    cy.get("#cyTestedSection").children().children().children().eq(0).contains("P");
   });
 });
