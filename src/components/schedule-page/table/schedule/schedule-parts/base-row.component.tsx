@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import { DirectionKey } from "../sections/base-section/base-section.component";
 import { ScheduleLogicContext } from "../use-schedule-state";
@@ -116,7 +116,7 @@ export function BaseRowComponentF({
     setSelectionMode(false);
   }
 
-  let data = useMemo(() => dataRow.rowData(false), [dataRow]);
+  let data = dataRow.rowData(false);
 
   if (numberOfDays && data.length !== numberOfDays) {
     const diff = numberOfDays - data.length;

@@ -70,7 +70,7 @@ export function ScheduleComponent(): JSX.Element {
                 </td>
                 <td>
                   <table>
-                    <tbody className="table" id="mainTable">
+                    <tbody className="table" id="cyTestedSection">
                       <ShiftsSectionComponent
                         uuid={scheduleLocalState.uuid}
                         workerType={WorkerType.NURSE}
@@ -97,7 +97,7 @@ export function ScheduleComponent(): JSX.Element {
                 </td>
                 <td>
                   <table>
-                    <tbody className="table" id="mainTable">
+                    <tbody className="table">
                       <ShiftsSectionComponent
                         uuid={scheduleLocalState.uuid}
                         workerType={WorkerType.OTHER}
@@ -124,7 +124,7 @@ export function ScheduleComponent(): JSX.Element {
                 </td>
                 <td>
                   <table>
-                    <tbody className="table" id="mainTable">
+                    <tbody className="table">
                       <FoundationInfoComponent
                         uuid={scheduleLocalState.uuid}
                         data={scheduleLocalState.foundationInfoSection}

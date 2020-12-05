@@ -17,7 +17,7 @@ context("Menu 'plik'", () => {
     it("Should be able to load and show the schedule", () => {
       cy.contains("Plik").click();
       cy.get('[data-cy="file-input"]').attachFile("example.xlsx");
-      cy.contains("Dni miesiąca");
+      cy.contains("Pielęgniarki");
     });
   });
 });

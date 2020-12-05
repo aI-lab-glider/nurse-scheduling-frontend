@@ -35,7 +35,7 @@ export function TimeTableSection(): JSX.Element {
 
   return (
     <React.Fragment>
-      <table className="table" id="mainTable">
+      <table className="table">
         <tbody>
           <ScheduleLogicContext.Provider value={scheduleLogic}>
             <TimeTableRow uuid={scheduleLocalState.uuid} dataRow={data} />
