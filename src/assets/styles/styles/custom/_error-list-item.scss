@@ -1,0 +1,38 @@
+.error-list-item {
+  border-radius: 2px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #c8dfff;
+  margin-left: 24px;
+  margin-right: 23px;
+  margin-top: 8px;
+}
+
+.red-rectangle {
+  border-radius: 4px;
+  width: 5px;
+  height: 44px;
+  position: absolute;
+  background-color: #c60000;
+  display: inline-flex;
+}
+
+.error-date {
+  color: #3c69a8;
+  size: 14px;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 10px;
+  display: inline-flex;
+  font-family: "Roboto";
+}
+
+.error-text {
+  color: #1d3557;
+  size: 13px;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-family: "Roboto";
+}

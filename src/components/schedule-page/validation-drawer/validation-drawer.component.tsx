@@ -9,6 +9,7 @@ import {
 } from "../../../common-models/schedule-error-message.model";
 import { Button } from "../../common-components";
 import { SpanErrors } from "./span-errors.component";
+import ErrorListItem from "./error-list-item.component";
 
 export default function ValidationDrawerComponent(): JSX.Element {
   const [errors, setErrors] = useState<ScheduleErrorMessageModel[]>();
@@ -49,6 +50,10 @@ export default function ValidationDrawerComponent(): JSX.Element {
             )
           )}
         </List>
+        <ErrorListItem />
+        <ErrorListItem />
+        <ErrorListItem />
+        <ErrorListItem />
       </Drawer>
     </div>
   );
