@@ -34,15 +34,13 @@ export default function DropdownButtonsComponent({ buttons, mainLabel }: Options
       </Button>
       <Popper open={open} anchorEl={anchorRef.current}>
         <ClickAwayListener onClickAway={handleClickAway}>
-          <ul>
+          <div className="dropdown-buttons-container">
             {buttons.map((item, index) => (
-              <li>
-                <Button variant="secondary" onClick={buttons[index].action}>
-                  {buttons[index].label}
-                </Button>
-              </li>
+              <Button variant="dropdown" onClick={buttons[index].action}>
+                {buttons[index].label}
+              </Button>
             ))}
-          </ul>
+          </div>
         </ClickAwayListener>
       </Popper>
     </div>
