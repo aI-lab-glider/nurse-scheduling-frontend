@@ -32,7 +32,7 @@ export default function DropdownButtonsComponent({ buttons, mainLabel }: Options
         {mainLabel}
         <ArrowDropDownIcon />
       </Button>
-      <Popper open={open} anchorEl={anchorRef.current}>
+      <Popper open={open} placement="bottom" anchorEl={anchorRef.current}>
         <div className="display-main-button">
           <Button variant="primary">
             {mainLabel}
