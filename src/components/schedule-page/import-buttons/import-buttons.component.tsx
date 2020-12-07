@@ -8,8 +8,10 @@ import { ScheduleError } from "../../../common-models/schedule-error.model";
 import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
 import { ScheduleExportLogic } from "../../../logic/schedule-exporter/schedule-export.logic";
-import DropdownButtonsComponent from "../../common-components/dropdown-buttons/dropdown-buttons.component";
-import { ButtonData } from "../../common-components/dropdown-buttons/dropdown-buttons.component";
+import {
+  ButtonData,
+  DropdownButtons,
+} from "../../common-components/dropdown-buttons/dropdown-buttons.component";
 
 export function ImportButtonsComponent(): JSX.Element {
   const DEFAULT_FILENAME = "grafik.xlsx";
@@ -57,7 +59,7 @@ export function ImportButtonsComponent(): JSX.Element {
 
   return (
     <div>
-      <DropdownButtonsComponent buttons={btnData} mainLabel="Plik"></DropdownButtonsComponent>
+      <DropdownButtons buttons={btnData} mainLabel="Plik" />
       <input
         ref={fileUpload}
         id="file-input"

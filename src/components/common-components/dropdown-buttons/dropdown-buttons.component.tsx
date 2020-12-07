@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Button } from "../button-component/button.component";
+import { Button, ButtonVariant } from "../button-component/button.component";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Popper from "@material-ui/core/Popper";
@@ -9,12 +9,17 @@ export interface ButtonData {
   action: () => void;
 }
 
-interface Options {
+interface DropdownOptions {
   buttons: ButtonData[];
   mainLabel: string;
+  variant?: ButtonVariant;
 }
 
-export default function DropdownButtonsComponent({ buttons, mainLabel }: Options): JSX.Element {
+export function DropdownButtons({
+  buttons,
+  mainLabel,
+  variant = "primary",
+}: DropdownOptions): JSX.Element {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
 
@@ -34,15 +39,15 @@ export default function DropdownButtonsComponent({ buttons, mainLabel }: Options
       </Button>
       <Popper open={open} placement="bottom" anchorEl={anchorRef.current}>
         <div className="display-main-button">
-          <Button variant="primary">
+          <Button variant={variant}>
             {mainLabel}
             <ArrowDropDownIcon />
           </Button>
         </div>
         <ClickAwayListener onClickAway={handleClickAway}>
           <div className="dropdown-buttons-container">
-            {buttons.map((item, index) => (
-              <Button onClick={buttons[index].action}>{buttons[index].label}</Button>
+            {buttons.map((item) => (
+              <Button onClick={item.action}>{item.label}</Button>
             ))}
           </div>
         </ClickAwayListener>
