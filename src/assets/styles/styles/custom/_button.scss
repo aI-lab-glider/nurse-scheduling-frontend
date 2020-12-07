@@ -52,29 +52,3 @@
   display: flex;
   justify-content: center;
 }
-
-.btn-dropdown {
-  border-radius: 0px;
-  &:hover {
-    cursor: pointer;
-    font-weight: 600;
-    box-shadow: 0px 0px;
-  }
-  float: left;
-  clear: left;
-  padding: 5px 7px 5px;
-  line-height: 20px;
-}
-
-.dropdown-buttons-container {
-  overflow: hidden;
-  border-bottom-left-radius: $btn-border-radius;
-  border-bottom-right-radius: $btn-border-radius;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
-  box-shadow: 0 2.8px 2.2px $gray-400, 0 6.7px 5.3px $gray-400;
-  position: relative;
-  top: -20px;
-  padding-bottom: 10px;
-  padding-top: 25px;
-}

@@ -33,6 +33,12 @@ export default function DropdownButtonsComponent({ buttons, mainLabel }: Options
         <ArrowDropDownIcon />
       </Button>
       <Popper open={open} anchorEl={anchorRef.current}>
+        <div className="display-main-button">
+          <Button variant="primary">
+            {mainLabel}
+            <ArrowDropDownIcon />
+          </Button>
+        </div>
         <ClickAwayListener onClickAway={handleClickAway}>
           <div className="dropdown-buttons-container">
             {buttons.map((item, index) => (
