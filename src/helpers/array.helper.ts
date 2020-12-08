@@ -1,4 +1,7 @@
 type Primitive = undefined | null | boolean | number | string | bigint | symbol;
+export type Comparator = number;
+export type Order = "asc" | "desc";
+
 export class ArrayHelper {
   public static zip<T1, T2>(
     array1: (T1 | null)[],
@@ -33,5 +36,15 @@ export class ArrayHelper {
       }
     }
     return true;
+  }
+
+  public static stableSort<T>(array: T[], comparator: (a: T, b: T) => Comparator): T[] {
+    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    return stabilizedThis.map((el) => el[0]);
   }
 }
