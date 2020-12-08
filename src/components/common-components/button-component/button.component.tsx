@@ -1,8 +1,9 @@
 import { ButtonProps } from "@material-ui/core";
 import React, { Ref } from "react";
 
+export type ButtonVariant = "primary" | "secondary" | "outlined" | "circle-outlined";
 export type ButtonOptions = Omit<ButtonProps, "variant"> & {
-  variant?: "primary" | "secondary" | "outlined" | "circle-outlined";
+  variant?: ButtonVariant;
 };
 
 export const Button = React.forwardRef(
