@@ -7,9 +7,24 @@ import { Button } from "../../common-components";
 import { WorkerData } from "../../../common-models/worker-info.model";
 import { Order } from "../../../helpers/array.helper";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
+import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 
 const useStyles = makeStyles(() =>
   createStyles({
+    label: {
+      color: ScssVars.primary,
+      fontWeight: "normal",
+      fontSize: ScssVars.fontSizeBase,
+      fontFamily: ScssVars.fontFamilyPrimary,
+      letterSpacing: ScssVars.headingLetterSpacing,
+    },
+    activeLabel: {
+      color: ScssVars.primary,
+      fontWeight: "bold",
+      fontSize: ScssVars.fontSizeBase,
+      fontFamily: ScssVars.fontFamilyPrimary,
+      letterSpacing: ScssVars.headingLetterSpacing,
+    },
     visuallyHidden: {
       border: 0,
       clip: "rect(0 0 0 0)",
@@ -25,9 +40,7 @@ const useStyles = makeStyles(() =>
 );
 
 interface EnhancedTableProps {
-  numSelected: number;
   onRequestSort: (event: React.MouseEvent<unknown>, property: keyof WorkerData) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
@@ -64,6 +77,7 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
               onClick={(event: React.MouseEvent<unknown>): void =>
                 createSortHandler(headCell.id, event)
               }
+              className={orderBy === headCell.id ? classes.activeLabel : classes.label}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -74,8 +88,8 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell align={"right"} colSpan={2}>
-          <Button variant="primary">Dodaj pracownika</Button>
+        <TableCell align={"right"}>
+          <Button variant="primary"> Dodaj pracownika</Button>
         </TableCell>
       </TableRow>
     </TableHead>
