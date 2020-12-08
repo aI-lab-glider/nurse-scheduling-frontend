@@ -125,6 +125,9 @@ function EnhancedTableHead(props: EnhancedTableProps): JSX.Element {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell align={"right"} colSpan={2}>
+          <Button variant="primary">Dodaj pracownika</Button>
+        </TableCell>
       </TableRow>
     </TableHead>
   );
@@ -184,15 +187,11 @@ export default function WorkersTab(): JSX.Element {
               const isItemSelected = isSelected(worker.name);
               return (
                 <TableRow key={worker.name} selected={isItemSelected}>
-                  <TableCell component="th" scope="row">
-                    {worker.name}
-                  </TableCell>
+                  <TableCell>{worker.name}</TableCell>
                   <TableCell align="left">{WorkerTypeHelper.translate(worker.type)}</TableCell>
                   <TableCell align="left">{worker.time}</TableCell>
                   <TableCell align="right">
                     <Button variant="primary">Edytuj</Button>
-                  </TableCell>
-                  <TableCell align="right">
                     <Button variant="outlined">Usuń</Button>
                   </TableCell>
                 </TableRow>
