@@ -11,6 +11,8 @@ $enable-print-styles: true !default;
 $primary-header-color: #1d3557 !default;
 $header-text-color: #ffffff !default;
 
+$babysitter-label-background: #ffd100 !default;
+$nurse-label-background: #c8dfff !default;
 // Color system
 $primary: #1d3557 !default;
 $secondary: #000000 !default;
@@ -518,7 +520,7 @@ $table-hover-bg: rgba($black, 0.075);
 $table-active-bg: $table-hover-bg !default;
 
 $table-border-width: $border-width !default;
-$table-border-color: $gray-300 !default;
+$table-border-color: #d5e6fe !default;
 
 $table-head-bg: $gray-200 !default;
 $table-head-color: $gray-700 !default;

@@ -8,9 +8,11 @@ import { WorkerData, WorkerTypeHelper } from "../../../common-models/worker-info
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { Button } from "../../common-components";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header-component";
 import { ArrayHelper, Comparator, Order } from "../../../helpers/array.helper";
+import { StringHelper } from "../../../helpers/string.helper";
+import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T): Comparator {
   if (b[orderBy] < a[orderBy]) {
@@ -25,23 +27,27 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T): Comparator {
 function getComparator<Key extends number | string | symbol>(
   order: Order,
   orderBy: Key
-): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
+): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => Comparator {
   return order === "desc"
     ? (a, b): Comparator => descendingComparator(a, b, orderBy)
     : (a, b): Comparator => -descendingComparator(a, b, orderBy);
 }
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
+      paddingTop: 0,
       width: "100%",
     },
-    paper: {
-      width: "100%",
-      marginBottom: theme.spacing(2),
+    tableCell: {
+      color: ScssVars.primary,
+      fontWeight: "normal",
+      fontSize: ScssVars.fontSizeBase,
+      fontFamily: ScssVars.fontFamilyPrimary,
+      letterSpacing: ScssVars.headingLetterSpacing,
     },
-    table: {
-      minWidth: 750,
+    row: {
+      borderTop: "2px solid #D5E6FE",
     },
   })
 );
@@ -69,32 +75,43 @@ export default function WorkersTab(): JSX.Element {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   }
-
   return (
-    <TableContainer className={classes.root}>
-      <Table className={classes.table}>
-        <EnhancedTableHeaderComponent
-          order={order}
-          orderBy={orderBy}
-          onRequestSort={handleRequestSort}
-          rowCount={workerData.length}
-        />
-        <TableBody>
-          {ArrayHelper.stableSort(workerData, getComparator(order, orderBy)).map((worker) => {
-            return (
-              <TableRow key={worker.name}>
-                <TableCell>{worker.name}</TableCell>
-                <TableCell align="left">{WorkerTypeHelper.translate(worker.type)}</TableCell>
-                <TableCell align="left">{worker.time}</TableCell>
-                <TableCell align="right">
-                  <Button variant="primary">Edytuj</Button>
-                  <Button variant="outlined">Usuń</Button>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div className={"workers-table"}>
+      <TableContainer className={classes.root}>
+        <Table size={"small"}>
+          <EnhancedTableHeaderComponent
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+            rowCount={workerData.length}
+          />
+          <TableBody>
+            {ArrayHelper.stableSort(workerData, getComparator(order, orderBy)).map((worker) => {
+              return (
+                <TableRow key={worker.name} className={classes.row}>
+                  <TableCell className={classes.tableCell}>{worker.name}</TableCell>
+                  <TableCell className={classes.tableCell} align="left">
+                    <span className={`worker-label ${worker.type.toString().toLowerCase()}-label`}>
+                      {StringHelper.capitalize(WorkerTypeHelper.translate(worker.type))}
+                    </span>
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="left">
+                    {worker.time}
+                  </TableCell>
+                  <TableCell align="right">
+                    <Button variant="primary" className="action-button">
+                      Edytuj
+                    </Button>
+                    <Button variant="outlined" className="action-button">
+                      Usuń
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 }

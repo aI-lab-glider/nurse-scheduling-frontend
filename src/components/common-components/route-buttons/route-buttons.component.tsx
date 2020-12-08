@@ -23,6 +23,7 @@ const useStyles = makeStyles(() => ({
   tabStyle: {
     opacity: 1,
     outline: "none",
+    paddingTop: 5,
   },
 }));
 
@@ -86,7 +87,7 @@ export default function RouteButtonsComponent({ tabs }: { tabs: Tabs[] }): JSX.E
         </div>
 
         {tabs.map((tab) => (
-          <TabPanel value={tab.label} key={tab.label}>
+          <TabPanel value={tab.label} key={tab.label} className={classes.tabStyle}>
             {tab.component}
           </TabPanel>
         ))}

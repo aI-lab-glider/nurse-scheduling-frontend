@@ -7,7 +7,7 @@ export type ButtonOptions = Omit<ButtonProps, "variant"> & {
 };
 
 export const Button = React.forwardRef(
-  ({ variant = "primary", ...rest }: ButtonOptions, ref?: Ref<HTMLButtonElement>) => {
-    return <button {...rest} ref={ref} className={`btn btn-${variant}`} />;
+  ({ variant = "primary", className, ...rest }: ButtonOptions, ref?: Ref<HTMLButtonElement>) => {
+    return <button {...rest} ref={ref} className={`btn btn-${variant} ${className}`} />;
   }
 );
