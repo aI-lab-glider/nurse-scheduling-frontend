@@ -1,0 +1,20 @@
+[
+  {
+    "day":1,
+    "required":8,
+    "code":"WND",
+    "actual":5
+  },
+  {
+    "day":2,
+    "required":8,
+    "code":"WND",
+    "actual":0
+  },
+  {
+    "day":2,
+    "required":5,
+    "code":"WNN",
+    "actual":0
+  }
+]
