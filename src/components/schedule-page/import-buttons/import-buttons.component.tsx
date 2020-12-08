@@ -59,7 +59,7 @@ export function ImportButtonsComponent(): JSX.Element {
 
   return (
     <div>
-      <DropdownButtons buttons={btnData} mainLabel="Plik" />
+      <DropdownButtons buttons={btnData} mainLabel="Plik" variant="primary" />
       <input
         ref={fileUpload}
         id="file-input"

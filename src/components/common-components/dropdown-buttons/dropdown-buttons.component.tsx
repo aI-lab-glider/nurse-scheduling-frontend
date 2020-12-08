@@ -15,11 +15,7 @@ interface DropdownOptions {
   variant?: ButtonVariant;
 }
 
-export function DropdownButtons({
-  buttons,
-  mainLabel,
-  variant = "primary",
-}: DropdownOptions): JSX.Element {
+export function DropdownButtons({ buttons, mainLabel, variant }: DropdownOptions): JSX.Element {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
 
@@ -33,12 +29,16 @@ export function DropdownButtons({
 
   return (
     <div>
-      <Button variant="primary" onClick={handleToggle} ref={anchorRef}>
+      <Button variant={variant} onClick={handleToggle} ref={anchorRef}>
         {mainLabel}
         <ArrowDropDownIcon />
       </Button>
       <Popper open={open} placement="bottom" anchorEl={anchorRef.current}>
-        <div className="display-main-button">
+        <div
+          className={`${
+            variant === "outlined" ? "display-main-button-outlined" : "display-main-button"
+          }`}
+        >
           <Button variant={variant}>
             {mainLabel}
             <ArrowDropDownIcon />
