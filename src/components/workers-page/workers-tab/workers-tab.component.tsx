@@ -13,15 +13,16 @@ import { EnhancedTableHeaderComponent } from "./enhanced-table-header-component"
 import { ArrayHelper, Comparator, Order } from "../../../helpers/array.helper";
 import { StringHelper } from "../../../helpers/string.helper";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import classNames from "classnames/bind";
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T): Comparator {
   if (b[orderBy] < a[orderBy]) {
     return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
+  } else if (b[orderBy] > a[orderBy]) {
     return 1;
+  } else {
+    return 0;
   }
-  return 0;
 }
 
 function getComparator<Key extends number | string | symbol>(
@@ -47,7 +48,7 @@ const useStyles = makeStyles(() =>
       letterSpacing: ScssVars.headingLetterSpacing,
     },
     row: {
-      borderTop: "2px solid #D5E6FE",
+      borderTop: `2px solid ${ScssVars.workerTableBorderColor}`,
     },
   })
 );
@@ -76,9 +77,9 @@ export default function WorkersTab(): JSX.Element {
     setOrderBy(property);
   }
   return (
-    <div className={"workers-table"}>
+    <div className="workers-table">
       <TableContainer className={classes.root}>
-        <Table size={"small"}>
+        <Table size="small">
           <EnhancedTableHeaderComponent
             order={order}
             orderBy={orderBy}
@@ -91,7 +92,12 @@ export default function WorkersTab(): JSX.Element {
                 <TableRow key={worker.name} className={classes.row}>
                   <TableCell className={classes.tableCell}>{worker.name}</TableCell>
                   <TableCell className={classes.tableCell} align="left">
-                    <span className={`worker-label ${worker.type.toString().toLowerCase()}-label`}>
+                    <span
+                      className={classNames(
+                        "worker-label",
+                        `${worker.type.toString().toLowerCase()}-label`
+                      )}
+                    >
                       {StringHelper.capitalize(WorkerTypeHelper.translate(worker.type))}
                     </span>
                   </TableCell>

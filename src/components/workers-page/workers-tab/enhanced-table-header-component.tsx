@@ -8,6 +8,7 @@ import { WorkerData } from "../../../common-models/worker-info.model";
 import { Order } from "../../../helpers/array.helper";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import classNames from "classnames/bind";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -19,22 +20,7 @@ const useStyles = makeStyles(() =>
       letterSpacing: ScssVars.headingLetterSpacing,
     },
     activeLabel: {
-      color: ScssVars.primary,
       fontWeight: "bold",
-      fontSize: ScssVars.fontSizeBase,
-      fontFamily: ScssVars.fontFamilyPrimary,
-      letterSpacing: ScssVars.headingLetterSpacing,
-    },
-    visuallyHidden: {
-      border: 0,
-      clip: "rect(0 0 0 0)",
-      height: 1,
-      margin: -1,
-      overflow: "hidden",
-      padding: 0,
-      position: "absolute",
-      top: 20,
-      width: 1,
     },
   })
 );
@@ -69,27 +55,25 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell key={headCell.id} sortDirection={orderBy === headCell.id ? order : false}>
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={(event: React.MouseEvent<unknown>): void =>
-                createSortHandler(headCell.id, event)
-              }
-              className={orderBy === headCell.id ? classes.activeLabel : classes.label}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-        <TableCell align={"right"}>
-          <Button variant="primary"> Dodaj pracownika</Button>
+        {headCells.map((headCell) => {
+          const isActive = orderBy === headCell.id;
+          return (
+            <TableCell key={headCell.id} sortDirection={isActive ? order : false}>
+              <TableSortLabel
+                active={isActive}
+                direction={isActive ? order : "asc"}
+                onClick={(event: React.MouseEvent<unknown>): void =>
+                  createSortHandler(headCell.id, event)
+                }
+                className={classNames(classes.label, { [classes.activeLabel]: isActive })}
+              >
+                {headCell.label}
+              </TableSortLabel>
+            </TableCell>
+          );
+        })}
+        <TableCell align="right">
+          <Button variant="primary">Dodaj pracownika</Button>
         </TableCell>
       </TableRow>
     </TableHead>
