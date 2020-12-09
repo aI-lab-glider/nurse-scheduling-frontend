@@ -4,11 +4,11 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import { Button } from "../../common-components";
-import { WorkerData } from "../../../common-models/worker-info.model";
-import { Order } from "../../../helpers/array.helper";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import classNames from "classnames/bind";
+import { Order } from "../../../helpers/comparator-helper";
+import { WorkerInfoModel } from "../../../common-models/worker-info.model";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -26,14 +26,14 @@ const useStyles = makeStyles(() =>
 );
 
 interface EnhancedTableProps {
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof WorkerData) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof WorkerInfoModel) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
 }
 
 interface WorkerDataCell {
-  id: keyof WorkerData;
+  id: keyof WorkerInfoModel;
   label: string;
   numeric: boolean;
 }
@@ -48,7 +48,10 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
   const classes = useStyles();
   const { order, orderBy, onRequestSort } = props;
 
-  function createSortHandler(property: keyof WorkerData, event: React.MouseEvent<unknown>): void {
+  function createSortHandler(
+    property: keyof WorkerInfoModel,
+    event: React.MouseEvent<unknown>
+  ): void {
     onRequestSort(event, property);
   }
 
