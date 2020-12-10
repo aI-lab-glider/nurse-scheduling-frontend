@@ -1,15 +1,24 @@
 import React from "react";
 import { Button } from "../../common-components";
+import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
 
-export default function ErrorListItem(): JSX.Element {
+interface Options {
+  error: ScheduleErrorMessageModel;
+}
+
+export default function ErrorListItem({ error }: Options): JSX.Element {
   return (
     <div className="error-list-item">
       <div className="red-rectangle"></div>
-      <span className="error-date">10 października</span>
-      <span className="error-text">Riley meows in the middle of the night</span>
-      <Button variant="primary" style={{ transform: "scale(0.8)", float: "right" }}>
-        Pokaż
-      </Button>
+      <div className="error-date">
+        <p className="error-date-content">10 października</p>
+      </div>
+      <div className="error-text">{error.message}</div>
+      <div className="error-btn">
+        <Button variant="primary" id="error-buttons" style={{ width: "90px", height: "26px" }}>
+          Pokaż
+        </Button>
+      </div>
     </div>
   );
 }

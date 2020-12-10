@@ -1,5 +1,4 @@
-import { Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import { Drawer } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
@@ -38,22 +37,11 @@ export default function ValidationDrawerComponent(): JSX.Element {
       </Button>
       <Drawer open={open} onClose={(): void => toggleDrawer(false)} anchor={"right"}>
         <SpanErrors errors={errors} />
-        <List>
-          {errors?.map(
-            (error, index): JSX.Element => (
-              <ListItem key={index + error.message.slice(0, 5)}>
-                <ListItemIcon>
-                  <ErrorOutlineIcon />
-                </ListItemIcon>
-                <ListItemText primary={error.message} />
-              </ListItem>
-            )
-          )}
-        </List>
-        <ErrorListItem />
-        <ErrorListItem />
-        <ErrorListItem />
-        <ErrorListItem />
+        {errors?.map(
+          (error): JSX.Element => (
+            <ErrorListItem error={error} />
+          )
+        )}
       </Drawer>
     </div>
   );
