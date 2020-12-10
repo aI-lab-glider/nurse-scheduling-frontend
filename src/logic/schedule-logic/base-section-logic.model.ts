@@ -10,13 +10,8 @@ export abstract class BaseSectionLogic {
     return this.sectionData;
   }
 
-  updateDataRow(rowIndex: number, updateIndicies: number[], newValue: string): DataRow {
-    return DataRowHelper.updateDataRowsIndicies(
-      this.sectionData,
-      rowIndex,
-      updateIndicies,
-      newValue
-    );
+  updateDataRow(rowIndex: number, updateIndices: number[], newValue: string): DataRow {
+    return DataRowHelper.updateDataRowIndices(this.sectionData[rowIndex], updateIndices, newValue);
   }
   abstract get sectionData(): DataRow[];
   abstract set sectionData(dataRows: DataRow[]);

@@ -63,9 +63,8 @@ export class FoundationInfoLogic
   }
   updateDataRow(rowIndex: number, updateIndexes: number[], newValue: string): DataRow {
     if (this.rows[rowIndex].editable) {
-      this.rows[rowIndex].data = DataRowHelper.updateDataRowsIndicies(
-        this.sectionData,
-        rowIndex,
+      this.rows[rowIndex].data = DataRowHelper.updateDataRowIndices(
+        this.sectionData[rowIndex],
         updateIndexes,
         newValue
       );

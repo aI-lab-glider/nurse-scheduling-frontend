@@ -21,13 +21,12 @@ export class DataRowHelper {
       (key, row) => row
     );
   }
-  public static updateDataRowsIndicies(
-    dataRows: DataRow[],
-    rowIndex: number,
+  public static updateDataRowIndices(
+    dataRow: DataRow,
     updateIndexes: number[],
     newValue: string
   ): DataRow {
-    return dataRows[rowIndex].updateData((data) => {
+    return dataRow.updateData((data) => {
       updateIndexes.forEach((ind) => (data[ind] = newValue));
       return data;
     });
