@@ -1,3 +1,4 @@
+import { DataRowHelper } from "../../helpers/data-row.helper";
 import { Sections } from "../providers/schedule-provider.model";
 import { DataRow } from "./data-row";
 
@@ -10,10 +11,12 @@ export abstract class BaseSectionLogic {
   }
 
   updateDataRow(rowIndex: number, updateIndexes: number[], newValue: string): DataRow {
-    return this.sectionData[rowIndex].updateData((data) => {
-      updateIndexes.forEach((ind) => (data[ind] = newValue));
-      return data;
-    });
+    return DataRowHelper.updateDataRowsIndecies(
+      this.sectionData,
+      rowIndex,
+      updateIndexes,
+      newValue
+    );
   }
   abstract get sectionData(): DataRow[];
   abstract set sectionData(dataRows: DataRow[]);
