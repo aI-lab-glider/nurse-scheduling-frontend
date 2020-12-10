@@ -10,11 +10,11 @@ export abstract class BaseSectionLogic {
     return this.sectionData;
   }
 
-  updateDataRow(rowIndex: number, updateIndexes: number[], newValue: string): DataRow {
+  updateDataRow(rowIndex: number, updateIndicies: number[], newValue: string): DataRow {
     return DataRowHelper.updateDataRowsIndicies(
       this.sectionData,
       rowIndex,
-      updateIndexes,
+      updateIndicies,
       newValue
     );
   }
