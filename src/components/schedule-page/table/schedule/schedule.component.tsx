@@ -67,6 +67,7 @@ export function ScheduleComponent(): JSX.Element {
                 <td>
                   <NameTableComponent
                     uuid={scheduleLocalState.uuid}
+                    workerType={WorkerType.NURSE}
                     data={scheduleLocalState.nurseShiftsSection}
                   />
                 </td>
@@ -94,6 +95,7 @@ export function ScheduleComponent(): JSX.Element {
                 <td>
                   <NameTableComponent
                     uuid={scheduleLocalState.uuid}
+                    workerType={WorkerType.OTHER}
                     data={scheduleLocalState.babysitterShiftsSection}
                   />
                 </td>
@@ -121,6 +123,7 @@ export function ScheduleComponent(): JSX.Element {
                 <td>
                   <NameTableComponent
                     uuid={scheduleLocalState.uuid}
+                    workerType={WorkerType.OTHER}
                     data={scheduleLocalState.foundationInfoSection}
                   />
                 </td>
