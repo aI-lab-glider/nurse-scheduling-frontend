@@ -1,5 +1,4 @@
 import { ScheduleDataModel } from "../../common-models/schedule-data.model";
-import fs from "file-saver";
 import xlsx from "exceljs";
 import { ShiftCode } from "../../common-models/shift-info.model";
 import { MonthInfoLogic } from "../../logic/schedule-logic/month-info.logic";
@@ -173,8 +172,25 @@ export class ScheduleExportLogic {
   private saveToFile(workbook: xlsx.Workbook, filename: string): void {
     workbook.xlsx.writeBuffer().then((buffer) => {
       const blob = new Blob([buffer]);
-      fs.saveAs(blob, filename);
+      this.saveFileAs(blob, filename);
     });
+  }
+
+  private saveFileAs(blob, filename: string): void {
+    const anchor = document.createElement("a");
+
+    anchor.download = filename;
+    anchor.href = URL.createObjectURL(blob);
+
+    document.body.appendChild(anchor);
+
+    // eslint-disable-next-line
+    // @ts-ignore
+    if (window.Cypress) {
+      return;
+    }
+
+    anchor.click();
   }
 
   private shiftInfoLogics(

@@ -21,7 +21,16 @@ export class DataRowHelper {
       (key, row) => row
     );
   }
-
+  public static updateDataRowIndices(
+    dataRow: DataRow,
+    updateIndexes: number[],
+    newValue: string
+  ): DataRow {
+    return dataRow.updateData((data) => {
+      updateIndexes.forEach((ind) => (data[ind] = newValue));
+      return data;
+    });
+  }
   public static areDataRowsEqual(dataRow1: DataRow, dataRow2: DataRow): boolean {
     const rowData1 = dataRow1.rowData(true, true);
     const rowData2 = dataRow2.rowData(true, true);
