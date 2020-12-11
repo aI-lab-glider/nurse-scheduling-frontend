@@ -7,6 +7,7 @@ export function HeaderComponent(): JSX.Element {
     <>
       <div id={"header"}>
         <AssignmentIndIcon id={"AssignmentIndIcon"} />
+        <div className={"filler"} />
         <MonthSwitchComponent />
         <div className={"filler"} />
       </div>

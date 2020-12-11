@@ -7,7 +7,6 @@ import {
   ScheduleErrorLevel,
   ScheduleErrorMessageModel,
 } from "../../../common-models/schedule-error-message.model";
-import { Button } from "../../common-components";
 import { SpanErrors } from "./span-errors.component";
 
 export default function ValidationDrawerComponent(): JSX.Element {
@@ -24,6 +23,7 @@ export default function ValidationDrawerComponent(): JSX.Element {
     } else {
       setErrors(noErrorsFound);
     }
+    setOpen(true);
   }, [errorsReceived]);
 
   function toggleDrawer(open: boolean): void {
@@ -32,9 +32,6 @@ export default function ValidationDrawerComponent(): JSX.Element {
 
   return (
     <div>
-      <Button variant="outlined" onClick={(): void => toggleDrawer(true)}>
-        Pokaż błędy
-      </Button>
       <Drawer open={open} onClose={(): void => toggleDrawer(false)} anchor={"right"}>
         <SpanErrors errors={errors} />
         <List>
