@@ -1,4 +1,5 @@
-type Primitive = undefined | null | boolean | number | string | bigint | symbol;
+export type Primitive = undefined | null | boolean | number | string | bigint | symbol;
+
 export class ArrayHelper {
   public static zip<T1, T2>(
     array1: (T1 | null)[],

@@ -1,5 +1,4 @@
 // Global settings
-
 $enable-caret: true !default;
 $enable-rounded: true !default;
 $enable-shadows: true !default;
@@ -12,8 +11,10 @@ $enable-print-styles: true !default;
 $primary-header-color: #1d3557 !default;
 $header-text-color: #ffffff !default;
 
+$babysitter-label-background: #ffd100 !default;
+$nurse-label-background: #c8dfff !default;
+$worker-table-border-color: #d5e6fe !default;
 // Color system
-
 $primary: #1d3557 !default;
 $secondary: #000000 !default;
 $primary-text-color: $primary !default;
@@ -285,9 +286,6 @@ $grid-breakpoints: (
   xl: 1200px,
 );
 
-@include _assert-ascending($grid-breakpoints, "$grid-breakpoints");
-@include _assert-starts-at-zero($grid-breakpoints);
-
 // Grid containers
 //
 // Define the maximum width of `.container` for different screen sizes.
@@ -389,8 +387,8 @@ $box-shadow: 0 1px 20px 0px rgba(0, 0, 0, 0.1);
 $sidebar-box-shadow: 0px 2px 22px 0 rgba(0, 0, 0, 0.2), 0px 2px 30px 0 rgba(0, 0, 0, 0.35);
 
 $component-active-color: $white !default;
-$component-active-bg: theme-color("primary") !default;
-$component-active-border-color: theme-color("primary") !default;
+$component-active-bg: $primary !default;
+$component-active-border-color: $primary !default;
 
 $component-hover-color: $gray-300 !default;
 $component-hover-bg: $gray-300 !default;
@@ -523,7 +521,7 @@ $table-hover-bg: rgba($black, 0.075);
 $table-active-bg: $table-hover-bg !default;
 
 $table-border-width: $border-width !default;
-$table-border-color: $gray-300 !default;
+$table-border-color: #d5e6fe !default;
 
 $table-head-bg: $gray-200 !default;
 $table-head-color: $gray-700 !default;
@@ -678,23 +676,23 @@ $custom-control-indicator-checked-color: $component-active-color !default;
 $custom-control-indicator-checked-bg: $component-active-bg !default;
 $custom-control-indicator-checked-border-color: $component-active-border-color !default;
 $custom-control-indicator-checked-box-shadow: $custom-control-indicator-box-shadow !default;
-$custom-control-indicator-checked-disabled-bg: rgba(theme-color("primary"), 0.5);
+$custom-control-indicator-checked-disabled-bg: rgba($primary, 0.5);
 
 $custom-control-indicator-disabled-bg: $gray-200 !default;
 $custom-control-label-disabled-color: $gray-600 !default;
 
 $custom-checkbox-indicator-border-radius: $border-radius-sm !default;
-//$custom-checkbox-indicator-icon-checked:        str-replace(url("data:image/svg+xml !default;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E"), "#", "%23") !default;
+//$custom-checkbox-indicator-icon-checked:        str-replace(url("data:image/svg+xml !default;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E"), "#", "%23 !default;
 
 $custom-toggle-slider-bg: #ddd !default;
-$custom-toggle-checked-bg: theme-color("primary") !default;
+$custom-toggle-checked-bg: $primary !default;
 
 // Form validation
 
 $form-feedback-valid-bg: lighten($success, 15%);
-$form-feedback-valid-color: theme-color("success") !default;
+$form-feedback-valid-color: $success !default;
 $form-feedback-invalid-bg: lighten($warning, 15%);
-$form-feedback-invalid-color: theme-color("warning") !default;
+$form-feedback-invalid-color: $warning !default;
 
 // Allows for customizing button radius independently from global border radius
 
@@ -715,7 +713,7 @@ $noui-slider-connect-bg: $primary !default;
 $noui-slider-connect-disabled-bg: #b2b2b2 !default;
 
 $noui-handle-width: 15px !default;
-$noui-handle-bg: theme-color("primary") !default;
+$noui-handle-bg: $primary !default;
 $noui-handle-border: 0 !default;
 $noui-handle-border-radius: 100% !default;
 
@@ -747,13 +745,13 @@ $nav-pills-space-x: 1rem !default;
 
 $nav-pills-bg: $white;
 $nav-pills-border-width: 1px !default;
-$nav-pills-border-color: theme-color("primary") !default;
+$nav-pills-border-color: $primary !default;
 $nav-pills-border-radius: $border-radius !default;
 
-$nav-pills-link-color: theme-color("primary") !default;
-$nav-pills-link-hover-color: darken(theme-color("primary"), 5%);
-$nav-pills-link-active-color: color-yiq(theme-color("primary"));
-$nav-pills-link-active-bg: theme-color("primary") !default;
+$nav-pills-link-color: $primary !default;
+$nav-pills-link-hover-color: darken($primary, 5%);
+$nav-pills-link-active-color: $primary;
+$nav-pills-link-active-bg: $primary !default;
 $nav-pills-box-shadow: $btn-box-shadow !default;
 
 // Navbar
@@ -790,7 +788,6 @@ $navbar-light-color: rgba($black, 0.5);
 $navbar-light-hover-color: rgba($black, 0.7);
 $navbar-light-active-color: rgba($black, 0.9);
 $navbar-light-disabled-color: rgba($black, 0.3);
-$navbar-light-toggler-icon-bg: str-replace(url("data:image/svg+xml !default;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{$navbar-light-color}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23") !default;
 $navbar-light-toggler-border-color: transparent !default;
 $full-width: 100% !default;
 $navbar-padding: 10px 15px !default;
@@ -993,10 +990,10 @@ $datepicker-disabled-old-new-color: $gray-500 !default;
 $datepicker-header-cell-border-radius: $border-radius !default;
 
 $datepicker-active-color: $white !default;
-$datepicker-active-background: theme-color("primary") !default;
+$datepicker-active-background: $primary !default;
 $datepicker-active-box-shadow: none !default;
 
-$datepicker-range-background: theme-color("primary") !default;
+$datepicker-range-background: $primary !default;
 $datepicker-range-cell-focused-background: darken($datepicker-range-background, 5%);
 $datepicker-range-color: $white !default;
 $datepicker-range-highlighted-bg: $gray-200 !default;
@@ -1008,7 +1005,7 @@ $datepicker-highlighted-bg: $datepicker-active-background !default;
 // Footer
 
 $footer-link-font-size: 0.85rem !default;
-$footer-bg: theme-color("secondary") !default;
+$footer-bg: $secondary !default;
 $footer-color: $gray-600 !default;
 $footer-link-color: $gray-600 !default;
 $footer-link-hover-color: $gray-700 !default;

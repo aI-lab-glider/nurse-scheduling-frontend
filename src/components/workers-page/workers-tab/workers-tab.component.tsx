@@ -3,65 +3,137 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import { WorkerType, WorkerTypeHelper } from "../../../common-models/worker-info.model";
+import {
+  WorkerInfoModel,
+  WorkerType,
+  WorkerTypeHelper,
+} from "../../../common-models/worker-info.model";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { Button } from "../../common-components";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
+import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
+import { StringHelper } from "../../../helpers/string.helper";
+import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import classNames from "classnames/bind";
+import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
+import WorkerDrawerComponent, { WorkerDrawerMode } from "./worker-drawer.component";
 
-interface WorkerData {
-  name: string;
-  type: WorkerType;
-  time: number;
-}
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      paddingTop: 0,
+      width: "100%",
+    },
+    tableCell: {
+      color: ScssVars.primary,
+      fontWeight: "normal",
+      fontSize: ScssVars.fontSizeBase,
+      fontFamily: ScssVars.fontFamilyPrimary,
+      letterSpacing: ScssVars.headingLetterSpacing,
+    },
+    row: {
+      borderTop: `2px solid ${ScssVars.workerTableBorderColor}`,
+    },
+  })
+);
 
 export default function WorkersTab(): JSX.Element {
+  const classes = useStyles();
+  const [order, setOrder] = React.useState<Order>("asc");
+  const [orderBy, setOrderBy] = React.useState<keyof WorkerInfoModel>("name");
   const { type, time } = useSelector(
     (state: ApplicationStateModel) => state.scheduleData.present.employee_info
   );
-  const [workerData, setWorkerData] = useState([] as WorkerData[]);
+  const [workerData, setWorkerData] = useState([] as WorkerInfoModel[]);
+  const [open, setIsOpen] = useState(false);
+  const [mode, setMode] = useState(WorkerDrawerMode.ADD_NEW);
+  const [worker, setWorker] = useState<WorkerInfoModel | undefined>(undefined);
 
   useEffect(() => {
     const newWorkerData = Object.keys(type).map(
-      (key): WorkerData => {
+      (key): WorkerInfoModel => {
         return { name: key, type: type[key], time: time[key] };
       }
     );
     setWorkerData(newWorkerData);
   }, [type, time, setWorkerData]);
 
+  function handleRequestSort(
+    event: React.MouseEvent<unknown>,
+    property: keyof WorkerInfoModel
+  ): void {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  }
+
+  function toggleDrawer(
+    open: boolean,
+    mode?: WorkerDrawerMode,
+    workerData?: WorkerInfoModel
+  ): void {
+    setIsOpen(open);
+    mode !== undefined && setMode(mode);
+    setWorker(workerData);
+  }
+
   return (
-    <>
-      <Button variant="secondary">Stanowisko</Button>
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Imię i nazwisko</TableCell>
-              <TableCell align="left">Stanowisko</TableCell>
-              <TableCell align="left">Wymiar pracy</TableCell>
-            </TableRow>
-          </TableHead>
+    <div className="workers-table">
+      <TableContainer className={classes.root}>
+        <Table size="small">
+          <EnhancedTableHeaderComponent
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+            rowCount={workerData.length}
+            toggleDrawer={toggleDrawer}
+          />
           <TableBody>
-            {workerData.map((worker) => (
-              <TableRow key={worker.name}>
-                <TableCell component="th" scope="row">
-                  {worker.name}
-                </TableCell>
-                <TableCell align="left">{WorkerTypeHelper.translate(worker.type)}</TableCell>
-                <TableCell align="left">{worker.time}</TableCell>
-                <TableCell align="right">
-                  <Button variant="secondary">Edytuj</Button>
-                </TableCell>
-                <TableCell align="right">
-                  <Button variant="secondary">Usuń</Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {ComparatorHelper.stableSort(workerData, order, orderBy).map((worker) => {
+              const workerType = worker.type ?? WorkerType.NURSE;
+              return (
+                <TableRow key={worker.name} className={classes.row}>
+                  <TableCell className={classes.tableCell}>{worker.name}</TableCell>
+                  <TableCell className={classes.tableCell} align="left">
+                    <span
+                      className={classNames(
+                        "worker-label",
+                        `${workerType.toString().toLowerCase()}-label`
+                      )}
+                    >
+                      {StringHelper.capitalize(WorkerTypeHelper.translate(workerType))}
+                    </span>
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="left">
+                    {worker.time}
+                  </TableCell>
+                  <TableCell align="right">
+                    <Button
+                      variant="primary"
+                      className="action-button"
+                      onClick={(): void => toggleDrawer(true, WorkerDrawerMode.EDIT, worker)}
+                    >
+                      Edytuj
+                    </Button>
+                    <Button variant="outlined" className="action-button">
+                      Usuń
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+      <WorkerDrawerComponent
+        open={open}
+        onClose={(): void => toggleDrawer(false)}
+        mode={mode}
+        worker={worker}
+        setOpen={setIsOpen}
+      />
+    </div>
   );
 }

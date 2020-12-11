@@ -22,4 +22,5 @@ export interface WorkersInfoModel {
 export interface WorkerInfoModel {
   name: string;
   time: number;
+  type?: WorkerType;
 }
