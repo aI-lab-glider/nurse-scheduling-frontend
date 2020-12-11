@@ -35,7 +35,7 @@ context("Work hours info (summary table)", () => {
       cy.get("#cyTestedSection").children().children().children().eq(4).contains("DN");
     });
 
-    it("Should have the same number of required hours", () => {
+    it("Should not change the number of required hours", () => {
       requiredHoursCell().contains(initialWorkHours.required);
     });
 
@@ -57,7 +57,7 @@ context("Work hours info (summary table)", () => {
       cy.get("#cyTestedSection").children().children().children().eq(0).contains("U");
     });
 
-    it("Should have the same number of required hours", () => {
+    it("Should not change the number of required hours", () => {
       requiredHoursCell().contains(initialWorkHours.required);
     });
 
@@ -79,7 +79,7 @@ context("Work hours info (summary table)", () => {
       cy.get("#cyTestedSection").children().children().children().eq(16).contains("N");
     });
 
-    it("Should have the same number of required hours", () => {
+    it("Should not change the number of required hours", () => {
       requiredHoursCell().contains(initialWorkHours.required);
     });
 
