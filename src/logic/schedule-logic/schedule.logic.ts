@@ -91,18 +91,20 @@ export class ScheduleLogic implements ScheduleProvider {
     return [data, index];
   }
 
-  public updateRow(
-    sectionKey: string,
-    rowIndex: number,
-    updateIndexes: number[],
+  public updateSection(
+    sectionKey: keyof Sections,
+    selectionMatrix: boolean[][],
     newValue: string
-  ): void {
-    const newDataRow = Object.values(this.sections)
-      ?.find((provider) => provider.sectionKey === sectionKey)
-      ?.updateDataRow(rowIndex, updateIndexes, newValue);
-    if (newDataRow) {
+  ): boolean {
+    const section = Object.values(this.sections).find(
+      (provider) => provider.sectionKey === sectionKey
+    );
+    if (section) {
+      section.update(selectionMatrix, newValue);
       this.updateGlobalState();
+      return true;
     }
+    return false;
   }
 
   public addWorker(

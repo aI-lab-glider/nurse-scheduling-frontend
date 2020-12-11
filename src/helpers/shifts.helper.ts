@@ -44,6 +44,7 @@ export class ShiftHelper {
         return 0;
     }
   }
+
   public static groupShiftsByWorkerType(
     shifts: ShiftInfoModel = {},
     workerTypes: { [workerName: string]: WorkerType } = {}

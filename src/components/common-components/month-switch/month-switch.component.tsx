@@ -1,5 +1,5 @@
 import { IconButton } from "@material-ui/core";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { MdChevronRight, MdChevronLeft } from "react-icons/md";
 import React from "react";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
@@ -27,11 +27,11 @@ export function MonthSwitchComponent(options: MonthSwitchOpions): JSX.Element {
       {actualMonth && (
         <div id="month-switch">
           <IconButton className="arrow-button" size={arrowSize}>
-            <IoIosArrowBack />
+            <MdChevronLeft />
           </IconButton>
           <span>{actualMonth}</span>
           <IconButton className="arrow-button" size={arrowSize}>
-            <IoIosArrowForward />
+            <MdChevronRight />
           </IconButton>
         </div>
       )}

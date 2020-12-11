@@ -1,9 +1,4 @@
 body {
   color: $primary-background;
-  overflow-y: hidden;
-
-  #page_without_header {
-    height: 90vh;
-    overflow-y: scroll;
-  }
+  overflow-y: scroll;
 }

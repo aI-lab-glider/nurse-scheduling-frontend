@@ -10,9 +10,10 @@ export abstract class BaseSectionLogic {
     return this.sectionData;
   }
 
-  updateDataRow(rowIndex: number, updateIndices: number[], newValue: string): DataRow {
-    return DataRowHelper.updateDataRowIndices(this.sectionData[rowIndex], updateIndices, newValue);
+  update(selectionMatrix: boolean[][], newValue: string): void {
+    this.sectionData = DataRowHelper.copyWithReplaced(selectionMatrix, this.sectionData, newValue);
   }
+
   abstract get sectionData(): DataRow[];
   abstract set sectionData(dataRows: DataRow[]);
 }

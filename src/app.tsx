@@ -14,7 +14,7 @@ interface TabData {
   component: JSX.Element;
 }
 
-function App() {
+function App(): JSX.Element {
   const scheduleDispatcher = useDispatch();
   const [editMode, setEditMode] = useState<boolean>(false);
 
@@ -37,9 +37,7 @@ function App() {
       <div>
         <CustomGlobalHotKeys />
         <HeaderComponent />
-        <div id={"page_without_header"}>
-          <RouteButtonsComponent tabs={tabs} disabled={editMode} />
-        </div>
+        <RouteButtonsComponent tabs={tabs} disabled={editMode} />
       </div>
     </React.Fragment>
   );

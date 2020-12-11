@@ -7,7 +7,6 @@ export interface DrawerOptions extends DrawerProps {
   title: string;
   setOpen: (open: boolean) => void;
 }
-
 export default function Drawer(options: DrawerOptions): JSX.Element {
   const { title, setOpen, children, ...otherOptions } = options;
 

@@ -68,17 +68,19 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
   );
 
   return (
-    <React.Fragment>
-      <BaseSectionComponent
-        {...options}
-        key={uuid}
-        data={data}
-        sectionKey={sectionKey}
-        cellComponent={ShiftCellComponent}
-        rowComponent={ShiftRowComponent}
-        onRowKeyClicked={(rowIndex): void => openWorkerModal(data[rowIndex].rowKey)}
-      />
+    <>
+      <table>
+        <BaseSectionComponent
+          {...options}
+          key={uuid}
+          data={data}
+          sectionKey={sectionKey}
+          cellComponent={ShiftCellComponent}
+          rowComponent={ShiftRowComponent}
+          onRowKeyClicked={(rowIndex): void => openWorkerModal(data[rowIndex].rowKey)}
+        />
+      </table>
       {modal}
-    </React.Fragment>
+    </>
   );
 }

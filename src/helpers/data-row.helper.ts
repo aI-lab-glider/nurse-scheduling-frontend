@@ -21,6 +21,7 @@ export class DataRowHelper {
       (key, row) => row
     );
   }
+
   public static updateDataRowIndices(
     dataRow: DataRow,
     updateIndexes: number[],
@@ -31,6 +32,30 @@ export class DataRowHelper {
       return data;
     });
   }
+
+  public static copyWithReplaced(
+    booleanMatrix: boolean[][],
+    source: DataRow[],
+    newValue: string
+  ): DataRow[] {
+    const copy = source.map(DataRowHelper.deepCopy);
+    copy.forEach((row, rowInd) => {
+      row.updateData((data) =>
+        data.map((cellValue, cellInd) => {
+          if (booleanMatrix[rowInd][cellInd]) {
+            return newValue;
+          }
+          return cellValue;
+        })
+      );
+    });
+    return copy;
+  }
+
+  public static deepCopy(dataRow: DataRow): DataRow {
+    return new DataRow(dataRow.rowKey, [...dataRow.rowData(true)]);
+  }
+
   public static areDataRowsEqual(dataRow1: DataRow, dataRow2: DataRow): boolean {
     const rowData1 = dataRow1.rowData(true, true);
     const rowData2 = dataRow2.rowData(true, true);
