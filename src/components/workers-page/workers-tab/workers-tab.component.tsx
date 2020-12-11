@@ -13,11 +13,12 @@ import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { Button } from "../../common-components";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
-import { EnhancedTableHeaderComponent } from "./enhanced-table-header-component";
+import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
 import { StringHelper } from "../../../helpers/string.helper";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import classNames from "classnames/bind";
-import { ComparatorHelper, Order } from "../../../helpers/comparator-helper";
+import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
+import WorkerDrawerComponent, { WorkerDrawerMode } from "./worker-drawer.component";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -46,6 +47,9 @@ export default function WorkersTab(): JSX.Element {
     (state: ApplicationStateModel) => state.scheduleData.present.employee_info
   );
   const [workerData, setWorkerData] = useState([] as WorkerInfoModel[]);
+  const [open, setIsOpen] = useState(false);
+  const [mode, setMode] = useState(WorkerDrawerMode.ADD_NEW);
+  const [worker, setWorker] = useState<WorkerInfoModel | undefined>(undefined);
 
   useEffect(() => {
     const newWorkerData = Object.keys(type).map(
@@ -64,6 +68,17 @@ export default function WorkersTab(): JSX.Element {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   }
+
+  function toggleDrawer(
+    open: boolean,
+    mode?: WorkerDrawerMode,
+    workerData?: WorkerInfoModel
+  ): void {
+    setIsOpen(open);
+    mode !== undefined && setMode(mode);
+    setWorker(workerData);
+  }
+
   return (
     <div className="workers-table">
       <TableContainer className={classes.root}>
@@ -73,6 +88,7 @@ export default function WorkersTab(): JSX.Element {
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
             rowCount={workerData.length}
+            toggleDrawer={toggleDrawer}
           />
           <TableBody>
             {ComparatorHelper.stableSort(workerData, order, orderBy).map((worker) => {
@@ -94,7 +110,11 @@ export default function WorkersTab(): JSX.Element {
                     {worker.time}
                   </TableCell>
                   <TableCell align="right">
-                    <Button variant="primary" className="action-button">
+                    <Button
+                      variant="primary"
+                      className="action-button"
+                      onClick={(): void => toggleDrawer(true, WorkerDrawerMode.EDIT, worker)}
+                    >
                       Edytuj
                     </Button>
                     <Button variant="outlined" className="action-button">
@@ -107,6 +127,13 @@ export default function WorkersTab(): JSX.Element {
           </TableBody>
         </Table>
       </TableContainer>
+      <WorkerDrawerComponent
+        open={open}
+        onClose={(): void => toggleDrawer(false)}
+        mode={mode}
+        worker={worker}
+        setOpen={setIsOpen}
+      />
     </div>
   );
 }

@@ -7,8 +7,9 @@ import { Button } from "../../common-components";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import classNames from "classnames/bind";
-import { Order } from "../../../helpers/comparator-helper";
+import { Order } from "../../../helpers/comparator.helper";
 import { WorkerInfoModel } from "../../../common-models/worker-info.model";
+import { WorkerDrawerMode } from "./worker-drawer.component";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -30,6 +31,7 @@ interface EnhancedTableProps {
   order: Order;
   orderBy: string;
   rowCount: number;
+  toggleDrawer: (open: boolean, mode?: WorkerDrawerMode, workerData?: WorkerInfoModel) => void;
 }
 
 interface WorkerDataCell {
@@ -46,7 +48,7 @@ const headCells: WorkerDataCell[] = [
 
 export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Element {
   const classes = useStyles();
-  const { order, orderBy, onRequestSort } = props;
+  const { order, orderBy, onRequestSort, toggleDrawer } = props;
 
   function createSortHandler(
     property: keyof WorkerInfoModel,
@@ -76,7 +78,14 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
           );
         })}
         <TableCell align="right">
-          <Button variant="primary">Dodaj pracownika</Button>
+          <Button
+            variant="primary"
+            onClick={(): void => {
+              toggleDrawer(true, WorkerDrawerMode.ADD_NEW, undefined);
+            }}
+          >
+            Dodaj pracownika
+          </Button>
         </TableCell>
       </TableRow>
     </TableHead>
