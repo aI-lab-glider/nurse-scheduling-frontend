@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+const initialWorkHours = { required: 136, actual: 164, overtime: 28 };
+
 context("Work hours info (summary table)", () => {
   beforeEach(() => {
     cy.visit(Cypress.env("baseUrl"));
@@ -14,7 +16,7 @@ context("Work hours info (summary table)", () => {
       .children()
       .eq(0)
       .as("requiredHours");
-    cy.get("@requiredHours").contains(136);
+    cy.get("@requiredHours").contains(initialWorkHours.required);
 
     cy.get('[data-cy="summaryTable"]')
       .children()
@@ -23,7 +25,7 @@ context("Work hours info (summary table)", () => {
       .children()
       .eq(1)
       .as("actualHours");
-    cy.get("@actualHours").contains(164);
+    cy.get("@actualHours").contains(initialWorkHours.actual);
 
     cy.get('[data-cy="summaryTable"]')
       .children()
@@ -32,14 +34,8 @@ context("Work hours info (summary table)", () => {
       .children()
       .eq(2)
       .as("overtimeHours");
-    cy.get("@overtimeHours").contains(28);
+    cy.get("@overtimeHours").contains(initialWorkHours.overtime);
   });
-
-  // zmiana w tym miesiącu na większą zmianę dodaje godziny
-  // zmiana w zeszłym miesiącu nie wpływa na nic
-  // zmiana w tym miesiącu na mniejszą odejmuje
-
-  // required, actual, overtime
 
   describe("When changing current month shift from U to DN", () => {
     beforeEach(() => {
@@ -51,15 +47,33 @@ context("Work hours info (summary table)", () => {
     });
 
     it("Should have the same number of required hours", () => {
-      cy.get('[data-cy="summaryTable"]').children().children().eq(0).children().eq(0).contains(136);
+      cy.get('[data-cy="summaryTable"]')
+        .children()
+        .children()
+        .eq(0)
+        .children()
+        .eq(0)
+        .contains(initialWorkHours.required);
     });
 
     it("Should add 24 hours to actual hours", () => {
-      cy.get('[data-cy="summaryTable"]').children().children().eq(0).children().eq(1).contains(188);
+      cy.get('[data-cy="summaryTable"]')
+        .children()
+        .children()
+        .eq(0)
+        .children()
+        .eq(1)
+        .contains(initialWorkHours.actual + 24);
     });
 
     it("Should add 24 hours to overtime hours", () => {
-      cy.get('[data-cy="summaryTable"]').children().children().eq(0).children().eq(2).contains(52);
+      cy.get('[data-cy="summaryTable"]')
+        .children()
+        .children()
+        .eq(0)
+        .children()
+        .eq(2)
+        .contains(initialWorkHours.overtime + 24);
     });
   });
 
@@ -73,15 +87,33 @@ context("Work hours info (summary table)", () => {
     });
 
     it("Should have the same number of required hours", () => {
-      cy.get('[data-cy="summaryTable"]').children().children().eq(0).children().eq(0).contains(136);
+      cy.get('[data-cy="summaryTable"]')
+        .children()
+        .children()
+        .eq(0)
+        .children()
+        .eq(0)
+        .contains(initialWorkHours.required);
     });
 
     it("Should not change the number of actual hours", () => {
-      cy.get('[data-cy="summaryTable"]').children().children().eq(0).children().eq(1).contains(164);
+      cy.get('[data-cy="summaryTable"]')
+        .children()
+        .children()
+        .eq(0)
+        .children()
+        .eq(1)
+        .contains(initialWorkHours.actual);
     });
 
     it("Should not change the number of overtime hours", () => {
-      cy.get('[data-cy="summaryTable"]').children().children().eq(0).children().eq(2).contains(28);
+      cy.get('[data-cy="summaryTable"]')
+        .children()
+        .children()
+        .eq(0)
+        .children()
+        .eq(2)
+        .contains(initialWorkHours.overtime);
     });
   });
 
@@ -95,15 +127,33 @@ context("Work hours info (summary table)", () => {
     });
 
     it("Should have the same number of required hours", () => {
-      cy.get('[data-cy="summaryTable"]').children().children().eq(0).children().eq(0).contains(136);
+      cy.get('[data-cy="summaryTable"]')
+        .children()
+        .children()
+        .eq(0)
+        .children()
+        .eq(0)
+        .contains(initialWorkHours.required);
     });
 
     it("Should subtract 12 hours from actual hours", () => {
-      cy.get('[data-cy="summaryTable"]').children().children().eq(0).children().eq(1).contains(152);
+      cy.get('[data-cy="summaryTable"]')
+        .children()
+        .children()
+        .eq(0)
+        .children()
+        .eq(1)
+        .contains(initialWorkHours.actual - 12);
     });
 
     it("Should subtract 12 hours from overtime hours", () => {
-      cy.get('[data-cy="summaryTable"]').children().children().eq(0).children().eq(2).contains(16);
+      cy.get('[data-cy="summaryTable"]')
+        .children()
+        .children()
+        .eq(0)
+        .children()
+        .eq(2)
+        .contains(initialWorkHours.overtime - 12);
     });
   });
 });
