@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { BaseCellComponent, PivotCell } from "../../schedule-parts/base-cell/base-cell.component";
 import { BaseRowComponent } from "../../schedule-parts/base-row.component";
 import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
@@ -9,6 +9,7 @@ import { DataRowHelper } from "../../../../../../helpers/data-row.helper";
 import { ScheduleLogicContext } from "../../use-schedule-state";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
+import { useSelectionMatrix } from "./use-selection-matrix";
 
 export enum DirectionKey {
   ArrowRight = "ArrowRight",
@@ -18,7 +19,6 @@ export enum DirectionKey {
 }
 
 type PointerPosition = { row: number; cell: number };
-type SelectionMatrix = boolean[][];
 export interface BaseSectionOptions {
   uuid: string;
   data?: DataRow[];
@@ -71,45 +71,19 @@ function BaseSectionComponentF({
 
   function resetSelection(): void {
     setPointerPosition({ row: -1, cell: -1 });
-    setSelectionMatrix(getCopy(selectionMatrix));
+    resetSelectionMatrix();
   }
 
-  const [selectionMatrix, setSelectionMatrix] = useState(
-    data.map((c) => c.rowData().map((_) => false))
+  const { selectionMatrix, setSelectionMatrix, resetSelectionMatrix } = useSelectionMatrix(
+    data.map((d) => d.rowData())
   );
 
   function onDrag(pivot: PivotCell, rowInd: number, cellInd: number): void {
-    setSelectionMatrix((prev) =>
-      setSelectionSquare(prev, pivot.cellIndex, pivot.rowIndex, cellInd, rowInd)
-    );
+    setSelectionMatrix(selectionMatrix, pivot.cellIndex, pivot.rowIndex, cellInd, rowInd);
   }
-
-  function getCopy(source: SelectionMatrix): SelectionMatrix {
-    return [...Array(source.length)].map((_) => Array(source[0].length).fill(false));
-  }
-
-  const setSelectionSquare = useCallback(
-    (source: SelectionMatrix, x1: number, y1: number, x2: number, y2: number): SelectionMatrix => {
-      const selection = getCopy(source);
-      const [startX, endX] = x2 < x1 ? [x2, x1] : [x1, x2];
-      const [startY, endY] = y2 < y1 ? [y2, y1] : [y1, y2];
-      if (startX < 0 || startY < 0) {
-        return selection;
-      }
-      for (let y = startY; y <= endY; ++y) {
-        for (let x = startX; x <= endX; ++x) {
-          selection[y][x] = true;
-        }
-      }
-      return selection;
-    },
-    []
-  );
 
   function handleCellClick(rowInd: number, cellInd: number): void {
-    setSelectionMatrix((prev) => {
-      return setSelectionSquare(prev, cellInd, rowInd, cellInd, rowInd);
-    });
+    setSelectionMatrix(selectionMatrix, cellInd, rowInd, cellInd, rowInd);
     setPointerPosition({ row: rowInd, cell: cellInd });
   }
 
