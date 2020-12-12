@@ -10,7 +10,7 @@ export function OvertimeHeaderRowF({ data }: OvertimeHeaderRowOptions): JSX.Elem
   return (
     <tr className="row" id="summaryRow">
       {data.map((cellData) => {
-        return <OvertimeHeaderCell value={cellData} />;
+        return <OvertimeHeaderCell value={cellData} key={cellData} />;
       })}
     </tr>
   );
