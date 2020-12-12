@@ -1,15 +1,16 @@
 import React from "react";
-
+import { LineMiddle } from "../common-components/lineMiddle/lineMiddle";
 export interface TableMiddleLineOptions {
   name: string;
+  children: JSX.Element | JSX.Element[];
 }
 
-export function TableMiddleLine({ name }: TableMiddleLineOptions): JSX.Element {
+export function TableMiddleLine({ name, children }: TableMiddleLineOptions): JSX.Element {
   return (
     <tr className="middleSection">
       <td className="middleCell">
         <span>
-          {name} <span className="tick">&#10093;</span>
+          {name} <LineMiddle component={children} />
         </span>
       </td>
       <td colSpan={2}>

@@ -9,7 +9,7 @@ import { TimeTableComponent } from "../../../timetable/timetable.component";
 import { NameTableComponent } from "../../../namestable/nametable.component";
 import { SummaryTableComponent } from "../../../summerytable/summarytable.component";
 import { TableMiddleLine } from "../../table-middleline";
-
+import { LineMiddle } from "../../../common-components/lineMiddle/lineMiddle";
 export function ScheduleComponent(): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
 
@@ -40,9 +40,7 @@ export function ScheduleComponent(): JSX.Element {
             <tr>
               <td></td>
               <td>
-                <div className="c" style={{ marginLeft: 126, marginTop: 20 }}>
-                  <TimeTableComponent />
-                </div>
+                <div className="c" style={{ marginLeft: 126, marginTop: 20 }}></div>
               </td>
               <td></td>
             </tr>
@@ -60,80 +58,83 @@ export function ScheduleComponent(): JSX.Element {
                 </td>
                 <td></td>
               </tr>
-              <TableMiddleLine name={"Pielęgniarki"} />
-              <tr className="sectionContainer">
-                <td>
-                  <NameTableComponent
-                    uuid={scheduleLocalState.uuid}
-                    data={scheduleLocalState.nurseShiftsSection}
-                  />
-                </td>
-                <td>
-                  <table>
-                    <tbody className="table" id="cyTestedSection">
-                      <ShiftsSectionComponent
-                        uuid={scheduleLocalState.uuid}
-                        workerType={WorkerType.NURSE}
-                        data={scheduleLocalState.nurseShiftsSection}
-                      />
-                    </tbody>
-                  </table>
-                </td>
-                <td className="summaryContainer">
-                  <SummaryTableComponent
-                    uuid={scheduleLocalState.uuid}
-                    data={scheduleLocalState.nurseShiftsSection}
-                    workerType={WorkerType.NURSE}
-                  />
-                </td>
-              </tr>
-              <TableMiddleLine name={"Opiekunowie"} />
-              <tr className="sectionContainer">
-                <td>
-                  <NameTableComponent
-                    uuid={scheduleLocalState.uuid}
-                    data={scheduleLocalState.babysitterShiftsSection}
-                  />
-                </td>
-                <td>
-                  <table>
-                    <tbody className="table">
-                      <ShiftsSectionComponent
-                        uuid={scheduleLocalState.uuid}
-                        workerType={WorkerType.OTHER}
-                        data={scheduleLocalState.babysitterShiftsSection}
-                      />
-                    </tbody>
-                  </table>
-                </td>
-                <td className="summaryContainer">
-                  <SummaryTableComponent
-                    uuid={scheduleLocalState.uuid}
-                    data={scheduleLocalState.babysitterShiftsSection}
-                    workerType={WorkerType.OTHER}
-                  />
-                </td>
-              </tr>
-              <TableMiddleLine name={"Informacje"} />
-              <tr className="sectionContainer">
-                <td>
-                  <NameTableComponent
-                    uuid={scheduleLocalState.uuid}
-                    data={scheduleLocalState.foundationInfoSection}
-                  />
-                </td>
-                <td>
-                  <table>
-                    <tbody className="table">
-                      <FoundationInfoComponent
-                        uuid={scheduleLocalState.uuid}
-                        data={scheduleLocalState.foundationInfoSection}
-                      />
-                    </tbody>
-                  </table>
-                </td>
-                <td></td>
-              </tr>
+              <TableMiddleLine name={"Pielęgniarki"}>
+                <tr className="sectionContainer">
+                  <td>
+                    <NameTableComponent
+                      uuid={scheduleLocalState.uuid}
+                      data={scheduleLocalState.nurseShiftsSection}
+                    />
+                  </td>
+                  <td>
+                    <table>
+                      <tbody className="table" id="cyTestedSection">
+                        <ShiftsSectionComponent
+                          uuid={scheduleLocalState.uuid}
+                          workerType={WorkerType.NURSE}
+                          data={scheduleLocalState.nurseShiftsSection}
+                        />
+                      </tbody>
+                    </table>
+                  </td>
+                  <td className="summaryContainer">
+                    <SummaryTableComponent
+                      uuid={scheduleLocalState.uuid}
+                      data={scheduleLocalState.nurseShiftsSection}
+                      workerType={WorkerType.NURSE}
+                    />
+                  </td>
+                </tr>
+              </TableMiddleLine>
+              <TableMiddleLine name={"Opiekunowie"}>
+                <tr className="sectionContainer">
+                  <td>
+                    <NameTableComponent
+                      uuid={scheduleLocalState.uuid}
+                      data={scheduleLocalState.babysitterShiftsSection}
+                    />
+                  </td>
+                  <td>
+                    <table>
+                      <tbody className="table">
+                        <ShiftsSectionComponent
+                          uuid={scheduleLocalState.uuid}
+                          workerType={WorkerType.OTHER}
+                          data={scheduleLocalState.babysitterShiftsSection}
+                        />
+                      </tbody>
+                    </table>
+                  </td>
+                  <td className="summaryContainer">
+                    <SummaryTableComponent
+                      uuid={scheduleLocalState.uuid}
+                      data={scheduleLocalState.babysitterShiftsSection}
+                      workerType={WorkerType.OTHER}
+                    />
+                  </td>
+                </tr>
+              </TableMiddleLine>
+              <TableMiddleLine name={"Informacje"}>
+                <tr className="sectionContainer">
+                  <td>
+                    <NameTableComponent
+                      uuid={scheduleLocalState.uuid}
+                      data={scheduleLocalState.foundationInfoSection}
+                    />
+                  </td>
+                  <td>
+                    <table>
+                      <tbody className="table">
+                        <FoundationInfoComponent
+                          uuid={scheduleLocalState.uuid}
+                          data={scheduleLocalState.foundationInfoSection}
+                        />
+                      </tbody>
+                    </table>
+                  </td>
+                  <td></td>
+                </tr>
+              </TableMiddleLine>
             </ScheduleLogicContext.Provider>
           </tbody>
         </table>
