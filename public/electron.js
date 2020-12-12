@@ -9,7 +9,7 @@ let mainWindow;
 const env = dotenv.config().parsed;
 
 function createWindow() {
-    mainWindow = new BrowserWindow({show: false});
+    mainWindow = new BrowserWindow({show: false, minHeight: 500, minWidth: 1500});
     mainWindow.maximize();
     mainWindow.removeMenu();
     mainWindow.show();
