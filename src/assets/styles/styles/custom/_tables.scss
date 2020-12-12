@@ -36,6 +36,14 @@
       padding-top: 0.7%;
 
       border: 1px solid $table-border-color-grey;
+
+      &:first-child {
+        border-left: 0;
+      }
+
+      &:last-child {
+        border-right: 0;
+      }
     }
 
     .summaryCell {
@@ -49,6 +57,34 @@
 
       color: $cell-color;
       background: $white;
+
+      &:first-child {
+        border-left: 0;
+      }
+
+      &:last-child {
+        border-right: 0;
+      }
+    }
+
+    .overtimeHeaderCell {
+      padding-top: 100%;
+      padding-bottom: 100%;
+      align-content: center;
+      position: relative;
+      bottom: 25%;
+
+      height: 100%;
+      width: 100%;
+      border: 0.5px solid $table-border-color-grey;
+
+      &:first-child {
+        border-left: 0;
+      }
+
+      &:last-child {
+        border-right: 0;
+      }
     }
 
     #thisMonth {
@@ -75,6 +111,14 @@
       padding-bottom: 50%;
       width: 100%;
       border: 0.5px solid $table-border-color-grey;
+
+      &:first-child {
+        border-left: 0;
+      }
+
+      &:last-child {
+        border-right: 0;
+      }
     }
 
     #thisMonthHeader {
@@ -85,6 +129,11 @@
     #otherMonthHeader {
       color: $opacity-table-color-5;
       background: $opacity-table-background;
+    }
+
+    #weekendHeader {
+      color: $table-color;
+      background: $cell-weekend-header-background-color;
     }
 
     .cell-input {
@@ -118,6 +167,11 @@
 
 #mainTable {
   width: 1156px;
+}
+
+#overtimeHeaderTable {
+  width: 102px;
+  height: 74px;
 }
 
 span.tick {
@@ -178,5 +232,11 @@ span {
     font-family: $font-family-base;
     font-weight: 600;
     font-size: 16px;
+  }
+
+  &.rotated {
+    writing-mode: vertical-rl;
+    -ms-writing-mode: tb-lr;
+    transform: rotate(180deg);
   }
 }

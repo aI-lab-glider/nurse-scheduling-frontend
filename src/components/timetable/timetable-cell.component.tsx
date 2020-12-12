@@ -1,5 +1,5 @@
 import React from "react";
-import { VerboseDate } from "../../common-models/month-info.model";
+import { VerboseDate, WeekDay } from "../../common-models/month-info.model";
 import { TranslationHelper } from "../../helpers/tranlsations.helper";
 
 export interface TimeTableCellOptions {
@@ -9,10 +9,13 @@ export interface TimeTableCellOptions {
 
 function TimeTableCellF({ value, currMonth }: TimeTableCellOptions): JSX.Element {
   function getId(): string {
-    if (value.month === TranslationHelper.englishMonths[currMonth]) {
-      return "thisMonthHeader";
+    if (value.month !== TranslationHelper.englishMonths[currMonth]) {
+      return "otherMonthHeader";
     }
-    return "otherMonthHeader";
+    if (value.isPublicHoliday || value.dayOfWeek === WeekDay.SA || value.dayOfWeek === WeekDay.SU) {
+      return "weekendHeader";
+    }
+    return "thisMonthHeader";
   }
 
   function isToday(): [string, string] {

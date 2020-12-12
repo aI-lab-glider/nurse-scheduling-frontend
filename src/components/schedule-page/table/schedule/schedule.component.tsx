@@ -9,6 +9,7 @@ import { TimeTableComponent } from "../../../timetable/timetable.component";
 import { NameTableComponent } from "../../../namestable/nametable.component";
 import { SummaryTableComponent } from "../../../summerytable/summarytable.component";
 import { TableMiddleLine } from "../../table-middleline";
+import { OvertimeHeaderComponent } from "../../../overtime-header-table/overtime-header.component";
 
 export function ScheduleComponent(): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
@@ -38,13 +39,13 @@ export function ScheduleComponent(): JSX.Element {
         <table>
           <tbody>
             <tr>
-              <td></td>
+              <td />
               <td>
                 <div className="c" style={{ marginLeft: 126, marginTop: 20 }}>
                   <TimeTableComponent />
                 </div>
               </td>
-              <td></td>
+              <td />
             </tr>
           </tbody>
         </table>
@@ -54,11 +55,13 @@ export function ScheduleComponent(): JSX.Element {
           <tbody>
             <ScheduleLogicContext.Provider value={scheduleLogic}>
               <tr className="sectionContainer">
-                <td></td>
+                <td />
                 <td>
                   <TimeTableComponent />
                 </td>
-                <td></td>
+                <td className="summaryContainer">
+                  <OvertimeHeaderComponent data={["norma", "aktualne", "różnica"]} />
+                </td>
               </tr>
               <TableMiddleLine name={"Pielęgniarki"} />
               <tr className="sectionContainer">
@@ -132,7 +135,7 @@ export function ScheduleComponent(): JSX.Element {
                     </tbody>
                   </table>
                 </td>
-                <td></td>
+                <td />
               </tr>
             </ScheduleLogicContext.Provider>
           </tbody>
