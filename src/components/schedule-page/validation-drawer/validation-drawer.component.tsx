@@ -10,21 +10,21 @@ import {
 import { SpanErrors } from "./span-errors.component";
 
 export default function ValidationDrawerComponent(): JSX.Element {
-  const [errors, setErrors] = useState<ScheduleErrorMessageModel[]>();
+  const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
   const [open, setOpen] = useState<boolean>(false);
-  const errorsReceived = useSelector((state: ApplicationStateModel) => state.scheduleErrors);
+  const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state);
 
   useEffect(() => {
     const noErrorsFound = [
       { kind: "", message: "Nie znaleziono błędów", level: ScheduleErrorLevel.INFO },
     ];
-    if (errorsReceived?.length) {
-      setErrors(errorsReceived);
+    if (scheduleErrors?.length) {
+      setMappedErrors(scheduleErrors);
+      setOpen(true);
     } else {
-      setErrors(noErrorsFound);
+      setMappedErrors(noErrorsFound);
     }
-    setOpen(true);
-  }, [errorsReceived]);
+  }, [scheduleErrors]);
 
   function toggleDrawer(open: boolean): void {
     setOpen(open);
@@ -33,9 +33,9 @@ export default function ValidationDrawerComponent(): JSX.Element {
   return (
     <div>
       <Drawer open={open} onClose={(): void => toggleDrawer(false)} anchor={"right"}>
-        <SpanErrors errors={errors} />
+        <SpanErrors errors={mappedErrors} />
         <List>
-          {errors?.map(
+          {mappedErrors?.map(
             (error, index): JSX.Element => (
               <ListItem key={index + error.message.slice(0, 5)}>
                 <ListItemIcon>
