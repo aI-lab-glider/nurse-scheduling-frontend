@@ -5,10 +5,6 @@ import { Sections } from "../providers/schedule-provider.model";
 import { ChildrenSectionKey, ExtraWorkersSectionKey, FoundationSectionKey } from "../section.model";
 import { BaseSectionLogic } from "./base-section-logic.model";
 import { DataRow } from "./data-row";
-export interface FoundationInfoDataItem {
-  data: DataRow;
-  editable: boolean;
-}
 export class FoundationInfoLogic
   extends FoundationInfoProvider
   implements Omit<BaseSectionLogic, "addDataRow"> {
@@ -16,59 +12,50 @@ export class FoundationInfoLogic
     return "FoundationInfo";
   }
 
+  update(selectionMatrix: boolean[][], newValue: string): void {
+    this.sectionData = DataRowHelper.copyWithReplaced(selectionMatrix, this.sectionData, newValue);
+  }
+
   get childrenInfo(): number[] {
     return (
-      this.rows
-        .find((d) => d.data.rowKey === ChildrenSectionKey.RegisteredChildrenCount)
-        ?.data.rowData() ?? []
+      this.rows.find((d) => d.rowKey === ChildrenSectionKey.RegisteredChildrenCount)?.rowData() ??
+      []
     );
   }
   get extraWorkersInfo(): number[] {
     return (
-      this.rows
-        .find((d) => d.data.rowKey === ExtraWorkersSectionKey.ExtraWorkersCount)
-        ?.data.rowData() ?? []
+      this.rows.find((d) => d.rowKey === ExtraWorkersSectionKey.ExtraWorkersCount)?.rowData() ?? []
     );
   }
-  private rows: FoundationInfoDataItem[] = [
-    {
-      data: new DataRow(
-        FoundationSectionKey.ChildrenCount,
-        this.sections.ChildrenInfo.registeredChildrenNumber
-      ),
-      editable: true,
-    },
-    {
-      data: new DataRow(FoundationSectionKey.NurseCount, this.getWorkersCount(WorkerType.NURSE)),
-      editable: false,
-    },
-    {
-      data: new DataRow(
-        FoundationSectionKey.BabysittersCount,
-        this.getWorkersCount(WorkerType.OTHER)
-      ),
-      editable: false,
-    },
-    {
-      data: new DataRow(
-        FoundationSectionKey.ExtraWorkersCount,
-        this.sections.ExtraWorkersInfo.extraWorkers
-      ),
-      editable: true,
-    },
+
+  private rows: DataRow[] = [
+    new DataRow(
+      FoundationSectionKey.ExtraWorkersCount,
+      this.sections.ExtraWorkersInfo.extraWorkers
+    ),
+    new DataRow(
+      FoundationSectionKey.ChildrenCount,
+      this.sections.ChildrenInfo.registeredChildrenNumber
+    ),
+    new DataRow(
+      FoundationSectionKey.BabysittersCount,
+      this.getWorkersCount(WorkerType.OTHER),
+      false
+    ),
+    new DataRow(FoundationSectionKey.NurseCount, this.getWorkersCount(WorkerType.NURSE), false),
   ];
 
   get sectionData(): DataRow[] {
-    return this.rows.map((r) => r.data);
+    return this.rows;
   }
-  updateDataRow(rowIndex: number, updateIndexes: number[], newValue: string): DataRow {
-    if (this.rows[rowIndex].editable) {
-      this.rows[rowIndex].data = DataRowHelper.updateDataRowIndices(
-        this.sectionData[rowIndex],
-        updateIndexes,
-        newValue
-      );
-    }
-    return this.rows[rowIndex].data;
+
+  set sectionData(newValue: DataRow[]) {
+    this.rows = this.rows.map((row) => {
+      const newRow = newValue.find((nRow) => nRow.rowKey === row.rowKey);
+      if (!newRow || !row.isEditable) {
+        return row;
+      }
+      return newRow;
+    });
   }
 }

@@ -16,7 +16,6 @@
     flex-direction: row;
     align-items: center;
     padding: 0;
-
     position: static;
 
     //text
@@ -30,20 +29,40 @@
 
     .mainCell {
       flex: 1 1 auto;
-      align-items: center;
-      height: 103%;
-      width: 120%;
-      padding-top: 0.7%;
-
       border: 1px solid $table-border-color-grey;
-
-      &:first-child {
-        border-left: 0;
+      align-items: center;
+      width: 120%;
+      height: 103%;
+      cursor: cell;
+      &.blocked {
+        cursor: default !important;
       }
 
-      &:last-child {
-        border-right: 0;
+      & .content {
+        display: block;
+        height: 100% !important;
+        margin: 0px;
+        p {
+          padding: 20%;
+          height: 100%;
+        }
+        input {
+          margin: 1%;
+        }
       }
+    }
+
+    border: 1px solid $table-border-color-grey;
+
+    &:first-child {
+      border-left: 0;
+    }
+
+    &:last-child {
+      border-right: 0;
+    }
+    .selection {
+      background-color: $selection-color !important;
     }
 
     .summaryCell {

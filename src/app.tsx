@@ -37,9 +37,7 @@ function App(): JSX.Element {
       <div>
         <CustomGlobalHotKeys />
         <HeaderComponent />
-        <div id={"page_without_header"}>
-          <RouteButtonsComponent tabs={tabs} disabled={editMode} />
-        </div>
+        <RouteButtonsComponent tabs={tabs} disabled={editMode} />
       </div>
     </React.Fragment>
   );

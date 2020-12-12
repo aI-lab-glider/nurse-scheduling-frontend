@@ -12,7 +12,6 @@ type ShiftCellOptions = BaseCellOptions;
 export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
   const { onValueChange, value } = options;
   const shiftValue = getShiftCode(value);
-
   function _onValueChange(inputValue: string): void {
     onValueChange && onValueChange(getShiftCode(inputValue));
   }

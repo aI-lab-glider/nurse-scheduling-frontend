@@ -1,11 +1,15 @@
-import React, { useState } from "react";
-import { BaseCellComponent } from "../../schedule-parts/base-cell/base-cell.component";
+import React, { useContext, useState } from "react";
+import { BaseCellComponent, PivotCell } from "../../schedule-parts/base-cell/base-cell.component";
 import { BaseRowComponent } from "../../schedule-parts/base-row.component";
 import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
 import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
 import { BaseCellOptions } from "../../schedule-parts/base-cell/base-cell.component";
 import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
 import { DataRowHelper } from "../../../../../../helpers/data-row.helper";
+import { ScheduleLogicContext } from "../../use-schedule-state";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
+import { useSelectionMatrix } from "./use-selection-matrix";
 
 export enum DirectionKey {
   ArrowRight = "ArrowRight",
@@ -15,7 +19,6 @@ export enum DirectionKey {
 }
 
 type PointerPosition = { row: number; cell: number };
-
 export interface BaseSectionOptions {
   uuid: string;
   data?: DataRow[];
@@ -31,8 +34,8 @@ function BaseSectionComponentF({
   cellComponent = BaseCellComponent,
   rowComponent: RowComponent = BaseRowComponent,
   sectionKey,
-  onRowKeyClicked,
 }: BaseSectionOptions): JSX.Element {
+  const scheduleLogic = useContext(ScheduleLogicContext);
   const [pointerPosition, setPointerPosition] = useState<PointerPosition>({ row: -1, cell: -1 });
 
   function isInRange(position: PointerPosition): boolean {
@@ -55,8 +58,8 @@ function BaseSectionComponentF({
         newPosition = { row: pointerPosition.row, cell: pointerPosition.cell - 1 };
         break;
       case "Escape":
-        newPosition = { row: -1, cell: -1 };
-        break;
+        resetSelection();
+        return;
       default:
         return;
     }
@@ -65,29 +68,54 @@ function BaseSectionComponentF({
       setPointerPosition(newPosition);
     }
   }
-  function resetPointer(): void {
+
+  function resetSelection(): void {
     setPointerPosition({ row: -1, cell: -1 });
+    resetSelectionMatrix();
   }
+
+  const { selectionMatrix, setSelectionMatrix, resetSelectionMatrix } = useSelectionMatrix(
+    data.map((d) => d.rowData())
+  );
+
+  function onDrag(pivot: PivotCell, rowInd: number, cellInd: number): void {
+    setSelectionMatrix(selectionMatrix, pivot.cellIndex, pivot.rowIndex, cellInd, rowInd);
+  }
+
+  function handleCellClick(rowInd: number, cellInd: number): void {
+    setSelectionMatrix(selectionMatrix, cellInd, rowInd, cellInd, rowInd);
+    setPointerPosition({ row: rowInd, cell: cellInd });
+  }
+
+  function onSave(newValue: string): void {
+    scheduleLogic?.updateSection(sectionKey, selectionMatrix, newValue);
+    resetSelection();
+  }
+
   return (
-    <React.Fragment>
-      {data.map((dataRow, index) => (
+    <DndProvider backend={HTML5Backend}>
+      {data.map((dataRow, rowInd) => (
         <RowComponent
+          selection={selectionMatrix[rowInd]}
           uuid={uuid}
           sectionKey={sectionKey}
-          key={`${dataRow.rowKey}${index}_${uuid}`}
-          index={index + 1}
+          key={`${dataRow.rowKey}${rowInd}_${uuid}`}
+          index={rowInd}
           dataRow={dataRow}
-          showSelectedCells={pointerPosition.row === index}
           cellComponent={cellComponent}
-          resetPointer={resetPointer}
-          pointerPosition={pointerPosition.row === index ? pointerPosition.cell : -1}
+          pointerPosition={pointerPosition.row === rowInd ? pointerPosition.cell : -1}
           onKeyDown={movePointer}
-          onClick={(cellIndex): void => setPointerPosition({ row: index, cell: cellIndex })}
-          onRowKeyClick={(): void => onRowKeyClicked && onRowKeyClicked(index)}
-          onBlur={resetPointer}
+          onClick={(cellInd): void => handleCellClick(rowInd, cellInd)}
+          onDrag={(pivot, cellInd): void => onDrag(pivot, rowInd, cellInd)}
+          onDragEnd={(rowIndex, cellIndex): void =>
+            setPointerPosition({ row: rowIndex, cell: cellIndex })
+          }
+          onSave={(newValue): void => onSave(newValue)}
+          onBlur={resetSelection}
+          isEditable={dataRow.isEditable}
         />
       ))}
-    </React.Fragment>
+    </DndProvider>
   );
 }
 

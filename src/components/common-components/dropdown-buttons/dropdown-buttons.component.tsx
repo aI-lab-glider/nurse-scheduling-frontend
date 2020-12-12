@@ -47,7 +47,7 @@ export function DropdownButtons({ buttons, mainLabel, variant }: DropdownOptions
         <ClickAwayListener onClickAway={handleClickAway}>
           <div className="dropdown-buttons-container">
             {buttons.map((item) => (
-              <Button onClick={item.action} key={item.label}>
+              <Button key={item.label} onClick={item.action}>
                 {item.label}
               </Button>
             ))}

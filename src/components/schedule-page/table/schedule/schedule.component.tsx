@@ -25,7 +25,6 @@ export function ScheduleComponent(): JSX.Element {
       const a = scheduleLocalState.dateSection?.length;
       const b = scheduleLocalState.nurseShiftsSection?.length;
       const c = scheduleLocalState.babysitterShiftsSection?.length;
-
       if (a && b && b && c && a * b * c) {
         return true;
       }
