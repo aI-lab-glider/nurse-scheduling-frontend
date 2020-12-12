@@ -34,7 +34,7 @@ export function AutocompleteComponent<T>({
     open: true,
   });
   return (
-    <div>
+    <div data-cy="shiftDropdown">
       <div {...getRootProps()}>
         <input
           className={className}

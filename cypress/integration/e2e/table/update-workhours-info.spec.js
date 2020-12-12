@@ -4,48 +4,59 @@
 const nurseInitialWorkHours = { required: 136, actual: 164, overtime: 28 };
 const babysitterInitialWorkHours = { required: 80, actual: 108, overtime: 28 };
 
-function requiredHoursCell(workerType) {
-  if (workerType === "nurse") {
-    return cy.get('[data-cy="nurseSummaryTable"]').children().children().eq(0).children().eq(0);
-  }
-  if (workerType === "babysitter") {
-    return cy
-      .get('[data-cy="babysitterSummaryTable"]')
-      .children()
-      .children()
-      .eq(3)
-      .children()
-      .eq(0);
-  }
+const workerTypeToIdx = {
+  nurse: 0,
+  babysitter: 3,
+};
+
+function shiftCell(workerType, shiftIdx) {
+  return cy
+    .get(`[data-cy="${workerType}ShiftsTable"]`)
+    .children()
+    .eq(workerTypeToIdx[workerType])
+    .children()
+    .eq(shiftIdx)
+    .children();
 }
 
-function actualHoursCell(workerType) {
-  if (workerType === "nurse") {
-    return cy.get('[data-cy="nurseSummaryTable"]').children().children().eq(0).children().eq(1);
-  }
-  if (workerType === "babysitter") {
-    return cy
-      .get('[data-cy="babysitterSummaryTable"]')
-      .children()
-      .children()
-      .eq(3)
-      .children()
-      .eq(1);
-  }
+const cellTypeToIdx = {
+  required: 0,
+  actual: 1,
+  overtime: 2,
+};
+
+function hoursInfoCell(workerType, cellType) {
+  return cy
+    .get(`[data-cy="${workerType}SummaryTable"]`)
+    .children()
+    .children()
+    .eq(workerTypeToIdx[workerType])
+    .children()
+    .eq(cellTypeToIdx[cellType]);
 }
-function overtimeHoursCell(workerType) {
-  if (workerType === "nurse") {
-    return cy.get('[data-cy="nurseSummaryTable"]').children().children().eq(0).children().eq(2);
+
+function testWorkHoursInfoUpdate(testData) {
+  const cellData = [testData.workerType, testData.shiftIndex];
+
+  if (testData.initialShiftCode) {
+    shiftCell(...cellData).contains(testData.initialShiftCode);
+    shiftCell(...cellData).click();
+  } else {
+    shiftCell(...cellData)
+      .parent()
+      .click();
   }
-  if (workerType === "babysitter") {
-    return cy
-      .get('[data-cy="babysitterSummaryTable"]')
-      .children()
-      .children()
-      .eq(3)
-      .children()
-      .eq(2);
+  cy.get('[data-cy="shiftDropdown"]').contains(testData.desiredShiftText).click({ force: true });
+
+  if (testData.desiredShiftCode) {
+    shiftCell(...cellData).contains(testData.desiredShiftCode);
+  } else {
+    shiftCell(...cellData).should("be.empty");
   }
+
+  hoursInfoCell(testData.workerType, "required").contains(testData.expectedWorkHoursInfo.required);
+  hoursInfoCell(testData.workerType, "actual").contains(testData.expectedWorkHoursInfo.actual);
+  hoursInfoCell(testData.workerType, "overtime").contains(testData.expectedWorkHoursInfo.overtime);
 }
 
 context("Work hours info (summary table)", () => {
@@ -53,198 +64,286 @@ context("Work hours info (summary table)", () => {
     cy.visit(Cypress.env("baseUrl"));
     cy.contains("Plik").click();
     cy.get('[data-cy="file-input"]').attachFile("example.xlsx");
+  });
 
-    // doublecheck if initial conditions are as expected
-    requiredHoursCell("nurse").contains(nurseInitialWorkHours.required);
-    actualHoursCell("nurse").contains(nurseInitialWorkHours.actual);
-    overtimeHoursCell("nurse").contains(nurseInitialWorkHours.overtime);
+  // sanity check in case schedule in the docs gets changed and these tests start failing because of it
+  it("Has expected initial values of workHourInfo in example schedule", () => {
+    hoursInfoCell("nurse", "required").contains(nurseInitialWorkHours.required);
+    hoursInfoCell("nurse", "actual").contains(nurseInitialWorkHours.actual);
+    hoursInfoCell("nurse", "overtime").contains(nurseInitialWorkHours.overtime);
 
-    requiredHoursCell("babysitter").contains(babysitterInitialWorkHours.required);
-    actualHoursCell("babysitter").contains(babysitterInitialWorkHours.actual);
-    overtimeHoursCell("babysitter").contains(babysitterInitialWorkHours.overtime);
+    hoursInfoCell("babysitter", "required").contains(babysitterInitialWorkHours.required);
+    hoursInfoCell("babysitter", "actual").contains(babysitterInitialWorkHours.actual);
+    hoursInfoCell("babysitter", "overtime").contains(babysitterInitialWorkHours.overtime);
   });
 
   describe("For a nurse", () => {
-    describe("When changing current month shift from U to DN", () => {
-      beforeEach(() => {
-        cy.get("[data-cy=nurseShiftsTable]")
-          .children()
-          .children()
-          .children()
-          .eq(4)
-          .as("currentMonthU");
-        cy.get("@currentMonthU").contains("U");
-        cy.get("@currentMonthU").click();
-        cy.contains("dzień + noc").click();
-        cy.get("[data-cy=nurseShiftsTable]").children().children().children().eq(4).contains("DN");
+    describe("When D for current month weekday", () => {
+      it("Is added, should add 12 to actual and overtime hours and not change required", () => {
+        const data = {
+          workerType: "nurse",
+          shiftIndex: 21,
+          initialShiftCode: null,
+          desiredShiftText: "dzień",
+          desiredShiftCode: "D",
+          expectedWorkHoursInfo: {
+            required: nurseInitialWorkHours.required,
+            actual: nurseInitialWorkHours.actual + 12,
+            overtime: nurseInitialWorkHours.overtime + 12,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
       });
-
-      it("Should not change the number of required hours", () => {
-        requiredHoursCell("nurse").contains(nurseInitialWorkHours.required);
-      });
-
-      it("Should add 24 hours to actual hours", () => {
-        actualHoursCell("nurse").contains(nurseInitialWorkHours.actual + 24);
-      });
-
-      it("Should add 24 hours to overtime hours", () => {
-        overtimeHoursCell("nurse").contains(nurseInitialWorkHours.overtime + 24);
-      });
-    });
-
-    describe("When changing previous month shift from DN to U", () => {
-      beforeEach(() => {
-        cy.get("[data-cy=nurseShiftsTable]")
-          .children()
-          .children()
-          .children()
-          .eq(0)
-          .as("previousMonthDN");
-        cy.get("@previousMonthDN").contains("DN");
-        cy.get("@previousMonthDN").click();
-        cy.contains("urlop").click();
-        cy.get("[data-cy=nurseShiftsTable]").children().children().children().eq(0).contains("U");
-      });
-
-      it("Should not change the number of required hours", () => {
-        requiredHoursCell("nurse").contains(nurseInitialWorkHours.required);
-      });
-
-      it("Should not change the number of actual hours", () => {
-        actualHoursCell("nurse").contains(nurseInitialWorkHours.actual);
-      });
-
-      it("Should not change the number of overtime hours", () => {
-        overtimeHoursCell("nurse").contains(nurseInitialWorkHours.overtime);
+      it("Is removed, should subtract 12 from actual and overtime hours and not change required", () => {
+        const data = {
+          workerType: "nurse",
+          shiftIndex: 9,
+          initialShiftCode: "D",
+          desiredShiftText: "wolne",
+          desiredShiftCode: null,
+          expectedWorkHoursInfo: {
+            required: nurseInitialWorkHours.required,
+            actual: nurseInitialWorkHours.actual - 12,
+            overtime: nurseInitialWorkHours.overtime - 12,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
       });
     });
 
-    describe("When changing current month shift from DN to N", () => {
-      beforeEach(() => {
-        cy.get("[data-cy=nurseShiftsTable]")
-          .children()
-          .children()
-          .children()
-          .eq(16)
-          .as("currentMonthDN");
-        cy.get("@currentMonthDN").contains("DN");
-        cy.get("@currentMonthDN").click();
-        cy.contains("noc").click();
-        cy.get("[data-cy=nurseShiftsTable]").children().children().children().eq(16).contains("N");
+    describe("When U for current month weekday", () => {
+      it("Is added, should subtract 8 from required hours, add 8 to overtime and not change actual", () => {
+        const data = {
+          workerType: "nurse",
+          shiftIndex: 21,
+          initialShiftCode: null,
+          desiredShiftText: "urlop",
+          desiredShiftCode: "U",
+          expectedWorkHoursInfo: {
+            required: nurseInitialWorkHours.required - 8,
+            actual: nurseInitialWorkHours.actual,
+            overtime: nurseInitialWorkHours.overtime + 8,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
       });
+      it("Is removed, should add 8 to required hours, subtract 8 from overtime and not change actual", () => {
+        const data = {
+          workerType: "nurse",
+          shiftIndex: 6,
+          initialShiftCode: "U",
+          desiredShiftText: "wolne",
+          desiredShiftCode: null,
+          expectedWorkHoursInfo: {
+            required: nurseInitialWorkHours.required + 8,
+            actual: nurseInitialWorkHours.actual,
+            overtime: nurseInitialWorkHours.overtime - 8,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
+      });
+    });
 
-      it("Should not change the number of required hours", () => {
-        requiredHoursCell("nurse").contains(nurseInitialWorkHours.required);
+    describe("When L4 for current month weekday", () => {
+      it("Is added, should subtract 8 from required hours, add 8 to overtime and not change actual", () => {
+        const data = {
+          workerType: "nurse",
+          shiftIndex: 21,
+          initialShiftCode: null,
+          desiredShiftText: "L4",
+          desiredShiftCode: "L4",
+          expectedWorkHoursInfo: {
+            required: nurseInitialWorkHours.required - 8,
+            actual: nurseInitialWorkHours.actual,
+            overtime: nurseInitialWorkHours.overtime + 8,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
       });
+    });
 
-      it("Should subtract 12 hours from actual hours", () => {
-        actualHoursCell("nurse").contains(nurseInitialWorkHours.actual - 12);
+    describe("When U for current month weekend", () => {
+      it("Is added, should subtract 8 from required hours, add 8 to overtime and not change actual", () => {
+        const data = {
+          workerType: "nurse",
+          shiftIndex: 10,
+          initialShiftCode: null,
+          desiredShiftText: "urlop",
+          desiredShiftCode: "U",
+          expectedWorkHoursInfo: {
+            required: nurseInitialWorkHours.required - 8,
+            actual: nurseInitialWorkHours.actual,
+            overtime: nurseInitialWorkHours.overtime + 8,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
       });
+      it("Is removed, should add 8 to required hours, subtract 8 from overtime and not change actual", () => {
+        const data = {
+          workerType: "nurse",
+          shiftIndex: 4,
+          initialShiftCode: "U",
+          desiredShiftText: "wolne",
+          desiredShiftCode: null,
+          expectedWorkHoursInfo: {
+            required: nurseInitialWorkHours.required + 8,
+            actual: nurseInitialWorkHours.actual,
+            overtime: nurseInitialWorkHours.overtime - 8,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
+      });
+    });
 
-      it("Should subtract 12 hours from overtime hours", () => {
-        overtimeHoursCell("nurse").contains(nurseInitialWorkHours.overtime - 12);
-      });
+    it("When changing previous month shift from DN to U, shouldn't change work hours info at all", () => {
+      const data = {
+        workerType: "nurse",
+        shiftIndex: 0,
+        initialShiftCode: "DN",
+        desiredShiftText: "urlop",
+        desiredShiftCode: "U",
+        expectedWorkHoursInfo: {
+          required: nurseInitialWorkHours.required,
+          actual: nurseInitialWorkHours.actual,
+          overtime: nurseInitialWorkHours.overtime,
+        },
+      };
+      testWorkHoursInfoUpdate(data);
     });
   });
 
   describe("For a babysitter", () => {
-    describe("When changing current month shift from U to DN", () => {
-      beforeEach(() => {
-        cy.get("[data-cy=babysitterShiftsTable]")
-          .children()
-          .eq(3)
-          .children()
-          .eq(9)
-          .children()
-          .as("currentMonthU");
-        cy.get("@currentMonthU").contains("U");
-        cy.get("@currentMonthU").click();
-        cy.contains("dzień + noc").click();
-        cy.get("[data-cy=babysitterShiftsTable]")
-          .children()
-          .eq(3)
-          .children()
-          .eq(9)
-          .children()
-          .contains("DN");
+    describe("When N for current month weekday", () => {
+      it("Is added, should add 12 to actual and overtime hours and not change required", () => {
+        const data = {
+          workerType: "babysitter",
+          shiftIndex: 6,
+          initialShiftCode: null,
+          desiredShiftText: "noc",
+          desiredShiftCode: "N",
+          expectedWorkHoursInfo: {
+            required: babysitterInitialWorkHours.required,
+            actual: babysitterInitialWorkHours.actual + 12,
+            overtime: babysitterInitialWorkHours.overtime + 12,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
       });
-      it("Should not change the number of required hours", () => {
-        requiredHoursCell("babysitter").contains(babysitterInitialWorkHours.required);
-      });
-
-      it("Should add 24 to the number of actual hours", () => {
-        actualHoursCell("babysitter").contains(babysitterInitialWorkHours.actual + 24);
-      });
-
-      it("Should add 24 to the number of overtime hours", () => {
-        overtimeHoursCell("babysitter").contains(babysitterInitialWorkHours.overtime + 24);
-      });
-    });
-
-    describe("When changing previous month shift from DN to U", () => {
-      beforeEach(() => {
-        cy.get("[data-cy=babysitterShiftsTable]")
-          .children()
-          .eq(3)
-          .children()
-          .eq(3)
-          .children()
-          .as("previousMonthDN");
-        cy.get("@previousMonthDN").contains("DN");
-        cy.get("@previousMonthDN").click();
-        cy.contains("noc").click();
-        cy.get("[data-cy=babysitterShiftsTable]")
-          .children()
-          .eq(3)
-          .children()
-          .eq(3)
-          .children()
-          .contains("N");
-      });
-      it("Should not change the number of required hours", () => {
-        requiredHoursCell("babysitter").contains(babysitterInitialWorkHours.required);
-      });
-
-      it("Should not change the number of actual hours", () => {
-        actualHoursCell("babysitter").contains(babysitterInitialWorkHours.actual);
-      });
-
-      it("Should not change the number of overtime hours", () => {
-        overtimeHoursCell("babysitter").contains(babysitterInitialWorkHours.overtime);
+      it("Is removed, should subtract 12 from actual and overtime hours and not change required", () => {
+        const data = {
+          workerType: "babysitter",
+          shiftIndex: 5,
+          initialShiftCode: "N",
+          desiredShiftText: "wolne",
+          desiredShiftCode: null,
+          expectedWorkHoursInfo: {
+            required: babysitterInitialWorkHours.required,
+            actual: babysitterInitialWorkHours.actual - 12,
+            overtime: babysitterInitialWorkHours.overtime - 12,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
       });
     });
 
-    describe("When changing current month shift from DN to N", () => {
-      beforeEach(() => {
-        cy.get("[data-cy=babysitterShiftsTable]")
-          .children()
-          .eq(3)
-          .children()
-          .eq(30)
-          .children()
-          .as("currentMonthDN");
-        cy.get("@currentMonthDN").contains("DN");
-        cy.get("@currentMonthDN").click();
-        cy.contains("noc").click();
-        cy.get("[data-cy=babysitterShiftsTable]")
-          .children()
-          .eq(3)
-          .children()
-          .eq(30)
-          .children()
-          .contains("N");
+    describe("When U for current month weekday", () => {
+      it("Is added, should subtract 8 from required hours, add 8 to overtime and not change actual", () => {
+        const data = {
+          workerType: "babysitter",
+          shiftIndex: 6,
+          initialShiftCode: null,
+          desiredShiftText: "urlop",
+          desiredShiftCode: "U",
+          expectedWorkHoursInfo: {
+            required: babysitterInitialWorkHours.required - 8,
+            actual: babysitterInitialWorkHours.actual,
+            overtime: babysitterInitialWorkHours.overtime + 8,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
       });
-      it("Should not change the number of required hours", () => {
-        requiredHoursCell("babysitter").contains(babysitterInitialWorkHours.required);
+      it("Is removed, should add 8 to required hours, subtract 8 from overtime and not change actual", () => {
+        const data = {
+          workerType: "babysitter",
+          shiftIndex: 8,
+          initialShiftCode: "U",
+          desiredShiftText: "wolne",
+          desiredShiftCode: null,
+          expectedWorkHoursInfo: {
+            required: babysitterInitialWorkHours.required + 8,
+            actual: babysitterInitialWorkHours.actual,
+            overtime: babysitterInitialWorkHours.overtime - 8,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
       });
+    });
 
-      it("Should subtract 12 from the number of actual hours", () => {
-        actualHoursCell("babysitter").contains(babysitterInitialWorkHours.actual + 12);
+    describe("When L4 for current month weekday", () => {
+      it("Is added, should subtract 8 from required hours, add 8 to overtime and not change actual", () => {
+        const data = {
+          workerType: "babysitter",
+          shiftIndex: 6,
+          initialShiftCode: null,
+          desiredShiftText: "L4",
+          desiredShiftCode: "L4",
+          expectedWorkHoursInfo: {
+            required: babysitterInitialWorkHours.required - 8,
+            actual: babysitterInitialWorkHours.actual,
+            overtime: babysitterInitialWorkHours.overtime + 8,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
       });
+    });
 
-      it("Should subtract 12 from the number of overtime hours", () => {
-        overtimeHoursCell("babysitter").contains(babysitterInitialWorkHours.overtime + 12);
+    describe("When U for current month weekend", () => {
+      it("Is added, should subtract 8 from required hours, add 8 to overtime and not change actual", () => {
+        const data = {
+          workerType: "babysitter",
+          shiftIndex: 31,
+          initialShiftCode: null,
+          desiredShiftText: "urlop",
+          desiredShiftCode: "U",
+          expectedWorkHoursInfo: {
+            required: babysitterInitialWorkHours.required - 8,
+            actual: babysitterInitialWorkHours.actual,
+            overtime: babysitterInitialWorkHours.overtime + 8,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
       });
+      it("Is removed, should add 8 to required hours, subtract 8 from overtime and not change actual", () => {
+        const data = {
+          workerType: "babysitter",
+          shiftIndex: 10,
+          initialShiftCode: "U",
+          desiredShiftText: "wolne",
+          desiredShiftCode: null,
+          expectedWorkHoursInfo: {
+            required: babysitterInitialWorkHours.required + 8,
+            actual: babysitterInitialWorkHours.actual,
+            overtime: babysitterInitialWorkHours.overtime - 8,
+          },
+        };
+        testWorkHoursInfoUpdate(data);
+      });
+    });
+
+    it("When changing previous month shift from DN to U, shouldn't change work hours info at all", () => {
+      const data = {
+        workerType: "babysitter",
+        shiftIndex: 3,
+        initialShiftCode: "DN",
+        desiredShiftText: "urlop",
+        desiredShiftCode: "U",
+        expectedWorkHoursInfo: {
+          required: babysitterInitialWorkHours.required,
+          actual: babysitterInitialWorkHours.actual,
+          overtime: babysitterInitialWorkHours.overtime,
+        },
+      };
+      testWorkHoursInfoUpdate(data);
     });
   });
 });
