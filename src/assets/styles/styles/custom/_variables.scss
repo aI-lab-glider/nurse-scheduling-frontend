@@ -38,10 +38,11 @@ $dark-background: #555555 !default;
 $table-color: #14142b !default;
 $table-border-color-grey: #d6d8e7 !default;
 $cell-color: #4e4b66 !default;
-$cell-weekend-background-color: #f5f5f5 !default;
-$cell-other-month-background-color: rgba(239, 240, 246, 0.5) !default;
+$cell-weekend-background-color: rgba(60, 105, 168, 0.2) !default;
+$cell-weekend-header-background-color: rgba(60, 105, 168, 0.3) !default;
+$cell-other-month-background-color: #f5f9ff !default;
 $cell-other-color: rgba(78, 75, 102, 0.5) !default;
-$header-curr-month-background-color: #eff0f7 !default;
+$header-curr-month-background-color: #ecf4ff !default;
 
 $grays: () !default;
 $grays: map-merge(
@@ -86,7 +87,7 @@ $opacity-1: rgba(255, 255, 255, 0.1) !default;
 $opacity-2: rgba(255, 255, 255, 0.2) !default;
 
 $opacity-table-color-5: rgba(20, 20, 43, 0.5) !default;
-$opacity-table-background: rgba(239, 240, 247, 0.5) !default;
+$opacity-table-background: rgba(236, 244, 255, 0.5) !default;
 
 // end beniamin
 
