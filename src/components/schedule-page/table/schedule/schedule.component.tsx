@@ -9,7 +9,6 @@ import { TimeTableComponent } from "../../../timetable/timetable.component";
 import { NameTableComponent } from "../../../namestable/nametable.component";
 import { SummaryTableComponent } from "../../../summerytable/summarytable.component";
 import { TableMiddleLine } from "../../table-middleline";
-import { LineMiddle } from "../../../common-components/lineMiddle/lineMiddle";
 export function ScheduleComponent(): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
 

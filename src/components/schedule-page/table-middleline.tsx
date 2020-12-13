@@ -7,15 +7,16 @@ export interface TableMiddleLineOptions {
 
 export function TableMiddleLine({ name, children }: TableMiddleLineOptions): JSX.Element {
   return (
-    <tr className="middleSection">
-      <td className="middleCell">
-        <span>
-          {name} <LineMiddle component={children} />
-        </span>
-      </td>
-      <td colSpan={2}>
-        <hr className="middle" />
-      </td>
-    </tr>
+    <>
+      <tr className="middleSection">
+        <td className="middleCell">
+          <span>{name}</span>
+        </td>
+        <td colSpan={2}>
+          <hr className="middle" />
+        </td>
+      </tr>
+      <LineMiddle component={children} />
+    </>
   );
 }
