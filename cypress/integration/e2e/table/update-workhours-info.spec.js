@@ -13,9 +13,11 @@ function shiftCell(workerType, shiftIdx) {
   return cy
     .get(`[data-cy="${workerType}ShiftsTable"]`)
     .children()
+    .children()
     .eq(workerTypeToIdx[workerType])
     .children()
     .eq(shiftIdx)
+    .children()
     .children();
 }
 
