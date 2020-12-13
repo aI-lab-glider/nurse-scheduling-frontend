@@ -14,7 +14,7 @@ interface WorkerDrawerOptions extends Omit<DrawerOptions, "title"> {
 
 export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX.Element {
   const { mode, worker, setOpen, ...otherOptions } = options;
-  const title = mode === WorkerDrawerMode.ADD_NEW ? "Dodaj pracownika" : "Edytuj pracownika";
+  const title = mode === WorkerDrawerMode.ADD_NEW ? "Dodaj pracownika" : "Edycja pracownika";
 
   return (
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>
