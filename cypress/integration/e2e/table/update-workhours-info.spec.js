@@ -164,39 +164,6 @@ context("Work hours info (summary table)", () => {
       });
     });
 
-    describe("When U for current month weekend", () => {
-      it("Is added, should subtract 8 from required hours, add 8 to overtime and not change actual", () => {
-        const data = {
-          workerType: "nurse",
-          shiftIndex: 10,
-          initialShiftCode: null,
-          desiredShiftText: "urlop",
-          desiredShiftCode: "U",
-          expectedWorkHoursInfo: {
-            required: nurseInitialWorkHours.required - 8,
-            actual: nurseInitialWorkHours.actual,
-            overtime: nurseInitialWorkHours.overtime + 8,
-          },
-        };
-        testWorkHoursInfoUpdate(data);
-      });
-      it("Is removed, should add 8 to required hours, subtract 8 from overtime and not change actual", () => {
-        const data = {
-          workerType: "nurse",
-          shiftIndex: 4,
-          initialShiftCode: "U",
-          desiredShiftText: "wolne",
-          desiredShiftCode: null,
-          expectedWorkHoursInfo: {
-            required: nurseInitialWorkHours.required + 8,
-            actual: nurseInitialWorkHours.actual,
-            overtime: nurseInitialWorkHours.overtime - 8,
-          },
-        };
-        testWorkHoursInfoUpdate(data);
-      });
-    });
-
     it("When changing previous month shift from DN to U, shouldn't change work hours info at all", () => {
       const data = {
         workerType: "nurse",
@@ -293,39 +260,6 @@ context("Work hours info (summary table)", () => {
             required: babysitterInitialWorkHours.required - 8,
             actual: babysitterInitialWorkHours.actual,
             overtime: babysitterInitialWorkHours.overtime + 8,
-          },
-        };
-        testWorkHoursInfoUpdate(data);
-      });
-    });
-
-    describe("When U for current month weekend", () => {
-      it("Is added, should subtract 8 from required hours, add 8 to overtime and not change actual", () => {
-        const data = {
-          workerType: "babysitter",
-          shiftIndex: 31,
-          initialShiftCode: null,
-          desiredShiftText: "urlop",
-          desiredShiftCode: "U",
-          expectedWorkHoursInfo: {
-            required: babysitterInitialWorkHours.required - 8,
-            actual: babysitterInitialWorkHours.actual,
-            overtime: babysitterInitialWorkHours.overtime + 8,
-          },
-        };
-        testWorkHoursInfoUpdate(data);
-      });
-      it("Is removed, should add 8 to required hours, subtract 8 from overtime and not change actual", () => {
-        const data = {
-          workerType: "babysitter",
-          shiftIndex: 10,
-          initialShiftCode: "U",
-          desiredShiftText: "wolne",
-          desiredShiftCode: null,
-          expectedWorkHoursInfo: {
-            required: babysitterInitialWorkHours.required + 8,
-            actual: babysitterInitialWorkHours.actual,
-            overtime: babysitterInitialWorkHours.overtime - 8,
           },
         };
         testWorkHoursInfoUpdate(data);
