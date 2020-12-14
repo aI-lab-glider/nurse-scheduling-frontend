@@ -1,13 +1,10 @@
-import { Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import Drawer from "../../common-components/drawer/drawer.component";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import {
-  ScheduleErrorLevel,
-  ScheduleErrorMessageModel,
-} from "../../../common-models/schedule-error-message.model";
+import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
 import { SpanErrors } from "./span-errors.component";
+import ErrorList from "./error-list.component";
 
 export default function ValidationDrawerComponent(): JSX.Element {
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
@@ -15,14 +12,9 @@ export default function ValidationDrawerComponent(): JSX.Element {
   const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state);
 
   useEffect(() => {
-    const noErrorsFound = [
-      { kind: "", message: "Nie znaleziono błędów", level: ScheduleErrorLevel.INFO },
-    ];
     if (scheduleErrors?.length) {
       setMappedErrors(scheduleErrors);
       setOpen(true);
-    } else {
-      setMappedErrors(noErrorsFound);
     }
   }, [scheduleErrors]);
 
@@ -32,20 +24,15 @@ export default function ValidationDrawerComponent(): JSX.Element {
 
   return (
     <div>
-      <Drawer open={open} onClose={(): void => toggleDrawer(false)} anchor={"right"}>
+      <Drawer
+        title="Sprawdź plan"
+        setOpen={setOpen}
+        open={open}
+        onClose={(): void => toggleDrawer(false)}
+        anchor={"right"}
+      >
         <SpanErrors errors={mappedErrors} />
-        <List>
-          {mappedErrors?.map(
-            (error, index): JSX.Element => (
-              <ListItem key={index + error.message.slice(0, 5)}>
-                <ListItemIcon>
-                  <ErrorOutlineIcon />
-                </ListItemIcon>
-                <ListItemText primary={error.message} />
-              </ListItem>
-            )
-          )}
-        </List>
+        <ErrorList errors={mappedErrors} />
       </Drawer>
     </div>
   );
