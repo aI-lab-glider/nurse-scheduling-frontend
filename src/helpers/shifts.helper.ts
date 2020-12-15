@@ -81,7 +81,11 @@ export class ShiftHelper {
     const workingData = monthData.filter(
       (d) => VerboseDateHelper.isWorkingDay(d[1]!) && !this.isNotWorkingShift(d[0]!)
     );
-    const requiredHours = workerNorm * WORK_HOURS_PER_DAY * workingData.length;
+    const holidaySaturdaysCount = monthData.filter((d) =>
+      VerboseDateHelper.isHolidaySaturday(d[1]!)
+    ).length;
+    const requiredHours =
+      workerNorm * WORK_HOURS_PER_DAY * (workingData.length - holidaySaturdaysCount);
     const actualHours = monthData.reduce(
       (a, s) => a + workerNorm * this.shiftCodeToWorkTime(s[0]!),
       0
