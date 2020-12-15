@@ -193,19 +193,48 @@ describe("ShiftHelper", () => {
 
   CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
     describe("caclulateWorkHoursInfo", () => {
-      const message = `${testCase.dates.length} ${testCase.shifts.length}  should calculate correct work hours for ${testCase.shifts}`;
-      it(message, () => {
+      describe("for standard holidays", () => {
+        const message = `${testCase.dates.length} ${testCase.shifts.length}  should calculate correct work hours for ${testCase.shifts}`;
+        it(message, () => {
+          const expectedOvertime =
+            testCase.expectedActualWorkHours - testCase.expectedRequiredHours;
+          const hours = ShiftHelper.caclulateWorkHoursInfo(
+            testCase.shifts,
+            testCase.workerNorm,
+            testCase.dates,
+            month
+          );
+          expect(hours).to.eql([
+            testCase.expectedRequiredHours,
+            testCase.expectedActualWorkHours,
+            expectedOvertime,
+          ]);
+        });
+      });
+    });
+  });
+  describe("calculateWorkHoursInfo for case with additional holiday on Saturday", () => {
+    const saturdayHoliday = {
+      month: month,
+      dayOfWeek: WeekDay.SA,
+      isPublicHoliday: true,
+    };
+    const saturdayHolidayCaseWeekends = [...weekends.slice(0, -1), saturdayHoliday];
+    const datesWithSaturdayHoliday = [...saturdayHolidayCaseWeekends, ...holidays, ...workDays];
+
+    CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
+      it(`should subtract 8 from required hours and add 8 to overtime for ${testCase.shifts}`, () => {
         const expectedOvertime = testCase.expectedActualWorkHours - testCase.expectedRequiredHours;
         const hours = ShiftHelper.caclulateWorkHoursInfo(
           testCase.shifts,
           testCase.workerNorm,
-          testCase.dates,
+          datesWithSaturdayHoliday,
           month
         );
         expect(hours).to.eql([
-          testCase.expectedRequiredHours,
+          testCase.expectedRequiredHours - 8,
           testCase.expectedActualWorkHours,
-          expectedOvertime,
+          expectedOvertime + 8,
         ]);
       });
     });
