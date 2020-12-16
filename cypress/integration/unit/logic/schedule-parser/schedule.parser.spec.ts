@@ -1,36 +1,12 @@
 /* eslint-disable @typescript-eslint/camelcase */
 /// <reference types="cypress" />
 import { ScheduleParser } from "../../../../../src/logic/schedule-parser/schedule.parser";
-
 import { ScheduleDataModel } from "../../../../../src/common-models/schedule-data.model";
 import { ShiftCode, ShiftInfoModel } from "../../../../../src/common-models/shift-info.model";
 import { WorkersInfoModel, WorkerType } from "../../../../../src/common-models/worker-info.model";
-import { data } from "cypress/types/jquery";
 import { ArrayHelper } from "../../../../../src/helpers/array.helper";
 describe("Schedule parser", () => {
-  const emptyRow = [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ];
+  const emptyRow = [""];
 
   const nurseSection = [
     ["pielęgniarka 1", "DN", " ", " ", " ", "U", "U", "U", "U", "U", "D"],
@@ -89,7 +65,7 @@ describe("Schedule parser", () => {
       }
     });
     it("length of days must be equal to length of shifts", () => {
-      for (const [key, value] of Object.entries(dataModel.shifts)) {
+      for (const [, value] of Object.entries(dataModel.shifts)) {
         expect(value.length).to.equal(dataModel.month_info.dates.length);
       }
     });
@@ -102,7 +78,7 @@ describe("Schedule parser", () => {
       }
     });
     it("all babysitter and nurses are in  employee_info ", () => {
-      for (const [key, value] of Object.entries(expectedSchedule.employee_info)) {
+      for (const [key] of Object.entries(expectedSchedule.employee_info)) {
         expect(dataModel.employee_info[key]);
       }
     });
