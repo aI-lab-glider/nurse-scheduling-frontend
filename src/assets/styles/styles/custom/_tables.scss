@@ -32,8 +32,9 @@
       border: 1px solid $table-border-color-grey;
       align-items: center;
       width: 120%;
-      height: 103%;
+      height: 101%;
       cursor: cell;
+
       &.blocked {
         cursor: default !important;
       }
@@ -41,26 +42,27 @@
       & .content {
         display: block;
         height: 100% !important;
-        margin: 0px;
+        margin: 0;
+
         p {
           padding: 20%;
           height: 100%;
         }
+
         input {
           margin: 1%;
         }
       }
+
+      &:first-child {
+        border-left: 0;
+      }
+
+      &:last-child {
+        border-right: 0;
+      }
     }
 
-    border: 1px solid $table-border-color-grey;
-
-    &:first-child {
-      border-left: 0;
-    }
-
-    &:last-child {
-      border-right: 0;
-    }
     .selection {
       background-color: $selection-color !important;
     }
@@ -257,5 +259,25 @@ span {
     writing-mode: vertical-rl;
     -ms-writing-mode: tb-lr;
     transform: rotate(180deg);
+  }
+
+  &.error-triangle {
+    position: absolute;
+    top: -3px;
+    right: -7px;
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+
+    border-bottom: 7px solid $error-red;
+    box-shadow: $error-triangle-box-shadow;
+
+    transform: rotate(45deg);
+    -ms-transform: rotate(45deg); //IE 9
+    -moz-transform: rotate(45deg); //Firefox
+    -webkit-transform: rotate(45deg); //Safari and Chrome
+    -o-transform: rotate(45deg); //Opera
   }
 }
