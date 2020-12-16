@@ -123,7 +123,7 @@ export function ScheduleComponent(): JSX.Element {
                 <td>
                   <NameTableComponent
                     uuid={scheduleLocalState.uuid}
-                    workerType={WorkerType.OTHER}
+                    //workerType={WorkerType.OTHER}
                     data={scheduleLocalState.foundationInfoSection}
                   />
                 </td>

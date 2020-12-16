@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { DataRow } from "../../logic/schedule-logic/data-row";
-import { WorkerInfoComponent } from "./worker-info.component";
-import { Drawer } from "@material-ui/core";
 import { WorkerInfoModel, WorkerType } from "../../common-models/worker-info.model";
 import { Sections } from "../../logic/providers/schedule-provider.model";
 import { ScheduleLogicContext } from "../schedule-page/table/schedule/use-schedule-state";
@@ -12,7 +10,7 @@ import WorkerDrawerComponent, {
 
 export interface NameTableCellOptions {
   dataRow: DataRow[];
-  workerType: WorkerType;
+  workerType?: WorkerType;
 }
 
 let workerInfo: WorkerInfoModel = { name: "", time: 0 };
@@ -27,19 +25,20 @@ export function NameTableSection({ dataRow, workerType }: NameTableCellOptions):
   const shiftLogic = scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey);
 
   function toggleDrawer(open: boolean, name: string): void {
-    setIsOpen(open);
-    if (open) {
-      console.log(name);
-      const [requiredHours, actualHours, overtime] =
-        shiftLogic?.calculateWorkerHourInfo(name) ?? [];
+    if (workerType) {
+      setIsOpen(open);
+      if (open) {
+        const [requiredHours, actualHours, overtime] =
+          shiftLogic?.calculateWorkerHourInfo(name) ?? [];
 
-      workerInfo = {
-        name: name,
-        time: actualHours,
-        type: workerType,
-        requiredHours,
-        overtime,
-      };
+        workerInfo = {
+          name: name,
+          time: actualHours,
+          type: workerType,
+          requiredHours,
+          overtime,
+        };
+      }
     }
   }
 

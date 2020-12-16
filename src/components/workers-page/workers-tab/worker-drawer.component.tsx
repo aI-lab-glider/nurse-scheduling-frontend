@@ -28,11 +28,12 @@ function getTitle(mode: WorkerDrawerMode) {
 export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX.Element {
   const { mode, worker, setOpen, ...otherOptions } = options;
   const title = getTitle(mode);
+  const isInfo = mode === WorkerDrawerMode.INFO;
   return (
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>
       {worker && <h1>{worker.name}</h1>}
 
-      {mode === WorkerDrawerMode.INFO && worker !== undefined && WorkerInfoComponent(worker)}
+      {isInfo && WorkerInfoComponent(worker ?? { name: "", time: 0 })}
     </Drawer>
   );
 }

@@ -4,7 +4,7 @@ import { BaseSectionOptions } from "../schedule-page/table/schedule/sections/bas
 import { WorkerType } from "../../common-models/worker-info.model";
 
 interface NameSectionOptions extends Partial<BaseSectionOptions> {
-  workerType: WorkerType;
+  workerType?: WorkerType;
 }
 
 export function NameTableComponent(options: NameSectionOptions): JSX.Element {
