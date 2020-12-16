@@ -1,26 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import { WorkerInfo } from "./nametable-section.component";
+import { WorkerInfoModel } from "../../common-models/worker-info.model";
 
-export function WorkerInfoComponent(info: WorkerInfo): JSX.Element {
-  const { name, workerType, requiredHours, actualHours, overtime, sumOfHours } = info;
+export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
   return (
     <>
       <div className={"span-errors"}>
-        <h3 className={"error-span-header"}>Pracownik</h3>
-        <Divider />
-        <p>
-          {name}
-          <br />
-          {workerType}
-          <br />
-          {actualHours}
-          <br />
-          {overtime}
-          <br />
-          {sumOfHours}
-          <br />
-        </p>
+        {info.type}
+        <p>Typ umowy:</p>
+        <p>Ilość godzin: {info.requiredHours}</p>
+        <p>Ilość nadgodzin: {info.overtime}</p>
+        <p>Suma godzin: {info.time}</p>
       </div>
     </>
   );
