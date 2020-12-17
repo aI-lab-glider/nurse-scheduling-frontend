@@ -5,6 +5,8 @@ import { WorkerInfoModel, WorkersInfoModel } from "../common-models/worker-info.
 import { ActionModel } from "../state/models/action.model";
 import { ApplicationStateModel } from "../state/models/application-state.model";
 
+/*eslint-disable @typescript-eslint/camelcase */
+
 export type ThunkFunction<T> = (
   dispatch: Dispatch<ActionModel<T>>,
   getState: () => ApplicationStateModel
@@ -15,13 +17,14 @@ export interface ScheduleKey {
   year: number;
 }
 
-type RevisionType = "primary" | "actual";
+export type RevisionType = "primary" | "actual";
 export interface RevisionFilter {
   revisionType: RevisionType;
   validityPeriod: ScheduleKey;
 }
 
 export interface ScheduleRevision {
+  _id: string;
   revisionType: RevisionType;
   data: ScheduleDataModel;
 }
@@ -32,11 +35,18 @@ export interface ScheduleRecord {
   validityPeriod: ScheduleKey;
   workersInfo: WorkerInfoModel[];
 }
-export interface PersistanceStoreProvider {
-  saveScheduleRevision(schedule: ScheduleRevision): ThunkFunction<ScheduleDataModel>;
-  getScheduleRevision(filter: RevisionFilter): ThunkFunction<ScheduleDataModel>;
-  addNewWorker(worker: WorkerInfoModel): ThunkFunction<WorkerInfoModel>;
-  getWorkers(period: ScheduleKey): ThunkFunction<WorkersInfoModel>;
-  addNewShift(shift: ShiftModel): ThunkFunction<ShiftModel>;
-  getShifts(period: ScheduleKey): ThunkFunction<ShiftModel>;
+export abstract class PersistanceStoreProvider {
+  abstract saveScheduleRevision(
+    type: RevisionType,
+    schedule: ScheduleDataModel
+  ): ThunkFunction<ScheduleDataModel>;
+  abstract getScheduleRevision(filter: RevisionFilter): ThunkFunction<ScheduleDataModel>;
+  abstract addNewWorker(worker: WorkerInfoModel): ThunkFunction<WorkerInfoModel>;
+  abstract getWorkers(period: ScheduleKey): ThunkFunction<WorkersInfoModel>;
+  abstract addNewShift(shift: ShiftModel): ThunkFunction<ShiftModel>;
+  abstract getShifts(period: ScheduleKey): ThunkFunction<ShiftModel>;
+  protected getScheduleId(schedule: ScheduleDataModel): string {
+    const { month_number, year } = schedule.schedule_info;
+    return `${month_number}_${year}`;
+  }
 }

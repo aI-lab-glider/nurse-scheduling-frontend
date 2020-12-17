@@ -16,7 +16,7 @@ export interface ShiftsSectionOptions extends Omit<BaseSectionOptions, "sectionK
 
 export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Element {
   const { data = [], workerType, uuid } = options;
-  const scheduleLogic = useContext(ScheduleLogicContext);
+  const { logic: scheduleLogic } = useContext(ScheduleLogicContext);
   const sectionKey: keyof Sections =
     workerType === WorkerType.NURSE ? "NurseInfo" : "BabysitterInfo";
   const sectionInfoProvider = scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey);

@@ -9,7 +9,9 @@ export class VerboseDateHelper {
       return false;
     }
     return (
-      !date.isPublicHoliday && !(date.dayOfWeek === WeekDay.SA || date.dayOfWeek === WeekDay.SU)
+      !date.isPublicHoliday &&
+      date.dayOfWeek !== WeekDay.SU &&
+      !(date.dayOfWeek === WeekDay.SA || date.dayOfWeek === WeekDay.SU)
     );
   }
 
