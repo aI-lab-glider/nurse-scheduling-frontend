@@ -199,9 +199,9 @@ describe("ShiftHelper", () => {
     });
   });
 
-  CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
-    describe("caclulateWorkHoursInfo", () => {
-      describe("for standard holidays", () => {
+  describe("caclulateWorkHoursInfo", () => {
+    describe("for standard holidays", () => {
+      CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
         const message = `${testCase.dates.length} ${testCase.shifts.length}  should calculate correct work hours for ${testCase.shifts}`;
         it(message, () => {
           const expectedOvertime =
@@ -210,20 +210,45 @@ describe("ShiftHelper", () => {
         });
       });
     });
-  });
-  describe("for case with additional holiday on Saturday", () => {
-    const saturdayHolidayCaseWeekends = [...weekends.slice(0, -1), saturdayHolidayTemplate];
-    const datesWithSaturdayHoliday = [...saturdayHolidayCaseWeekends, ...holidays, ...workDays];
+    describe("for cases with additional holiday on Saturday", () => {
+      describe("for case with 1 such holiday", () => {
+        const saturdayHolidayCaseWeekends = [...weekends.slice(0, -1), saturdayHolidayTemplate];
+        const datesWithSaturdayHoliday = [...saturdayHolidayCaseWeekends, ...holidays, ...workDays];
 
-    CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
-      it(`should subtract 8 from required hours and add 8 to overtime for ${testCase.shifts}`, () => {
-        const expectedOvertime = testCase.expectedActualWorkHours - testCase.expectedRequiredHours;
-        testForCorrectWorkHourCalculation(
-          testCase,
-          expectedOvertime + 8,
-          testCase.expectedRequiredHours - 8,
-          datesWithSaturdayHoliday
-        );
+        CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
+          it(`should subtract 8 from required hours and add 8 to overtime for ${testCase.shifts}`, () => {
+            const expectedOvertime =
+              testCase.expectedActualWorkHours - testCase.expectedRequiredHours;
+            testForCorrectWorkHourCalculation(
+              testCase,
+              expectedOvertime + 8,
+              testCase.expectedRequiredHours - 8,
+              datesWithSaturdayHoliday
+            );
+          });
+        });
+      });
+      describe("for case with 3 such holidays", () => {
+        const saturdayHolidayCaseWeekends = [
+          ...weekends.slice(0, -3),
+          saturdayHolidayTemplate,
+          saturdayHolidayTemplate,
+          saturdayHolidayTemplate,
+        ];
+        const datesWithSaturdayHoliday = [...saturdayHolidayCaseWeekends, ...holidays, ...workDays];
+
+        CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
+          it(`should subtract 24 from required hours and add 24 to overtime for ${testCase.shifts}`, () => {
+            const expectedOvertime =
+              testCase.expectedActualWorkHours - testCase.expectedRequiredHours;
+            testForCorrectWorkHourCalculation(
+              testCase,
+              expectedOvertime + 24,
+              testCase.expectedRequiredHours - 24,
+              datesWithSaturdayHoliday
+            );
+          });
+        });
       });
     });
   });
