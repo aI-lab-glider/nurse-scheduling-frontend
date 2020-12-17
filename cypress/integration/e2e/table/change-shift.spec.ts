@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 context("Change shift", () => {
   beforeEach(() => {
     cy.visit(Cypress.env("baseUrl"));

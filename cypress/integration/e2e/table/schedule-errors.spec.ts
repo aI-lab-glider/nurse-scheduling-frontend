@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 context("Schedule errors", () => {
   beforeEach(() => {
     cy.server();

@@ -1,4 +1,3 @@
-/// <reference types="cypress" />
 import { ArrayHelper } from "../../../../src/helpers/array.helper";
 
 type TestCase = { arr1: number[]; arr2: number[]; exp: [number, number][] };

@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 import { ComparatorHelper, Order } from "../../../../src/helpers/comparator.helper";
 
 interface ComplexType {

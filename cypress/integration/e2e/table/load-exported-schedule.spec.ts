@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 context("Load Exported Schedule", () => {
   beforeEach(() => {
     cy.visit(Cypress.env("baseUrl"));
@@ -13,15 +11,15 @@ context("Load Exported Schedule", () => {
     cy.get("a[download]")
       .then(
         (anchor) =>
-          new Cypress.Promise((resolve, reject) => {
+          new Cypress.Promise((resolve) => {
             const xhr = new XMLHttpRequest();
             xhr.open("GET", anchor.prop("href"), true);
             xhr.responseType = "blob";
-            xhr.onload = () => {
+            xhr.onload = (): void => {
               if (xhr.status === 200) {
                 const blob = xhr.response;
                 const reader = new FileReader();
-                reader.onload = () => {
+                reader.onload = (): void => {
                   resolve(reader.result);
                 };
                 reader.readAsBinaryString(blob);
@@ -30,7 +28,7 @@ context("Load Exported Schedule", () => {
             xhr.send();
           })
       )
-      .then((file) => {
+      .then((file: string) => {
         cy.writeFile("cypress/fixtures/grafik.xlsx", file, "binary");
         cy.get('[data-cy="file-input"]').attachFile("grafik.xlsx");
       });

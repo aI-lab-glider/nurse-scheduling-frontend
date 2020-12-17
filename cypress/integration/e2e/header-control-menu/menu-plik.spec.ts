@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 context("Menu 'plik'", () => {
   beforeEach(() => {
     cy.visit(Cypress.env("baseUrl"));
