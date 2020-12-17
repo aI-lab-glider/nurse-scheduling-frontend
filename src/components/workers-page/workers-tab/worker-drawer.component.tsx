@@ -14,7 +14,7 @@ interface WorkerDrawerOptions extends Omit<DrawerOptions, "title"> {
   worker?: WorkerInfoModel;
 }
 
-function getTitle(mode: WorkerDrawerMode) {
+function getTitle(mode: WorkerDrawerMode): string {
   switch (mode) {
     case WorkerDrawerMode.EDIT:
       return "Edycja pracownika";
