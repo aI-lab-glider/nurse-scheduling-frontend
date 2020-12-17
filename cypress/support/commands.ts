@@ -1,6 +1,7 @@
 import "cypress-file-upload";
 import { WorkerType } from "../../src/common-models/worker-info.model";
 import { ShiftCode } from "../../src/common-models/shift-info.model";
+import { HoursInfo, HoursInfoCells } from "../integration/e2e/table/update-workhours-info.spec";
 
 export interface GetWorkerShiftOptions {
   workerType: WorkerType;
@@ -13,6 +14,12 @@ export interface ChangeWorkerShiftOptions {
   workerIdx: number;
   shiftIdx: number;
   newShiftCode: ShiftCode;
+}
+
+export interface CheckHoursInfoOptions {
+  workerType: WorkerType;
+  workerIdx: number;
+  hoursInfo: HoursInfo;
 }
 
 Cypress.Commands.add("loadSchedule", () => {
@@ -49,6 +56,23 @@ Cypress.Commands.add(
   "changeWorkerShift",
   ({ workerType, workerIdx, shiftIdx, newShiftCode }: ChangeWorkerShiftOptions) => {
     cy.getWorkerShift({ workerType, workerIdx, shiftIdx }).click();
-    return cy.get(`[data-cy=autocomplete-${newShiftCode}]`).click();
+    return cy.get(`[data-cy=autocomplete-${newShiftCode}]`, { timeout: 100000 }).click();
+  }
+);
+
+Cypress.Commands.add(
+  "checkHoursInfo",
+  ({ workerType, workerIdx, hoursInfo }: CheckHoursInfoOptions) => {
+    Object.keys(HoursInfoCells)
+      .filter((key) => isNaN(Number(HoursInfoCells[key])))
+      .forEach((key) => {
+        cy.get(`[data-cy="${workerType.toLowerCase()}SummaryTable"]`)
+          .children()
+          .children()
+          .eq(workerIdx)
+          .children()
+          .eq(Number(key))
+          .contains(hoursInfo[key]);
+      });
   }
 );
