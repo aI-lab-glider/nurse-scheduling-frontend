@@ -61,9 +61,11 @@ const GetWorkersCountTestCases: GetWorkersCountTestCase[] = [
 ];
 //#endregion
 
+type DateArray = Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek" | "month">[];
+
 //#region caclulateWorkHoursInfo
 type CaclulateWorkHoursInfoTestData = {
-  dates: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek" | "month">[];
+  dates: DateArray;
   shifts: ShiftCode[];
   workerNorm: number;
   expectedActualWorkHours: number;
@@ -81,6 +83,12 @@ const weekendTemplate = {
   month: month,
   dayOfWeek: WeekDay.SU,
   isPublicHoliday: false,
+};
+
+const saturdayHolidayTemplate = {
+  month: month,
+  dayOfWeek: WeekDay.SA,
+  isPublicHoliday: true,
 };
 
 const holidayTemplate = {
@@ -198,45 +206,44 @@ describe("ShiftHelper", () => {
         it(message, () => {
           const expectedOvertime =
             testCase.expectedActualWorkHours - testCase.expectedRequiredHours;
-          const hours = ShiftHelper.caclulateWorkHoursInfo(
-            testCase.shifts,
-            testCase.workerNorm,
-            testCase.dates,
-            month
-          );
-          expect(hours).to.eql([
-            testCase.expectedRequiredHours,
-            testCase.expectedActualWorkHours,
-            expectedOvertime,
-          ]);
+          testForCorrectWorkHourCalculation(testCase, expectedOvertime);
         });
       });
     });
   });
-  describe("calculateWorkHoursInfo for case with additional holiday on Saturday", () => {
-    const saturdayHoliday = {
-      month: month,
-      dayOfWeek: WeekDay.SA,
-      isPublicHoliday: true,
-    };
-    const saturdayHolidayCaseWeekends = [...weekends.slice(0, -1), saturdayHoliday];
+  describe("for case with additional holiday on Saturday", () => {
+    const saturdayHolidayCaseWeekends = [...weekends.slice(0, -1), saturdayHolidayTemplate];
     const datesWithSaturdayHoliday = [...saturdayHolidayCaseWeekends, ...holidays, ...workDays];
 
     CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
       it(`should subtract 8 from required hours and add 8 to overtime for ${testCase.shifts}`, () => {
         const expectedOvertime = testCase.expectedActualWorkHours - testCase.expectedRequiredHours;
-        const hours = ShiftHelper.caclulateWorkHoursInfo(
-          testCase.shifts,
-          testCase.workerNorm,
-          datesWithSaturdayHoliday,
-          month
-        );
-        expect(hours).to.eql([
-          testCase.expectedRequiredHours - 8,
-          testCase.expectedActualWorkHours,
+        testForCorrectWorkHourCalculation(
+          testCase,
           expectedOvertime + 8,
-        ]);
+          testCase.expectedRequiredHours - 8,
+          datesWithSaturdayHoliday
+        );
       });
     });
   });
 });
+
+function testForCorrectWorkHourCalculation(
+  testCase: CaclulateWorkHoursInfoTestData,
+  expectedOvertimeHours: number,
+  expectedRequiredHours?: number,
+  dates?: DateArray
+): void {
+  const hours = ShiftHelper.caclulateWorkHoursInfo(
+    testCase.shifts,
+    testCase.workerNorm,
+    dates ? dates : testCase.dates,
+    month
+  );
+  expect(hours).to.eql([
+    expectedRequiredHours ? expectedRequiredHours : testCase.expectedRequiredHours,
+    testCase.expectedActualWorkHours,
+    expectedOvertimeHours,
+  ]);
+}
