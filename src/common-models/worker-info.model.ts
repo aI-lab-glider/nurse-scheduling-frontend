@@ -17,6 +17,22 @@ export class WorkerTypeHelper {
   }
 }
 
+export enum ContractType {
+  UOP = "UOP",
+  CONTRACTOR = "CONTRACTOR",
+}
+
+export class ContractTypeHelper {
+  static translate(type: ContractType): string {
+    switch (type) {
+      case ContractType.UOP:
+        return "umowa o pracę";
+      case ContractType.CONTRACTOR:
+        return "umowa zlecenie";
+    }
+  }
+}
+
 export interface WorkersInfoModel {
   time: { [key: string]: number };
   type: { [workerName: string]: WorkerType };

@@ -2,6 +2,7 @@ import React from "react";
 import Drawer, { DrawerOptions } from "../../common-components/drawer/drawer.component";
 import { WorkerInfoModel } from "../../../common-models/worker-info.model";
 import { WorkerInfoComponent } from "../../namestable/worker-info.component";
+import { WorkerEditComponent } from "../../namestable/worker-edit.component";
 
 export enum WorkerDrawerMode {
   EDIT,
@@ -31,7 +32,7 @@ export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX
   const isInfo = mode === WorkerDrawerMode.INFO;
   return (
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>
-      {worker && <h1>{worker.name}</h1>}
+      {worker && <WorkerEditComponent {...worker} />}
 
       {isInfo && WorkerInfoComponent(worker ?? { name: "", time: 0 })}
     </Drawer>
