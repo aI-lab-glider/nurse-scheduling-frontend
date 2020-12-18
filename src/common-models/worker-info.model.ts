@@ -23,4 +23,6 @@ export interface WorkerInfoModel {
   name: string;
   time: number;
   type?: WorkerType;
+  requiredHours?: number;
+  overtime?: number;
 }
