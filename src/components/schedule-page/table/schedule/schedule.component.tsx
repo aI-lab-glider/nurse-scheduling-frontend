@@ -9,7 +9,6 @@ import { TimeTableComponent } from "../../../timetable/timetable.component";
 import { NameTableComponent } from "../../../namestable/nametable.component";
 import { SummaryTableComponent } from "../../../summerytable/summarytable.component";
 import { TableMiddleLine } from "../../table-middleline";
-import { LineMiddle } from "../../../common-components/lineMiddle/lineMiddle";
 export function ScheduleComponent(): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
 
@@ -58,7 +57,7 @@ export function ScheduleComponent(): JSX.Element {
                 </td>
                 <td></td>
               </tr>
-              <TableMiddleLine name={"Pielęgniarki"}>
+              <TableMiddleLine name={" Pielęgniarki"}>
                 <tr className="sectionContainer">
                   <td>
                     <NameTableComponent
@@ -86,7 +85,7 @@ export function ScheduleComponent(): JSX.Element {
                   </td>
                 </tr>
               </TableMiddleLine>
-              <TableMiddleLine name={"Opiekunowie"}>
+              <TableMiddleLine name={" Opiekunowie"}>
                 <tr className="sectionContainer">
                   <td>
                     <NameTableComponent
@@ -114,7 +113,7 @@ export function ScheduleComponent(): JSX.Element {
                   </td>
                 </tr>
               </TableMiddleLine>
-              <TableMiddleLine name={"Informacje"}>
+              <TableMiddleLine name={" Informacje"}>
                 <tr className="sectionContainer">
                   <td>
                     <NameTableComponent
