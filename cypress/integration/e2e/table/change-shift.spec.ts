@@ -3,7 +3,7 @@ context("Change shift", () => {
     cy.visit(Cypress.env("baseUrl"));
     cy.contains("Plik").click();
     cy.get('[data-cy="file-input"]').attachFile("example.xlsx");
-    cy.get("#cyTestedSection").children().children().children().eq(0).as("cell");
+    cy.get("#nurseShiftsTable").children().children().children().eq(0).as("cell");
     cy.get("@cell").contains("DN");
   });
 
@@ -11,7 +11,6 @@ context("Change shift", () => {
     cy.get("@cell").click();
     cy.contains("Popołudnie").click();
 
-    // https://github.com/cypress-io/cypress/issues/7413
-    cy.get("#cyTestedSection").children().children().children().eq(0).contains("P");
+    cy.get("#nurseShiftsTable").children().children().children().eq(0).contains("P");
   });
 });

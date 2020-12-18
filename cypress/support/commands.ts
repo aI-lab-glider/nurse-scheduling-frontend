@@ -24,9 +24,31 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import "cypress-file-upload";
+import { WorkerType } from "../../src/common-models/worker-info.model";
+
+export interface WorkerShiftOptions {
+  workerType: WorkerType;
+  workerIdx: number;
+  shiftIdx: number;
+}
 
 Cypress.Commands.add("loadSchedule", () => {
   cy.visit(Cypress.env("baseUrl"));
   cy.contains("Plik").click();
   cy.get('[data-cy="file-input"]').attachFile("example.xlsx");
 });
+
+Cypress.Commands.add(
+  "getWorkerShift",
+  ({ workerType, workerIdx, shiftIdx }: WorkerShiftOptions) => {
+    return cy
+      .get(`[data-cy="${workerType.toLowerCase()}ShiftsTable"]`)
+      .children()
+      .children()
+      .eq(workerIdx)
+      .children()
+      .eq(shiftIdx)
+      .children()
+      .children();
+  }
+);

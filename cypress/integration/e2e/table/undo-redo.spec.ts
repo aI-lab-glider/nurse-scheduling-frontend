@@ -1,25 +1,42 @@
 /// <reference path="../../../support/index.d.ts" />
 
+import { WorkerType } from "../../../../src/common-models/worker-info.model";
+import { WorkerShiftOptions } from "../../../support/commands";
+
+const testedShift: WorkerShiftOptions = {
+  workerType: WorkerType.NURSE,
+  workerIdx: 0,
+  shiftIdx: 0,
+};
+
 context("Undo redo test", () => {
   before(() => {
     cy.loadSchedule();
     cy.contains("Edytuj").click();
   });
+
   beforeEach(() => {
-    cy.get("#cyTestedSection").children().children().children().eq(0).as("cell");
-    cy.get("@cell").contains("DN").click();
+    cy.getWorkerShift(testedShift).click();
+    cy.contains("rano").click();
+
+    cy.getWorkerShift(testedShift).click();
     cy.contains("popołudnie").click();
   });
 
-  it("Undo button test", () => {
-    cy.get("#undo-button").click();
-    cy.get("#cyTestedSection").children().children().children().eq(0).contains("DN");
+  it("Undo/Redo button test", () => {
+    cy.get("[data-cy=undo-button]").click();
+    cy.getWorkerShift(testedShift).contains("R");
+
+    cy.get("[data-cy=redo-button]").click();
+    cy.getWorkerShift(testedShift).contains("P");
   });
 
-  it("Redo button test", () => {
-    cy.get("#undo-button").click();
-    cy.get("#cyTestedSection").children().children().children().eq(0).contains("DN");
-    cy.get("#redo-button").click();
-    cy.get("#cyTestedSection").children().children().children().eq(0).contains("P");
+  it("Undo/Redo shortcuts test", () => {
+    cy.get("body").type("{ctrl}{z}");
+    cy.getWorkerShift(testedShift).contains("R");
+
+    cy.get("body").type("{ctrl}{shift}{z}");
+    cy.get("[data-cy=redo-button]").click();
+    cy.getWorkerShift(testedShift).contains("P");
   });
 });
