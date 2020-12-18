@@ -23,3 +23,28 @@ export interface ShiftModel {
   color?: string;
   validityPeriod: ScheduleKey;
 }
+
+export interface DisplayedShiftData {
+  name: ShiftName;
+  code: ShiftCode;
+  hours: ShiftHours;
+  color?: string;
+}
+
+export enum ShiftName {
+  R = "Rano",
+  P = "Popołudnie",
+  D = "Dzień",
+  N = "Noc",
+  U = "Urlop wypoczynkowy",
+  L4 = "Zwolnienie lekarskie (L4)",
+}
+
+export enum ShiftHours {
+  R = "8:00 - 12:00",
+  P = "14:00 - 20:00",
+  D = "8:00 - 16:00",
+  N = "22:00 - 6:00",
+  U = "-",
+  L4 = "-",
+}
