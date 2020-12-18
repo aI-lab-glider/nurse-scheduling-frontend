@@ -11,15 +11,15 @@ interface TabData {
 
 export default function ManagementPage(): JSX.Element {
   const tabs: TabData[] = [
-    { label: "Pracownicy", component: <WorkersTab /> },
-    { label: "Zmiany", component: <ShiftTab /> },
-    { label: "Ograniczenia", component: <ConstraintTab /> },
+    { label: "Pracownicy".toUpperCase(), component: <WorkersTab /> },
+    { label: "Zmiany".toUpperCase(), component: <ShiftTab /> },
+    { label: "Ograniczenia".toUpperCase(), component: <ConstraintTab /> },
   ];
 
   return (
     <div className="management-page">
       <h1>Panel zarządzania</h1>
-      <RouteButtonsComponent tabs={tabs} />
+      <RouteButtonsComponent id="adjusted-tab-padding" tabs={tabs} />
     </div>
   );
 }

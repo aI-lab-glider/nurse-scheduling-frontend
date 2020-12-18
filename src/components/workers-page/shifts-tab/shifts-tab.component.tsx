@@ -19,15 +19,18 @@ import ShiftDrawerComponent, { ShiftDrawerMode } from "./shift-drawer.component"
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      paddingTop: 0,
+      padding: "0 0 0 10px",
       width: "100%",
     },
     tableCell: {
-      color: ScssVars.primary,
+      color: `black`,
       fontWeight: "normal",
       fontSize: ScssVars.fontSizeBase,
       fontFamily: ScssVars.fontFamilyPrimary,
       letterSpacing: ScssVars.headingLetterSpacing,
+      textAlign: "left",
+      width: "212px",
+      padding: "0 0 0 0",
     },
     row: {
       borderTop: `2px solid ${ScssVars.workerTableBorderColor}`,
@@ -68,13 +71,13 @@ export default function ShiftTab(): JSX.Element {
               return (
                 <TableRow key={singleShiftData.code} className={classes.row}>
                   <TableCell className={classes.tableCell}>{singleShiftData.name}</TableCell>
-                  <TableCell className={classes.tableCell} align="left">
+                  <TableCell className={classes.tableCell} style={{ width: "94px" }}>
                     {singleShiftData.hours}
                   </TableCell>
-                  <TableCell className={classes.tableCell} align="left">
+                  <TableCell className={classes.tableCell} style={{ width: "94px" }}>
                     {singleShiftData.code}
                   </TableCell>
-                  <TableCell className={classes.tableCell} align="left">
+                  <TableCell className={classes.tableCell}>
                     <div
                       className={classes.colorSample}
                       style={{ backgroundColor: `#${singleShiftData.color}` }}
@@ -95,7 +98,6 @@ export default function ShiftTab(): JSX.Element {
                 </TableRow>
               );
             })}
-            ;
           </TableBody>
         </Table>
       </TableContainer>

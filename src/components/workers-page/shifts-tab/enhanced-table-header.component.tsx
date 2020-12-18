@@ -5,6 +5,18 @@ import TableCell from "@material-ui/core/TableCell";
 import { Button } from "../../common-components";
 import { ShiftDrawerMode } from "./shift-drawer.component";
 import { DisplayedShiftData } from "../../../common-models/shift-info.model";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
+import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    tableCellH: {
+      fontWeight: "bolder",
+      color: ScssVars.primary,
+      padding: "0px",
+    },
+  })
+);
 
 interface EnhancedTableProps {
   toggleDrawer: (open: boolean, mode?: ShiftDrawerMode) => void;
@@ -24,12 +36,17 @@ const headCells: ShiftDataCell[] = [
 
 export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Element {
   const { toggleDrawer } = props;
+  const classes = useStyles();
 
   return (
     <TableHead>
       <TableRow>
         {headCells.map((headCell) => {
-          return <TableCell key={headCell.id}>{headCell.label}</TableCell>;
+          return (
+            <TableCell className={classes.tableCellH} key={headCell.id}>
+              {headCell.label}
+            </TableCell>
+          );
         })}
         <TableCell align="right">
           <Button
