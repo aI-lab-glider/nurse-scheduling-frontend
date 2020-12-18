@@ -54,6 +54,7 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
             onClick={(): void => {
               toggleDrawer(true, ShiftDrawerMode.ADD_NEW);
             }}
+            style={{ width: "187px" }}
           >
             Dodaj zmianę
           </Button>
