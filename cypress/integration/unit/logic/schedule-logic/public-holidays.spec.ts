@@ -1,4 +1,3 @@
-/// <reference types="cypress" />
 import { PublicHolidaysLogic } from "../../../../../src/logic/schedule-logic/public-holidays.logic";
 
 type CustomDate = { day: number; month: number };

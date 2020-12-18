@@ -23,4 +23,10 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-import 'cypress-file-upload';
+import "cypress-file-upload";
+
+Cypress.Commands.add("loadSchedule", () => {
+  cy.visit(Cypress.env("baseUrl"));
+  cy.contains("Plik").click();
+  cy.get('[data-cy="file-input"]').attachFile("example.xlsx");
+});

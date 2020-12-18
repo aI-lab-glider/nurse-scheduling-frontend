@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 import { DataRowParser } from "../../../../../src/logic/schedule-parser/data-row.parser";
 
 describe("DataRowParser", () => {
