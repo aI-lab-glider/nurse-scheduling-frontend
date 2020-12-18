@@ -1,5 +1,4 @@
 import React from "react";
-import { LineMiddle } from "../common-components/lineMiddle/lineMiddle";
 import { useState } from "react";
 
 export interface TableMiddleLineOptions {
