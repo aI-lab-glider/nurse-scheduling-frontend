@@ -1,16 +1,13 @@
+import PouchDB from "pouchdb-browser";
 import { ScheduleDataModel } from "../common-models/schedule-data.model";
-import { ShiftModel } from "../common-models/shift-info.model";
-import { WorkerInfoModel, WorkersInfoModel } from "../common-models/worker-info.model";
 import { ScheduleDataActionType } from "../state/reducers/schedule-data.reducer";
 import {
   PersistanceStoreProvider,
   RevisionFilter,
+  RevisionType,
   ScheduleRevision,
   ThunkFunction,
-  ScheduleKey,
-  RevisionType,
 } from "./persistance-store.model";
-import PouchDB from "pouchdb-browser";
 
 /*eslint-disable @typescript-eslint/camelcase */
 export class LocalStorageProvider extends PersistanceStoreProvider {
@@ -64,18 +61,5 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
         payload: result.doc.data,
       });
     };
-  }
-  addNewWorker(worker: WorkerInfoModel): ThunkFunction<WorkerInfoModel> {
-    throw Error("Not implemented method");
-  }
-  getWorkers(period: ScheduleKey): ThunkFunction<WorkersInfoModel> {
-    throw Error("Not implemented method");
-  }
-
-  addNewShift(shift: ShiftModel): ThunkFunction<ShiftModel> {
-    throw Error("Not implemented method");
-  }
-  getShifts(period: ScheduleKey): ThunkFunction<ShiftModel> {
-    throw Error("Not implemented method");
   }
 }

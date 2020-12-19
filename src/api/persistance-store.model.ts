@@ -1,7 +1,6 @@
 import { Dispatch } from "react";
 import { ScheduleDataModel } from "../common-models/schedule-data.model";
-import { ShiftModel } from "../common-models/shift-info.model";
-import { WorkerInfoModel, WorkersInfoModel } from "../common-models/worker-info.model";
+import { WorkerInfoModel } from "../common-models/worker-info.model";
 import { ActionModel } from "../state/models/action.model";
 import { ApplicationStateModel } from "../state/models/application-state.model";
 
@@ -41,10 +40,6 @@ export abstract class PersistanceStoreProvider {
     schedule: ScheduleDataModel
   ): ThunkFunction<ScheduleDataModel>;
   abstract getScheduleRevision(filter: RevisionFilter): ThunkFunction<ScheduleDataModel>;
-  abstract addNewWorker(worker: WorkerInfoModel): ThunkFunction<WorkerInfoModel>;
-  abstract getWorkers(period: ScheduleKey): ThunkFunction<WorkersInfoModel>;
-  abstract addNewShift(shift: ShiftModel): ThunkFunction<ShiftModel>;
-  abstract getShifts(period: ScheduleKey): ThunkFunction<ShiftModel>;
   protected getScheduleId(schedule: ScheduleDataModel): string {
     const { month_number, year } = schedule.schedule_info;
     return `${month_number}_${year}`;
