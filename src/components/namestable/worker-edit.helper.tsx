@@ -4,17 +4,14 @@ import {
   ContractType,
   ContractTypeHelper,
 } from "../../common-models/worker-info.model";
+import { StringHelper } from "../../helpers/string.helper";
 
 export function translateAndCapitalizeWorkerType(workerType: WorkerType): string {
   const translation = WorkerTypeHelper.translate(workerType);
-  return capitalize(translation);
+  return StringHelper.capitalize(translation);
 }
 
 export function translateAndCapitalizeContractType(contractType: ContractType): string {
   const translation = ContractTypeHelper.translate(contractType);
-  return capitalize(translation);
-}
-
-export function capitalize(text: string): string {
-  return text.charAt(0).toUpperCase() + text.slice(1);
+  return StringHelper.capitalize(translation);
 }
