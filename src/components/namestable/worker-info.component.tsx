@@ -6,7 +6,6 @@ import {
 } from "../../common-models/worker-info.model";
 import { StringHelper } from "../../helpers/string.helper";
 import classNames from "classnames/bind";
-import { Button } from "../common-components";
 
 export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
   return (
