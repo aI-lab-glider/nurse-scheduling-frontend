@@ -3,6 +3,8 @@
 context("Tab 'zarządzanie'", () => {
   beforeEach(() => {
     cy.visit(Cypress.env("baseUrl"));
+    cy.contains("Plik").click();
+    cy.get('[data-cy="file-input"]').attachFile("example.xlsx");
     cy.contains("Zarządzanie").click();
     cy.contains("opiekunka 1").parent().contains("Edytuj").click();
   });
