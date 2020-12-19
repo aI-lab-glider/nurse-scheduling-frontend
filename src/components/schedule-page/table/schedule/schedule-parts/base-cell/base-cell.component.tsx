@@ -136,13 +136,13 @@ export function BaseCellComponent({
 
         {(!isPointerOn || (isPointerOn && isBlocked)) && (
           <p
-            style={{ position: "relative" }}
+            className="relative"
             onClick={(): void => {
               !isBlocked && onClick && onClick();
             }}
           >
             {
-              value == "N" && <span className="error-triangle" /> //todo change to proper error flag
+              value === "N" && <span className="error-triangle" /> //todo change to proper error flag
             }
             {value}
           </p>

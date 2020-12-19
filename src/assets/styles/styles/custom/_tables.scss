@@ -5,7 +5,7 @@
   padding: 0;
 
   background: $white;
-  border: 2px solid $table-border-color-grey;
+  border: 1px solid $table-border-color-grey;
   box-sizing: border-box;
   border-radius: 10px;
 
@@ -27,9 +27,13 @@
     font-size: 12px;
     line-height: 24px;
 
+    &:not(:last-child) {
+      border-bottom: 1px solid $table-border-color-grey;
+    }
+
     .mainCell {
       flex: 1 1 auto;
-      border: 1px solid $table-border-color-grey;
+      border-left: 1px solid $table-border-color-grey;
       align-items: center;
       width: 120%;
       height: 101%;
@@ -57,10 +61,6 @@
       &:first-child {
         border-left: 0;
       }
-
-      &:last-child {
-        border-right: 0;
-      }
     }
 
     .selection {
@@ -72,7 +72,8 @@
       align-items: center;
       height: 103%;
       width: 120%;
-      border: 0.25px solid $table-border-color-grey;
+      border-top: 1px solid $table-border-color-grey;
+      border-left: 1px solid $table-border-color-grey;
 
       padding-top: 8%;
 
@@ -81,10 +82,6 @@
 
       &:first-child {
         border-left: 0;
-      }
-
-      &:last-child {
-        border-right: 0;
       }
     }
 
@@ -97,14 +94,10 @@
 
       height: 100%;
       width: 100%;
-      border: 0.5px solid $table-border-color-grey;
+      border-left: 0.5px solid $table-border-color-grey;
 
       &:first-child {
         border-left: 0;
-      }
-
-      &:last-child {
-        border-right: 0;
       }
     }
 
@@ -131,14 +124,10 @@
       padding-top: 50%;
       padding-bottom: 50%;
       width: 100%;
-      border: 0.5px solid $table-border-color-grey;
+      border-left: 1px solid $table-border-color-grey;
 
       &:first-child {
         border-left: 0;
-      }
-
-      &:last-child {
-        border-right: 0;
       }
     }
 
@@ -264,7 +253,7 @@ span {
   &.error-triangle {
     position: absolute;
     top: -3px;
-    right: -7px;
+    right: -6px;
     display: block;
     width: 0;
     height: 0;
@@ -275,9 +264,11 @@ span {
     box-shadow: $error-triangle-box-shadow;
 
     transform: rotate(45deg);
-    -ms-transform: rotate(45deg); //IE 9
-    -moz-transform: rotate(45deg); //Firefox
-    -webkit-transform: rotate(45deg); //Safari and Chrome
-    -o-transform: rotate(45deg); //Opera
+  }
+}
+
+p {
+  &.relative {
+    position: relative;
   }
 }
