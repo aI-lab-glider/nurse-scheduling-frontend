@@ -18,16 +18,16 @@ export class WorkerTypeHelper {
 }
 
 export enum ContractType {
-  UOP = "UOP",
-  CONTRACTOR = "CONTRACTOR",
+  EMPLOYMENT_CONTRACT = "EMPLOYMENT_CONTRACT",
+  CIVIL_CONTRACT = "CIVIL_CONTRACT",
 }
 
 export class ContractTypeHelper {
   static translate(type: ContractType): string {
     switch (type) {
-      case ContractType.UOP:
+      case ContractType.EMPLOYMENT_CONTRACT:
         return "umowa o pracę";
-      case ContractType.CONTRACTOR:
+      case ContractType.CIVIL_CONTRACT:
         return "umowa zlecenie";
     }
   }
