@@ -41,7 +41,7 @@ export function DropdownButtons({
         <ArrowDropDownIcon />
       </Button>
       <Popper
-        className={"dropdown-buttons-z-index"}
+        className="dropdown-buttons-z-index"
         open={open}
         placement="bottom"
         anchorEl={anchorRef.current}
