@@ -80,7 +80,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
               variant="outlined"
             />
           </Grid>
-          {contractType === ContractType.UOP && (
+          {contractType === ContractType.EMPLOYMENT_CONTRACT && (
             <Grid item xs={6}>
               <Typography className={classes.label}>Wpisz wymiar etatu</Typography>
               <TextField
