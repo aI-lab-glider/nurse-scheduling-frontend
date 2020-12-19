@@ -12,7 +12,7 @@ export interface TimeTableRowOptions {
 }
 
 export function TimeTableRowF({ dataRow, uuid }: TimeTableRowOptions): JSX.Element {
-  const { logic: scheduleLogic } = useContext(ScheduleLogicContext);
+  const scheduleLogic = useContext(ScheduleLogicContext);
 
   function getVerboseDates(): [VerboseDate[], number] {
     if (

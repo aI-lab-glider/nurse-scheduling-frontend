@@ -1,9 +1,6 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { ApplicationStateModel } from "../../state/models/application-state.model";
 import { ScheduleEditPage } from "./edit-page/schedule-edit.page";
-import { ScheduleLogicContext, useScheduleState } from "./table/schedule/use-schedule-state";
 import { ScheduleViewOnlyPage } from "./view-only-page/view-only.page";
 
 interface SchedulePageOptions {
@@ -11,12 +8,6 @@ interface SchedulePageOptions {
 }
 
 export function SchedulePage(props: SchedulePageOptions): JSX.Element {
-  const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
-  const { scheduleLogic, setNewSchedule, scheduleLocalState } = useScheduleState(scheduleModel);
-  useEffect(() => {
-    setNewSchedule(scheduleModel);
-  }, [scheduleModel, setNewSchedule]);
-
   function ViewOnly(): JSX.Element {
     return (
       <>
@@ -34,18 +25,14 @@ export function SchedulePage(props: SchedulePageOptions): JSX.Element {
   }
 
   return (
-    <ScheduleLogicContext.Provider
-      value={{
-        logic: scheduleLogic,
-        schedule: scheduleLocalState,
-      }}
-    >
+    <>
       <div className="schedule-container">
         <Switch>
           <Route path="/" component={ViewOnly} exact />
           <Route path="/schedule-editing" component={Edit} />
         </Switch>
       </div>
-    </ScheduleLogicContext.Provider>
+      )
+    </>
   );
 }

@@ -28,7 +28,6 @@ export class ScheduleLogic implements ScheduleProvider {
     scheduleModel: ScheduleDataModel
   ) {
     this.update(scheduleModel);
-    this.tryGetCurrentMonthSchedule();
   }
 
   public update(schedule: ScheduleDataModel): void {
@@ -69,7 +68,7 @@ export class ScheduleLogic implements ScheduleProvider {
     return { ...logics, FoundationInfo: foundationLogic, Metadata: metadata };
   }
 
-  protected tryGetCurrentMonthSchedule(): void {
+  public tryGetCurrentMonthSchedule(): void {
     const [month, year] = this.sections.Metadata.monthLogic.currentDate;
     const filter: RevisionFilter = { revisionType: "actual", validityPeriod: { month, year } };
     this.dispatchScheduleUpdate(this.storeProvider.getScheduleRevision(filter));

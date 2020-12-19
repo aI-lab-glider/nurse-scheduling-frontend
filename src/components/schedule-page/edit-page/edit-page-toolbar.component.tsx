@@ -17,7 +17,7 @@ interface EditPageToolbarOptions {
 }
 
 export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Element {
-  const { logic: scheduleLogic } = useContext(ScheduleLogicContext);
+  const scheduleLogic = useContext(ScheduleLogicContext);
   const dispatcher = useDispatch();
   async function updateScheduleErrors(): Promise<void> {
     const schedule = scheduleLogic?.schedule.getDataModel();
@@ -77,7 +77,9 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
           size="small"
           className="submit-button"
           variant="outlined"
-          onClick={(): void => scheduleLogic && scheduleLogic.updateActualRevision()}
+          onClick={(): void => {
+            scheduleLogic && scheduleLogic.updateActualRevision();
+          }}
         >
           Zapisz
         </Button>

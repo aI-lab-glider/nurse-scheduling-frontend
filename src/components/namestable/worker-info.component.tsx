@@ -1,3 +1,4 @@
+import classNames from "classnames/bind";
 import React from "react";
 import {
   WorkerInfoModel,
@@ -5,7 +6,6 @@ import {
   WorkerTypeHelper,
 } from "../../common-models/worker-info.model";
 import { StringHelper } from "../../helpers/string.helper";
-import classNames from "classnames/bind";
 
 export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
   return (

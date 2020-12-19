@@ -8,10 +8,15 @@ import { NameTableComponent } from "../../../namestable/nametable.component";
 import { SummaryTableComponent } from "../../../summerytable/summarytable.component";
 import { TableMiddleLine } from "../../table-middleline";
 import { OvertimeHeaderComponent } from "../../../overtime-header-table/overtime-header.component";
+import { ScheduleComponentState } from "./schedule-state.model";
 
-export function ScheduleComponent(): JSX.Element {
-  const { schedule: scheduleLocalState } = useContext(ScheduleLogicContext);
-
+interface ScheduleComponentOptions {
+  schedule: ScheduleComponentState;
+}
+export function ScheduleComponent({
+  schedule: scheduleLocalState,
+}: ScheduleComponentOptions): JSX.Element {
+  const scheduleLogic = useContext(ScheduleLogicContext);
   function isPresent(): boolean {
     if (scheduleLocalState.isInitialized) {
       const a = scheduleLocalState.dateSection?.length;
@@ -21,6 +26,7 @@ export function ScheduleComponent(): JSX.Element {
         return true;
       }
     }
+    scheduleLogic?.tryGetCurrentMonthSchedule();
     return false;
   }
 
@@ -33,7 +39,7 @@ export function ScheduleComponent(): JSX.Element {
               <td />
               <td>
                 <div className="c" style={{ marginLeft: 126, marginTop: 20 }}>
-                  <TimeTableComponent />
+                  <TimeTableComponent scheduleLocalState={scheduleLocalState} />
                 </div>
               </td>
               <td />
@@ -47,7 +53,7 @@ export function ScheduleComponent(): JSX.Element {
             <tr className="sectionContainer">
               <td />
               <td>
-                <TimeTableComponent />
+                <TimeTableComponent scheduleLocalState={scheduleLocalState} />
               </td>
               <td className="summaryContainer">
                 <OvertimeHeaderComponent data={["norma", "aktualne", "różnica"]} />
@@ -64,7 +70,7 @@ export function ScheduleComponent(): JSX.Element {
               </td>
               <td>
                 <table>
-                  <tbody className="table" data-cy="nurseShiftsTable">
+                  <tbody className="table" id="cyTestedSection">
                     <ShiftsSectionComponent
                       uuid={scheduleLocalState.uuid}
                       workerType={WorkerType.NURSE}

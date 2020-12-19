@@ -1,11 +1,12 @@
-import React, { useContext } from "react";
-import { ScheduleLogicContext } from "../schedule-page/table/schedule/use-schedule-state";
+import React from "react";
 import { DataRow } from "../../logic/schedule-logic/data-row";
+import { ScheduleComponentState } from "../schedule-page/table/schedule/schedule-state.model";
 import { TimeTableRow } from "./timetable-row.component";
 
-export function TimeTableSection(): JSX.Element {
-  const { schedule: scheduleLocalState } = useContext(ScheduleLogicContext);
-
+export interface TimeTableSectionOptions {
+  scheduleLocalState: ScheduleComponentState;
+}
+export function TimeTableSection({ scheduleLocalState }: TimeTableSectionOptions): JSX.Element {
   function getDataRow(): DataRow {
     if (scheduleLocalState.isInitialized) {
       const d = scheduleLocalState.dateSection?.values().next().value as DataRow;

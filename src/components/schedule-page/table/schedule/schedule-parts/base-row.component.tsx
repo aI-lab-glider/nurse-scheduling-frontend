@@ -41,7 +41,7 @@ export function BaseRowComponentF({
   selection = [],
   isEditable = true,
 }: BaseRowOptions): JSX.Element {
-  const { logic: scheduleLogic } = useContext(ScheduleLogicContext);
+  const scheduleLogic = useContext(ScheduleLogicContext);
   const verboseDates = scheduleLogic?.sections.Metadata?.verboseDates;
   const currMonthNumber = scheduleLogic?.sections.Metadata.monthNumber;
   const numberOfDays = verboseDates?.length;

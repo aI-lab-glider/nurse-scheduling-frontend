@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ScheduleLogic } from "../../../../logic/schedule-logic/schedule.logic";
-import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
+import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 import { FoundationInfoLogic } from "../../../../logic/schedule-logic/foundation-info.logic";
 import { MetadataLogic } from "../../../../logic/schedule-logic/metadata.logic";
+import { ScheduleLogic } from "../../../../logic/schedule-logic/schedule.logic";
 import { ShiftsInfoLogic } from "../../../../logic/schedule-logic/shifts-info.logic";
 import { ScheduleComponentState, scheduleInitialState } from "./schedule-state.model";
 
@@ -15,14 +15,7 @@ export interface useScheduleStateReturn {
   scheduleLocalState: ScheduleComponentState;
 }
 
-export interface ScheduleContext {
-  schedule: ScheduleComponentState;
-  logic?: ScheduleLogic;
-}
-
-export const ScheduleLogicContext = React.createContext<ScheduleContext>({
-  schedule: scheduleInitialState,
-});
+export const ScheduleLogicContext = React.createContext<ScheduleLogic | null>(null);
 
 export function useScheduleState(
   initialScheduleModelState: ScheduleDataModel
