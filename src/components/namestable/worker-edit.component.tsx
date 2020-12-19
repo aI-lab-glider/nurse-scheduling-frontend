@@ -21,20 +21,39 @@ const useStyles = makeStyles({
   },
 });
 
+export interface WorkerInfoExtendedInterface {
+  name: string;
+  workerType: WorkerType | undefined;
+  contractType: ContractType | undefined;
+  employmentTime: string;
+  civilTime: string;
+}
+
 export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
   const classes = useStyles();
 
-  const [name, setName] = useState(info.name);
-  const [workerType, setWorkerType] = useState(info.type);
-  const [contractType, setContractType] = useState<ContractType>();
-  const [uopTime, setUopTime] = useState(" / ");
-  const [contractorTime, setContractorTime] = useState(0);
+  const [workerInfo, setWorkerInfo] = useState<WorkerInfoExtendedInterface>({
+    name: info.name,
+    workerType: info.type,
+    contractType: undefined,
+    employmentTime: " / ",
+    civilTime: "0",
+  });
+
+  function handleUpdate(event) {
+    const { target } = event;
+    updateWorkerInfo(target.name, target.value);
+  }
+
+  function updateWorkerInfo(key, value) {
+    setWorkerInfo({ ...workerInfo, [key]: value });
+  }
 
   const positionOptions = Object.keys(WorkerType).map((workerTypeName) => {
     const workerType = WorkerType[workerTypeName];
     return {
       label: translateAndCapitalizeWorkerType(workerType),
-      action: () => setWorkerType(workerType),
+      action: () => updateWorkerInfo("workerType", workerType),
     };
   });
 
@@ -42,7 +61,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     const contractType = ContractType[contractTypeName];
     return {
       label: translateAndCapitalizeContractType(contractType),
-      action: () => setContractType(contractType),
+      action: () => updateWorkerInfo("contractType", contractType),
     };
   });
 
@@ -54,9 +73,10 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
             <Typography className={classes.label}>Imię i nazwisko</Typography>
             <TextField
               fullWidth
+              name="name"
               data-cy="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={workerInfo.name}
+              onChange={handleUpdate}
               color="primary"
             />
           </Grid>
@@ -65,7 +85,11 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
             <DropdownButtons
               data-cy="position"
               buttons={positionOptions}
-              mainLabel={workerType ? translateAndCapitalizeWorkerType(workerType) : "Stanowisko"}
+              mainLabel={
+                workerInfo.workerType
+                  ? translateAndCapitalizeWorkerType(workerInfo.workerType)
+                  : "Stanowisko"
+              }
               variant="outlined"
             />
           </Grid>
@@ -75,31 +99,35 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
               data-cy="contract"
               buttons={contractOptions}
               mainLabel={
-                contractType ? translateAndCapitalizeContractType(contractType) : "Typ umowy"
+                workerInfo.contractType
+                  ? translateAndCapitalizeContractType(workerInfo.contractType)
+                  : "Typ umowy"
               }
               variant="outlined"
             />
           </Grid>
-          {contractType === ContractType.EMPLOYMENT_CONTRACT && (
+          {workerInfo.contractType === ContractType.EMPLOYMENT_CONTRACT && (
             <Grid item xs={6}>
               <Typography className={classes.label}>Wpisz wymiar etatu</Typography>
               <TextField
                 fullWidth
-                data-cy="contractor"
-                value={contractorTime}
+                name="civilTime"
+                data-cy="civilTime"
+                value={workerInfo.civilTime}
                 type="number"
-                onChange={(e) => setContractorTime(parseInt(e.target.value))}
+                onChange={handleUpdate}
                 color="primary"
               />
             </Grid>
           )}
-          {contractType === ContractType.CONTRACTOR && (
+          {workerInfo.contractType === ContractType.CIVIL_CONTRACT && (
             <Grid item xs={6}>
               <Typography className={classes.label}>Ilość godzin</Typography>
               <Input
                 fullWidth
-                value={uopTime}
-                onChange={(e) => setUopTime(e.target.value)}
+                name="employmentTime"
+                value={workerInfo.employmentTime}
+                onChange={handleUpdate}
                 data-cy="hours-number"
                 inputComponent={TextMaskCustom as any}
               />
