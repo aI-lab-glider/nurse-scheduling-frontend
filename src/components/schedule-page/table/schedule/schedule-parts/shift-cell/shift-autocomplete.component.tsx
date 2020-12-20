@@ -17,7 +17,7 @@ const shiftCodes: ShiftCode[] = [
 
 const ShiftCodeSelectItems = shiftCodes.map((shiftCode) => createSelectItem(shiftCode));
 
-function createSelectItem(shiftCode: ShiftCode) {
+function createSelectItem(shiftCode: ShiftCode): { name: string; symbol: string; code: ShiftCode } {
   return {
     name:
       `${shifts[shiftCode].name}` +
@@ -27,7 +27,7 @@ function createSelectItem(shiftCode: ShiftCode) {
           : ""
       }`,
     symbol: `${shifts[shiftCode].code}`,
-    code: `${shiftCode}`,
+    code: shiftCode,
   };
 }
 
