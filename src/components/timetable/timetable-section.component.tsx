@@ -1,22 +1,12 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../state/models/application-state.model";
-import {
-  ScheduleLogicContext,
-  useScheduleState,
-} from "../schedule-page/table/schedule/use-schedule-state";
+import React from "react";
 import { DataRow } from "../../logic/schedule-logic/data-row";
+import { ScheduleComponentState } from "../schedule-page/table/schedule/schedule-state.model";
 import { TimeTableRow } from "./timetable-row.component";
 
-export function TimeTableSection(): JSX.Element {
-  const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
-
-  const { scheduleLogic, scheduleLocalState, setNewSchedule } = useScheduleState(scheduleModel);
-
-  useEffect(() => {
-    setNewSchedule(scheduleModel);
-  }, [scheduleModel, setNewSchedule]);
-
+export interface TimeTableSectionOptions {
+  scheduleLocalState: ScheduleComponentState;
+}
+export function TimeTableSection({ scheduleLocalState }: TimeTableSectionOptions): JSX.Element {
   function getDataRow(): DataRow {
     if (scheduleLocalState.isInitialized) {
       const d = scheduleLocalState.dateSection?.values().next().value as DataRow;
@@ -37,9 +27,7 @@ export function TimeTableSection(): JSX.Element {
     <React.Fragment>
       <table className="table">
         <tbody>
-          <ScheduleLogicContext.Provider value={scheduleLogic}>
-            <TimeTableRow uuid={scheduleLocalState.uuid} dataRow={data} />
-          </ScheduleLogicContext.Provider>
+          <TimeTableRow uuid={scheduleLocalState.uuid} dataRow={data} />
         </tbody>
       </table>
     </React.Fragment>

@@ -1,14 +1,9 @@
-import React, { useCallback, useContext, useMemo, useState } from "react";
-import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
-import { WorkerInfoModel, WorkerType } from "../../../../../../common-models/worker-info.model";
-import { ShiftCode } from "../../../../../../common-models/shift-info.model";
-import { ShiftCellComponent } from "../../schedule-parts/shift-cell/shift-cell.component";
-import { ScheduleLogicContext } from "../../use-schedule-state";
-import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-section.component";
-import { ShiftRowComponent } from "../../schedule-parts/shift-row.component";
+import React from "react";
+import { WorkerType } from "../../../../../../common-models/worker-info.model";
 import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
-import { ShiftsInfoLogic } from "../../../../../../logic/schedule-logic/shifts-info.logic";
-import { AddWorkerModal } from "../../../../../common-components";
+import { ShiftCellComponent } from "../../schedule-parts/shift-cell/shift-cell.component";
+import { ShiftRowComponent } from "../../schedule-parts/shift-row.component";
+import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-section.component";
 
 export interface ShiftsSectionOptions extends Omit<BaseSectionOptions, "sectionKey"> {
   workerType: WorkerType;
@@ -16,56 +11,8 @@ export interface ShiftsSectionOptions extends Omit<BaseSectionOptions, "sectionK
 
 export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Element {
   const { data = [], workerType, uuid } = options;
-  const scheduleLogic = useContext(ScheduleLogicContext);
   const sectionKey: keyof Sections =
     workerType === WorkerType.NURSE ? "NurseInfo" : "BabysitterInfo";
-  const sectionInfoProvider = scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey);
-  const [isOpened, setIsOpened] = useState(false);
-  const [workerInfo, setWorkerInfo] = useState({ name: "", time: 0 });
-
-  const addOrUpdateWorker = useCallback(
-    (newRow: DataRow, workerTime: number): void => {
-      if (sectionKey) scheduleLogic?.addWorker(sectionKey, newRow, workerTime);
-    },
-    [scheduleLogic, sectionKey]
-  );
-
-  const submit = useCallback(
-    ({ name, time }: WorkerInfoModel): void => {
-      if (!name || !time) return;
-      let dataRow = data.find((row) => row.rowKey === name);
-      if (!dataRow) {
-        dataRow = new DataRow(name, new Array(data[0].length - 1).fill(ShiftCode.W));
-      }
-      addOrUpdateWorker(dataRow, time);
-    },
-    [data, addOrUpdateWorker]
-  );
-
-  const modal = useMemo(
-    () => (
-      <AddWorkerModal
-        isOpened={isOpened}
-        setIsOpened={setIsOpened}
-        submit={submit}
-        workerType={workerType}
-        workerInfo={workerInfo}
-      />
-    ),
-    [workerType, workerInfo, isOpened, submit]
-  );
-
-  const openWorkerModal = useCallback(
-    (workerName?: string): void => {
-      let workerInfo = { name: "", time: 0 };
-      if (workerName && sectionInfoProvider) {
-        workerInfo = { name: workerName, time: sectionInfoProvider.workerWorkTime(workerName) };
-      }
-      setWorkerInfo(workerInfo);
-      setIsOpened(true);
-    },
-    [setWorkerInfo, setIsOpened, sectionInfoProvider]
-  );
 
   return (
     <>
@@ -77,10 +24,8 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
           sectionKey={sectionKey}
           cellComponent={ShiftCellComponent}
           rowComponent={ShiftRowComponent}
-          onRowKeyClicked={(rowIndex): void => openWorkerModal(data[rowIndex].rowKey)}
         />
       </table>
-      {modal}
     </>
   );
 }

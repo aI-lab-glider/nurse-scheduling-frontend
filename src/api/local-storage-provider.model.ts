@@ -1,81 +1,65 @@
+import PouchDB from "pouchdb-browser";
 import { ScheduleDataModel } from "../common-models/schedule-data.model";
-import { ShiftInfoModel, ShiftModel } from "../common-models/shift-info.model";
-import { WorkerInfoModel, WorkersInfoModel } from "../common-models/worker-info.model";
 import { ScheduleDataActionType } from "../state/reducers/schedule-data.reducer";
 import {
   PersistanceStoreProvider,
   RevisionFilter,
+  RevisionType,
   ScheduleRevision,
   ThunkFunction,
-  ScheduleKey,
-  ScheduleRecord,
 } from "./persistance-store.model";
-/*eslint-disable @typescript-eslint/no-unused-vars*/
 
-export class LocalStorageProvider implements PersistanceStoreProvider {
-  private sleep(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+/*eslint-disable @typescript-eslint/camelcase */
+export class LocalStorageProvider extends PersistanceStoreProvider {
+  private storage: PouchDB.Database<ScheduleRevision>;
+
+  constructor() {
+    super();
+    this.storage = new PouchDB("nurse-scheduling");
   }
-  saveScheduleRevision(revision: ScheduleRevision): ThunkFunction<ScheduleDataModel> {
+
+  saveScheduleRevision(
+    type: RevisionType,
+    schedule: ScheduleDataModel
+  ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
-      await this.sleep(100);
-      const revisions = JSON.parse(localStorage.getItem("revisions") || "[]");
-      localStorage.setItem("currentSchedule", JSON.stringify([...revisions, revision]));
+      const id = this.getScheduleId(schedule);
+      let revision = "";
+      try {
+        const document = await this.storage.get(id);
+        revision = document._rev;
+      } catch {}
+      this.storage.put({
+        _rev: revision,
+        _id: id,
+        data: schedule,
+        revisionType: type,
+      });
       dispatch({
         type: ScheduleDataActionType.ADD_NEW,
-        payload: revision.data,
+        payload: schedule,
       });
     };
   }
+
   getScheduleRevision(filter: RevisionFilter): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
-      await this.sleep(100);
-      const revisions: ScheduleRecord[] = JSON.parse(localStorage.getItem("revisions") || "[]");
-      const result = revisions.find(
-        (r) =>
-          r.validityPeriod.month === filter.validityPeriod.month &&
-          r.validityPeriod.year === filter.validityPeriod.year
-      );
-      if (!result) {
+      const revisions = await this.storage.allDocs({ include_docs: true });
+      const result = revisions.rows.find((r) => {
+        const { year, month_number } = r.doc?.data.schedule_info ?? {};
+        return (
+          month_number === filter.validityPeriod.month &&
+          year === filter.validityPeriod.year &&
+          r.doc?.revisionType === filter.revisionType
+        );
+      });
+      if (!result?.doc) {
         return;
       }
-
       dispatch({
         type: ScheduleDataActionType.ADD_NEW,
-        payload:
-          filter.revisionType === "primary"
-            ? result.primaryRevision.data
-            : result.actualRevision.data,
+        payload: result.doc.data,
       });
-    };
-  }
-  addNewWorker(worker: WorkerInfoModel): ThunkFunction<WorkerInfoModel> {
-    return async (dispatch, getState): Promise<void> => {
-      await this.sleep(100);
-      const workers: WorkerInfoModel[] = JSON.parse(localStorage.getItem("workers") || "[]");
-      localStorage.setItem("workers", JSON.stringify([...workers, worker]));
-    };
-  }
-  getWorkers(period: ScheduleKey): ThunkFunction<WorkersInfoModel> {
-    return async (dispatch, getState): Promise<void> => {
-      await this.sleep(100);
-      const workers: WorkerInfoModel[] = JSON.parse(localStorage.getItem("workers") || "[]");
-      const workersInPeriod = workers;
-    };
-  }
-
-  addNewShift(shift: ShiftModel): ThunkFunction<ShiftModel> {
-    return async (dispatch, getState): Promise<void> => {
-      await this.sleep(100);
-      const shifts: ShiftInfoModel[] = JSON.parse(localStorage.getItem("shifts") || "[]");
-      localStorage.setItem("shifts", JSON.stringify([...shifts, shift]));
-    };
-  }
-  getShifts(period: ScheduleKey): ThunkFunction<ShiftModel> {
-    return async (dispatch, getState): Promise<void> => {
-      await this.sleep(100);
-      const shifts: ShiftModel[] = JSON.parse(localStorage.getItem("shifts") || "[]");
-      const shiftInPeriod = shifts;
     };
   }
 }

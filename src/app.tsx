@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CustomGlobalHotKeys, HeaderComponent } from "./components/common-components";
-import { SchedulePage } from "./components/schedule-page.component";
+import { SchedulePage } from "./components/schedule-page/schedule-page.component";
 import { useDispatch } from "react-redux";
 import schedule from "./assets/devMode/schedule.js";
 import { ScheduleDataActionType } from "./state/reducers/schedule-data.reducer";
