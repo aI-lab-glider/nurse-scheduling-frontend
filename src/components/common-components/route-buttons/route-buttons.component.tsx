@@ -14,6 +14,7 @@ interface Tabs {
 interface RouteButtonsOptions {
   tabs: Tabs[];
   disabled?: boolean;
+  id?: string;
 }
 
 const useStyles = makeStyles(() => ({
@@ -26,12 +27,13 @@ const useStyles = makeStyles(() => ({
     minWidth: 0,
     outline: "none",
     margin: "0 20px 0 0",
-    padding: 5,
+    padding: 0,
   },
 }));
 
 export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.Element {
   const tabs = props.tabs;
+  const id = "" + props.id;
   const [tab, setTab] = React.useState(tabs[0].label);
   const classes = useStyles();
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string): void => {
@@ -68,7 +70,7 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
   return (
     <div className={"tabs-and-buttons"}>
       <TabContext value={tab}>
-        <div className={"tabs-row"}>
+        <div className={"tabs-row"} id={id}>
           <div className={"tabs-and-buttons"}>
             <TabList
               classes={{ indicator: classes.indicatorStyle }}

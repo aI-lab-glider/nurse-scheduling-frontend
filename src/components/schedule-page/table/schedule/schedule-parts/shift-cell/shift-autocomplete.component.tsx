@@ -1,18 +1,35 @@
 import React from "react";
-import { ShiftCode } from "../../../../../../common-models/shift-info.model";
+import { ShiftCode, shifts } from "../../../../../../common-models/shift-info.model";
 import { AutocompleteComponent } from "../../../../../common-components";
 import { BaseCellInputOptions } from "../base-cell/base-cell-input.component";
-const ShiftCodeSelectItems = [
-  { name: "rano: 7-15", symbol: "R", code: ShiftCode.R },
-  { name: "popołudnie: 15-19", symbol: "P", code: ShiftCode.P },
-  { name: "dzień: 7-19", symbol: "D", code: ShiftCode.D },
-  { name: "noc: 19-7", symbol: "N", code: ShiftCode.N },
-  { name: "dzień + noc: 7-7", symbol: "DN", code: ShiftCode.DN },
-  { name: "popołudnie + noc: 15-7", symbol: "PN", code: ShiftCode.PN },
-  { name: "wolne", symbol: "W", code: ShiftCode.W },
-  { name: "urlop", symbol: "U", code: ShiftCode.U },
-  { name: "L4", symbol: "L4", code: ShiftCode.L4 },
+
+const shiftCodes: ShiftCode[] = [
+  ShiftCode.R,
+  ShiftCode.P,
+  ShiftCode.D,
+  ShiftCode.N,
+  ShiftCode.DN,
+  ShiftCode.PN,
+  ShiftCode.W,
+  ShiftCode.U,
+  ShiftCode.L4,
 ];
+const ShiftCodeSelectItems = shiftCodes.map((shiftCode) => createSelectItem(shiftCode));
+
+function createSelectItem(shiftCode: ShiftCode): { name: string; symbol: string; code: ShiftCode } {
+  return {
+    name:
+      `${shifts[shiftCode].name}` +
+      `${
+        shifts[shiftCode].isWorkingShift
+          ? `: ${shifts[shiftCode].from}-${shifts[shiftCode].to}`
+          : ""
+      }`,
+    symbol: `${shifts[shiftCode].code}`,
+    code: shiftCode,
+  };
+}
+
 export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): JSX.Element {
   return (
     <AutocompleteComponent
