@@ -4,12 +4,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
-import {
-  DisplayedShiftData,
-  ShiftCode,
-  ShiftHours,
-  ShiftName,
-} from "../../../common-models/shift-info.model";
+import { ShiftCode, shifts } from "../../../common-models/shift-info.model";
 import { Button } from "../../common-components";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
@@ -47,13 +42,13 @@ export default function ShiftTab(): JSX.Element {
   const classes = useStyles();
   const [open, setIsOpen] = useState(false);
   const [mode, setMode] = useState(ShiftDrawerMode.ADD_NEW);
-  const shiftData: DisplayedShiftData[] = [
-    { code: ShiftCode.D, name: ShiftName.D, hours: ShiftHours.D, color: "CBEECB" },
-    { code: ShiftCode.N, name: ShiftName.N, hours: ShiftHours.N, color: "B7BCC7" },
-    { code: ShiftCode.R, name: ShiftName.R, hours: ShiftHours.R, color: "FFE880" },
-    { code: ShiftCode.P, name: ShiftName.P, hours: ShiftHours.P, color: "B3E3FF" },
-    { code: ShiftCode.L4, name: ShiftName.L4, hours: ShiftHours.L4, color: "EEB3B3" },
-    { code: ShiftCode.U, name: ShiftName.U, hours: ShiftHours.U, color: "FFDBC3" },
+  const shiftCodes: ShiftCode[] = [
+    ShiftCode.D,
+    ShiftCode.N,
+    ShiftCode.R,
+    ShiftCode.P,
+    ShiftCode.L4,
+    ShiftCode.U,
   ];
 
   function toggleDrawer(open: boolean, mode?: ShiftDrawerMode): void {
@@ -67,20 +62,21 @@ export default function ShiftTab(): JSX.Element {
         <Table size="small">
           <EnhancedTableHeaderComponent toggleDrawer={toggleDrawer} />
           <TableBody>
-            {shiftData.map((singleShiftData) => {
+            {shiftCodes.map((shiftCode) => {
               return (
-                <TableRow key={singleShiftData.code} className={classes.row}>
-                  <TableCell className={classes.tableCell}>{singleShiftData.name}</TableCell>
-                  <TableCell className={classes.tableCell} style={{ width: "94px" }}>
-                    {singleShiftData.hours}
+                <TableRow key={shifts[shiftCode].code} className={classes.row}>
+                  <TableCell className={classes.tableCell}>{shifts[shiftCode].name}</TableCell>
+                  <TableCell className={classes.tableCell} style={{ width: "120px" }}>
+                    {shifts[shiftCode].isWorkingShift ? `${shifts[shiftCode].from}:00 ` : ""}-
+                    {shifts[shiftCode].isWorkingShift ? ` ${shifts[shiftCode].to}:00` : ""}
                   </TableCell>
                   <TableCell className={classes.tableCell} style={{ width: "94px" }}>
-                    {singleShiftData.code}
+                    {shifts[shiftCode].code}
                   </TableCell>
                   <TableCell className={classes.tableCell}>
                     <div
                       className={classes.colorSample}
-                      style={{ backgroundColor: `#${singleShiftData.color}` }}
+                      style={{ backgroundColor: `#${shifts[shiftCode].color}` }}
                     />
                   </TableCell>
                   <TableCell align="right">
