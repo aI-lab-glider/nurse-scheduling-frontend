@@ -17,7 +17,7 @@ export const shifts: { [id: string]: Shift } = {
   DN: { code: "DN", name: "Dzień + Noc", from: 7, to: 7, color: "", isWorkingShift: true },
   PN: {
     code: "PN",
-    name: "Popołudnie + Noc",
+    name: "Popołudn + Noc",
     from: 19,
     to: 7,
     color: "",
