@@ -11,9 +11,9 @@ interface TabData {
 
 export default function ManagementPage(): JSX.Element {
   const tabs: TabData[] = [
-    { label: "Pracownicy".toUpperCase(), component: <WorkersTab /> },
-    { label: "Zmiany".toUpperCase(), component: <ShiftTab /> },
-    { label: "Ograniczenia".toUpperCase(), component: <ConstraintTab /> },
+    { label: "PRACOWNICY", component: <WorkersTab /> },
+    { label: "ZMIANY", component: <ShiftTab /> },
+    { label: "OGRANICZENIA", component: <ConstraintTab /> },
   ];
 
   return (

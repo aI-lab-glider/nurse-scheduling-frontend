@@ -94,6 +94,7 @@ export function BaseCellComponent({
     }
     onKeyDown && onKeyDown(e);
   }
+
   function _onValueChange(newValue: string): void {
     onValueChange && onValueChange(newValue);
   }
@@ -135,10 +136,14 @@ export function BaseCellComponent({
 
         {(!isPointerOn || (isPointerOn && isBlocked)) && (
           <p
+            className="relative"
             onClick={(): void => {
               !isBlocked && onClick && onClick();
             }}
           >
+            {
+              value === "N" && <span className="error-triangle" /> //todo change to proper error flag
+            }
             {value}
           </p>
         )}

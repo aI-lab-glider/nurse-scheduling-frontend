@@ -4,9 +4,9 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import { Button } from "../../common-components";
 import { ShiftDrawerMode } from "./shift-drawer.component";
-import { DisplayedShiftData } from "../../../common-models/shift-info.model";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import { Shift } from "../../../common-models/shift-info.model";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -23,13 +23,13 @@ interface EnhancedTableProps {
 }
 
 interface ShiftDataCell {
-  id: keyof DisplayedShiftData;
+  id: keyof Shift;
   label: string;
 }
 
 const headCells: ShiftDataCell[] = [
   { id: "name", label: "Nazwa zmiany" },
-  { id: "hours", label: "Godziny" },
+  { id: "from", label: "Godziny" },
   { id: "code", label: "Skrót" },
   { id: "color", label: "Kolor" },
 ];

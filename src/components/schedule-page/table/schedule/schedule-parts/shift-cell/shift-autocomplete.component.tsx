@@ -14,7 +14,6 @@ const shiftCodes: ShiftCode[] = [
   ShiftCode.U,
   ShiftCode.L4,
 ];
-
 const ShiftCodeSelectItems = shiftCodes.map((shiftCode) => createSelectItem(shiftCode));
 
 function createSelectItem(shiftCode: ShiftCode): { name: string; symbol: string; code: ShiftCode } {
