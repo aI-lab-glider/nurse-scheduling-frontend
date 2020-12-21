@@ -24,7 +24,6 @@ const useStyles = makeStyles(() =>
       fontFamily: ScssVars.fontFamilyPrimary,
       letterSpacing: ScssVars.headingLetterSpacing,
       textAlign: "left",
-      width: "212px",
       padding: "0 0 0 0",
     },
     row: {
@@ -42,14 +41,14 @@ export default function ShiftTab(): JSX.Element {
   const classes = useStyles();
   const [open, setIsOpen] = useState(false);
   const [mode, setMode] = useState(ShiftDrawerMode.ADD_NEW);
-  const shiftCodes: ShiftCode[] = [
+  /*const shiftCodes: ShiftCode[] = [
     ShiftCode.D,
     ShiftCode.N,
     ShiftCode.R,
     ShiftCode.P,
     ShiftCode.L4,
     ShiftCode.U,
-  ];
+  ];*/
 
   function toggleDrawer(open: boolean, mode?: ShiftDrawerMode): void {
     setIsOpen(open);
@@ -62,21 +61,19 @@ export default function ShiftTab(): JSX.Element {
         <Table size="small">
           <EnhancedTableHeaderComponent toggleDrawer={toggleDrawer} />
           <TableBody>
-            {shiftCodes.map((shiftCode) => {
+            {Object.values(shifts).map((shift) => {
               return (
-                <TableRow key={shifts[shiftCode].code} className={classes.row}>
-                  <TableCell className={classes.tableCell}>{shifts[shiftCode].name}</TableCell>
-                  <TableCell className={classes.tableCell} style={{ width: "120px" }}>
-                    {shifts[shiftCode].isWorkingShift ? `${shifts[shiftCode].from}:00 ` : ""}-
-                    {shifts[shiftCode].isWorkingShift ? ` ${shifts[shiftCode].to}:00` : ""}
+                <TableRow key={shift.code} className={classes.row}>
+                  <TableCell className={classes.tableCell}>{shift.name}</TableCell>
+                  <TableCell className={classes.tableCell}>
+                    {shift.isWorkingShift ? `${shift.from}:00 ` : ""}-
+                    {shift.isWorkingShift ? ` ${shift.to}:00` : ""}
                   </TableCell>
-                  <TableCell className={classes.tableCell} style={{ width: "94px" }}>
-                    {shifts[shiftCode].code}
-                  </TableCell>
+                  <TableCell className={classes.tableCell}>{shift.code}</TableCell>
                   <TableCell className={classes.tableCell}>
                     <div
                       className={classes.colorSample}
-                      style={{ backgroundColor: `#${shifts[shiftCode].color}` }}
+                      style={{ backgroundColor: `#${shift.color}` }}
                     />
                   </TableCell>
                   <TableCell align="right">

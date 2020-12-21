@@ -14,21 +14,13 @@ const shiftCodes: ShiftCode[] = [
   ShiftCode.U,
   ShiftCode.L4,
 ];
-const ShiftCodeSelectItems = shiftCodes.map((shiftCode) => createSelectItem(shiftCode));
-
-function createSelectItem(shiftCode: ShiftCode): { name: string; symbol: string; code: ShiftCode } {
+const ShiftCodeSelectItems = Object.values(shifts).map((shift) => {
   return {
-    name:
-      `${shifts[shiftCode].name}` +
-      `${
-        shifts[shiftCode].isWorkingShift
-          ? `: ${shifts[shiftCode].from}-${shifts[shiftCode].to}`
-          : ""
-      }`,
-    symbol: `${shifts[shiftCode].code}`,
-    code: shiftCode,
+    name: `${shift.name}` + `${shift.isWorkingShift ? `: ${shift.from}-${shift.to}` : ""}`,
+    symbol: shift.code,
+    code: shift.code,
   };
-}
+});
 
 export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): JSX.Element {
   return (

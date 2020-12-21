@@ -5,31 +5,30 @@ export interface Shift {
   name: string;
   from: number;
   to: number;
-  color: string;
+  color?: string;
   isWorkingShift?: boolean;
 }
 
 export const shifts: { [id: string]: Shift } = {
-  R: { code: "R", name: "Rano", from: 7, to: 15, color: "FFE880", isWorkingShift: true },
-  P: { code: "P", name: "Popołudnie", from: 15, to: 19, color: "B3E3FF", isWorkingShift: true },
-  D: { code: "D", name: "Dzień", from: 7, to: 19, color: "CBEECB", isWorkingShift: true },
-  N: { code: "N", name: "Noc", from: 19, to: 7, color: "B7BCC7", isWorkingShift: true },
-  DN: { code: "DN", name: "Dzień + Noc", from: 7, to: 7, color: "", isWorkingShift: true },
+  R: { code: "R", name: "Rano", from: 7, to: 15, color: "FFD100", isWorkingShift: true },
+  P: { code: "P", name: "Popołudnie", from: 15, to: 19, color: "00A3FF", isWorkingShift: true },
+  D: { code: "D", name: "Dzień", from: 7, to: 19, color: "73B471", isWorkingShift: true },
+  N: { code: "N", name: "Noc", from: 19, to: 7, color: "1D3557", isWorkingShift: true },
+  DN: { code: "DN", name: "Dzień + Noc", from: 7, to: 7, color: "641EAA", isWorkingShift: true },
   PN: {
     code: "PN",
     name: "Popołudnie + Noc",
     from: 19,
     to: 7,
-    color: "",
     isWorkingShift: true,
   },
-  W: { code: "W", name: "Wolne", from: 0, to: 24, color: "", isWorkingShift: false },
+  W: { code: "W", name: "Wolne", from: 0, to: 24, isWorkingShift: false },
   U: {
     code: "U",
     name: "Urlop wypoczynkowy",
     from: 0,
     to: 24,
-    color: "FFDBC3",
+    color: "FF8A00",
     isWorkingShift: false,
   },
   L4: {
@@ -37,7 +36,15 @@ export const shifts: { [id: string]: Shift } = {
     name: "Zwolnienie lekarskie (L4)",
     from: 0,
     to: 24,
-    color: "EEB3B3",
+    color: "C60000",
+    isWorkingShift: false,
+  },
+  K: {
+    code: "K",
+    name: "Kwarantanna",
+    from: 0,
+    to: 24,
+    color: "000000",
     isWorkingShift: false,
   },
 };
