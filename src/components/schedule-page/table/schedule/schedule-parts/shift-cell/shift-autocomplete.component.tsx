@@ -5,7 +5,7 @@ import { BaseCellInputOptions } from "../base-cell/base-cell-input.component";
 
 const ShiftCodeSelectItems = Object.values(shifts).map((shift) => {
   return {
-    name: `${shift.name}` + `${shift.isWorkingShift ? `: ${shift.from}-${shift.to}` : ""}`,
+    name: `${shift.name} ${shift.isWorkingShift ? `: ${shift.from}-${shift.to}` : ""}`,
     symbol: shift.code,
     code: shift.code,
   };
