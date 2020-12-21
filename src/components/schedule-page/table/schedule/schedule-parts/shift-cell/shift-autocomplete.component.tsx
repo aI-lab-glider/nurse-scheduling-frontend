@@ -1,19 +1,8 @@
 import React from "react";
-import { ShiftCode, shifts } from "../../../../../../common-models/shift-info.model";
+import { shifts } from "../../../../../../common-models/shift-info.model";
 import { AutocompleteComponent } from "../../../../../common-components";
 import { BaseCellInputOptions } from "../base-cell/base-cell-input.component";
 
-const shiftCodes: ShiftCode[] = [
-  ShiftCode.R,
-  ShiftCode.P,
-  ShiftCode.D,
-  ShiftCode.N,
-  ShiftCode.DN,
-  ShiftCode.PN,
-  ShiftCode.W,
-  ShiftCode.U,
-  ShiftCode.L4,
-];
 const ShiftCodeSelectItems = Object.values(shifts).map((shift) => {
   return {
     name: `${shift.name}` + `${shift.isWorkingShift ? `: ${shift.from}-${shift.to}` : ""}`,

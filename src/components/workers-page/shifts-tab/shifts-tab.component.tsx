@@ -4,7 +4,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
-import { ShiftCode, shifts } from "../../../common-models/shift-info.model";
+import { shifts } from "../../../common-models/shift-info.model";
 import { Button } from "../../common-components";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
@@ -41,14 +41,6 @@ export default function ShiftTab(): JSX.Element {
   const classes = useStyles();
   const [open, setIsOpen] = useState(false);
   const [mode, setMode] = useState(ShiftDrawerMode.ADD_NEW);
-  /*const shiftCodes: ShiftCode[] = [
-    ShiftCode.D,
-    ShiftCode.N,
-    ShiftCode.R,
-    ShiftCode.P,
-    ShiftCode.L4,
-    ShiftCode.U,
-  ];*/
 
   function toggleDrawer(open: boolean, mode?: ShiftDrawerMode): void {
     setIsOpen(open);
