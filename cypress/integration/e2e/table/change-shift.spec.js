@@ -11,7 +11,7 @@ context("Change shift", () => {
 
   it("Should be able to change shift using dropdown", () => {
     cy.get("@cell").click();
-    cy.contains("popołudnie").click();
+    cy.contains("Popołudnie").click();
 
     // https://github.com/cypress-io/cypress/issues/7413
     cy.get("#cyTestedSection").children().children().children().eq(0).contains("P");

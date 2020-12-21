@@ -79,6 +79,7 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
         })}
         <TableCell align="right">
           <Button
+            className="header-button"
             variant="primary"
             onClick={(): void => {
               toggleDrawer(true, WorkerDrawerMode.ADD_NEW, undefined);
