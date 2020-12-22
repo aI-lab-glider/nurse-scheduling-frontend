@@ -12,17 +12,14 @@ interface Options {
 
 export default function ErrorListItem({ error }: Options): JSX.Element {
   /* eslint-disable @typescript-eslint/camelcase */
-  const { month_number, year } = useSelector(
+  const { month_number } = useSelector(
     (state: ApplicationStateModel) => state.scheduleData.present.schedule_info
   );
 
   let currMonthGenetivus = "";
-  if (month_number && year) {
-    currMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[month_number]}`;
-  }
-
   let prevMonthGenetivus = "";
-  if (month_number && year) {
+  if (month_number) {
+    currMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[month_number]}`;
     prevMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[month_number - 1]}`;
   }
 
@@ -35,11 +32,9 @@ export default function ErrorListItem({ error }: Options): JSX.Element {
   }
 
   let errorDayIndex = -1;
-  if (error.day) {
-    errorDayIndex = error.day - 1;
-  }
   let errorDay = -1;
-  if (mappedDays) {
+  if (error.day && mappedDays) {
+    errorDayIndex = error.day - 1;
     errorDay = mappedDays[errorDayIndex];
   }
 
@@ -53,7 +48,7 @@ export default function ErrorListItem({ error }: Options): JSX.Element {
       <div className="red-rectangle"></div>
       <div className="error-title">
         <p className="error-title-content">
-          {error.day ? `${errorDay} ` + month : `${error.title}`}
+          {error.title === "date" ? `${errorDay} ` + month : `${error.title}`}
         </p>
       </div>
       <div className="error-text">{error.message}</div>
