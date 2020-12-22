@@ -23,8 +23,16 @@ export function ImportButtonsComponent(): JSX.Element {
   );
   const scheduleDipatcher = useDispatch();
 
-  const btnData1: ButtonData = { label: "Wczytaj", action: () => fileUpload.current?.click() };
-  const btnData2: ButtonData = { label: "Zapisz jako...", action: (): void => handleExport() };
+  const btnData1: ButtonData = {
+    label: "Wczytaj",
+    action: () => fileUpload.current?.click(),
+    dataCy: "load-schedule-button",
+  };
+  const btnData2: ButtonData = {
+    label: "Zapisz jako...",
+    action: (): void => handleExport(),
+    dataCy: "export-schedule-button",
+  };
 
   const btnData = [btnData1, btnData2];
 
@@ -59,7 +67,12 @@ export function ImportButtonsComponent(): JSX.Element {
 
   return (
     <div>
-      <DropdownButtons buttons={btnData} mainLabel="Plik" variant="primary" />
+      <DropdownButtons
+        buttons={btnData}
+        mainLabel="Plik"
+        variant="primary"
+        dataCy={"file-dropdown"}
+      />
       <input
         ref={fileUpload}
         id="file-input"

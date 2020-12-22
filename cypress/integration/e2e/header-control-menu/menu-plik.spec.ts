@@ -5,16 +5,15 @@ context("Menu 'plik'", () => {
 
   describe("File button", () => {
     it("Should open options menu", () => {
-      cy.contains("Plik").click();
-      cy.contains("Wczytaj");
-      cy.contains("Zapisz jako...");
+      cy.get("[data-cy=file-dropdown]").click();
+      cy.get("[data-cy=load-schedule-button]");
+      cy.get("[data-cy=export-schedule-button]");
     });
   });
 
   describe("Load schedule", () => {
     it("Should be able to load and show the schedule", () => {
-      cy.contains("Plik").click();
-      cy.get('[data-cy="file-input"]').attachFile("example.xlsx");
+      cy.loadSchedule();
       cy.contains("Pielęgniarki");
     });
   });

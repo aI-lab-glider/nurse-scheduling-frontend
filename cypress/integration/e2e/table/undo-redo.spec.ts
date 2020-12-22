@@ -30,10 +30,12 @@ const testCases: TestCase[] = [
     secondShift: ShiftCode.DN,
   },
 ];
+
 context("Undo/Redo test", () => {
   before(() => {
     cy.loadSchedule();
     cy.get("[data-cy=edit-mode-button]").click();
+    cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
   });
 
   describe("Undo/Redo button tests", () => {
@@ -63,7 +65,6 @@ context("Undo/Redo test", () => {
         cy.getWorkerShift(testCase.testedShift).contains(testCase.firstShift);
 
         cy.get("body").type("{ctrl}{shift}{z}");
-        cy.get("[data-cy=redo-button]").click();
         cy.getWorkerShift(testCase.testedShift).contains(testCase.secondShift);
       });
     });

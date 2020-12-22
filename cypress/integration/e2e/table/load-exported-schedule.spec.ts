@@ -1,12 +1,10 @@
 context("Load Exported Schedule", () => {
-  beforeEach(() => {
-    cy.visit(Cypress.env("baseUrl"));
-    cy.contains("Plik").click();
-    cy.get('[data-cy="file-input"]').attachFile("example.xlsx");
+  before(() => {
+    cy.loadSchedule();
   });
 
   it("Should be able to save file and load the exported file", () => {
-    cy.contains("Zapisz jako...").click();
+    cy.get("[data-cy=export-schedule-button]").click();
 
     cy.get("a[download]")
       .then(

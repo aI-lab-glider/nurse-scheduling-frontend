@@ -33,7 +33,6 @@ export function AutocompleteComponent<T>({
     getOptionLabel,
     open: true,
   });
-  debugger;
   return (
     <div>
       <div {...getRootProps()}>

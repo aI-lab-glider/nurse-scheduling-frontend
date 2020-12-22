@@ -69,6 +69,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
           className="submit-button"
           variant="primary"
           onClick={updateScheduleErrors}
+          data-cy="check-schedule-button"
         >
           Sprawdź Plan
         </Button>
