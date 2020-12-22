@@ -1,42 +1,71 @@
 /// <reference path="../../../support/index.d.ts" />
 
 import { WorkerType } from "../../../../src/common-models/worker-info.model";
-import { WorkerShiftOptions } from "../../../support/commands";
+import { GetWorkerShiftOptions } from "../../../support/commands";
+import { ShiftCode } from "../../../../src/common-models/shift-info.model";
 
-const testedShift: WorkerShiftOptions = {
-  workerType: WorkerType.NURSE,
-  workerIdx: 0,
-  shiftIdx: 0,
-};
+interface TestCase {
+  testedShift: GetWorkerShiftOptions;
+  firstShift: ShiftCode;
+  secondShift: ShiftCode;
+}
 
-context("Undo redo test", () => {
+const testCases: TestCase[] = [
+  {
+    testedShift: {
+      workerType: WorkerType.NURSE,
+      workerIdx: 0,
+      shiftIdx: 0,
+    },
+    firstShift: ShiftCode.R,
+    secondShift: ShiftCode.P,
+  },
+  {
+    testedShift: {
+      workerType: WorkerType.OTHER,
+      workerIdx: 3,
+      shiftIdx: 5,
+    },
+    firstShift: ShiftCode.N,
+    secondShift: ShiftCode.DN,
+  },
+];
+context("Undo/Redo test", () => {
   before(() => {
     cy.loadSchedule();
-    cy.contains("Edytuj").click();
+    cy.get("[data-cy=edit-mode-button]").click();
   });
 
-  beforeEach(() => {
-    cy.getWorkerShift(testedShift).click();
-    cy.get("[data-cy=autocomplete-R]").click();
+  describe("Undo/Redo button tests", () => {
+    testCases.forEach((testCase) => {
+      it(`Should change worker (type: ${testCase.testedShift.workerType.toLowerCase()}) shift and
+       use undo and redo buttons to set proper cell state`, () => {
+        cy.changeWorkerShift({ ...testCase.testedShift, newShiftCode: testCase.firstShift });
+        cy.changeWorkerShift({ ...testCase.testedShift, newShiftCode: testCase.secondShift });
 
-    cy.getWorkerShift(testedShift).click();
-    cy.get("[data-cy=autocomplete-P]").click();
+        cy.get("[data-cy=undo-button]").click();
+        cy.getWorkerShift(testCase.testedShift).contains(testCase.firstShift);
+
+        cy.get("[data-cy=redo-button]").click();
+        cy.getWorkerShift(testCase.testedShift).contains(testCase.secondShift);
+      });
+    });
   });
 
-  it("Undo/Redo button test", () => {
-    cy.get("[data-cy=undo-button]").click();
-    cy.getWorkerShift(testedShift).contains("R");
+  describe("Undo/Redo shortcuts tests", () => {
+    testCases.forEach((testCase) => {
+      it(`Should change worker (type: ${testCase.testedShift.workerType.toLowerCase()}shift and
+       use undo and redo shortcuts to set proper cell state`, () => {
+        cy.changeWorkerShift({ ...testCase.testedShift, newShiftCode: testCase.firstShift });
+        cy.changeWorkerShift({ ...testCase.testedShift, newShiftCode: testCase.secondShift });
 
-    cy.get("[data-cy=redo-button]").click();
-    cy.getWorkerShift(testedShift).contains("P");
-  });
+        cy.get("body").type("{ctrl}{z}");
+        cy.getWorkerShift(testCase.testedShift).contains(testCase.firstShift);
 
-  it("Undo/Redo shortcuts test", () => {
-    cy.get("body").type("{ctrl}{z}");
-    cy.getWorkerShift(testedShift).contains("R");
-
-    cy.get("body").type("{ctrl}{shift}{z}");
-    cy.get("[data-cy=redo-button]").click();
-    cy.getWorkerShift(testedShift).contains("P");
+        cy.get("body").type("{ctrl}{shift}{z}");
+        cy.get("[data-cy=redo-button]").click();
+        cy.getWorkerShift(testCase.testedShift).contains(testCase.secondShift);
+      });
+    });
   });
 });

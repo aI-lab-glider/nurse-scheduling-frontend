@@ -25,11 +25,19 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import "cypress-file-upload";
 import { WorkerType } from "../../src/common-models/worker-info.model";
+import { ShiftCode } from "../../src/common-models/shift-info.model";
 
-export interface WorkerShiftOptions {
+export interface GetWorkerShiftOptions {
   workerType: WorkerType;
   workerIdx: number;
   shiftIdx: number;
+}
+
+export interface ChangeWorkerShiftOptions {
+  workerType: WorkerType;
+  workerIdx: number;
+  shiftIdx: number;
+  newShiftCode: ShiftCode;
 }
 
 Cypress.Commands.add("loadSchedule", () => {
@@ -40,7 +48,7 @@ Cypress.Commands.add("loadSchedule", () => {
 
 Cypress.Commands.add(
   "getWorkerShift",
-  ({ workerType, workerIdx, shiftIdx }: WorkerShiftOptions) => {
+  ({ workerType, workerIdx, shiftIdx }: GetWorkerShiftOptions) => {
     return cy
       .get(`[data-cy="${workerType.toLowerCase()}ShiftsTable"]`)
       .children()
@@ -50,5 +58,13 @@ Cypress.Commands.add(
       .eq(shiftIdx)
       .children()
       .children();
+  }
+);
+
+Cypress.Commands.add(
+  "changeWorkerShift",
+  ({ workerType, workerIdx, shiftIdx, newShiftCode }: ChangeWorkerShiftOptions) => {
+    cy.getWorkerShift({ workerType, workerIdx, shiftIdx }).click();
+    return cy.get(`[data-cy=autocomplete-${newShiftCode}]`).click();
   }
 );

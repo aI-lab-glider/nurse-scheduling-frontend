@@ -98,7 +98,7 @@ export function ScheduleComponent({
               </td>
               <td>
                 <table>
-                  <tbody className="table" data-cy="babysitterShiftsTable">
+                  <tbody className="table" data-cy="otherShiftsTable">
                     <ShiftsSectionComponent
                       uuid={scheduleLocalState.uuid}
                       workerType={WorkerType.OTHER}

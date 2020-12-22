@@ -1,7 +1,7 @@
-import { WorkerShiftOptions } from "../../../support/commands";
+import { GetWorkerShiftOptions } from "../../../support/commands";
 import { WorkerType } from "../../../../src/common-models/worker-info.model";
 
-const testedShift: WorkerShiftOptions = {
+const testedShift: GetWorkerShiftOptions = {
   workerType: WorkerType.NURSE,
   workerIdx: 0,
   shiftIdx: 0,
