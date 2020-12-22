@@ -41,17 +41,15 @@ export default function ValidationDrawerComponent(options: ValidationDrawerOptio
   }
 
   return (
-    <div>
-      <Drawer
-        title="Sprawdź plan"
-        setOpen={setOpen}
-        open={open}
-        onClose={(): void => closeDrawer()}
-        anchor="right"
-      >
-        <SpanErrors errors={mappedErrors} />
-        <ErrorList errors={mappedErrors} />
-      </Drawer>
-    </div>
+    <Drawer
+      title="Sprawdź plan"
+      setOpen={setOpen}
+      open={open}
+      onClose={(): void => closeDrawer()}
+      anchor="right"
+    >
+      <SpanErrors errors={mappedErrors} />
+      <ErrorList errors={mappedErrors} />
+    </Drawer>
   );
 }
