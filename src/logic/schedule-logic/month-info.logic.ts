@@ -1,5 +1,5 @@
 import { StringHelper } from "../../helpers/string.helper";
-import { TranslationHelper } from "../../helpers/tranlsations.helper";
+import { TranslationHelper } from "../../helpers/translations.helper";
 import { VerboseDate, WeekDay } from "../../common-models/month-info.model";
 import { PublicHolidaysLogic } from "./public-holidays.logic";
 

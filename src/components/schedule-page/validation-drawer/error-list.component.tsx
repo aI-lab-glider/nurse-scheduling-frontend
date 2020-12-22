@@ -2,7 +2,7 @@ import React from "react";
 import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
 import { FoldingSection } from "../../common-components";
 import ErrorListItem from "./error-list-item.component";
-import { TranslationHelper } from "../../../helpers/tranlsations.helper";
+import { TranslationHelper } from "../../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { useSelector } from "react-redux";
 
