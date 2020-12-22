@@ -30,7 +30,7 @@ export default function ErrorListItem({ error }: Options): JSX.Element {
   const mappedDays = scheduleLogic?.sections.Metadata?.verboseDates.map((d) => d.date);
 
   let monthStartIndex = 0;
-  while (scheduleLogic?.sections.Metadata?.dates[monthStartIndex] != 1) {
+  while (scheduleLogic?.sections.Metadata?.dates[monthStartIndex] !== 1) {
     monthStartIndex++;
   }
 
