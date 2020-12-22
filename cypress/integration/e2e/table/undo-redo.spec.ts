@@ -17,10 +17,10 @@ context("Undo redo test", () => {
 
   beforeEach(() => {
     cy.getWorkerShift(testedShift).click();
-    cy.contains("rano").click();
+    cy.get("[data-cy=autocomplete-R]").click();
 
     cy.getWorkerShift(testedShift).click();
-    cy.contains("popołudnie").click();
+    cy.get("[data-cy=autocomplete-P]").click();
   });
 
   it("Undo/Redo button test", () => {

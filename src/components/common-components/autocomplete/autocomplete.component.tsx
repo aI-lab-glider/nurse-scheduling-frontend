@@ -33,7 +33,7 @@ export function AutocompleteComponent<T>({
     getOptionLabel,
     open: true,
   });
-
+  debugger;
   return (
     <div>
       <div {...getRootProps()}>
@@ -50,6 +50,7 @@ export function AutocompleteComponent<T>({
           {groupedOptions.map((option, index) => (
             <li
               {...getOptionProps({ option, index })}
+              data-cy={option["data-cy"]}
               onClick={(): void => {
                 setValue(option);
               }}

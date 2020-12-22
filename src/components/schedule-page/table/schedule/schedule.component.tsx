@@ -70,7 +70,7 @@ export function ScheduleComponent({
               </td>
               <td>
                 <table>
-                  <tbody className="table" id="cyTestedSection">
+                  <tbody className="table" data-cy="nurseShiftsTable">
                     <ShiftsSectionComponent
                       uuid={scheduleLocalState.uuid}
                       workerType={WorkerType.NURSE}
