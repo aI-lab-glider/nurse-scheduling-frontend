@@ -20,7 +20,11 @@ export default function ErrorListItem({ error }: Options): JSX.Element {
   let prevMonthGenetivus = "";
   if (month_number) {
     currMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[month_number]}`;
-    prevMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[month_number - 1]}`;
+    if (month_number > 0) {
+      prevMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[month_number - 1]}`;
+    } else {
+      prevMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[month_number + 11]}`;
+    }
   }
 
   const scheduleLogic = useContext(ScheduleLogicContext);
