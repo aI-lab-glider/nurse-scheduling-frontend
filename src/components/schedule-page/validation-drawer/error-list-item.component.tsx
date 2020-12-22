@@ -11,7 +11,7 @@ export default function ErrorListItem({ error }: Options): JSX.Element {
     <div className="error-list-item">
       <div className="red-rectangle"></div>
       <div className="error-title">
-        <p className="error-title-content">10 października{error.day}</p>
+        <p className="error-title-content">{error.title}</p>
       </div>
       <div className="error-text">{error.message}</div>
       <div className="error-btn">
