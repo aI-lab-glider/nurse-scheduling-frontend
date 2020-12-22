@@ -24,6 +24,7 @@ export class ErrorMessageHelper {
     const kind = error.kind;
     let message: string;
     let title = "default title";
+    let day = 0;
 
     switch (error.kind) {
       case AlgorithmErrorCode.AON:
@@ -31,18 +32,30 @@ export class ErrorMessageHelper {
           error.day_time ? dayTimeTranslations[error.day_time] : ""
         }`;
         title = "date";
+        if (error.day) {
+          day = day + error.day;
+        }
         break;
       case AlgorithmErrorCode.WND:
         message = `Za mało pracowników w trakcie dnia w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
         title = "date";
+        if (error.day) {
+          day = day + error.day;
+        }
         break;
       case AlgorithmErrorCode.WNN:
         message = `Za mało pracowników w nocy w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
         title = "date";
+        if (error.day) {
+          day = day + error.day;
+        }
         break;
       case AlgorithmErrorCode.DSS:
         message = `Niedozwolona sekwencja zmian dla pracownika ${error.worker} w dniu ${error.day}: ${error.succeeding} po ${error.preceding}`;
         title = "date";
+        if (error.day) {
+          day = day + error.day;
+        }
         break;
       case AlgorithmErrorCode.LLB:
         message = `Brak wymaganej długiej przerwy dla pracownika ${error.worker} w tygodniu ${error.week}`;
@@ -85,7 +98,7 @@ export class ErrorMessageHelper {
     const level = AlgorithmErrorCode[kind]
       ? ScheduleErrorLevel.CRITICAL_ERROR
       : ScheduleErrorLevel.WARNING;
-    return { kind, title, message, level };
+    return { kind, title, day, message, level };
   }
 
   public static getErrorColor(error: Error): Color {
