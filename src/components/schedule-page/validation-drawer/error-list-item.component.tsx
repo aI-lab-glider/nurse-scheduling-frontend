@@ -4,14 +4,15 @@ import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error
 
 interface Options {
   error: ScheduleErrorMessageModel;
+  month: string;
 }
 
-export default function ErrorListItem({ error }: Options): JSX.Element {
+export default function ErrorListItem({ error, month }: Options): JSX.Element {
   return (
     <div className="error-list-item">
       <div className="red-rectangle"></div>
       <div className="error-title">
-        <p className="error-title-content">{error.title}</p>
+        <p className="error-title-content">{error.title === "date" ? month : `${error.title}`}</p>
       </div>
       <div className="error-text">{error.message}</div>
       <div className="error-btn">

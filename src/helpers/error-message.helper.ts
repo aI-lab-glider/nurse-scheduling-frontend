@@ -24,26 +24,25 @@ export class ErrorMessageHelper {
     const kind = error.kind;
     let message: string;
     let title = "default title";
-    const month = "monthName";
 
     switch (error.kind) {
       case AlgorithmErrorCode.AON:
         message = `Brak pielęgniarek w dniu ${error.day} na zmianie ${
           error.day_time ? dayTimeTranslations[error.day_time] : ""
         }`;
-        title = `${error.day}.${month}`;
+        title = "date";
         break;
       case AlgorithmErrorCode.WND:
         message = `Za mało pracowników w trakcie dnia w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
-        title = `${error.day}.${month}`;
+        title = "date";
         break;
       case AlgorithmErrorCode.WNN:
         message = `Za mało pracowników w nocy w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
-        title = `${error.day}.${month}`;
+        title = "date";
         break;
       case AlgorithmErrorCode.DSS:
         message = `Niedozwolona sekwencja zmian dla pracownika ${error.worker} w dniu ${error.day}: ${error.succeeding} po ${error.preceding}`;
-        title = `${error.day}.${month}`;
+        title = "date";
         break;
       case AlgorithmErrorCode.LLB:
         message = `Brak wymaganej długiej przerwy dla pracownika ${error.worker} w tygodniu ${error.week}`;
@@ -77,7 +76,7 @@ export class ErrorMessageHelper {
         message = `Błąd podczas wczytywania pliku wejściowego: Wykryto błędy w sekcji informacyjnej`;
         break;
       case InputFileErrorCode.NO_CHILDREN_QUANTITY:
-        message = "Błąd podczas wczytywania pliku wejściowego: Nie podano ilości dzieci";
+        message = "Błąd podczas wczytywania pliku wejściowego: Nie podano liczby dzieci";
         break;
       default:
         message = "Nieznany błąd";
