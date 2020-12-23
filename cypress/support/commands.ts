@@ -1,7 +1,6 @@
 import "cypress-file-upload";
 import { WorkerType } from "../../src/common-models/worker-info.model";
 import { ShiftCode } from "../../src/common-models/shift-info.model";
-import { HoursInfo, HoursInfoCells } from "../integration/e2e/table/update-workhours-info.spec";
 
 export interface GetWorkerShiftOptions {
   workerType: WorkerType;
@@ -20,6 +19,16 @@ export interface CheckHoursInfoOptions {
   workerType: WorkerType;
   workerIdx: number;
   hoursInfo: HoursInfo;
+}
+
+export type HoursInfo = {
+  [key in HoursInfoCells]: number;
+};
+
+export enum HoursInfoCells {
+  required = 0,
+  actual = 1,
+  overtime = 2,
 }
 
 Cypress.Commands.add("loadSchedule", () => {
