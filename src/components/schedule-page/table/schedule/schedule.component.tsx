@@ -8,7 +8,7 @@ import { FoundationInfoComponent } from "./sections/foundation-info-section/foun
 import { TimeTableComponent } from "../../../timetable/timetable.component";
 import { NameTableComponent } from "../../../namestable/nametable.component";
 import { SummaryTableComponent } from "../../../summerytable/summarytable.component";
-import { TableMiddleLine } from "../../table-middleline";
+import { FoldingSection } from "../../table-middleline";
 export function ScheduleComponent(): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
 
@@ -57,7 +57,7 @@ export function ScheduleComponent(): JSX.Element {
                 </td>
                 <td></td>
               </tr>
-              <TableMiddleLine name={" Pielęgniarki"}>
+              <FoldingSection name={" Pielęgniarki"}>
                 <tr className="sectionContainer">
                   <td>
                     <NameTableComponent
@@ -84,8 +84,8 @@ export function ScheduleComponent(): JSX.Element {
                     />
                   </td>
                 </tr>
-              </TableMiddleLine>
-              <TableMiddleLine name={" Opiekunowie"}>
+              </FoldingSection>
+              <FoldingSection name={"Opiekunowie"}>
                 <tr className="sectionContainer">
                   <td>
                     <NameTableComponent
@@ -112,8 +112,8 @@ export function ScheduleComponent(): JSX.Element {
                     />
                   </td>
                 </tr>
-              </TableMiddleLine>
-              <TableMiddleLine name={" Informacje"}>
+              </FoldingSection>
+              <FoldingSection name={" Informacje"}>
                 <tr className="sectionContainer">
                   <td>
                     <NameTableComponent
@@ -133,7 +133,7 @@ export function ScheduleComponent(): JSX.Element {
                   </td>
                   <td></td>
                 </tr>
-              </TableMiddleLine>
+              </FoldingSection>
             </ScheduleLogicContext.Provider>
           </tbody>
         </table>
