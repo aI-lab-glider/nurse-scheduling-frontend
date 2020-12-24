@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CellColorSet } from "../../../../../../helpers/colors/cell-color-set.model";
 import { BaseCellInputComponent, BaseCellInputOptions } from "./base-cell-input.component";
 import { VerboseDate, WeekDay } from "../../../../../../common-models/month-info.model";
@@ -62,25 +62,15 @@ export function BaseCellComponent({
   const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
   const errorTriangle = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  usePopper(errorTriangle.current, tooltipRef.current);
+
+  const [isToolTipOpen, setToolTipOpen] = useState(false);
+  const { styles, attributes } = usePopper(errorTriangle.current, tooltipRef.current);
   function showErrorTooltip(): void {
-    tooltipRef.current?.setAttribute("data-show", "");
+    setToolTipOpen(true);
   }
   function hideErrorTooltip(): void {
-    tooltipRef.current?.removeAttribute("data-show");
+    setToolTipOpen(false);
   }
-  const showEvents = ["mouseenter", "focus"];
-  const hideEvents = ["mouseleave", "blur"];
-
-  useEffect(() => {
-    showEvents.forEach((event) => {
-      errorTriangle.current?.addEventListener(event, showErrorTooltip);
-    });
-    hideEvents.forEach((event) => {
-      errorTriangle.current?.addEventListener(event, hideErrorTooltip);
-    });
-  });
-
   const [, drop] = useDrop({
     accept: dragAnDropType,
     collect: (monitor) => {
@@ -153,11 +143,16 @@ export function BaseCellComponent({
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
           />
         )}
-        <div id="tooltip" role="tooltip" ref={tooltipRef}>
-          Bład w linii: {rowIndex}, pozycji: {index}. Wartość komórki: {value}
-          <div id="arrow" data-popper-arrow></div>
-        </div>
-
+        {isToolTipOpen && (
+          <div
+            style={styles.poper}
+            {...attributes.poper}
+            className="error-tooltip"
+            ref={tooltipRef}
+          >
+            Bład w linii: {rowIndex}, pozycji: {index}. Wartość komórki: {value}
+          </div>
+        )}
         {(!isPointerOn || (isPointerOn && isBlocked)) && (
           <p
             className="relative"
@@ -167,7 +162,12 @@ export function BaseCellComponent({
           >
             {
               value === "N" && (
-                <span id="error-triangle" ref={errorTriangle} className="error-triangle" />
+                <span
+                  onMouseEnter={showErrorTooltip}
+                  onMouseLeave={hideErrorTooltip}
+                  ref={errorTriangle}
+                  className="error-triangle"
+                />
               ) //todo change to proper error flag
             }
             {value}
