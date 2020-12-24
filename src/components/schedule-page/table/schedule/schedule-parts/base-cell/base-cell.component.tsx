@@ -6,6 +6,8 @@ import { TranslationHelper } from "../../../../../../helpers/tranlsations.helper
 import { useDrag, useDrop } from "react-dnd";
 import classNames from "classnames/bind";
 import { getEmptyImage } from "react-dnd-html5-backend";
+import { useRef } from "react";
+import { usePopper } from "react-popper";
 
 export enum CellManagementKeys {
   Enter = "Enter",
@@ -58,6 +60,27 @@ export function BaseCellComponent({
   sectionKey,
 }: BaseCellOptions): JSX.Element {
   const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
+  const errorTriangle = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  usePopper(errorTriangle.current, tooltipRef.current);
+  function showErrorTooltip(): void {
+    tooltipRef.current?.setAttribute("data-show", "");
+  }
+  function hideErrorTooltip(): void {
+    tooltipRef.current?.removeAttribute("data-show");
+  }
+  const showEvents = ["mouseenter", "focus"];
+  const hideEvents = ["mouseleave", "blur"];
+
+  useEffect(() => {
+    showEvents.forEach((event) => {
+      errorTriangle.current?.addEventListener(event, showErrorTooltip);
+    });
+    hideEvents.forEach((event) => {
+      errorTriangle.current?.addEventListener(event, hideErrorTooltip);
+    });
+  });
+
   const [, drop] = useDrop({
     accept: dragAnDropType,
     collect: (monitor) => {
@@ -71,7 +94,6 @@ export function BaseCellComponent({
       onDragEnd && onDragEnd();
     },
   });
-
   const [, drag, preview] = useDrag({
     item: {
       type: dragAnDropType,
@@ -94,11 +116,9 @@ export function BaseCellComponent({
     }
     onKeyDown && onKeyDown(e);
   }
-
   function _onValueChange(newValue: string): void {
     onValueChange && onValueChange(newValue);
   }
-
   function getId(): string {
     if (verboseDate && monthNumber) {
       if (verboseDate.month !== TranslationHelper.englishMonths[monthNumber]) {
@@ -133,6 +153,10 @@ export function BaseCellComponent({
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
           />
         )}
+        <div id="tooltip" role="tooltip" ref={tooltipRef}>
+          Bład w linii: {rowIndex}, pozycji: {index}. Wartość komórki: {value}
+          <div id="arrow" data-popper-arrow></div>
+        </div>
 
         {(!isPointerOn || (isPointerOn && isBlocked)) && (
           <p
@@ -142,7 +166,9 @@ export function BaseCellComponent({
             }}
           >
             {
-              value === "N" && <span className="error-triangle" /> //todo change to proper error flag
+              value === "N" && (
+                <span id="error-triangle" ref={errorTriangle} className="error-triangle" />
+              ) //todo change to proper error flag
             }
             {value}
           </p>

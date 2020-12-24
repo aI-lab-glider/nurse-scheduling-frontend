@@ -254,6 +254,7 @@ span {
     position: absolute;
     top: -3px;
     right: -6px;
+
     display: block;
     width: 0;
     height: 0;
@@ -271,4 +272,20 @@ p {
   &.relative {
     position: relative;
   }
+}
+
+#tooltip {
+  background: $error-red;
+  color: white;
+  font-weight: bold;
+  padding: 4px 8px;
+  font-size: 13px;
+  border-radius: 4px;
+  display: none;
+  position: absolute;
+  margin-top: 8px;
+  z-index: 2;
+}
+#tooltip[data-show] {
+  display: block;
 }
