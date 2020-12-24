@@ -55,5 +55,5 @@ export function TimeTableRowF({ dataRow, uuid }: TimeTableRowOptions): JSX.Eleme
 }
 
 export const TimeTableRow = React.memo(TimeTableRowF, (prev, next) => {
-  return DataRowHelper.areDataRowsEqual(prev.dataRow, next.dataRow);
+  return DataRowHelper.areDataRowsEqual(prev.dataRow, next.dataRow) && prev.uuid === next.uuid;
 });
