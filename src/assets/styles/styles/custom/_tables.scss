@@ -120,10 +120,23 @@
   width: 1156px;
 }
 
-span.tick {
-  transform: rotate(90deg);
-  display: inline-block;
+.toggle {
+  display: flex;
+  flex-direction: row;
+  font-family: $font-family-table;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 20px;
+
+  letter-spacing: 0.75px;
+
+  color: $primary;
 }
+// span.tick {
+//   transform: rotate(90deg);
+//   display: inline-block;
+// }
 
 .middleSection {
   height: 50px;

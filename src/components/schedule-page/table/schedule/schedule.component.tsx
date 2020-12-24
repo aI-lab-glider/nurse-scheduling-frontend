@@ -8,7 +8,7 @@ import { FoundationInfoComponent } from "./sections/foundation-info-section/foun
 import { TimeTableComponent } from "../../../timetable/timetable.component";
 import { NameTableComponent } from "../../../namestable/nametable.component";
 import { SummaryTableComponent } from "../../../summerytable/summarytable.component";
-import { FoldingSection } from "../../table-middleline";
+import { FoldingSection } from "../../folding-section.component";
 export function ScheduleComponent(): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
 
