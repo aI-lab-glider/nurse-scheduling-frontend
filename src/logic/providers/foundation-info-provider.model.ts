@@ -19,6 +19,7 @@ export abstract class FoundationInfoProvider {
   get extraWorkersInfo(): number[] {
     return this.sections.ExtraWorkersInfo.extraWorkers;
   }
+
   getWorkersCount(type: WorkerType): number[] {
     if (type === WorkerType.NURSE) {
       return ShiftHelper.getWorkersCount(this.sections.NurseInfo.workerShifts);

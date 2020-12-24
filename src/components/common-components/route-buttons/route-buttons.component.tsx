@@ -9,63 +9,73 @@ import ScssVars from "../../../assets/styles/styles/custom/_route-buttons.module
 interface Tabs {
   label: string;
   component: JSX.Element;
-  rightSideButtons?: JSX.Element;
+}
+
+interface RouteButtonsOptions {
+  tabs: Tabs[];
+  disabled?: boolean;
+  id?: string;
 }
 
 const useStyles = makeStyles(() => ({
   indicatorStyle: {
     backgroundColor: ScssVars.indicatorColor,
     height: 3,
-    opacity: 1,
     outline: "none",
   },
-
   tabStyle: {
-    opacity: 1,
+    minWidth: 0,
     outline: "none",
+    margin: "0 20px 0 0",
+    padding: 0,
   },
 }));
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const StyledTab: any = withStyles((theme) => ({
-  root: {
-    textTransform: "none",
-    color: ScssVars.routeTextColor,
-    outline: "none",
-    fontWeight: theme.typography.fontWeightMedium,
-    fontSize: "16",
-    opacity: 1,
-    fontFamily: ["Roboto"].join(","),
-    "&:hover": {
-      color: ScssVars.indicatorColor,
-      opacity: 1,
-      outline: "none",
-    },
-    "&$selected": {
-      color: ScssVars.routeTextColor,
-      outline: "none",
-      fontWeight: theme.typography.fontWeightBold,
-    },
-  },
-
-  selected: {
-    outline: "none",
-  },
-}))((props) => <Tab disableRipple {...props} />);
-
-export default function RouteButtonsComponent({ tabs }: { tabs: Tabs[] }): JSX.Element {
+export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.Element {
+  const tabs = props.tabs;
+  const id = "" + props.id;
   const [tab, setTab] = React.useState(tabs[0].label);
   const classes = useStyles();
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string): void => {
     setTab(newValue);
   };
 
+  // eslint-disable-next-line
+  const StyledTab: any = withStyles((theme) => ({
+    root: {
+      textTransform: "none",
+      color: props.disabled ? ScssVars.disabledTextColor : ScssVars.routeTextColor,
+      outline: "none",
+      fontWeight: theme.typography.fontWeightMedium,
+      fontSize: "20",
+      fontFamily: ["Roboto"].join(","),
+
+      "&:hover": {
+        color: props.disabled ? ScssVars.disabledTextColor : ScssVars.indicatorColor,
+        opacity: 1,
+        outline: "none",
+      },
+      "&$selected": {
+        color: ScssVars.routeTextColor,
+        outline: "none",
+        fontWeight: theme.typography.fontWeightBold,
+      },
+    },
+
+    selected: {
+      outline: "none",
+    },
+  }))((props) => <Tab disableRipple {...props} />);
+
   return (
     <div className={"tabs-and-buttons"}>
       <TabContext value={tab}>
-        <div className={"tabs-row"}>
+        <div className={"tabs-row"} id={id}>
           <div className={"tabs-and-buttons"}>
-            <TabList classes={{ indicator: classes.indicatorStyle }} onChange={handleChange}>
+            <TabList
+              classes={{ indicator: classes.indicatorStyle }}
+              onChange={!props.disabled ? handleChange : void 0}
+            >
               {tabs.map((tab) => (
                 <StyledTab
                   className={classes.tabStyle}
@@ -77,16 +87,10 @@ export default function RouteButtonsComponent({ tabs }: { tabs: Tabs[] }): JSX.E
             </TabList>
             <Divider />
           </div>
-          <div className="filler" />
-          {tabs.map((tab) => (
-            <TabPanel value={tab.label} key={tab.label}>
-              {tab.rightSideButtons}
-            </TabPanel>
-          ))}
         </div>
 
         {tabs.map((tab) => (
-          <TabPanel value={tab.label} key={tab.label}>
+          <TabPanel value={tab.label} key={tab.label} className={classes.tabStyle}>
             {tab.component}
           </TabPanel>
         ))}

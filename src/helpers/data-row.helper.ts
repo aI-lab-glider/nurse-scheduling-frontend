@@ -22,6 +22,40 @@ export class DataRowHelper {
     );
   }
 
+  public static updateDataRowIndices(
+    dataRow: DataRow,
+    updateIndexes: number[],
+    newValue: string
+  ): DataRow {
+    return dataRow.updateData((data) => {
+      updateIndexes.forEach((ind) => (data[ind] = newValue));
+      return data;
+    });
+  }
+
+  public static copyWithReplaced(
+    booleanMatrix: boolean[][],
+    source: DataRow[],
+    newValue: string
+  ): DataRow[] {
+    const copy = source.map(DataRowHelper.deepCopy);
+    copy.forEach((row, rowInd) => {
+      row.updateData((data) =>
+        data.map((cellValue, cellInd) => {
+          if (booleanMatrix[rowInd][cellInd]) {
+            return newValue;
+          }
+          return cellValue;
+        })
+      );
+    });
+    return copy;
+  }
+
+  public static deepCopy(dataRow: DataRow): DataRow {
+    return new DataRow(dataRow.rowKey, [...dataRow.rowData(true)]);
+  }
+
   public static areDataRowsEqual(dataRow1: DataRow, dataRow2: DataRow): boolean {
     const rowData1 = dataRow1.rowData(true, true);
     const rowData2 = dataRow2.rowData(true, true);

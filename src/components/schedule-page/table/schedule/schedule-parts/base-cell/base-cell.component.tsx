@@ -1,16 +1,25 @@
-import React from "react";
-import { ColorHelper } from "../../../../../../helpers/colors/color.helper";
+import React, { useEffect } from "react";
 import { CellColorSet } from "../../../../../../helpers/colors/cell-color-set.model";
 import { BaseCellInputComponent, BaseCellInputOptions } from "./base-cell-input.component";
 import { VerboseDate, WeekDay } from "../../../../../../common-models/month-info.model";
 import { TranslationHelper } from "../../../../../../helpers/tranlsations.helper";
+import { useDrag, useDrop } from "react-dnd";
+import classNames from "classnames/bind";
+import { getEmptyImage } from "react-dnd-html5-backend";
 
 export enum CellManagementKeys {
   Enter = "Enter",
   Escape = "Escape",
 }
 
+const PivotCellType = "Cell";
+export interface PivotCell {
+  type: string;
+  rowIndex: number;
+  cellIndex: number;
+}
 export interface BaseCellOptions {
+  rowIndex: number;
   index: number;
   value: string;
   style?: CellColorSet;
@@ -25,28 +34,59 @@ export interface BaseCellOptions {
   input?: React.FC<BaseCellInputOptions>;
   monthNumber?: number;
   verboseDate?: VerboseDate;
+  onDrag?: (pivotCell: PivotCell) => void;
+  onDragEnd?: () => void;
+  sectionKey: string;
 }
 
 export function BaseCellComponent({
+  rowIndex,
   index,
   value,
-  style = ColorHelper.DEFAULT_COLOR_SET,
   isBlocked,
   isSelected,
   isPointerOn,
   onKeyDown,
   onValueChange,
-  onContextMenu,
   onClick,
   onBlur,
   input: InputComponent = BaseCellInputComponent,
   monthNumber,
   verboseDate,
+  onDrag,
+  onDragEnd,
+  sectionKey,
 }: BaseCellOptions): JSX.Element {
-  function handleContextMenu(e: React.MouseEvent): void {
-    e.preventDefault();
-    onContextMenu && onContextMenu();
-  }
+  const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
+  const [, drop] = useDrop({
+    accept: dragAnDropType,
+    collect: (monitor) => {
+      if (monitor.isOver()) {
+        if (!isBlocked) {
+          onDrag && onDrag(monitor.getItem() as PivotCell);
+        }
+      }
+    },
+    drop: () => {
+      onDragEnd && onDragEnd();
+    },
+  });
+
+  const [, drag, preview] = useDrag({
+    item: {
+      type: dragAnDropType,
+      rowIndex: rowIndex,
+      cellIndex: index,
+    } as PivotCell,
+    end: (item, monitor) => {
+      if (!monitor.didDrop()) onDragEnd && onDragEnd();
+    },
+  });
+  // Below lines disable default preview image that is inserted by browser on dragging
+  useEffect(() => {
+    preview(getEmptyImage());
+  }, [preview]);
+
   function _onKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
     if (e.key === CellManagementKeys.Enter) {
       onValueChange && onValueChange(e.currentTarget.value);
@@ -54,6 +94,7 @@ export function BaseCellComponent({
     }
     onKeyDown && onKeyDown(e);
   }
+
   function _onValueChange(newValue: string): void {
     onValueChange && onValueChange(newValue);
   }
@@ -73,27 +114,40 @@ export function BaseCellComponent({
     }
     return "thisMonth";
   }
+
   //  #region view
   return (
     <td
-      className="mainCell"
+      ref={drop}
+      className={classNames("mainCell", { selection: isSelected, blocked: isBlocked })}
       id={getId()}
-      onClick={(): void => {
-        !isBlocked && onClick && onClick();
-      }}
-      onContextMenu={handleContextMenu}
-      onBlur={(e): void => {
+      onBlur={(): void => {
         onBlur && onBlur();
       }}
     >
-      {isPointerOn && !isBlocked && (
-        <InputComponent
-          className="cell-input"
-          onValueChange={(value): void => _onValueChange(value)}
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
-        />
-      )}
-      {(!isPointerOn || (isPointerOn && isBlocked)) && <span>{value}</span>}
+      <div className="content" ref={drag}>
+        {isPointerOn && !isBlocked && (
+          <InputComponent
+            className="cell-input"
+            onValueChange={(value): void => _onValueChange(value)}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
+          />
+        )}
+
+        {(!isPointerOn || (isPointerOn && isBlocked)) && (
+          <p
+            className="relative"
+            onClick={(): void => {
+              !isBlocked && onClick && onClick();
+            }}
+          >
+            {
+              value === "N" && <span className="error-triangle" /> //todo change to proper error flag
+            }
+            {value}
+          </p>
+        )}
+      </div>
     </td>
   );
   //#endregion

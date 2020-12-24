@@ -5,7 +5,7 @@
   padding: 0;
 
   background: $white;
-  border: 2px solid $table-border-color-grey;
+  border: 1px solid $table-border-color-grey;
   box-sizing: border-box;
   border-radius: 10px;
 
@@ -16,7 +16,6 @@
     flex-direction: row;
     align-items: center;
     padding: 0;
-
     position: static;
 
     //text
@@ -28,14 +27,44 @@
     font-size: 12px;
     line-height: 24px;
 
+    &:not(:last-child) {
+      border-bottom: 1px solid $table-border-color-grey;
+    }
+
     .mainCell {
       flex: 1 1 auto;
+      border-left: 1px solid $table-border-color-grey;
       align-items: center;
-      height: 103%;
       width: 120%;
-      padding-top: 0.7%;
+      height: 101%;
+      cursor: cell;
 
-      border: 1px solid $table-border-color-grey;
+      &.blocked {
+        cursor: default !important;
+      }
+
+      .content {
+        display: block;
+        height: 100% !important;
+        margin: 0;
+
+        p {
+          padding: 20%;
+          height: 100%;
+        }
+
+        input {
+          margin: 1%;
+        }
+      }
+
+      &:first-child {
+        border-left: 0;
+      }
+    }
+
+    .selection {
+      background-color: $selection-color !important;
     }
 
     .summaryCell {
@@ -43,12 +72,33 @@
       align-items: center;
       height: 103%;
       width: 120%;
-      border: 0.25px solid $table-border-color-grey;
+      border-top: 1px solid $table-border-color-grey;
+      border-left: 1px solid $table-border-color-grey;
 
       padding-top: 8%;
 
       color: $cell-color;
       background: $white;
+
+      &:first-child {
+        border-left: 0;
+      }
+    }
+
+    .overtimeHeaderCell {
+      padding-top: 100%;
+      padding-bottom: 100%;
+      align-content: center;
+      position: relative;
+      bottom: 25%;
+
+      height: 100%;
+      width: 100%;
+      border-left: 0.5px solid $table-border-color-grey;
+
+      &:first-child {
+        border-left: 0;
+      }
     }
 
     #thisMonth {
@@ -74,7 +124,11 @@
       padding-top: 50%;
       padding-bottom: 50%;
       width: 100%;
-      border: 0.5px solid $table-border-color-grey;
+      border-left: 1px solid $table-border-color-grey;
+
+      &:first-child {
+        border-left: 0;
+      }
     }
 
     #thisMonthHeader {
@@ -85,6 +139,11 @@
     #otherMonthHeader {
       color: $opacity-table-color-5;
       background: $opacity-table-background;
+    }
+
+    #weekendHeader {
+      color: $table-color;
+      background: $cell-weekend-header-background-color;
     }
 
     .cell-input {
@@ -120,23 +179,15 @@
   width: 1156px;
 }
 
-.toggle {
+.sectionToggleHeader {
   display: flex;
-  flex-direction: row;
-  font-family: $font-family-table;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 20px;
-
-  letter-spacing: 0.75px;
-
-  color: $primary;
+  padding-right: 10px;
 }
-// span.tick {
-//   transform: rotate(90deg);
-//   display: inline-block;
-// }
+
+#overtimeHeaderTable {
+  width: 102px;
+  height: 74px;
+}
 
 .middleSection {
   height: 50px;
@@ -154,9 +205,7 @@
     font-weight: bold;
     font-size: 14px;
     line-height: 20px;
-
     letter-spacing: 0.75px;
-
     color: $primary;
   }
 }
@@ -191,5 +240,33 @@ span {
     font-family: $font-family-base;
     font-weight: 600;
     font-size: 16px;
+  }
+
+  &.rotated {
+    writing-mode: vertical-rl;
+    -ms-writing-mode: tb-lr;
+    transform: rotate(180deg);
+  }
+
+  &.error-triangle {
+    position: absolute;
+    top: -3px;
+    right: -6px;
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+
+    border-bottom: 7px solid $error-red;
+    box-shadow: $error-triangle-box-shadow;
+
+    transform: rotate(45deg);
+  }
+}
+
+p {
+  &.relative {
+    position: relative;
   }
 }

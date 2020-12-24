@@ -2,10 +2,12 @@
 
 $indicator-color: #1d3557;
 $route-text-color: #000000;
+$disabled-text-color: #d1d6dc;
 
 :export {
   indicatorColor: $indicator-color;
   routeTextColor: $route-text-color;
+  disabledTextColor: $disabled-text-color;
 }
 
 .tabs-and-buttons {
@@ -13,10 +15,15 @@ $route-text-color: #000000;
 }
 
 .tabs-row {
+  padding: 0 30px 0 30px;
   display: flex;
   flex-direction: row;
   width: 100%;
   .filler {
     flex-grow: 1;
   }
+}
+
+#adjusted-tab-padding {
+  padding: 0 0 0 10px;
 }

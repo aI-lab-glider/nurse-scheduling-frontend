@@ -18,4 +18,7 @@
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-}
+  return {
+    browsers: config.browsers.filter((b) => b.name === "electron"),
+  };
+};

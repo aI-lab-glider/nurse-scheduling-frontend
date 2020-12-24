@@ -1,47 +1,48 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import React, { useContext } from "react";
 import { WorkerType } from "../../../../common-models/worker-info.model";
 import { ShiftsSectionComponent } from "./sections/shifts-section/shifts-section.component";
-import { ScheduleLogicContext, useScheduleState } from "./use-schedule-state";
+import { ScheduleLogicContext } from "./use-schedule-state";
 import { FoundationInfoComponent } from "./sections/foundation-info-section/foundation-info.component";
 import { TimeTableComponent } from "../../../timetable/timetable.component";
 import { NameTableComponent } from "../../../namestable/nametable.component";
 import { SummaryTableComponent } from "../../../summerytable/summarytable.component";
-import { FoldingSection } from "../../folding-section.component";
-export function ScheduleComponent(): JSX.Element {
-  const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
+import { OvertimeHeaderComponent } from "../../../overtime-header-table/overtime-header.component";
+import { ScheduleComponentState } from "./schedule-state.model";
+import { ScheduleFoldingSection } from "./schedule-parts/folding-section.component";
 
-  const { scheduleLogic, scheduleLocalState, setNewSchedule } = useScheduleState(scheduleModel);
-
-  useEffect(() => {
-    setNewSchedule(scheduleModel);
-  }, [scheduleModel, setNewSchedule]);
-
+interface ScheduleComponentOptions {
+  schedule: ScheduleComponentState;
+}
+export function ScheduleComponent({
+  schedule: scheduleLocalState,
+}: ScheduleComponentOptions): JSX.Element {
+  const scheduleLogic = useContext(ScheduleLogicContext);
   function isPresent(): boolean {
     if (scheduleLocalState.isInitialized) {
       const a = scheduleLocalState.dateSection?.length;
       const b = scheduleLocalState.nurseShiftsSection?.length;
       const c = scheduleLocalState.babysitterShiftsSection?.length;
-
       if (a && b && b && c && a * b * c) {
         return true;
       }
     }
+    scheduleLogic?.tryGetCurrentMonthSchedule();
     return false;
   }
 
   return (
-    <React.Fragment>
+    <>
       {!isPresent() && (
         <table>
           <tbody>
             <tr>
-              <td></td>
+              <td />
               <td>
-                <div className="c" style={{ marginLeft: 126, marginTop: 20 }}></div>
+                <div className="c" style={{ marginLeft: 126, marginTop: 20 }}>
+                  <TimeTableComponent scheduleLocalState={scheduleLocalState} />
+                </div>
               </td>
-              <td></td>
+              <td />
             </tr>
           </tbody>
         </table>
@@ -49,95 +50,99 @@ export function ScheduleComponent(): JSX.Element {
       {isPresent() && (
         <table style={{ margin: 20 }}>
           <tbody>
-            <ScheduleLogicContext.Provider value={scheduleLogic}>
+            <tr className="sectionContainer">
+              <td />
+              <td>
+                <TimeTableComponent scheduleLocalState={scheduleLocalState} />
+              </td>
+              <td className="summaryContainer">
+                <OvertimeHeaderComponent data={["norma", "aktualne", "różnica"]} />
+              </td>
+            </tr>
+            <ScheduleFoldingSection name="Pielęgniarki">
               <tr className="sectionContainer">
-                <td></td>
                 <td>
-                  <TimeTableComponent />
+                  <NameTableComponent
+                    uuid={scheduleLocalState.uuid}
+                    workerType={WorkerType.NURSE}
+                    data={scheduleLocalState.nurseShiftsSection}
+                  />
                 </td>
-                <td></td>
+                <td>
+                  <table>
+                    <tbody className="table" id="cyTestedSection">
+                      <ShiftsSectionComponent
+                        uuid={scheduleLocalState.uuid}
+                        workerType={WorkerType.NURSE}
+                        data={scheduleLocalState.nurseShiftsSection}
+                      />
+                    </tbody>
+                  </table>
+                </td>
+                <td className="summaryContainer">
+                  <SummaryTableComponent
+                    uuid={scheduleLocalState.uuid}
+                    data={scheduleLocalState.nurseShiftsSection}
+                    workerType={WorkerType.NURSE}
+                  />
+                </td>
               </tr>
-              <FoldingSection name={" Pielęgniarki"}>
-                <tr className="sectionContainer">
-                  <td>
-                    <NameTableComponent
-                      uuid={scheduleLocalState.uuid}
-                      data={scheduleLocalState.nurseShiftsSection}
-                    />
-                  </td>
-                  <td>
-                    <table>
-                      <tbody className="table" id="cyTestedSection">
-                        <ShiftsSectionComponent
-                          uuid={scheduleLocalState.uuid}
-                          workerType={WorkerType.NURSE}
-                          data={scheduleLocalState.nurseShiftsSection}
-                        />
-                      </tbody>
-                    </table>
-                  </td>
-                  <td className="summaryContainer">
-                    <SummaryTableComponent
-                      uuid={scheduleLocalState.uuid}
-                      data={scheduleLocalState.nurseShiftsSection}
-                      workerType={WorkerType.NURSE}
-                    />
-                  </td>
-                </tr>
-              </FoldingSection>
-              <FoldingSection name={"Opiekunowie"}>
-                <tr className="sectionContainer">
-                  <td>
-                    <NameTableComponent
-                      uuid={scheduleLocalState.uuid}
-                      data={scheduleLocalState.babysitterShiftsSection}
-                    />
-                  </td>
-                  <td>
-                    <table>
-                      <tbody className="table">
-                        <ShiftsSectionComponent
-                          uuid={scheduleLocalState.uuid}
-                          workerType={WorkerType.OTHER}
-                          data={scheduleLocalState.babysitterShiftsSection}
-                        />
-                      </tbody>
-                    </table>
-                  </td>
-                  <td className="summaryContainer">
-                    <SummaryTableComponent
-                      uuid={scheduleLocalState.uuid}
-                      data={scheduleLocalState.babysitterShiftsSection}
-                      workerType={WorkerType.OTHER}
-                    />
-                  </td>
-                </tr>
-              </FoldingSection>
-              <FoldingSection name={" Informacje"}>
-                <tr className="sectionContainer">
-                  <td>
-                    <NameTableComponent
-                      uuid={scheduleLocalState.uuid}
-                      data={scheduleLocalState.foundationInfoSection}
-                    />
-                  </td>
-                  <td>
-                    <table>
-                      <tbody className="table">
-                        <FoundationInfoComponent
-                          uuid={scheduleLocalState.uuid}
-                          data={scheduleLocalState.foundationInfoSection}
-                        />
-                      </tbody>
-                    </table>
-                  </td>
-                  <td></td>
-                </tr>
-              </FoldingSection>
-            </ScheduleLogicContext.Provider>
+            </ScheduleFoldingSection>
+
+            <ScheduleFoldingSection name="Opiekunowie">
+              <tr className="sectionContainer">
+                <td>
+                  <NameTableComponent
+                    uuid={scheduleLocalState.uuid}
+                    workerType={WorkerType.OTHER}
+                    data={scheduleLocalState.babysitterShiftsSection}
+                  />
+                </td>
+                <td>
+                  <table>
+                    <tbody className="table" data-cy="babysitterShiftsTable">
+                      <ShiftsSectionComponent
+                        uuid={scheduleLocalState.uuid}
+                        workerType={WorkerType.OTHER}
+                        data={scheduleLocalState.babysitterShiftsSection}
+                      />
+                    </tbody>
+                  </table>
+                </td>
+                <td className="summaryContainer">
+                  <SummaryTableComponent
+                    uuid={scheduleLocalState.uuid}
+                    data={scheduleLocalState.babysitterShiftsSection}
+                    workerType={WorkerType.OTHER}
+                  />
+                </td>
+              </tr>
+            </ScheduleFoldingSection>
+
+            <ScheduleFoldingSection name="Informacje">
+              <tr className="sectionContainer">
+                <td>
+                  <NameTableComponent
+                    uuid={scheduleLocalState.uuid}
+                    data={scheduleLocalState.foundationInfoSection}
+                  />
+                </td>
+                <td>
+                  <table>
+                    <tbody className="table">
+                      <FoundationInfoComponent
+                        uuid={scheduleLocalState.uuid}
+                        data={scheduleLocalState.foundationInfoSection}
+                      />
+                    </tbody>
+                  </table>
+                </td>
+                <td />
+              </tr>
+            </ScheduleFoldingSection>
           </tbody>
         </table>
       )}
-    </React.Fragment>
+    </>
   );
 }

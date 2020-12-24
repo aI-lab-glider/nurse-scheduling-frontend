@@ -1,0 +1,20 @@
+@import "variables";
+
+.workers-table {
+  .action-button {
+    font-size: $font-size-sm;
+    padding: 2px 25px 2px;
+  }
+  .worker-label {
+    border-radius: $btn-border-radius;
+    font-weight: $font-weight-normal;
+    letter-spacing: $btn-letter-spacing;
+    padding: 6px;
+  }
+  .nurse-label {
+    background-color: $nurse-label-background;
+  }
+  .other-label {
+    background-color: $babysitter-label-background;
+  }
+}

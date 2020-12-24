@@ -9,6 +9,10 @@ export class MonthInfoLogic {
   private monthDates: number[];
   private publicHolidaysLogic: PublicHolidaysLogic;
 
+  public get currentDate(): [number, number] {
+    return [new Date().getMonth(), new Date().getFullYear()];
+  }
+
   public get dates(): number[] {
     return this._verboseDates.map((d) => d.date);
   }

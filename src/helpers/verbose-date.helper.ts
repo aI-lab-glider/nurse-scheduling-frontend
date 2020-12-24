@@ -13,6 +13,13 @@ export class VerboseDateHelper {
     );
   }
 
+  static isHolidaySaturday(date?: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek">): boolean {
+    if (!date) {
+      return false;
+    }
+    return date.isPublicHoliday && date.dayOfWeek === WeekDay.SA;
+  }
+
   static getDayColor(
     day?: VerboseDate,
     defaultColorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET,

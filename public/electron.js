@@ -6,10 +6,15 @@ const isDev = require("electron-is-dev");
 const dotenv = require('dotenv');
 let mainWindow;
 
-const env = dotenv.config().parsed;
-
-function createWindow() {
-    mainWindow = new BrowserWindow({show: false});
+const globalEnv = dotenv.config().parsed;
+const localEnv = dotenv.config({path: `${__dirname}/../.env.local`}).parsed
+const env = {...globalEnv, ...localEnv};
+function createWindow() {    
+    if (env.FIXED_WINDOW_SIZE==="true") {
+        mainWindow = new BrowserWindow({show: false, minHeight: 500, minWidth: 1500});
+    } else {
+        mainWindow = new BrowserWindow({show: false});        
+    }
     mainWindow.maximize();
     mainWindow.removeMenu();
     mainWindow.show();

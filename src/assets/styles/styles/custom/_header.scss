@@ -6,7 +6,8 @@
   background-color: $primary-header-color;
   padding: 0 20px 0 20px;
   align-items: center;
-  justify-content: left;
+  justify-content: space-around;
+  position: relative;
 
   #AssignmentIndIcon {
     color: $header-text-color;
