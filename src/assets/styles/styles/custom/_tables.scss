@@ -179,38 +179,13 @@
   width: 1156px;
 }
 
-.sectionToggleHeader {
-  display: flex;
-  padding-right: 10px;
-}
-
 #overtimeHeaderTable {
   width: 102px;
   height: 74px;
 }
 
-.middleSection {
-  height: 50px;
-
-  hr.middle {
-    width: 102%;
-    border: 1px solid $table-border-color-grey;
-  }
-
-  .middleCell {
-    width: 110px;
-
-    font-family: $font-family-table;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 20px;
-    letter-spacing: 0.75px;
-    color: $primary;
-  }
-}
-
 .summaryContainer {
+  width: 134px;
   padding-left: 2%;
 }
 

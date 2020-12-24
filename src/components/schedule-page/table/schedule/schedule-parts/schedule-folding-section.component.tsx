@@ -1,12 +1,14 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { useState } from "react";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-export interface ScheduleFoldingSectionOptions {
+interface ScheduleFoldingSectionOptions {
   name: string;
-  children: JSX.Element | JSX.Element[];
+  children: ReactNode;
 }
-
+/**
+ * Used only in schedule. For other use cases, use @see FoldingSection from  @module common-components
+ */
 export function ScheduleFoldingSection({
   name,
   children,
@@ -14,12 +16,10 @@ export function ScheduleFoldingSection({
   const [opened, setOpened] = useState(true);
   return (
     <>
-      <tr className="middleSection">
-        <td className="middleCell">
-          <div className="sectionToggleHeader">
-            <span onClick={(): void => setOpened((prev) => !prev)}>
-              {opened ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
-            </span>
+      <tr className="foldingSection">
+        <td>
+          <div onClick={(): void => setOpened((prev) => !prev)} className="text">
+            <span>{opened ? <ArrowDropDownIcon /> : <ArrowRightIcon />}</span>
             <span>{name}</span>
           </div>
         </td>
