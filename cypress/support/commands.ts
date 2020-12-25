@@ -15,6 +15,22 @@ export interface ChangeWorkerShiftOptions {
   newShiftCode: ShiftCode;
 }
 
+export interface CheckHoursInfoOptions {
+  workerType: WorkerType;
+  workerIdx: number;
+  hoursInfo: HoursInfo;
+}
+
+export type HoursInfo = {
+  [key in HoursInfoCells]: number;
+};
+
+export enum HoursInfoCells {
+  required = 0,
+  actual = 1,
+  overtime = 2,
+}
+
 Cypress.Commands.add("loadSchedule", () => {
   cy.visit(Cypress.env("baseUrl"));
   cy.get("[data-cy=file-dropdown]").click();
@@ -49,6 +65,23 @@ Cypress.Commands.add(
   "changeWorkerShift",
   ({ workerType, workerIdx, shiftIdx, newShiftCode }: ChangeWorkerShiftOptions) => {
     cy.getWorkerShift({ workerType, workerIdx, shiftIdx }).click();
-    return cy.get(`[data-cy=autocomplete-${newShiftCode}]`).click();
+    return cy.get(`[data-cy=autocomplete-${newShiftCode}]`, { timeout: 100000 }).click();
+  }
+);
+
+Cypress.Commands.add(
+  "checkHoursInfo",
+  ({ workerType, workerIdx, hoursInfo }: CheckHoursInfoOptions) => {
+    Object.keys(HoursInfoCells)
+      .filter((key) => isNaN(Number(HoursInfoCells[key])))
+      .forEach((key) => {
+        cy.get(`[data-cy="${workerType.toLowerCase()}SummaryTable"]`)
+          .children()
+          .children()
+          .eq(workerIdx)
+          .children()
+          .eq(Number(key))
+          .contains(hoursInfo[key]);
+      });
   }
 );

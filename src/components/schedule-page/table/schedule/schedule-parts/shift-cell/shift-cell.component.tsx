@@ -21,7 +21,7 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
       {...options}
       input={ShiftAutocompleteComponent}
       onValueChange={_onValueChange}
-      value={shiftValue === ShiftCode.W ? "" : shiftValue}
+      value={shiftValue === ShiftCode.W ? "W" : shiftValue}
     />
   );
 }
