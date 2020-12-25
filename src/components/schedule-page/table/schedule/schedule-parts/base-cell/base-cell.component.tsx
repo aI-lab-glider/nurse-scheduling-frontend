@@ -8,6 +8,7 @@ import classNames from "classnames/bind";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { useRef } from "react";
 import { usePopper } from "react-popper";
+import { Popper } from "./popper";
 
 export enum CellManagementKeys {
   Enter = "Enter",
@@ -143,11 +144,22 @@ export function BaseCellComponent({
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
           />
         )}
-        {isToolTipOpen && (
-          <div style={styles.poper} {...attributes.poper} className="errorTooltip" ref={tooltipRef}>
-            Bład w linii: {rowIndex}, pozycji: {index}. Wartość komórki: {value}
-          </div>
-        )}
+
+        <Popper
+          ref={tooltipRef}
+          className="errorTooltip"
+          style={styles}
+          {...attributes}
+          data={
+            <div>
+              {" "}
+              <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Bład w linii: {rowIndex},
+              pozycji: {index}. Wartość komórki: {value}
+            </div>
+          }
+          isOpen={isToolTipOpen}
+        ></Popper>
+
         {(!isPointerOn || (isPointerOn && isBlocked)) && (
           <p
             className="relative"
