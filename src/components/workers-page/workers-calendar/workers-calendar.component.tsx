@@ -46,10 +46,10 @@ export default function WorkersCalendar(params: CalendarOptions): JSX.Element {
           {daysToDisplay.map((element) => {
             return <div className={"dayName"}>{element}</div>;
           })}
-          {shiftsArr!.map((element, index) => {
+          {shiftsArr?.map((element, index) => {
             const [date, shift] = element;
-            if (index < shiftsArr!.length - 1) {
-              nextShift = shiftsArr![index + 1][1];
+            if (index < shiftsArr.length - 1) {
+              nextShift = shiftsArr[index + 1][1];
             } else {
               nextShift = null;
             }
