@@ -42,6 +42,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
           onClick={(): void => {
             dispatcher(UndoActionCreators.undo());
           }}
+          data-cy="undo-button"
           variant="circle-outlined"
         >
           <UndoIcon className="edit-icons" />
@@ -51,6 +52,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
           onClick={(): void => {
             dispatcher(UndoActionCreators.redo());
           }}
+          data-cy="redo-button"
           variant="circle-outlined"
         >
           <RedoIcon className="edit-icons" />
@@ -67,6 +69,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
           className="submit-button"
           variant="primary"
           onClick={updateScheduleErrors}
+          data-cy="check-schedule-button"
         >
           Sprawdź Plan
         </Button>
