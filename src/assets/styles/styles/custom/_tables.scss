@@ -184,35 +184,8 @@
   height: 74px;
 }
 
-span.tick {
-  transform: rotate(90deg);
-  display: inline-block;
-}
-
-.middleSection {
-  height: 50px;
-
-  hr.middle {
-    width: 102%;
-    border: 1px solid $table-border-color-grey;
-  }
-
-  .middleCell {
-    width: 110px;
-
-    font-family: $font-family-table;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 20px;
-
-    letter-spacing: 0.75px;
-
-    color: $primary;
-  }
-}
-
 .summaryContainer {
+  width: 134px;
   padding-left: 2%;
 }
 
