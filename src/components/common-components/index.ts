@@ -5,3 +5,4 @@ export * from "./month-switch/month-switch.component";
 export * from "./snackbar/snackbar.component";
 export * from "./tools/globalhotkeys.component";
 export * from "./drawer/drawer.component";
+export * from "./folding-section/folding-section.component";
