@@ -38,23 +38,19 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
   return (
     <div className="editing-row">
       <div className="buttons">
-        <Button
+        <UndoIcon
+          className="edit-icons"
           onClick={(): void => {
             dispatcher(UndoActionCreators.undo());
           }}
-          variant="circle-outlined"
-        >
-          <UndoIcon className="edit-icons" />
-        </Button>
+        />
 
-        <Button
+        <RedoIcon
+          className="edit-icons"
           onClick={(): void => {
             dispatcher(UndoActionCreators.redo());
           }}
-          variant="circle-outlined"
-        >
-          <RedoIcon className="edit-icons" />
-        </Button>
+        />
 
         <div id="edit-panel-text-container">
           <p>Tryb edycji aktywny</p>
