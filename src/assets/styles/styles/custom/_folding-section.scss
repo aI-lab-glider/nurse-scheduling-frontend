@@ -1,0 +1,30 @@
+.foldingSection {
+  height: 50px;
+
+  hr.middle {
+    width: 102%;
+    //   Fix, required to handle hr color correctly in electron
+    border: 0px;
+    border-top: 2px solid $table-border-color-grey;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .text {
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+    font-family: $font-family-table;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.75px;
+    color: $primary;
+    padding-right: 10px;
+  }
+}
