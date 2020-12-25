@@ -7,6 +7,8 @@ import { ShiftsInfoLogic } from "../../logic/schedule-logic/shifts-info.logic";
 import WorkerDrawerComponent, {
   WorkerDrawerMode,
 } from "../workers-page/workers-tab/worker-drawer.component";
+import { MetadataLogic } from "../../logic/schedule-logic/metadata.logic";
+import { ArrayHelper } from "../../helpers/array.helper";
 
 export interface NameTableCellOptions {
   dataRow: DataRow[];
@@ -24,6 +26,9 @@ export function NameTableSection({ dataRow, workerType }: NameTableCellOptions):
     workerType === WorkerType.NURSE ? "NurseInfo" : "BabysitterInfo";
   const shiftLogic = scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey);
 
+  const shifts = scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey)?.workerShifts;
+  const verboseDates = scheduleLogic?.getSection<MetadataLogic>("Metadata")?.verboseDates;
+
   function toggleDrawer(open: boolean, name: string): void {
     if (workerType) {
       setIsOpen(open);
@@ -31,10 +36,13 @@ export function NameTableSection({ dataRow, workerType }: NameTableCellOptions):
         const [requiredHours, actualHours, overtime] =
           shiftLogic?.calculateWorkerHourInfo(name) ?? [];
 
+        const workersWithDates = ArrayHelper.zip(verboseDates!, shifts![name]);
+
         workerInfo = {
           name: name,
           time: actualHours,
           type: workerType,
+          shifts: workersWithDates,
           requiredHours,
           overtime,
         };
@@ -61,7 +69,7 @@ export function NameTableSection({ dataRow, workerType }: NameTableCellOptions):
               >
                 <td>
                   <span>{cellData}</span>
-                  <span className="underline"></span>
+                  <span className="underline" />
                 </td>
               </tr>
             );

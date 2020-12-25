@@ -1,3 +1,6 @@
+import { VerboseDate } from "./month-info.model";
+import { ShiftCode } from "./shift-info.model";
+
 export enum WorkerType {
   NURSE = "NURSE",
   OTHER = "OTHER",
@@ -23,6 +26,7 @@ export interface WorkerInfoModel {
   name: string;
   time: number;
   type?: WorkerType;
+  shifts?: [VerboseDate | null, ShiftCode | null][];
   requiredHours?: number;
   overtime?: number;
 }

@@ -59,6 +59,7 @@ export enum ShiftCode {
   W = "W",
   U = "U",
   L4 = "L4",
+  K = "K",
 }
 
 export interface ShiftInfoModel {
