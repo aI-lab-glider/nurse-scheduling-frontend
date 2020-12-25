@@ -144,12 +144,7 @@ export function BaseCellComponent({
           />
         )}
         {isToolTipOpen && (
-          <div
-            style={styles.poper}
-            {...attributes.poper}
-            className="error-tooltip"
-            ref={tooltipRef}
-          >
+          <div style={styles.poper} {...attributes.poper} className="errorTooltip" ref={tooltipRef}>
             Bład w linii: {rowIndex}, pozycji: {index}. Wartość komórki: {value}
           </div>
         )}
