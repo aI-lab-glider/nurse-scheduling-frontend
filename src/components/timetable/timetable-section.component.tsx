@@ -24,12 +24,12 @@ export function TimeTableSection({ scheduleLocalState }: TimeTableSectionOptions
   const data = getDataRow();
 
   return (
-    <React.Fragment>
+    <>
       <table className="table">
         <tbody>
           <TimeTableRow uuid={scheduleLocalState.uuid} dataRow={data} />
         </tbody>
       </table>
-    </React.Fragment>
+    </>
   );
 }

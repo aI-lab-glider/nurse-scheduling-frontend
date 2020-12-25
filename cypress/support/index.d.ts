@@ -6,6 +6,10 @@ declare namespace Cypress {
       GetWorkerShiftOptions: import("./commands").GetWorkerShiftOptions
     ): Chainable<Element>;
 
+    checkWorkerShift(
+      CheckWorkerShift: import("./commands").CheckWorkerShiftOptions
+    ): Chainable<Element>;
+
     changeWorkerShift(
       ChangeWorkerShiftOptions: import("./commands").ChangeWorkerShiftOptions
     ): Chainable<Element>;

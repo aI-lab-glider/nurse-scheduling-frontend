@@ -26,6 +26,7 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 if ((window as any).Cypress) {
   (window as any).store = appStore;
 }

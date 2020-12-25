@@ -2,7 +2,7 @@ import { WorkerType } from "../../../../src/common-models/worker-info.model";
 import { ShiftCode } from "../../../../src/common-models/shift-info.model";
 
 const testData = {
-  testedShift: {
+  testedCell: {
     workerType: WorkerType.NURSE,
     workerIdx: 0,
     shiftIdx: 0,
@@ -16,8 +16,7 @@ context("Change shift", () => {
   });
 
   it("Should be able to change shift using dropdown", () => {
-    cy.changeWorkerShift({ ...testData.testedShift, newShiftCode: testData.newShiftCode });
-
-    cy.getWorkerShift(testData.testedShift).contains(testData.newShiftCode);
+    cy.changeWorkerShift({ ...testData.testedCell, newShiftCode: testData.newShiftCode });
+    cy.checkWorkerShift({ ...testData.testedCell, desiredShiftCode: testData.newShiftCode });
   });
 });

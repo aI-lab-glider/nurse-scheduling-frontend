@@ -5,14 +5,14 @@ import { GetWorkerShiftOptions } from "../../../support/commands";
 import { ShiftCode } from "../../../../src/common-models/shift-info.model";
 
 interface TestCase {
-  testedShift: GetWorkerShiftOptions;
+  testedCell: GetWorkerShiftOptions;
   firstShift: ShiftCode;
   secondShift: ShiftCode;
 }
 
 const testCases: TestCase[] = [
   {
-    testedShift: {
+    testedCell: {
       workerType: WorkerType.NURSE,
       workerIdx: 0,
       shiftIdx: 0,
@@ -21,7 +21,7 @@ const testCases: TestCase[] = [
     secondShift: ShiftCode.P,
   },
   {
-    testedShift: {
+    testedCell: {
       workerType: WorkerType.OTHER,
       workerIdx: 3,
       shiftIdx: 5,
@@ -40,32 +40,32 @@ context("Undo/Redo test", () => {
 
   describe("Undo/Redo button tests", () => {
     testCases.forEach((testCase) => {
-      it(`Should change worker (type: ${testCase.testedShift.workerType.toLowerCase()}) shift and
+      it(`Should change worker (type: ${testCase.testedCell.workerType.toLowerCase()}) shift and
        use undo and redo buttons to set proper cell state`, () => {
-        cy.changeWorkerShift({ ...testCase.testedShift, newShiftCode: testCase.firstShift });
-        cy.changeWorkerShift({ ...testCase.testedShift, newShiftCode: testCase.secondShift });
+        cy.changeWorkerShift({ ...testCase.testedCell, newShiftCode: testCase.firstShift });
+        cy.changeWorkerShift({ ...testCase.testedCell, newShiftCode: testCase.secondShift });
 
         cy.get("[data-cy=undo-button]").click();
-        cy.getWorkerShift(testCase.testedShift).contains(testCase.firstShift);
+        cy.getWorkerShift(testCase.testedCell).contains(testCase.firstShift);
 
         cy.get("[data-cy=redo-button]").click();
-        cy.getWorkerShift(testCase.testedShift).contains(testCase.secondShift);
+        cy.getWorkerShift(testCase.testedCell).contains(testCase.secondShift);
       });
     });
   });
 
   describe("Undo/Redo shortcuts tests", () => {
     testCases.forEach((testCase) => {
-      it(`Should change worker (type: ${testCase.testedShift.workerType.toLowerCase()}shift and
+      it(`Should change worker (type: ${testCase.testedCell.workerType.toLowerCase()}shift and
        use undo and redo shortcuts to set proper cell state`, () => {
-        cy.changeWorkerShift({ ...testCase.testedShift, newShiftCode: testCase.firstShift });
-        cy.changeWorkerShift({ ...testCase.testedShift, newShiftCode: testCase.secondShift });
+        cy.changeWorkerShift({ ...testCase.testedCell, newShiftCode: testCase.firstShift });
+        cy.changeWorkerShift({ ...testCase.testedCell, newShiftCode: testCase.secondShift });
 
         cy.get("body").type("{ctrl}{z}");
-        cy.getWorkerShift(testCase.testedShift).contains(testCase.firstShift);
+        cy.getWorkerShift(testCase.testedCell).contains(testCase.firstShift);
 
         cy.get("body").type("{ctrl}{shift}{z}");
-        cy.getWorkerShift(testCase.testedShift).contains(testCase.secondShift);
+        cy.getWorkerShift(testCase.testedCell).contains(testCase.secondShift);
       });
     });
   });

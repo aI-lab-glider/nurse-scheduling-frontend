@@ -8,10 +8,10 @@ export interface GetWorkerShiftOptions {
   shiftIdx: number;
 }
 
-export interface ChangeWorkerShiftOptions {
-  workerType: WorkerType;
-  workerIdx: number;
-  shiftIdx: number;
+export interface CheckWorkerShift extends GetWorkerShiftOptions {
+  desiredShiftCode: ShiftCode;
+}
+export interface ChangeWorkerShiftOptions extends GetWorkerShiftOptions {
   newShiftCode: ShiftCode;
 }
 
@@ -62,9 +62,20 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
+  "checkWorkerShift",
+  ({ desiredShiftCode, ...getWorkerShiftOptions }: CheckWorkerShift) => {
+    if (desiredShiftCode === ShiftCode.W) {
+      return cy.getWorkerShift(getWorkerShiftOptions).should("be.empty");
+    } else {
+      return cy.getWorkerShift(getWorkerShiftOptions).contains(desiredShiftCode);
+    }
+  }
+);
+
+Cypress.Commands.add(
   "changeWorkerShift",
-  ({ workerType, workerIdx, shiftIdx, newShiftCode }: ChangeWorkerShiftOptions) => {
-    cy.getWorkerShift({ workerType, workerIdx, shiftIdx }).click();
+  ({ newShiftCode, ...getWorkerShiftOptions }: ChangeWorkerShiftOptions) => {
+    cy.getWorkerShift(getWorkerShiftOptions).click();
     return cy.get(`[data-cy=autocomplete-${newShiftCode}]`, { timeout: 100000 }).click();
   }
 );
