@@ -25,3 +25,4 @@ yarn-error.log*
 .env*.local
 cypress.env.json
 .idea/*
+.vs

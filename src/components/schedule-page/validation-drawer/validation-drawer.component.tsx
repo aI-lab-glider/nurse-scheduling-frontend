@@ -29,7 +29,7 @@ export default function ValidationDrawerComponent(): JSX.Element {
         setOpen={setOpen}
         open={open}
         onClose={(): void => toggleDrawer(false)}
-        anchor={"right"}
+        anchor="right"
       >
         <SpanErrors errors={mappedErrors} />
         <ErrorList errors={mappedErrors} />

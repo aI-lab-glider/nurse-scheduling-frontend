@@ -10,7 +10,6 @@ export function SpanErrors({ errors = [] }: SpanErrorOptions): JSX.Element {
   return (
     <>
       <div className={"span-errors"}>
-        <hr />
         <div className={"error-span-main-block"}>
           <div className={"error-numbers"}>
             <p>Błędy : {errors?.length}</p>
