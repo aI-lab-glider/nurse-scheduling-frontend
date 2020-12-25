@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { useState } from "react";
-import ArrowRightIcon from "@material-ui/icons/ArrowRight";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 interface ScheduleFoldingSectionOptions {
   name: string;
   children: ReactNode;
@@ -19,7 +19,7 @@ export function ScheduleFoldingSection({
       <tr className="foldingSection">
         <td>
           <div onClick={(): void => setOpened((prev) => !prev)} className="text">
-            <span>{opened ? <ArrowDropDownIcon /> : <ArrowRightIcon />}</span>
+            <span>{opened ? <ExpandMoreIcon /> : <ChevronRightIcon />}</span>
             <span>{name}</span>
           </div>
         </td>

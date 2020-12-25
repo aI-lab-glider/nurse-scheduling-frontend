@@ -1,8 +1,7 @@
 import React, { ReactNode } from "react";
 import { useState } from "react";
-import ArrowRightIcon from "@material-ui/icons/ArrowRight";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 interface FoldingSectionOptions {
   name: string;
   children: ReactNode;
@@ -14,7 +13,7 @@ export function FoldingSection({ name, children }: FoldingSectionOptions): JSX.E
     <div className="foldingSection">
       <div className="header">
         <div onClick={(): void => setOpened((prev) => !prev)} className="text">
-          <span>{opened ? <ArrowDropDownIcon /> : <ArrowRightIcon />}</span>
+          <span>{opened ? <ExpandMoreIcon /> : <ChevronRightIcon />}</span>
           <span>{name}</span>
         </div>
         <hr className="middle" />
