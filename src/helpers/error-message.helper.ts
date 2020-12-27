@@ -23,33 +23,55 @@ export class ErrorMessageHelper {
 
     const kind = error.kind;
     let message: string;
+    let title = "default title";
+    let day = 0;
 
     switch (error.kind) {
       case AlgorithmErrorCode.AON:
         message = `Brak pielęgniarek w dniu ${error.day} na zmianie ${
           error.day_time ? dayTimeTranslations[error.day_time] : ""
         }`;
+        title = "date";
+        if (error.day) {
+          day = day + error.day;
+        }
         break;
       case AlgorithmErrorCode.WND:
         message = `Za mało pracowników w trakcie dnia w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
+        title = "date";
+        if (error.day) {
+          day = day + error.day;
+        }
         break;
       case AlgorithmErrorCode.WNN:
         message = `Za mało pracowników w nocy w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
+        title = "date";
+        if (error.day) {
+          day = day + error.day;
+        }
         break;
       case AlgorithmErrorCode.DSS:
         message = `Niedozwolona sekwencja zmian dla pracownika ${error.worker} w dniu ${error.day}: ${error.succeeding} po ${error.preceding}`;
+        title = "date";
+        if (error.day) {
+          day = day + error.day;
+        }
         break;
       case AlgorithmErrorCode.LLB:
         message = `Brak wymaganej długiej przerwy dla pracownika ${error.worker} w tygodniu ${error.week}`;
+        title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WUH:
         message = `Pracownik ${error.worker} ma ${error.hours} niedogodzin`;
+        title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WOH:
         message = `Pracownik ${error.worker} ma ${error.hours} nadgodzin`;
+        title = `${error.worker}`;
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
         message = `Niedozwolona wartość zmiany: ${error.actual}, w dniu ${error.day} u pracownika ${error.worker}`;
+        title = `${error.worker}`;
         break;
       case InputFileErrorCode.EMPTY_FILE:
         message = `Błąd podczas wczytywania pliku wejściowego: Pusty plik`;
@@ -67,7 +89,7 @@ export class ErrorMessageHelper {
         message = `Błąd podczas wczytywania pliku wejściowego: Wykryto błędy w sekcji informacyjnej`;
         break;
       case InputFileErrorCode.NO_CHILDREN_QUANTITY:
-        message = "Błąd podczas wczytywania pliku wejściowego: Nie podano ilości dzieci";
+        message = "Błąd podczas wczytywania pliku wejściowego: Nie podano liczby dzieci";
         break;
       default:
         message = "Nieznany błąd";
@@ -76,7 +98,7 @@ export class ErrorMessageHelper {
     const level = AlgorithmErrorCode[kind]
       ? ScheduleErrorLevel.CRITICAL_ERROR
       : ScheduleErrorLevel.WARNING;
-    return { kind, message, level };
+    return { kind, title, day, message, level };
   }
 
   public static getErrorColor(error: Error): Color {
