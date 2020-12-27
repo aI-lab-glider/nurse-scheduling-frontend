@@ -126,7 +126,7 @@ export class ScheduleExportLogic {
       const category = scheduleModel.employee_info.type[key] ?? "";
       const shiftsRow: string[] = [
         key,
-        ...scheduleModel.shifts[key]?.map((s) => (s === ShiftCode.W ? " " : s)),
+        ...scheduleModel.shifts[key]?.map((s) => (s === ShiftCode.W ? "" : s)),
         ...shiftInfoLogics[category].calculateWorkerHourInfo(key).map((e) => e.toString()),
       ];
       grouped[category].push(shiftsRow);

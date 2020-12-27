@@ -7,15 +7,22 @@ import Popper from "@material-ui/core/Popper";
 export interface ButtonData {
   label: string;
   action: () => void;
+  dataCy?: string;
 }
 
 interface DropdownOptions {
   buttons: ButtonData[];
   mainLabel: string;
   variant?: ButtonVariant;
+  dataCy?: string;
 }
 
-export function DropdownButtons({ buttons, mainLabel, variant }: DropdownOptions): JSX.Element {
+export function DropdownButtons({
+  buttons,
+  mainLabel,
+  variant,
+  dataCy,
+}: DropdownOptions): JSX.Element {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
 
@@ -29,7 +36,7 @@ export function DropdownButtons({ buttons, mainLabel, variant }: DropdownOptions
 
   return (
     <div>
-      <Button variant={variant} onClick={handleToggle} ref={anchorRef}>
+      <Button variant={variant} onClick={handleToggle} ref={anchorRef} data-cy={dataCy}>
         {mainLabel}
         <ArrowDropDownIcon />
       </Button>
@@ -47,7 +54,7 @@ export function DropdownButtons({ buttons, mainLabel, variant }: DropdownOptions
         <ClickAwayListener onClickAway={handleClickAway}>
           <div className="dropdown-buttons-container">
             {buttons.map((item) => (
-              <Button key={item.label} onClick={item.action}>
+              <Button key={item.label} onClick={item.action} data-cy={item.dataCy}>
                 {item.label}
               </Button>
             ))}

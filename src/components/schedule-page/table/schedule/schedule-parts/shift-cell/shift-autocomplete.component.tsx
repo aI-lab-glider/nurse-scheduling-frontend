@@ -8,6 +8,7 @@ const ShiftCodeSelectItems = Object.values(shifts).map((shift) => {
     name: `${shift.name} ${shift.isWorkingShift ? `: ${shift.from}-${shift.to}` : ""}`,
     symbol: shift.code,
     code: shift.code,
+    "data-cy": `autocomplete-${shift.code}`,
   };
 });
 

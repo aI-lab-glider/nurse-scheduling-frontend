@@ -12,7 +12,13 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
       <div className="filler" />
       <ImportButtonsComponent />
       <Link to="/schedule-editing">
-        <Button onClick={openEdit} size="small" className="submit-button" variant="primary">
+        <Button
+          onClick={openEdit}
+          size="small"
+          className="submit-button"
+          variant="primary"
+          data-cy="edit-mode-button"
+        >
           Edytuj
         </Button>
       </Link>
