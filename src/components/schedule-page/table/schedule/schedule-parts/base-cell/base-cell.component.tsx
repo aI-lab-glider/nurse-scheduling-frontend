@@ -152,7 +152,6 @@ export function BaseCellComponent({
           {...attributes}
           data={
             <div>
-              {" "}
               <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Bład w linii: {rowIndex},
               pozycji: {index}. Wartość komórki: {value}
             </div>
