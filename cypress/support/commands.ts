@@ -56,8 +56,7 @@ Cypress.Commands.add(
       .eq(workerIdx)
       .children()
       .eq(shiftIdx)
-      .children()
-      .children();
+      .find("[data-cy=cell]");
   }
 );
 
