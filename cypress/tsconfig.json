@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "es5",
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "types": [
+      "cypress",
+      "cypress-file-upload"
+    ],
+    "jsx": "react"
+  },
+  "include": [
+    "**/**/*.ts"
+  ]
+}

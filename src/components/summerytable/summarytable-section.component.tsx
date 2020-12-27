@@ -28,7 +28,11 @@ export function SummaryTableSection({
 
   return (
     <>
-      <table className="table" id="summaryTable">
+      <table
+        className="table"
+        id="summaryTable"
+        data-cy={`${workerType.toLowerCase()}SummaryTable`}
+      >
         <tbody>
           {dataRows.map((dataRow) => {
             return (

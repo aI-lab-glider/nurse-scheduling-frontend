@@ -1,4 +1,3 @@
-/// <reference types="cypress" />
 import { ShiftHelper } from "../../../../src/helpers/shifts.helper";
 import { ShiftCode, ShiftInfoModel } from "../../../../src/common-models/shift-info.model";
 import { VerboseDate, WeekDay } from "../../../../src/common-models/month-info.model";
