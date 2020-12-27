@@ -161,6 +161,7 @@ export function BaseCellComponent({
 
         {(!isPointerOn || (isPointerOn && isBlocked)) && (
           <p
+            data-cy="cell"
             className="relative"
             onClick={(): void => {
               !isBlocked && onClick && onClick();
