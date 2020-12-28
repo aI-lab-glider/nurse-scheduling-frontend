@@ -8,6 +8,8 @@ import { ActionModel } from "./state/models/action.model";
 import { ScheduleDataModel } from "./common-models/schedule-data.model";
 import ManagementPage from "./components/workers-page/management-page.component";
 import RouteButtonsComponent from "./components/common-components/route-buttons/route-buttons.component";
+import { Route, Switch } from "react-router-dom";
+import { NewMonthPlanComponent } from "./components/schedule-page/new-month-page.component";
 
 interface TabData {
   label: string;
@@ -36,8 +38,23 @@ function App(): JSX.Element {
     <React.Fragment>
       <div>
         <CustomGlobalHotKeys />
-        <HeaderComponent />
-        <RouteButtonsComponent tabs={tabs} disabled={editMode} />
+        <Switch>
+          <Route path="/next-month">
+            <HeaderComponent isNewMonthPage={true} />
+            <RouteButtonsComponent
+              tabs={[
+                { label: "Plan", component: <NewMonthPlanComponent /> },
+                { label: "Raporty", component: <></> },
+                { label: "Zarządzanie", component: <ManagementPage /> },
+              ]}
+              disabled={editMode}
+            />
+          </Route>
+          <Route path="/">
+            <HeaderComponent isNewMonthPage={false} />
+            <RouteButtonsComponent tabs={tabs} disabled={editMode} />
+          </Route>
+        </Switch>
       </div>
     </React.Fragment>
   );

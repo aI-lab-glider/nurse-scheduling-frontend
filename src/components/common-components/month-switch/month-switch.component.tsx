@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { TranslationHelper } from "../../../helpers/tranlsations.helper";
 import { StringHelper } from "../../../helpers/string.helper";
+import { Link } from "react-router-dom";
 
 interface MonthSwitchOpions {
   key?: string;
@@ -29,10 +30,14 @@ export function MonthSwitchComponent(options: MonthSwitchOpions): JSX.Element {
           <IconButton className="arrow-button" size={arrowSize}>
             <MdChevronLeft />
           </IconButton>
+
           <span>{actualMonth}</span>
-          <IconButton className="arrow-button" size={arrowSize}>
-            <MdChevronRight />
-          </IconButton>
+
+          <Link to="/next-month">
+            <IconButton className="arrow-button" size={arrowSize}>
+              <MdChevronRight />
+            </IconButton>
+          </Link>
         </div>
       )}
     </>
