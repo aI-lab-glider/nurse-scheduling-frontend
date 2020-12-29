@@ -5,10 +5,14 @@ import { Button } from "../button-component/button.component";
 import { Link } from "react-router-dom";
 
 interface HeaderCheckInterface {
+  actualMonth: string;
   isNewMonthPage: boolean;
 }
 
-export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.Element {
+export function HeaderComponent({
+  isNewMonthPage,
+  actualMonth,
+}: HeaderCheckInterface): JSX.Element {
   return (
     <>
       <div id={"header"}>
@@ -21,7 +25,7 @@ export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.E
           </Link>
         )}
         <div className={"filler"} />
-        <MonthSwitchComponent />
+        <MonthSwitchComponent actualMonth={actualMonth} />
         <div className={"filler"} />
       </div>
     </>

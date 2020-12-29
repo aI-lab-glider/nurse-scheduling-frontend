@@ -8,30 +8,20 @@ import { StringHelper } from "../../../helpers/string.helper";
 import { Link } from "react-router-dom";
 
 interface MonthSwitchOpions {
+  actualMonth?: string;
   key?: string;
 }
 export function MonthSwitchComponent(options: MonthSwitchOpions): JSX.Element {
   const arrowSize = "small";
-  /* eslint-disable @typescript-eslint/camelcase */
-  const { month_number, year } = useSelector(
-    (state: ApplicationStateModel) => state.scheduleData.present.schedule_info
-  );
-
-  let actualMonth = "";
-  if (month_number && year) {
-    actualMonth = StringHelper.capitalize(
-      `${TranslationHelper.polishMonths[month_number]} ${year}`
-    );
-  }
   return (
     <>
-      {actualMonth && (
+      {options.actualMonth && (
         <div id="month-switch">
           <IconButton className="arrow-button" size={arrowSize}>
             <MdChevronLeft />
           </IconButton>
 
-          <span>{actualMonth}</span>
+          <span>{options.actualMonth}</span>
 
           <Link to="/next-month">
             <IconButton className="arrow-button" size={arrowSize}>

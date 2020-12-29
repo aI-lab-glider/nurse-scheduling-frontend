@@ -1,7 +1,10 @@
 import React from "react";
 import { Button } from "../common-components/button-component/button.component";
 
-export function NewMonthPlanComponent(): JSX.Element {
+interface NewMonthPlanOptions {
+  actualMonth: string;
+}
+export function NewMonthPlanComponent({ actualMonth }: NewMonthPlanOptions): JSX.Element {
   return (
     <>
       <div className={"newMonthComponents"}>
@@ -12,7 +15,7 @@ export function NewMonthPlanComponent(): JSX.Element {
         <p>Nie masz planu na ten miesiąc</p>
         <div className={"newPageButtonsPane"}>
           <Button size="small" className="submit-button" variant="outlined">
-            Kopiuj plan z $miesiąc
+            Kopiuj plan z {actualMonth}
           </Button>
           <Button size="small" className="submit-button" variant="primary">
             Wgraj plan z pliku

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CustomGlobalHotKeys, HeaderComponent } from "./components/common-components";
 import { SchedulePage } from "./components/schedule-page/schedule-page.component";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import schedule from "./assets/devMode/schedule.js";
 import { ScheduleDataActionType } from "./state/reducers/schedule-data.reducer";
 import { ActionModel } from "./state/models/action.model";
@@ -10,6 +10,9 @@ import ManagementPage from "./components/workers-page/management-page.component"
 import RouteButtonsComponent from "./components/common-components/route-buttons/route-buttons.component";
 import { Route, Switch } from "react-router-dom";
 import { NewMonthPlanComponent } from "./components/schedule-page/new-month-page.component";
+import { ApplicationStateModel } from "./state/models/application-state.model";
+import { TranslationHelper } from "./helpers/tranlsations.helper";
+import { StringHelper } from "./helpers/string.helper";
 
 interface TabData {
   label: string;
@@ -19,6 +22,17 @@ interface TabData {
 function App(): JSX.Element {
   const scheduleDispatcher = useDispatch();
   const [editMode, setEditMode] = useState<boolean>(false);
+  /* eslint-disable @typescript-eslint/camelcase */
+  const { month_number, year } = useSelector(
+    (state: ApplicationStateModel) => state.scheduleData.present.schedule_info
+  );
+
+  let actualMonth = "";
+  if (month_number && year) {
+    actualMonth = StringHelper.capitalize(
+      `${TranslationHelper.polishMonths[month_number]} ${year}`
+    );
+  }
 
   const tabs: TabData[] = [
     { label: "Plan", component: <SchedulePage editModeHandler={setEditMode} /> },
@@ -40,18 +54,11 @@ function App(): JSX.Element {
         <CustomGlobalHotKeys />
         <Switch>
           <Route path="/next-month">
-            <HeaderComponent isNewMonthPage={true} />
-            <RouteButtonsComponent
-              tabs={[
-                { label: "Plan", component: <NewMonthPlanComponent /> },
-                { label: "Raporty", component: <></> },
-                { label: "Zarządzanie", component: <ManagementPage /> },
-              ]}
-              disabled={editMode}
-            />
+            <HeaderComponent isNewMonthPage={true} actualMonth={actualMonth} />
+            <NewMonthPlanComponent actualMonth={actualMonth} />
           </Route>
           <Route path="/">
-            <HeaderComponent isNewMonthPage={false} />
+            <HeaderComponent isNewMonthPage={false} actualMonth={actualMonth} />
             <RouteButtonsComponent tabs={tabs} disabled={editMode} />
           </Route>
         </Switch>
