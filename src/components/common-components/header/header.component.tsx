@@ -15,7 +15,7 @@ export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.E
         <AssignmentIndIcon id={"AssignmentIndIcon"} />
         {isNewMonthPage && (
           <Link to="/">
-            <Button size="small" className="submit-button" variant="secondary">
+            <Button size="small" className="submit-button returnToNowBtn" variant="secondary">
               Wróć do teraz
             </Button>
           </Link>
