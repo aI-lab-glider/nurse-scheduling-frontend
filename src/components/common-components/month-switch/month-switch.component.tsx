@@ -1,10 +1,6 @@
 import { IconButton } from "@material-ui/core";
 import { MdChevronRight, MdChevronLeft } from "react-icons/md";
 import React from "react";
-import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { TranslationHelper } from "../../../helpers/tranlsations.helper";
-import { StringHelper } from "../../../helpers/string.helper";
 import { Link } from "react-router-dom";
 import { useActualMonth } from "./use-actual-month";
 
@@ -13,17 +9,6 @@ interface MonthSwitchOpions {
 }
 export function MonthSwitchComponent(options: MonthSwitchOpions): JSX.Element {
   const arrowSize = "small";
-  // /* eslint-disable @typescript-eslint/camelcase */
-  // const { month_number, year } = useSelector(
-  //   (state: ApplicationStateModel) => state.scheduleData.present.schedule_info
-  // );
-
-  // let actualMonth = "";
-  // if (month_number && year) {
-  //   actualMonth = StringHelper.capitalize(
-  //     `${TranslationHelper.polishMonths[month_number]} ${year}`
-  //   );
-  // }
   const actualMonth = useActualMonth();
 
   return (

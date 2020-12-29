@@ -10,9 +10,6 @@ import ManagementPage from "./components/workers-page/management-page.component"
 import RouteButtonsComponent from "./components/common-components/route-buttons/route-buttons.component";
 import { Route, Switch } from "react-router-dom";
 import { NewMonthPlanComponent } from "./components/schedule-page/new-month-page.component";
-import { ApplicationStateModel } from "./state/models/application-state.model";
-import { TranslationHelper } from "./helpers/tranlsations.helper";
-import { StringHelper } from "./helpers/string.helper";
 
 interface TabData {
   label: string;
