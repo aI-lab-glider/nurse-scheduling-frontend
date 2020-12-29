@@ -13,7 +13,10 @@ export function ScheduleViewOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.El
   const scheduleModel = useSelector((state: ApplicationStateModel) => {
     return state.scheduleData.present;
   });
-  const { scheduleLogic, setNewSchedule, scheduleLocalState } = useScheduleState(scheduleModel);
+  const { scheduleLogic, setNewSchedule, scheduleLocalState } = useScheduleState(
+    scheduleModel,
+    "readonly"
+  );
   useEffect(() => {
     setNewSchedule(scheduleModel);
   }, [scheduleModel, setNewSchedule]);

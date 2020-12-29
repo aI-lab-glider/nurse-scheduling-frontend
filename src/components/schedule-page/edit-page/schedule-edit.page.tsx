@@ -11,7 +11,10 @@ interface ScheduleEditPageOptions {
 
 export function ScheduleEditPage(options: ScheduleEditPageOptions): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
-  const { scheduleLogic, setNewSchedule, scheduleLocalState } = useScheduleState(scheduleModel);
+  const { scheduleLogic, setNewSchedule, scheduleLocalState } = useScheduleState(
+    scheduleModel,
+    "edit"
+  );
   useEffect(() => {
     setNewSchedule(scheduleModel);
   }, [scheduleModel, setNewSchedule]);

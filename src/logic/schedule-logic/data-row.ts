@@ -2,7 +2,7 @@ import { DataRowModel } from "../../common-models/data-row.model";
 
 export class DataRow implements DataRowModel {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(private key: string, private data: any[] = [], public readonly isEditable = true) {}
+  constructor(private key: string, private data: any[] = [], public isEditable = true) {}
 
   public get isEmpty(): boolean {
     return this.data.filter((i) => i !== null).length === 0;
@@ -10,6 +10,10 @@ export class DataRow implements DataRowModel {
 
   public get rowKey(): string {
     return this.key;
+  }
+
+  public disableEdit() {
+    this.isEditable = false;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
