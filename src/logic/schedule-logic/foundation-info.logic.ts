@@ -45,6 +45,10 @@ export class FoundationInfoLogic
     new DataRow(FoundationSectionKey.NurseCount, this.getWorkersCount(WorkerType.NURSE), false),
   ];
 
+  public disableEdit() {
+    this.rows.forEach((row) => row.disableEdit());
+  }
+
   get sectionData(): DataRow[] {
     return this.rows;
   }

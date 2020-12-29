@@ -17,7 +17,10 @@ export function SummaryTableSection({
   workerType,
 }: SummaryTableSectionOptions): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
-  const { scheduleLogic, scheduleLocalState, setNewSchedule } = useScheduleState(scheduleModel);
+  const { scheduleLogic, scheduleLocalState, setNewSchedule } = useScheduleState(
+    scheduleModel,
+    "readonly"
+  );
 
   const sectionKey = workerType === WorkerType.NURSE ? "NurseInfo" : "BabysitterInfo";
   const shiftLogic = scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey);

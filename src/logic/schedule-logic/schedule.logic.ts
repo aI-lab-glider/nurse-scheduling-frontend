@@ -18,6 +18,9 @@ import { FoundationInfoLogic } from "./foundation-info.logic";
 import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
 import { ThunkDispatch } from "redux-thunk";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
+import { SelectionMatrix } from "../../components/schedule-page/table/schedule/sections/base-section/use-selection-matrix";
+import { BaseSectionLogic } from "./base-section-logic.model";
+
 export class ScheduleLogic implements ScheduleProvider {
   schedule!: Schedule;
   sections!: Sections;
@@ -25,15 +28,25 @@ export class ScheduleLogic implements ScheduleProvider {
   constructor(
     private dispatchScheduleUpdate: ThunkDispatch<ApplicationStateModel, void, ScheduleActionModel>,
     private storeProvider: PersistanceStoreProvider,
-    scheduleModel: ScheduleDataModel
+    scheduleModel: ScheduleDataModel,
+    private mode: "edit" | "readonly"
   ) {
     this.update(scheduleModel);
+  }
+
+  public disableEdit() {
+    Object.values(this.sections).forEach((section) => {
+      (section as BaseSectionLogic).disableEdit();
+    });
   }
 
   public update(schedule: ScheduleDataModel): void {
     this.uuid = schedule.schedule_info.UUID ?? "";
     this.sections = this.createSections(schedule);
     this.schedule = new Schedule(this);
+    if (this.mode === "readonly") {
+      this.disableEdit();
+    }
   }
 
   public createSections(scheduleModel: ScheduleDataModel): Sections {
@@ -65,7 +78,12 @@ export class ScheduleLogic implements ScheduleProvider {
     };
 
     const foundationLogic = new FoundationInfoLogic(logics);
-    return { ...logics, FoundationInfo: foundationLogic, Metadata: metadata };
+    return {
+      BabysitterInfo: logics.BabysitterInfo,
+      NurseInfo: logics.NurseInfo,
+      FoundationInfo: foundationLogic,
+      Metadata: metadata,
+    };
   }
 
   public tryGetCurrentMonthSchedule(): void {
@@ -108,7 +126,7 @@ export class ScheduleLogic implements ScheduleProvider {
 
   public updateSection(
     sectionKey: keyof Sections,
-    selectionMatrix: boolean[][],
+    selectionMatrix: SelectionMatrix,
     newValue: string
   ): boolean {
     const section = Object.values(this.sections).find(
