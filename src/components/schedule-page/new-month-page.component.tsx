@@ -1,10 +1,9 @@
 import React from "react";
 import { Button } from "../common-components/button-component/button.component";
+import { useActualMonth } from "../common-components/month-switch/use-actual-month";
 
-interface NewMonthPlanOptions {
-  actualMonth: string;
-}
-export function NewMonthPlanComponent({ actualMonth }: NewMonthPlanOptions): JSX.Element {
+export function NewMonthPlanComponent(): JSX.Element {
+  const actualMonth = useActualMonth();
   return (
     <>
       <div className={"newMonthComponents"}>

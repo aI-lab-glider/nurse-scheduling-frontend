@@ -22,17 +22,6 @@ interface TabData {
 function App(): JSX.Element {
   const scheduleDispatcher = useDispatch();
   const [editMode, setEditMode] = useState<boolean>(false);
-  /* eslint-disable @typescript-eslint/camelcase */
-  const { month_number, year } = useSelector(
-    (state: ApplicationStateModel) => state.scheduleData.present.schedule_info
-  );
-
-  let actualMonth = "";
-  if (month_number && year) {
-    actualMonth = StringHelper.capitalize(
-      `${TranslationHelper.polishMonths[month_number]} ${year}`
-    );
-  }
 
   const tabs: TabData[] = [
     { label: "Plan", component: <SchedulePage editModeHandler={setEditMode} /> },
@@ -54,11 +43,11 @@ function App(): JSX.Element {
         <CustomGlobalHotKeys />
         <Switch>
           <Route path="/next-month">
-            <HeaderComponent isNewMonthPage={true} actualMonth={actualMonth} />
-            <NewMonthPlanComponent actualMonth={actualMonth} />
+            <HeaderComponent isNewMonthPage={true} />
+            <NewMonthPlanComponent />
           </Route>
           <Route path="/">
-            <HeaderComponent isNewMonthPage={false} actualMonth={actualMonth} />
+            <HeaderComponent isNewMonthPage={false} />
             <RouteButtonsComponent tabs={tabs} disabled={editMode} />
           </Route>
         </Switch>
