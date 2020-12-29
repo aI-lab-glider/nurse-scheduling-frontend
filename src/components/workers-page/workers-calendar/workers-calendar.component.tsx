@@ -5,7 +5,10 @@ import { VerboseDate } from "../../../common-models/month-info.model";
 
 const calendarShifts = shifts;
 calendarShifts["W"]["name"] = " ";
-calendarShifts["U"]["name"] = "Urlop";
+calendarShifts["U"]["name"] = "U";
+calendarShifts["R"]["name"] = "R";
+calendarShifts["D"]["name"] = "D";
+calendarShifts["N"]["name"] = "N";
 calendarShifts["DN"]["name"] = "D+N";
 calendarShifts["PN"]["name"] = "P+N";
 calendarShifts["L4"]["name"] = "L4";

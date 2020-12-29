@@ -18,27 +18,28 @@ $worker-table-border-color: #d5e6fe !default;
 // Shifts
 
 $dzien: rgba(152, 221, 150, 1);
-$dzien-50: rgba(152, 221, 150, 0.5);
-
 $dzien-noc: #641ea9;
-
 $rano: rgba(255, 209, 0, 1);
-$rano-50: rgba(255, 209, 0, 0.5);
-
 $popoludnie: rgba(0, 163, 255, 1);
-$popoludnie-50: rgba(0, 163, 255, 0.5);
-
 $noc: rgba(16, 32, 70, 1);
-$noc-50: rgba(16, 32, 70, 0.5);
 
 $l4: rgba(198, 0, 0, 1);
-$l4-50: rgba(198, 0, 0, 0.3);
+$l4-50: change-color(
+  $color: $l4,
+  $alpha: 0.3,
+);
 
 $kwaratanna: rgba(0, 0, 0, 1);
-$kwaratanna-50: rgba(0, 0, 0, 0.3);
+$kwaratanna-50: change-color(
+  $color: $kwaratanna,
+  $alpha: 0.3,
+);
 
 $urlop: rgba(255, 138, 0, 1);
-$urlop-50: rgba(255, 138, 0, 0.3);
+$urlop-50: change-color(
+  $color: $urlop,
+  $alpha: 0.3,
+);
 
 // Color system
 $primary: #1d3557 !default;
