@@ -3,6 +3,7 @@
   font-weight: 900;
   font-size: 16px;
   letter-spacing: 1px;
+  position: fixed;
   * {
     color: $header-text-color;
   }
@@ -11,5 +12,37 @@
   }
   .arrow-button {
     outline: none;
+  }
+}
+
+.returnToNowBtn {
+  margin-top: 0px !important;
+}
+
+.newMonthComponents {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 80vh;
+
+  img {
+    width: 150px;
+    height: 100px;
+  }
+
+  p {
+    color: $primary;
+    font-weight: $font-weight-bold;
+    margin-top: 1rem;
+  }
+
+  .newPageButtonsPane {
+    box-sizing: border-box;
+    display: inline;
+    * {
+      font-weight: $font-weight-bold;
+    }
   }
 }

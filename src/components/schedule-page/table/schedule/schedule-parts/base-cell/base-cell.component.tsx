@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CellColorSet } from "../../../../../../helpers/colors/cell-color-set.model";
 import { BaseCellInputComponent, BaseCellInputOptions } from "./base-cell-input.component";
 import { VerboseDate, WeekDay } from "../../../../../../common-models/month-info.model";
@@ -6,6 +6,9 @@ import { TranslationHelper } from "../../../../../../helpers/tranlsations.helper
 import { useDrag, useDrop } from "react-dnd";
 import classNames from "classnames/bind";
 import { getEmptyImage } from "react-dnd-html5-backend";
+import { useRef } from "react";
+import { usePopper } from "react-popper";
+import { Popper } from "./popper";
 
 export enum CellManagementKeys {
   Enter = "Enter",
@@ -58,6 +61,17 @@ export function BaseCellComponent({
   sectionKey,
 }: BaseCellOptions): JSX.Element {
   const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
+  const errorTriangle = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
+  const [isToolTipOpen, setToolTipOpen] = useState(false);
+  const { styles, attributes } = usePopper(errorTriangle.current, tooltipRef.current);
+  function showErrorTooltip(): void {
+    setToolTipOpen(true);
+  }
+  function hideErrorTooltip(): void {
+    setToolTipOpen(false);
+  }
   const [, drop] = useDrop({
     accept: dragAnDropType,
     collect: (monitor) => {
@@ -71,7 +85,6 @@ export function BaseCellComponent({
       onDragEnd && onDragEnd();
     },
   });
-
   const [, drag, preview] = useDrag({
     item: {
       type: dragAnDropType,
@@ -94,11 +107,9 @@ export function BaseCellComponent({
     }
     onKeyDown && onKeyDown(e);
   }
-
   function _onValueChange(newValue: string): void {
     onValueChange && onValueChange(newValue);
   }
-
   function getId(): string {
     if (verboseDate && monthNumber) {
       if (verboseDate.month !== TranslationHelper.englishMonths[monthNumber]) {
@@ -134,15 +145,37 @@ export function BaseCellComponent({
           />
         )}
 
+        <Popper
+          ref={tooltipRef}
+          className="errorTooltip"
+          style={styles}
+          {...attributes}
+          data={
+            <div>
+              <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Bład w linii: {rowIndex},
+              pozycji: {index}. Wartość komórki: {value}
+            </div>
+          }
+          isOpen={isToolTipOpen}
+        ></Popper>
+
         {(!isPointerOn || (isPointerOn && isBlocked)) && (
           <p
+            data-cy="cell"
             className="relative"
             onClick={(): void => {
               !isBlocked && onClick && onClick();
             }}
           >
             {
-              value === "N" && <span className="error-triangle" /> //todo change to proper error flag
+              value === "N" && (
+                <span
+                  onMouseEnter={showErrorTooltip}
+                  onMouseLeave={hideErrorTooltip}
+                  ref={errorTriangle}
+                  className="error-triangle"
+                />
+              ) //todo change to proper error flag
             }
             {value}
           </p>
