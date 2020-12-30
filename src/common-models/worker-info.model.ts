@@ -26,7 +26,7 @@ export interface WorkerInfoModel {
   name: string;
   time: number;
   type?: WorkerType;
-  shifts?: [VerboseDate | null, ShiftCode | null][];
+  shifts?: [VerboseDate, ShiftCode][];
   requiredHours?: number;
   overtime?: number;
 }

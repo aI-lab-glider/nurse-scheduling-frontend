@@ -1,33 +1,14 @@
 import React from "react";
-import { ShiftCode, shifts } from "../../../common-models/shift-info.model";
-import { WorkerInfoModel } from "../../../common-models/worker-info.model";
 import { VerboseDate } from "../../../common-models/month-info.model";
-
-const calendarShifts = shifts;
-calendarShifts["W"]["name"] = " ";
-calendarShifts["U"]["name"] = "U";
-calendarShifts["R"]["name"] = "R";
-calendarShifts["D"]["name"] = "D";
-calendarShifts["N"]["name"] = "N";
-calendarShifts["DN"]["name"] = "D+N";
-calendarShifts["PN"]["name"] = "P+N";
-calendarShifts["L4"]["name"] = "L4";
+import { ShiftCode } from "../../../common-models/shift-info.model";
+import { WorkersCalendarCell } from "./worker-calendar-cell.component";
 
 interface CalendarOptions {
-  params: WorkerInfoModel;
+  shiftsArr: [VerboseDate, ShiftCode][];
 }
 
-interface CellOptions {
-  keepOn: boolean;
-  date: VerboseDate | null;
-  shift: ShiftCode | null;
-  hasNext: boolean;
-  notCurrentMonth: boolean;
-}
-
-export default function WorkersCalendar(params: CalendarOptions): JSX.Element {
-  const shiftsArr = params.params.shifts;
-  const firstDay = shiftsArr![0]![0]!["dayOfWeek"];
+export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Element {
+  const firstDay = shiftsArr[0][0].dayOfWeek;
   const dayOfWeekNamesEng = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
   const dayOfWeekNames = ["PON", "WT", "ŚR", "CZW", "PT", "SB", "ND"];
   const daysToDisplay: string[] = [];
@@ -56,7 +37,7 @@ export default function WorkersCalendar(params: CalendarOptions): JSX.Element {
             } else {
               nextShift = null;
             }
-            if (date!["date"] === 1) {
+            if (date.date === 1) {
               notCurrentMonth = !notCurrentMonth;
             }
             keepOn =
@@ -74,26 +55,6 @@ export default function WorkersCalendar(params: CalendarOptions): JSX.Element {
               />
             );
           })}
-        </div>
-      </div>
-    </>
-  );
-}
-
-function WorkersCalendarCell(params: CellOptions): JSX.Element {
-  const date = params.date;
-  const shift = params.shift;
-  const keepOn = "keepOn" + params.keepOn;
-  const hasNext = "hasNext" + params.hasNext;
-  const notCurrentMonth = "notCurrentMonth" + params.notCurrentMonth;
-
-  return (
-    <>
-      <div className={"workersCalendarCell"}>
-        <div className={"TopCellPart " + notCurrentMonth}>{date!["date"]}</div>
-        <div className={"BottomCellPart " + keepOn + shift + " " + hasNext}>
-          <div className={"leftBorder leftBorderColor"} />
-          <p>{params.keepOn ? void 0 : calendarShifts[shift!]["name"]}</p>
         </div>
       </div>
     </>

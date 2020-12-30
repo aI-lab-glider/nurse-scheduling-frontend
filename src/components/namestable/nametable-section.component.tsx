@@ -9,6 +9,8 @@ import WorkerDrawerComponent, {
 } from "../workers-page/workers-tab/worker-drawer.component";
 import { MetadataLogic } from "../../logic/schedule-logic/metadata.logic";
 import { ArrayHelper } from "../../helpers/array.helper";
+import { VerboseDate } from "../../common-models/month-info.model";
+import { ShiftCode } from "../../common-models/shift-info.model";
 
 export interface NameTableCellOptions {
   dataRow: DataRow[];
@@ -36,7 +38,10 @@ export function NameTableSection({ dataRow, workerType }: NameTableCellOptions):
         const [requiredHours, actualHours, overtime] =
           shiftLogic?.calculateWorkerHourInfo(name) ?? [];
 
-        const workersWithDates = ArrayHelper.zip(verboseDates!, shifts![name]);
+        const workersWithDates = ArrayHelper.zip<NonNullable<VerboseDate>, NonNullable<ShiftCode>>(
+          verboseDates,
+          shifts?.[name]
+        );
 
         workerInfo = {
           name: name,

@@ -31,7 +31,7 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
             <b>ZMIANY</b>
           </div>
         </div>
-        <WorkersCalendar params={info} />
+        <WorkersCalendar shiftsArr={info.shifts!} />
       </div>
     </>
   );
