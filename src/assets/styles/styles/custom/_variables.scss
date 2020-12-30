@@ -14,6 +14,18 @@ $header-text-color: #ffffff !default;
 $babysitter-label-background: #ffd100 !default;
 $nurse-label-background: #c8dfff !default;
 $worker-table-border-color: #d5e6fe !default;
+
+// Shifts
+
+$dzien: rgba(152, 221, 150, 1);
+$dzien-noc: #641ea9;
+$rano: rgba(255, 209, 0, 1);
+$popoludnie: rgba(0, 163, 255, 1);
+$noc: rgba(16, 32, 70, 1);
+$l4: rgba(198, 0, 0, 1);
+$kwaratanna: rgba(0, 0, 0, 1);
+$urlop: rgba(255, 138, 0, 1);
+
 // Color system
 $primary: #1d3557 !default;
 $selection-color: rgba(71, 13, 179, 0.25);
@@ -89,6 +101,7 @@ $opacity-5: rgba(255, 255, 255, 0.5) !default;
 $opacity-6: rgba(255, 255, 255, 0.6) !default;
 $opacity-8: rgba(255, 255, 255, 0.8) !default;
 
+$opacity-0: rgba(255, 255, 255, 0) !default;
 $opacity-1: rgba(255, 255, 255, 0.1) !default;
 $opacity-2: rgba(255, 255, 255, 0.2) !default;
 

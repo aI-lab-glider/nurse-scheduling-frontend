@@ -1,10 +1,11 @@
 export type Primitive = undefined | null | boolean | number | string | bigint | symbol;
 
+type ValueOrNotDefined<T> = T extends NonNullable<T> ? T : T | null | undefined;
 export class ArrayHelper {
   public static zip<T1, T2>(
-    array1: (T1 | null)[],
-    array2: (T2 | null)[]
-  ): [T1 | null, T2 | null][] {
+    array1: ValueOrNotDefined<T1>[] = [],
+    array2: ValueOrNotDefined<T2>[] = []
+  ): [ValueOrNotDefined<T1>, ValueOrNotDefined<T2>][] {
     if (array1.length < array2.length) {
       const count = array2.length - array1.length;
       array1 = [...array1, ...Array.from(Array(count))];

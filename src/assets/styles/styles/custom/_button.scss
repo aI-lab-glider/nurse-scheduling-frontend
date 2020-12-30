@@ -45,10 +45,7 @@
   height: $btn-circle-outlined-size;
   width: $btn-circle-outlined-size;
   margin: auto 10px;
-  border-radius: 50%;
-  border: 1px solid $primary;
-  background-color: $white;
-  color: $primary;
+  background-color: $opacity-0;
   display: flex;
   justify-content: center;
 }
