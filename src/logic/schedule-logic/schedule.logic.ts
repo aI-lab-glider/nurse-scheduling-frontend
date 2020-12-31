@@ -1,40 +1,44 @@
+import { Dispatch } from "react";
+import { ThunkDispatch } from "redux-thunk";
+import { PersistanceStoreProvider, RevisionFilter } from "../../api/persistance-store.model";
+import { ScheduleDataModel } from "../../common-models/schedule-data.model";
+import { WorkerType } from "../../common-models/worker-info.model";
+import { SelectionMatrix } from "../../components/schedule-page/table/schedule/sections/base-section/use-selection-matrix";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { StringHelper } from "../../helpers/string.helper";
-import { WorkerType } from "../../common-models/worker-info.model";
-import { ScheduleDataModel } from "../../common-models/schedule-data.model";
-import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
-import { ChildrenInfoLogic } from "./children-info.logic";
-import { DataRow } from "./data-row";
-import { ExtraWorkersLogic } from "./extra-workers.logic";
-import { MetadataLogic } from "./metadata.logic";
-import { ShiftsInfoLogic } from "./shifts-info.logic";
-import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../section.model";
-import { PersistanceStoreProvider, RevisionFilter } from "../../api/persistance-store.model";
+import { ActionModel } from "../../state/models/action.model";
+import { ApplicationStateModel } from "../../state/models/application-state.model";
 import {
   ScheduleActionModel,
   ScheduleDataActionType,
 } from "../../state/reducers/schedule-data.reducer";
-import { FoundationInfoLogic } from "./foundation-info.logic";
 import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
-import { ThunkDispatch } from "redux-thunk";
-import { ApplicationStateModel } from "../../state/models/application-state.model";
-import { SelectionMatrix } from "../../components/schedule-page/table/schedule/sections/base-section/use-selection-matrix";
+import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
+import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../section.model";
 import { BaseSectionLogic } from "./base-section-logic.model";
+import { ChildrenInfoLogic } from "./children-info.logic";
+import { DataRow } from "./data-row";
+import { ExtraWorkersLogic } from "./extra-workers.logic";
+import { FoundationInfoLogic } from "./foundation-info.logic";
+import { MetadataLogic } from "./metadata.logic";
+import { ShiftsInfoLogic } from "./shifts-info.logic";
 
+export type ScheduleLogicMode = "edit" | "readonly";
 export class ScheduleLogic implements ScheduleProvider {
   schedule!: Schedule;
   sections!: Sections;
   uuid!: string;
   constructor(
-    private dispatchScheduleUpdate: ThunkDispatch<ApplicationStateModel, void, ScheduleActionModel>,
+    private globalDispatch: ThunkDispatch<ApplicationStateModel, void, ScheduleActionModel>,
+    private localDispatch: Dispatch<ActionModel<ScheduleDataModel>>,
     private storeProvider: PersistanceStoreProvider,
     scheduleModel: ScheduleDataModel,
-    private mode: "edit" | "readonly"
+    private mode: ScheduleLogicMode
   ) {
     this.update(scheduleModel);
   }
 
-  public disableEdit() {
+  public disableEdit(): void {
     Object.values(this.sections).forEach((section) => {
       (section as BaseSectionLogic).disableEdit();
     });
@@ -89,11 +93,11 @@ export class ScheduleLogic implements ScheduleProvider {
   public tryGetCurrentMonthSchedule(): void {
     const [month, year] = this.sections.Metadata.monthLogic.currentDate;
     const filter: RevisionFilter = { revisionType: "actual", validityPeriod: { month, year } };
-    this.dispatchScheduleUpdate(this.storeProvider.getScheduleRevision(filter));
+    this.globalDispatch(this.storeProvider.getScheduleRevision(filter));
   }
 
   public updateActualRevision(): void {
-    this.dispatchScheduleUpdate(
+    this.globalDispatch(
       this.storeProvider.saveScheduleRevision("actual", this.schedule.getDataModel())
     );
   }
@@ -104,7 +108,7 @@ export class ScheduleLogic implements ScheduleProvider {
     this.updateGlobalState();
   }
 
-  public getWorkerTypes(): {} {
+  public getWorkerTypes(): { [workerName: string]: WorkerType } {
     const result = {};
     this.sections.BabysitterInfo.workers.forEach((babysitter) => {
       result[babysitter] = WorkerType.OTHER;
@@ -168,7 +172,7 @@ export class ScheduleLogic implements ScheduleProvider {
 
   private updateGlobalState(): void {
     const model = this.schedule.getDataModel();
-    this.dispatchScheduleUpdate({
+    this.localDispatch({
       type: ScheduleDataActionType.UPDATE,
       payload: model,
     });

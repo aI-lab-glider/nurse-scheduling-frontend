@@ -12,7 +12,7 @@ export class DataRow implements DataRowModel {
     return this.key;
   }
 
-  public disableEdit() {
+  public disableEdit(): void {
     this.isEditable = false;
   }
 
@@ -44,7 +44,6 @@ export class DataRow implements DataRowModel {
   }
 
   public get length(): number {
-    // data + key
     return this.data.length + 1;
   }
 }

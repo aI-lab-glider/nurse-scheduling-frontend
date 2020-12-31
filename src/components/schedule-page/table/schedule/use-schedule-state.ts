@@ -4,7 +4,7 @@ import { LocalStorageProvider } from "../../../../api/local-storage-provider.mod
 import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 import { FoundationInfoLogic } from "../../../../logic/schedule-logic/foundation-info.logic";
 import { MetadataLogic } from "../../../../logic/schedule-logic/metadata.logic";
-import { ScheduleLogic } from "../../../../logic/schedule-logic/schedule.logic";
+import { ScheduleLogic, ScheduleLogicMode } from "../../../../logic/schedule-logic/schedule.logic";
 import { ShiftsInfoLogic } from "../../../../logic/schedule-logic/shifts-info.logic";
 import { ScheduleComponentState, scheduleInitialState } from "./schedule-state.model";
 
@@ -19,7 +19,7 @@ export const ScheduleLogicContext = React.createContext<ScheduleLogic | null>(nu
 
 export function useScheduleState(
   initialScheduleModelState: ScheduleDataModel,
-  mode: "readonly" | "edit"
+  mode: ScheduleLogicMode
 ): useScheduleStateReturn {
   const dispatchGlobalState = useDispatch();
   const [scheduleLocalState, setScheduleLocalState] = useState<ScheduleComponentState>(
@@ -28,6 +28,11 @@ export function useScheduleState(
   const [scheduleLogic] = useState<ScheduleLogic>(
     new ScheduleLogic(
       dispatchGlobalState,
+      (schedule) => {
+        if (schedule.payload) {
+          setNewSchedule(schedule.payload);
+        }
+      },
       new LocalStorageProvider(),
       initialScheduleModelState,
       mode
