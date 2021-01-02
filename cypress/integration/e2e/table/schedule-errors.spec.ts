@@ -13,6 +13,7 @@ context("Schedule errors", () => {
   });
 
   it("Should show errors returned by server", () => {
+    cy.get("[data-cy=save-schedule-button]").click();
     cy.get("[data-cy=check-schedule-button]").click();
     cy.contains("Za mało pracowników w trakcie dnia w dniu 1, potrzeba 8, jest 5");
     cy.contains("Za mało pracowników w trakcie dnia w dniu 2, potrzeba 8, jest 0");

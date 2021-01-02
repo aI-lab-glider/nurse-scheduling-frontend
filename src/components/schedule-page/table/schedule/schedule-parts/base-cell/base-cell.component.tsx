@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CellColorSet } from "../../../../../../helpers/colors/cell-color-set.model";
 import { BaseCellInputComponent, BaseCellInputOptions } from "./base-cell-input.component";
 import { VerboseDate, WeekDay } from "../../../../../../common-models/month-info.model";
-import { TranslationHelper } from "../../../../../../helpers/tranlsations.helper";
+import { TranslationHelper } from "../../../../../../helpers/translations.helper";
 import { useDrag, useDrop } from "react-dnd";
 import classNames from "classnames/bind";
 import { getEmptyImage } from "react-dnd-html5-backend";

@@ -12,13 +12,12 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
     <FoldingSection name="Errors">
       <div className="scrollableContainer75vh">
         {errors?.length > 0 &&
-          errors.map(
-            (error, index): JSX.Element => (
-              <ErrorListItem key={error.message.substr(2, 9) + index} error={error} />
-            )
-          )}
-        {errors?.length === 0 && <span>Nie znaleziono błędów</span>}
-      </div>
+        errors.map(
+          (error, index): JSX.Element => (
+            <ErrorListItem key={error.message.substr(2, 9) + index} error={error} />
+          )
+        )}
+        {errors?.length === 0 && "Nie znaleziono błędów"}      </div>
     </FoldingSection>
   );
 }

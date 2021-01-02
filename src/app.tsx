@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CustomGlobalHotKeys, HeaderComponent } from "./components/common-components";
 import { SchedulePage } from "./components/schedule-page/schedule-page.component";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import schedule from "./assets/devMode/schedule.js";
 import { ScheduleDataActionType } from "./state/reducers/schedule-data.reducer";
 import { ActionModel } from "./state/models/action.model";

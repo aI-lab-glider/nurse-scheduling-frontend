@@ -7,7 +7,7 @@ import { DataRow } from "./data-row";
 import { BaseSectionLogic } from "./base-section-logic.model";
 import { ShiftsProvider } from "../providers/shifts-provider.model";
 import { MetadataLogic } from "./metadata.logic";
-import { TranslationHelper } from "../../helpers/tranlsations.helper";
+import { TranslationHelper } from "../../helpers/translations.helper";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 
 export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider {
