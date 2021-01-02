@@ -49,6 +49,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
             dispatcher(UndoActionCreators.undo());
           }}
           variant="circle-outlined"
+          data-cy="undo-button"
         >
           <UndoIcon className="edit-icons" />
         </Button>
@@ -84,6 +85,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
         <Button
           size="small"
           className="submit-button"
+          data-cy="save-schedule-button"
           variant="outlined"
           onClick={(): void => {
             scheduleLogic && scheduleLogic.updateActualRevision();
