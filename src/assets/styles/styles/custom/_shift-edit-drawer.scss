@@ -1,0 +1,45 @@
+.edit-field {
+  h4 {
+    font-family: $font-family-base;
+    font-weight: $font-weight-extra-bold;
+    font-size: $font-size-base;
+    color: $primary-header-color;
+  }
+
+  label {
+    color: $gray-700;
+  }
+
+  input[type="text"] {
+    border: none;
+    border-bottom: 2px solid $gray-700;
+    ::placeholder {
+      color: $gray-700;
+    }
+  }
+
+  input[type="radio"] {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid $gray-700;
+    border-radius: 50%;
+    outline: none;
+  }
+
+  input[type="radio"]:hover {
+    box-shadow: 0 0 5px 0px $gray-700 inset;
+  }
+
+  input[type="radio"]:before {
+    content: "";
+    display: block;
+    width: 75%;
+    height: 75%;
+    margin: 15% auto;
+    border-radius: 50%;
+  }
+  input[type="radio"]:checked:before {
+    background: $primary-header-color;
+  }
+}
