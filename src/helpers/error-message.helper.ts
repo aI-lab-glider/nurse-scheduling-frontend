@@ -23,7 +23,7 @@ export class ErrorMessageHelper {
 
     const kind = error.kind;
     let message: string;
-    let title = "default title";
+    let title = "Nie rozpoznano błędu";
     let day = 0;
 
     switch (error.kind) {
@@ -33,28 +33,28 @@ export class ErrorMessageHelper {
         }`;
         title = "date";
         if (error.day) {
-          day = day + error.day;
+          day += error.day;
         }
         break;
       case AlgorithmErrorCode.WND:
         message = `Za mało pracowników w trakcie dnia w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
         title = "date";
         if (error.day) {
-          day = day + error.day;
+          day += error.day;
         }
         break;
       case AlgorithmErrorCode.WNN:
         message = `Za mało pracowników w nocy w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
         title = "date";
         if (error.day) {
-          day = day + error.day;
+          day += error.day;
         }
         break;
       case AlgorithmErrorCode.DSS:
         message = `Niedozwolona sekwencja zmian dla pracownika ${error.worker} w dniu ${error.day}: ${error.succeeding} po ${error.preceding}`;
         title = "date";
         if (error.day) {
-          day = day + error.day;
+          day += error.day;
         }
         break;
       case AlgorithmErrorCode.LLB:

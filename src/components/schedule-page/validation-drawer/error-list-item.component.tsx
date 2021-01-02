@@ -30,10 +30,7 @@ export default function ErrorListItem({ error }: Options): JSX.Element {
   const scheduleLogic = useContext(ScheduleLogicContext);
   const mappedDays = scheduleLogic?.sections.Metadata?.verboseDates.map((d) => d.date);
 
-  let monthStartIndex = 0;
-  while (scheduleLogic?.sections.Metadata?.dates[monthStartIndex] !== 1) {
-    monthStartIndex++;
-  }
+  const monthStartIndex = scheduleLogic?.sections.Metadata?.dates.findIndex((d) => d === 1) ?? 0;
 
   let errorDayIndex = -1;
   let errorDay = -1;
@@ -42,14 +39,11 @@ export default function ErrorListItem({ error }: Options): JSX.Element {
     errorDay = mappedDays[errorDayIndex];
   }
 
-  let month = "";
-  if (errorDayIndex < monthStartIndex) {
-    month = prevMonthGenetivus;
-  } else month = currMonthGenetivus;
+  const month = errorDayIndex < monthStartIndex ? prevMonthGenetivus : currMonthGenetivus;
 
   return (
     <div className="error-list-item">
-      <div className="red-rectangle"></div>
+      <div className="red-rectangle" />
       <div className="error-title">
         <p className="error-title-content">
           {error.title === "date" ? `${errorDay} ` + month : `${error.title}`}
