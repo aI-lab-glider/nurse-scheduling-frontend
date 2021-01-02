@@ -83,6 +83,35 @@ const workerTestCases: WorkerTestCase[] = [
     },
     desiredShiftCode: ShiftCode.L4,
   },
+  // TODO: Uncomment after introduction of new range selection
+  // {
+  //   title: "Should change single row when rectangle with at least row dim is selected",
+  //   startShiftCell: {
+  //     workerType: WorkerType.OTHER,
+  //     workerIdx: 1,
+  //     shiftIdx: 3,
+  //   },
+  //   endShiftCell: {
+  //     workerType: WorkerType.OTHER,
+  //     workerIdx: 3,
+  //     shiftIdx: 6,
+  //   },
+  //   desiredShiftCode: ShiftCode.L4,
+  // },
+  // {
+  //   title: "Should change single column when rectangle with bigger row dim is selected",
+  //   startShiftCell: {
+  //     workerType: WorkerType.OTHER,
+  //     workerIdx: 1,
+  //     shiftIdx: 3,
+  //   },
+  //   endShiftCell: {
+  //     workerType: WorkerType.OTHER,
+  //     workerIdx: 3,
+  //     shiftIdx: 2,
+  //   },
+  //   desiredShiftCode: ShiftCode.L4,
+  // },
 ];
 
 enum FoundationInfoKeys {
@@ -122,7 +151,7 @@ function validateHorizontalShifts(
   endShiftIdx: number,
   desiredShiftCode: ShiftCode
 ) {
-  for (const shiftIdx of _.range(startShiftIdx, endShiftIdx)) {
+  for (const shiftIdx of _.range(startShiftIdx, endShiftIdx + 1)) {
     cy.checkWorkerShift({
       workerType,
       workerIdx,
@@ -139,7 +168,7 @@ function validateVerticalShifts(
   endWorkerIdx: number,
   desiredShiftCode: ShiftCode
 ) {
-  for (const workerIdx of _.range(startWorkerIdx, endWorkerIdx)) {
+  for (const workerIdx of _.range(startWorkerIdx, endWorkerIdx + 1)) {
     cy.checkWorkerShift({
       workerType,
       workerIdx,
@@ -184,6 +213,26 @@ function validateChange({ startShiftCell, endShiftCell, desiredShiftCode }: Work
   } else {
     cy.log("WRONG TEST SPEC");
     throw error;
+    // TODO: Uncomment after introduction of new range selection
+    // const workerDim = Math.abs(startWorkerIdx-endWorkerIdx)
+    // const shiftDim = Math.abs(startShiftIdx-endShiftIdx)
+    // if(shiftDim >= workerDim){
+    //   validateHorizontalShifts(
+    //     startWorkerType,
+    //     startWorkerIdx,
+    //     startShiftIdx,
+    //     endShiftIdx,
+    //     desiredShiftCode
+    //   );
+    // }else{
+    //   validateVerticalShifts(
+    //     startWorkerType,
+    //     startShiftIdx,
+    //     startWorkerIdx,
+    //     endWorkerIdx,
+    //     desiredShiftCode
+    //   );
+    // }
   }
 }
 
@@ -218,7 +267,7 @@ context("Shift range selection", () => {
         .eq(endDayIdx)
         .trigger("drop")
         .type(`${desiredNumber}{enter}`);
-      for (const dayIdx of _.range(startDayIdx, endDayIdx)) {
+      for (const dayIdx of _.range(startDayIdx, endDayIdx + 1)) {
         cy.get(`[data-cy=foundationInfoSection]`)
           .children()
           .eq(dataKey)
