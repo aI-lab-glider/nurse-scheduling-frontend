@@ -5,14 +5,14 @@ import * as _ from "lodash";
 import { Simulate } from "react-dom/test-utils";
 import error = Simulate.error;
 
-interface TestCase {
+interface WorkerTestCase {
   title: string;
   startShiftCell: GetWorkerShiftOptions;
   endShiftCell: GetWorkerShiftOptions;
   desiredShiftCode: ShiftCode;
 }
 
-const testCases: TestCase[] = [
+const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple days of single nurse (drag left to right)",
     startShiftCell: {
@@ -85,6 +85,36 @@ const testCases: TestCase[] = [
   },
 ];
 
+enum FoundationInfoKeys {
+  EXTRA_WORKERS,
+  CHILDREN,
+}
+
+interface FoundationTestCase {
+  title: string;
+  dataKey: FoundationInfoKeys;
+  startDayIdx: number;
+  endDayIdx: number;
+  desiredNumber: number;
+}
+
+const foundationTestCases: FoundationTestCase[] = [
+  {
+    title: "Should be able to edit extra workers number with range selection",
+    dataKey: FoundationInfoKeys.EXTRA_WORKERS,
+    startDayIdx: 3,
+    endDayIdx: 8,
+    desiredNumber: 10,
+  },
+  {
+    title: "Should be able to edit children number with range selection",
+    dataKey: FoundationInfoKeys.CHILDREN,
+    startDayIdx: 12,
+    endDayIdx: 3,
+    desiredNumber: 13,
+  },
+];
+
 function validateHorizontalShifts(
   workerType: WorkerType,
   workerIdx: number,
@@ -119,7 +149,7 @@ function validateVerticalShifts(
   }
 }
 
-function validateChange({ startShiftCell, endShiftCell, desiredShiftCode }: TestCase) {
+function validateChange({ startShiftCell, endShiftCell, desiredShiftCode }: WorkerTestCase) {
   const {
     workerType: startWorkerType,
     workerIdx: startWorkerIdx,
@@ -164,12 +194,38 @@ context("Shift range selection", () => {
     cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
   });
 
-  testCases.forEach((test) => {
+  workerTestCases.forEach((test) => {
     it(test.title, () => {
       cy.getWorkerShift(test.startShiftCell).trigger("dragstart");
       cy.getWorkerShift(test.endShiftCell).trigger("drop");
       cy.useAutocomplete(test.desiredShiftCode);
       validateChange(test);
+    });
+  });
+
+  foundationTestCases.forEach(({ title, dataKey, startDayIdx, endDayIdx, desiredNumber }) => {
+    it(title, () => {
+      cy.get(`[data-cy=foundationInfoSection]`)
+        .children()
+        .eq(dataKey)
+        .children()
+        .eq(startDayIdx)
+        .trigger("dragstart");
+      cy.get(`[data-cy=foundationInfoSection]`)
+        .children()
+        .eq(dataKey)
+        .children()
+        .eq(endDayIdx)
+        .trigger("drop")
+        .type(`${desiredNumber}{enter}`);
+      for (const dayIdx of _.range(startDayIdx, endDayIdx)) {
+        cy.get(`[data-cy=foundationInfoSection]`)
+          .children()
+          .eq(dataKey)
+          .children()
+          .eq(dayIdx)
+          .contains(desiredNumber);
+      }
     });
   });
 });

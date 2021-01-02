@@ -129,7 +129,7 @@ export function ScheduleComponent({
                 </td>
                 <td>
                   <table>
-                    <tbody className="table">
+                    <tbody className="table" data-cy="foundationInfoSection">
                       <FoundationInfoComponent
                         uuid={scheduleLocalState.uuid}
                         data={scheduleLocalState.foundationInfoSection}
