@@ -77,12 +77,12 @@ export function BaseCellComponent({
     collect: (monitor) => {
       if (monitor.isOver()) {
         if (!isBlocked) {
-          onDrag && onDrag(monitor.getItem() as PivotCell);
+          onDrag?.(monitor.getItem() as PivotCell);
         }
       }
     },
     drop: () => {
-      onDragEnd && onDragEnd();
+      onDragEnd?.();
     },
   });
   const [, drag, preview] = useDrag({
@@ -92,7 +92,7 @@ export function BaseCellComponent({
       cellIndex: index,
     } as PivotCell,
     end: (item, monitor) => {
-      if (!monitor.didDrop()) onDragEnd && onDragEnd();
+      if (!monitor.didDrop()) onDragEnd?.();
     },
   });
   // Below lines disable default preview image that is inserted by browser on dragging
@@ -102,13 +102,13 @@ export function BaseCellComponent({
 
   function _onKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
     if (e.key === CellManagementKeys.Enter) {
-      onValueChange && onValueChange(e.currentTarget.value);
+      onValueChange?.(e.currentTarget.value);
       return;
     }
-    onKeyDown && onKeyDown(e);
+    onKeyDown?.(e);
   }
   function _onValueChange(newValue: string): void {
-    onValueChange && onValueChange(newValue);
+    onValueChange?.(newValue);
   }
   function getId(): string {
     if (verboseDate && monthNumber) {
@@ -133,7 +133,7 @@ export function BaseCellComponent({
       className={classNames("mainCell", { selection: isSelected, blocked: isBlocked })}
       id={getId()}
       onBlur={(): void => {
-        onBlur && onBlur();
+        onBlur?.();
       }}
     >
       <div className="content" ref={drag}>
@@ -164,7 +164,7 @@ export function BaseCellComponent({
             data-cy="cell"
             className="relative"
             onClick={(): void => {
-              !isBlocked && onClick && onClick();
+              if (!isBlocked) onClick?.();
             }}
           >
             {

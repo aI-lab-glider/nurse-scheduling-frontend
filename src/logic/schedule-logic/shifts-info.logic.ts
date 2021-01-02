@@ -52,7 +52,7 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
     this._scheduleErrors = value;
   }
 
-  private get shifts() {
+  private get shifts(): { [key: string]: DataRow } {
     return ArrayHelper.arrayToObject(
       this.sectionData,
       (row) => row.rowKey,

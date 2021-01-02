@@ -1,25 +1,23 @@
+import { ThunkDispatch } from "redux-thunk";
+import { PersistanceStoreProvider, RevisionFilter } from "../../api/persistance-store.model";
+import { ScheduleDataModel } from "../../common-models/schedule-data.model";
+import { WorkerType } from "../../common-models/worker-info.model";
+import { SelectionMatrix } from "../../components/schedule-page/table/schedule/sections/base-section/use-selection-matrix";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { StringHelper } from "../../helpers/string.helper";
-import { WorkerType } from "../../common-models/worker-info.model";
-import { ScheduleDataModel } from "../../common-models/schedule-data.model";
+import { ApplicationStateModel } from "../../state/models/application-state.model";
+import { ScheduleDataActionCreator } from "../../state/reducers/schedule-data-reducers/schedule-data.action-creator";
+import { ScheduleActionModel } from "../../state/reducers/schedule-data-reducers/schedule-data.reducer";
+import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
 import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
+import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../section.model";
+import { BaseSectionLogic } from "./base-section-logic.model";
 import { ChildrenInfoLogic } from "./children-info.logic";
 import { DataRow } from "./data-row";
 import { ExtraWorkersLogic } from "./extra-workers.logic";
+import { FoundationInfoLogic } from "./foundation-info.logic";
 import { MetadataLogic } from "./metadata.logic";
 import { ShiftsInfoLogic } from "./shifts-info.logic";
-import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../section.model";
-import { PersistanceStoreProvider, RevisionFilter } from "../../api/persistance-store.model";
-import {
-  ScheduleActionModel,
-  ScheduleDataActionType,
-} from "../../state/reducers/schedule-data.reducer";
-import { FoundationInfoLogic } from "./foundation-info.logic";
-import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
-import { ThunkDispatch } from "redux-thunk";
-import { ApplicationStateModel } from "../../state/models/application-state.model";
-import { SelectionMatrix } from "../../components/schedule-page/table/schedule/sections/base-section/use-selection-matrix";
-import { BaseSectionLogic } from "./base-section-logic.model";
 
 export class ScheduleLogic implements ScheduleProvider {
   schedule!: Schedule;
@@ -34,7 +32,7 @@ export class ScheduleLogic implements ScheduleProvider {
     this.update(scheduleModel);
   }
 
-  public disableEdit() {
+  public disableEdit(): void {
     Object.values(this.sections).forEach((section) => {
       (section as BaseSectionLogic).disableEdit();
     });
@@ -168,9 +166,7 @@ export class ScheduleLogic implements ScheduleProvider {
 
   private updateGlobalState(): void {
     const model = this.schedule.getDataModel();
-    this.dispatchScheduleUpdate({
-      type: ScheduleDataActionType.UPDATE,
-      payload: model,
-    });
+    const action = ScheduleDataActionCreator.updateSchedule(model);
+    this.dispatchScheduleUpdate(action);
   }
 }

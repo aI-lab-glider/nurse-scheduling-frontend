@@ -3,6 +3,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { ActionCreators as UndoActionCreators } from "redux-undo";
 
+// TODO: Add integration based on actual schedule mode
 export function CustomGlobalHotKeys(): JSX.Element {
   const dispatch = useDispatch();
 

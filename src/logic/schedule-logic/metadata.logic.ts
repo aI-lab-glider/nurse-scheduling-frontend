@@ -78,12 +78,4 @@ export class MetadataLogic extends BaseSectionLogic implements MetadataProvider 
   public get dates(): number[] {
     return this.monthLogic.verboseDates.map((d) => d.date);
   }
-
-  // public get dayNumbers(): number[] {
-  //   return this.monthLogic.dates;
-  // }
-
-  // public get sectionData(): DataRow[] {
-  //   return [new DataRow(MetaDataSectionKey.MonthDays, this.dayNumbers)];
-  // }
 }

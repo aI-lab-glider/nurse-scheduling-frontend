@@ -47,7 +47,7 @@ export function BaseRowComponentF({
   const numberOfDays = verboseDates?.length;
 
   function saveValue(newValue: string): void {
-    if (sectionKey) onSave && onSave(newValue);
+    if (sectionKey) onSave?.(newValue);
   }
   let data = dataRow.rowData(false);
 
@@ -70,14 +70,14 @@ export function BaseRowComponentF({
             style={ShiftHelper.getShiftColor(cellData, verboseDates?.[cellIndex])}
             isPointerOn={cellIndex === pointerPosition}
             isBlocked={!isEditable}
-            onKeyDown={(event): void => onKeyDown && onKeyDown(cellIndex, event)}
+            onKeyDown={(event): void => onKeyDown?.(cellIndex, event)}
             onValueChange={saveValue}
-            onClick={(): void => onClick && onClick(cellIndex)}
-            onBlur={(): void => onBlur && onBlur()}
+            onClick={(): void => onClick?.(cellIndex)}
+            onBlur={(): void => onBlur?.()}
             monthNumber={currMonthNumber}
             verboseDate={verboseDates?.[cellIndex]}
-            onDrag={(pivot): void => onDrag && onDrag(pivot, cellIndex)}
-            onDragEnd={(): void => onDragEnd && onDragEnd(index, cellIndex)}
+            onDrag={(pivot): void => onDrag?.(pivot, cellIndex)}
+            onDragEnd={(): void => onDragEnd?.(index, cellIndex)}
           />
         );
       })}

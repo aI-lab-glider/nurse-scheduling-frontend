@@ -1,6 +1,6 @@
 import PouchDB from "pouchdb-browser";
 import { ScheduleDataModel } from "../common-models/schedule-data.model";
-import { ScheduleDataActionType } from "../state/reducers/schedule-data.reducer";
+import { ScheduleDataActionCreator } from "../state/reducers/schedule-data-reducers/schedule-data.action-creator";
 import {
   PersistanceStoreProvider,
   RevisionFilter,
@@ -35,10 +35,8 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
         data: schedule,
         revisionType: type,
       });
-      dispatch({
-        type: ScheduleDataActionType.ADD_NEW,
-        payload: schedule,
-      });
+      const action = ScheduleDataActionCreator.addNewSchedule(schedule);
+      dispatch(action);
     };
   }
 
@@ -56,10 +54,8 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
       if (!result?.doc) {
         return;
       }
-      dispatch({
-        type: ScheduleDataActionType.ADD_NEW,
-        payload: result.doc.data,
-      });
+      const action = ScheduleDataActionCreator.addNewSchedule(result.doc.data);
+      dispatch(action);
     };
   }
 }

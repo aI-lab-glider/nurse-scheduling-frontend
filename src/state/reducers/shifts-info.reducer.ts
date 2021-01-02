@@ -1,9 +1,12 @@
 import { ShiftInfoModel } from "../../common-models/shift-info.model";
-import { ScheduleActionModel, ScheduleDataActionType } from "./schedule-data.reducer";
+import { scheduleDataInitialState } from "./schedule-data-reducers/schedule-data-initial-state";
+import {
+  ScheduleActionModel,
+  ScheduleDataActionType,
+} from "./schedule-data-reducers/schedule-data.reducer";
 
-const initialState: ShiftInfoModel = {};
 export function shiftsInfoReducer(
-  state: ShiftInfoModel = initialState,
+  state: ShiftInfoModel = scheduleDataInitialState.shifts,
   action: ScheduleActionModel
 ): ShiftInfoModel {
   const data = action.payload?.shifts;

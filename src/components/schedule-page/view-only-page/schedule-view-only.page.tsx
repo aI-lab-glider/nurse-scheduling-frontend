@@ -11,7 +11,7 @@ interface ScheduleViewOnlyPageOptions {
 
 export function ScheduleViewOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => {
-    return state.scheduleData.present;
+    return state.actualRevision.present;
   });
   const { scheduleLogic, setNewSchedule, scheduleLocalState } = useScheduleState(
     scheduleModel,

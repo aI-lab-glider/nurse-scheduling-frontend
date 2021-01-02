@@ -8,7 +8,7 @@ export interface GetWorkerShiftOptions {
   shiftIdx: number;
 }
 
-export interface CheckWorkerShift extends GetWorkerShiftOptions {
+export interface CheckWorkerShiftOptions extends GetWorkerShiftOptions {
   desiredShiftCode: ShiftCode;
 }
 export interface ChangeWorkerShiftOptions extends GetWorkerShiftOptions {
@@ -62,7 +62,7 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   "checkWorkerShift",
-  ({ desiredShiftCode, ...getWorkerShiftOptions }: CheckWorkerShift) => {
+  ({ desiredShiftCode, ...getWorkerShiftOptions }: CheckWorkerShiftOptions) => {
     if (desiredShiftCode === ShiftCode.W) {
       return cy.getWorkerShift(getWorkerShiftOptions).should("be.empty");
     } else {
@@ -95,3 +95,8 @@ Cypress.Commands.add(
       });
   }
 );
+
+Cypress.Commands.add("enterEditMode", () => {
+  cy.get("[data-cy=edit-mode-button]").click();
+  return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
+});

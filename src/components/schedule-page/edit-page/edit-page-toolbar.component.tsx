@@ -88,7 +88,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
           data-cy="save-schedule-button"
           variant="outlined"
           onClick={(): void => {
-            scheduleLogic && scheduleLogic.updateActualRevision();
+            scheduleLogic?.updateActualRevision();
           }}
         >
           Zapisz
