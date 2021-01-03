@@ -1,6 +1,6 @@
 import PouchDB from "pouchdb-browser";
 import { ScheduleDataModel } from "../common-models/schedule-data.model";
-import { ScheduleDataActionCreator } from "../state/reducers/schedule-data-reducers/schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import {
   PersistanceStoreProvider,
   RevisionFilter,

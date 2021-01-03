@@ -1,7 +1,7 @@
-import { MonthInfoModel } from "../../../common-models/month-info.model";
-import { ScheduleModel } from "../../../common-models/schedule.model";
-import { ShiftInfoModel } from "../../../common-models/shift-info.model";
-import { WorkersInfoModel } from "../../../common-models/worker-info.model";
+import { MonthInfoModel } from "../../../../common-models/month-info.model";
+import { ScheduleModel } from "../../../../common-models/schedule.model";
+import { ShiftInfoModel } from "../../../../common-models/shift-info.model";
+import { WorkersInfoModel } from "../../../../common-models/worker-info.model";
 
 /* eslint-disable @typescript-eslint/camelcase */
 const employeeInfoinitialState: WorkersInfoModel = { time: {}, type: {} };

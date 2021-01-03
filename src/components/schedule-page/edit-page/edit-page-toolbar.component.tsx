@@ -4,14 +4,14 @@ import { useDispatch } from "react-redux";
 import backend from "../../../api/backend";
 import { ScheduleError } from "../../../common-models/schedule-error.model";
 import { ActionModel } from "../../../state/models/action.model";
-import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
+import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
 import { Button } from "../../common-components";
 import ValidationDrawerComponent from "../validation-drawer/validation-drawer.component";
 import UndoIcon from "@material-ui/icons/Undo";
 import RedoIcon from "@material-ui/icons/Redo";
 import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
-import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/schedule-data-reducers/temporary-schedule.reducer";
 import { UndoActionCreator } from "../../../state/reducers/undoable.action-creator";
+import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/temporary-schedule.reducer";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;

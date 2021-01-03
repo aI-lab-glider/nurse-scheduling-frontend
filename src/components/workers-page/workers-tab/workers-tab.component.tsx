@@ -44,7 +44,7 @@ export default function WorkersTab(): JSX.Element {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof WorkerInfoModel>("name");
   const { type, time } = useSelector(
-    (state: ApplicationStateModel) => state.temporarySchedule.present.employee_info
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.employee_info
   );
   const [workerData, setWorkerData] = useState([] as WorkerInfoModel[]);
   const [open, setIsOpen] = useState(false);

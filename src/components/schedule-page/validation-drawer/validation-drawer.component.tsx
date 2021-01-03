@@ -17,7 +17,7 @@ export interface ValidationDrawerOptions {
 export default function ValidationDrawerComponent(options: ValidationDrawerOptions): JSX.Element {
   const { open, setOpen } = options;
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
-  const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state);
+  const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   useEffect(() => {
     const spinner = [

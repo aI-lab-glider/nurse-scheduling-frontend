@@ -1,8 +1,8 @@
-import { ThunkFunction } from "../../../api/persistance-store.model";
-import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
+import { ThunkFunction } from "../../../../api/persistance-store.model";
+import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 import { PersistentScheduleActionType } from "./persistent-schedule.reducer";
 import { TemporaryScheduleActionType } from "./temporary-schedule.reducer";
-import { ActionModel } from "../../models/action.model";
+import { ActionModel } from "../../../models/action.model";
 
 export type ScheduleActionModel = ActionModel<ScheduleDataModel>;
 export class ScheduleDataActionCreator {

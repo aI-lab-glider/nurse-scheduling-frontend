@@ -1,7 +1,7 @@
-import { WorkersInfoModel } from "../../common-models/worker-info.model";
-import { scheduleDataInitialState } from "./schedule-data-reducers/schedule-data-initial-state";
-import { TemporaryScheduleActionType } from "./schedule-data-reducers/temporary-schedule.reducer";
-import { ScheduleActionModel } from "./schedule-data-reducers/schedule-data.action-creator";
+import { WorkersInfoModel } from "../../../common-models/worker-info.model";
+import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
+import { ScheduleActionModel } from "./schedule-data/schedule-data.action-creator";
+import { TemporaryScheduleActionType } from "./schedule-data/temporary-schedule.reducer";
 
 /* eslint-disable @typescript-eslint/camelcase */
 export function employeeInfoReducer(

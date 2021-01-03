@@ -13,7 +13,7 @@ interface Options {
 export default function ErrorListItem({ error }: Options): JSX.Element {
   /* eslint-disable @typescript-eslint/camelcase */
   const { month_number } = useSelector(
-    (state: ApplicationStateModel) => state.temporarySchedule.present.schedule_info
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
 
   let currMonthGenetivus = "";

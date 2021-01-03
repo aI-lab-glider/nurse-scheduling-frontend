@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
-import schedule from "./assets/devMode/schedule.js";
-import { ScheduleDataModel } from "./common-models/schedule-data.model.js";
+
+import { useDispatch } from "react-redux";
+import schedule from "./assets/devMode/schedule";
+import { ScheduleDataModel } from "./common-models/schedule-data.model";
 import { HeaderComponent } from "./components/common-components";
 import RouteButtonsComponent from "./components/common-components/route-buttons/route-buttons.component";
 import { NewMonthPlanComponent } from "./components/schedule-page/new-month-page.component";
 import { SchedulePage } from "./components/schedule-page/schedule-page.component";
 import ManagementPage from "./components/workers-page/management-page.component";
-import { ScheduleDataActionCreator } from "./state/reducers/schedule-data-reducers/schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "./state/reducers/month-state/schedule-data/schedule-data.action-creator";
 
 interface TabData {
   label: string;
