@@ -6,16 +6,28 @@
     color: $primary-header-color;
   }
 
-  label {
-    color: $gray-700;
+  .MuiFormControl-root {
+    margin-bottom: 20px;
   }
 
-  input[type="text"] {
-    border: none;
-    border-bottom: 2px solid $gray-700;
-    ::placeholder {
-      color: $gray-700;
+  .time-range {
+    * {
+      display: inline-flex;
     }
+    p {
+      font-weight: $font-weight-extra-bold;
+      font-size: $font-size-base;
+      color: $gray-700;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    .MuiFormControl-root {
+      width: 100px;
+    }
+  }
+
+  label {
+    color: $gray-700;
   }
 
   input[type="radio"] {
