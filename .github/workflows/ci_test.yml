@@ -28,5 +28,5 @@ jobs:
         working-directory: ${{env.frontend-folder}}
 
       - name: Run cypress
-        run: npx cypress run
+        run: npx cypress run --record --key 9e055824-71df-490e-adef-d984dff9e547
         working-directory: ${{env.frontend-folder}}
