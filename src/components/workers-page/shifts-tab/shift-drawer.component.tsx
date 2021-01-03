@@ -25,7 +25,6 @@ export default function ShiftDrawerComponent(options: ShiftDrawerOptions): JSX.E
   const title = getTitle(mode);
   return (
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>
-      Drawer content
       <ShiftEditDrower />
     </Drawer>
   );
