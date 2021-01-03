@@ -4,8 +4,8 @@ import { ScheduleError } from "../../../common-models/schedule-error.model";
 import { ScheduleExportLogic } from "../../../logic/schedule-exporter/schedule-export.logic";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { ScheduleDataActionCreator } from "../../../state/reducers/schedule-data-reducers/schedule-data.action-creator";
-import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
+import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
 import {
   ButtonData,
   DropdownButtons,
@@ -18,7 +18,7 @@ export function ImportButtonsComponent(): JSX.Element {
   const fileUpload = useRef<HTMLInputElement>(null);
 
   const stateScheduleModel = useSelector(
-    (state: ApplicationStateModel) => state.temporarySchedule?.present
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule?.present
   );
   const scheduleDipatcher = useDispatch();
 

@@ -9,7 +9,7 @@ import { ApplicationStateModel } from "../../state/models/application-state.mode
 import {
   ScheduleActionModel,
   ScheduleDataActionCreator,
-} from "../../state/reducers/schedule-data-reducers/schedule-data.action-creator";
+} from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
 import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
 import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../section.model";

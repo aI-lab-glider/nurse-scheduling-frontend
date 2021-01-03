@@ -6,7 +6,7 @@ import { TranslationHelper } from "../../../helpers/translations.helper";
 export function useActualMonth(): string {
   /* eslint-disable @typescript-eslint/camelcase */
   const { month_number, year } = useSelector(
-    (state: ApplicationStateModel) => state.temporarySchedule.present.schedule_info
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
 
   let actualMonth = "";

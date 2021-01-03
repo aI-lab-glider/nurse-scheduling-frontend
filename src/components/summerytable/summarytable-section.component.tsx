@@ -17,7 +17,7 @@ export function SummaryTableSection({
   workerType,
 }: SummaryTableSectionOptions): JSX.Element {
   const scheduleModel = useSelector(
-    (state: ApplicationStateModel) => state.temporarySchedule.present
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present
   );
   const { scheduleLogic, scheduleLocalState, setNewSchedule } = useScheduleState(
     scheduleModel,
