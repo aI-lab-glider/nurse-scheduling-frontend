@@ -22,8 +22,12 @@ export default function ShiftEditDrower(): JSX.Element {
 
   const btnData = [btnData1, btnData2];
 
-  const [valueTimeStart, onChangeTimeStart] = useState<Date | null>(new Date());
-  const [valueTimeEnd, onChangeTimeEnd] = useState<Date | null>(new Date());
+  const [valueTimeStart, onChangeTimeStart] = useState<Date | null>(
+    new Date("2021-01-01T23:00:00.000Z")
+  );
+  const [valueTimeEnd, onChangeTimeEnd] = useState<Date | null>(
+    new Date("2021-01-01T23:00:00.000Z")
+  );
   const [value, setValue] = useState("working");
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -45,7 +49,7 @@ export default function ShiftEditDrower(): JSX.Element {
             onChange={handleChange}
           >
             <FormControlLabel value="working" control={<Radio />} label="Pracująca" />
-            <FormControlLabel value="not_working" control={<Radio />} label="Nie pracująca" />
+            <FormControlLabel value="not_working" control={<Radio />} label="Niepracująca" />
           </RadioGroup>
         </FormControl>
         <br />
