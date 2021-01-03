@@ -39,7 +39,7 @@ Cypress.Commands.add("loadSchedule", () => {
   cy.window()
     .its("store")
     .invoke("getState")
-    .its("scheduleData")
+    .its("temporarySchedule")
     .its("present")
     .its("month_info")
     .its("children_number")
