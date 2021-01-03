@@ -1,24 +1,36 @@
 import { ThunkFunction } from "../../../api/persistance-store.model";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
-import { ActualRevisionActionaType, actualRevisionMeta } from "./actual-revision.reducer";
-import {
-  editableScheduleMeta,
-  ScheduleActionModel,
-  ScheduleDataActionType,
-} from "./schedule-data.reducer";
+import { ActualRevisionActionType } from "./actual-revision.reducer";
+import { ScheduleActionModel, ScheduleDataActionType } from "./schedule-data.reducer";
+
+export interface UndoableConfig {
+  undoType: string;
+  redoType: string;
+}
+
+export class UndoActionCreator {
+  static undo(config: UndoableConfig): ScheduleActionModel {
+    return {
+      type: config.undoType,
+    };
+  }
+  static redo(config: UndoableConfig): ScheduleActionModel {
+    return {
+      type: config.redoType,
+    };
+  }
+}
 
 export class ScheduleDataActionCreator {
   static addNewSchedule(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
-    return async (dispatch, getState): Promise<void> => {
+    return async (dispatch): Promise<void> => {
       const setEditableSchedule = {
         type: ScheduleDataActionType.ADD_NEW,
         payload: newSchedule,
-        meta: editableScheduleMeta,
       };
       const setActualRevision = {
-        type: ActualRevisionActionaType.SET_REVISION,
+        type: ActualRevisionActionType.SET_REVISION,
         payload: newSchedule,
-        meta: actualRevisionMeta,
       };
       dispatch(setActualRevision);
       dispatch(setEditableSchedule);
@@ -29,7 +41,6 @@ export class ScheduleDataActionCreator {
     return {
       type: ScheduleDataActionType.UPDATE,
       payload: newScheduleModel,
-      meta: editableScheduleMeta,
     };
   }
 }

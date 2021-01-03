@@ -5,14 +5,17 @@ import { employeeInfoReducer } from "../employee-info.reducer";
 import { monthInfoReducer } from "../month-info.reducer";
 import { scheduleInfoReducer } from "../schedule-info.reducer";
 import { shiftsInfoReducer } from "../shifts-info.reducer";
+import { UndoableConfig } from "./schedule-data.action-creator";
 
 export enum ScheduleDataActionType {
   UPDATE = "updateScheduleData",
   ADD_NEW = "addNew",
 }
 
-export const editableScheduleMeta = "EDIT";
-
+export const SCHEDULE_UNDOABLE_CONFIG: UndoableConfig = {
+  undoType: "SCHEDULE_REVISION_UNDO",
+  redoType: "SCHEDULE_REVISION_REDO",
+};
 /* eslint-disable @typescript-eslint/camelcase */
 type ScheduleDataReducers = {
   [key in keyof ScheduleDataModel]: <T, U>(state: T, action: ActionModel<U>) => T;
