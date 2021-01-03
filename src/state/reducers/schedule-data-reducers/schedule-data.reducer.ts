@@ -12,7 +12,7 @@ export enum ScheduleDataActionType {
   ADD_NEW = "addNew",
 }
 
-export const SCHEDULE_UNDOABLE_CONFIG: UndoableConfig = {
+export const SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {
   undoType: "SCHEDULE_REVISION_UNDO",
   redoType: "SCHEDULE_REVISION_REDO",
 };

@@ -1,10 +1,16 @@
 import { GlobalHotKeys } from "react-hotkeys";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { ActionCreators as UndoActionCreators } from "redux-undo";
+import {
+  UndoableConfig,
+  UndoActionCreator,
+} from "../../../state/reducers/schedule-data-reducers/schedule-data.action-creator";
 
-// TODO: Add integration based on actual schedule mode
-export function CustomGlobalHotKeys(): JSX.Element {
+interface UndoableHotkeysOptions {
+  config: UndoableConfig<unknown>;
+}
+
+export function UndoableHotkeys({ config }: UndoableHotkeysOptions): JSX.Element {
   const dispatch = useDispatch();
 
   enum KeyMapActions {
@@ -18,8 +24,8 @@ export function CustomGlobalHotKeys(): JSX.Element {
   };
 
   const handlers: Record<KeyMapActions, (keyEvent?: KeyboardEvent) => void> = {
-    [KeyMapActions.UNDO]: () => dispatch(UndoActionCreators.undo()),
-    [KeyMapActions.REDO]: () => dispatch(UndoActionCreators.redo()),
+    [KeyMapActions.UNDO]: () => dispatch(UndoActionCreator.undo(config)),
+    [KeyMapActions.REDO]: () => dispatch(UndoActionCreator.redo(config)),
   };
 
   return <GlobalHotKeys keyMap={keyMap} handlers={handlers} />;

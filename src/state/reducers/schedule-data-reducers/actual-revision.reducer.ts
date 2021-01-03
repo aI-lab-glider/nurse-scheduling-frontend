@@ -1,15 +1,23 @@
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { scheduleDataInitialState } from "./schedule-data-initial-state";
 import { ScheduleActionModel } from "./schedule-data.reducer";
-import { UndoableConfig } from "./schedule-data.action-creator";
+import { ScheduleDataActionCreator, UndoableConfig } from "./schedule-data.action-creator";
 
 export enum ActualRevisionActionType {
   SET_REVISION = "setRevision",
 }
 
-export const ACTUAL_REVISION_UNDOABLE_CONFIG: UndoableConfig = {
+export const ACTUAL_REVISION_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {
   undoType: "ACTUAL_REVISION_UNDO",
   redoType: "ACTUAL_REVISION_REDO",
+  afterUndo: async (dispatch, getState) => {
+    const state = getState().actualRevision.present;
+    state && (await dispatch(ScheduleDataActionCreator.addNewSchedule(state)));
+  },
+  afterRedo: async (dispatch, getState) => {
+    const state = getState().actualRevision.present;
+    state && (await dispatch(ScheduleDataActionCreator.addNewSchedule(state)));
+  },
 };
 
 export function actualRevisionReducer(

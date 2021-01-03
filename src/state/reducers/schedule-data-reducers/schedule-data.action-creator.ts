@@ -3,20 +3,28 @@ import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ActualRevisionActionType } from "./actual-revision.reducer";
 import { ScheduleActionModel, ScheduleDataActionType } from "./schedule-data.reducer";
 
-export interface UndoableConfig {
+export interface UndoableConfig<T> {
   undoType: string;
   redoType: string;
+  afterUndo?: ThunkFunction<T>;
+  afterRedo?: ThunkFunction<T>;
 }
 
 export class UndoActionCreator {
-  static undo(config: UndoableConfig): ScheduleActionModel {
-    return {
-      type: config.undoType,
+  static undo({ undoType, afterUndo }: UndoableConfig<unknown>): ThunkFunction<unknown> {
+    return async (dispatch, getState) => {
+      dispatch({
+        type: undoType,
+      });
+      await afterUndo?.(dispatch, getState);
     };
   }
-  static redo(config: UndoableConfig): ScheduleActionModel {
-    return {
-      type: config.redoType,
+  static redo({ redoType, afterRedo }: UndoableConfig<unknown>): ThunkFunction<unknown> {
+    return async (dispatch, getState) => {
+      dispatch({
+        type: redoType,
+      });
+      await afterRedo?.(dispatch, getState);
     };
   }
 }

@@ -14,7 +14,7 @@ import {
 
 export const appReducer = combineReducers({
   actualRevision: undoable(actualRevisionReducer, {
-    limit: 5,
+    limit: 50,
     ...ACTUAL_REVISION_UNDOABLE_CONFIG,
   }),
   scheduleData: undoable(scheduleDataReducer, {
