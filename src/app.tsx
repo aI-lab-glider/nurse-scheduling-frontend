@@ -26,7 +26,7 @@ function App(): JSX.Element {
 
   useEffect(() => {
     if (process.env.REACT_APP_DEV_MODE === "true") {
-      const action = ScheduleDataActionCreator.addNewSchedule(schedule as ScheduleDataModel);
+      const action = ScheduleDataActionCreator.setPersistentSchedule(schedule as ScheduleDataModel);
       scheduleDispatcher(action);
     }
   }, [scheduleDispatcher]);

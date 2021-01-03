@@ -8,13 +8,13 @@ import { shiftsInfoReducer } from "../shifts-info.reducer";
 import { UndoableConfig } from "../undoable.action-creator";
 
 export enum TemporaryScheduleActionType {
-  UPDATE = "updateScheduleData",
-  ADD_NEW = "addNew",
+  UPDATE = "UPDATE_SCHEDULE",
+  ADD_NEW = "ADD_NEW_SCHEDULE",
 }
 
 export const TEMPORARY_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {
-  undoType: "SCHEDULE_REVISION_UNDO",
-  redoType: "SCHEDULE_REVISION_REDO",
+  undoType: "TEMPORARY_REVISION_UNDO",
+  redoType: "TEMPORARY_REVISION_REDO",
 };
 /* eslint-disable @typescript-eslint/camelcase */
 type ScheduleDataReducers = {

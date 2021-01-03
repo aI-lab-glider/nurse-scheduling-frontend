@@ -22,7 +22,7 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
     type: RevisionType,
     schedule: ScheduleDataModel
   ): ThunkFunction<ScheduleDataModel> {
-    return async (dispatch, getState): Promise<void> => {
+    return async (dispatch): Promise<void> => {
       const id = this.getScheduleId(schedule);
       let revision = "";
       try {
@@ -35,13 +35,13 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
         data: schedule,
         revisionType: type,
       });
-      const action = ScheduleDataActionCreator.addNewSchedule(schedule);
+      const action = ScheduleDataActionCreator.setPersistentSchedule(schedule);
       dispatch(action);
     };
   }
 
   getScheduleRevision(filter: RevisionFilter): ThunkFunction<ScheduleDataModel> {
-    return async (dispatch, getState): Promise<void> => {
+    return async (dispatch): Promise<void> => {
       const revisions = await this.storage.allDocs({ include_docs: true });
       const result = revisions.rows.find((r) => {
         const { year, month_number } = r.doc?.data.schedule_info ?? {};
@@ -54,7 +54,7 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
       if (!result?.doc) {
         return;
       }
-      const action = ScheduleDataActionCreator.addNewSchedule(result.doc.data);
+      const action = ScheduleDataActionCreator.setPersistentSchedule(result.doc.data);
       dispatch(action);
     };
   }

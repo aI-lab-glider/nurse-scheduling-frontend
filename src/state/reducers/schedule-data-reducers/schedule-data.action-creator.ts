@@ -6,7 +6,7 @@ import { ActionModel } from "../../models/action.model";
 
 export type ScheduleActionModel = ActionModel<ScheduleDataModel>;
 export class ScheduleDataActionCreator {
-  static addNewSchedule(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
+  static setPersistentSchedule(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
       const setEditableSchedule = {
         type: TemporaryScheduleActionType.ADD_NEW,
@@ -18,6 +18,13 @@ export class ScheduleDataActionCreator {
       };
       dispatch(setActualRevision);
       dispatch(setEditableSchedule);
+    };
+  }
+
+  static setTemporarySchedule(newSchedule: ScheduleDataModel): ScheduleActionModel {
+    return {
+      type: TemporaryScheduleActionType.ADD_NEW,
+      payload: newSchedule,
     };
   }
 
