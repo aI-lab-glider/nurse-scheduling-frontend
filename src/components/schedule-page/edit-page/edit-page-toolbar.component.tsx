@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { ActionCreators as UndoActionCreators } from "redux-undo";
 import backend from "../../../api/backend";
 import { ScheduleError } from "../../../common-models/schedule-error.model";
 import { ActionModel } from "../../../state/models/action.model";
@@ -11,6 +10,8 @@ import ValidationDrawerComponent from "../validation-drawer/validation-drawer.co
 import UndoIcon from "@material-ui/icons/Undo";
 import RedoIcon from "@material-ui/icons/Redo";
 import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
+import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/schedule-data-reducers/temporary-schedule.reducer";
+import { UndoActionCreator } from "../../../state/reducers/undoable.action-creator";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;
@@ -46,7 +47,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
       <div className="buttons">
         <Button
           onClick={(): void => {
-            dispatcher(UndoActionCreators.undo());
+            dispatcher(UndoActionCreator.undo(TEMPORARY_SCHEDULE_UNDOABLE_CONFIG));
           }}
           variant="circle-outlined"
           data-cy="undo-button"
@@ -56,7 +57,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
 
         <Button
           onClick={(): void => {
-            dispatcher(UndoActionCreators.redo());
+            dispatcher(UndoActionCreator.redo(TEMPORARY_SCHEDULE_UNDOABLE_CONFIG));
           }}
           data-cy="redo-button"
           variant="circle-outlined"
@@ -88,7 +89,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
           data-cy="save-schedule-button"
           variant="outlined"
           onClick={(): void => {
-            scheduleLogic && scheduleLogic.updateActualRevision();
+            scheduleLogic?.updateActualRevision();
           }}
         >
           Zapisz

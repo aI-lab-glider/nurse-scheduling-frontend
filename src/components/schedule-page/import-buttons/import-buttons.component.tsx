@@ -1,17 +1,16 @@
 import React, { ChangeEvent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useScheduleConverter } from "./hooks/use-schedule-converter";
+import { ScheduleError } from "../../../common-models/schedule-error.model";
+import { ScheduleExportLogic } from "../../../logic/schedule-exporter/schedule-export.logic";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
-import { ScheduleError } from "../../../common-models/schedule-error.model";
-import { ScheduleDataActionType } from "../../../state/reducers/schedule-data.reducer";
+import { ScheduleDataActionCreator } from "../../../state/reducers/schedule-data-reducers/schedule-data.action-creator";
 import { ScheduleErrorActionType } from "../../../state/reducers/schedule-errors.reducer";
-import { ScheduleExportLogic } from "../../../logic/schedule-exporter/schedule-export.logic";
 import {
   ButtonData,
   DropdownButtons,
 } from "../../common-components/dropdown-buttons/dropdown-buttons.component";
+import { useScheduleConverter } from "./hooks/use-schedule-converter";
 
 export function ImportButtonsComponent(): JSX.Element {
   const DEFAULT_FILENAME = "grafik.xlsx";
@@ -19,7 +18,7 @@ export function ImportButtonsComponent(): JSX.Element {
   const fileUpload = useRef<HTMLInputElement>(null);
 
   const stateScheduleModel = useSelector(
-    (state: ApplicationStateModel) => state.scheduleData?.present
+    (state: ApplicationStateModel) => state.temporarySchedule?.present
   );
   const scheduleDipatcher = useDispatch();
 
@@ -38,10 +37,8 @@ export function ImportButtonsComponent(): JSX.Element {
 
   useEffect(() => {
     if (scheduleModel) {
-      scheduleDipatcher({
-        type: ScheduleDataActionType.ADD_NEW,
-        payload: scheduleModel,
-      } as ActionModel<ScheduleDataModel>);
+      const action = ScheduleDataActionCreator.setPersistentSchedule(scheduleModel);
+      scheduleDipatcher(action);
     } else if (errorOccurred) {
       //todo display message
     }

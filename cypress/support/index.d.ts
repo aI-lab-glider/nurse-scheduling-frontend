@@ -17,5 +17,7 @@ declare namespace Cypress {
     checkHoursInfo(
       ChangeWorkerShiftOptions: import("./commands").CheckHoursInfoOptions
     ): Chainable<Element>;
+
+    enterEditMode(): Chainable<Element>;
   }
 }

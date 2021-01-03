@@ -36,7 +36,7 @@ export class MetadataLogic extends BaseSectionLogic implements MetadataProvider 
     monthDates: number[] = [],
     public daysFromPreviousMonthExists: boolean = false
   ) {
-    super();
+    super([new DataRow(MetaDataSectionKey.MonthDays, monthDates)]);
     const today = new Date();
     this._year = year ?? today.getFullYear().toString();
     this.month = month ?? today.getMonth();
@@ -77,13 +77,5 @@ export class MetadataLogic extends BaseSectionLogic implements MetadataProvider 
 
   public get dates(): number[] {
     return this.monthLogic.verboseDates.map((d) => d.date);
-  }
-
-  public get dayNumbers(): number[] {
-    return this.monthLogic.dates;
-  }
-
-  public get sectionData(): DataRow[] {
-    return [new DataRow(MetaDataSectionKey.MonthDays, this.dayNumbers)];
   }
 }

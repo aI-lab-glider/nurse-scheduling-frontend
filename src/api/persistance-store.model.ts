@@ -1,4 +1,4 @@
-import { Dispatch } from "react";
+import { ThunkDispatch } from "redux-thunk";
 import { ScheduleDataModel } from "../common-models/schedule-data.model";
 import { WorkerInfoModel } from "../common-models/worker-info.model";
 import { ActionModel } from "../state/models/action.model";
@@ -7,7 +7,7 @@ import { ApplicationStateModel } from "../state/models/application-state.model";
 /*eslint-disable @typescript-eslint/camelcase */
 
 export type ThunkFunction<T> = (
-  dispatch: Dispatch<ActionModel<T>>,
+  dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<T>>,
   getState: () => ApplicationStateModel
 ) => Promise<unknown>;
 
