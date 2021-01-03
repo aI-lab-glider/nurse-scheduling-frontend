@@ -18,7 +18,7 @@ export function ImportButtonsComponent(): JSX.Element {
   const fileUpload = useRef<HTMLInputElement>(null);
 
   const stateScheduleModel = useSelector(
-    (state: ApplicationStateModel) => state.scheduleData?.present
+    (state: ApplicationStateModel) => state.temporarySchedule?.present
   );
   const scheduleDipatcher = useDispatch();
 

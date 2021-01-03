@@ -6,8 +6,10 @@ import { SelectionMatrix } from "../../components/schedule-page/table/schedule/s
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
-import { ScheduleDataActionCreator } from "../../state/reducers/schedule-data-reducers/schedule-data.action-creator";
-import { ScheduleActionModel } from "../../state/reducers/schedule-data-reducers/schedule-data.reducer";
+import {
+  ScheduleActionModel,
+  ScheduleDataActionCreator,
+} from "../../state/reducers/schedule-data-reducers/schedule-data.action-creator";
 import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
 import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
 import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../section.model";

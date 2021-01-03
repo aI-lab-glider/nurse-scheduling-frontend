@@ -10,8 +10,8 @@ import ValidationDrawerComponent from "../validation-drawer/validation-drawer.co
 import UndoIcon from "@material-ui/icons/Undo";
 import RedoIcon from "@material-ui/icons/Redo";
 import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
-import { SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/schedule-data-reducers/schedule-data.reducer";
-import { UndoActionCreator } from "../../../state/reducers/schedule-data-reducers/schedule-data.action-creator";
+import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/schedule-data-reducers/temporary-schedule.reducer";
+import { UndoActionCreator } from "../../../state/reducers/undoable.action-creator";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;
@@ -47,7 +47,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
       <div className="buttons">
         <Button
           onClick={(): void => {
-            dispatcher(UndoActionCreator.undo(SCHEDULE_UNDOABLE_CONFIG));
+            dispatcher(UndoActionCreator.undo(TEMPORARY_SCHEDULE_UNDOABLE_CONFIG));
           }}
           variant="circle-outlined"
           data-cy="undo-button"
@@ -57,7 +57,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
 
         <Button
           onClick={(): void => {
-            dispatcher(UndoActionCreator.redo(SCHEDULE_UNDOABLE_CONFIG));
+            dispatcher(UndoActionCreator.redo(TEMPORARY_SCHEDULE_UNDOABLE_CONFIG));
           }}
           data-cy="redo-button"
           variant="circle-outlined"

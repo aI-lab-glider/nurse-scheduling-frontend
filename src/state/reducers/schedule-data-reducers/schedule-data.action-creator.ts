@@ -1,43 +1,19 @@
 import { ThunkFunction } from "../../../api/persistance-store.model";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
-import { ActualRevisionActionType } from "./actual-revision.reducer";
-import { ScheduleActionModel, ScheduleDataActionType } from "./schedule-data.reducer";
+import { PersistentScheduleActionType } from "./persistent-schedule.reducer";
+import { TemporaryScheduleActionType } from "./temporary-schedule.reducer";
+import { ActionModel } from "../../models/action.model";
 
-export interface UndoableConfig<T> {
-  undoType: string;
-  redoType: string;
-  afterUndo?: ThunkFunction<T>;
-  afterRedo?: ThunkFunction<T>;
-}
-
-export class UndoActionCreator {
-  static undo({ undoType, afterUndo }: UndoableConfig<unknown>): ThunkFunction<unknown> {
-    return async (dispatch, getState) => {
-      dispatch({
-        type: undoType,
-      });
-      await afterUndo?.(dispatch, getState);
-    };
-  }
-  static redo({ redoType, afterRedo }: UndoableConfig<unknown>): ThunkFunction<unknown> {
-    return async (dispatch, getState) => {
-      dispatch({
-        type: redoType,
-      });
-      await afterRedo?.(dispatch, getState);
-    };
-  }
-}
-
+export type ScheduleActionModel = ActionModel<ScheduleDataModel>;
 export class ScheduleDataActionCreator {
   static addNewSchedule(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
       const setEditableSchedule = {
-        type: ScheduleDataActionType.ADD_NEW,
+        type: TemporaryScheduleActionType.ADD_NEW,
         payload: newSchedule,
       };
       const setActualRevision = {
-        type: ActualRevisionActionType.SET_REVISION,
+        type: PersistentScheduleActionType.SET_REVISION,
         payload: newSchedule,
       };
       dispatch(setActualRevision);
@@ -47,7 +23,7 @@ export class ScheduleDataActionCreator {
 
   static updateSchedule(newScheduleModel: ScheduleDataModel): ScheduleActionModel {
     return {
-      type: ScheduleDataActionType.UPDATE,
+      type: TemporaryScheduleActionType.UPDATE,
       payload: newScheduleModel,
     };
   }

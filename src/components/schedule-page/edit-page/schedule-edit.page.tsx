@@ -5,14 +5,16 @@ import { ScheduleComponent } from "../table/schedule/schedule.component";
 import { ScheduleLogicContext, useScheduleState } from "../table/schedule/use-schedule-state";
 import { EditPageToolbar } from "./edit-page-toolbar.component";
 import { UndoableHotkeys } from "../../common-components";
-import { SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/schedule-data-reducers/schedule-data.reducer";
+import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/schedule-data-reducers/temporary-schedule.reducer";
 
 interface ScheduleEditPageOptions {
   closeEdit: () => void;
 }
 
 export function ScheduleEditPage(options: ScheduleEditPageOptions): JSX.Element {
-  const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
+  const scheduleModel = useSelector(
+    (state: ApplicationStateModel) => state.temporarySchedule.present
+  );
   const { scheduleLogic, setNewSchedule, scheduleLocalState } = useScheduleState(
     scheduleModel,
     "edit"
@@ -23,7 +25,7 @@ export function ScheduleEditPage(options: ScheduleEditPageOptions): JSX.Element 
 
   return (
     <>
-      <UndoableHotkeys config={SCHEDULE_UNDOABLE_CONFIG} />
+      <UndoableHotkeys config={TEMPORARY_SCHEDULE_UNDOABLE_CONFIG} />
       <ScheduleLogicContext.Provider value={scheduleLogic}>
         <EditPageToolbar closeEdit={options.closeEdit} />
         <div className="schedule">

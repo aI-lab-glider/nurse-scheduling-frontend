@@ -5,14 +5,14 @@ import { employeeInfoReducer } from "../employee-info.reducer";
 import { monthInfoReducer } from "../month-info.reducer";
 import { scheduleInfoReducer } from "../schedule-info.reducer";
 import { shiftsInfoReducer } from "../shifts-info.reducer";
-import { UndoableConfig } from "./schedule-data.action-creator";
+import { UndoableConfig } from "../undoable.action-creator";
 
-export enum ScheduleDataActionType {
+export enum TemporaryScheduleActionType {
   UPDATE = "updateScheduleData",
   ADD_NEW = "addNew",
 }
 
-export const SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {
+export const TEMPORARY_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {
   undoType: "SCHEDULE_REVISION_UNDO",
   redoType: "SCHEDULE_REVISION_REDO",
 };
@@ -20,8 +20,8 @@ export const SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {
 type ScheduleDataReducers = {
   [key in keyof ScheduleDataModel]: <T, U>(state: T, action: ActionModel<U>) => T;
 };
-export type ScheduleActionModel = ActionModel<ScheduleDataModel>;
-export const scheduleDataReducer = combineReducers({
+
+export const temporaryScheduleReducer = combineReducers({
   schedule_info: scheduleInfoReducer,
   shifts: shiftsInfoReducer,
   month_info: monthInfoReducer,

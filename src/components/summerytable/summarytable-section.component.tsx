@@ -16,7 +16,9 @@ export function SummaryTableSection({
   dataRows,
   workerType,
 }: SummaryTableSectionOptions): JSX.Element {
-  const scheduleModel = useSelector((state: ApplicationStateModel) => state.scheduleData.present);
+  const scheduleModel = useSelector(
+    (state: ApplicationStateModel) => state.temporarySchedule.present
+  );
   const { scheduleLogic, scheduleLocalState, setNewSchedule } = useScheduleState(
     scheduleModel,
     "readonly"
