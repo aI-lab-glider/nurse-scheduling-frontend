@@ -39,7 +39,7 @@ Cypress.Commands.add("loadSchedule", () => {
   cy.window()
     .its("store")
     .invoke("getState")
-    .its("scheduleData")
+    .its("temporarySchedule")
     .its("present")
     .its("month_info")
     .its("children_number")
@@ -99,3 +99,8 @@ Cypress.Commands.add(
       });
   }
 );
+
+Cypress.Commands.add("enterEditMode", () => {
+  cy.get("[data-cy=edit-mode-button]").click();
+  return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
+});

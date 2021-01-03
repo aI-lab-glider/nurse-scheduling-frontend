@@ -4,6 +4,8 @@ import { ApplicationStateModel } from "../../../state/models/application-state.m
 import { ScheduleComponent } from "../table/schedule/schedule.component";
 import { ScheduleLogicContext, useScheduleState } from "../table/schedule/use-schedule-state";
 import { ViewOnlyToolbar } from "./view-only-toolbar";
+import { UndoableHotkeys } from "../../common-components";
+import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/schedule-data-reducers/persistent-schedule.reducer";
 
 interface ScheduleViewOnlyPageOptions {
   openEdit: () => void;
@@ -11,15 +13,19 @@ interface ScheduleViewOnlyPageOptions {
 
 export function ScheduleViewOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.Element {
   const scheduleModel = useSelector((state: ApplicationStateModel) => {
-    return state.scheduleData.present;
+    return state.persistentSchedule.present;
   });
-  const { scheduleLogic, setNewSchedule, scheduleLocalState } = useScheduleState(scheduleModel);
+  const { scheduleLogic, setNewSchedule, scheduleLocalState } = useScheduleState(
+    scheduleModel,
+    "readonly"
+  );
   useEffect(() => {
     setNewSchedule(scheduleModel);
   }, [scheduleModel, setNewSchedule]);
 
   return (
     <>
+      <UndoableHotkeys config={PERSISTENT_SCHEDULE_UNDOABLE_CONFIG} />
       <ScheduleLogicContext.Provider value={scheduleLogic}>
         <ViewOnlyToolbar openEdit={props.openEdit} />
         <div className={"schedule"}>

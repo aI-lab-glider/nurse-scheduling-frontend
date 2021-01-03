@@ -18,15 +18,21 @@ export interface useScheduleStateReturn {
 export const ScheduleLogicContext = React.createContext<ScheduleLogic | null>(null);
 
 export function useScheduleState(
-  initialScheduleModelState: ScheduleDataModel
+  initialScheduleModelState: ScheduleDataModel,
+  mode: "readonly" | "edit"
 ): useScheduleStateReturn {
   const dispatchGlobalState = useDispatch();
   const [scheduleLocalState, setScheduleLocalState] = useState<ScheduleComponentState>(
     scheduleInitialState
   );
-  const scheduleLogic = useState<ScheduleLogic>(
-    new ScheduleLogic(dispatchGlobalState, new LocalStorageProvider(), initialScheduleModelState)
-  )[0];
+  const [scheduleLogic] = useState<ScheduleLogic>(
+    new ScheduleLogic(
+      dispatchGlobalState,
+      new LocalStorageProvider(),
+      initialScheduleModelState,
+      mode
+    )
+  );
 
   const setNewSchedule = useCallback(
     (scheduleModel: ScheduleDataModel): void => {

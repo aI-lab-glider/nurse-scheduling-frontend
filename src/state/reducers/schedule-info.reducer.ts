@@ -1,23 +1,23 @@
 import { ScheduleModel } from "../../common-models/schedule.model";
-import { ScheduleActionModel, ScheduleDataActionType } from "./schedule-data.reducer";
+import { scheduleDataInitialState } from "./schedule-data-reducers/schedule-data-initial-state";
+import { TemporaryScheduleActionType } from "./schedule-data-reducers/temporary-schedule.reducer";
+import { ScheduleActionModel } from "./schedule-data-reducers/schedule-data.action-creator";
 
 let uuid = 0;
+
 /* eslint-disable @typescript-eslint/camelcase */
-const initialState: ScheduleModel = {
-  daysFromPreviousMonthExists: false,
-};
 
 export function scheduleInfoReducer(
-  state: ScheduleModel = initialState,
+  state: ScheduleModel = scheduleDataInitialState.schedule_info,
   action: ScheduleActionModel
 ): ScheduleModel {
   const data = action.payload?.schedule_info;
   if (!data) return state;
   switch (action.type) {
-    case ScheduleDataActionType.ADD_NEW:
+    case TemporaryScheduleActionType.ADD_NEW:
       uuid += 1;
       return { ...data, UUID: uuid.toString() };
-    case ScheduleDataActionType.UPDATE:
+    case TemporaryScheduleActionType.UPDATE:
       return { ...state, ...data };
     default:
       return state;
