@@ -30,28 +30,20 @@
     color: $gray-700;
   }
 
-  input[type="radio"] {
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid $gray-700;
-    border-radius: 50%;
-    outline: none;
+  .MuiSvgIcon-root {
+    fill: $primary-header-color;
   }
 
-  input[type="radio"]:hover {
-    box-shadow: 0 0 5px 0px $gray-700 inset;
+  .MuiRadio-colorSecondary.Mui-checked {
+    color: $gray-700;
   }
-
-  input[type="radio"]:before {
-    content: "";
-    display: block;
-    width: 75%;
-    height: 75%;
-    margin: 15% auto;
-    border-radius: 50%;
+  .MuiRadio-colorSecondary.Mui-checked:hover {
+    background-color: $gray-100;
   }
-  input[type="radio"]:checked:before {
-    background: $primary-header-color;
+  .MuiRadio-colorSecondary:hover {
+    background-color: $gray-100;
+  }
+  .btn {
+    margin-left: 0px;
   }
 }
