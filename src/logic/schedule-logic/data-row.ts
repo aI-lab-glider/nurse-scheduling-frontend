@@ -12,7 +12,7 @@ export class DataRow implements DataRowModel {
     return this.key;
   }
 
-  public disableEdit(): boolean {
+  public disableEdit(): void {
     this.isEditable = false;
   }
 
