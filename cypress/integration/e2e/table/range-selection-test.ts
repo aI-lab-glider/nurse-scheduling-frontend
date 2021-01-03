@@ -239,8 +239,7 @@ function validateChange({ startShiftCell, endShiftCell, desiredShiftCode }: Work
 context("Shift range selection", () => {
   before(() => {
     cy.loadSchedule();
-    cy.get("[data-cy=edit-mode-button]").click();
-    cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
+    cy.enterEditMode();
   });
 
   workerTestCases.forEach((test) => {
