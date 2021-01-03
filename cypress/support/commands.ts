@@ -71,11 +71,15 @@ Cypress.Commands.add(
   }
 );
 
+Cypress.Commands.add("useAutocomplete", (newShiftCode: ShiftCode) => {
+  return cy.get(`[data-cy=autocomplete-${newShiftCode}]`, { timeout: 100000 }).click();
+});
+
 Cypress.Commands.add(
   "changeWorkerShift",
   ({ newShiftCode, ...getWorkerShiftOptions }: ChangeWorkerShiftOptions) => {
     cy.getWorkerShift(getWorkerShiftOptions).click();
-    return cy.get(`[data-cy=autocomplete-${newShiftCode}]`, { timeout: 100000 }).click();
+    return cy.useAutocomplete(newShiftCode);
   }
 );
 
