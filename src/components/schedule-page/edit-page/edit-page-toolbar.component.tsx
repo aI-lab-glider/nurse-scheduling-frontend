@@ -1,7 +1,6 @@
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import React, { useContext } from "react";
 import { useDispatch } from "react-redux";
-import { ActionCreators as UndoActionCreators } from "redux-undo";
 import backend from "../../../api/backend";
 import { ScheduleError } from "../../../common-models/schedule-error.model";
 import { ActionModel } from "../../../state/models/action.model";
@@ -11,6 +10,8 @@ import ValidationDrawerComponent from "../validation-drawer/validation-drawer.co
 import UndoIcon from "@material-ui/icons/Undo";
 import RedoIcon from "@material-ui/icons/Redo";
 import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
+import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/schedule-data-reducers/temporary-schedule.reducer";
+import { UndoActionCreator } from "../../../state/reducers/undoable.action-creator";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;
@@ -19,6 +20,7 @@ interface EditPageToolbarOptions {
 export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Element {
   const scheduleLogic = useContext(ScheduleLogicContext);
   const dispatcher = useDispatch();
+  const [openDrawer, setOpenDrawer] = useState(false);
   async function updateScheduleErrors(): Promise<void> {
     const schedule = scheduleLogic?.schedule.getDataModel();
     if (schedule) {
@@ -35,22 +37,27 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
     }
   }
 
+  function prepareDrawer(): void {
+    updateScheduleErrors();
+    setOpenDrawer(true);
+  }
+
   return (
     <div className="editing-row">
       <div className="buttons">
         <Button
           onClick={(): void => {
-            dispatcher(UndoActionCreators.undo());
+            dispatcher(UndoActionCreator.undo(TEMPORARY_SCHEDULE_UNDOABLE_CONFIG));
           }}
-          data-cy="undo-button"
           variant="circle-outlined"
+          data-cy="undo-button"
         >
           <UndoIcon className="edit-icons" />
         </Button>
 
         <Button
           onClick={(): void => {
-            dispatcher(UndoActionCreators.redo());
+            dispatcher(UndoActionCreator.redo(TEMPORARY_SCHEDULE_UNDOABLE_CONFIG));
           }}
           data-cy="redo-button"
           variant="circle-outlined"
@@ -62,14 +69,14 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
           <p>Tryb edycji aktywny</p>
         </div>
 
-        <ValidationDrawerComponent />
+        <ValidationDrawerComponent open={openDrawer} setOpen={setOpenDrawer} />
 
         <Button
           size="small"
+          data-cy="check-schedule-button"
           className="submit-button"
           variant="primary"
-          onClick={updateScheduleErrors}
-          data-cy="check-schedule-button"
+          onClick={prepareDrawer}
         >
           Sprawdź Plan
         </Button>
@@ -79,9 +86,10 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
         <Button
           size="small"
           className="submit-button"
+          data-cy="save-schedule-button"
           variant="outlined"
           onClick={(): void => {
-            scheduleLogic && scheduleLogic.updateActualRevision();
+            scheduleLogic?.updateActualRevision();
           }}
         >
           Zapisz

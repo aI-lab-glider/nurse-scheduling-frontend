@@ -5,6 +5,9 @@ export class TranslationHelper {
   public static get englishMonths(): string[] {
     return Object.values(TranslationHelper.monthTranslations);
   }
+  public static get polishMonthsGenetivus(): string[] {
+    return Object.values(TranslationHelper.monthsGenetivus);
+  }
 
   // suggestions appreciated since this is kinda whack
   public static get workHoursInfoHeader(): { [key: string]: string } {
@@ -29,6 +32,23 @@ export class TranslationHelper {
       październik: "october",
       listopad: "november",
       grudzień: "december",
+    };
+  }
+
+  private static get monthsGenetivus(): { [key: number]: string } {
+    return {
+      1: "stycznia",
+      2: "lutego",
+      3: "marca",
+      4: "kwietnia",
+      5: "maja",
+      6: "czerwca",
+      7: "lipca",
+      8: "sierpnia",
+      9: "września",
+      10: "października",
+      11: "listopada",
+      12: "grudnia",
     };
   }
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { VerboseDate, WeekDay } from "../../common-models/month-info.model";
-import { TranslationHelper } from "../../helpers/tranlsations.helper";
+import { TranslationHelper } from "../../helpers/translations.helper";
 
 export interface TimeTableCellOptions {
   value: VerboseDate;

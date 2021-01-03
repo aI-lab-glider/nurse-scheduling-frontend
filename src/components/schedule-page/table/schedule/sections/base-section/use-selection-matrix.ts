@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-type SelectionMatrix = boolean[][];
+export type SelectionMatrix = boolean[][];
 
 interface UseSelectionMatrixReturn {
   setSelectionMatrix: (

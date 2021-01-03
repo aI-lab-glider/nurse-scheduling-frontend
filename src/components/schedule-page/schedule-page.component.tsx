@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { ScheduleEditPage } from "./edit-page/schedule-edit.page";
-import { ScheduleViewOnlyPage } from "./view-only-page/view-only.page";
+import { ScheduleViewOnlyPage } from "./view-only-page/schedule-view-only.page";
 
 interface SchedulePageOptions {
   editModeHandler: (editMode: boolean) => void;

@@ -83,6 +83,7 @@
     "eslint-plugin-cypress": "^2.11.2",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.2",
+    "lodash": "^4.17.20",
     "prettier": "^2.1.2",
     "typedoc": "^0.19.2"
   },

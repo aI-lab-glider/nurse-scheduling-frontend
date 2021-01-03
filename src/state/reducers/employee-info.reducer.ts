@@ -1,17 +1,19 @@
 import { WorkersInfoModel } from "../../common-models/worker-info.model";
-import { ScheduleActionModel, ScheduleDataActionType } from "./schedule-data.reducer";
+import { scheduleDataInitialState } from "./schedule-data-reducers/schedule-data-initial-state";
+import { TemporaryScheduleActionType } from "./schedule-data-reducers/temporary-schedule.reducer";
+import { ScheduleActionModel } from "./schedule-data-reducers/schedule-data.action-creator";
 
-const initialState: WorkersInfoModel = { time: {}, type: {} };
+/* eslint-disable @typescript-eslint/camelcase */
 export function employeeInfoReducer(
-  state: WorkersInfoModel = initialState,
+  state: WorkersInfoModel = scheduleDataInitialState.employee_info,
   action: ScheduleActionModel
 ): WorkersInfoModel {
   const data = action.payload?.employee_info;
   if (!data) return state;
   switch (action.type) {
-    case ScheduleDataActionType.ADD_NEW:
+    case TemporaryScheduleActionType.ADD_NEW:
       return { ...data };
-    case ScheduleDataActionType.UPDATE:
+    case TemporaryScheduleActionType.UPDATE:
       return { ...state, ...data };
     default:
       return state;
