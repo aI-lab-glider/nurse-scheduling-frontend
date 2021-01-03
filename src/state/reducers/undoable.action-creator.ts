@@ -9,7 +9,7 @@ export interface UndoableConfig<T> {
 
 export class UndoActionCreator {
   static undo({ undoType, afterUndo }: UndoableConfig<unknown>): ThunkFunction<unknown> {
-    return async (dispatch, getState) => {
+    return async (dispatch, getState): Promise<void> => {
       dispatch({
         type: undoType,
       });
@@ -17,7 +17,7 @@ export class UndoActionCreator {
     };
   }
   static redo({ redoType, afterRedo }: UndoableConfig<unknown>): ThunkFunction<unknown> {
-    return async (dispatch, getState) => {
+    return async (dispatch, getState): Promise<void> => {
       dispatch({
         type: redoType,
       });

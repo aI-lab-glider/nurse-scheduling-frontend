@@ -14,7 +14,7 @@ export enum PersistentScheduleActionType {
 async function updatePersistentSchedule(
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<ScheduleDataModel>>,
   state: ScheduleDataModel
-) {
+): Promise<void> {
   const storeProvider = new LocalStorageProvider();
   storeProvider.saveScheduleRevision("actual", state);
   state && (await dispatch(ScheduleDataActionCreator.setTemporarySchedule(state)));

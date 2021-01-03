@@ -24,7 +24,7 @@ jobs:
         working-directory: ${{env.frontend-folder}}
 
       - name: Run lint
-        run: npm run lint
+        run: npm run lint-warn
         working-directory: ${{env.frontend-folder}}
 
       - name: Run cypress
