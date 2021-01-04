@@ -3,6 +3,8 @@ import { ScheduleDataModel } from "../../../../common-models/schedule-data.model
 import { PersistentScheduleActionType } from "./persistent-schedule.reducer";
 import { TemporaryScheduleActionType } from "./temporary-schedule.reducer";
 import { ActionModel } from "../../../models/action.model";
+import { HistoryReducerActionCreator } from "../../history.reducer";
+import { MonthStateModel } from "../../../models/application-state.model";
 
 export type ScheduleActionModel = ActionModel<ScheduleDataModel>;
 export class ScheduleDataActionCreator {
@@ -21,6 +23,24 @@ export class ScheduleDataActionCreator {
     };
   }
 
+  static copyPreviousMonth(): ThunkFunction<unknown> {
+    return async (dispatch, getState): Promise<void> => {
+      const actualSchedule = getState().actualState;
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      const action = HistoryReducerActionCreator.addToHistory(actualSchedule);
+      const copyAction = {
+        type: PersistentScheduleActionType.COPY_FROM_MONTH,
+        payload: {
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          month_number:
+            actualSchedule.persistentSchedule.present.schedule_info.month_number ?? 0 % 12,
+          year: actualSchedule.persistentSchedule.present.schedule_info.year,
+        },
+      };
+      dispatch(action);
+      dispatch(copyAction);
+    };
+  }
   static setTemporarySchedule(newSchedule: ScheduleDataModel): ScheduleActionModel {
     return {
       type: TemporaryScheduleActionType.ADD_NEW,

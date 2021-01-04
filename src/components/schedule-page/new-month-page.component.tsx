@@ -1,9 +1,12 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { ScheduleDataActionCreator } from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { Button } from "../common-components";
 import { useActualMonth } from "../common-components/month-switch/use-actual-month";
 
 export function NewMonthPlanComponent(): JSX.Element {
   const actualMonth = useActualMonth();
+  const dispatch = useDispatch();
   return (
     <>
       <div className={"newMonthComponents"}>
@@ -13,7 +16,14 @@ export function NewMonthPlanComponent(): JSX.Element {
         />
         <p>Nie masz planu na ten miesiąc</p>
         <div className={"newPageButtonsPane"}>
-          <Button size="small" className="submit-button" variant="outlined">
+          <Button
+            onClick={(): void => {
+              dispatch(ScheduleDataActionCreator.copyPreviousMonth());
+            }}
+            size="small"
+            className="submit-button"
+            variant="outlined"
+          >
             Kopiuj plan z {actualMonth}
           </Button>
           <Button size="small" className="submit-button" variant="primary">
