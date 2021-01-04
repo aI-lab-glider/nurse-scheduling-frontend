@@ -8,16 +8,25 @@ import {
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { KeyboardTimePicker } from "@material-ui/pickers";
-import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from "@material-ui/core";
+import {
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Grid,
+  Typography,
+} from "@material-ui/core";
+import classes from "*.module.css";
 
 export default function ShiftEditDrower(): JSX.Element {
   const btnData1: ButtonData = {
     action: (): void => console.log("Color1"),
-    label: "Wczytaj",
+    label: "Color1",
   };
   const btnData2: ButtonData = {
     action: (): void => console.log("Color2"),
-    label: "Zapisz jako...",
+    label: "Color2",
   };
 
   const btnData = [btnData1, btnData2];

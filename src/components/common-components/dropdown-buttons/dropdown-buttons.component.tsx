@@ -1,6 +1,3 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState, useRef } from "react";
 import { Button, ButtonVariant } from "../button-component/button.component";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
@@ -18,7 +15,6 @@ interface DropdownOptions {
   mainLabel: string;
   variant?: ButtonVariant;
   dataCy?: string;
-  disabled?: boolean;
 }
 
 export function DropdownButtons({
@@ -26,7 +22,6 @@ export function DropdownButtons({
   mainLabel,
   variant,
   dataCy,
-  disabled = false,
 }: DropdownOptions): JSX.Element {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
@@ -41,18 +36,12 @@ export function DropdownButtons({
 
   return (
     <div>
-      <Button
-        variant={variant}
-        onClick={handleToggle}
-        ref={anchorRef}
-        data-cy={dataCy}
-        disabled={disabled}
-      >
+      <Button variant={variant} onClick={handleToggle} ref={anchorRef} data-cy={dataCy}>
         {mainLabel}
         <ArrowDropDownIcon />
       </Button>
       <Popper
-        className="dropdown-buttons-z-index"
+        className={"dropdown-buttons-z-index"}
         open={open}
         placement="bottom"
         anchorEl={anchorRef.current}
