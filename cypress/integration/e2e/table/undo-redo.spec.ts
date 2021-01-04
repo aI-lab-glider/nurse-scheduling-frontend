@@ -31,7 +31,8 @@ const testCases: TestCase[] = [
   },
 ];
 
-function performShiftChanges(testCase) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function performShiftChanges(testCase: TestCase) {
   cy.changeWorkerShift({ ...testCase.testedShiftCell, newShiftCode: testCase.firstShift });
   cy.changeWorkerShift({ ...testCase.testedShiftCell, newShiftCode: testCase.secondShift });
 }

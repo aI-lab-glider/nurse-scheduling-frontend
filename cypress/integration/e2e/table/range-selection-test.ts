@@ -144,6 +144,7 @@ const foundationTestCases: FoundationTestCase[] = [
   },
 ];
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function validateHorizontalShifts(
   workerType: WorkerType,
   workerIdx: number,
@@ -161,6 +162,7 @@ function validateHorizontalShifts(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function validateVerticalShifts(
   workerType: WorkerType,
   shiftIdx: number,
@@ -178,6 +180,7 @@ function validateVerticalShifts(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function validateChange({ startShiftCell, endShiftCell, desiredShiftCode }: WorkerTestCase) {
   const {
     workerType: startWorkerType,
