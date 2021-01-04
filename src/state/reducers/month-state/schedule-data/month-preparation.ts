@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 export function daysInMonth(month = 0, year = 0): number[] {
   let day = 1;
   const result = [day];

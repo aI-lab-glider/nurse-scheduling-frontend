@@ -4,14 +4,13 @@ import { TemporaryScheduleActionType } from "./schedule-data/temporary-schedule.
 import { ScheduleActionModel } from "./schedule-data/schedule-data.action-creator";
 import { PersistentScheduleActionType } from "./schedule-data/persistent-schedule.reducer";
 import { daysInMonth } from "./schedule-data/month-preparation";
-import { ArrayHelper } from "../../../helpers/array.helper";
-import * as _ from "lodash";
+import _ from "lodash";
 export function shiftsInfoReducer(
   state: ShiftInfoModel = scheduleDataInitialState.shifts,
   action: ScheduleActionModel
 ): ShiftInfoModel {
   const data = action.payload?.shifts;
-  if (!data && action.type != PersistentScheduleActionType.COPY_FROM_MONTH) return state;
+  if (!data && action.type !== PersistentScheduleActionType.COPY_FROM_MONTH) return state;
   switch (action.type) {
     case TemporaryScheduleActionType.ADD_NEW:
       return { ...data };

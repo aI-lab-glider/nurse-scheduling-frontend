@@ -4,7 +4,6 @@ import { PersistentScheduleActionType } from "./persistent-schedule.reducer";
 import { TemporaryScheduleActionType } from "./temporary-schedule.reducer";
 import { ActionModel } from "../../../models/action.model";
 import { HistoryReducerActionCreator } from "../../history.reducer";
-import { MonthStateModel } from "../../../models/application-state.model";
 
 export type ScheduleActionModel = ActionModel<ScheduleDataModel>;
 export class ScheduleDataActionCreator {
