@@ -1,18 +1,23 @@
 import { combineReducers } from "redux";
 import { ActionModel } from "./models/action.model";
-import { ApplicationStateModel } from "./models/application-state.model";
-import {
-  TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
-  temporaryScheduleReducer,
-} from "./reducers/schedule-data-reducers/temporary-schedule.reducer";
-import { scheduleErrorsReducer } from "./reducers/schedule-errors.reducer";
+import { ApplicationStateModel, MonthStateModel } from "./models/application-state.model";
+import { scheduleErrorsReducer } from "./reducers/month-state/schedule-errors.reducer";
 import undoable from "redux-undo";
+import { historyReducer } from "./reducers/history.reducer";
 import {
-  PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
   persistentScheduleReducer,
-} from "./reducers/schedule-data-reducers/persistent-schedule.reducer";
+  PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
+} from "./reducers/month-state/schedule-data/persistent-schedule.reducer";
+import {
+  temporaryScheduleReducer,
+  TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
+} from "./reducers/month-state/schedule-data/temporary-schedule.reducer";
 
-export const appReducer = combineReducers({
+export type CombinedReducers<StateModel> = {
+  [key in keyof StateModel]: <T, U>(state: T, action: ActionModel<U>) => T;
+};
+
+const monthStateReducer = combineReducers({
   persistentSchedule: undoable(persistentScheduleReducer, {
     limit: 50,
     ...PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
@@ -22,4 +27,9 @@ export const appReducer = combineReducers({
     ...TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
   }),
   scheduleErrors: scheduleErrorsReducer,
-} as { [key in keyof ApplicationStateModel]: <T, U>(state: T, action: ActionModel<U>) => T });
+} as CombinedReducers<MonthStateModel>);
+
+export const appReducer = combineReducers({
+  actualState: monthStateReducer,
+  history: historyReducer,
+} as CombinedReducers<ApplicationStateModel>);

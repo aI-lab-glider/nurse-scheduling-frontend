@@ -1,11 +1,11 @@
-import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
+import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 import { scheduleDataInitialState } from "./schedule-data-initial-state";
 import { ScheduleActionModel, ScheduleDataActionCreator } from "./schedule-data.action-creator";
-import { UndoableConfig } from "../undoable.action-creator";
-import { LocalStorageProvider } from "../../../api/local-storage-provider.model";
+import { UndoableConfig } from "../../undoable.action-creator";
+import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import { ThunkDispatch } from "redux-thunk";
-import { ApplicationStateModel } from "../../models/application-state.model";
-import { ActionModel } from "../../models/action.model";
+import { ApplicationStateModel } from "../../../models/application-state.model";
+import { ActionModel } from "../../../models/action.model";
 
 export enum PersistentScheduleActionType {
   SET_REVISION = "SET_REVISION",
@@ -24,12 +24,12 @@ export const PERSISTENT_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataMod
   undoType: "PERSISTENT_REVISION_UNDO",
   redoType: "PERSISTENT_REVISION_REDO",
   afterUndo: async (dispatch, getState) => {
-    const state = getState().persistentSchedule.present;
+    const state = getState().actualState.persistentSchedule.present;
     debugger;
     await updatePersistentSchedule(dispatch, state);
   },
   afterRedo: async (dispatch, getState) => {
-    const state = getState().persistentSchedule.present;
+    const state = getState().actualState.persistentSchedule.present;
     debugger;
     await updatePersistentSchedule(dispatch, state);
   },
