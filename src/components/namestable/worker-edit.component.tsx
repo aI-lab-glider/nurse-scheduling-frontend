@@ -7,17 +7,18 @@ import {
   translateAndCapitalizeContractType,
   translateAndCapitalizeWorkerType,
 } from "./worker-edit.helper";
-import MaskedInput from "react-text-mask";
 import { Button } from "../common-components";
+import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
+import { TextMaskCustom } from "../common-components/text-mask-custom/text-mask-custom.component";
 
 const useStyles = makeStyles({
   container: {
     height: "100%",
   },
   label: {
-    fontSize: 16,
+    fontSize: ScssVars.fontSizeBase,
     fontWeight: 700,
-    lineHeight: 1.75,
+    lineHeight: ScssVars.lineHeightXl,
   },
 });
 
@@ -40,12 +41,12 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     civilTime: "0",
   });
 
-  function handleUpdate(event) {
-    const { target } = event;
-    updateWorkerInfo(target.name, target.value);
+  function handleUpdate(event): void {
+    const { name, value } = event.target;
+    updateWorkerInfo(name, value);
   }
 
-  function updateWorkerInfo(key, value) {
+  function updateWorkerInfo(key, value): void {
     setWorkerInfo({ ...workerInfo, [key]: value });
   }
 
@@ -53,7 +54,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     const workerType = WorkerType[workerTypeName];
     return {
       label: translateAndCapitalizeWorkerType(workerType),
-      action: () => updateWorkerInfo("workerType", workerType),
+      action: (): void => updateWorkerInfo("workerType", workerType),
     };
   });
 
@@ -61,7 +62,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     const contractType = ContractType[contractTypeName];
     return {
       label: translateAndCapitalizeContractType(contractType),
-      action: () => updateWorkerInfo("contractType", contractType),
+      action: (): void => updateWorkerInfo("contractType", contractType),
     };
   });
 
@@ -129,7 +130,10 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
                 value={workerInfo.employmentTime}
                 onChange={handleUpdate}
                 data-cy="hours-number"
-                inputComponent={TextMaskCustom as any}
+                inputComponent={
+                  // eslint-disable-next-line
+                  TextMaskCustom as any
+                }
               />
             </Grid>
           )}
@@ -139,24 +143,5 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
         <Button>Zapisz pracownika</Button>
       </Grid>
     </Grid>
-  );
-}
-
-interface TextMaskCustomProps {
-  inputRef: (ref: HTMLInputElement | null) => void;
-}
-
-function TextMaskCustom(props: TextMaskCustomProps) {
-  const { inputRef, ...other } = props;
-
-  return (
-    <MaskedInput
-      {...other}
-      ref={(ref: any) => {
-        inputRef(ref ? ref.inputElement : null);
-      }}
-      mask={[/[1-9]/, "/", /[1-9]/]}
-      showMask
-    />
   );
 }
