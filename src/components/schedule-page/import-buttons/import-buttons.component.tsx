@@ -72,7 +72,6 @@ export function ImportButtonsComponent(): JSX.Element {
         mainLabel="Plik"
         variant="primary"
         dataCy={"file-dropdown"}
-        position={"bottom"}
       />
       <input
         ref={fileUpload}
