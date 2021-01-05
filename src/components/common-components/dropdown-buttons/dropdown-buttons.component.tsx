@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Button, ButtonVariant } from "../button-component/button.component";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import Popper from "@material-ui/core/Popper";
+import Popper, { PopperPlacementType } from "@material-ui/core/Popper";
 
 export interface ButtonData {
   label: string;
@@ -15,14 +15,13 @@ interface DropdownOptions {
   mainLabel: string;
   variant?: ButtonVariant;
   dataCy?: string;
+  position?: PopperPlacementType;
 }
 
-export function DropdownButtons({
-  buttons,
-  mainLabel,
-  variant,
-  dataCy,
-}: DropdownOptions): JSX.Element {
+export function DropdownButtons(
+  this: any,
+  { buttons, mainLabel, variant, dataCy, position }: DropdownOptions
+): JSX.Element {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
 
@@ -33,7 +32,6 @@ export function DropdownButtons({
   function handleClickAway(): void {
     setOpen(false);
   }
-
   return (
     <div>
       <Button variant={variant} onClick={handleToggle} ref={anchorRef} data-cy={dataCy}>
@@ -41,9 +39,9 @@ export function DropdownButtons({
         <ArrowDropDownIcon />
       </Button>
       <Popper
-        className={"dropdown-buttons-z-index"}
         open={open}
-        placement="bottom"
+        placement={position}
+        className={`position-${position}`}
         anchorEl={anchorRef.current}
       >
         <div

@@ -62,7 +62,6 @@ export default function ShiftEditDrower(): JSX.Element {
           </RadioGroup>
         </FormControl>
         <br />
-
         <h4>Godziny zmiany</h4>
         <div className={"time-range"}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -97,6 +96,7 @@ export default function ShiftEditDrower(): JSX.Element {
           mainLabel="Wybierz kolory"
           variant="outlined"
           dataCy={"file-dropdown"}
+          position={"top"}
         />
         <Button size="small" className="submit-button" variant="primary">
           Dodaj zmianę
