@@ -1,5 +1,6 @@
 import { ScheduleModel } from "../../../common-models/schedule.model";
-import { PersistentScheduleActionType } from "./schedule-data/persistent-schedule.reducer";
+import { PersistentScheduleActionType } from "./schedule-data/persistent";
+
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import { ScheduleActionModel } from "./schedule-data/schedule-data.action-creator";
 import { TemporaryScheduleActionType } from "./schedule-data/temporary-schedule.reducer";
@@ -15,6 +16,7 @@ export function scheduleInfoReducer(
   const data = action.payload?.schedule_info;
   if (!data) return state;
   switch (action.type) {
+    case PersistentScheduleActionType.SET_REVISION:
     case TemporaryScheduleActionType.ADD_NEW:
       uuid += 1;
       return { ...data, UUID: uuid.toString() };

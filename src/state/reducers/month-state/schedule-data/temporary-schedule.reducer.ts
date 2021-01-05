@@ -10,6 +10,7 @@ import { shiftsInfoReducer } from "../shifts-info.reducer";
 export enum TemporaryScheduleActionType {
   UPDATE = "UPDATE_SCHEDULE",
   ADD_NEW = "ADD_NEW_SCHEDULE",
+  COPY_FROM_MONTH = "COPY_FROM_MONTH",
 }
 
 export const TEMPORARY_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {
@@ -23,4 +24,3 @@ export const temporaryScheduleReducer = combineReducers({
   month_info: monthInfoReducer,
   employee_info: employeeInfoReducer,
 } as CombinedReducers<ScheduleDataModel>);
-/* eslint-enable @typescript-eslint/camelcase */

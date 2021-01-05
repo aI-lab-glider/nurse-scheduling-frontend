@@ -1,16 +1,19 @@
+/* eslint-disable @typescript-eslint/camelcase */
+
 import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
-import { scheduleDataInitialState } from "./schedule-data-initial-state";
-import { ScheduleActionModel, ScheduleDataActionCreator } from "./schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
 import { UndoableConfig } from "../../undoable.action-creator";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import { ThunkDispatch } from "redux-thunk";
 import { ApplicationStateModel } from "../../../models/application-state.model";
 import { ActionModel } from "../../../models/action.model";
+import { combineReducers } from "redux";
 
-export enum PersistentScheduleActionType {
-  SET_REVISION = "SET_REVISION",
-  COPY_FROM_MONTH = "COPY_FROM_MONTH",
-}
+import { CombinedReducers } from "../../../app.reducer";
+import { employeeInfoReducer } from "../employee-info.reducer";
+import { persistentScheduleMonthInfoReducer } from "../month-info.reducer";
+import { scheduleInfoReducer } from "../schedule-info.reducer";
+import { persistenScheduletShiftsInfoReducer } from "../shifts-info.reducer";
 
 async function updatePersistentSchedule(
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<ScheduleDataModel>>,
@@ -36,16 +39,9 @@ export const PERSISTENT_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataMod
   },
 };
 
-export function persistentScheduleReducer(
-  state: ScheduleDataModel = scheduleDataInitialState,
-  action: ScheduleActionModel
-): ScheduleDataModel {
-  const data = action.payload;
-  if (!data) return state;
-  switch (action.type) {
-    case PersistentScheduleActionType.SET_REVISION:
-      return { ...data };
-    default:
-      return state;
-  }
-}
+export const persistentScheduleReducer = combineReducers({
+  schedule_info: scheduleInfoReducer,
+  shifts: persistenScheduletShiftsInfoReducer,
+  month_info: persistentScheduleMonthInfoReducer,
+  employee_info: employeeInfoReducer,
+} as CombinedReducers<ScheduleDataModel>);

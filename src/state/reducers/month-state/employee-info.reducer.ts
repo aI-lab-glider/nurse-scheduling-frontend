@@ -1,4 +1,5 @@
 import { WorkersInfoModel } from "../../../common-models/worker-info.model";
+import { PersistentScheduleActionType } from "./schedule-data/persistent";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import { ScheduleActionModel } from "./schedule-data/schedule-data.action-creator";
 import { TemporaryScheduleActionType } from "./schedule-data/temporary-schedule.reducer";
@@ -11,6 +12,7 @@ export function employeeInfoReducer(
   const data = action.payload?.employee_info;
   if (!data) return state;
   switch (action.type) {
+    case PersistentScheduleActionType.SET_REVISION:
     case TemporaryScheduleActionType.ADD_NEW:
       return { ...data };
     case TemporaryScheduleActionType.UPDATE:

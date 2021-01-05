@@ -1,9 +1,10 @@
 import { ThunkFunction } from "../../../../api/persistance-store.model";
 import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
-import { PersistentScheduleActionType } from "./persistent-schedule.reducer";
+
 import { TemporaryScheduleActionType } from "./temporary-schedule.reducer";
 import { ActionModel } from "../../../models/action.model";
 import { HistoryReducerActionCreator } from "../../history.reducer";
+import { PersistentScheduleActionType } from "./persistent";
 
 export type ScheduleActionModel = ActionModel<ScheduleDataModel>;
 export class ScheduleDataActionCreator {
@@ -27,7 +28,16 @@ export class ScheduleDataActionCreator {
       const actualSchedule = getState().actualState;
       // eslint-disable-next-line @typescript-eslint/camelcase
       const action = HistoryReducerActionCreator.addToHistory(actualSchedule);
-      const copyAction = {
+      const temporaryAction = {
+        type: TemporaryScheduleActionType.COPY_FROM_MONTH,
+        payload: {
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          month_number:
+            actualSchedule.temporarySchedule.present.schedule_info.month_number ?? 0 % 12,
+          year: actualSchedule.temporarySchedule.present.schedule_info.year,
+        },
+      };
+      const persistentAction = {
         type: PersistentScheduleActionType.COPY_FROM_MONTH,
         payload: {
           // eslint-disable-next-line @typescript-eslint/camelcase
@@ -37,7 +47,8 @@ export class ScheduleDataActionCreator {
         },
       };
       dispatch(action);
-      dispatch(copyAction);
+      dispatch(temporaryAction);
+      dispatch(persistentAction);
     };
   }
   static setTemporarySchedule(newSchedule: ScheduleDataModel): ScheduleActionModel {
