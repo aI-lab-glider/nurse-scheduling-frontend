@@ -1,15 +1,18 @@
-import { ContractType, WorkerInfoModel, WorkerType } from "../../common-models/worker-info.model";
+import {
+  ContractType,
+  ContractTypeHelper,
+  WorkerInfoModel,
+  WorkerType,
+  WorkerTypeHelper,
+} from "../../common-models/worker-info.model";
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Input, TextField, Typography } from "@material-ui/core";
 import { DropdownButtons } from "../common-components/dropdown-buttons/dropdown-buttons.component";
-import {
-  translateAndCapitalizeContractType,
-  translateAndCapitalizeWorkerType,
-} from "./worker-edit.helper";
 import { Button } from "../common-components";
 import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
 import { TextMaskCustom } from "../common-components/text-mask-custom/text-mask-custom.component";
+import { StringHelper } from "../../helpers/string.helper";
 
 const useStyles = makeStyles({
   container: {
@@ -144,4 +147,17 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
       </Grid>
     </Grid>
   );
+}
+
+function translateAndCapitalizeWorkerType(workerType: WorkerType): string {
+  return translateAndCapitalize(workerType, WorkerTypeHelper);
+}
+
+function translateAndCapitalizeContractType(contractType: ContractType): string {
+  return translateAndCapitalize(contractType, ContractTypeHelper);
+}
+
+function translateAndCapitalize<T>(what: T, using: { translate: (what: T) => string }): string {
+  const translation = using.translate(what);
+  return StringHelper.capitalize(translation);
 }
