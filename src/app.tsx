@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { CustomGlobalHotKeys, HeaderComponent } from "./components/common-components";
-import { SchedulePage } from "./components/schedule-page/schedule-page.component";
-import { useDispatch, useSelector } from "react-redux";
-import schedule from "./assets/devMode/schedule.js";
-import { ScheduleDataActionType } from "./state/reducers/schedule-data.reducer";
-import { ActionModel } from "./state/models/action.model";
-import { ScheduleDataModel } from "./common-models/schedule-data.model";
-import ManagementPage from "./components/workers-page/management-page.component";
-import RouteButtonsComponent from "./components/common-components/route-buttons/route-buttons.component";
+import React, { useState, useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
+
+import { useDispatch } from "react-redux";
+import schedule from "./assets/devMode/schedule";
+import { ScheduleDataModel } from "./common-models/schedule-data.model";
+import { HeaderComponent } from "./components/common-components";
+import RouteButtonsComponent from "./components/common-components/route-buttons/route-buttons.component";
 import { NewMonthPlanComponent } from "./components/schedule-page/new-month-page.component";
+import { SchedulePage } from "./components/schedule-page/schedule-page.component";
+import ManagementPage from "./components/workers-page/management-page.component";
+import { ScheduleDataActionCreator } from "./state/reducers/month-state/schedule-data/schedule-data.action-creator";
 
 interface TabData {
   label: string;
@@ -27,17 +27,14 @@ function App(): JSX.Element {
 
   useEffect(() => {
     if (process.env.REACT_APP_DEV_MODE === "true") {
-      scheduleDispatcher({
-        type: ScheduleDataActionType.ADD_NEW,
-        payload: schedule,
-      } as ActionModel<ScheduleDataModel>);
+      const action = ScheduleDataActionCreator.setPersistentSchedule(schedule as ScheduleDataModel);
+      scheduleDispatcher(action);
     }
   }, [scheduleDispatcher]);
 
   return (
-    <React.Fragment>
+    <>
       <div>
-        <CustomGlobalHotKeys />
         <Switch>
           <Route path="/next-month">
             <HeaderComponent isNewMonthPage={true} />
@@ -49,7 +46,7 @@ function App(): JSX.Element {
           </Route>
         </Switch>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

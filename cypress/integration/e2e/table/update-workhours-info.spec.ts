@@ -45,6 +45,7 @@ context("Work hours info (summary table)", () => {
   // sanity check in case schedule in the docs gets changed and these tests start failing because of it
   before("Has expected initial values of workHourInfo in example schedule", () => {
     cy.loadSchedule();
+    cy.enterEditMode();
 
     cy.checkHoursInfo({
       workerType: WorkerType.NURSE,

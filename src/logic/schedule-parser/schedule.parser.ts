@@ -7,7 +7,7 @@ import { ShiftsInfoParser } from "./shifts-info.parser";
 import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
 import { ExtraWorkersParser } from "./extra-workers.parser";
 import { ChildrenSectionKey, MetaDataRowLabel, MetaDataSectionKey } from "../section.model";
-import { TranslationHelper } from "../../helpers/tranlsations.helper";
+import { TranslationHelper } from "../../helpers/translations.helper";
 import { InputFileErrorCode } from "../../common-models/schedule-error.model";
 import { FoundationInfoParser } from "./foundation-info.parser";
 import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";

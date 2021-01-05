@@ -2,6 +2,10 @@ declare namespace Cypress {
   interface Chainable {
     loadSchedule(): Chainable<Element>;
 
+    useAutocomplete(
+      newShiftCode: import("../../src/common-models/shift-info.model").ShiftCode
+    ): Chainable<Element>;
+
     getWorkerShift(
       GetWorkerShiftOptions: import("./commands").GetWorkerShiftOptions
     ): Chainable<Element>;
@@ -17,5 +21,7 @@ declare namespace Cypress {
     checkHoursInfo(
       ChangeWorkerShiftOptions: import("./commands").CheckHoursInfoOptions
     ): Chainable<Element>;
+
+    enterEditMode(): Chainable<Element>;
   }
 }

@@ -7,15 +7,15 @@ import { DataRow } from "./data-row";
 import { BaseSectionLogic } from "./base-section-logic.model";
 import { ShiftsProvider } from "../providers/shifts-provider.model";
 import { MetadataLogic } from "./metadata.logic";
-import { TranslationHelper } from "../../helpers/tranlsations.helper";
+import { TranslationHelper } from "../../helpers/translations.helper";
 import { ShiftHelper } from "../../helpers/shifts.helper";
+import { ArrayHelper } from "../../helpers/array.helper";
 
 export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider {
   get sectionKey(): keyof Sections {
     return this.workerType === WorkerType.NURSE ? "NurseInfo" : "BabysitterInfo";
   }
 
-  private shifts: { [nurseName: string]: DataRow } = {};
   private _availableWorkersWorkTime: { [nurseName: string]: number } = {};
   private _scheduleErrors: ScheduleError[] = [];
 
@@ -24,10 +24,7 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
     private workerType: WorkerType,
     private metadata: MetadataLogic
   ) {
-    super();
-    Object.keys(shiftSection).forEach((key) => {
-      this.shifts[key] = new DataRow(key, shiftSection[key]);
-    });
+    super(Object.keys(shiftSection).map((key) => new DataRow(key, shiftSection[key])));
     this._availableWorkersWorkTime = this.mockWorkersWorkTime();
   }
 
@@ -55,12 +52,12 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
     this._scheduleErrors = value;
   }
 
-  public get sectionData(): DataRow[] {
-    return Object.values(this.shifts);
-  }
-
-  public set sectionData(dataRows: DataRow[]) {
-    this.shifts = DataRowHelper.dataRowsAsDataRowDict<DataRow>(dataRows);
+  private get shifts(): { [key: string]: DataRow } {
+    return ArrayHelper.arrayToObject(
+      this.sectionData,
+      (row) => row.rowKey,
+      (key, row) => row
+    );
   }
 
   public get workersCount(): number {

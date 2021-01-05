@@ -1,7 +1,7 @@
-import { ErrorMessageHelper } from "../../helpers/error-message.helper";
-import { ActionModel } from "../models/action.model";
-import { ScheduleErrorMessageModel } from "../../common-models/schedule-error-message.model";
-import { ScheduleError } from "../../common-models/schedule-error.model";
+import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
+import { ActionModel } from "../../models/action.model";
+import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
+import { ScheduleError } from "../../../common-models/schedule-error.model";
 
 export enum ScheduleErrorActionType {
   UPDATE = "updateScheduleError",

@@ -2,38 +2,54 @@ import Drawer from "../../common-components/drawer/drawer.component";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
+import {
+  ScheduleErrorLevel,
+  ScheduleErrorMessageModel,
+} from "../../../common-models/schedule-error-message.model";
 import { SpanErrors } from "./span-errors.component";
 import ErrorList from "./error-list.component";
 
-export default function ValidationDrawerComponent(): JSX.Element {
+export interface ValidationDrawerOptions {
+  open: boolean;
+  setOpen: (boolean) => void;
+}
+
+export default function ValidationDrawerComponent(options: ValidationDrawerOptions): JSX.Element {
+  const { open, setOpen } = options;
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
-  const [open, setOpen] = useState<boolean>(false);
-  const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state);
+  const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   useEffect(() => {
+    const spinner = [
+      {
+        kind: "",
+        title: "kółeczko",
+        message: "Teraz kręci się kółeczko",
+        level: ScheduleErrorLevel.INFO,
+      },
+    ];
     if (scheduleErrors?.length) {
       setMappedErrors(scheduleErrors);
       setOpen(true);
+    } else {
+      setMappedErrors(spinner);
     }
-  }, [scheduleErrors]);
+  }, [scheduleErrors, setOpen]);
 
-  function toggleDrawer(open: boolean): void {
-    setOpen(open);
+  function closeDrawer(): void {
+    setOpen(false);
   }
 
   return (
-    <div>
-      <Drawer
-        title="Sprawdź plan"
-        setOpen={setOpen}
-        open={open}
-        onClose={(): void => toggleDrawer(false)}
-        anchor="right"
-      >
-        <SpanErrors errors={mappedErrors} />
-        <ErrorList errors={mappedErrors} />
-      </Drawer>
-    </div>
+    <Drawer
+      title="Sprawdź plan"
+      setOpen={setOpen}
+      open={open}
+      onClose={(): void => closeDrawer()}
+      anchor="right"
+    >
+      <SpanErrors errors={mappedErrors} />
+      <ErrorList errors={mappedErrors} />
+    </Drawer>
   );
 }

@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
 import { StringHelper } from "../../../helpers/string.helper";
-import { TranslationHelper } from "../../../helpers/tranlsations.helper";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { TranslationHelper } from "../../../helpers/translations.helper";
 
 export function useActualMonth(): string {
   /* eslint-disable @typescript-eslint/camelcase */
   const { month_number, year } = useSelector(
-    (state: ApplicationStateModel) => state.scheduleData.present.schedule_info
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
 
   let actualMonth = "";

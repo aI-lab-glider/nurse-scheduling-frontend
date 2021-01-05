@@ -1,6 +1,6 @@
 import PouchDB from "pouchdb-browser";
 import { ScheduleDataModel } from "../common-models/schedule-data.model";
-import { ScheduleDataActionType } from "../state/reducers/schedule-data.reducer";
+import { ScheduleDataActionCreator } from "../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import {
   PersistanceStoreProvider,
   RevisionFilter,
@@ -22,7 +22,7 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
     type: RevisionType,
     schedule: ScheduleDataModel
   ): ThunkFunction<ScheduleDataModel> {
-    return async (dispatch, getState): Promise<void> => {
+    return async (dispatch): Promise<void> => {
       const id = this.getScheduleId(schedule);
       let revision = "";
       try {
@@ -35,15 +35,13 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
         data: schedule,
         revisionType: type,
       });
-      dispatch({
-        type: ScheduleDataActionType.ADD_NEW,
-        payload: schedule,
-      });
+      const action = ScheduleDataActionCreator.setPersistentSchedule(schedule);
+      dispatch(action);
     };
   }
 
   getScheduleRevision(filter: RevisionFilter): ThunkFunction<ScheduleDataModel> {
-    return async (dispatch, getState): Promise<void> => {
+    return async (dispatch): Promise<void> => {
       const revisions = await this.storage.allDocs({ include_docs: true });
       const result = revisions.rows.find((r) => {
         const { year, month_number } = r.doc?.data.schedule_info ?? {};
@@ -56,10 +54,8 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
       if (!result?.doc) {
         return;
       }
-      dispatch({
-        type: ScheduleDataActionType.ADD_NEW,
-        payload: result.doc.data,
-      });
+      const action = ScheduleDataActionCreator.setPersistentSchedule(result.doc.data);
+      dispatch(action);
     };
   }
 }
