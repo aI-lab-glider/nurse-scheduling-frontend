@@ -3,30 +3,21 @@ import React, { useState } from "react";
 import { Button } from "../../common-components/button-component/button.component";
 import {
   ButtonData,
-  DropdownButtons,
-} from "../../common-components/dropdown-buttons/dropdown-buttons.component";
-import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+  ColorSelector,
+} from "../../common-components/color-selector/color-selector.component";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { KeyboardTimePicker } from "@material-ui/pickers";
-import {
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  Grid,
-  Typography,
-} from "@material-ui/core";
-import classes from "*.module.css";
+import { FormControl, RadioGroup, FormControlLabel, Radio } from "@material-ui/core";
 
 export default function ShiftEditDrower(): JSX.Element {
   const btnData1: ButtonData = {
     action: (): void => console.log("Color1"),
-    label: "Color1",
+    label: "pracujące",
   };
   const btnData2: ButtonData = {
     action: (): void => console.log("Color2"),
-    label: "Color2",
+    label: "niepracujące",
   };
 
   const btnData = [btnData1, btnData2];
@@ -47,7 +38,6 @@ export default function ShiftEditDrower(): JSX.Element {
         <h4>Nazwa zmiany</h4>
         <TextField type="text" placeholder="Nazwa zmiany" />
         <br />
-
         <h4>Typ zmiany</h4>
         <FormControl component="fieldset">
           <RadioGroup
@@ -91,12 +81,12 @@ export default function ShiftEditDrower(): JSX.Element {
         <br />
 
         <h4>Kolor zmiany</h4>
-        <DropdownButtons
+        <ColorSelector
           buttons={btnData}
           mainLabel="Wybierz kolory"
           variant="outlined"
           dataCy={"file-dropdown"}
-          position={"top"}
+          position={"bottom"}
         />
         <Button size="small" className="submit-button" variant="primary">
           Dodaj zmianę
