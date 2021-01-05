@@ -30,6 +30,7 @@ export interface WorkerInfoExtendedInterface {
   workerType: WorkerType | undefined;
   contractType: ContractType | undefined;
   employmentTime: string;
+  employmentTimeOther: string;
   civilTime: string;
 }
 
@@ -40,7 +41,8 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     name: info.name,
     workerType: info.type,
     contractType: undefined,
-    employmentTime: " / ",
+    employmentTime: "1/1",
+    employmentTimeOther: " / ",
     civilTime: "0",
   });
 
@@ -66,6 +68,14 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     return {
       label: translateAndCapitalizeContractType(contractType),
       action: (): void => updateWorkerInfo("contractType", contractType),
+    };
+  });
+
+  const contractTimeDrawerOptions = Object.keys(TimeDrawerType).map((timeTypeName) => {
+    const timeType = TimeDrawerType[timeTypeName];
+    return {
+      label: timeType,
+      action: (): void => updateWorkerInfo("employmentTime", timeType),
     };
   });
 
@@ -97,22 +107,35 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <Typography className={classes.label}>Wymiar pracy</Typography>
-            <DropdownButtons
-              data-cy="contract"
-              buttons={contractOptions}
-              mainLabel={
-                workerInfo.contractType
-                  ? translateAndCapitalizeContractType(workerInfo.contractType)
-                  : "Typ umowy"
-              }
-              variant="outlined"
-            />
+            <Grid container>
+              <Grid item>
+                <DropdownButtons
+                  data-cy="contract"
+                  buttons={contractOptions}
+                  mainLabel={
+                    workerInfo.contractType
+                      ? translateAndCapitalizeContractType(workerInfo.contractType)
+                      : "Typ umowy"
+                  }
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item>
+                <DropdownButtons
+                  data-cy="contract-time-dropdown"
+                  buttons={contractTimeDrawerOptions}
+                  mainLabel={workerInfo.employmentTime}
+                  variant="outlined"
+                  disabled={workerInfo.contractType !== ContractType.EMPLOYMENT_CONTRACT}
+                />
+              </Grid>
+            </Grid>
           </Grid>
-          {workerInfo.contractType === ContractType.EMPLOYMENT_CONTRACT && (
+          {workerInfo.contractType === ContractType.CIVIL_CONTRACT && (
             <Grid item xs={6}>
-              <Typography className={classes.label}>Wpisz wymiar etatu</Typography>
+              <Typography className={classes.label}>Ilość godzin</Typography>
               <TextField
                 fullWidth
                 name="civilTime"
@@ -124,22 +147,23 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
               />
             </Grid>
           )}
-          {workerInfo.contractType === ContractType.CIVIL_CONTRACT && (
-            <Grid item xs={6}>
-              <Typography className={classes.label}>Ilość godzin</Typography>
-              <Input
-                fullWidth
-                name="employmentTime"
-                value={workerInfo.employmentTime}
-                onChange={handleUpdate}
-                data-cy="hours-number"
-                inputComponent={
-                  // eslint-disable-next-line
-                  TextMaskCustom as any
-                }
-              />
-            </Grid>
-          )}
+          {workerInfo.contractType === ContractType.EMPLOYMENT_CONTRACT &&
+            workerInfo.employmentTime === TimeDrawerType.OTHER && (
+              <Grid item xs={6}>
+                <Typography className={classes.label}>Wpisz wymiar etatu</Typography>
+                <Input
+                  fullWidth
+                  name="employmentTimeOther"
+                  value={workerInfo.employmentTimeOther}
+                  onChange={handleUpdate}
+                  data-cy="hours-number"
+                  inputComponent={
+                    // eslint-disable-next-line
+                    TextMaskCustom as any
+                  }
+                />
+              </Grid>
+            )}
         </Grid>
       </Grid>
       <Grid item>
