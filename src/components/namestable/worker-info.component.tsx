@@ -1,4 +1,3 @@
-import classNames from "classnames/bind";
 import React from "react";
 import {
   WorkerInfoModel,
@@ -8,6 +7,7 @@ import {
 import { StringHelper } from "../../helpers/string.helper";
 import WorkersCalendar from "../workers-page/workers-calendar/workers-calendar.component";
 import { Divider } from "@material-ui/core";
+import classNames from "classnames/bind";
 
 export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
   return (

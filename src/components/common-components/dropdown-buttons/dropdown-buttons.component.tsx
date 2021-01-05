@@ -40,7 +40,12 @@ export function DropdownButtons({
         {mainLabel}
         <ArrowDropDownIcon />
       </Button>
-      <Popper open={open} placement="bottom" anchorEl={anchorRef.current}>
+      <Popper
+        className="dropdown-buttons-z-index"
+        open={open}
+        placement="bottom"
+        anchorEl={anchorRef.current}
+      >
         <div
           className={`${
             variant === "outlined" ? "display-main-button-outlined" : "display-main-button"
