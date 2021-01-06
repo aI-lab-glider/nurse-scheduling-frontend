@@ -10,7 +10,11 @@ export interface MonthStateModel {
   scheduleErrors?: ScheduleErrorMessageModel[];
 }
 
-export type HistoryStateModel = { [scheduleKey: string]: MonthStateModel };
+export interface MonthHistoryRecord {
+  schedule: ScheduleDataModel;
+}
+
+export type HistoryStateModel = { [scheduleKey: string]: MonthHistoryRecord };
 export interface ApplicationStateModel {
   actualState: MonthStateModel;
   history: HistoryStateModel;

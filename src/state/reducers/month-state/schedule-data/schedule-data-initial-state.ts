@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { MonthInfoModel } from "../../../../common-models/month-info.model";
-import { ScheduleModel } from "../../../../common-models/schedule.model";
+import { ScheduleMetadata } from "../../../../common-models/schedule.model";
 import { ShiftInfoModel } from "../../../../common-models/shift-info.model";
 import { WorkersInfoModel } from "../../../../common-models/worker-info.model";
 
@@ -12,7 +12,7 @@ const monthInfoinitialState: MonthInfoModel = {
   frozen_shifts: [],
   dates: [],
 };
-export const scheduleInfoInitialState: ScheduleModel = {
+export const scheduleInfoInitialState: ScheduleMetadata = {
   daysFromPreviousMonthExists: false,
 };
 export const shiftInfoInitialState: ShiftInfoModel = {};

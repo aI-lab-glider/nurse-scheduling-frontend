@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { ScheduleModel } from "../../../common-models/schedule.model";
+import { ScheduleMetadata } from "../../../common-models/schedule.model";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import {
   ScheduleActionModel,
@@ -16,9 +16,9 @@ let uuid = 0;
 
 export function scheduleInfoReducerF(name: string) {
   return (
-    state: ScheduleModel = scheduleDataInitialState.schedule_info,
+    state: ScheduleMetadata = scheduleDataInitialState.schedule_info,
     action: ScheduleActionModel
-  ): ScheduleModel => {
+  ): ScheduleMetadata => {
     const data = action.payload?.schedule_info;
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):

@@ -5,7 +5,7 @@
 import { ScheduleKey } from "../../../api/persistance-store.model";
 import { MonthInfoModel } from "../../../common-models/month-info.model";
 import { ActionModel } from "../../models/action.model";
-import { copyMonthInfo } from "./schedule-data/common-reducers";
+import { cropMonthInfoToMonth } from "./schedule-data/common-reducers";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import {
   ScheduleActionModel,
@@ -32,7 +32,7 @@ export function monthInfoReducerF(name: string) {
         return { ...data };
       case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
         const { month, year } = action.payload as ScheduleKey;
-        return copyMonthInfo(month, year, state);
+        return cropMonthInfoToMonth(month, year, state);
       default:
         return state;
     }

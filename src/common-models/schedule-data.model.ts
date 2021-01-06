@@ -3,12 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { WorkersInfoModel } from "./worker-info.model";
 import { MonthInfoModel } from "./month-info.model";
-import { ScheduleModel } from "./schedule.model";
+import { ScheduleMetadata } from "./schedule.model";
 import { ShiftInfoModel } from "./shift-info.model";
 import _ from "lodash";
 
 export interface ScheduleDataModel {
-  schedule_info: ScheduleModel;
+  schedule_info: ScheduleMetadata;
   month_info: MonthInfoModel;
   employee_info: WorkersInfoModel;
   shifts: ShiftInfoModel;

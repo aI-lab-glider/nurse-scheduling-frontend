@@ -1,28 +1,22 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import _ from "lodash";
+import * as _ from "lodash";
 import { MonthInfoModel } from "../../../../common-models/month-info.model";
 import { ShiftCode, ShiftInfoModel } from "../../../../common-models/shift-info.model";
 
 export function daysInMonth(month = 0, year = 0): number[] {
-  let day = 1;
-  const result = [day];
-  let date = new Date(year, month, day);
-  while (month === date.getMonth()) {
-    day++;
-    date = new Date(year, month, day);
-    result.push(day);
-  }
-  return result;
+  const dayCount = new Date(year, month + 1, 0).getDate();
+  return _.range(1, dayCount + 1);
 }
-export function copyShiftstoMonth(
+export function cropShiftsToMonth(
   month: number,
   year: number,
-  shifts: ShiftInfoModel
+  shifts: ShiftInfoModel,
+  startFromIndex = 0
 ): ShiftInfoModel {
   const days = daysInMonth(month, year).length;
   const copiedShifts = _.cloneDeep(shifts);
   Object.keys(copiedShifts).forEach((key) => {
-    const values = copiedShifts[key].slice(0, days);
+    const values = copiedShifts[key].slice(startFromIndex, days);
     copiedShifts[key] = values.map((shift) =>
       [ShiftCode.L4, ShiftCode.U, ShiftCode.K].includes(shift) ? ShiftCode.W : shift
     );
@@ -30,15 +24,16 @@ export function copyShiftstoMonth(
   return copiedShifts;
 }
 
-export function copyMonthInfo(
+export function cropMonthInfoToMonth(
   month: number,
   year: number,
-  monthInfo: MonthInfoModel
+  monthInfo: MonthInfoModel,
+  startFromIndex = 0
 ): MonthInfoModel {
   const days = daysInMonth(month, year);
   const copiedInfo: MonthInfoModel = {
-    children_number: monthInfo.children_number?.slice(0, days.length),
-    extra_workers: monthInfo.extra_workers?.slice(0, days.length),
+    children_number: monthInfo.children_number?.slice(startFromIndex, days.length),
+    extra_workers: monthInfo.extra_workers?.slice(startFromIndex, days.length),
     dates: days,
     frozen_shifts: [],
   };

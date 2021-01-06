@@ -6,7 +6,7 @@ import { ScheduleKey } from "../../../api/persistance-store.model";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ShiftInfoModel } from "../../../common-models/shift-info.model";
 import { ActionModel } from "../../models/action.model";
-import { copyShiftstoMonth } from "./schedule-data/common-reducers";
+import { cropShiftsToMonth } from "./schedule-data/common-reducers";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import {
   ScheduleActionModel,
@@ -26,7 +26,7 @@ export function scheduleShiftsInfoReducerF(name: string) {
         return { ...data };
       case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
         const { month, year } = action.payload as ScheduleKey;
-        return copyShiftstoMonth(month, year, state);
+        return cropShiftsToMonth(month, year, state);
 
       default:
         return state;

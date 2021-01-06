@@ -12,7 +12,7 @@ import { ApplicationStateModel } from "../state/models/application-state.model";
 export type ThunkFunction<T> = (
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<T>>,
   getState: () => ApplicationStateModel
-) => Promise<unknown>;
+) => Promise<unknown> | unknown;
 
 export interface ScheduleKey {
   month: number;
