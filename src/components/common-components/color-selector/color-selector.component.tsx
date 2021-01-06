@@ -8,38 +8,16 @@ import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scs
 import { shifts } from "../../../common-models/shift-info.model";
 import { IconButton } from "@material-ui/core";
 
-export interface ButtonData {
-  label: string;
-  action: () => void;
-  dataCy?: string;
-}
-
 interface ColorSelectorOptions {
-  buttons: ButtonData[];
+  shiftType: string;
   mainLabel: string;
   variant?: ButtonVariant;
-  dataCy?: string;
   position?: PopperPlacementType;
+  colorClicker: any;
 }
 
 const useStyles = makeStyles(() =>
   createStyles({
-    root: {
-      padding: "0 0 0 10px",
-      width: "100%",
-    },
-    tableCell: {
-      color: `black`,
-      fontWeight: "normal",
-      fontSize: ScssVars.fontSizeBase,
-      fontFamily: ScssVars.fontFamilyPrimary,
-      letterSpacing: ScssVars.headingLetterSpacing,
-      textAlign: "left",
-      padding: "0 0 0 0",
-    },
-    row: {
-      borderTop: `2px solid ${ScssVars.workerTableBorderColor}`,
-    },
     colorSample: {
       width: "18px",
       height: "18px",
@@ -49,16 +27,32 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export function ColorSelector(
-  this: any,
-  { buttons, mainLabel, variant, dataCy, position }: ColorSelectorOptions
-): JSX.Element {
+export function ColorSelector({
+  shiftType,
+  mainLabel,
+  variant,
+  position,
+  colorClicker,
+}: ColorSelectorOptions): JSX.Element {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const classes = useStyles();
 
-  const worksShifts = Object.values(shifts).filter((shift) => shift.isWorkingShift);
-  const notWorksShifts = Object.values(shifts).filter((shift) => !shift.isWorkingShift);
+  const worksShifts = [
+    "FFD100",
+    "73B471",
+    "00A3FF",
+    "1D3557",
+    "641EAA",
+    "FF77D9",
+    "FFF849",
+    "33FF00",
+    "79E7FF",
+    "FF003D",
+    "B770FF",
+    "FF00B8",
+  ];
+  const notWorksShifts = ["FF8A00", "C60000", "000000", "FFFFFF", "C3A000", "007F87"];
 
   function handleToggle(): void {
     setOpen((prevVal) => !prevVal);
@@ -69,7 +63,7 @@ export function ColorSelector(
   }
   return (
     <div>
-      <Button variant={variant} onClick={handleToggle} ref={anchorRef} data-cy={dataCy}>
+      <Button variant={variant} onClick={handleToggle} ref={anchorRef}>
         {mainLabel}
         <ArrowDropDownIcon />
       </Button>
@@ -93,38 +87,48 @@ export function ColorSelector(
         <ClickAwayListener onClickAway={handleClickAway}>
           <div className="dropdown-buttons-container">
             <div className={"colors"}>
-              <p>pracującę</p>
-              <div className={"shifts-colors"}>
-                {Object.values(worksShifts).map((shift, index) => {
-                  return (
-                    <>
-                      {index !== 0 && index % 6 === 0 && <br>&nbsp;</br>}
-                      <IconButton className={"color-button"} size={"small"}>
-                        <div
-                          className={classes.colorSample}
-                          style={{ backgroundColor: `#${shift.color}` }}
-                        />
-                      </IconButton>
-                    </>
-                  );
-                })}
-              </div>
-              <p>niepracującę</p>
-              <div className={"shifts-colors"}>
-                {Object.values(notWorksShifts).map((shift, index) => {
-                  return (
-                    <>
-                      {index !== 0 && index % 6 === 0 && <br />}
-                      <IconButton className={"color-button"} size={"small"}>
-                        <div
-                          className={classes.colorSample}
-                          style={{ backgroundColor: `#${shift.color}` }}
-                        />
-                      </IconButton>
-                    </>
-                  );
-                })}
-              </div>
+              {shiftType === "working" && (
+                <>
+                  <p>pracującę</p>
+                  <div className={"shifts-colors"}>
+                    {worksShifts.map((color, index) => {
+                      return (
+                        <>
+                          {index !== 0 && index % 6 === 0 && <br />}
+                          <IconButton className={"color-button"} size={"small"}>
+                            <div
+                              className={classes.colorSample}
+                              onClick={(): void => colorClicker(color)}
+                              style={{ backgroundColor: `#${color}` }}
+                            />
+                          </IconButton>
+                        </>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+              {shiftType === "not_working" && (
+                <>
+                  <p>niepracującę</p>
+                  <div className={"shifts-colors"}>
+                    {notWorksShifts.map((color, index) => {
+                      return (
+                        <>
+                          {index !== 0 && index % 6 === 0 && <br />}
+                          <IconButton className={"color-button"} size={"small"}>
+                            <div
+                              className={classes.colorSample}
+                              onClick={(): void => colorClicker(color)}
+                              style={{ backgroundColor: `#${color}` }}
+                            />
+                          </IconButton>
+                        </>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </ClickAwayListener>

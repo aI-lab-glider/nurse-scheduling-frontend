@@ -1,27 +1,14 @@
 import TextField from "@material-ui/core/TextField";
 import React, { useState } from "react";
 import { Button } from "../../common-components/button-component/button.component";
-import {
-  ButtonData,
-  ColorSelector,
-} from "../../common-components/color-selector/color-selector.component";
+import { ColorSelector } from "../../common-components/color-selector/color-selector.component";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { KeyboardTimePicker } from "@material-ui/pickers";
 import { FormControl, RadioGroup, FormControlLabel, Radio } from "@material-ui/core";
+import { Shift } from "../../../common-models/shift-info.model";
 
 export default function ShiftEditDrower(): JSX.Element {
-  const btnData1: ButtonData = {
-    action: (): void => console.log("Color1"),
-    label: "pracujące",
-  };
-  const btnData2: ButtonData = {
-    action: (): void => console.log("Color2"),
-    label: "niepracujące",
-  };
-
-  const btnData = [btnData1, btnData2];
-
   const [valueTimeStart, onChangeTimeStart] = useState<Date | null>(
     new Date("2021-01-01T23:00:00.000Z")
   );
@@ -31,6 +18,14 @@ export default function ShiftEditDrower(): JSX.Element {
   const [value, setValue] = useState("working");
   const handleChange = (event) => {
     setValue(event.target.value);
+  };
+
+  const [colorPicked, setPicked] = useState("000000");
+  const colorClicked = (event: string) => setPicked(event);
+
+  const [newShift, setShift] = useState<Shift | null>(null);
+  const setNewShift = (event: Shift) => {
+    setShift(event);
   };
   return (
     <>
@@ -82,13 +77,21 @@ export default function ShiftEditDrower(): JSX.Element {
 
         <h4>Kolor zmiany</h4>
         <ColorSelector
-          buttons={btnData}
+          shiftType={value}
           mainLabel="Wybierz kolory"
           variant="outlined"
-          dataCy={"file-dropdown"}
           position={"bottom"}
+          colorClicker={colorClicked}
         />
-        <Button size="small" className="submit-button" variant="primary">
+        <Button
+          size="small"
+          className="submit-button"
+          variant="primary"
+          onClick={(): void => {
+            setNewShift({ code: "", name: "", from: 0, to: 12, color: colorPicked });
+            console.log(newShift);
+          }}
+        >
           Dodaj zmianę
         </Button>
       </div>
