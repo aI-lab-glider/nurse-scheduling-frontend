@@ -4,68 +4,52 @@ import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
 import ErrorLoader from "./error-loader.component";
+import { NetworkErrorCode } from "../../../common-models/schedule-error.model";
 
 export interface ValidationDrawerOptions {
   open: boolean;
   setOpen: (boolean) => void;
 }
 
-export enum errorLoaderState {
+export enum ErrorLoaderState {
   CHECKING = "CHECKING",
   NOERRORS = "NOERRORS",
   ERRORS = "ERRORS",
   CONNECTIONFAILED = "CONNECTIONFAILED",
 }
 
-export interface CheckingStateProps {
-  state: errorLoaderState.CHECKING;
+export interface ValidationDrawerState {
+  state: ErrorLoaderState;
   message: string;
 }
 
-export interface ErrorsStateProps {
-  state: errorLoaderState.ERRORS;
-  message: string;
-}
-
-export interface NoErrorsStateProps {
-  state: errorLoaderState.NOERRORS;
-  message: string;
-}
-
-export interface ConnectionFailedStateProps {
-  state: errorLoaderState.CONNECTIONFAILED;
-  message: string;
-}
-
-export type Props =
-  | CheckingStateProps
-  | ErrorsStateProps
-  | NoErrorsStateProps
-  | ConnectionFailedStateProps;
+export type Props = ValidationDrawerState;
 
 export default function ValidationDrawerComponent(options: ValidationDrawerOptions): JSX.Element {
   const { open, setOpen } = options;
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
   const [loadingState, setLoadingState] = useState<Props>();
+  const [isNetworkError, setIsNetworkError] = useState(false);
   const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   useEffect(() => {
-    const spinner: CheckingStateProps = {
-      state: errorLoaderState.CHECKING,
+    const spinner = {
+      state: ErrorLoaderState.CHECKING,
       message: "Spinner",
     };
-    const failed: ConnectionFailedStateProps = {
-      state: errorLoaderState.CONNECTIONFAILED,
-      message: "Connection failed",
-    };
-    const errorsFound: ErrorsStateProps = {
-      state: errorLoaderState.ERRORS,
+    const errorsFound = {
+      state: ErrorLoaderState.ERRORS,
       message: "Errors found",
     };
-    const noErrors: NoErrorsStateProps = {
-      state: errorLoaderState.NOERRORS,
+    const noErrors = {
+      state: ErrorLoaderState.NOERRORS,
       message: "No errors found",
     };
+    if (
+      scheduleErrors?.includes({ kind: NetworkErrorCode.NETWORK_ERROR, message: "Błąd połączenia" })
+    ) {
+      setIsNetworkError(true);
+    }
     if (scheduleErrors) {
       if (scheduleErrors.length > 0) {
         setMappedErrors(scheduleErrors);
@@ -75,7 +59,6 @@ export default function ValidationDrawerComponent(options: ValidationDrawerOptio
       }
     } else {
       setLoadingState(spinner);
-      setLoadingState(failed);
     }
   }, [scheduleErrors]);
 
@@ -91,7 +74,7 @@ export default function ValidationDrawerComponent(options: ValidationDrawerOptio
       onClose={(): void => closeDrawer()}
       anchor="right"
     >
-      <ErrorLoader state={loadingState} errors={mappedErrors} />
+      <ErrorLoader state={loadingState} errors={mappedErrors} isNetworkError={isNetworkError} />
     </Drawer>
   );
 }

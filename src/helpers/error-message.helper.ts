@@ -5,6 +5,7 @@ import {
 import {
   AlgorithmErrorCode,
   InputFileErrorCode,
+  NetworkErrorCode,
   ParseErrorCode,
   ScheduleError,
 } from "../common-models/schedule-error.model";
@@ -90,6 +91,9 @@ export class ErrorMessageHelper {
         break;
       case InputFileErrorCode.NO_CHILDREN_QUANTITY:
         message = "Błąd podczas wczytywania pliku wejściowego: Nie podano liczby dzieci";
+        break;
+      case NetworkErrorCode.NETWORK_ERROR:
+        message = "Błąd połączenia";
         break;
       default:
         message = "Nieznany błąd";
