@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import {
   Box,
   Divider,
@@ -10,6 +13,7 @@ import { MdClose } from "react-icons/md";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import classNames from "classnames";
 
 const useStyles = makeStyles({
   drawer: {
@@ -20,6 +24,9 @@ const useStyles = makeStyles({
     paddingLeft: 24,
     paddingRight: 24,
     paddingBottom: 15,
+  },
+  fullHeight: {
+    height: "100%",
   },
   exitButton: {
     margin: "-7px -8px",
@@ -57,7 +64,11 @@ export default function Drawer(options: DrawerOptions): JSX.Element {
           <h1 className={classes.title}>{title}</h1>
         </Grid>
         <Grid item>
-          <IconButton className={classes.exitButton} onClick={(): void => setOpen(false)}>
+          <IconButton
+            className={classes.exitButton}
+            data-cy="exit-drawer"
+            onClick={(): void => setOpen(false)}
+          >
             <MdClose />
           </IconButton>
         </Grid>
@@ -65,7 +76,7 @@ export default function Drawer(options: DrawerOptions): JSX.Element {
 
       <Divider />
 
-      <Box className={classes.drawerContentMargin}>{children}</Box>
+      <Box className={classNames(classes.drawerContentMargin, classes.fullHeight)}>{children}</Box>
     </MaterialDrawer>
   );
 }

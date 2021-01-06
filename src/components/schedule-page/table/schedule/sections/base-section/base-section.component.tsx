@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useContext, useState } from "react";
 import { BaseCellComponent, PivotCell } from "../../schedule-parts/base-cell/base-cell.component";
 import { BaseRowComponent } from "../../schedule-parts/base-row.component";
