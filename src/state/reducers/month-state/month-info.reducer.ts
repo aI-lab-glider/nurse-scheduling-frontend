@@ -13,17 +13,18 @@ export function monthInfoReducerF(name: string) {
 
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
+      case createActionName(name, ScheduleActionType.UPDATE):
         if (!data) {
           return state;
         }
-        return { ...state, ...data };
+        return { ...data };
+
       case createActionName(name, ScheduleActionType.COPY_FROM_MONTH):
         // eslint-disable-next-line @typescript-eslint/camelcase
         const { month_number, year } = (action.payload as unknown) as {
           month_number: number;
           year: number;
         };
-
         return copyMonthInfo(month_number, year, state);
       default:
         return state;
