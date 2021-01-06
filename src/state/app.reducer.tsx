@@ -1,31 +1,34 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 import { combineReducers } from "redux";
-import { ActionModel } from "./models/action.model";
-import { ApplicationStateModel, MonthStateModel } from "./models/application-state.model";
-import { scheduleErrorsReducer } from "./reducers/month-state/schedule-errors.reducer";
 import undoable from "redux-undo";
+import { ActionModel } from "./models/action.model";
+import { MonthStateModel, ApplicationStateModel } from "./models/application-state.model";
 import { historyReducer } from "./reducers/history.reducer";
 import {
-  persistentScheduleReducer,
   PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
-} from "./reducers/month-state/schedule-data/persistent-schedule.reducer";
-import {
-  temporaryScheduleReducer,
   TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
-} from "./reducers/month-state/schedule-data/temporary-schedule.reducer";
+} from "./reducers/month-state/schedule-data/schedule.actions";
+import { scheduleReducerF } from "./reducers/month-state/schedule-data/schedule.reducer";
+import { scheduleErrorsReducer } from "./reducers/month-state/schedule-errors.reducer";
 
 export type CombinedReducers<StateModel> = {
   [key in keyof StateModel]: <T, U>(state: T, action: ActionModel<U>) => T;
 };
 
+export const PERSISTENT_SCHEDULE_NAME: ScheduleActionDestination = "PERSISTENT";
+export const TEMPORARY_SCHEDULE_NAME: ScheduleActionDestination = "TEMPORARY";
+
+export type ScheduleActionDestination = "PERSISTENT" | "TEMPORARY";
+
 const monthStateReducer = combineReducers({
-  persistentSchedule: undoable(persistentScheduleReducer, {
+  persistentSchedule: undoable(scheduleReducerF(PERSISTENT_SCHEDULE_NAME), {
     limit: 50,
     ...PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
   }),
-  temporarySchedule: undoable(temporaryScheduleReducer, {
+  temporarySchedule: undoable(scheduleReducerF(TEMPORARY_SCHEDULE_NAME), {
     limit: 50,
     ...TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
   }),

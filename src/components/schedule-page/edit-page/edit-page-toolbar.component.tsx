@@ -14,7 +14,7 @@ import UndoIcon from "@material-ui/icons/Undo";
 import RedoIcon from "@material-ui/icons/Redo";
 import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
 import { UndoActionCreator } from "../../../state/reducers/undoable.action-creator";
-import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/temporary-schedule.reducer";
+import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;

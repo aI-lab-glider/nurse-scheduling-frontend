@@ -8,7 +8,7 @@ import { ScheduleComponent } from "../table/schedule/schedule.component";
 import { ScheduleLogicContext, useScheduleState } from "../table/schedule/use-schedule-state";
 import { EditPageToolbar } from "./edit-page-toolbar.component";
 import { UndoableHotkeys } from "../../common-components";
-import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/temporary-schedule.reducer";
+import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
 
 interface ScheduleEditPageOptions {
   closeEdit: () => void;
