@@ -5,24 +5,26 @@ import { scheduleErrorsReducer } from "./reducers/month-state/schedule-errors.re
 import undoable from "redux-undo";
 import { historyReducer } from "./reducers/history.reducer";
 import {
-  persistentScheduleReducer,
   PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
+  scheduleReducerF,
 } from "./reducers/month-state/schedule-data/persistent-schedule.reducer";
-import {
-  temporaryScheduleReducer,
-  TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
-} from "./reducers/month-state/schedule-data/temporary-schedule.reducer";
+import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "./reducers/month-state/schedule-data/temporary-schedule.reducer";
 
 export type CombinedReducers<StateModel> = {
   [key in keyof StateModel]: <T, U>(state: T, action: ActionModel<U>) => T;
 };
 
+export const PERSISTENT_SCHEDULE_NAME: ScheduleActionDestination = "PERSISTENT";
+export const TEMPORARY_SCHEDULE_NAME: ScheduleActionDestination = "TEMPORARY";
+
+export type ScheduleActionDestination = "PERSISTENT" | "TEMPORARY";
+
 const monthStateReducer = combineReducers({
-  persistentSchedule: undoable(persistentScheduleReducer, {
+  persistentSchedule: undoable(scheduleReducerF(PERSISTENT_SCHEDULE_NAME), {
     limit: 50,
     ...PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
   }),
-  temporarySchedule: undoable(temporaryScheduleReducer, {
+  temporarySchedule: undoable(scheduleReducerF(TEMPORARY_SCHEDULE_NAME), {
     limit: 50,
     ...TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
   }),

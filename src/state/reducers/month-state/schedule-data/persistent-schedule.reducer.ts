@@ -9,11 +9,11 @@ import { ApplicationStateModel } from "../../../models/application-state.model";
 import { ActionModel } from "../../../models/action.model";
 import { combineReducers } from "redux";
 
-import { CombinedReducers } from "../../../app.reducer";
-import { employeeInfoReducer } from "../employee-info.reducer";
-import { persistentScheduleMonthInfoReducer } from "../month-info.reducer";
-import { scheduleInfoReducer } from "../schedule-info.reducer";
-import { persistenScheduletShiftsInfoReducer } from "../shifts-info.reducer";
+import { CombinedReducers, TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
+import { scheduleInfoReducerF } from "../schedule-info.reducer";
+import { scheduleShiftsInfoReducerF } from "../shifts-info.reducer";
+import { monthInfoReducerF } from "../month-info.reducer";
+import { employeeInfoReducerF } from "../employee-info.reducer";
 
 async function updatePersistentSchedule(
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<ScheduleDataModel>>,
@@ -21,7 +21,8 @@ async function updatePersistentSchedule(
 ): Promise<void> {
   const storeProvider = new LocalStorageProvider();
   storeProvider.saveScheduleRevision("actual", state);
-  state && (await dispatch(ScheduleDataActionCreator.setTemporarySchedule(state)));
+  state &&
+    (await dispatch(ScheduleDataActionCreator.addNewSchedule(TEMPORARY_SCHEDULE_NAME, state)));
 }
 
 export const PERSISTENT_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {
@@ -39,9 +40,12 @@ export const PERSISTENT_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataMod
   },
 };
 
-export const persistentScheduleReducer = combineReducers({
-  schedule_info: scheduleInfoReducer,
-  shifts: persistenScheduletShiftsInfoReducer,
-  month_info: persistentScheduleMonthInfoReducer,
-  employee_info: employeeInfoReducer,
-} as CombinedReducers<ScheduleDataModel>);
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function scheduleReducerF(name: string) {
+  return combineReducers({
+    schedule_info: scheduleInfoReducerF(name),
+    shifts: scheduleShiftsInfoReducerF(name),
+    month_info: monthInfoReducerF(name),
+    employee_info: employeeInfoReducerF(name),
+  } as CombinedReducers<ScheduleDataModel>);
+}
