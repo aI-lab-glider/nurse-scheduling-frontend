@@ -1,29 +1,32 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+import { ScheduleKey } from "../../../api/persistance-store.model";
+import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ShiftInfoModel } from "../../../common-models/shift-info.model";
+import { ActionModel } from "../../models/action.model";
+import { copyShiftstoMonth } from "./schedule-data/common-reducers";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
-import { ScheduleActionType } from "./schedule-data/temporary-schedule.reducer";
-import { ScheduleActionModel } from "./schedule-data/schedule-data.action-creator";
-import { copyShiftstoMonth, createActionName } from "./schedule-data/common-reducers";
+import {
+  ScheduleActionModel,
+  createActionName,
+  ScheduleActionType,
+} from "./schedule-data/schedule.actions";
 
 export function scheduleShiftsInfoReducerF(name: string) {
   return (
     state: ShiftInfoModel = scheduleDataInitialState.shifts,
-    action: ScheduleActionModel
+    action: ScheduleActionModel | ActionModel<ScheduleKey>
   ): ShiftInfoModel => {
-    const data = action.payload?.shifts;
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
       case createActionName(name, ScheduleActionType.UPDATE):
+        const data = (action.payload as ScheduleDataModel)?.shifts;
         return { ...data };
-      case createActionName(name, ScheduleActionType.COPY_FROM_MONTH):
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        const { month_number, year } = (action.payload as unknown) as {
-          month_number: number;
-          year: number;
-        };
-        return copyShiftstoMonth(month_number, year, state);
+      case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
+        const { month, year } = action.payload as ScheduleKey;
+        return copyShiftstoMonth(month, year, state);
 
       default:
         return state;

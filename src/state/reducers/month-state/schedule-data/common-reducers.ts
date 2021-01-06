@@ -2,7 +2,6 @@
 import _ from "lodash";
 import { MonthInfoModel } from "../../../../common-models/month-info.model";
 import { ShiftCode, ShiftInfoModel } from "../../../../common-models/shift-info.model";
-import { ScheduleActionType } from "./temporary-schedule.reducer";
 
 export function daysInMonth(month = 0, year = 0): number[] {
   let day = 1;
@@ -44,8 +43,4 @@ export function copyMonthInfo(
     frozen_shifts: [],
   };
   return copiedInfo;
-}
-
-export function createActionName(name: string, action: ScheduleActionType): string {
-  return `${name}/${action}`;
 }

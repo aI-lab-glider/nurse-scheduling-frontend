@@ -1,19 +1,17 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { ThunkFunction } from "../../../../api/persistance-store.model";
+import { ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
 import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 import {
   PERSISTENT_SCHEDULE_NAME,
   ScheduleActionDestination,
   TEMPORARY_SCHEDULE_NAME,
 } from "../../../app.reducer";
-import { ActionModel } from "../../../models/action.model";
+import { MonthStateModel } from "../../../models/application-state.model";
 import { HistoryReducerActionCreator } from "../../history.reducer";
-import { createActionName } from "./common-reducers";
-import { ScheduleActionType } from "./temporary-schedule.reducer";
+import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 
-export type ScheduleActionModel = ActionModel<ScheduleDataModel>;
 export class ScheduleDataActionCreator {
   static setPersistentSchedule(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
@@ -28,22 +26,21 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static copyPreviousMonth(): ThunkFunction<unknown> {
+  static copyPreviousMonth(): ThunkFunction<ScheduleKey | MonthStateModel> {
     return async (dispatch, getState): Promise<void> => {
       const actualSchedule = getState().actualState;
-      // eslint-disable-next-line @typescript-eslint/camelcase
       const historyAction = HistoryReducerActionCreator.addToHistory(actualSchedule);
-
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
-      const nextMonth =
-        ((actualSchedule.temporarySchedule.present.schedule_info.month_number ?? 0) + 1) % 12;
+      const {
+        month_number: currentMonth = 0,
+        year = new Date().getFullYear(),
+      } = actualSchedule.temporarySchedule.present.schedule_info;
       destinations.forEach((destination) => {
         const action = {
-          type: createActionName(destination, ScheduleActionType.COPY_FROM_MONTH),
+          type: createActionName(destination, ScheduleActionType.COPY_TO_MONTH),
           payload: {
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            month_number: nextMonth,
-            year: actualSchedule.temporarySchedule.present.schedule_info.year,
+            month: (currentMonth + 1) % 12,
+            year: currentMonth === 11 ? year + 1 : year,
           },
         };
         dispatch(action);

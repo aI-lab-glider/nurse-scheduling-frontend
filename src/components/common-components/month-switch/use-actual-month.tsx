@@ -21,7 +21,5 @@ export function useActualMonth(): string {
       setActualMonth(month);
     }
   }, [month_number, year]);
-
-  // let actualMonth = "";
   return actualMonth;
 }

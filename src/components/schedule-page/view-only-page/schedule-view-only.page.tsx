@@ -8,7 +8,7 @@ import { ScheduleComponent } from "../table/schedule/schedule.component";
 import { ScheduleLogicContext, useScheduleState } from "../table/schedule/use-schedule-state";
 import { ViewOnlyToolbar } from "./view-only-toolbar";
 import { UndoableHotkeys } from "../../common-components";
-import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/persistent-schedule.reducer";
+import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
 
 interface ScheduleViewOnlyPageOptions {
   openEdit: () => void;
