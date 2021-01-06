@@ -34,7 +34,7 @@ const testCases: TestCase[] = [
   },
 ];
 
-function performShiftChanges(testCase) {
+function performShiftChanges(testCase: TestCase): void {
   cy.changeWorkerShift({ ...testCase.testedShiftCell, newShiftCode: testCase.firstShift });
   cy.changeWorkerShift({ ...testCase.testedShiftCell, newShiftCode: testCase.secondShift });
 }
