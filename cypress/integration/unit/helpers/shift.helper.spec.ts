@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ShiftHelper } from "../../../../src/helpers/shifts.helper";
 import { ShiftCode, ShiftInfoModel } from "../../../../src/common-models/shift-info.model";
 import { VerboseDate, WeekDay } from "../../../../src/common-models/month-info.model";

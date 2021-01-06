@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /// <reference path="../../../support/index.d.ts" />
 
 import { WorkerType } from "../../../../src/common-models/worker-info.model";
@@ -31,7 +34,7 @@ const testCases: TestCase[] = [
   },
 ];
 
-function performShiftChanges(testCase) {
+function performShiftChanges(testCase: TestCase): void {
   cy.changeWorkerShift({ ...testCase.testedShiftCell, newShiftCode: testCase.firstShift });
   cy.changeWorkerShift({ ...testCase.testedShiftCell, newShiftCode: testCase.secondShift });
 }

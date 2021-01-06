@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { VerboseDate } from "./month-info.model";
 import { ShiftCode } from "./shift-info.model";
 
@@ -13,6 +16,22 @@ export class WorkerTypeHelper {
         return pluralize ? "pielęgniarki" : "pielęgniarka";
       case WorkerType.OTHER:
         return pluralize ? "opiekunki" : "opiekunka";
+    }
+  }
+}
+
+export enum ContractType {
+  EMPLOYMENT_CONTRACT = "EMPLOYMENT_CONTRACT",
+  CIVIL_CONTRACT = "CIVIL_CONTRACT",
+}
+
+export class ContractTypeHelper {
+  static translate(type: ContractType): string {
+    switch (type) {
+      case ContractType.EMPLOYMENT_CONTRACT:
+        return "umowa o pracę";
+      case ContractType.CIVIL_CONTRACT:
+        return "umowa zlecenie";
     }
   }
 }

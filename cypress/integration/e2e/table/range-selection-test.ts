@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { GetWorkerShiftOptions } from "../../../support/commands";
 import { WorkerType } from "../../../../src/common-models/worker-info.model";
 import { ShiftCode } from "../../../../src/common-models/shift-info.model";
@@ -144,6 +147,7 @@ const foundationTestCases: FoundationTestCase[] = [
   },
 ];
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function validateHorizontalShifts(
   workerType: WorkerType,
   workerIdx: number,
@@ -161,6 +165,7 @@ function validateHorizontalShifts(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function validateVerticalShifts(
   workerType: WorkerType,
   shiftIdx: number,
@@ -178,6 +183,7 @@ function validateVerticalShifts(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function validateChange({ startShiftCell, endShiftCell, desiredShiftCode }: WorkerTestCase) {
   const {
     workerType: startWorkerType,

@@ -1,7 +1,11 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import Drawer, { DrawerOptions } from "../../common-components/drawer/drawer.component";
 import { WorkerInfoModel } from "../../../common-models/worker-info.model";
 import { WorkerInfoComponent } from "../../namestable/worker-info.component";
+import { WorkerEditComponent } from "../../namestable/worker-edit.component";
 
 export enum WorkerDrawerMode {
   EDIT,
@@ -29,9 +33,10 @@ export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX
   const { mode, worker, setOpen, ...otherOptions } = options;
   const title = getTitle(mode);
   const isInfo = mode === WorkerDrawerMode.INFO;
+  const isEdit = mode === WorkerDrawerMode.EDIT;
   return (
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>
-      {worker && <h1>{worker.name}</h1>}
+      {isEdit && worker && <WorkerEditComponent {...worker} />}
 
       {isInfo && WorkerInfoComponent(worker ?? { name: "", time: 0 })}
     </Drawer>

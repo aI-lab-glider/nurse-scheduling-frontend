@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState, useRef } from "react";
 import { Button, ButtonVariant } from "../button-component/button.component";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
@@ -40,7 +43,12 @@ export function DropdownButtons({
         {mainLabel}
         <ArrowDropDownIcon />
       </Button>
-      <Popper open={open} placement="bottom" anchorEl={anchorRef.current}>
+      <Popper
+        className="dropdown-buttons-z-index"
+        open={open}
+        placement="bottom"
+        anchorEl={anchorRef.current}
+      >
         <div
           className={`${
             variant === "outlined" ? "display-main-button-outlined" : "display-main-button"
