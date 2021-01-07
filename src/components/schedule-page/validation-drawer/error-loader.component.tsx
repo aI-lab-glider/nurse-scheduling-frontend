@@ -19,7 +19,7 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
       {options.state?.state === ErrorLoaderState.CHECKING && (
         <div className="error-loading-container">
           <div className="center">
-            <div>SPINNER??</div>
+            <div className="spinner" />
             <div className="error-loading-text">Trwa sprawdzanie planu</div>
           </div>
         </div>

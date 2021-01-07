@@ -9,7 +9,7 @@ export enum ScheduleErrorLevel {
 export interface ScheduleErrorMessageModel {
   kind: string;
   title?: string;
-  message: string;
+  message?: string;
   worker?: string;
   day?: number;
   week?: number;

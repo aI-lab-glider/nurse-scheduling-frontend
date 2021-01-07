@@ -33,7 +33,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
       } catch (err) {
         response = [
           {
-            kind: NetworkErrorCode[err.message as keyof typeof NetworkErrorCode],
+            kind: NetworkErrorCode.NETWORK_ERROR,
           },
         ];
       }

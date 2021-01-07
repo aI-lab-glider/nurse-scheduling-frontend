@@ -45,7 +45,6 @@ interface InputFileError {
 
 export interface NetworkError {
   kind: NetworkErrorCode;
-  message?: string;
 }
 
 export type DayTime = "MORNING" | "AFTERNOON" | "NIGHT";

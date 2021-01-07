@@ -18,7 +18,6 @@ export enum ErrorLoaderState {
   CHECKING = "CHECKING",
   NOERRORS = "NOERRORS",
   ERRORS = "ERRORS",
-  CONNECTIONFAILED = "CONNECTIONFAILED",
 }
 
 export interface ValidationDrawerState {
@@ -48,9 +47,8 @@ export default function ValidationDrawerComponent(options: ValidationDrawerOptio
       state: ErrorLoaderState.NOERRORS,
       message: "No errors found",
     };
-    if (
-      scheduleErrors?.includes({ kind: NetworkErrorCode.NETWORK_ERROR, message: "Błąd połączenia" })
-    ) {
+
+    if (scheduleErrors?.find((element) => element.kind === NetworkErrorCode.NETWORK_ERROR)) {
       setIsNetworkError(true);
     }
     if (scheduleErrors) {
@@ -58,10 +56,10 @@ export default function ValidationDrawerComponent(options: ValidationDrawerOptio
         setMappedErrors(scheduleErrors);
         setLoadingState(errorsFound);
       } else {
-        setLoadingState(noErrors);
+        setLoadingState(spinner);
       }
     } else {
-      setLoadingState(spinner);
+      setLoadingState(noErrors);
     }
   }, [scheduleErrors]);
 

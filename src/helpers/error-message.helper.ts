@@ -97,6 +97,7 @@ export class ErrorMessageHelper {
         break;
       case NetworkErrorCode.NETWORK_ERROR:
         message = "Błąd połączenia";
+        title = "Błąd połączenia";
         break;
       default:
         message = "Nieznany błąd";
