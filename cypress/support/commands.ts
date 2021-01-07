@@ -17,7 +17,6 @@ export interface CheckWorkerShiftOptions extends GetWorkerShiftOptions {
 export interface ChangeWorkerShiftOptions extends GetWorkerShiftOptions {
   newShiftCode: ShiftCode;
 }
-
 export interface CheckHoursInfoOptions {
   workerType: WorkerType;
   workerIdx: number;
@@ -33,11 +32,12 @@ export enum HoursInfoCells {
   actual = 1,
   overtime = 2,
 }
+export type ScheduleName = "example.xlsx" | "grafik.xlsx" | "example_2.xlsx";
 
-Cypress.Commands.add("loadSchedule", () => {
+Cypress.Commands.add("loadSchedule", (scheduleName: ScheduleName = "example.xlsx") => {
   cy.visit(Cypress.env("baseUrl"));
   cy.get("[data-cy=file-dropdown]").click();
-  cy.get('[data-cy="file-input"]').attachFile("example.xlsx");
+  cy.get('[data-cy="file-input"]').attachFile(scheduleName);
   cy.get(`[data-cy=nurseShiftsTable]`, { timeout: 10000 });
   cy.window()
     .its("store")
@@ -104,7 +104,16 @@ Cypress.Commands.add(
   }
 );
 
+Cypress.Commands.add("saveToDatabase", () => {
+  return cy.get("[data-cy=save-schedule-button").click();
+});
+
 Cypress.Commands.add("enterEditMode", () => {
   cy.get("[data-cy=edit-mode-button]").click();
+  return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
+});
+
+Cypress.Commands.add("leaveEditMode", () => {
+  cy.get("[data-cy=leave-edit-mode]").click();
   return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
 });

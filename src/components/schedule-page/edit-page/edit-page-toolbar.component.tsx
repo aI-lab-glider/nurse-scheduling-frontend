@@ -99,7 +99,13 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
         </Button>
 
         <Link to="/">
-          <Button onClick={closeEdit} size="small" className="submit-button" variant="primary">
+          <Button
+            onClick={closeEdit}
+            size="small"
+            className="submit-button"
+            variant="primary"
+            data-cy="leave-edit-mode"
+          >
             Wyjdź
           </Button>
         </Link>

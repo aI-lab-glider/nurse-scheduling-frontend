@@ -1,12 +1,37 @@
+import { ShiftCode } from "../../../../src/common-models/shift-info.model";
+import { WorkerType } from "../../../../src/common-models/worker-info.model";
+
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-context("Load Exported Schedule", () => {
+context("Load schedule", () => {
   before(() => {
     cy.loadSchedule();
   });
+  it("Shoud be able to save file to database and after that load new schedule", () => {
+    const cell = {
+      workerType: WorkerType.NURSE,
+      workerIdx: 0,
+      shiftIdx: 0,
+    };
+    cy.loadSchedule("example.xlsx");
+    cy.checkWorkerShift({
+      ...cell,
+      desiredShiftCode: ShiftCode.DN,
+    });
+    cy.enterEditMode();
+    cy.saveToDatabase();
+    cy.leaveEditMode();
+    cy.loadSchedule("example_2.xlsx");
+    cy.checkWorkerShift({
+      ...cell,
+      desiredShiftCode: ShiftCode.N,
+    });
+  });
 
   it("Should be able to save file and load the exported file", () => {
+    cy.loadSchedule();
+
     cy.get("[data-cy=export-schedule-button]").click();
 
     cy.get("a[download]")
