@@ -5,9 +5,21 @@ import { WorkerType } from "../../../../src/common-models/worker-info.model";
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 context("Load schedule", () => {
-  before(() => {
-    cy.loadSchedule();
+  it("Shoud be able to load schedule after clicking save with  empty state to database", () => {
+    cy.visit(Cypress.env("baseUrl"));
+    cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 }).should("not.exist");
+    cy.get("[data-cy=edit-mode-button]").click();
+    cy.saveToDatabase();
+    cy.get("[data-cy=leave-edit-mode]").click();
+    cy.loadSchedule("example_2.xlsx");
+    cy.checkWorkerShift({
+      workerType: WorkerType.NURSE,
+      workerIdx: 0,
+      shiftIdx: 0,
+      desiredShiftCode: ShiftCode.N,
+    });
   });
+
   it("Shoud be able to save file to database and after that load new schedule", () => {
     const cell = {
       workerType: WorkerType.NURSE,

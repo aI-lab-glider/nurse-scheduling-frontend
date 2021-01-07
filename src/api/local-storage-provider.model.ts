@@ -12,13 +12,14 @@ import {
   ThunkFunction,
 } from "./persistance-store.model";
 
+export const DATABASE_NAME = "nurse-scheduling";
 /*eslint-disable @typescript-eslint/camelcase */
 export class LocalStorageProvider extends PersistanceStoreProvider {
   private storage: PouchDB.Database<ScheduleRevision>;
 
   constructor() {
     super();
-    this.storage = new PouchDB("nurse-scheduling");
+    this.storage = new PouchDB(DATABASE_NAME);
   }
 
   saveScheduleRevision(
