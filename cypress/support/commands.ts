@@ -2,9 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import "cypress-file-upload";
-import { WorkerType } from "../../src/common-models/worker-info.model";
 import { ShiftCode } from "../../src/common-models/shift-info.model";
-
+import { WorkerType } from "../../src/common-models/worker-info.model";
 export interface GetWorkerShiftOptions {
   workerType: WorkerType;
   workerIdx: number;
