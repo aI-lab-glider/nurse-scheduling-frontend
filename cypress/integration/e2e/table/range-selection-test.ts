@@ -155,13 +155,19 @@ function validateHorizontalShifts(
   endShiftIdx: number,
   desiredShiftCode: ShiftCode
 ) {
-  for (const shiftIdx of _.range(startShiftIdx, endShiftIdx + 1)) {
-    cy.checkWorkerShift({
+  cy.checkWorkerShift({
+    workerType,
+    workerIdx,
+    shiftIdx: startShiftIdx,
+    desiredShiftCode,
+  });
+  for (const shiftIdx of _.range(startShiftIdx + 1, endShiftIdx + 1)) {
+    cy.getWorkerShift({
       workerType,
       workerIdx,
       shiftIdx,
-      desiredShiftCode,
-    });
+      selector: "highlighted-cell",
+    }).should("have.class", `keepOntrue${desiredShiftCode}`);
   }
 }
 
