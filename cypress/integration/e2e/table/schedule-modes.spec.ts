@@ -7,7 +7,7 @@ import { WorkerType } from "../../../../src/common-models/worker-info.model";
 const testedCell = {
   workerType: WorkerType.NURSE,
   workerIdx: 0,
-  shiftIdx: 6,
+  shiftIdx: 4,
   initialShiftCode: ShiftCode.U,
   desiredShiftCode: ShiftCode.W,
 };
