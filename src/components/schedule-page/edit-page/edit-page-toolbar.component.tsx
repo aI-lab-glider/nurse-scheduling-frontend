@@ -1,8 +1,11 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import backend from "../../../api/backend";
-import { ScheduleError } from "../../../common-models/schedule-error.model";
+import { NetworkErrorCode, ScheduleError } from "../../../common-models/schedule-error.model";
 import { ActionModel } from "../../../state/models/action.model";
 import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
 import { Button } from "../../common-components";
@@ -11,7 +14,7 @@ import UndoIcon from "@material-ui/icons/Undo";
 import RedoIcon from "@material-ui/icons/Redo";
 import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
 import { UndoActionCreator } from "../../../state/reducers/undoable.action-creator";
-import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/temporary-schedule.reducer";
+import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;
@@ -27,8 +30,12 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
       let response: ScheduleError[];
       try {
         response = await backend.getErrors(schedule);
-      } catch {
-        response = [];
+      } catch (err) {
+        response = [
+          {
+            kind: NetworkErrorCode.NETWORK_ERROR,
+          },
+        ];
       }
       dispatcher({
         type: ScheduleErrorActionType.UPDATE,

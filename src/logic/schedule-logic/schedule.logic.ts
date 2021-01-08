@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ThunkDispatch } from "redux-thunk";
 import { PersistanceStoreProvider, RevisionFilter } from "../../api/persistance-store.model";
 import { ScheduleDataModel } from "../../common-models/schedule-data.model";
@@ -6,10 +9,8 @@ import { SelectionMatrix } from "../../components/schedule-page/table/schedule/s
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
-import {
-  ScheduleActionModel,
-  ScheduleDataActionCreator,
-} from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { ScheduleActionModel } from "../../state/reducers/month-state/schedule-data/schedule.actions";
 import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
 import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
 import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../section.model";
