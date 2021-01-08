@@ -33,14 +33,17 @@ context("Tab 'zarządzanie'", () => {
       it("Should properly render conditional sections", () => {
         cy.get(".btn-primary").contains("Umowa o pracę").click();
         cy.get(".btn-outlined").contains("Umowa o pracę");
+        cy.get(".btn-outlined").contains("1/1").click();
+        cy.get(".btn-primary").contains("inne").click();
         cy.contains("Wpisz wymiar etatu");
+        cy.get(".btn-outlined").contains("Umowa o pracę").click();
         cy.get(".btn-primary").contains("Umowa zlecenie").click();
         cy.get(".btn-outlined").contains("Umowa zlecenie");
         cy.contains("Ilość godzin");
       });
 
       it("Should properly handle number of hours when employment contract", () => {
-        cy.get(".btn-primary").contains("Umowa o pracę").click();
+        cy.get(".btn-primary").contains("Umowa zlecenie").click();
         cy.get('[data-cy="civilTime"] input').clear({ force: true }).type("123");
         cy.get(".btn-outlined").contains("Opiekunka").click(); // unclick
         cy.get('[value="123"]').should("be.visible");
