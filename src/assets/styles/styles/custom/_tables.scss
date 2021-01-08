@@ -47,6 +47,11 @@
         cursor: default !important;
       }
 
+      .wrapContent {
+        height: 100% !important;
+        width: 100%;
+      }
+
       .content {
         display: flex;
         justify-content: flex-start;
@@ -256,6 +261,8 @@ span {
 
 p {
   &.relative {
+    min-width: 10px;
+    min-height: 10px;
     position: relative;
   }
 }

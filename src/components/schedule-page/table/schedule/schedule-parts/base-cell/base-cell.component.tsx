@@ -152,51 +152,53 @@ export function BaseCellComponent({
         onBlur?.();
       }}
     >
-      <div className={"content " + hasNextClass + " " + keepOnClass} ref={drag}>
-        {isPointerOn && !isBlocked && (
-          <InputComponent
-            className="cell-input"
-            onValueChange={(value): void => _onValueChange(value)}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
-          />
-        )}
+      <div className={"wrapContent"} ref={drag}>
+        <div className={"content " + hasNextClass + " " + keepOnClass}>
+          {isPointerOn && !isBlocked && (
+            <InputComponent
+              className="cell-input"
+              onValueChange={(value): void => _onValueChange(value)}
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
+            />
+          )}
 
-        <Popper
-          ref={tooltipRef}
-          className="errorTooltip"
-          style={styles}
-          {...attributes}
-          data={
-            <div>
-              <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Bład w linii: {rowIndex},
-              pozycji: {index}. Wartość komórki: {value}
-            </div>
-          }
-          isOpen={isToolTipOpen}
-        />
-        <div className={"leftBorder leftBorderColor"} />
-        {(!isPointerOn || (isPointerOn && isBlocked)) && (
-          <p
-            data-cy="cell"
-            className={"relative "}
-            onClick={(): void => {
-              if (!isBlocked) onClick?.();
-            }}
-          >
-            {
-              value === "N" && (
-                <span
-                  onMouseEnter={showErrorTooltip}
-                  onMouseLeave={hideErrorTooltip}
-                  ref={errorTriangle}
-                  className="error-triangle"
-                />
-              ) //todo change to proper error flag
+          <Popper
+            ref={tooltipRef}
+            className="errorTooltip"
+            style={styles}
+            {...attributes}
+            data={
+              <div>
+                <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Bład w linii: {rowIndex}
+                , pozycji: {index}. Wartość komórki: {value}
+              </div>
             }
+            isOpen={isToolTipOpen}
+          />
+          <div className={"leftBorder leftBorderColor"} />
+          {(!isPointerOn || (isPointerOn && isBlocked)) && (
+            <p
+              data-cy="cell"
+              className={"relative "}
+              onClick={(): void => {
+                if (!isBlocked) onClick?.();
+              }}
+            >
+              {
+                value === "N" && (
+                  <span
+                    onMouseEnter={showErrorTooltip}
+                    onMouseLeave={hideErrorTooltip}
+                    ref={errorTriangle}
+                    className="error-triangle"
+                  />
+                ) //todo change to proper error flag
+              }
 
-            {keepOn ? "" : value}
-          </p>
-        )}
+              {keepOn ? "" : value}
+            </p>
+          )}
+        </div>
       </div>
     </td>
   );
