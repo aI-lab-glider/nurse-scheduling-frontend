@@ -19,13 +19,17 @@ export enum CellManagementKeys {
 }
 
 const PivotCellType = "Cell";
+
 export interface PivotCell {
   type: string;
   rowIndex: number;
   cellIndex: number;
 }
+
 export interface BaseCellOptions {
   rowIndex: number;
+  keepOn: boolean;
+  hasNext: boolean;
   index: number;
   value: string;
   style?: CellColorSet;
@@ -47,6 +51,8 @@ export interface BaseCellOptions {
 
 export function BaseCellComponent({
   rowIndex,
+  keepOn,
+  hasNext,
   index,
   value,
   isBlocked,
@@ -66,15 +72,20 @@ export function BaseCellComponent({
   const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
   const errorTriangle = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const keepOnClass = "keepOn" + keepOn + value;
+  const hasNextClass = "hasNext" + hasNext;
 
   const [isToolTipOpen, setToolTipOpen] = useState(false);
   const { styles, attributes } = usePopper(errorTriangle.current, tooltipRef.current);
+
   function showErrorTooltip(): void {
     setToolTipOpen(true);
   }
+
   function hideErrorTooltip(): void {
     setToolTipOpen(false);
   }
+
   const [, drop] = useDrop({
     accept: dragAnDropType,
     collect: (monitor) => {
@@ -110,9 +121,11 @@ export function BaseCellComponent({
     }
     onKeyDown?.(e);
   }
+
   function _onValueChange(newValue: string): void {
     onValueChange?.(newValue);
   }
+
   function getId(): string {
     if (verboseDate && monthNumber) {
       if (verboseDate.month !== TranslationHelper.englishMonths[monthNumber]) {
@@ -139,7 +152,7 @@ export function BaseCellComponent({
         onBlur?.();
       }}
     >
-      <div className="content" ref={drag}>
+      <div className={"content " + hasNextClass + " " + keepOnClass} ref={drag}>
         {isPointerOn && !isBlocked && (
           <InputComponent
             className="cell-input"
@@ -160,12 +173,12 @@ export function BaseCellComponent({
             </div>
           }
           isOpen={isToolTipOpen}
-        ></Popper>
-
+        />
+        <div className={"leftBorder leftBorderColor"} />
         {(!isPointerOn || (isPointerOn && isBlocked)) && (
           <p
             data-cy="cell"
-            className="relative"
+            className={"relative "}
             onClick={(): void => {
               if (!isBlocked) onClick?.();
             }}
@@ -180,7 +193,8 @@ export function BaseCellComponent({
                 />
               ) //todo change to proper error flag
             }
-            {value}
+
+            {keepOn ? "" : value}
           </p>
         )}
       </div>
