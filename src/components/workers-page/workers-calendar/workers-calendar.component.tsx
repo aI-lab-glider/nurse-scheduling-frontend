@@ -2,6 +2,7 @@ import React from "react";
 import { VerboseDate } from "../../../common-models/month-info.model";
 import { ShiftCode } from "../../../common-models/shift-info.model";
 import { WorkersCalendarCell } from "./worker-calendar-cell.component";
+import { useScheduleStyling } from "../../common-components/use-schedule-styling/use-schedule-styling";
 
 interface CalendarOptions {
   shiftsArr: [VerboseDate, ShiftCode][];
@@ -12,10 +13,7 @@ export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Ele
   const dayOfWeekNamesEng = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
   const dayOfWeekNames = ["PON", "WT", "ŚR", "CZW", "PT", "SB", "ND"];
   const daysToDisplay: string[] = [];
-  let prevShift: ShiftCode | null = null;
-  let nextShift: ShiftCode | null = null;
-  let keepOn: boolean;
-  let hasNext: boolean;
+  let date: VerboseDate;
   let notCurrentMonth = true;
   for (let i = dayOfWeekNamesEng.indexOf(firstDay); i < 7; i++) {
     daysToDisplay.push(dayOfWeekNames[i]);
@@ -23,31 +21,25 @@ export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Ele
   for (let i = 0; i < dayOfWeekNamesEng.indexOf(firstDay); i++) {
     daysToDisplay.push(dayOfWeekNames[i]);
   }
+
+  const data = useScheduleStyling(shiftsArr.map((x) => x[1]));
+
   return (
     <>
-      <div id={"workersCalendar"}>
+      <div className={"scheduleStyle"}>
         <div className={"calendarRow"}>
           {daysToDisplay.map((element) => {
             return <div className={"dayName"}>{element}</div>;
           })}
-          {shiftsArr?.map((element, index) => {
-            const [date, shift] = element;
-            if (index < shiftsArr.length - 1) {
-              nextShift = shiftsArr[index + 1][1];
-            } else {
-              nextShift = null;
-            }
+          {data?.map(({ cellData, keepOn, hasNext }, index) => {
+            date = shiftsArr[index][0];
             if (date.date === 1) {
               notCurrentMonth = !notCurrentMonth;
             }
-            keepOn =
-              prevShift === shift && [ShiftCode.K, ShiftCode.U, ShiftCode.L4, null].includes(shift);
-            hasNext =
-              nextShift === shift && [ShiftCode.K, ShiftCode.U, ShiftCode.L4, null].includes(shift);
-            prevShift = shift;
+
             return (
               <WorkersCalendarCell
-                shift={shift}
+                shift={cellData}
                 date={date}
                 keepOn={keepOn}
                 hasNext={hasNext}
