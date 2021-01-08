@@ -35,7 +35,7 @@ const workerTestCases: WorkerTestCase[] = [
     startShiftCell: {
       workerType: WorkerType.NURSE,
       workerIdx: 3,
-      shiftIdx: 3,
+      shiftIdx: 4,
     },
     endShiftCell: {
       workerType: WorkerType.NURSE,
