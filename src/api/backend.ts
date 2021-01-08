@@ -17,10 +17,16 @@ class Backend {
     });
   }
 
+  public sleep<T>(ms: number): Promise<T> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   public getErrors(schedule: ScheduleDataModel): Promise<ScheduleError[]> {
-    return this.axios
-      .post("/schedule_errors", schedule)
-      .then((resp) => resp.data.map((el: BackendErrorObject) => ({ ...el, kind: el.code })));
+    return this.sleep(1000).then(() =>
+      this.axios
+        .post("/schedule_errors", schedule)
+        .then((resp) => resp.data.map((el: BackendErrorObject) => ({ ...el, kind: el.code })))
+    );
   }
 
   public fixSchedule(schedule: ScheduleDataModel): Promise<ScheduleDataModel[]> {
