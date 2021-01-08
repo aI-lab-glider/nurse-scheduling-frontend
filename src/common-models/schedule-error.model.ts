@@ -26,7 +26,11 @@ export enum InputFileErrorCode {
   NO_CHILDREN_QUANTITY = "NO_CHILDREN_QUANTITY",
 }
 
-export type ScheduleError = UnknownValueError | InputFileError | AlgorithmError;
+export enum NetworkErrorCode {
+  NETWORK_ERROR = "NETWORK_ERROR",
+}
+
+export type ScheduleError = UnknownValueError | InputFileError | AlgorithmError | NetworkError;
 
 interface UnknownValueError {
   kind: ParseErrorCode.UNKNOWN_VALUE;
@@ -37,6 +41,10 @@ interface UnknownValueError {
 
 interface InputFileError {
   kind: InputFileErrorCode;
+}
+
+export interface NetworkError {
+  kind: NetworkErrorCode;
 }
 
 export type DayTime = "MORNING" | "AFTERNOON" | "NIGHT";

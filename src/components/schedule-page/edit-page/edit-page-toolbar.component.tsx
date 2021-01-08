@@ -5,7 +5,7 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import backend from "../../../api/backend";
-import { ScheduleError } from "../../../common-models/schedule-error.model";
+import { NetworkErrorCode, ScheduleError } from "../../../common-models/schedule-error.model";
 import { ActionModel } from "../../../state/models/action.model";
 import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
 import { Button } from "../../common-components";
@@ -30,8 +30,12 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
       let response: ScheduleError[];
       try {
         response = await backend.getErrors(schedule);
-      } catch {
-        response = [];
+      } catch (err) {
+        response = [
+          {
+            kind: NetworkErrorCode.NETWORK_ERROR,
+          },
+        ];
       }
       dispatcher({
         type: ScheduleErrorActionType.UPDATE,
