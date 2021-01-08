@@ -48,6 +48,20 @@ context("Tab 'zarządzanie'", () => {
         cy.get(".btn-outlined").contains("Opiekunka").click(); // unclick
         cy.get('[value="123"]').should("be.visible");
       });
+
+      it("Should properly translate hours to fractions and fractions to hours", () => {
+        cy.get(".btn-primary").contains("Umowa o pracę").click();
+        cy.get(".btn-outlined").contains("1/1").click();
+        cy.get(".btn-primary").contains("inne").click();
+        cy.get('[data-cy="employmentTimeOther"] input').clear({ force: true }).type("34");
+        cy.get(".btn-outlined").contains("Umowa o pracę").click();
+        cy.get(".btn-primary").contains("Umowa zlecenie").click();
+        cy.get('[data-cy="civilTime"] input').should("have.value", "126");
+        cy.get('[data-cy="civilTime"] input').clear({ force: true }).type("88");
+        cy.get(".btn-outlined").contains("Umowa zlecenie").click();
+        cy.get(".btn-primary").contains("Umowa o pracę").click();
+        cy.get('[data-cy="employmentTimeOther"] input').should("have.value", "1/2");
+      });
     });
   });
 });

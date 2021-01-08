@@ -17,6 +17,7 @@ import { Button } from "../common-components";
 import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
 import { TextMaskCustom } from "../common-components/text-mask-custom/text-mask-custom.component";
 import { StringHelper } from "../../helpers/string.helper";
+import { WorkingTimeHelper } from "./working-time.helper";
 
 const useStyles = makeStyles({
   container: {
@@ -52,7 +53,28 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
 
   function handleUpdate(event): void {
     const { name, value } = event.target;
-    updateWorkerInfo(name, value);
+    if (name === "employmentTime") {
+      updateWorkerInfoBatch({
+        employmentTime: value,
+        civilTime: WorkingTimeHelper.fromFractionToHours(value, 168),
+      });
+    } else if (name === "employmentTimeOther") {
+      updateWorkerInfoBatch({
+        employmentTimeOther: value,
+        civilTime: WorkingTimeHelper.fromFractionToHours(value, 168),
+      });
+    } else if (name === "civilTime") {
+      updateWorkerInfoBatch({
+        civilTime: value,
+        employmentTimeOther: WorkingTimeHelper.fromHoursToFraction(value, 168),
+      });
+    } else {
+      updateWorkerInfo(name, value);
+    }
+  }
+
+  function updateWorkerInfoBatch(newStatePart): void {
+    setWorkerInfo({ ...workerInfo, ...newStatePart });
   }
 
   function updateWorkerInfo(key, value): void {
@@ -160,7 +182,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
                   name="employmentTimeOther"
                   value={workerInfo.employmentTimeOther}
                   onChange={handleUpdate}
-                  data-cy="hours-number"
+                  data-cy="employmentTimeOther"
                   inputComponent={
                     // eslint-disable-next-line
                     TextMaskCustom as any
