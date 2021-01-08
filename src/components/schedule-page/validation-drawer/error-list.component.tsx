@@ -17,7 +17,10 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
         {errors?.length > 0 &&
           errors.map(
             (error, index): JSX.Element => (
-              <ErrorListItem key={error.message.substr(2, 9) + index} error={error} />
+              <ErrorListItem
+                key={(error.message ? error.message.substr(2, 9) : "0") + index}
+                error={error}
+              />
             )
           )}
         {errors?.length === 0 && "Nie znaleziono błędów"}{" "}
