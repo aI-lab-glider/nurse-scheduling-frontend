@@ -161,7 +161,10 @@ function validateHorizontalShifts(
     shiftIdx: Math.min(startShiftIdx, endShiftIdx),
     desiredShiftCode,
   });
-  const [start, end] = [Math.min(startShiftIdx) + 1, Math.max(endShiftIdx) + 1];
+  const [start, end] = [
+    Math.min(startShiftIdx, endShiftIdx) + 1,
+    Math.max(startShiftIdx, endShiftIdx) + 1,
+  ];
   for (const shiftIdx of _.range(start, end)) {
     cy.getWorkerShift({
       workerType,
