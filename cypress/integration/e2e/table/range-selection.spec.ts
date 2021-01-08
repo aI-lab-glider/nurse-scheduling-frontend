@@ -158,7 +158,7 @@ function validateHorizontalShifts(
   cy.checkWorkerShift({
     workerType,
     workerIdx,
-    shiftIdx: startShiftIdx,
+    shiftIdx: Math.min(startShiftIdx, endShiftIdx),
     desiredShiftCode,
   });
   for (const shiftIdx of _.range(startShiftIdx + 1, endShiftIdx + 1)) {
