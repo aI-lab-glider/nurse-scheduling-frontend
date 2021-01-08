@@ -35,12 +35,12 @@ const workerTestCases: WorkerTestCase[] = [
     startShiftCell: {
       workerType: WorkerType.NURSE,
       workerIdx: 3,
-      shiftIdx: 7,
+      shiftIdx: 3,
     },
     endShiftCell: {
       workerType: WorkerType.NURSE,
       workerIdx: 3,
-      shiftIdx: 3,
+      shiftIdx: 0,
     },
     desiredShiftCode: ShiftCode.U,
   },
