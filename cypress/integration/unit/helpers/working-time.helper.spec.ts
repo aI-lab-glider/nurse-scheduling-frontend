@@ -4,7 +4,7 @@
 
 import { WorkingTimeHelper } from "../../../../src/components/namestable/working-time.helper";
 
-describe.only("WorkingTimeHelper", () => {
+describe("WorkingTimeHelper", () => {
   describe("fromHoursToFraction", () => {
     const testCases = [
       { hours: 168, base: 168, result: "1/1" },
