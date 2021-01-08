@@ -53,7 +53,7 @@ const workerTestCases: WorkerTestCase[] = [
     },
     endShiftCell: {
       workerType: WorkerType.NURSE,
-      workerIdx: 3,
+      workerIdx: 2,
       shiftIdx: 5,
     },
     desiredShiftCode: ShiftCode.L4,
@@ -161,7 +161,8 @@ function validateHorizontalShifts(
     shiftIdx: Math.min(startShiftIdx, endShiftIdx),
     desiredShiftCode,
   });
-  for (const shiftIdx of _.range(startShiftIdx + 1, endShiftIdx + 1)) {
+  const [start, end] = [Math.min(startShiftIdx) + 1, Math.max(endShiftIdx) + 1];
+  for (const shiftIdx of _.range(start, end)) {
     cy.getWorkerShift({
       workerType,
       workerIdx,
