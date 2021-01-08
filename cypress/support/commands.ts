@@ -9,6 +9,7 @@ export interface GetWorkerShiftOptions {
   workerType: WorkerType;
   workerIdx: number;
   shiftIdx: number;
+  selector?: "cell" | "highlighted-cell";
 }
 
 export interface CheckWorkerShiftOptions extends GetWorkerShiftOptions {
@@ -52,7 +53,7 @@ Cypress.Commands.add("loadSchedule", () => {
 
 Cypress.Commands.add(
   "getWorkerShift",
-  ({ workerType, workerIdx, shiftIdx }: GetWorkerShiftOptions) => {
+  ({ workerType, workerIdx, shiftIdx, selector = "cell" }: GetWorkerShiftOptions) => {
     return cy
       .get(`[data-cy=${workerType.toLowerCase()}ShiftsTable]`)
       .children()
@@ -60,7 +61,7 @@ Cypress.Commands.add(
       .eq(workerIdx)
       .children()
       .eq(shiftIdx)
-      .find("[data-cy=cell]");
+      .find(`[data-cy=${selector}]`);
   }
 );
 

@@ -152,7 +152,11 @@ export function BaseCellComponent({
         onBlur?.();
       }}
     >
-      <div className={"content " + hasNextClass + " " + keepOnClass} ref={drag}>
+      <div
+        data-cy="highlighted-cell"
+        className={"content " + hasNextClass + " " + keepOnClass}
+        ref={drag}
+      >
         {isPointerOn && !isBlocked && (
           <InputComponent
             className="cell-input"
