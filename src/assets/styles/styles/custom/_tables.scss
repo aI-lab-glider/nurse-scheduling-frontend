@@ -41,7 +41,7 @@
       width: 120%;
       height: 100%;
       cursor: cell;
-      padding: 4px 0 4px 0;
+      padding: 0;
 
       &.blocked {
         cursor: default !important;
@@ -50,6 +50,7 @@
       .wrapContent {
         height: 100% !important;
         width: 100%;
+        padding: 4px 0 4px 0;
       }
 
       .content {
