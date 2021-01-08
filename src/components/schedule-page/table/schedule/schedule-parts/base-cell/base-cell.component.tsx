@@ -153,7 +153,7 @@ export function BaseCellComponent({
       }}
     >
       <div className={"wrapContent"} ref={drag}>
-        <div className={"content " + hasNextClass + " " + keepOnClass}>
+        <div className={"content " + hasNextClass + " " + keepOnClass} data-cy="highlighted-cell">
           {isPointerOn && !isBlocked && (
             <InputComponent
               className="cell-input"
