@@ -11,7 +11,7 @@ describe("WorkingTimeHelper", () => {
       { hours: 84, base: 168, result: "1/2" },
       { hours: 85, base: 168, result: "1/2" },
       { hours: 90, base: 168, result: "1/2" },
-      { hours: 95, base: 168, result: "4/7" },
+      { hours: 95, base: 168, result: "3/5" },
       { hours: 129, base: 173, result: "3/4" },
       { hours: 180, base: 173, result: "1/1" },
       { hours: -1, base: 173, result: "1/8" },
