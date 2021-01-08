@@ -34,8 +34,8 @@ const workerTestCases: WorkerTestCase[] = [
     title: "Should be able to edit multiple days of single nurse (drag right to left)",
     startShiftCell: {
       workerType: WorkerType.NURSE,
-      workerIdx: 3,
-      shiftIdx: 4,
+      workerIdx: 0,
+      shiftIdx: 3,
     },
     endShiftCell: {
       workerType: WorkerType.NURSE,
