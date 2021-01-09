@@ -4,20 +4,20 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
+import { UndoableHotkeys } from "../../common-components";
 import { ScheduleComponent } from "../table/schedule/schedule.component";
 import { ScheduleLogicContext, useScheduleState } from "../table/schedule/use-schedule-state";
 import { ViewOnlyToolbar } from "./view-only-toolbar";
-import { UndoableHotkeys } from "../../common-components";
-import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
-
 interface ScheduleViewOnlyPageOptions {
   openEdit: () => void;
 }
 
 export function ScheduleViewOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.Element {
-  const scheduleModel = useSelector((state: ApplicationStateModel) => {
-    return state.actualState.persistentSchedule.present;
-  });
+  const scheduleModel = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
+  );
+
   const { scheduleLogic, setNewSchedule, scheduleLocalState } = useScheduleState(
     scheduleModel,
     "readonly"
