@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 import _ from "lodash";
 import { MonthInfoModel } from "../../../../common-models/month-info.model";
 import { ShiftCode, ShiftInfoModel } from "../../../../common-models/shift-info.model";
@@ -43,4 +47,10 @@ export function copyMonthInfo(
     frozen_shifts: [],
   };
   return copiedInfo;
+}
+
+export function getDateWithMonthOffset(month: number, year: number, offset: number): Date {
+  const curDate = new Date(year, month);
+  curDate.setMonth(curDate.getMonth() + offset);
+  return curDate;
 }

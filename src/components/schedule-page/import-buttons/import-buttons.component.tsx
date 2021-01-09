@@ -40,7 +40,7 @@ export function ImportButtonsComponent(): JSX.Element {
 
   useEffect(() => {
     if (scheduleModel) {
-      const action = ScheduleDataActionCreator.setPersistentSchedule(scheduleModel);
+      const action = ScheduleDataActionCreator.setSchedule(scheduleModel);
       scheduleDipatcher(action);
     } else if (errorOccurred) {
       //todo display message
