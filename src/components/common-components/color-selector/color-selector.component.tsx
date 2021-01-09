@@ -5,7 +5,6 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Popper, { PopperPlacementType } from "@material-ui/core/Popper";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
-import { shifts } from "../../../common-models/shift-info.model";
 import { IconButton } from "@material-ui/core";
 
 interface ColorSelectorOptions {
@@ -13,7 +12,7 @@ interface ColorSelectorOptions {
   mainLabel: string;
   variant?: ButtonVariant;
   position?: PopperPlacementType;
-  colorClicker: any;
+  colorClicker: (event: string) => void;
 }
 
 const useStyles = makeStyles(() =>
@@ -35,6 +34,7 @@ export function ColorSelector({
   colorClicker,
 }: ColorSelectorOptions): JSX.Element {
   const [open, setOpen] = useState(false);
+  const [colorPicked, setLocalColor] = useState("-1");
   const anchorRef = useRef(null);
   const classes = useStyles();
 
@@ -64,6 +64,11 @@ export function ColorSelector({
   return (
     <div>
       <Button variant={variant} onClick={handleToggle} ref={anchorRef}>
+        {colorPicked !== "-1" && (
+          <IconButton className={"color-button"} size={"small"}>
+            <div className={classes.colorSample} style={{ backgroundColor: `#${colorPicked}` }} />
+          </IconButton>
+        )}
         {mainLabel}
         <ArrowDropDownIcon />
       </Button>
@@ -76,7 +81,7 @@ export function ColorSelector({
             offset: "-1, -40",
           },
         }}
-        className={`position`} //-${position}
+        className={`position`}
         anchorEl={anchorRef.current}
       >
         <div
@@ -98,7 +103,10 @@ export function ColorSelector({
                           <IconButton className={"color-button"} size={"small"}>
                             <div
                               className={classes.colorSample}
-                              onClick={(): void => colorClicker(color)}
+                              onClick={(): void => {
+                                colorClicker(color);
+                                setLocalColor(color);
+                              }}
                               style={{ backgroundColor: `#${color}` }}
                             />
                           </IconButton>
@@ -119,7 +127,10 @@ export function ColorSelector({
                           <IconButton className={"color-button"} size={"small"}>
                             <div
                               className={classes.colorSample}
-                              onClick={(): void => colorClicker(color)}
+                              onClick={(): void => {
+                                colorClicker(color);
+                                setLocalColor(color);
+                              }}
                               style={{ backgroundColor: `#${color}` }}
                             />
                           </IconButton>
@@ -133,6 +144,11 @@ export function ColorSelector({
           </div>
         </ClickAwayListener>
         <Button variant={variant} className={"button-helper"}>
+          {colorPicked !== "-1" && (
+            <IconButton className={"color-button-selected"} size={"small"}>
+              <div className={classes.colorSample} style={{ backgroundColor: `#${colorPicked}` }} />
+            </IconButton>
+          )}
           {mainLabel}
           <ArrowDropDownIcon />
         </Button>
