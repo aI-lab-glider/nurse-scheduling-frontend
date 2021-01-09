@@ -1,9 +1,10 @@
-import { ShiftCode } from "../../../../src/common-models/shift-info.model";
-import { WorkerType } from "../../../../src/common-models/worker-info.model";
-
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+import { ShiftCode } from "../../../../src/common-models/shift-info.model";
+import { WorkerType } from "../../../../src/common-models/worker-info.model";
+
 context("Load schedule", () => {
   it("Shoud be able to load schedule after clicking save with  empty state to database", () => {
     cy.visit(Cypress.env("baseUrl"));
