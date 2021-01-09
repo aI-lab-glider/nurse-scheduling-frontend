@@ -1,6 +1,10 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import {
   ContractType,
   ContractTypeHelper,
+  TimeDrawerType,
   WorkerInfoModel,
   WorkerType,
   WorkerTypeHelper,
@@ -13,6 +17,7 @@ import { Button } from "../common-components";
 import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
 import { TextMaskCustom } from "../common-components/text-mask-custom/text-mask-custom.component";
 import { StringHelper } from "../../helpers/string.helper";
+import { WorkingTimeHelper } from "./working-time.helper";
 
 const useStyles = makeStyles({
   container: {
@@ -30,6 +35,7 @@ export interface WorkerInfoExtendedInterface {
   workerType: WorkerType | undefined;
   contractType: ContractType | undefined;
   employmentTime: string;
+  employmentTimeOther: string;
   civilTime: string;
 }
 
@@ -40,13 +46,35 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     name: info.name,
     workerType: info.type,
     contractType: undefined,
-    employmentTime: " / ",
+    employmentTime: "1/1",
+    employmentTimeOther: " / ",
     civilTime: "0",
   });
 
   function handleUpdate(event): void {
     const { name, value } = event.target;
-    updateWorkerInfo(name, value);
+    if (name === "employmentTime") {
+      updateWorkerInfoBatch({
+        employmentTime: value,
+        civilTime: WorkingTimeHelper.fromFractionToHours(value, 168),
+      });
+    } else if (name === "employmentTimeOther") {
+      updateWorkerInfoBatch({
+        employmentTimeOther: value,
+        civilTime: WorkingTimeHelper.fromFractionToHours(value, 168),
+      });
+    } else if (name === "civilTime") {
+      updateWorkerInfoBatch({
+        civilTime: value,
+        employmentTimeOther: WorkingTimeHelper.fromHoursToFraction(value, 168),
+      });
+    } else {
+      updateWorkerInfo(name, value);
+    }
+  }
+
+  function updateWorkerInfoBatch(newStatePart): void {
+    setWorkerInfo({ ...workerInfo, ...newStatePart });
   }
 
   function updateWorkerInfo(key, value): void {
@@ -66,6 +94,14 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     return {
       label: translateAndCapitalizeContractType(contractType),
       action: (): void => updateWorkerInfo("contractType", contractType),
+    };
+  });
+
+  const contractTimeDrawerOptions = Object.keys(TimeDrawerType).map((timeTypeName) => {
+    const timeType = TimeDrawerType[timeTypeName];
+    return {
+      label: timeType,
+      action: (): void => updateWorkerInfo("employmentTime", timeType),
     };
   });
 
@@ -97,22 +133,35 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <Typography className={classes.label}>Wymiar pracy</Typography>
-            <DropdownButtons
-              data-cy="contract"
-              buttons={contractOptions}
-              mainLabel={
-                workerInfo.contractType
-                  ? translateAndCapitalizeContractType(workerInfo.contractType)
-                  : "Typ umowy"
-              }
-              variant="outlined"
-            />
+            <Grid container>
+              <Grid item>
+                <DropdownButtons
+                  data-cy="contract"
+                  buttons={contractOptions}
+                  mainLabel={
+                    workerInfo.contractType
+                      ? translateAndCapitalizeContractType(workerInfo.contractType)
+                      : "Typ umowy"
+                  }
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item>
+                <DropdownButtons
+                  data-cy="contract-time-dropdown"
+                  buttons={contractTimeDrawerOptions}
+                  mainLabel={workerInfo.employmentTime}
+                  variant="outlined"
+                  disabled={workerInfo.contractType !== ContractType.EMPLOYMENT_CONTRACT}
+                />
+              </Grid>
+            </Grid>
           </Grid>
-          {workerInfo.contractType === ContractType.EMPLOYMENT_CONTRACT && (
+          {workerInfo.contractType === ContractType.CIVIL_CONTRACT && (
             <Grid item xs={6}>
-              <Typography className={classes.label}>Wpisz wymiar etatu</Typography>
+              <Typography className={classes.label}>Ilość godzin</Typography>
               <TextField
                 fullWidth
                 name="civilTime"
@@ -124,22 +173,23 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
               />
             </Grid>
           )}
-          {workerInfo.contractType === ContractType.CIVIL_CONTRACT && (
-            <Grid item xs={6}>
-              <Typography className={classes.label}>Ilość godzin</Typography>
-              <Input
-                fullWidth
-                name="employmentTime"
-                value={workerInfo.employmentTime}
-                onChange={handleUpdate}
-                data-cy="hours-number"
-                inputComponent={
-                  // eslint-disable-next-line
-                  TextMaskCustom as any
-                }
-              />
-            </Grid>
-          )}
+          {workerInfo.contractType === ContractType.EMPLOYMENT_CONTRACT &&
+            workerInfo.employmentTime === TimeDrawerType.OTHER && (
+              <Grid item xs={6}>
+                <Typography className={classes.label}>Wpisz wymiar etatu</Typography>
+                <Input
+                  fullWidth
+                  name="employmentTimeOther"
+                  value={workerInfo.employmentTimeOther}
+                  onChange={handleUpdate}
+                  data-cy="employmentTimeOther"
+                  inputComponent={
+                    // eslint-disable-next-line
+                    TextMaskCustom as any
+                  }
+                />
+              </Grid>
+            )}
         </Grid>
       </Grid>
       <Grid item>

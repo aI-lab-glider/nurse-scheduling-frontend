@@ -11,9 +11,17 @@ export type ButtonOptions = Omit<ButtonProps, "variant"> & {
 };
 
 export const Button = React.forwardRef(
-  ({ variant = "primary", className, ...rest }: ButtonOptions, ref?: Ref<HTMLButtonElement>) => {
+  (
+    { variant = "primary", className, disabled = false, ...rest }: ButtonOptions,
+    ref?: Ref<HTMLButtonElement>
+  ) => {
     return (
-      <button {...rest} ref={ref} className={classNames("btn", `btn-${variant}`, className)} />
+      <button
+        {...rest}
+        ref={ref}
+        className={classNames("btn", `btn-${variant}`, disabled ? "btn-disabled" : "", className)}
+        disabled={disabled}
+      />
     );
   }
 );
