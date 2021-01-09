@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import PouchDB from "pouchdb-browser";
-import { ScheduleDataModel } from "../common-models/schedule-data.model";
+import { isScheduleModelEmpty, ScheduleDataModel } from "../common-models/schedule-data.model";
 import { ScheduleDataActionCreator } from "../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import {
   PersistanceStoreProvider,
@@ -12,13 +12,14 @@ import {
   ThunkFunction,
 } from "./persistance-store.model";
 
+export const DATABASE_NAME = "nurse-scheduling";
 /*eslint-disable @typescript-eslint/camelcase */
 export class LocalStorageProvider extends PersistanceStoreProvider {
   private storage: PouchDB.Database<ScheduleRevision>;
 
   constructor() {
     super();
-    this.storage = new PouchDB("nurse-scheduling");
+    this.storage = new PouchDB(DATABASE_NAME);
   }
 
   saveScheduleRevision(
@@ -26,6 +27,9 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
     schedule: ScheduleDataModel
   ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
+      if (isScheduleModelEmpty(schedule)) {
+        return;
+      }
       const id = this.getScheduleId(schedule);
       let revision = "";
       try {

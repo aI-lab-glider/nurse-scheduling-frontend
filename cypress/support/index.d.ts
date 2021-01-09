@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 declare namespace Cypress {
   interface Chainable {
-    loadSchedule(): Chainable<Element>;
+    loadSchedule(scheduleName?: import("./commands").ScheduleName): Chainable<Element>;
 
     useAutocomplete(
       newShiftCode: import("../../src/common-models/shift-info.model").ShiftCode
@@ -26,5 +26,7 @@ declare namespace Cypress {
     ): Chainable<Element>;
 
     enterEditMode(): Chainable<Element>;
+    saveToDatabase(): Chainable<Element>;
+    leaveEditMode(): Chainable<Element>;
   }
 }
