@@ -2,7 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { ScheduleKey } from "../../../api/persistance-store.model";
+import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ScheduleModel } from "../../../common-models/schedule.model";
+import { ActionModel } from "../../models/action.model";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import {
   ScheduleActionModel,
@@ -17,23 +20,22 @@ let uuid = 0;
 export function scheduleInfoReducerF(name: string) {
   return (
     state: ScheduleModel = scheduleDataInitialState.schedule_info,
-    action: ScheduleActionModel
+    action: ScheduleActionModel | ActionModel<ScheduleKey>
   ): ScheduleModel => {
-    const data = action.payload?.schedule_info;
+    let data: ScheduleModel;
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
+        data = (action.payload as ScheduleDataModel).schedule_info;
         uuid += 1;
         if (!data) return state;
         return { ...data, UUID: uuid.toString() };
       case createActionName(name, ScheduleActionType.UPDATE):
+        data = (action.payload as ScheduleDataModel).schedule_info;
         if (!data) return state;
         return { ...state, ...data };
       case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
-        const { month_number, year } = (action.payload as unknown) as {
-          month_number: number;
-          year: number;
-        };
-        return { ...state, month_number, year };
+        const { month, year } = action.payload as ScheduleKey;
+        return { ...state, month_number: month, year };
       default:
         return state;
     }
