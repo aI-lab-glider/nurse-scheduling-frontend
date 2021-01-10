@@ -8,6 +8,7 @@ import {
   PersistanceStoreProvider,
   RevisionFilter,
   RevisionType,
+  ScheduleKey,
   ScheduleRevision,
   ThunkFunction,
 } from "./persistance-store.model";
@@ -51,11 +52,10 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
     return async (dispatch): Promise<void> => {
       const revisions = await this.storage.allDocs({ include_docs: true });
       const result = revisions.rows.find((r) => {
-        const { year, month_number } = r.doc?.data.schedule_info ?? {};
+        const { year, month_number: month } = r.doc?.data.schedule_info ?? {};
         return (
-          month_number === filter.validityPeriod.month &&
-          year === filter.validityPeriod.year &&
-          r.doc?.revisionType === filter.revisionType
+          new ScheduleKey(month ?? new Date().getMonth(), year ?? new Date().getFullYear()).key ===
+            filter.validityPeriod && r.doc?.revisionType === filter.revisionType
         );
       });
       if (!result?.doc) {

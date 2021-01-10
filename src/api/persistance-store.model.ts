@@ -14,15 +14,35 @@ export type ThunkFunction<T> = (
   getState: () => ApplicationStateModel
 ) => Promise<unknown> | unknown;
 
-export interface ScheduleKey {
-  month: number;
-  year: number;
+export type ScheduleKeyString = string;
+
+export class ScheduleKey {
+  constructor(public month: number, public year: number) {}
+
+  get key(): ScheduleKeyString {
+    return `${this.month}_${this.year}`;
+  }
+
+  get nextMonthKey(): ScheduleKey {
+    const isLastYearMonth = this.month === 11;
+    const month = isLastYearMonth ? 0 : this.month + 1;
+    const year = isLastYearMonth ? this.year + 1 : this.year;
+    return new ScheduleKey(month, year);
+  }
+
+  get prevMonthKey(): ScheduleKey {
+    const isFirstYearMonth = this.month === 0;
+    const month = isFirstYearMonth ? 11 : this.month - 1;
+    const year = isFirstYearMonth ? this.year - 1 : this.year;
+    return new ScheduleKey(month, year);
+  }
 }
 
 export type RevisionType = "primary" | "actual";
+
 export interface RevisionFilter {
   revisionType: RevisionType;
-  validityPeriod: ScheduleKey;
+  validityPeriod: ScheduleKeyString;
 }
 
 export interface ScheduleRevision {
@@ -34,9 +54,10 @@ export interface ScheduleRevision {
 export interface ScheduleRecord {
   primaryRevision: ScheduleRevision;
   actualRevision: ScheduleRevision;
-  validityPeriod: ScheduleKey;
+  validityPeriod: ScheduleKeyString;
   workersInfo: WorkerInfoModel[];
 }
+
 export abstract class PersistanceStoreProvider {
   abstract saveScheduleRevision(
     type: RevisionType,

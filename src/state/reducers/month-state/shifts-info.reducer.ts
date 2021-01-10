@@ -9,8 +9,8 @@ import { ActionModel } from "../../models/action.model";
 import { cropShiftsToMonth } from "./schedule-data/common-reducers";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import {
-  ScheduleActionModel,
   createActionName,
+  ScheduleActionModel,
   ScheduleActionType,
 } from "./schedule-data/schedule.actions";
 
@@ -25,8 +25,7 @@ export function scheduleShiftsInfoReducerF(name: string) {
         const data = (action.payload as ScheduleDataModel)?.shifts;
         return { ...data };
       case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
-        const { month, year } = action.payload as ScheduleKey;
-        return cropShiftsToMonth(month, year, state);
+        return cropShiftsToMonth(action.payload as ScheduleKey, state);
 
       default:
         return state;

@@ -1,57 +1,42 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { ScheduleDataModel } from "../../common-models/schedule-data.model";
-import { ScheduleMetadata } from "../../common-models/schedule.model";
+import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
 import { ActionModel } from "../models/action.model";
-import {
-  HistoryStateModel,
-  MonthHistoryRecord,
-  MonthStateModel,
-} from "../models/application-state.model";
-/* eslint-disable @typescript-eslint/camelcase */
+import { HistoryStateModel } from "../models/application-state.model";
+import { cropScheduleToMonthDM } from "./month-state/schedule-data/schedule-data.action-creator";
+
 enum HistoryReducerAction {
   ADD_MONTH_STATE = "ADD_MONTH_STATE",
 }
 
 export class HistoryReducerActionCreator {
-  static addToHistory(scheduleModel: MonthStateModel): ActionModel<MonthStateModel> {
-    // const payload = cropToOneMonth(scheduleModel);
+  static addToScheduleHistory(scheduleModel: ScheduleDataModel): ActionModel<MonthDataModel> {
+    const monthDataModel = cropScheduleToMonthDM(scheduleModel);
     return {
       type: HistoryReducerAction.ADD_MONTH_STATE,
-      payload: scheduleModel,
+      payload: monthDataModel,
+    };
+  }
+
+  static addToMonthHistory(monthModel: MonthDataModel): ActionModel<MonthDataModel> {
+    return {
+      type: HistoryReducerAction.ADD_MONTH_STATE,
+      payload: monthModel,
     };
   }
 }
 
-const createMonthKey = (month: number, year: number): string => `${month}_${year}`;
-
-function isValidMonthModel(
-  scheduleModel: ScheduleMetadata
-): scheduleModel is Required<ScheduleMetadata> {
-  const { month_number, year } = scheduleModel;
-  return month_number !== undefined && year !== undefined;
-}
-
-function createMonthKeyFromState(monthModel: ScheduleDataModel): string {
-  if (!isValidMonthModel(monthModel.schedule_info)) {
-    return "";
-  }
-  const { month_number, year } = monthModel.schedule_info;
-  return createMonthKey(month_number, year);
-}
-
 export function historyReducer(
   state: HistoryStateModel = {},
-  action: ActionModel<MonthHistoryRecord>
+  action: ActionModel<MonthDataModel>
 ): HistoryStateModel {
   if (!action.payload) {
     return state;
   }
   switch (action.type) {
     case HistoryReducerAction.ADD_MONTH_STATE:
-      const key = createMonthKeyFromState(action.payload.schedule);
-      return { ...state, [key]: action.payload };
+      return { ...state, [action.payload.scheduleKey.key]: action.payload };
     default:
       return state;
   }

@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import _ from "lodash";
+import * as _ from "lodash";
 import { ThunkDispatch } from "redux-thunk";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";

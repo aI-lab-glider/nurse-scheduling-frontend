@@ -5,6 +5,7 @@ import { WorkersInfoModel } from "./worker-info.model";
 import { MonthInfoModel } from "./month-info.model";
 import { ScheduleMetadata } from "./schedule.model";
 import { ShiftInfoModel } from "./shift-info.model";
+import { ScheduleKey } from "../api/persistance-store.model";
 import _ from "lodash";
 
 export interface ScheduleDataModel {
@@ -14,10 +15,21 @@ export interface ScheduleDataModel {
   shifts: ShiftInfoModel;
 }
 
+export interface MonthDataModel extends Omit<ScheduleDataModel, "schedule_info"> {
+  scheduleKey: ScheduleKey;
+}
+
 export function isScheduleModelEmpty(scheduleModel: ScheduleDataModel): boolean {
   const requiredFields: (keyof ScheduleDataModel)[] = ["employee_info", "month_info", "shifts"];
   return requiredFields.every((field) => {
     const requiredObject = scheduleModel[field];
     return Object.values(requiredObject).every((field) => _.isEmpty(field));
   });
+}
+
+export function getScheduleKey(newSchedule: ScheduleDataModel): ScheduleKey {
+  return new ScheduleKey(
+    newSchedule.schedule_info.month_number ?? new Date().getMonth(),
+    newSchedule.schedule_info.year ?? new Date().getFullYear()
+  );
 }

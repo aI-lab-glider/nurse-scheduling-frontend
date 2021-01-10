@@ -1,5 +1,6 @@
 import { daysInMonth } from "../../../../../src/state/reducers/month-state/schedule-data/common-reducers";
 import { calculateMissingFullWeekDays } from "../../../../../src/state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { ScheduleKey } from "../../../../../src/api/persistance-store.model";
 
 interface TestCase {
   title: string;
@@ -54,7 +55,9 @@ describe("Schedule preprocessor functions", () => {
     });
 
     it(`Function calculateMissingFullWeekDays ${test.title}`, () => {
-      const [prev, next] = calculateMissingFullWeekDays(test.monthNumber, test.year);
+      const [prev, next] = calculateMissingFullWeekDays(
+        new ScheduleKey(test.monthNumber, test.year)
+      );
       expect(prev).eql(test.missingDaysToFullWeek.prevMonth);
       expect(next).eql(test.missingDaysToFullWeek.nextMonth);
     });

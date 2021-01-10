@@ -1,20 +1,26 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 /* eslint-disable @typescript-eslint/camelcase */
-import * as _ from "lodash";
+
+import {
+  getScheduleKey,
+  MonthDataModel,
+  ScheduleDataModel,
+} from "../../../../common-models/schedule-data.model";
 import { ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
-import { MonthInfoModel } from "../../../../common-models/month-info.model";
-import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 import {
   PERSISTENT_SCHEDULE_NAME,
   ScheduleActionDestination,
   TEMPORARY_SCHEDULE_NAME,
 } from "../../../app.reducer";
-import { HistoryStateModel, MonthStateModel } from "../../../models/application-state.model";
-import { HistoryReducerActionCreator } from "../../history.reducer";
-import { cropMonthInfoToMonth, cropShiftsToMonth } from "./common-reducers";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
+import { HistoryStateModel } from "../../../models/application-state.model";
+import { HistoryReducerActionCreator } from "../../history.reducer";
+import { ShiftInfoModel } from "../../../../common-models/shift-info.model";
+import { MonthInfoModel } from "../../../../common-models/month-info.model";
+import { cropMonthInfoToMonth, cropShiftsToMonth } from "./common-reducers";
 
 export class ScheduleDataActionCreator {
   static setPersistentSchedule(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
@@ -30,22 +36,17 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static copyPreviousMonth(): ThunkFunction<ScheduleKey | MonthStateModel> {
+  static copyPreviousMonth(): ThunkFunction<ScheduleKey | MonthDataModel> {
     return (dispatch, getState): void => {
-      const actualSchedule = getState().actualState;
-      const historyAction = HistoryReducerActionCreator.addToHistory(actualSchedule);
+      const actualSchedule = getState().actualState.persistentSchedule.present;
+      const historyAction = HistoryReducerActionCreator.addToScheduleHistory(actualSchedule);
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
-      const {
-        month_number: currentMonth = 0,
-        year = new Date().getFullYear(),
-      } = actualSchedule.temporarySchedule.present.schedule_info;
+      const scheduleKey: ScheduleKey = getScheduleKey(actualSchedule);
+
       destinations.forEach((destination) => {
         const action = {
           type: createActionName(destination, ScheduleActionType.COPY_TO_MONTH),
-          payload: {
-            month: (currentMonth + 1) % 12,
-            year: currentMonth === 11 ? year + 1 : year,
-          },
+          payload: scheduleKey.nextMonthKey,
         };
         dispatch(action);
       });
@@ -56,11 +57,21 @@ export class ScheduleDataActionCreator {
   static addNewSchedule(
     destination: ScheduleActionDestination,
     newSchedule: ScheduleDataModel
+  ): ScheduleActionModel {
+    return {
+      type: createActionName(destination, ScheduleActionType.ADD_NEW),
+      payload: newSchedule,
+    };
+  }
+
+  static addNewScheduleFromMonth(
+    destination: ScheduleActionDestination,
+    newMonth: MonthDataModel
   ): ThunkFunction<ScheduleDataModel> {
     return (dispatch, getState): void => {
       const history = getState().history;
-      const [prevMonth, nextMonth] = getSurroundingMonths(getScheduleKey(newSchedule), history);
-      const extendedSchedule = preprocessSchedule(prevMonth, newSchedule, nextMonth);
+      const [prevMonth, nextMonth] = getSurroundingMonths(newMonth.scheduleKey, history);
+      const extendedSchedule = extendMonthToScheduleDM(prevMonth, newMonth, nextMonth);
       const action = {
         type: createActionName(destination, ScheduleActionType.ADD_NEW),
         payload: extendedSchedule,
@@ -80,80 +91,83 @@ export class ScheduleDataActionCreator {
 function getSurroundingMonths(
   key: ScheduleKey,
   history: HistoryStateModel
-): [ScheduleDataModel, ScheduleDataModel] {
-  // get schedule from history
+): [MonthDataModel, MonthDataModel] {
+  const prevMonth: MonthDataModel = getMonth(key.prevMonthKey, history);
+  const nextMonth: MonthDataModel = getMonth(key.nextMonthKey, history);
+  return [prevMonth, nextMonth];
+}
 
+function getMonth(monthKey: ScheduleKey, history: HistoryStateModel): MonthDataModel {
+  const monthDataModel = history[monthKey.key];
+  // get schedule from history
   // if not avaiable get one/both from db
   // if not avaible create one/both
   // add new schedule to db/
   // add new scheudle to history
-  return [history[0].schedule, history[1].schedule];
+  return monthDataModel;
 }
 
-function preprocessSchedule(
-  prevMonthSchedule: ScheduleDataModel,
-  currentSchedule: ScheduleDataModel,
-  nextMonthSchedule: ScheduleDataModel
+function extendMonthToScheduleDM(
+  prevMonthData: MonthDataModel,
+  currentMonthData: MonthDataModel,
+  nextMonthData: MonthDataModel
 ): ScheduleDataModel {
-  const croppedSchedule = cropToFullMonth(currentSchedule);
-  const {
-    month_number: monthNumber = new Date().getMonth(),
-    year = new Date().getFullYear(),
-  } = currentSchedule.schedule_info;
-  const [missingFromPrev, missingFromNext] = calculateMissingFullWeekDays(monthNumber, year);
-  const extendedSchedule = _.cloneDeep(croppedSchedule);
+  const { scheduleKey } = currentMonthData;
+  const [missingFromPrev, missingFromNext] = calculateMissingFullWeekDays(scheduleKey);
+
   const extendSchedule = <T>(sectionKey: string, valueKey: string): T[] =>
     extend<T>(
-      prevMonthSchedule[sectionKey][valueKey],
+      prevMonthData[sectionKey][valueKey],
       missingFromPrev,
-      currentSchedule[sectionKey][valueKey],
-      nextMonthSchedule[sectionKey][valueKey],
+      currentMonthData[sectionKey][valueKey],
+      nextMonthData[sectionKey][valueKey],
       missingFromNext
     );
-  Object.keys(extendedSchedule.shifts).forEach((key) => {
-    extendedSchedule.shifts[key] = extendSchedule("shifts", key);
+
+  const shifts: ShiftInfoModel = {};
+  Object.keys(currentMonthData.shifts).forEach((key) => {
+    shifts[key] = extendSchedule("shifts", key);
   });
-  const copiedInfo: MonthInfoModel = {
+
+  const monthInfoModel: MonthInfoModel = {
     children_number: extendSchedule("month_info", "children_number"),
     extra_workers: extendSchedule("month_info", "extra_workers"),
     dates: extendSchedule("month_info", "dates"),
     frozen_shifts: [],
   };
-  extendedSchedule.month_info = copiedInfo;
-  return extendedSchedule;
+
+  return {
+    schedule_info: {
+      UUID: "0",
+      month_number: scheduleKey.month,
+      year: scheduleKey.year,
+      daysFromPreviousMonthExists: false,
+    },
+    month_info: monthInfoModel,
+    employee_info: currentMonthData.employee_info,
+    shifts,
+  };
 }
 
 function extend<T>(arr1: T[], count1: number, curr: T[], arr2: T[], count2: number): T[] {
   return [...arr1.slice(arr1.length - count1), ...curr, ...arr2.slice(count2)];
 }
 
-export function calculateMissingFullWeekDays(monthNumber: number, year: number): [number, number] {
-  const firstMonthDay = new Date(year, monthNumber, 1).getDay();
-  const lastMonthDay = new Date(year, monthNumber + 1, 0).getDay();
+export function calculateMissingFullWeekDays({ month, year }: ScheduleKey): [number, number] {
+  const firstMonthDay = new Date(year, month, 1).getDay();
+  const lastMonthDay = new Date(year, month + 1, 0).getDay();
   return [firstMonthDay === 0 ? 0 : firstMonthDay - 1, lastMonthDay === 0 ? 0 : 7 - lastMonthDay];
 }
 
-function cropToFullMonth(schedule: Required<ScheduleDataModel>): ScheduleDataModel {
-  const croppedSchedule: ScheduleDataModel = _.cloneDeep(schedule);
-  const { dates } = croppedSchedule.month_info;
-  const {
-    month_number: monthNumber = new Date().getMonth(),
-    year = new Date().getFullYear(),
-  } = schedule.schedule_info;
+export function cropScheduleToMonthDM(schedule: Required<ScheduleDataModel>): MonthDataModel {
+  const { dates } = schedule.month_info;
   const monthStart = dates.findIndex((v) => v === 1);
-  croppedSchedule.shifts = cropShiftsToMonth(monthNumber, year, croppedSchedule.shifts, monthStart);
-  croppedSchedule.month_info = cropMonthInfoToMonth(
-    monthNumber,
-    year,
-    croppedSchedule.month_info,
-    monthStart
-  );
-  return croppedSchedule;
-}
+  const monthKey = getScheduleKey(schedule);
 
-function getScheduleKey(newSchedule: ScheduleDataModel): ScheduleKey {
   return {
-    month: newSchedule.schedule_info.month_number ?? new Date().getMonth(),
-    year: newSchedule.schedule_info.year ?? new Date().getFullYear(),
+    scheduleKey: monthKey,
+    shifts: cropShiftsToMonth(monthKey, schedule.shifts, monthStart),
+    month_info: cropMonthInfoToMonth(monthKey, schedule.month_info, monthStart),
+    employee_info: schedule.employee_info,
   };
 }

@@ -2,7 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ThunkDispatch } from "redux-thunk";
-import { PersistanceStoreProvider, RevisionFilter } from "../../api/persistance-store.model";
+import {
+  PersistanceStoreProvider,
+  RevisionFilter,
+  ScheduleKey,
+} from "../../api/persistance-store.model";
 import { ScheduleDataModel } from "../../common-models/schedule-data.model";
 import { WorkerType } from "../../common-models/worker-info.model";
 import { SelectionMatrix } from "../../components/schedule-page/table/schedule/sections/base-section/use-selection-matrix";
@@ -89,7 +93,10 @@ export class ScheduleLogic implements ScheduleProvider {
 
   public tryGetCurrentMonthSchedule(): void {
     const [month, year] = this.sections.Metadata.monthLogic.currentDate;
-    const filter: RevisionFilter = { revisionType: "actual", validityPeriod: { month, year } };
+    const filter: RevisionFilter = {
+      revisionType: "actual",
+      validityPeriod: new ScheduleKey(month, year).key,
+    };
     this.dispatchScheduleUpdate(this.storeProvider.getScheduleRevision(filter));
   }
 

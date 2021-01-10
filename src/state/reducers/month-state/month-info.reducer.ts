@@ -31,8 +31,7 @@ export function monthInfoReducerF(name: string) {
         }
         return { ...data };
       case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
-        const { month, year } = action.payload as ScheduleKey;
-        return cropMonthInfoToMonth(month, year, state);
+        return cropMonthInfoToMonth(action.payload as ScheduleKey, state);
       default:
         return state;
     }
