@@ -1,5 +1,5 @@
 import { Button } from "../../common-components";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
 import ErrorList from "./error-list.component";
 import { ErrorLoaderState, Props } from "./validation-drawer.component";
@@ -7,6 +7,12 @@ import { SpanErrors } from "./span-errors.component";
 import warning from "../../../assets/images/warning.svg";
 import ok from "../../../assets/images/ok.svg";
 import useForceUpdate from "./use-force-update";
+import { NetworkErrorCode, ScheduleError } from "../../../common-models/schedule-error.model";
+import backend from "../../../api/backend";
+import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
+import { ActionModel } from "../../../state/models/action.model";
+import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
+import { useDispatch } from "react-redux";
 
 interface ErrorLoaderOptions {
   state?: Props;
@@ -19,6 +25,8 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
   const { setOpen, isNetworkError } = options;
   const [spinnerAgain, setSpinnerAgain] = useState(false);
   const forceUpdate = useForceUpdate();
+  const scheduleLogic = useContext(ScheduleLogicContext);
+  const dispatcher = useDispatch();
 
   function closeDrawer(): void {
     setOpen(false);
@@ -27,8 +35,29 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
   const reload = React.useCallback(() => {
     setSpinnerAgain(true);
     forceUpdate();
+    updateScheduleErrors();
     setTimeout(() => setSpinnerAgain(false), 1000);
   }, [forceUpdate]);
+
+  async function updateScheduleErrors(): Promise<void> {
+    const schedule = scheduleLogic?.schedule.getDataModel();
+    if (schedule) {
+      let response: ScheduleError[];
+      try {
+        response = await backend.getErrors(schedule);
+      } catch (err) {
+        response = [
+          {
+            kind: NetworkErrorCode.NETWORK_ERROR,
+          },
+        ];
+      }
+      dispatcher({
+        type: ScheduleErrorActionType.UPDATE,
+        payload: response,
+      } as ActionModel<ScheduleError[]>);
+    }
+  }
 
   return (
     <>

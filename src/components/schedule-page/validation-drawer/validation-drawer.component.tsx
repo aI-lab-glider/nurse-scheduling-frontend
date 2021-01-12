@@ -45,6 +45,8 @@ export default function ValidationDrawerComponent(options: ValidationDrawerOptio
     };
     if (scheduleErrors?.find((element) => element.kind === NetworkErrorCode.NETWORK_ERROR)) {
       setIsNetworkError(true);
+    } else {
+      setIsNetworkError(false);
     }
     if (scheduleErrors) {
       if (scheduleErrors.length > 0) {
