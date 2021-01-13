@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public 
+ * License, v. 2.0. If a copy of the MPL was not distributed with this 
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 .dropdown-buttons-container {
   background-color: white;
   mix-blend-mode: multiply;
@@ -12,7 +15,7 @@
   right: -10px;
   padding-bottom: 10px;
   padding-top: 25px;
-  max-width: 119px;
+  width: calc(100% - 20px);
 
   button {
     width: 100%;
@@ -31,6 +34,10 @@
     background-color: white;
     color: $primary;
   }
+}
+
+.dropdown-buttons-z-index {
+  z-index: 1300;
 }
 
 .display-main-button {
