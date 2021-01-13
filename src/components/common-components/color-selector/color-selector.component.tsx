@@ -65,7 +65,7 @@ export function ColorSelector({
     <div>
       <Button variant={variant} onClick={handleToggle} ref={anchorRef}>
         {colorPicked !== "-1" && (
-          <IconButton className={"color-button"} size={"small"}>
+          <IconButton className={"color-button picked-color"} size={"small"}>
             <div className={classes.colorSample} style={{ backgroundColor: `#${colorPicked}` }} />
           </IconButton>
         )}
@@ -81,14 +81,14 @@ export function ColorSelector({
             offset: "-1, -40",
           },
         }}
-        className={`position`}
+        className={`color-selector`}
         anchorEl={anchorRef.current}
       >
         <div
           className={`${
             variant === "outlined" ? "display-main-button-outlined" : "display-main-button"
           }`}
-        ></div>
+        />
         <ClickAwayListener onClickAway={handleClickAway}>
           <div className="dropdown-buttons-container">
             <div className={"colors"}>
@@ -145,7 +145,7 @@ export function ColorSelector({
         </ClickAwayListener>
         <Button variant={variant} className={"button-helper"}>
           {colorPicked !== "-1" && (
-            <IconButton className={"color-button-selected"} size={"small"}>
+            <IconButton className={"color-button-selected picked-color"} size={"small"}>
               <div className={classes.colorSample} style={{ backgroundColor: `#${colorPicked}` }} />
             </IconButton>
           )}

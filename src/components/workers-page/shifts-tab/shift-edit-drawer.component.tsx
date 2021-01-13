@@ -10,9 +10,12 @@ import { AcronymGenerator } from "../../../helpers/acronym-generator.helper";
 
 export default function ShiftEditDrower(): JSX.Element {
   const shiftNames = Object.values(shifts).map((shift) => shift.name);
+  const shiftCodes = Object.values(shifts).map((shift) => shift.code);
   const [shiftName, setShiftName] = useState("");
   const [shiftCode, setShiftCode] = useState("");
+
   const [isInShiftNames, checkShiftName] = useState(false);
+  const [isInShiftCodes, checkShiftCode] = useState(false);
 
   const shiftNameTextFieldOnChange = (shiftNameActual: string): void => {
     setShiftName(shiftNameActual);
@@ -97,7 +100,12 @@ export default function ShiftEditDrower(): JSX.Element {
           type="text"
           placeholder="Skrót"
           value={shiftCode}
-          onChange={(event): void => setShiftCode(event.target.value)}
+          onChange={(event): void => {
+            setShiftCode(event.target.value);
+            checkShiftCode(shiftCodes.includes(event.target.value));
+          }}
+          helperText={isInShiftCodes ? "Zmiana z takim kodem już istnieje" : ""}
+          error={isInShiftCodes}
         />
         <br />
 
