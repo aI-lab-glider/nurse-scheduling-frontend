@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import Drawer, { DrawerOptions } from "../../common-components/drawer/drawer.component";
+import ShiftEditDrower from "./shift-edit-drawer.component";
 
 export enum ShiftDrawerMode {
   EDIT,
@@ -27,7 +28,7 @@ export default function ShiftDrawerComponent(options: ShiftDrawerOptions): JSX.E
   const title = getTitle(mode);
   return (
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>
-      Drawer content
+      <ShiftEditDrower />
     </Drawer>
   );
 }
