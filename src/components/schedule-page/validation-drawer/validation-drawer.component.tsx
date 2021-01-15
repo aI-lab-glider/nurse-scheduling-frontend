@@ -22,7 +22,6 @@ export enum ErrorLoaderState {
 
 export interface ValidationDrawerState {
   state: ErrorLoaderState;
-  message: string;
 }
 
 export type Props = ValidationDrawerState;
@@ -37,19 +36,17 @@ export default function ValidationDrawerComponent(options: ValidationDrawerOptio
   useEffect(() => {
     const spinner = {
       state: ErrorLoaderState.CHECKING,
-      message: "Spinner",
     };
     const errorsFound = {
       state: ErrorLoaderState.ERRORS,
-      message: "Errors found",
     };
     const noErrors = {
       state: ErrorLoaderState.NOERRORS,
-      message: "No errors found",
     };
-
     if (scheduleErrors?.find((element) => element.kind === NetworkErrorCode.NETWORK_ERROR)) {
       setIsNetworkError(true);
+    } else {
+      setIsNetworkError(false);
     }
     if (scheduleErrors) {
       if (scheduleErrors.length > 0) {
@@ -75,7 +72,12 @@ export default function ValidationDrawerComponent(options: ValidationDrawerOptio
       onClose={(): void => closeDrawer()}
       anchor="right"
     >
-      <ErrorLoader state={loadingState} errors={mappedErrors} isNetworkError={isNetworkError} />
+      <ErrorLoader
+        state={loadingState}
+        errors={mappedErrors}
+        isNetworkError={isNetworkError}
+        setOpen={setOpen}
+      />
     </Drawer>
   );
 }
