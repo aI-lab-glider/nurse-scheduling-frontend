@@ -19,7 +19,7 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
   const { setOpen, open } = options;
   const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setOpen(false);
   };
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();

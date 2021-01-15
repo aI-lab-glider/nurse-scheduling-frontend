@@ -78,7 +78,7 @@ export default function DefaultModal(options: ModalOptions): JSX.Element {
   const classes = useStyles();
   const { setOpen, open, title, body, footer } = options;
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setOpen(false);
   };
 
