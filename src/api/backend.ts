@@ -8,12 +8,13 @@ import { ScheduleError } from "../common-models/schedule-error.model";
 interface BackendErrorObject extends Omit<ScheduleError, "kind"> {
   code: string;
 }
+
 class Backend {
   axios: AxiosInstance;
 
   constructor() {
     this.axios = axios.create({
-      baseURL: "http://127.0.0.1:8000/",
+      baseURL: process.env.REACT_APP_SOLVER_API_URL,
     });
   }
 

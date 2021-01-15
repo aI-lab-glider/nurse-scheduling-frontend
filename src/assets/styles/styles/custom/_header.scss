@@ -10,7 +10,9 @@
   padding: 0 20px 0 20px;
   align-items: center;
   justify-content: space-around;
-  position: relative;
+  position: fixed;
+  top: 0;
+  z-index: 1;
 
   #AssignmentIndIcon {
     color: $header-text-color;
