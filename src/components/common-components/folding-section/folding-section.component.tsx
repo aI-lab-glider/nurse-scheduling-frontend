@@ -15,7 +15,11 @@ export function FoldingSection({ name, children }: FoldingSectionOptions): JSX.E
   return (
     <div className="foldingSection">
       <div className="header">
-        <div onClick={(): void => setOpened((prev) => !prev)} className="text">
+        <div
+          onClick={(): void => setOpened((prev) => !prev)}
+          className="text"
+          data-cy="open-folding-section"
+        >
           <span>{opened ? <ExpandMoreIcon /> : <ChevronRightIcon />}</span>
           <span>{name}</span>
         </div>
