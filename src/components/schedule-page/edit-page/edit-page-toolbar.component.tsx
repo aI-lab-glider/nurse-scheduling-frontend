@@ -15,6 +15,7 @@ import RedoIcon from "@material-ui/icons/Redo";
 import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
 import { UndoActionCreator } from "../../../state/reducers/undoable.action-creator";
 import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
+import { useNotification } from "../../common-components/notification/notification.context";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;
@@ -22,6 +23,7 @@ interface EditPageToolbarOptions {
 
 export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Element {
   const scheduleLogic = useContext(ScheduleLogicContext);
+  const { createNotification } = useNotification();
   const dispatcher = useDispatch();
   const [openDrawer, setOpenDrawer] = useState(false);
   async function updateScheduleErrors(): Promise<void> {
@@ -47,6 +49,11 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
   function prepareDrawer(): void {
     updateScheduleErrors();
     setOpenDrawer(true);
+  }
+
+  function handleSaveClick(): void {
+    scheduleLogic?.updateActualRevision();
+    createNotification({ type: "success", message: "Plan został zapisany!" });
   }
 
   return (
@@ -96,7 +103,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
           data-cy="save-schedule-button"
           variant="outlined"
           onClick={(): void => {
-            scheduleLogic?.updateActualRevision();
+            handleSaveClick();
           }}
         >
           Zapisz
