@@ -24,6 +24,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
               `${errors?.filter((e) => e.type === ScheduleErrorType.UNDERTIME).length}` +
               ")"
             }
+            data-cy="open-folding-section-undertime-errors"
           >
             <div className="scrollableContainer75vh">
               {errors
