@@ -11,7 +11,7 @@ interface FoldingSectionOptions {
 }
 
 export function FoldingSection({ name, children }: FoldingSectionOptions): JSX.Element {
-  const [opened, setOpened] = useState(true);
+  const [opened, setOpened] = useState(false);
   return (
     <div className="foldingSection">
       <div className="header">
@@ -19,7 +19,6 @@ export function FoldingSection({ name, children }: FoldingSectionOptions): JSX.E
           <span>{opened ? <ExpandMoreIcon /> : <ChevronRightIcon />}</span>
           <span>{name}</span>
         </div>
-        <hr className="middle" />
       </div>
       {opened && children}
     </div>

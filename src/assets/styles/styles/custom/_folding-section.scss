@@ -2,19 +2,24 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this 
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 .foldingSection {
-  height: 50px;
+  min-height: 50px;
+  height: auto;
+  overflow: hidden;
+  padding-top: 20px;
 
   hr.middle {
     width: 102%;
+    display: block;
     //   Fix, required to handle hr color correctly in electron
     border: 0px;
     border-top: 2px solid $table-border-color-grey;
   }
 
   .header {
-    display: flex;
+    display: block;
     flex-direction: row;
     align-items: center;
+    padding-bottom: 20px;
   }
 
   .text {
