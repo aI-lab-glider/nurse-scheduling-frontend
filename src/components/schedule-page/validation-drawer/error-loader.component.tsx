@@ -6,7 +6,6 @@ import { ErrorLoaderState, Props } from "./validation-drawer.component";
 import { SpanErrors } from "./span-errors.component";
 import warning from "../../../assets/images/warning.svg";
 import ok from "../../../assets/images/ok.svg";
-import useForceUpdate from "./use-force-update";
 import { NetworkErrorCode, ScheduleError } from "../../../common-models/schedule-error.model";
 import backend from "../../../api/backend";
 import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
@@ -24,7 +23,6 @@ interface ErrorLoaderOptions {
 export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.Element {
   const { setOpen, isNetworkError } = options;
   const [spinnerAgain, setSpinnerAgain] = useState(false);
-  const forceUpdate = useForceUpdate();
   const scheduleLogic = useContext(ScheduleLogicContext);
   const dispatcher = useDispatch();
 
@@ -34,10 +32,9 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
 
   const reload = React.useCallback(() => {
     setSpinnerAgain(true);
-    forceUpdate();
     updateScheduleErrors();
     setTimeout(() => setSpinnerAgain(false), 1000);
-  }, [forceUpdate]);
+  }, []);
 
   async function updateScheduleErrors(): Promise<void> {
     const schedule = scheduleLogic?.schedule.getDataModel();
