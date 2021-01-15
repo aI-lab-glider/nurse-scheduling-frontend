@@ -34,7 +34,7 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
     setSpinnerAgain(true);
     updateScheduleErrors();
     setTimeout(() => setSpinnerAgain(false), 1000);
-  }, []);
+  }, [updateScheduleErrors]);
 
   async function updateScheduleErrors(): Promise<void> {
     const schedule = scheduleLogic?.schedule.getDataModel();
