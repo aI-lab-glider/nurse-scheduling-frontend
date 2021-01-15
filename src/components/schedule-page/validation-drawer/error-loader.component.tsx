@@ -31,30 +31,29 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
   }
 
   const reload = React.useCallback(() => {
+    async function updateScheduleErrors(): Promise<void> {
+      const schedule = scheduleLogic?.schedule.getDataModel();
+      if (schedule) {
+        let response: ScheduleError[];
+        try {
+          response = await backend.getErrors(schedule);
+        } catch (err) {
+          response = [
+            {
+              kind: NetworkErrorCode.NETWORK_ERROR,
+            },
+          ];
+        }
+        dispatcher({
+          type: ScheduleErrorActionType.UPDATE,
+          payload: response,
+        } as ActionModel<ScheduleError[]>);
+      }
+    }
     setSpinnerAgain(true);
     updateScheduleErrors();
     setTimeout(() => setSpinnerAgain(false), 1000);
-  }, [updateScheduleErrors]);
-
-  async function updateScheduleErrors(): Promise<void> {
-    const schedule = scheduleLogic?.schedule.getDataModel();
-    if (schedule) {
-      let response: ScheduleError[];
-      try {
-        response = await backend.getErrors(schedule);
-      } catch (err) {
-        response = [
-          {
-            kind: NetworkErrorCode.NETWORK_ERROR,
-          },
-        ];
-      }
-      dispatcher({
-        type: ScheduleErrorActionType.UPDATE,
-        payload: response,
-      } as ActionModel<ScheduleError[]>);
-    }
-  }
+  }, [dispatcher, scheduleLogic]);
 
   return (
     <>
