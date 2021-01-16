@@ -23,6 +23,7 @@ export function FoldingSection({ name, children }: FoldingSectionOptions): JSX.E
           <span>{opened ? <ExpandMoreIcon /> : <ChevronRightIcon />}</span>
           <span>{name}</span>
         </div>
+        <hr className="middle" />
       </div>
       {opened && children}
     </div>

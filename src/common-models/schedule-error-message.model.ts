@@ -8,12 +8,15 @@ export enum ScheduleErrorLevel {
 }
 
 export enum ScheduleErrorType {
-  OTHER = 1,
-  OVERTIME = 2,
-  UNDERTIME = 3,
-  NOT_ENOUGH_WORKERS = 4,
-  ILLEGAL_SEQUENCE = 5,
-  ILLEGAL_SHIFT_VALUE = 6,
+  OTH = "OTH",
+  AON = "AON",
+  WND = "WND",
+  WNN = "WNN",
+  DSS = "DSS",
+  LLB = "LLB",
+  WUH = "WUH",
+  WOH = "WOH",
+  ILLEGAL_SHIFT_VALUE = "ILLEGAL_SHIFT_VALUE",
 }
 
 export interface ScheduleErrorMessageModel {

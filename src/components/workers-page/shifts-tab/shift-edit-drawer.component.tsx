@@ -37,8 +37,7 @@ export default function ShiftEditDrower(): JSX.Element {
   const [colorPicked, setPicked] = useState("");
   const colorClicked = (colorChosen: string): void => setPicked(colorChosen);
 
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  const [newShift, setShift] = useState<Shift | null>(null);
+  const [, setShift] = useState<Shift | null>(null);
   const setNewShift = (createdShift: Shift): void => setShift(createdShift);
 
   return (

@@ -52,7 +52,7 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
     }
     setSpinnerAgain(true);
     updateScheduleErrors();
-    setTimeout(() => setSpinnerAgain(false), 1000);
+    setTimeout(() => setSpinnerAgain(false), 4000);
   }, [dispatcher, scheduleLogic]);
 
   return (
