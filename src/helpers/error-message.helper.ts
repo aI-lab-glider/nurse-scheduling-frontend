@@ -90,20 +90,8 @@ export class ErrorMessageHelper {
       case InputFileErrorCode.EMPTY_FILE:
         message = `Błąd podczas wczytywania pliku wejściowego: Pusty plik`;
         break;
-      case InputFileErrorCode.NO_BABYSITTER_SECTION:
-        message = `Błąd podczas wczytywania pliku wejściowego: Nie znaleziono sekcji "opiekunki"`;
-        break;
-      case InputFileErrorCode.NO_NURSE_SECTION:
-        message = `Błąd podczas wczytywania pliku wejściowego: Nie znaleziono sekcji "pielęgniarki"`;
-        break;
-      case InputFileErrorCode.NO_CHILDREN_SECTION:
-        message = `Błąd podczas wczytywania pliku wejściowego: Nie znaleziono sekcji "dzieci"`;
-        break;
-      case InputFileErrorCode.INVALID_METADATA:
-        message = `Błąd podczas wczytywania pliku wejściowego: Wykryto błędy w sekcji informacyjnej`;
-        break;
-      case InputFileErrorCode.NO_CHILDREN_QUANTITY:
-        message = "Błąd podczas wczytywania pliku wejściowego: Nie podano liczby dzieci";
+      case InputFileErrorCode.LOAD_FILE_ERROR:
+        message = `${error.message}`;
         break;
       case NetworkErrorCode.NETWORK_ERROR:
         message = "Błąd połączenia";

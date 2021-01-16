@@ -18,7 +18,6 @@ export interface UseScheduleConverterOutput {
   scheduleSheet?: Array<object>;
   setSrcFile: (srcFile: File) => void;
   scheduleErrors: ScheduleError[];
-  errorOccurred: boolean;
 }
 
 export function useScheduleConverter(): UseScheduleConverterOutput {
@@ -26,7 +25,6 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
   const [scheduleSheet, setScheduleSheet] = useState<Array<object>>();
   const [fileContent, setSrcFile] = useFileReader();
   const [monthModel, setMonthModel] = useState<MonthDataModel>();
-  const [errorOccurred, setErrorOccurredFlag] = useState<boolean>(false);
   const { month_number: month, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
@@ -41,11 +39,9 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       try {
         readFileContent(workbook);
       } catch (e) {
-        setErrorOccurredFlag(true);
-
         setScheduleErrors([
           {
-            kind: InputFileErrorCode[e.message as keyof typeof InputFileErrorCode],
+            kind: InputFileErrorCode.EMPTY_FILE,
           },
         ]);
 
@@ -60,32 +56,50 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
     scheduleSheet: scheduleSheet,
     setSrcFile: setSrcFile,
     scheduleErrors: scheduleErrors,
-    errorOccurred: errorOccurred,
   };
 
   function readFileContent(workbook): void {
     const sheet = workbook.getWorksheet(1);
+
     if (sheet.rowCount === 0) {
       throw new Error(InputFileErrorCode.EMPTY_FILE);
     }
 
-    const parsedFileContent = Array<Array<string>>();
+    const golden = Array<Array<Array<string>>>();
+    let silver = Array<Array<string>>();
+
     sheet.eachRow((row, _) => {
-      parsedFileContent.push(row.values as Array<string>);
+      const rowValues = row.values as Array<string>;
+      rowValues.shift();
+
+      function notEmpty() {
+        const rowValuesSet = new Set(rowValues.map((x) => x.toString()));
+        return rowValuesSet.size === 1 && rowValuesSet.values().next().value === "";
+      }
+
+      if (notEmpty()) {
+        if (silver.length !== 0) {
+          golden.push(silver);
+        }
+        silver = Array<Array<string>>();
+      } else {
+        silver.push(rowValues);
+      }
     });
-    parsedFileContent.forEach((a) => a.shift());
 
-    while (parsedFileContent[parsedFileContent.length - 1][0] === "") {
-      parsedFileContent.pop();
-    }
+    setScheduleSheet(golden);
 
-    setScheduleSheet(parsedFileContent);
-    if (Object.keys(parsedFileContent).length !== 0) {
-      const parser = new ScheduleParser(month, year, parsedFileContent);
+    if (Object.keys(golden).length !== 0) {
+      const parser = new ScheduleParser(golden);
+
       setScheduleErrors([
+        ...parser._parseErrors,
+        ...parser.sections.Metadata.errors,
+        ...parser.sections.FoundationInfo.errors,
         ...parser.sections.NurseInfo.errors,
         ...parser.sections.BabysitterInfo.errors,
       ]);
+      //todo coto
       setMonthModel(cropScheduleDMToMonthDM(parser.schedule.getDataModel()));
     }
     return;

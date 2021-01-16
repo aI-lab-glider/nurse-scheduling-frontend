@@ -1,31 +1,62 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { ParseErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
+import {
+  InputFileErrorCode,
+  ParseErrorCode,
+  ScheduleError,
+} from "../../common-models/schedule-error.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
 import { ShiftsProvider } from "../providers/shifts-provider.model";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
+import { WorkerType, WorkerTypeHelper } from "../../common-models/worker-info.model";
 
 export class ShiftsInfoParser extends ShiftsProvider {
   private _sectionRows: { [key: string]: DataRowParser } = {};
   private _parseErrors: ScheduleError[] = [];
 
-  constructor(scheduleInfoSection: DataRowParser[], private metaData: MetaDataParser) {
+  constructor(data: string[][], typeOfPersonel: WorkerType, private metaData: MetaDataParser) {
     super();
-    scheduleInfoSection
-      .map((row) =>
-        row
-          .createWithCroppedData(this.metaData.validDataStart, this.metaData.validDataEnd + 1)
-          .createWithProcessedRow((dataRow) => this.fillRowWithShifts(dataRow))
-      )
-      .forEach((row) => {
-        this._sectionRows[row.rowKey] = row;
-      });
+    this.myPersonel(data, typeOfPersonel).forEach((row) => {
+      this._sectionRows[row.rowKey] = row;
+    });
   }
 
   public get errors(): ScheduleError[] {
     return [...this._parseErrors];
+  }
+
+  private myPersonel(raw: string[][], typeOfPersonel: WorkerType): DataRowParser[] {
+    const sectionData: DataRowParser[] = [];
+    raw.forEach((a, id) => {
+      if (a.length <= 1) {
+        this.logLoadFileError(
+          "Wiersz numer" +
+            id +
+            "w sekcji " +
+            WorkerTypeHelper.translate(typeOfPersonel, true) +
+            " ma nieodpowiednią długośc"
+        );
+      }
+      a.slice(1).forEach((b, innerId) => {
+        if (typeof b !== "string" || !(b in ShiftCode || b === " ")) {
+          this.logLoadFileError(
+            "" +
+              b +
+              " Błąd w sekcji " +
+              WorkerTypeHelper.translate(typeOfPersonel, true) +
+              " wiersz numer " +
+              id +
+              " kolumna " +
+              innerId
+          );
+        }
+      });
+
+      sectionData.push(new DataRowParser(a));
+    });
+    return sectionData;
   }
 
   public get sectionData(): DataRowParser[] {
@@ -83,6 +114,13 @@ export class ShiftsInfoParser extends ShiftsProvider {
       day: date,
       worker: worker,
       actual: value,
+    });
+  }
+
+  private logLoadFileError(msg: string): void {
+    this._parseErrors.push({
+      kind: InputFileErrorCode.LOAD_FILE_ERROR,
+      message: msg,
     });
   }
 }
