@@ -8,6 +8,7 @@ import { MonthInfoLogic } from "./month-info.logic";
 import { BaseSectionLogic } from "./base-section-logic.model";
 import { MetaDataSectionKey } from "../section.model";
 import { MetadataProvider } from "../providers/metadata-provider.model";
+import { ScheduleError } from "../../common-models/schedule-error.model";
 export enum MonthLogicActionType {
   UpdateFrozenDates = "updateFrozenDates",
 }
@@ -70,5 +71,8 @@ export class MetadataLogic extends BaseSectionLogic implements MetadataProvider 
 
   public get dates(): number[] {
     return this.monthLogic.verboseDates.map((d) => d.date);
+  }
+  get errors(): ScheduleError[] {
+    return [];
   }
 }
