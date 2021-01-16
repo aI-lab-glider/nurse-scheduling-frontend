@@ -19,10 +19,10 @@ export interface MonthDataModel extends Omit<ScheduleDataModel, "schedule_info">
   scheduleKey: ScheduleKey;
 }
 
-export function isScheduleModelEmpty(scheduleModel: ScheduleDataModel): boolean {
-  const requiredFields: (keyof ScheduleDataModel)[] = ["employee_info", "month_info", "shifts"];
+export function isMonthModelEmpty(monthDataModel: MonthDataModel): boolean {
+  const requiredFields: (keyof MonthDataModel)[] = ["employee_info", "month_info", "shifts"];
   return requiredFields.every((field) => {
-    const requiredObject = scheduleModel[field];
+    const requiredObject = monthDataModel[field];
     return Object.values(requiredObject).every((field) => _.isEmpty(field));
   });
 }

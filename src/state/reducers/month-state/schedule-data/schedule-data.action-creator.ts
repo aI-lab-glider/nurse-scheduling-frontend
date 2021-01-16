@@ -16,11 +16,15 @@ import {
   TEMPORARY_SCHEDULE_NAME,
 } from "../../../app.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
-import { HistoryStateModel } from "../../../models/application-state.model";
+import { ApplicationStateModel, HistoryStateModel } from "../../../models/application-state.model";
 import { HistoryReducerActionCreator } from "../../history.reducer";
 import { ShiftInfoModel } from "../../../../common-models/shift-info.model";
 import { MonthInfoModel } from "../../../../common-models/month-info.model";
 import { cropMonthInfoToMonth, cropShiftsToMonth } from "./common-reducers";
+import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
+import { ThunkDispatch } from "redux-thunk";
+import { ActionModel } from "../../../models/action.model";
+import _ from "lodash";
 
 export class ScheduleDataActionCreator {
   static setPersistentSchedule(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
@@ -30,6 +34,19 @@ export class ScheduleDataActionCreator {
         const action = {
           type: createActionName(destination, ScheduleActionType.ADD_NEW),
           payload: newSchedule,
+        };
+        dispatch(action);
+      });
+    };
+  }
+
+  static setPersistentScheduleMonth(newMonthData: MonthDataModel): ThunkFunction<MonthDataModel> {
+    return (dispatch): void => {
+      const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
+      destinations.forEach((destination) => {
+        const action = {
+          type: createActionName(destination, ScheduleActionType.ADD_NEW),
+          payload: newMonthData,
         };
         dispatch(action);
       });
@@ -68,9 +85,13 @@ export class ScheduleDataActionCreator {
     destination: ScheduleActionDestination,
     newMonth: MonthDataModel
   ): ThunkFunction<ScheduleDataModel> {
-    return (dispatch, getState): void => {
+    return async (dispatch, getState): Promise<void> => {
       const history = getState().history;
-      const [prevMonth, nextMonth] = getSurroundingMonths(newMonth.scheduleKey, history);
+      const [prevMonth, nextMonth] = await getSurroundingMonths(
+        newMonth.scheduleKey,
+        history,
+        dispatch
+      );
       const extendedSchedule = extendMonthToScheduleDM(prevMonth, newMonth, nextMonth);
       const action = {
         type: createActionName(destination, ScheduleActionType.ADD_NEW),
@@ -88,19 +109,32 @@ export class ScheduleDataActionCreator {
   }
 }
 
-function getSurroundingMonths(
+async function getSurroundingMonths(
   key: ScheduleKey,
-  history: HistoryStateModel
-): [MonthDataModel, MonthDataModel] {
-  const prevMonth: MonthDataModel = getMonth(key.prevMonthKey, history);
-  const nextMonth: MonthDataModel = getMonth(key.nextMonthKey, history);
+  history: HistoryStateModel,
+  dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<ScheduleDataModel>>
+): Promise<[MonthDataModel, MonthDataModel]> {
+  const prevMonth: MonthDataModel = await getMonth(key.prevMonthKey, history, dispatch);
+  const nextMonth: MonthDataModel = await getMonth(key.nextMonthKey, history, dispatch);
   return [prevMonth, nextMonth];
 }
 
-function getMonth(monthKey: ScheduleKey, history: HistoryStateModel): MonthDataModel {
+async function getMonth(
+  monthKey: ScheduleKey,
+  history: HistoryStateModel,
+  dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<ScheduleDataModel>>
+): Promise<MonthDataModel> {
   const monthDataModel = history[monthKey.key];
-  // get schedule from history
-  // if not avaiable get one/both from db
+  const noMonthInHistory = _.isNil(monthDataModel);
+  if (noMonthInHistory) {
+    const db = await new LocalStorageProvider().getMonthRevision({
+      revisionType: "actual",
+      validityPeriod: monthKey.key,
+    });
+    const noMonthInDatabase = _.isNil(db);
+    if (monthDataModel) {
+    }
+  }
   // if not avaible create one/both
   // add new schedule to db/
   // add new scheudle to history

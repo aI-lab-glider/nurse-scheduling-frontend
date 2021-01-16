@@ -2,36 +2,39 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import PouchDB from "pouchdb-browser";
-import { isScheduleModelEmpty, ScheduleDataModel } from "../common-models/schedule-data.model";
+import {
+  isMonthModelEmpty,
+  MonthDataModel,
+  ScheduleDataModel,
+} from "../common-models/schedule-data.model";
+
 import { ScheduleDataActionCreator } from "../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import {
-  PersistanceStoreProvider,
+  MonthRevision,
+  PersistenceStoreProvider,
   RevisionFilter,
   RevisionType,
-  ScheduleKey,
-  ScheduleRevision,
   ThunkFunction,
 } from "./persistance-store.model";
 
 export const DATABASE_NAME = "nurse-scheduling";
-/*eslint-disable @typescript-eslint/camelcase */
-export class LocalStorageProvider extends PersistanceStoreProvider {
-  private storage: PouchDB.Database<ScheduleRevision>;
+export class LocalStorageProvider extends PersistenceStoreProvider {
+  private storage: PouchDB.Database<MonthRevision>;
 
   constructor() {
     super();
     this.storage = new PouchDB(DATABASE_NAME);
   }
 
-  saveScheduleRevision(
+  saveMonthRevision(
     type: RevisionType,
-    schedule: ScheduleDataModel
-  ): ThunkFunction<ScheduleDataModel> {
+    monthDataModel: MonthDataModel
+  ): ThunkFunction<MonthDataModel> {
     return async (dispatch): Promise<void> => {
-      if (isScheduleModelEmpty(schedule)) {
+      if (isMonthModelEmpty(monthDataModel)) {
         return;
       }
-      const id = this.getScheduleId(schedule);
+      const id = monthDataModel.scheduleKey.key;
       let revision = "";
       try {
         const document = await this.storage.get(id);
@@ -40,28 +43,32 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
       this.storage.put({
         _rev: revision,
         _id: id,
-        data: schedule,
+        data: monthDataModel,
         revisionType: type,
       });
-      const action = ScheduleDataActionCreator.setPersistentSchedule(schedule);
+      const action = ScheduleDataActionCreator.setPersistentScheduleMonth(monthDataModel);
       dispatch(action);
     };
   }
 
-  getScheduleRevision(filter: RevisionFilter): ThunkFunction<ScheduleDataModel> {
+  getMonthRevision(filter: RevisionFilter): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
+      // eslint-disable-next-line @typescript-eslint/camelcase
       const revisions = await this.storage.allDocs({ include_docs: true });
       const result = revisions.rows.find((r) => {
-        const { year, month_number: month } = r.doc?.data.schedule_info ?? {};
-        return (
-          new ScheduleKey(month ?? new Date().getMonth(), year ?? new Date().getFullYear()).key ===
-            filter.validityPeriod && r.doc?.revisionType === filter.revisionType
-        );
+        if (r.doc?.data.scheduleKey) {
+          return (
+            r.doc?.data.scheduleKey.key === filter.validityPeriod &&
+            r.doc?.revisionType === filter.revisionType
+          );
+        } else {
+          return undefined;
+        }
       });
       if (!result?.doc) {
         return;
       }
-      const action = ScheduleDataActionCreator.setPersistentSchedule(result.doc.data);
+      const action = ScheduleDataActionCreator.setPersistentScheduleMonth(result.doc.data);
       dispatch(action);
     };
   }

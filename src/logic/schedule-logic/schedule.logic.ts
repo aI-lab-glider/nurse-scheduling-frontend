@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ThunkDispatch } from "redux-thunk";
 import {
-  PersistanceStoreProvider,
+  PersistenceStoreProvider,
   RevisionFilter,
   ScheduleKey,
 } from "../../api/persistance-store.model";
@@ -13,7 +13,10 @@ import { SelectionMatrix } from "../../components/schedule-page/table/schedule/s
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
-import { ScheduleDataActionCreator } from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import {
+  cropScheduleToMonthDM,
+  ScheduleDataActionCreator,
+} from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { ScheduleActionModel } from "../../state/reducers/month-state/schedule-data/schedule.actions";
 import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
 import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
@@ -32,7 +35,7 @@ export class ScheduleLogic implements ScheduleProvider {
   uuid!: string;
   constructor(
     private dispatchScheduleUpdate: ThunkDispatch<ApplicationStateModel, void, ScheduleActionModel>,
-    private storeProvider: PersistanceStoreProvider,
+    private storeProvider: PersistenceStoreProvider,
     scheduleModel: ScheduleDataModel,
     private mode: "edit" | "readonly"
   ) {
@@ -97,12 +100,16 @@ export class ScheduleLogic implements ScheduleProvider {
       revisionType: "actual",
       validityPeriod: new ScheduleKey(month, year).key,
     };
-    this.dispatchScheduleUpdate(this.storeProvider.getScheduleRevision(filter));
+    this.dispatchScheduleUpdate(this.storeProvider.getMonthRevision(filter));
   }
 
   public updateActualRevision(): void {
     this.dispatchScheduleUpdate(
-      this.storeProvider.saveScheduleRevision("actual", this.schedule.getDataModel())
+      // TODO: SAVE WEEKS FROM PREV AND NEXT MONTHS
+      this.storeProvider.saveMonthRevision(
+        "actual",
+        cropScheduleToMonthDM(this.schedule.getDataModel())
+      )
     );
   }
 

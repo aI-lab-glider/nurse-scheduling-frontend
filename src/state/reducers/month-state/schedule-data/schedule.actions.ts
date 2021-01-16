@@ -10,7 +10,7 @@ import { TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
 import { ActionModel } from "../../../models/action.model";
 import { ApplicationStateModel } from "../../../models/application-state.model";
 import { UndoableConfig } from "../../undoable.action-creator";
-import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
+import { cropScheduleToMonthDM, ScheduleDataActionCreator } from "./schedule-data.action-creator";
 
 export function isScheduleAction(action: ActionModel<unknown>): action is ScheduleActionModel {
   return !_.isNil((action.payload as ScheduleDataModel)?.schedule_info);
@@ -33,7 +33,8 @@ async function updatePersistentSchedule(
   state: ScheduleDataModel
 ): Promise<void> {
   const storeProvider = new LocalStorageProvider();
-  storeProvider.saveScheduleRevision("actual", state);
+  // TODO: SAVE WEEKS FROM PREV AND NEXT MONTHS
+  storeProvider.saveMonthRevision("actual", cropScheduleToMonthDM(state));
   state &&
     (await dispatch(ScheduleDataActionCreator.addNewSchedule(TEMPORARY_SCHEDULE_NAME, state)));
 }
