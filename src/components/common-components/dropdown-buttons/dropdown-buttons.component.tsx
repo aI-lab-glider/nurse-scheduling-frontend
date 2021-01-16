@@ -18,6 +18,7 @@ interface DropdownOptions {
   mainLabel: string;
   variant?: ButtonVariant;
   dataCy?: string;
+  disabled?: boolean;
 }
 
 export function DropdownButtons({
@@ -25,6 +26,7 @@ export function DropdownButtons({
   mainLabel,
   variant,
   dataCy,
+  disabled = false,
 }: DropdownOptions): JSX.Element {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
@@ -39,7 +41,13 @@ export function DropdownButtons({
 
   return (
     <div>
-      <Button variant={variant} onClick={handleToggle} ref={anchorRef} data-cy={dataCy}>
+      <Button
+        variant={variant}
+        onClick={handleToggle}
+        ref={anchorRef}
+        data-cy={dataCy}
+        disabled={disabled}
+      >
         {mainLabel}
         <ArrowDropDownIcon />
       </Button>

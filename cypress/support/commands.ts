@@ -2,13 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import "cypress-file-upload";
-import { WorkerType } from "../../src/common-models/worker-info.model";
 import { ShiftCode } from "../../src/common-models/shift-info.model";
-
+import { WorkerType } from "../../src/common-models/worker-info.model";
 export interface GetWorkerShiftOptions {
   workerType: WorkerType;
   workerIdx: number;
   shiftIdx: number;
+  selector?: "cell" | "highlighted-cell";
 }
 
 export interface CheckWorkerShiftOptions extends GetWorkerShiftOptions {
@@ -17,7 +17,6 @@ export interface CheckWorkerShiftOptions extends GetWorkerShiftOptions {
 export interface ChangeWorkerShiftOptions extends GetWorkerShiftOptions {
   newShiftCode: ShiftCode;
 }
-
 export interface CheckHoursInfoOptions {
   workerType: WorkerType;
   workerIdx: number;
@@ -33,11 +32,12 @@ export enum HoursInfoCells {
   actual = 1,
   overtime = 2,
 }
+export type ScheduleName = "example.xlsx" | "grafik.xlsx" | "example_2.xlsx";
 
-Cypress.Commands.add("loadSchedule", () => {
+Cypress.Commands.add("loadSchedule", (scheduleName: ScheduleName = "example.xlsx") => {
   cy.visit(Cypress.env("baseUrl"));
   cy.get("[data-cy=file-dropdown]").click();
-  cy.get('[data-cy="file-input"]').attachFile("example.xlsx");
+  cy.get('[data-cy="file-input"]').attachFile(scheduleName);
   cy.get(`[data-cy=nurseShiftsTable]`, { timeout: 10000 });
   cy.window()
     .its("store")
@@ -52,7 +52,7 @@ Cypress.Commands.add("loadSchedule", () => {
 
 Cypress.Commands.add(
   "getWorkerShift",
-  ({ workerType, workerIdx, shiftIdx }: GetWorkerShiftOptions) => {
+  ({ workerType, workerIdx, shiftIdx, selector = "cell" }: GetWorkerShiftOptions) => {
     return cy
       .get(`[data-cy=${workerType.toLowerCase()}ShiftsTable]`)
       .children()
@@ -60,7 +60,7 @@ Cypress.Commands.add(
       .eq(workerIdx)
       .children()
       .eq(shiftIdx)
-      .find("[data-cy=cell]");
+      .find(`[data-cy=${selector}]`);
   }
 );
 
@@ -76,7 +76,9 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("useAutocomplete", (newShiftCode: ShiftCode) => {
-  return cy.get(`[data-cy=autocomplete-${newShiftCode}]`, { timeout: 100000 }).click();
+  return cy
+    .get(`[data-cy=autocomplete-${newShiftCode}]`, { timeout: 100000 })
+    .click({ force: true });
 });
 
 Cypress.Commands.add(
@@ -104,7 +106,16 @@ Cypress.Commands.add(
   }
 );
 
+Cypress.Commands.add("saveToDatabase", () => {
+  return cy.get("[data-cy=save-schedule-button").click();
+});
+
 Cypress.Commands.add("enterEditMode", () => {
   cy.get("[data-cy=edit-mode-button]").click();
+  return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
+});
+
+Cypress.Commands.add("leaveEditMode", () => {
+  cy.get("[data-cy=leave-edit-mode]").click();
   return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
 });

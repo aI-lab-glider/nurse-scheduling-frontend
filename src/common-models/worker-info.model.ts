@@ -36,6 +36,12 @@ export class ContractTypeHelper {
   }
 }
 
+export enum TimeDrawerType {
+  FULL = "1/1",
+  HALF = "1/2",
+  OTHER = "inne",
+}
+
 export interface WorkersInfoModel {
   time: { [key: string]: number };
   type: { [workerName: string]: WorkerType };

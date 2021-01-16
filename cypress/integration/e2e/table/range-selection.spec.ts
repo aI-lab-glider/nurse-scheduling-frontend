@@ -35,12 +35,12 @@ const workerTestCases: WorkerTestCase[] = [
     startShiftCell: {
       workerType: WorkerType.NURSE,
       workerIdx: 3,
-      shiftIdx: 7,
+      shiftIdx: 3,
     },
     endShiftCell: {
       workerType: WorkerType.NURSE,
       workerIdx: 3,
-      shiftIdx: 3,
+      shiftIdx: 0,
     },
     desiredShiftCode: ShiftCode.U,
   },
@@ -53,7 +53,7 @@ const workerTestCases: WorkerTestCase[] = [
     },
     endShiftCell: {
       workerType: WorkerType.NURSE,
-      workerIdx: 3,
+      workerIdx: 2,
       shiftIdx: 5,
     },
     desiredShiftCode: ShiftCode.L4,
@@ -155,13 +155,23 @@ function validateHorizontalShifts(
   endShiftIdx: number,
   desiredShiftCode: ShiftCode
 ) {
-  for (const shiftIdx of _.range(startShiftIdx, endShiftIdx + 1)) {
-    cy.checkWorkerShift({
+  cy.checkWorkerShift({
+    workerType,
+    workerIdx,
+    shiftIdx: Math.min(startShiftIdx, endShiftIdx),
+    desiredShiftCode,
+  });
+  const [start, end] = [
+    Math.min(startShiftIdx, endShiftIdx) + 1,
+    Math.max(startShiftIdx, endShiftIdx) + 1,
+  ];
+  for (const shiftIdx of _.range(start, end)) {
+    cy.getWorkerShift({
       workerType,
       workerIdx,
       shiftIdx,
-      desiredShiftCode,
-    });
+      selector: "highlighted-cell",
+    }).should("have.class", `keepOntrue${desiredShiftCode}`);
   }
 }
 

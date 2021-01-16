@@ -43,6 +43,17 @@
   color: $primary;
 }
 
+.btn-disabled {
+  border: 1px solid $gray-400;
+  color: $gray-400;
+
+  &:hover {
+    cursor: default;
+    font-weight: $btn-font-weight;
+    box-shadow: none;
+  }
+}
+
 .btn-circle-outlined {
   padding: 0;
   height: $btn-circle-outlined-size;

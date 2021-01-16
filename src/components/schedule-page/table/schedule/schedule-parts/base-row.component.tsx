@@ -9,6 +9,7 @@ import { ShiftHelper } from "../../../../../helpers/shifts.helper";
 import { Sections } from "../../../../../logic/providers/schedule-provider.model";
 import { DataRowHelper } from "../../../../../helpers/data-row.helper";
 import { ArrayHelper } from "../../../../../helpers/array.helper";
+import { useScheduleStyling } from "../../../../common-components/use-schedule-styling/use-schedule-styling";
 
 export interface BaseRowOptions {
   uuid: string;
@@ -59,13 +60,17 @@ export function BaseRowComponentF({
     data = [...data, ...Array.from(Array(diff))];
   }
 
+  data = useScheduleStyling(data);
+
   return (
-    <tr className="row" id="mainRow">
-      {data.map((cellData, cellIndex) => {
+    <tr className="row scheduleStyle" id="mainRow">
+      {data.map(({ cellData, keepOn, hasNext }, cellIndex) => {
         return (
           <CellComponent
             sectionKey={sectionKey}
             rowIndex={index}
+            keepOn={keepOn}
+            hasNext={hasNext}
             index={cellIndex}
             key={`${cellData}${cellIndex}_${uuid}}`}
             value={cellData}

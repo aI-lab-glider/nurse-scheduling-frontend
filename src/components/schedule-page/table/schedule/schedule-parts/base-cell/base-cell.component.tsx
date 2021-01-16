@@ -19,13 +19,17 @@ export enum CellManagementKeys {
 }
 
 const PivotCellType = "Cell";
+
 export interface PivotCell {
   type: string;
   rowIndex: number;
   cellIndex: number;
 }
+
 export interface BaseCellOptions {
   rowIndex: number;
+  keepOn: boolean;
+  hasNext: boolean;
   index: number;
   value: string;
   style?: CellColorSet;
@@ -47,6 +51,8 @@ export interface BaseCellOptions {
 
 export function BaseCellComponent({
   rowIndex,
+  keepOn,
+  hasNext,
   index,
   value,
   isBlocked,
@@ -66,15 +72,20 @@ export function BaseCellComponent({
   const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
   const errorTriangle = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const keepOnClass = "keepOn" + keepOn + value;
+  const hasNextClass = "hasNext" + hasNext;
 
   const [isToolTipOpen, setToolTipOpen] = useState(false);
   const { styles, attributes } = usePopper(errorTriangle.current, tooltipRef.current);
+
   function showErrorTooltip(): void {
     setToolTipOpen(true);
   }
+
   function hideErrorTooltip(): void {
     setToolTipOpen(false);
   }
+
   const [, drop] = useDrop({
     accept: dragAnDropType,
     collect: (monitor) => {
@@ -110,9 +121,11 @@ export function BaseCellComponent({
     }
     onKeyDown?.(e);
   }
+
   function _onValueChange(newValue: string): void {
     onValueChange?.(newValue);
   }
+
   function getId(): string {
     if (verboseDate && monthNumber) {
       if (verboseDate.month !== TranslationHelper.englishMonths[monthNumber]) {
@@ -139,50 +152,53 @@ export function BaseCellComponent({
         onBlur?.();
       }}
     >
-      <div className="content" ref={drag}>
-        {isPointerOn && !isBlocked && (
-          <InputComponent
-            className="cell-input"
-            onValueChange={(value): void => _onValueChange(value)}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
-          />
-        )}
+      <div className={"wrapContent"} ref={drag}>
+        <div className={"content " + hasNextClass + " " + keepOnClass} data-cy="highlighted-cell">
+          {isPointerOn && !isBlocked && (
+            <InputComponent
+              className="cell-input"
+              onValueChange={(value): void => _onValueChange(value)}
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
+            />
+          )}
 
-        <Popper
-          ref={tooltipRef}
-          className="errorTooltip"
-          style={styles}
-          {...attributes}
-          data={
-            <div>
-              <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Bład w linii: {rowIndex},
-              pozycji: {index}. Wartość komórki: {value}
-            </div>
-          }
-          isOpen={isToolTipOpen}
-        ></Popper>
-
-        {(!isPointerOn || (isPointerOn && isBlocked)) && (
-          <p
-            data-cy="cell"
-            className="relative"
-            onClick={(): void => {
-              if (!isBlocked) onClick?.();
-            }}
-          >
-            {
-              value === "N" && (
-                <span
-                  onMouseEnter={showErrorTooltip}
-                  onMouseLeave={hideErrorTooltip}
-                  ref={errorTriangle}
-                  className="error-triangle"
-                />
-              ) //todo change to proper error flag
+          <Popper
+            ref={tooltipRef}
+            className="errorTooltip"
+            style={styles}
+            {...attributes}
+            data={
+              <div>
+                <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Bład w linii: {rowIndex}
+                , pozycji: {index}. Wartość komórki: {value}
+              </div>
             }
-            {value}
-          </p>
-        )}
+            isOpen={isToolTipOpen}
+          />
+          <div className={"leftBorder leftBorderColor"} />
+          {(!isPointerOn || (isPointerOn && isBlocked)) && (
+            <p
+              data-cy="cell"
+              className={"relative "}
+              onClick={(): void => {
+                if (!isBlocked) onClick?.();
+              }}
+            >
+              {
+                value === "N" && (
+                  <span
+                    onMouseEnter={showErrorTooltip}
+                    onMouseLeave={hideErrorTooltip}
+                    ref={errorTriangle}
+                    className="error-triangle"
+                  />
+                ) //todo change to proper error flag
+              }
+
+              {keepOn ? "" : value}
+            </p>
+          )}
+        </div>
       </div>
     </td>
   );
