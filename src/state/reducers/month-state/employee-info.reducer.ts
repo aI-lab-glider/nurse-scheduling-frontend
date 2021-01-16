@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { WorkersInfoModel, WorkerType } from "../../../common-models/worker-info.model";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
-import { WorkersInfoModel } from "../../../common-models/worker-info.model";
 import { ActionModel } from "../../models/action.model";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import { CopyMonthActionPayload } from "./schedule-data/schedule-data.action-creator";
@@ -32,6 +32,24 @@ export function employeeInfoReducerF(name: string) {
       case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
         data = (action.payload as CopyMonthActionPayload).scheduleData.employee_info;
         return { ...data };
+      case ScheduleActionType.ADD_NEW_WORKER:
+        return {
+          time: {
+            [action.payload!.worker!.name]: [action.payload!.worker!.employmentTime],
+            ...state.time,
+          },
+          type: { [action.payload!.worker!.name]: WorkerType.OTHER, ...state.type },
+        };
+      case ScheduleActionType.MODIFY_WORKER:
+        delete state.time[action.payload!.worker!.prevName];
+        delete state.type[action.payload!.worker!.prevName];
+        return {
+          time: {
+            [action.payload!.worker!.name]: [action.payload!.worker!.employmentTime],
+            ...state.time,
+          },
+          type: { [action.payload!.worker!.name]: WorkerType.OTHER, ...state.type },
+        };
       default:
         return state;
     }

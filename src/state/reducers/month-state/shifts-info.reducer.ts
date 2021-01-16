@@ -27,6 +27,10 @@ export function scheduleShiftsInfoReducerF(name: string) {
       case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
         const { month, year, scheduleData } = action.payload as CopyMonthActionPayload;
         return copyShiftstoMonth(month, year, scheduleData.shifts, scheduleData.month_info.dates);
+      case ScheduleActionType.MODIFY_WORKER:
+        const shiftsArr = state[action.payload!.worker!.prevName];
+        delete state[action.payload!.worker!.prevName];
+        return { ...{ [action.payload!.worker!.name]: shiftsArr }, ...state };
 
       default:
         return state;

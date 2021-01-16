@@ -73,6 +73,26 @@ export class ScheduleDataActionCreator {
     };
   }
 
+  static addNewWorker(worker) {
+    return async (dispatch): Promise<void> => {
+      const action = {
+        type: ScheduleActionType.ADD_NEW_WORKER,
+        payload: { worker },
+      };
+      dispatch(action);
+    };
+  }
+
+  static modifyWorker(worker) {
+    return async (dispatch): Promise<void> => {
+      const action = {
+        type: ScheduleActionType.MODIFY_WORKER,
+        payload: { worker },
+      };
+      dispatch(action);
+    };
+  }
+
   static addNewSchedule(
     destination: ScheduleActionDestination,
     newSchedule: ScheduleDataModel

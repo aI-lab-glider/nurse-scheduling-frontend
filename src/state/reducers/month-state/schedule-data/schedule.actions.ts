@@ -11,17 +11,24 @@ import { ActionModel } from "../../../models/action.model";
 import { ApplicationStateModel } from "../../../models/application-state.model";
 import { UndoableConfig } from "../../undoable.action-creator";
 import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
+import { WorkerInfoExtendedInterface } from "../../../../components/namestable/worker-edit.component";
 
 export function isScheduleAction(action: ActionModel<unknown>): action is ScheduleActionModel {
   return !_.isNil((action.payload as ScheduleDataModel)?.schedule_info);
 }
 
-export type ScheduleActionModel = ActionModel<ScheduleDataModel>;
+interface ScheduleDataModelExtended extends ScheduleDataModel {
+  worker?: WorkerInfoExtendedInterface;
+}
+
+export type ScheduleActionModel = ActionModel<ScheduleDataModelExtended>;
 
 export enum ScheduleActionType {
   UPDATE = "UPDATE_SCHEDULE",
   ADD_NEW = "ADD_NEW_SCHEDULE",
   COPY_TO_MONTH = "COPY_TO_MONTH",
+  ADD_NEW_WORKER = "ADD_NEW_WORKER",
+  MODIFY_WORKER = "MODIFY_WORKER",
 }
 
 export function createActionName(name: string, action: ScheduleActionType): string {
