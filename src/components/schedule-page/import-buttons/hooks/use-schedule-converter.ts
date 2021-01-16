@@ -22,7 +22,6 @@ export interface UseScheduleConverterOutput {
 
 export function useScheduleConverter(): UseScheduleConverterOutput {
   const [scheduleErrors, setScheduleErrors] = useState<ScheduleError[]>([]);
-  const [scheduleSheet, setScheduleSheet] = useState<Array<object>>();
   const [fileContent, setSrcFile] = useFileReader();
   const [monthModel, setMonthModel] = useState<MonthDataModel>();
   const { month_number: month, year } = useSelector(
@@ -65,8 +64,8 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       throw new Error(InputFileErrorCode.EMPTY_FILE);
     }
 
-    const golden = Array<Array<Array<string>>>();
-    let silver = Array<Array<string>>();
+    const outerArray = Array<Array<Array<string>>>();
+    let innerArray = Array<Array<string>>();
 
     sheet.eachRow((row, _) => {
       const rowValues = row.values as Array<string>;
@@ -78,19 +77,17 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       }
 
       if (notEmpty()) {
-        if (silver.length !== 0) {
-          golden.push(silver);
+        if (innerArray.length !== 0) {
+          outerArray.push(innerArray);
         }
-        silver = Array<Array<string>>();
+        innerArray = Array<Array<string>>();
       } else {
-        silver.push(rowValues);
+        innerArray.push(rowValues);
       }
     });
 
-    setScheduleSheet(golden);
-
-    if (Object.keys(golden).length !== 0) {
-      const parser = new ScheduleParser(golden);
+    if (Object.keys(outerArray).length !== 0) {
+      const parser = new ScheduleParser(outerArray);
 
       setScheduleErrors([
         ...parser._parseErrors,
