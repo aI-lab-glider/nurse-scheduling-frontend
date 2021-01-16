@@ -4,6 +4,7 @@
 import {
   ScheduleErrorLevel,
   ScheduleErrorMessageModel,
+  ScheduleErrorType,
 } from "../common-models/schedule-error-message.model";
 import {
   AlgorithmErrorCode,
@@ -29,12 +30,14 @@ export class ErrorMessageHelper {
     let message: string;
     let title = "Nie rozpoznano błędu";
     let day = 0;
+    let type = ScheduleErrorType.OTH;
 
     switch (error.kind) {
       case AlgorithmErrorCode.AON:
         message = `Brak pielęgniarek w dniu ${error.day} na zmianie ${
           error.day_time ? dayTimeTranslations[error.day_time] : ""
         }`;
+        type = ScheduleErrorType.AON;
         title = "date";
         if (error.day) {
           day += error.day;
@@ -42,6 +45,7 @@ export class ErrorMessageHelper {
         break;
       case AlgorithmErrorCode.WND:
         message = `Za mało pracowników w trakcie dnia w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
+        type = ScheduleErrorType.WND;
         title = "date";
         if (error.day) {
           day += error.day;
@@ -49,6 +53,7 @@ export class ErrorMessageHelper {
         break;
       case AlgorithmErrorCode.WNN:
         message = `Za mało pracowników w nocy w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
+        type = ScheduleErrorType.WNN;
         title = "date";
         if (error.day) {
           day += error.day;
@@ -56,6 +61,7 @@ export class ErrorMessageHelper {
         break;
       case AlgorithmErrorCode.DSS:
         message = `Niedozwolona sekwencja zmian dla pracownika ${error.worker} w dniu ${error.day}: ${error.succeeding} po ${error.preceding}`;
+        type = ScheduleErrorType.DSS;
         title = "date";
         if (error.day) {
           day += error.day;
@@ -63,18 +69,22 @@ export class ErrorMessageHelper {
         break;
       case AlgorithmErrorCode.LLB:
         message = `Brak wymaganej długiej przerwy dla pracownika ${error.worker} w tygodniu ${error.week}`;
+        type = ScheduleErrorType.LLB;
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WUH:
         message = `Pracownik ${error.worker} ma ${error.hours} niedogodzin`;
+        type = ScheduleErrorType.WUH;
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WOH:
         message = `Pracownik ${error.worker} ma ${error.hours} nadgodzin`;
+        type = ScheduleErrorType.WOH;
         title = `${error.worker}`;
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
         message = `Niedozwolona wartość zmiany: ${error.actual}, w dniu ${error.day} u pracownika ${error.worker}`;
+        type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
         title = `${error.worker}`;
         break;
       case InputFileErrorCode.EMPTY_FILE:
@@ -106,7 +116,7 @@ export class ErrorMessageHelper {
     const level = AlgorithmErrorCode[kind]
       ? ScheduleErrorLevel.CRITICAL_ERROR
       : ScheduleErrorLevel.WARNING;
-    return { kind, title, day, message, level };
+    return { kind, title, day, message, level, type };
   }
 
   public static getErrorColor(error: Error): Color {

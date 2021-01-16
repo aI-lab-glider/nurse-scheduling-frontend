@@ -11,11 +11,15 @@ interface FoldingSectionOptions {
 }
 
 export function FoldingSection({ name, children }: FoldingSectionOptions): JSX.Element {
-  const [opened, setOpened] = useState(true);
+  const [opened, setOpened] = useState(false);
   return (
     <div className="foldingSection">
       <div className="header">
-        <div onClick={(): void => setOpened((prev) => !prev)} className="text">
+        <div
+          onClick={(): void => setOpened((prev) => !prev)}
+          className="text"
+          data-cy="open-folding-section"
+        >
           <span>{opened ? <ExpandMoreIcon /> : <ChevronRightIcon />}</span>
           <span>{name}</span>
         </div>

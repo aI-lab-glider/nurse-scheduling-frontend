@@ -19,7 +19,7 @@ export function ScheduleFoldingSection({
   const [opened, setOpened] = useState(true);
   return (
     <>
-      <tr className="foldingSection">
+      <tr className="scheduleFoldingSection">
         <td>
           <div onClick={(): void => setOpened((prev) => !prev)} className="text">
             <span>{opened ? <ExpandMoreIcon /> : <ChevronRightIcon />}</span>
