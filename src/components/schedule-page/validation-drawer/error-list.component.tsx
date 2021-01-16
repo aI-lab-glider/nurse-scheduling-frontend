@@ -1,8 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { isValidElement } from "react";
-import { isVariableStatement } from "typescript";
+import React from "react";
 import {
   ScheduleErrorMessageModel,
   ScheduleErrorType,
@@ -69,7 +68,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
   return (
     <>
       {aon.length > 0 && (
-        <FoldingSection name={"Brak pielęgniarek (" + `${aon.length}` + ")"}>
+        <FoldingSection name={`Brak pielęgniarek (${aon.length})`}>
           <div className="scrollableContainer75vh">
             {aon.errors?.map(
               (error, index): JSX.Element => (
@@ -83,7 +82,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
         </FoldingSection>
       )}
       {wnd.length > 0 && (
-        <FoldingSection name={"Za mało pracowników w trakcie dnia (" + `${wnd.length}` + ")"}>
+        <FoldingSection name={`Za mało pracowników w trakcie dnia (${wnd.length})`}>
           <div className="scrollableContainer75vh">
             {wnd.errors?.map(
               (error, index): JSX.Element => (
@@ -97,7 +96,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
         </FoldingSection>
       )}
       {wnn.length > 0 && (
-        <FoldingSection name={"Za mało pracowników w nocy (" + `${wnn.length}` + ")"}>
+        <FoldingSection name={`Za mało pracowników w nocy (${wnn.length})`}>
           <div className="scrollableContainer75vh">
             {wnn.errors?.map(
               (error, index): JSX.Element => (
@@ -111,7 +110,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
         </FoldingSection>
       )}
       {dss.length > 0 && (
-        <FoldingSection name={"Niedozwolona sekwencja zmian (" + `${dss.length}` + ")"}>
+        <FoldingSection name={`Niedozwolona sekwencja zmian (${dss.length})`}>
           <div className="scrollableContainer75vh">
             {dss.errors?.map(
               (error, index): JSX.Element => (
@@ -125,7 +124,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
         </FoldingSection>
       )}
       {llb.length > 0 && (
-        <FoldingSection name={"Brak wymaganej długiej przerwy (" + `${llb.length}` + ")"}>
+        <FoldingSection name={`Brak wymaganej długiej przerwy (${llb.length})`}>
           <div className="scrollableContainer75vh">
             {llb.errors?.map(
               (error, index): JSX.Element => (
@@ -139,7 +138,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
         </FoldingSection>
       )}
       {wuh.length > 0 && (
-        <FoldingSection name={"Niedogodziny (" + `${wuh.length}` + ")"}>
+        <FoldingSection name={`Niedogodziny (${wuh.length})`}>
           <div className="scrollableContainer75vh">
             {wuh.errors?.map(
               (error, index): JSX.Element => (
@@ -153,7 +152,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
         </FoldingSection>
       )}
       {woh.length > 0 && (
-        <FoldingSection name={"Nadgodziny (" + `${woh.length}` + ")"}>
+        <FoldingSection name={`Nadgodziny (${woh.length})`}>
           <div className="scrollableContainer75vh">
             {woh.errors?.map(
               (error, index): JSX.Element => (
@@ -167,7 +166,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
         </FoldingSection>
       )}
       {isv.length > 0 && (
-        <FoldingSection name={"Niedozwolona wartość zmiany (" + `${isv.length}` + ")"}>
+        <FoldingSection name={`Niedozwolona wartość zmiany (${isv.length})`}>
           <div className="scrollableContainer75vh">
             {isv.errors?.map(
               (error, index): JSX.Element => (
@@ -181,7 +180,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
         </FoldingSection>
       )}
       {oth.length > 0 && (
-        <FoldingSection name={"Pozostałe błędy (" + `${oth.length}` + ")"}>
+        <FoldingSection name={`Pozostałe błędy (${oth.length})`}>
           <div className="scrollableContainer75vh">
             {oth.errors?.map(
               (error, index): JSX.Element => (
