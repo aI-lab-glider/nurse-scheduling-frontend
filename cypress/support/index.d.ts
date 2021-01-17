@@ -32,5 +32,17 @@ declare namespace Cypress {
     enterEditMode(): Chainable<Element>;
     saveToDatabase(): Chainable<Element>;
     leaveEditMode(): Chainable<Element>;
+    /**
+     * Behaves in the same way as built screenshot command, but also awaits for some amount of time,
+     * to ensure that screenshot will capture actual state of application.
+     * For more details @see https://docs.cypress.io/api/commands/screenshot.html#Asynchronous
+     * @param awaitTime estimated time, required for cypress engine to make
+     * snapshot of current application state. Default value is 200
+     * @param optios options for cy.screenshot
+     */
+    screenshotSync(
+      awaitTime?: number,
+      options?: import("./commands").CypressScreenshotOptions
+    ): Chainable<Element>;
   }
 }
