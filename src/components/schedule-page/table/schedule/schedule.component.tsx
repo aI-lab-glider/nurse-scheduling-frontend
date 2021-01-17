@@ -29,6 +29,7 @@ export function ScheduleComponent({
         return true;
       }
     }
+
     scheduleLogic?.tryGetCurrentMonthSchedule();
     return false;
   }

@@ -44,6 +44,7 @@ export class ScheduleDataActionCreator {
       const history = getState().history;
       const [prevMonth, nextMonth] = await getSurroundingMonths(newMonth, history);
       const newSchedule = extendMonthToScheduleDM(prevMonth, newMonth, nextMonth);
+
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
       destinations.forEach((destination) => {
         const action = {
@@ -69,7 +70,7 @@ export class ScheduleDataActionCreator {
         }
       }
       if (!_.isNil(monthDataModel)) {
-        this.addScheduleFromMonthModel(monthDataModel);
+        dispatch(this.addScheduleFromMonthModel(monthDataModel));
       }
     };
   }
@@ -106,9 +107,10 @@ async function getSurroundingMonths(
   baseMonth: MonthDataModel,
   history: HistoryStateModel
 ): Promise<[MonthDataModel, MonthDataModel]> {
+  const scheduleKey = new ScheduleKey(baseMonth.scheduleKey.month, baseMonth.scheduleKey.year);
   return [
-    await fetchOrCreateMonthDM(baseMonth.scheduleKey.prevMonthKey, history, baseMonth),
-    await fetchOrCreateMonthDM(baseMonth.scheduleKey.nextMonthKey, history, baseMonth),
+    await fetchOrCreateMonthDM(scheduleKey.prevMonthKey, history, baseMonth),
+    await fetchOrCreateMonthDM(scheduleKey.nextMonthKey, history, baseMonth),
   ];
 }
 
@@ -118,6 +120,7 @@ async function fetchOrCreateMonthDM(
   baseMonth: MonthDataModel
 ): Promise<MonthDataModel> {
   let monthDataModel = history[monthKey.key];
+
   if (_.isNil(monthDataModel)) {
     const storageProvider = new LocalStorageProvider();
     const newMonthDataModel = await storageProvider.getMonthRevision({
@@ -143,6 +146,7 @@ function extendMonthToScheduleDM(
   const { scheduleKey } = currentMonthData;
   const [missingFromPrev, missingFromNext] = calculateMissingFullWeekDays(scheduleKey);
 
+  debugger;
   const extendSchedule = <T>(sectionKey: string, valueKey: string): T[] =>
     extend<T>(
       prevMonthData[sectionKey][valueKey],
@@ -184,7 +188,6 @@ export function cropScheduleToMonthDM(schedule: Required<ScheduleDataModel>): Mo
   const { dates } = schedule.month_info;
   const monthStart = dates.findIndex((v) => v === 1);
   const monthKey = getScheduleKey(schedule);
-  debugger;
 
   return {
     scheduleKey: monthKey,

@@ -62,25 +62,9 @@ export class MonthInfoLogic {
     return this._verboseDates;
   }
 
-  // TODO add holidays
-  private static isWorkingDay(day: WeekDay): boolean {
-    return day !== WeekDay.SA && day !== WeekDay.SU;
-  }
-
-  public get workingDaysNumber(): number {
-    const month = TranslationHelper.englishMonths[this.monthNumber];
-    return this._verboseDates.filter(
-      (date) => date.month === month && MonthInfoLogic.isWorkingDay(date.dayOfWeek)
-    ).length;
-  }
-
   public get numberOfPreviousMonthDays(): number {
     const month = TranslationHelper.englishMonths[this.monthNumber];
     return this._verboseDates.filter((date) => date.month !== month).length;
-  }
-
-  public static convertToDate(monthNumber: number, year): Date {
-    return new Date(`1 ${TranslationHelper.englishMonths[monthNumber]} ${year}`);
   }
 
   private createCalendar(monthNumber: number, year: number): VerboseDate[] {
@@ -97,6 +81,10 @@ export class MonthInfoLogic {
       WeekDay.SA,
     ];
     let currentMonth = monthNumber - 1;
+    if (currentMonth === -1) {
+      currentMonth = 11;
+      year -= 1;
+    }
     for (const day of this.monthDates) {
       if (day === 1) {
         currentMonth += 1;

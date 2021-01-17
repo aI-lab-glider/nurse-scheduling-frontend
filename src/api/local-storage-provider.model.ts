@@ -124,10 +124,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     const revisions = await this.storage.allDocs({ include_docs: true });
     const result = revisions.rows.find((r) => {
       if (r.doc?.data.scheduleKey) {
-        return (
-          r.doc?.data.scheduleKey.key === filter.validityPeriod &&
-          r.doc?.revisionType === filter.revisionType
-        );
+        return r.id === filter.validityPeriod && r.doc?.revisionType === filter.revisionType;
       } else {
         return undefined;
       }
