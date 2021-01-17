@@ -1,15 +1,47 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { ChangeEvent, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { TranslationHelper } from "../../helpers/translations.helper";
+import { ApplicationStateModel } from "../../state/models/application-state.model";
+import { createMonthKey } from "../../state/reducers/history.reducer";
+import { getDateWithMonthOffset } from "../../state/reducers/month-state/schedule-data/common-reducers";
 import { ScheduleDataActionCreator } from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { Button } from "../common-components";
-import { useActualMonth } from "../common-components/month-switch/use-actual-month";
+import { useScheduleConverter } from "./import-buttons/hooks/use-schedule-converter";
 
 export function NewMonthPlanComponent(): JSX.Element {
-  const actualMonth = useActualMonth();
+  const state = useSelector((state: ApplicationStateModel) => state);
+  const currentMonth = state.actualState.persistentSchedule.present.schedule_info.month_number;
+  const currentYear = state.actualState.persistentSchedule.present.schedule_info.year;
+  const nextDate = getDateWithMonthOffset(currentMonth, currentYear, 1);
+  const prevDate = getDateWithMonthOffset(currentMonth, currentYear, -1);
+  const nextMonth = state.history[createMonthKey(nextDate.getMonth(), nextDate.getFullYear())];
+  const prevMonth = state.history[createMonthKey(prevDate.getMonth(), prevDate.getFullYear())];
+  const { scheduleModel, setSrcFile } = useScheduleConverter();
+
+  const hasNext =
+    nextMonth !== undefined && nextMonth.persistentSchedule.present.month_info.dates.length > 0;
+  const hasPrevious =
+    prevMonth !== undefined && prevMonth.persistentSchedule.present.month_info.dates.length > 0;
   const dispatch = useDispatch();
+
+  const fileUpload = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (scheduleModel) {
+      const action = ScheduleDataActionCreator.setSchedule(scheduleModel);
+      dispatch(action);
+    }
+  });
+  function handleImport(event: ChangeEvent<HTMLInputElement>): void {
+    const file = event.target?.files && event.target?.files[0];
+    if (file) {
+      setSrcFile(file);
+    }
+  }
+
   return (
     <>
       <div className={"newMonthComponents"}>
@@ -19,18 +51,53 @@ export function NewMonthPlanComponent(): JSX.Element {
         />
         <p>Nie masz planu na ten miesiąc</p>
         <div className={"newPageButtonsPane"}>
+          {hasPrevious && (
+            <Button
+              onClick={(): void => {
+                dispatch(ScheduleDataActionCreator.copyMonth(-1));
+              }}
+              size="small"
+              className="submit-button"
+              variant="outlined"
+            >
+              {" "}
+              {`Kopiuj plan z ${
+                TranslationHelper.polishMonths[prevDate.getMonth()]
+              } ${prevDate.getFullYear()}`}
+            </Button>
+          )}
+
+          {hasNext && !hasPrevious && (
+            <Button
+              onClick={(): void => {
+                dispatch(ScheduleDataActionCreator.copyMonth(1));
+              }}
+              size="small"
+              className="submit-button"
+              variant="outlined"
+            >
+              {`Kopiuj plan z ${
+                TranslationHelper.polishMonths[nextDate.getMonth()]
+              } ${nextDate.getFullYear()}`}
+            </Button>
+          )}
+
           <Button
-            onClick={(): void => {
-              dispatch(ScheduleDataActionCreator.copyPreviousMonth());
-            }}
             size="small"
             className="submit-button"
-            variant="outlined"
+            variant="primary"
+            onClick={(): void => fileUpload.current?.click()}
           >
-            Kopiuj plan z {actualMonth}
-          </Button>
-          <Button size="small" className="submit-button" variant="primary">
-            Wgraj plan z pliku
+            <input
+              ref={fileUpload}
+              id="file-input"
+              data-cy="file-input"
+              onChange={(event): void => handleImport(event)}
+              style={{ display: "none" }}
+              type="file"
+              accept=".xlsx"
+            />
+            Wgraj z pliku
           </Button>
         </div>
       </div>

@@ -41,7 +41,7 @@ export function ImportButtonsComponent(): JSX.Element {
   const btnData = [btnData1, btnData2];
   useEffect(() => {
     if (scheduleModel) {
-      const action = ScheduleDataActionCreator.setPersistentSchedule(scheduleModel);
+      const action = ScheduleDataActionCreator.setSchedule(scheduleModel);
       scheduleDipatcher(action);
     } else if (scheduleErrors) {
       setOpen(true);

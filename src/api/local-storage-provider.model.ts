@@ -42,7 +42,7 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
         data: schedule,
         revisionType: type,
       });
-      const action = ScheduleDataActionCreator.setPersistentSchedule(schedule);
+      const action = ScheduleDataActionCreator.setSchedule(schedule);
       dispatch(action);
     };
   }
@@ -61,7 +61,7 @@ export class LocalStorageProvider extends PersistanceStoreProvider {
       if (!result?.doc) {
         return;
       }
-      const action = ScheduleDataActionCreator.setPersistentSchedule(result.doc.data);
+      const action = ScheduleDataActionCreator.setSchedule(result.doc.data);
       dispatch(action);
     };
   }

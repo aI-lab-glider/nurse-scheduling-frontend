@@ -2,11 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { ScheduleKey } from "../../../api/persistance-store.model";
 import { MonthInfoModel } from "../../../common-models/month-info.model";
 import { ActionModel } from "../../models/action.model";
 import { copyMonthInfo } from "./schedule-data/common-reducers";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
+import { CopyMonthActionPayload } from "./schedule-data/schedule-data.action-creator";
 import {
   ScheduleActionModel,
   createActionName,
@@ -17,7 +17,7 @@ import {
 export function monthInfoReducerF(name: string) {
   return (
     state: MonthInfoModel = scheduleDataInitialState.month_info,
-    action: ScheduleActionModel | ActionModel<ScheduleKey>
+    action: ScheduleActionModel | ActionModel<CopyMonthActionPayload>
   ): MonthInfoModel => {
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
@@ -31,8 +31,8 @@ export function monthInfoReducerF(name: string) {
         }
         return { ...data };
       case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
-        const { month, year } = action.payload as ScheduleKey;
-        return copyMonthInfo(month, year, state);
+        const { month, year, scheduleData } = action.payload as CopyMonthActionPayload;
+        return copyMonthInfo(month, year, scheduleData.month_info);
       default:
         return state;
     }

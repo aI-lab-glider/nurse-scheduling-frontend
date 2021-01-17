@@ -18,7 +18,7 @@ export class HistoryReducerActionCreator {
   }
 }
 
-const createMonthKey = (month: number, year: number): string => `${month}_${year}`;
+export const createMonthKey = (month: number, year: number): string => `${month}_${year}`;
 
 function isValidMonthModel(scheduleModel: ScheduleModel): scheduleModel is Required<ScheduleModel> {
   const { month_number, year } = scheduleModel;
