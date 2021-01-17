@@ -84,6 +84,7 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
           <Button
             className="header-button"
             variant="primary"
+            data-cy="btnDodajPracownika"
             onClick={(): void => {
               toggleDrawer(true, WorkerDrawerMode.ADD_NEW, undefined);
             }}

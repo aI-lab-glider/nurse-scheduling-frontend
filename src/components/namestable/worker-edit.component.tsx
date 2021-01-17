@@ -128,7 +128,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
           <Grid item xs={6}>
             <Typography className={classes.label}>Stanowisko</Typography>
             <DropdownButtons
-              data-cy="position"
+              dataCy="position"
               buttons={positionOptions}
               mainLabel={
                 workerInfo.workerType
@@ -143,7 +143,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
             <Grid container>
               <Grid item>
                 <DropdownButtons
-                  data-cy="contract"
+                  dataCy="contract"
                   buttons={contractOptions}
                   mainLabel={
                     workerInfo.contractType
@@ -155,7 +155,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
               </Grid>
               <Grid item>
                 <DropdownButtons
-                  data-cy="contract-time-dropdown"
+                  dataCy="contract-time-dropdown"
                   buttons={contractTimeDrawerOptions}
                   mainLabel={workerInfo.employmentTime}
                   variant="outlined"
@@ -199,6 +199,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
       </Grid>
       <Grid item>
         <Button
+          data-cy="ZapiszBtn"
           onClick={(): void => {
             workerInfo.prevName === ""
               ? dispatcher(ScheduleDataActionCreator.addNewWorker(workerInfo))
