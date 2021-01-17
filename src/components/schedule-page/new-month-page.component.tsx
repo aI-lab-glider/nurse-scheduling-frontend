@@ -19,7 +19,7 @@ export function NewMonthPlanComponent(): JSX.Element {
   const prevDate = getDateWithMonthOffset(currentMonth, currentYear, -1);
   const nextMonth = state.history[createMonthKey(nextDate.getMonth(), nextDate.getFullYear())];
   const prevMonth = state.history[createMonthKey(prevDate.getMonth(), prevDate.getFullYear())];
-  const { scheduleModel, setSrcFile, scheduleErrors, errorOccurred } = useScheduleConverter();
+  const { scheduleModel, setSrcFile } = useScheduleConverter();
 
   const hasNext =
     nextMonth !== undefined && nextMonth.persistentSchedule.present.month_info.dates.length > 0;
