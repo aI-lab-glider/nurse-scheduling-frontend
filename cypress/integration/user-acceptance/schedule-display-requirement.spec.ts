@@ -1,11 +1,8 @@
 import { WorkerType } from "../../../src/common-models/worker-info.model";
 import { ShiftCode } from "../../../src/common-models/shift-info.model";
-import { useActualMonth } from "../../../src/components/common-components/month-switch/use-actual-month";
-import { CheckWorkerShiftOptions } from "../../support/commands";
 
 context("Display schedule", () => {
   it("Should be able to load and display schedule", () => {
-    // cy.visit(Cypress.env("baseUrl"));
     cy.loadSchedule("example_2.xlsx");
     cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 }).should("exist");
   });
