@@ -13,8 +13,8 @@ import { useScheduleConverter } from "./import-buttons/hooks/use-schedule-conver
 
 export function NewMonthPlanComponent(): JSX.Element {
   const state = useSelector((state: ApplicationStateModel) => state);
-  const currentMonth = state.actualState.persistentSchedule.present.schedule_info.month_number ?? 0;
-  const currentYear = state.actualState.persistentSchedule.present.schedule_info.year ?? 0;
+  const currentMonth = state.actualState.persistentSchedule.present.schedule_info.month_number;
+  const currentYear = state.actualState.persistentSchedule.present.schedule_info.year;
   const nextDate = getDateWithMonthOffset(currentMonth, currentYear, 1);
   const prevDate = getDateWithMonthOffset(currentMonth, currentYear, -1);
   const nextMonth = state.history[createMonthKey(nextDate.getMonth(), nextDate.getFullYear())];
