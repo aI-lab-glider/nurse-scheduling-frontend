@@ -4,6 +4,11 @@
 import "cypress-file-upload";
 import { ShiftCode } from "../../src/common-models/shift-info.model";
 import { WorkerType } from "../../src/common-models/worker-info.model";
+
+export type CypressScreenshotOptions = Partial<
+  Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions
+>;
+
 export interface GetWorkerShiftOptions {
   workerType: WorkerType;
   workerIdx: number;
@@ -119,3 +124,11 @@ Cypress.Commands.add("leaveEditMode", () => {
   cy.get("[data-cy=leave-edit-mode]").click();
   return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
 });
+
+Cypress.Commands.add(
+  "screenshotSync",
+  (awaitTime = 200, cyScreenshotOptions?: CypressScreenshotOptions) => {
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    return cy.screenshot(cyScreenshotOptions).wait(awaitTime);
+  }
+);
