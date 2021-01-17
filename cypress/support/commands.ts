@@ -47,7 +47,7 @@ Cypress.Commands.add("loadSchedule", (scheduleName: ScheduleName = "example.xlsx
     .its("present")
     .its("month_info")
     .its("children_number")
-    .should("have.length", 35);
+    .should("have.length", 36);
 });
 
 Cypress.Commands.add(

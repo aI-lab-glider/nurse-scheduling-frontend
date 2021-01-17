@@ -146,7 +146,6 @@ function extendMonthToScheduleDM(
   const { scheduleKey } = currentMonthData;
   const [missingFromPrev, missingFromNext] = calculateMissingFullWeekDays(scheduleKey);
 
-  debugger;
   const extendSchedule = <T>(sectionKey: string, valueKey: string): T[] =>
     extend<T>(
       prevMonthData[sectionKey][valueKey],

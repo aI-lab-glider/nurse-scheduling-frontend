@@ -9,6 +9,7 @@ import { ColorHelper } from "./colors/color.helper";
 import { Colors } from "./colors/color.model";
 import { VerboseDateHelper } from "./verbose-date.helper";
 import { VerboseDate } from "../common-models/month-info.model";
+import * as _ from "lodash";
 
 const WORK_HOURS_PER_DAY = 8;
 
@@ -80,7 +81,12 @@ export class ShiftHelper {
       throw Error("Shifts should be defined for each day");
     }
     const firstDayOfCurrentMonth = dates.findIndex((d) => d.month === currentMonth);
-    const monthData = ArrayHelper.zip(shifts, dates).slice(firstDayOfCurrentMonth);
+    const lastDayOfCurrentMonth = _.findLastIndex(dates, (d) => d.month === currentMonth);
+
+    const monthData = ArrayHelper.zip(shifts, dates).slice(
+      firstDayOfCurrentMonth,
+      lastDayOfCurrentMonth
+    );
     const workingDaysCount = monthData.filter(
       (d) => VerboseDateHelper.isWorkingDay(d[1]!) && !this.isNotWorkingShift(d[0]!)
     ).length;

@@ -22,7 +22,6 @@ export function cropShiftsToMonth(
       [ShiftCode.L4, ShiftCode.U, ShiftCode.K].includes(shift) ? ShiftCode.W : shift
     );
   });
-  debugger;
 
   return copiedShifts;
 }
