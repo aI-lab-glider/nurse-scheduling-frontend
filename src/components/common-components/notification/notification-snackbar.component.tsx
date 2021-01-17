@@ -15,9 +15,6 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "relative",
       margin: 25,
     },
-    alert: {
-      fontSize: 14,
-    },
   })
 );
 
