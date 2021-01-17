@@ -20,7 +20,6 @@ export interface GetWorkerShiftOptions {
   shiftIdx: number;
   selector?: "cell" | "highlighted-cell";
 }
-
 export interface CheckWorkerShiftOptions extends GetWorkerShiftOptions {
   desiredShiftCode: ShiftCode;
 }
@@ -140,9 +139,44 @@ Cypress.Commands.add("leaveEditMode", () => {
 
 Cypress.Commands.add(
   "screenshotSync",
-  (awaitTime = 200, cyScreenshotOptions?: CypressScreenshotOptions) => {
+  (awaitTime = 100, cyScreenshotOptions?: CypressScreenshotOptions) => {
+    cy.get("#header").invoke("css", "position", "absolute");
     // eslint-disable-next-line cypress/no-unnecessary-waiting
-    return cy.screenshot(cyScreenshotOptions).wait(awaitTime);
+    cy.screenshot(cyScreenshotOptions).wait(awaitTime);
+    return cy.get("#header").invoke("css", "position", null);
+  }
+);
+
+export enum FoundationInfoRowType {
+  ExtraWorkersRow = 0,
+  ChildrenInfoRow = 1,
+  NurseCountRow = 2,
+  BabysitterCountRow = 3,
+}
+export interface GetFoundationInfoCellOptions {
+  rowType: FoundationInfoRowType;
+  cellIdx: number;
+  actualValue: number;
+}
+Cypress.Commands.add(
+  "getFoundationInfoCell",
+  ({ cellIdx, rowType, actualValue }: GetFoundationInfoCellOptions) => {
+    cy.get("[data-cy=foundationInfoSection]")
+      .children()
+      .eq(rowType)
+      .children()
+      .eq(cellIdx)
+      .contains(actualValue);
+  }
+);
+
+export interface ChangeFoundationInfoCellOptions extends GetFoundationInfoCellOptions {
+  newValue: number;
+}
+Cypress.Commands.add(
+  "changeFoundationInfoCell",
+  ({ newValue, ...getCellOptions }: ChangeFoundationInfoCellOptions) => {
+    cy.getFoundationInfoCell(getCellOptions).type(`${newValue}{enter}`);
   }
 );
 

@@ -4,5 +4,7 @@
 import "./commands";
 
 Cypress.Screenshot.defaults({
-  capture: "viewport",
+  capture: "fullPage",
+  disableTimersAndAnimations: true,
+  scale: true,
 });

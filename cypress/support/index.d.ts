@@ -44,5 +44,12 @@ declare namespace Cypress {
       awaitTime?: number,
       options?: import("./commands").CypressScreenshotOptions
     ): Chainable<Element>;
+
+    getFoundationInfoCell(
+      options: import("./commands").GetFoundationInfoCellOptions
+    ): Chainable<Element>;
+    changeFoundationInfoCell(
+      options: import("./commands").ChangeFoundationInfoCellOptions
+    ): Chainable<Element>;
   }
 }
