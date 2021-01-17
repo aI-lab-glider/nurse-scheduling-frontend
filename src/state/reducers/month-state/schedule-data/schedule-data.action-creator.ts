@@ -13,10 +13,11 @@ import { MonthStateModel } from "../../../models/application-state.model";
 import { createMonthKey } from "../../history.reducer";
 import { getDateWithMonthOffset } from "./common-reducers";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
+import { WorkerInfoExtendedInterface } from "../../../../components/namestable/worker-edit.component";
+
 export interface CopyMonthActionPayload extends ScheduleKey {
   scheduleData: ScheduleDataModel;
 }
-import { WorkerInfoExtendedInterface } from "../../../../components/namestable/worker-edit.component";
 
 export class ScheduleDataActionCreator {
   static setSchedule(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
