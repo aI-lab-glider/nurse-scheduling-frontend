@@ -34,6 +34,8 @@ $allowed-heights: 10vh, 20vh, 25vh, 50vh, 75vh, 100vh;
 @each $height in $allowed-heights {
   .scrollableContainer#{$height} {
     overflow-y: scroll;
-    height: $height;
+    max-height: $height;
+    height: auto;
+    display: block;
   }
 }
