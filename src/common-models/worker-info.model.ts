@@ -43,14 +43,14 @@ export enum TimeDrawerType {
 }
 
 export interface WorkersInfoModel {
-  time: { [key: string]: string | string[] | number };
+  time: { [key: string]: number };
   type: { [workerName: string]: WorkerType };
   contractType?: { [workerName: string]: ContractType };
 }
 
 export interface WorkerInfoModel {
   name: string;
-  time: string | string[] | number;
+  time: number;
   type?: WorkerType;
   shifts?: [VerboseDate, ShiftCode][];
   requiredHours?: number;
