@@ -31,7 +31,7 @@ export function isMonthModelEmpty(monthDataModel: MonthDataModel): boolean {
 
 export function createEmptyMonthDataModel(
   scheduleKey: ScheduleKey,
-  { employee_info, shifts }: MonthDataModel
+  { employee_info, shifts }: Pick<MonthDataModel, "employee_info" | "shifts">
 ): MonthDataModel {
   const dates = daysInMonth(scheduleKey.month, scheduleKey.year);
   const monthLength = dates.length;

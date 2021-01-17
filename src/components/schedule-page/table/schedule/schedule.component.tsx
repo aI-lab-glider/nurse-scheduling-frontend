@@ -12,6 +12,7 @@ import { SummaryTableComponent } from "../../../summerytable/summarytable.compon
 import { OvertimeHeaderComponent } from "../../../overtime-header-table/overtime-header.component";
 import { ScheduleComponentState } from "./schedule-state.model";
 import { ScheduleFoldingSection } from "./schedule-parts/schedule-folding-section.component";
+import { NewMonthPlanComponent } from "../../new-month-page.component";
 
 interface ScheduleComponentOptions {
   schedule: ScheduleComponentState;
@@ -36,21 +37,7 @@ export function ScheduleComponent({
 
   return (
     <>
-      {!isPresent() && (
-        <table>
-          <tbody>
-            <tr>
-              <td />
-              <td>
-                <div className="c" style={{ marginLeft: 126, marginTop: 20 }}>
-                  <TimeTableComponent scheduleLocalState={scheduleLocalState} />
-                </div>
-              </td>
-              <td />
-            </tr>
-          </tbody>
-        </table>
-      )}
+      {!isPresent() && <NewMonthPlanComponent />}
       {isPresent() && (
         <table style={{ margin: 20 }}>
           <tbody>

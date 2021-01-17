@@ -12,7 +12,10 @@ const monthInfoinitialState: MonthInfoModel = {
   frozen_shifts: [],
   dates: [],
 };
-export const scheduleInfoInitialState: ScheduleMetadata = {};
+export const scheduleInfoInitialState: ScheduleMetadata = {
+  year: new Date().getFullYear(),
+  month_number: new Date().getMonth(),
+};
 export const shiftInfoInitialState: ShiftInfoModel = {};
 
 export const scheduleDataInitialState = {

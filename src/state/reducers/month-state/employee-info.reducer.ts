@@ -2,11 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { WorkersInfoModel } from "../../../common-models/worker-info.model";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import {
-  ScheduleActionModel,
   createActionName,
+  ScheduleActionModel,
   ScheduleActionType,
 } from "./schedule-data/schedule.actions";
 
@@ -16,12 +17,15 @@ export function employeeInfoReducerF(name: string) {
     state: WorkersInfoModel = scheduleDataInitialState.employee_info,
     action: ScheduleActionModel
   ): WorkersInfoModel => {
-    const data = action.payload?.employee_info;
-    if (!data) return state;
+    let data;
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
+        data = (action.payload as ScheduleDataModel)?.employee_info;
+        if (!data) return state;
         return { ...data };
       case createActionName(name, ScheduleActionType.UPDATE):
+        data = (action.payload as ScheduleDataModel)?.employee_info;
+        if (!data) return state;
         return { ...state, ...data };
       default:
         return state;

@@ -13,16 +13,22 @@ import { ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.mo
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 import { HistoryStateModel } from "../../../models/application-state.model";
-import { HistoryReducerActionCreator } from "../../history.reducer";
 import { ShiftInfoModel } from "../../../../common-models/shift-info.model";
 import { MonthInfoModel } from "../../../../common-models/month-info.model";
 import {
   calculateMissingFullWeekDays,
   cropMonthInfoToMonth,
+  copyShiftsToMonth,
   cropShiftsToMonth,
 } from "./common-reducers";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import _ from "lodash";
+
+export interface CopyMonthActionPayload {
+  month: number;
+  year: number;
+  monthDataModel: MonthDataModel;
+}
 
 export class ScheduleDataActionCreator {
   static addScheduleDM(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
@@ -72,26 +78,6 @@ export class ScheduleDataActionCreator {
       if (!_.isNil(monthDataModel)) {
         dispatch(this.addScheduleFromMonthModel(monthDataModel));
       }
-    };
-  }
-
-  static copyPreviousMonth(): ThunkFunction<ScheduleKey | MonthDataModel> {
-    return (dispatch, getState): void => {
-      const actualSchedule = getState().actualState.persistentSchedule.present;
-      const actualMonth = cropScheduleToMonthDM(actualSchedule);
-      const historyAction = HistoryReducerActionCreator.addToMonthHistory(actualMonth);
-
-      const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
-      const scheduleKey: ScheduleKey = getScheduleKey(actualSchedule);
-
-      destinations.forEach((destination) => {
-        const action = {
-          type: createActionName(destination, ScheduleActionType.COPY_TO_MONTH),
-          payload: scheduleKey.nextMonthKey,
-        };
-        dispatch(action);
-      });
-      dispatch(historyAction);
     };
   }
 

@@ -33,6 +33,8 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
   }
 
   async saveMonthRevision(type: RevisionType, monthDataModel: MonthDataModel): Promise<void> {
+    debugger;
+
     if (isMonthModelEmpty(monthDataModel)) {
       return;
     }
@@ -51,6 +53,8 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
   }
 
   async saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void> {
+    debugger;
+
     const monthDataModel = cropScheduleToMonthDM(scheduleDataModel);
     await this.saveMonthRevision(type, monthDataModel);
     const [missingFromPrev] = calculateMissingFullWeekDays(monthDataModel.scheduleKey);
@@ -89,6 +93,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     updateShifts: ShiftInfoModel,
     updatePosition: UpdatePosition
   ): Promise<void> {
+    debugger;
     try {
       const document = await this.storage.get(monthKey.key);
       const revision = document._rev;
@@ -107,7 +112,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
         }
       });
       document.data.shifts = newShifts;
-
+      debugger;
       this.storage.put({
         _rev: revision,
         _id: monthKey.key,

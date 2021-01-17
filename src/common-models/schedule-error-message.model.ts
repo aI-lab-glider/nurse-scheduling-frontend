@@ -6,6 +6,19 @@ export enum ScheduleErrorLevel {
   WARNING = "warning",
   CRITICAL_ERROR = "error",
 }
+
+export enum ScheduleErrorType {
+  OTH = "OTH",
+  AON = "AON",
+  WND = "WND",
+  WNN = "WNN",
+  DSS = "DSS",
+  LLB = "LLB",
+  WUH = "WUH",
+  WOH = "WOH",
+  ILLEGAL_SHIFT_VALUE = "ILLEGAL_SHIFT_VALUE",
+}
+
 export interface ScheduleErrorMessageModel {
   kind: string;
   title?: string;
@@ -14,4 +27,5 @@ export interface ScheduleErrorMessageModel {
   day?: number;
   week?: number;
   level?: ScheduleErrorLevel;
+  type?: ScheduleErrorType;
 }
