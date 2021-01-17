@@ -19,6 +19,10 @@ export function scheduleShiftsInfoReducerF(name: string) {
     state: ShiftInfoModel = scheduleDataInitialState.shifts,
     action: ScheduleActionModel | ActionModel<CopyMonthActionPayload>
   ): ShiftInfoModel => {
+    let workerName, prevName;
+    if (action.payload?.worker) {
+      ({ workerName, prevName } = action.payload?.worker);
+    }
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
       case createActionName(name, ScheduleActionType.UPDATE):
@@ -27,10 +31,13 @@ export function scheduleShiftsInfoReducerF(name: string) {
       case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
         const { month, year, scheduleData } = action.payload as CopyMonthActionPayload;
         return copyShiftstoMonth(month, year, scheduleData.shifts, scheduleData.month_info.dates);
+      case ScheduleActionType.ADD_NEW_WORKER:
+        const newShiftsArr = [...Array(35).fill("W")];
+        return { ...{ [workerName]: newShiftsArr }, ...state };
       case ScheduleActionType.MODIFY_WORKER:
-        const shiftsArr = state[action.payload!.worker!.prevName];
-        delete state[action.payload!.worker!.prevName];
-        return { ...{ [action.payload!.worker!.name]: shiftsArr }, ...state };
+        const shiftsArr = state[prevName];
+        delete state[prevName];
+        return { ...{ [workerName]: shiftsArr }, ...state };
 
       default:
         return state;

@@ -2,9 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { WorkersInfoModel, WorkerType } from "../../../common-models/worker-info.model";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ActionModel } from "../../models/action.model";
+import { WorkersInfoModel } from "../../../common-models/worker-info.model";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import { CopyMonthActionPayload } from "./schedule-data/schedule-data.action-creator";
 import {
@@ -20,6 +20,11 @@ export function employeeInfoReducerF(name: string) {
     action: ScheduleActionModel | ActionModel<CopyMonthActionPayload>
   ): WorkersInfoModel => {
     let data;
+    let workerName, prevName, workerType, employmentTime;
+    if (action.payload?.worker) {
+      ({ workerName, prevName, workerType, employmentTime } = action.payload?.worker);
+    }
+
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
         data = (action.payload as ScheduleDataModel)?.employee_info;
@@ -35,20 +40,20 @@ export function employeeInfoReducerF(name: string) {
       case ScheduleActionType.ADD_NEW_WORKER:
         return {
           time: {
-            [action.payload!.worker!.name]: [action.payload!.worker!.employmentTime],
+            [workerName]: [employmentTime],
             ...state.time,
           },
-          type: { [action.payload!.worker!.name]: WorkerType.OTHER, ...state.type },
+          type: { [workerName]: workerType, ...state.type },
         };
       case ScheduleActionType.MODIFY_WORKER:
-        delete state.time[action.payload!.worker!.prevName];
-        delete state.type[action.payload!.worker!.prevName];
+        delete state.time[prevName];
+        delete state.type[prevName];
         return {
           time: {
-            [action.payload!.worker!.name]: [action.payload!.worker!.employmentTime],
+            [workerName]: [employmentTime],
             ...state.time,
           },
-          type: { [action.payload!.worker!.name]: WorkerType.OTHER, ...state.type },
+          type: { [workerName]: workerType, ...state.type },
         };
       default:
         return state;

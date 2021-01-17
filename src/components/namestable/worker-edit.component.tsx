@@ -33,7 +33,7 @@ const useStyles = makeStyles({
 });
 
 export interface WorkerInfoExtendedInterface {
-  name: string;
+  workerName: string;
   prevName: string;
   workerType: WorkerType | undefined;
   contractType: ContractType | undefined;
@@ -47,7 +47,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
   const dispatcher = useDispatch();
 
   const [workerInfo, setWorkerInfo] = useState<WorkerInfoExtendedInterface>({
-    name: info.name,
+    workerName: info.name,
     prevName: info.name,
     workerType: info.type,
     contractType: undefined,
@@ -118,9 +118,9 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
             <Typography className={classes.label}>Imię i nazwisko</Typography>
             <TextField
               fullWidth
-              name="name"
+              name="workerName"
               data-cy="name"
-              value={workerInfo.name}
+              value={workerInfo.workerName}
               onChange={handleUpdate}
               color="primary"
             />

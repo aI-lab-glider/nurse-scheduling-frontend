@@ -16,6 +16,8 @@ import { createActionName, ScheduleActionModel, ScheduleActionType } from "./sch
 export interface CopyMonthActionPayload extends ScheduleKey {
   scheduleData: ScheduleDataModel;
 }
+import { WorkerInfoExtendedInterface } from "../../../../components/namestable/worker-edit.component";
+
 export class ScheduleDataActionCreator {
   static setSchedule(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
@@ -73,7 +75,7 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static addNewWorker(worker) {
+  static addNewWorker(worker: WorkerInfoExtendedInterface): (dispatch) => Promise<void> {
     return async (dispatch): Promise<void> => {
       const action = {
         type: ScheduleActionType.ADD_NEW_WORKER,
@@ -83,7 +85,7 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static modifyWorker(worker) {
+  static modifyWorker(worker: WorkerInfoExtendedInterface): (dispatch) => Promise<void> {
     return async (dispatch): Promise<void> => {
       const action = {
         type: ScheduleActionType.MODIFY_WORKER,
