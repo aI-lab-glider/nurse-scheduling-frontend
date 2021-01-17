@@ -29,34 +29,15 @@ export class ScheduleDataActionCreator {
       });
     };
   }
-  static copyPreviousMonth(): ThunkFunction<unknown> {
+
+  static copyMonth(offset: number): ThunkFunction<unknown> {
     return async (dispatch, getState): Promise<void> => {
       const {
         month_number,
         year,
       } = getState().actualState.persistentSchedule.present.schedule_info;
       if (month_number === undefined || year === undefined) return;
-      const date = getDateWithMonthOffset(month_number, year, -1);
-      dispatch(
-        ScheduleDataActionCreator.copyFromMonth(
-          date.getMonth(),
-          date.getFullYear(),
-          month_number,
-          year
-        )
-      );
-    };
-  }
-  static copyNextMonth(): ThunkFunction<unknown> {
-    return async (dispatch, getState): Promise<void> => {
-      const {
-        month_number,
-        year,
-      } = getState().actualState.persistentSchedule.present.schedule_info;
-      if (month_number === undefined || year === undefined) return;
-
-      const date = getDateWithMonthOffset(month_number, year, 1);
-
+      const date = getDateWithMonthOffset(month_number, year, offset);
       dispatch(
         ScheduleDataActionCreator.copyFromMonth(
           date.getMonth(),

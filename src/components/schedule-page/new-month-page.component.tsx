@@ -54,7 +54,7 @@ export function NewMonthPlanComponent(): JSX.Element {
           {hasPrevious && (
             <Button
               onClick={(): void => {
-                dispatch(ScheduleDataActionCreator.copyPreviousMonth());
+                dispatch(ScheduleDataActionCreator.copyMonth(-1));
               }}
               size="small"
               className="submit-button"
@@ -70,7 +70,7 @@ export function NewMonthPlanComponent(): JSX.Element {
           {hasNext && !hasPrevious && (
             <Button
               onClick={(): void => {
-                dispatch(ScheduleDataActionCreator.copyNextMonth());
+                dispatch(ScheduleDataActionCreator.copyMonth(1));
               }}
               size="small"
               className="submit-button"

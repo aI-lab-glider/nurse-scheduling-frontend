@@ -14,6 +14,8 @@ const monthInfoinitialState: MonthInfoModel = {
 };
 export const scheduleInfoInitialState: ScheduleModel = {
   daysFromPreviousMonthExists: false,
+  year: new Date().getFullYear(),
+  month_number: 0,
 };
 export const shiftInfoInitialState: ShiftInfoModel = {};
 

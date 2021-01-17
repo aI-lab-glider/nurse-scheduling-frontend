@@ -18,8 +18,13 @@ export function MonthSwitchComponent(options: MonthSwitchOpions): JSX.Element {
   return (
     <>
       {actualMonth && (
-        <div id="month-switch">
-          <IconButton className="arrow-button" size={arrowSize}>
+        <div>
+          <IconButton
+            className="arrow-button"
+            size={arrowSize}
+            id="month-switch"
+            data-cy="switch-prev-month"
+          >
             <MdChevronLeft
               onClick={(): void => {
                 dispatch(MonthSwitchActionCreator.switchToNewMonth(-1));
@@ -29,7 +34,12 @@ export function MonthSwitchComponent(options: MonthSwitchOpions): JSX.Element {
 
           <span>{actualMonth}</span>
 
-          <IconButton className="arrow-button" size={arrowSize}>
+          <IconButton
+            className="arrow-button"
+            size={arrowSize}
+            id="month-switch"
+            data-cy="switch-next-month"
+          >
             <MdChevronRight
               onClick={(): void => {
                 dispatch(MonthSwitchActionCreator.switchToNewMonth(1));
