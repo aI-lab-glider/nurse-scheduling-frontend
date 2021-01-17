@@ -98,7 +98,9 @@ export default function WorkersTab(): JSX.Element {
               const workerType = worker.type ?? WorkerType.NURSE;
               return (
                 <TableRow key={worker.name} className={classes.row}>
-                  <TableCell className={classes.tableCell}>{worker.name}</TableCell>
+                  <TableCell className={classes.tableCell} data-cy="workerName">
+                    {worker.name}
+                  </TableCell>
                   <TableCell className={classes.tableCell} align="left">
                     <span
                       className={classNames(
