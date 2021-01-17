@@ -2,21 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ThunkDispatch } from "redux-thunk";
-import {
-  PersistenceStoreProvider,
-  RevisionFilter,
-  ScheduleKey,
-} from "../../api/persistance-store.model";
+import { PersistenceStoreProvider, ScheduleKey } from "../../api/persistance-store.model";
 import { ScheduleDataModel } from "../../common-models/schedule-data.model";
 import { WorkerType } from "../../common-models/worker-info.model";
 import { SelectionMatrix } from "../../components/schedule-page/table/schedule/sections/base-section/use-selection-matrix";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
-import {
-  cropScheduleToMonthDM,
-  ScheduleDataActionCreator,
-} from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { ScheduleActionModel } from "../../state/reducers/month-state/schedule-data/schedule.actions";
 import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
 import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
@@ -75,8 +68,7 @@ export class ScheduleLogic implements ScheduleProvider {
     const metadata = new MetadataLogic(
       scheduleInfo.year?.toString(),
       scheduleInfo.month_number,
-      scheduleModel.month_info?.dates,
-      scheduleInfo.daysFromPreviousMonthExists
+      scheduleModel.month_info?.dates
     );
     const logics: FoundationInfoOptions = {
       BabysitterInfo: new ShiftsInfoLogic(babysitterShifts, WorkerType.OTHER, metadata),
@@ -96,20 +88,14 @@ export class ScheduleLogic implements ScheduleProvider {
 
   public tryGetCurrentMonthSchedule(): void {
     const [month, year] = this.sections.Metadata.monthLogic.currentDate;
-    const filter: RevisionFilter = {
-      revisionType: "actual",
-      validityPeriod: new ScheduleKey(month, year).key,
-    };
-    this.dispatchScheduleUpdate(this.storeProvider.getMonthRevision(filter));
+    this.dispatchScheduleUpdate(
+      ScheduleDataActionCreator.addScheduleFromMonth(new ScheduleKey(month, year))
+    );
   }
 
   public updateActualRevision(): void {
     this.dispatchScheduleUpdate(
-      // TODO: SAVE WEEKS FROM PREV AND NEXT MONTHS
-      this.storeProvider.saveMonthRevision(
-        "actual",
-        cropScheduleToMonthDM(this.schedule.getDataModel())
-      )
+      ScheduleDataActionCreator.addScheduleDM(this.schedule.getDataModel())
     );
   }
 

@@ -1,5 +1,5 @@
 {
-  "schedule_info": { "month_number": 10, "year": 2020, "daysFromPreviousMonthExists": true },
+  "schedule_info": { "month_number": 10, "year": 2020 },
   "shifts": {
     "opiekunka 1": [
       "N",

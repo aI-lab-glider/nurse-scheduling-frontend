@@ -1,24 +1,15 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
+import { MonthDataModel } from "../../common-models/schedule-data.model";
 import { ActionModel } from "../models/action.model";
 import { HistoryStateModel } from "../models/application-state.model";
-import { cropScheduleToMonthDM } from "./month-state/schedule-data/schedule-data.action-creator";
 
 enum HistoryReducerAction {
   ADD_MONTH_STATE = "ADD_MONTH_STATE",
 }
 
 export class HistoryReducerActionCreator {
-  static addToScheduleHistory(scheduleModel: ScheduleDataModel): ActionModel<MonthDataModel> {
-    const monthDataModel = cropScheduleToMonthDM(scheduleModel);
-    return {
-      type: HistoryReducerAction.ADD_MONTH_STATE,
-      payload: monthDataModel,
-    };
-  }
-
   static addToMonthHistory(monthModel: MonthDataModel): ActionModel<MonthDataModel> {
     return {
       type: HistoryReducerAction.ADD_MONTH_STATE,

@@ -55,7 +55,7 @@ fillWorkerInfo(shifts, employee_info, nurseSection, WorkerType.NURSE);
 fillWorkerInfo(shifts, employee_info, babysitterSection, WorkerType.OTHER);
 
 const expectedSchedule: ScheduleDataModel = {
-  schedule_info: { month_number: 10, year: 2020, daysFromPreviousMonthExists: true },
+  schedule_info: { month_number: 10, year: 2020 },
   shifts: shifts,
   month_info: {
     frozen_shifts: [],

@@ -8,7 +8,10 @@ import { ScheduleError } from "../../../common-models/schedule-error.model";
 import { ScheduleExportLogic } from "../../../logic/schedule-exporter/schedule-export.logic";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import {
+  cropScheduleToMonthDM,
+  ScheduleDataActionCreator,
+} from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
 import {
   ButtonData,
@@ -41,7 +44,9 @@ export function ImportButtonsComponent(): JSX.Element {
   const btnData = [btnData1, btnData2];
   useEffect(() => {
     if (scheduleModel) {
-      const action = ScheduleDataActionCreator.setPersistentSchedule(scheduleModel);
+      const action = ScheduleDataActionCreator.addScheduleFromMonthModel(
+        cropScheduleToMonthDM(scheduleModel)
+      );
       scheduleDipatcher(action);
     } else if (scheduleErrors) {
       setOpen(true);

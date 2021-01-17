@@ -32,7 +32,6 @@ export class Schedule {
       schedule_info: {
         month_number: sections.Metadata.monthNumber ?? 0,
         year: sections.Metadata?.year ?? 0,
-        daysFromPreviousMonthExists: sections.Metadata?.daysFromPreviousMonthExists ?? false,
       },
       shifts: {
         ...sections.BabysitterInfo.workerShifts,

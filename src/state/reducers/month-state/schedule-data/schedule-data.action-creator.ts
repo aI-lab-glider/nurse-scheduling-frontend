@@ -3,32 +3,47 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 /* eslint-disable @typescript-eslint/camelcase */
-
 import {
+  createEmptyMonthDataModel,
   getScheduleKey,
   MonthDataModel,
   ScheduleDataModel,
 } from "../../../../common-models/schedule-data.model";
 import { ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
-import {
-  PERSISTENT_SCHEDULE_NAME,
-  ScheduleActionDestination,
-  TEMPORARY_SCHEDULE_NAME,
-} from "../../../app.reducer";
+import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
-import { ApplicationStateModel, HistoryStateModel } from "../../../models/application-state.model";
+import { HistoryStateModel } from "../../../models/application-state.model";
 import { HistoryReducerActionCreator } from "../../history.reducer";
 import { ShiftInfoModel } from "../../../../common-models/shift-info.model";
 import { MonthInfoModel } from "../../../../common-models/month-info.model";
-import { cropMonthInfoToMonth, cropShiftsToMonth } from "./common-reducers";
+import {
+  calculateMissingFullWeekDays,
+  cropMonthInfoToMonth,
+  cropShiftsToMonth,
+} from "./common-reducers";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
-import { ThunkDispatch } from "redux-thunk";
-import { ActionModel } from "../../../models/action.model";
 import _ from "lodash";
 
 export class ScheduleDataActionCreator {
-  static setPersistentSchedule(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
-    return (dispatch): void => {
+  static addScheduleDM(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
+    return async (dispatch): Promise<void> => {
+      const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
+      await new LocalStorageProvider().saveSchedule("actual", newSchedule);
+      destinations.forEach((destination) => {
+        const action = {
+          type: createActionName(destination, ScheduleActionType.ADD_NEW),
+          payload: newSchedule,
+        };
+        dispatch(action);
+      });
+    };
+  }
+
+  static addScheduleFromMonthModel(newMonth: MonthDataModel): ThunkFunction<ScheduleDataModel> {
+    return async (dispatch, getState): Promise<void> => {
+      const history = getState().history;
+      const [prevMonth, nextMonth] = await getSurroundingMonths(newMonth, history);
+      const newSchedule = extendMonthToScheduleDM(prevMonth, newMonth, nextMonth);
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
       destinations.forEach((destination) => {
         const action = {
@@ -40,23 +55,31 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static setPersistentScheduleMonth(newMonthData: MonthDataModel): ThunkFunction<MonthDataModel> {
-    return (dispatch): void => {
-      const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
-      destinations.forEach((destination) => {
-        const action = {
-          type: createActionName(destination, ScheduleActionType.ADD_NEW),
-          payload: newMonthData,
-        };
-        dispatch(action);
-      });
+  static addScheduleFromMonth(monthKey: ScheduleKey): ThunkFunction<ScheduleDataModel> {
+    return async (dispatch, getState): Promise<void> => {
+      const history = getState().history;
+      let monthDataModel = history[monthKey.key];
+      if (_.isNil(monthDataModel)) {
+        const monthModel = await new LocalStorageProvider().getMonthRevision({
+          revisionType: "actual",
+          validityPeriod: monthKey.key,
+        });
+        if (!_.isNil(monthModel)) {
+          monthDataModel = monthModel;
+        }
+      }
+      if (!_.isNil(monthDataModel)) {
+        this.addScheduleFromMonthModel(monthDataModel);
+      }
     };
   }
 
   static copyPreviousMonth(): ThunkFunction<ScheduleKey | MonthDataModel> {
     return (dispatch, getState): void => {
       const actualSchedule = getState().actualState.persistentSchedule.present;
-      const historyAction = HistoryReducerActionCreator.addToScheduleHistory(actualSchedule);
+      const actualMonth = cropScheduleToMonthDM(actualSchedule);
+      const historyAction = HistoryReducerActionCreator.addToMonthHistory(actualMonth);
+
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
       const scheduleKey: ScheduleKey = getScheduleKey(actualSchedule);
 
@@ -71,36 +94,6 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static addNewSchedule(
-    destination: ScheduleActionDestination,
-    newSchedule: ScheduleDataModel
-  ): ScheduleActionModel {
-    return {
-      type: createActionName(destination, ScheduleActionType.ADD_NEW),
-      payload: newSchedule,
-    };
-  }
-
-  static addNewScheduleFromMonth(
-    destination: ScheduleActionDestination,
-    newMonth: MonthDataModel
-  ): ThunkFunction<ScheduleDataModel> {
-    return async (dispatch, getState): Promise<void> => {
-      const history = getState().history;
-      const [prevMonth, nextMonth] = await getSurroundingMonths(
-        newMonth.scheduleKey,
-        history,
-        dispatch
-      );
-      const extendedSchedule = extendMonthToScheduleDM(prevMonth, newMonth, nextMonth);
-      const action = {
-        type: createActionName(destination, ScheduleActionType.ADD_NEW),
-        payload: extendedSchedule,
-      };
-      dispatch(action);
-    };
-  }
-
   static updateSchedule(newScheduleModel: ScheduleDataModel): ScheduleActionModel {
     return {
       type: createActionName(TEMPORARY_SCHEDULE_NAME, ScheduleActionType.UPDATE),
@@ -110,34 +103,35 @@ export class ScheduleDataActionCreator {
 }
 
 async function getSurroundingMonths(
-  key: ScheduleKey,
-  history: HistoryStateModel,
-  dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<ScheduleDataModel>>
+  baseMonth: MonthDataModel,
+  history: HistoryStateModel
 ): Promise<[MonthDataModel, MonthDataModel]> {
-  const prevMonth: MonthDataModel = await getMonth(key.prevMonthKey, history, dispatch);
-  const nextMonth: MonthDataModel = await getMonth(key.nextMonthKey, history, dispatch);
-  return [prevMonth, nextMonth];
+  return [
+    await fetchOrCreateMonthDM(baseMonth.scheduleKey.prevMonthKey, history, baseMonth),
+    await fetchOrCreateMonthDM(baseMonth.scheduleKey.nextMonthKey, history, baseMonth),
+  ];
 }
 
-async function getMonth(
+async function fetchOrCreateMonthDM(
   monthKey: ScheduleKey,
   history: HistoryStateModel,
-  dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<ScheduleDataModel>>
+  baseMonth: MonthDataModel
 ): Promise<MonthDataModel> {
-  const monthDataModel = history[monthKey.key];
-  const noMonthInHistory = _.isNil(monthDataModel);
-  if (noMonthInHistory) {
-    const db = await new LocalStorageProvider().getMonthRevision({
+  let monthDataModel = history[monthKey.key];
+  if (_.isNil(monthDataModel)) {
+    const storageProvider = new LocalStorageProvider();
+    const newMonthDataModel = await storageProvider.getMonthRevision({
       revisionType: "actual",
       validityPeriod: monthKey.key,
     });
-    const noMonthInDatabase = _.isNil(db);
-    if (monthDataModel) {
+
+    if (_.isNil(newMonthDataModel)) {
+      monthDataModel = createEmptyMonthDataModel(monthKey, baseMonth);
+      await storageProvider.saveMonthRevision("actual", monthDataModel);
+    } else {
+      monthDataModel = newMonthDataModel;
     }
   }
-  // if not avaible create one/both
-  // add new schedule to db/
-  // add new scheudle to history
   return monthDataModel;
 }
 
@@ -175,7 +169,6 @@ function extendMonthToScheduleDM(
       UUID: "0",
       month_number: scheduleKey.month,
       year: scheduleKey.year,
-      daysFromPreviousMonthExists: false,
     },
     month_info: monthInfoModel,
     employee_info: currentMonthData.employee_info,
@@ -184,19 +177,14 @@ function extendMonthToScheduleDM(
 }
 
 function extend<T>(arr1: T[], count1: number, curr: T[], arr2: T[], count2: number): T[] {
-  return [...arr1.slice(arr1.length - count1), ...curr, ...arr2.slice(count2)];
-}
-
-export function calculateMissingFullWeekDays({ month, year }: ScheduleKey): [number, number] {
-  const firstMonthDay = new Date(year, month, 1).getDay();
-  const lastMonthDay = new Date(year, month + 1, 0).getDay();
-  return [firstMonthDay === 0 ? 0 : firstMonthDay - 1, lastMonthDay === 0 ? 0 : 7 - lastMonthDay];
+  return [...arr1.slice(arr1.length - count1), ...curr, ...arr2.slice(0, count2)];
 }
 
 export function cropScheduleToMonthDM(schedule: Required<ScheduleDataModel>): MonthDataModel {
   const { dates } = schedule.month_info;
   const monthStart = dates.findIndex((v) => v === 1);
   const monthKey = getScheduleKey(schedule);
+  debugger;
 
   return {
     scheduleKey: monthKey,

@@ -4,9 +4,11 @@
 import { WorkersInfoModel } from "./worker-info.model";
 import { MonthInfoModel } from "./month-info.model";
 import { ScheduleMetadata } from "./schedule.model";
-import { ShiftInfoModel } from "./shift-info.model";
+import { ShiftCode, ShiftInfoModel } from "./shift-info.model";
 import { ScheduleKey } from "../api/persistance-store.model";
 import _ from "lodash";
+import { daysInMonth } from "../state/reducers/month-state/schedule-data/common-reducers";
+/* eslint-disable @typescript-eslint/camelcase */
 
 export interface ScheduleDataModel {
   schedule_info: ScheduleMetadata;
@@ -25,6 +27,31 @@ export function isMonthModelEmpty(monthDataModel: MonthDataModel): boolean {
     const requiredObject = monthDataModel[field];
     return Object.values(requiredObject).every((field) => _.isEmpty(field));
   });
+}
+
+export function createEmptyMonthDataModel(
+  scheduleKey: ScheduleKey,
+  { employee_info, shifts }: MonthDataModel
+): MonthDataModel {
+  const dates = daysInMonth(scheduleKey.month, scheduleKey.year);
+  const monthLength = dates.length;
+
+  const freeShifts: ShiftInfoModel = {};
+  Object.keys(shifts).forEach((key) => {
+    freeShifts[key] = new Array(monthLength).fill(ShiftCode.W);
+  });
+
+  return {
+    scheduleKey,
+    month_info: {
+      children_number: new Array(monthLength).fill(0),
+      extra_workers: new Array(monthLength).fill(0),
+      frozen_shifts: [],
+      dates,
+    },
+    employee_info: employee_info,
+    shifts: freeShifts,
+  };
 }
 
 export function getScheduleKey(newSchedule: ScheduleDataModel): ScheduleKey {

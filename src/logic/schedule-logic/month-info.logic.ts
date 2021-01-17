@@ -28,12 +28,7 @@ export class MonthInfoLogic {
     return this._verboseDates.map((d) => d.dayOfWeek);
   }
 
-  constructor(
-    monthId: string | number,
-    public year: string,
-    monthDates: number[],
-    daysFromPreviousMonthExists: boolean
-  ) {
+  constructor(monthId: string | number, public year: string, monthDates: number[]) {
     if (typeof monthId == "string") {
       monthId = TranslationHelper.polishMonths.findIndex(
         (month) => StringHelper.getRawValue(month) === monthId
@@ -49,7 +44,7 @@ export class MonthInfoLogic {
 
     this.publicHolidaysLogic = new PublicHolidaysLogic(year);
 
-    this._verboseDates = this.createCalendar(this.monthNumber, year, daysFromPreviousMonthExists);
+    this._verboseDates = this.createCalendar(this.monthNumber, parseInt(year));
   }
 
   private generateMonthDates(monthNumber: number, year: string): number[] {
@@ -88,11 +83,7 @@ export class MonthInfoLogic {
     return new Date(`1 ${TranslationHelper.englishMonths[monthNumber]} ${year}`);
   }
 
-  private createCalendar(
-    monthNumber: number,
-    year: string,
-    daysFromPreviousMonthExists: boolean
-  ): VerboseDate[] {
+  private createCalendar(monthNumber: number, year: number): VerboseDate[] {
     const verboseDates: VerboseDate[] = [];
     // declare array by hand instead of using Object.values(WeekDay), to be sure
     // that order of day will always be consistent with js-function Date.getDay()
@@ -105,13 +96,17 @@ export class MonthInfoLogic {
       WeekDay.FR,
       WeekDay.SA,
     ];
+    let currentMonth = monthNumber - 1;
     for (const day of this.monthDates) {
       if (day === 1) {
-        daysFromPreviousMonthExists = false;
+        currentMonth += 1;
+        if (currentMonth === 12) {
+          currentMonth = 0;
+          year += 1;
+        }
       }
-      const month = daysFromPreviousMonthExists ? monthNumber - 1 : monthNumber;
-      const isPublicHoliday = this.publicHolidaysLogic.isPublicHoliday(day, month);
-      const monthName = TranslationHelper.englishMonths[month];
+      const isPublicHoliday = this.publicHolidaysLogic.isPublicHoliday(day, currentMonth);
+      const monthName = TranslationHelper.englishMonths[currentMonth];
       const date = new Date(`${day} ${monthName} ${year}`);
       verboseDates.push({
         date: day,
@@ -119,19 +114,10 @@ export class MonthInfoLogic {
         isPublicHoliday: isPublicHoliday,
         isFrozen: false,
         // TODO: handle automatic frozen state
-        // this.isDateFrozen(date, daysFromPreviousMonthExists),
         month: monthName,
       });
     }
     return verboseDates;
-  }
-  private isDateFrozen(date: Date, dayBelongToPreviousMonth: boolean): boolean {
-    const today = new Date();
-    return (
-      (date.getDate() < today.getDate() && date.getMonth() <= today.getMonth()) ||
-      date.getFullYear() < today.getFullYear() ||
-      dayBelongToPreviousMonth
-    );
   }
 
   private isDateBelongsToMonth(date: number, month: string, year: string): boolean {

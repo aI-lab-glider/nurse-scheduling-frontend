@@ -2,10 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ThunkDispatch } from "redux-thunk";
-import { MonthDataModel } from "../common-models/schedule-data.model";
+import { MonthDataModel, ScheduleDataModel } from "../common-models/schedule-data.model";
 import { WorkerInfoModel } from "../common-models/worker-info.model";
 import { ActionModel } from "../state/models/action.model";
 import { ApplicationStateModel } from "../state/models/application-state.model";
+import { ShiftInfoModel } from "../common-models/shift-info.model";
 
 export type ThunkFunction<T> = (
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<T>>,
@@ -13,6 +14,7 @@ export type ThunkFunction<T> = (
 ) => Promise<unknown> | unknown;
 
 export type ScheduleKeyString = string;
+export type UpdatePosition = "START" | "END";
 
 export class ScheduleKey {
   constructor(public month: number, public year: number) {}
@@ -57,9 +59,20 @@ export interface MonthRecord {
 }
 
 export abstract class PersistenceStoreProvider {
-  abstract saveMonthRevision(
+  abstract async saveMonthRevision(
     type: RevisionType,
     monthDataModel: MonthDataModel
-  ): ThunkFunction<MonthDataModel>;
-  abstract getMonthRevision(filter: RevisionFilter): ThunkFunction<MonthDataModel>;
+  ): Promise<void>;
+  abstract async getMonthRevision(filter: RevisionFilter): Promise<MonthDataModel | undefined>;
+  abstract async saveSchedule(
+    type: RevisionType,
+    scheduleDataModel: ScheduleDataModel
+  ): Promise<void>;
+
+  abstract async updateMonthRevision(
+    type: RevisionType,
+    monthKey: ScheduleKey,
+    updateShifts: ShiftInfoModel,
+    updatePosition: UpdatePosition
+  ): Promise<void>;
 }

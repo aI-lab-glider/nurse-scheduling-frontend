@@ -12,9 +12,7 @@ const monthInfoinitialState: MonthInfoModel = {
   frozen_shifts: [],
   dates: [],
 };
-export const scheduleInfoInitialState: ScheduleMetadata = {
-  daysFromPreviousMonthExists: false,
-};
+export const scheduleInfoInitialState: ScheduleMetadata = {};
 export const shiftInfoInitialState: ShiftInfoModel = {};
 
 export const scheduleDataInitialState = {

@@ -4,13 +4,11 @@
 
 import * as _ from "lodash";
 import { ThunkDispatch } from "redux-thunk";
-import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
-import { TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
 import { ActionModel } from "../../../models/action.model";
 import { ApplicationStateModel } from "../../../models/application-state.model";
 import { UndoableConfig } from "../../undoable.action-creator";
-import { cropScheduleToMonthDM, ScheduleDataActionCreator } from "./schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
 
 export function isScheduleAction(action: ActionModel<unknown>): action is ScheduleActionModel {
   return !_.isNil((action.payload as ScheduleDataModel)?.schedule_info);
@@ -28,29 +26,23 @@ export function createActionName(name: string, action: ScheduleActionType): stri
   return `${name}/${action}`;
 }
 
-async function updatePersistentSchedule(
+function updatePersistentSchedule(
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<ScheduleDataModel>>,
   state: ScheduleDataModel
-): Promise<void> {
-  const storeProvider = new LocalStorageProvider();
-  // TODO: SAVE WEEKS FROM PREV AND NEXT MONTHS
-  storeProvider.saveMonthRevision("actual", cropScheduleToMonthDM(state));
-  state &&
-    (await dispatch(ScheduleDataActionCreator.addNewSchedule(TEMPORARY_SCHEDULE_NAME, state)));
+): void {
+  dispatch(ScheduleDataActionCreator.addScheduleDM(state));
 }
 
 export const PERSISTENT_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {
   undoType: "PERSISTENT_REVISION_UNDO",
   redoType: "PERSISTENT_REVISION_REDO",
-  afterUndo: async (dispatch, getState) => {
+  afterUndo: (dispatch, getState) => {
     const state = getState().actualState.persistentSchedule.present;
-    debugger;
-    await updatePersistentSchedule(dispatch, state);
+    updatePersistentSchedule(dispatch, state);
   },
-  afterRedo: async (dispatch, getState) => {
+  afterRedo: (dispatch, getState) => {
     const state = getState().actualState.persistentSchedule.present;
-    debugger;
-    await updatePersistentSchedule(dispatch, state);
+    updatePersistentSchedule(dispatch, state);
   },
 };
 

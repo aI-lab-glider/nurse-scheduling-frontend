@@ -5,5 +5,4 @@ export interface ScheduleMetadata {
   UUID?: string;
   month_number?: number;
   year?: number;
-  daysFromPreviousMonthExists: boolean;
 }

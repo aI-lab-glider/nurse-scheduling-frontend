@@ -1,5 +1,7 @@
-import { daysInMonth } from "../../../../../src/state/reducers/month-state/schedule-data/common-reducers";
-import { calculateMissingFullWeekDays } from "../../../../../src/state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import {
+  calculateMissingFullWeekDays,
+  daysInMonth,
+} from "../../../../../src/state/reducers/month-state/schedule-data/common-reducers";
 import { ScheduleKey } from "../../../../../src/api/persistance-store.model";
 
 interface TestCase {

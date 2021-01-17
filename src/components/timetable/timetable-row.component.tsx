@@ -32,9 +32,9 @@ export function TimeTableRowF({ dataRow, uuid }: TimeTableRowOptions): JSX.Eleme
       const monthLogic = new MonthInfoLogic(
         today.getMonth(),
         today.getFullYear().toString(),
-        dataRow.rowData(),
-        false
+        dataRow.rowData()
       );
+
       return [monthLogic.verboseDates, monthLogic.monthNumber];
     }
   }
