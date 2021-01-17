@@ -13,9 +13,12 @@ import { MonthStateModel } from "../../../models/application-state.model";
 import { createMonthKey } from "../../history.reducer";
 import { getDateWithMonthOffset } from "./common-reducers";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
+import { WorkerInfoExtendedInterface } from "../../../../components/namestable/worker-edit.component";
+
 export interface CopyMonthActionPayload extends ScheduleKey {
   scheduleData: ScheduleDataModel;
 }
+
 export class ScheduleDataActionCreator {
   static setSchedule(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
@@ -70,6 +73,26 @@ export class ScheduleDataActionCreator {
         };
         dispatch(action);
       });
+    };
+  }
+
+  static addNewWorker(worker: WorkerInfoExtendedInterface): (dispatch) => Promise<void> {
+    return async (dispatch): Promise<void> => {
+      const action = {
+        type: ScheduleActionType.ADD_NEW_WORKER,
+        payload: { ...worker },
+      };
+      dispatch(action);
+    };
+  }
+
+  static modifyWorker(worker: WorkerInfoExtendedInterface): (dispatch) => Promise<void> {
+    return async (dispatch): Promise<void> => {
+      const action = {
+        type: ScheduleActionType.MODIFY_WORKER,
+        payload: { ...worker },
+      };
+      dispatch(action);
     };
   }
 

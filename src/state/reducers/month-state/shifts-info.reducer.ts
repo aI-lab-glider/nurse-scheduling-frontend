@@ -11,14 +11,22 @@ import { CopyMonthActionPayload } from "./schedule-data/schedule-data.action-cre
 import {
   ScheduleActionModel,
   createActionName,
-  ScheduleActionType,
+  ScheduleActionType
 } from "./schedule-data/schedule.actions";
+import { WorkerInfoExtendedInterface } from "../../../components/namestable/worker-edit.component";
 
 export function scheduleShiftsInfoReducerF(name: string) {
   return (
     state: ShiftInfoModel = scheduleDataInitialState.shifts,
-    action: ScheduleActionModel | ActionModel<CopyMonthActionPayload>
+    action:
+      | ScheduleActionModel
+      | ActionModel<WorkerInfoExtendedInterface>
+      | ActionModel<CopyMonthActionPayload>
   ): ShiftInfoModel => {
+    let workerName, prevName;
+    if (action.payload as WorkerInfoExtendedInterface) {
+      ({ workerName, prevName } = action.payload as WorkerInfoExtendedInterface);
+    }
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
       case createActionName(name, ScheduleActionType.UPDATE):
@@ -27,6 +35,13 @@ export function scheduleShiftsInfoReducerF(name: string) {
       case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
         const { month, year, scheduleData } = action.payload as CopyMonthActionPayload;
         return copyShiftstoMonth(month, year, scheduleData.shifts, scheduleData.month_info.dates);
+      case ScheduleActionType.ADD_NEW_WORKER:
+        const newShiftsArr = [...Array(35).fill("W")];
+        return { ...{ [workerName]: newShiftsArr }, ...state };
+      case ScheduleActionType.MODIFY_WORKER:
+        const shiftsArr = state[prevName];
+        delete state[prevName];
+        return { ...{ [workerName]: shiftsArr }, ...state };
 
       default:
         return state;
