@@ -199,7 +199,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
       </Grid>
       <Grid item>
         <Button
-          data-cy="ZapiszBtn"
+          data-cy="saveWorkerInfoBtn"
           onClick={(): void => {
             workerInfo.prevName === ""
               ? dispatcher(ScheduleDataActionCreator.addNewWorker(workerInfo))
