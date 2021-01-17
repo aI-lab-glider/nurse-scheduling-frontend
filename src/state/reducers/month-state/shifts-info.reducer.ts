@@ -11,17 +11,21 @@ import { CopyMonthActionPayload } from "./schedule-data/schedule-data.action-cre
 import {
   ScheduleActionModel,
   createActionName,
-  ScheduleActionType,
+  ScheduleActionType
 } from "./schedule-data/schedule.actions";
+import { WorkerInfoExtendedInterface } from "../../../components/namestable/worker-edit.component";
 
 export function scheduleShiftsInfoReducerF(name: string) {
   return (
     state: ShiftInfoModel = scheduleDataInitialState.shifts,
-    action: ScheduleActionModel | ActionModel<CopyMonthActionPayload>
+    action:
+      | ScheduleActionModel
+      | ActionModel<WorkerInfoExtendedInterface>
+      | ActionModel<CopyMonthActionPayload>
   ): ShiftInfoModel => {
     let workerName, prevName;
-    if (action.payload?.worker) {
-      ({ workerName, prevName } = action.payload?.worker);
+    if (action.payload as WorkerInfoExtendedInterface) {
+      ({ workerName, prevName } = action.payload as WorkerInfoExtendedInterface);
     }
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):

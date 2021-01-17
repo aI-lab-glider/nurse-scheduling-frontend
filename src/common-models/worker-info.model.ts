@@ -45,6 +45,7 @@ export enum TimeDrawerType {
 export interface WorkersInfoModel {
   time: { [key: string]: string | string[] | number };
   type: { [workerName: string]: WorkerType };
+  contractType?: { [workerName: string]: ContractType };
 }
 
 export interface WorkerInfoModel {

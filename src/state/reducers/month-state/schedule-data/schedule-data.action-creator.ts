@@ -79,7 +79,7 @@ export class ScheduleDataActionCreator {
     return async (dispatch): Promise<void> => {
       const action = {
         type: ScheduleActionType.ADD_NEW_WORKER,
-        payload: { worker },
+        payload: { ...worker },
       };
       dispatch(action);
     };
@@ -89,7 +89,7 @@ export class ScheduleDataActionCreator {
     return async (dispatch): Promise<void> => {
       const action = {
         type: ScheduleActionType.MODIFY_WORKER,
-        payload: { worker },
+        payload: { ...worker },
       };
       dispatch(action);
     };
