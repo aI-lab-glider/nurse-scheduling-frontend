@@ -23,5 +23,8 @@ export function useActualMonth(): string {
       setActualMonth(month);
     }
   }, [month_number, year]);
-  return actualMonth;
+
+  if (actualMonth === "")
+    return `${TranslationHelper.polishMonths[new Date().getMonth()]} ${new Date().getFullYear()}`;
+  else return actualMonth;
 }

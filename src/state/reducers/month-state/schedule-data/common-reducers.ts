@@ -11,7 +11,7 @@ export function daysInMonth(month = 0, year = 0): number[] {
   let day = 1;
   const result = [day];
   let date = new Date(year, month, day);
-  while (month === date.getMonth()) {
+  while (month === date.getMonth() && day < 31) {
     day++;
     date = new Date(year, month, day);
     result.push(day);
@@ -21,16 +21,46 @@ export function daysInMonth(month = 0, year = 0): number[] {
 export function copyShiftstoMonth(
   month: number,
   year: number,
-  shifts: ShiftInfoModel
+  shifts: ShiftInfoModel,
+  dates: number[]
 ): ShiftInfoModel {
   const days = daysInMonth(month, year).length;
+
   const copiedShifts = _.cloneDeep(shifts);
+  const firstDay = dates.indexOf(1);
+  let firstMonday = 0;
+  for (let index = firstDay; index < dates.length; index++) {
+    const day = dates[index];
+    const prevMonth = getDateWithMonthOffset(month, year, -1).getMonth();
+    const dayOfWeek = new Date(year, prevMonth, day).getDay();
+    if (dayOfWeek === 1) {
+      firstMonday = index;
+      break;
+    }
+  }
+
   Object.keys(copiedShifts).forEach((key) => {
     const values = copiedShifts[key].slice(0, days);
     copiedShifts[key] = values.map((shift) =>
       [ShiftCode.L4, ShiftCode.U, ShiftCode.K].includes(shift) ? ShiftCode.W : shift
     );
   });
+  const copiedWeek: ShiftInfoModel = {};
+  Object.keys(copiedShifts).forEach((key) => {
+    const shifts = copiedShifts[key].slice(firstMonday, firstMonday + 7);
+    copiedWeek[key] = shifts;
+  });
+  Object.keys(copiedShifts).forEach((key) => {
+    const shifts = copiedShifts[key];
+    let index = 0;
+    shifts.forEach((element) => {
+      const dayofWeek = new Date(year, month, index).getDay();
+      shifts[index] = copiedWeek[key][dayofWeek];
+      index += 1;
+    });
+    copiedShifts[key] = shifts;
+  });
+
   return copiedShifts;
 }
 

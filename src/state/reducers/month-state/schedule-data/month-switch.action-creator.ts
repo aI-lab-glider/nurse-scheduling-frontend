@@ -15,7 +15,8 @@ export class MonthSwitchActionCreator {
     return async (dispatch, getState): Promise<void> => {
       const history = getState().history;
       const actualSchedule = getState().actualState;
-      const year = actualSchedule.persistentSchedule.present.schedule_info.year ?? 0;
+      const year =
+        actualSchedule.persistentSchedule.present.schedule_info.year ?? new Date().getFullYear();
       const month = actualSchedule.persistentSchedule.present.schedule_info.month_number ?? 0;
 
       const historyAction = HistoryReducerActionCreator.addToHistory(actualSchedule);
