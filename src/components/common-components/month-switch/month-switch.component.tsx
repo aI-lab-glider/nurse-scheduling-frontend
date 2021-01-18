@@ -4,8 +4,9 @@
 import { IconButton } from "@material-ui/core";
 import { MdChevronRight, MdChevronLeft } from "react-icons/md";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useActualMonth } from "./use-actual-month";
+import { MonthSwitchActionCreator } from "../../../state/reducers/month-state/schedule-data/month-switch.action-creator";
 
 interface MonthSwitchOpions {
   key?: string;
@@ -13,22 +14,38 @@ interface MonthSwitchOpions {
 export function MonthSwitchComponent(options: MonthSwitchOpions): JSX.Element {
   const arrowSize = "small";
   const actualMonth = useActualMonth();
-
+  const dispatch = useDispatch();
   return (
     <>
       {actualMonth && (
-        <div id="month-switch">
-          <IconButton className="arrow-button" size={arrowSize}>
-            <MdChevronLeft />
+        <div>
+          <IconButton
+            className="arrow-button"
+            size={arrowSize}
+            id="month-switch"
+            data-cy="switch-prev-month"
+          >
+            <MdChevronLeft
+              onClick={(): void => {
+                dispatch(MonthSwitchActionCreator.switchToNewMonth(-1));
+              }}
+            />
           </IconButton>
 
           <span>{actualMonth}</span>
 
-          <Link to="/next-month">
-            <IconButton className="arrow-button" size={arrowSize}>
-              <MdChevronRight />
-            </IconButton>
-          </Link>
+          <IconButton
+            className="arrow-button"
+            size={arrowSize}
+            id="month-switch"
+            data-cy="switch-next-month"
+          >
+            <MdChevronRight
+              onClick={(): void => {
+                dispatch(MonthSwitchActionCreator.switchToNewMonth(1));
+              }}
+            />
+          </IconButton>
         </div>
       )}
     </>

@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 import React, { ChangeEvent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ScheduleError } from "../../../common-models/schedule-error.model";
@@ -14,6 +15,7 @@ import {
   DropdownButtons,
 } from "../../common-components/dropdown-buttons/dropdown-buttons.component";
 import { useScheduleConverter } from "./hooks/use-schedule-converter";
+import ParseErrorModal from "../../common-components/modal/error-modal/errors.modal.component";
 
 export function ImportButtonsComponent(): JSX.Element {
   const DEFAULT_FILENAME = "grafik.xlsx";
@@ -37,13 +39,12 @@ export function ImportButtonsComponent(): JSX.Element {
   };
 
   const btnData = [btnData1, btnData2];
-
   useEffect(() => {
     if (scheduleModel) {
-      const action = ScheduleDataActionCreator.setPersistentSchedule(scheduleModel);
+      const action = ScheduleDataActionCreator.setSchedule(scheduleModel);
       scheduleDipatcher(action);
-    } else if (errorOccurred) {
-      //todo display message
+    } else if (scheduleErrors) {
+      setOpen(true);
     }
 
     scheduleDipatcher({
@@ -65,6 +66,8 @@ export function ImportButtonsComponent(): JSX.Element {
     }
   }
 
+  const [open, setOpen] = React.useState(false);
+
   return (
     <div>
       <DropdownButtons
@@ -82,6 +85,8 @@ export function ImportButtonsComponent(): JSX.Element {
         type="file"
         accept=".xlsx"
       />
+
+      {scheduleErrors.length !== 0 && <ParseErrorModal open={open} setOpen={setOpen} />}
     </div>
   );
 }

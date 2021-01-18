@@ -18,6 +18,8 @@ import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
 import { TextMaskCustom } from "../common-components/text-mask-custom/text-mask-custom.component";
 import { StringHelper } from "../../helpers/string.helper";
 import { WorkingTimeHelper } from "./working-time.helper";
+import { ScheduleDataActionCreator } from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles({
   container: {
@@ -31,7 +33,8 @@ const useStyles = makeStyles({
 });
 
 export interface WorkerInfoExtendedInterface {
-  name: string;
+  workerName: string;
+  prevName: string;
   workerType: WorkerType | undefined;
   contractType: ContractType | undefined;
   employmentTime: string;
@@ -41,9 +44,11 @@ export interface WorkerInfoExtendedInterface {
 
 export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
   const classes = useStyles();
+  const dispatcher = useDispatch();
 
   const [workerInfo, setWorkerInfo] = useState<WorkerInfoExtendedInterface>({
-    name: info.name,
+    workerName: info.name,
+    prevName: info.name,
     workerType: info.type,
     contractType: undefined,
     employmentTime: "1/1",
@@ -113,9 +118,9 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
             <Typography className={classes.label}>Imię i nazwisko</Typography>
             <TextField
               fullWidth
-              name="name"
+              name="workerName"
               data-cy="name"
-              value={workerInfo.name}
+              value={workerInfo.workerName}
               onChange={handleUpdate}
               color="primary"
             />
@@ -193,7 +198,15 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
         </Grid>
       </Grid>
       <Grid item>
-        <Button>Zapisz pracownika</Button>
+        <Button
+          onClick={(): void => {
+            workerInfo.prevName === ""
+              ? dispatcher(ScheduleDataActionCreator.addNewWorker(workerInfo))
+              : dispatcher(ScheduleDataActionCreator.modifyWorker(workerInfo));
+          }}
+        >
+          Zapisz pracownika
+        </Button>
       </Grid>
     </Grid>
   );

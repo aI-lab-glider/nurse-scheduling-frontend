@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 export interface ScheduleModel {
   UUID?: string;
-  month_number?: number;
-  year?: number;
+  month_number: number;
+  year: number;
   daysFromPreviousMonthExists: boolean;
 }

@@ -33,11 +33,12 @@ export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX
   const { mode, worker, setOpen, ...otherOptions } = options;
   const title = getTitle(mode);
   const isInfo = mode === WorkerDrawerMode.INFO;
+  const isNew = mode === WorkerDrawerMode.ADD_NEW;
   const isEdit = mode === WorkerDrawerMode.EDIT;
   return (
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>
       {isEdit && worker && <WorkerEditComponent {...worker} />}
-
+      {isNew && <WorkerEditComponent {...{ name: "", time: 0 }} />}
       {isInfo && WorkerInfoComponent(worker ?? { name: "", time: 0 })}
     </Drawer>
   );

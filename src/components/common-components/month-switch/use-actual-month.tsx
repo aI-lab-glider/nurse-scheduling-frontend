@@ -12,14 +12,19 @@ export function useActualMonth(): string {
   const { month_number, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
+
   const [actualMonth, setActualMonth] = useState<string>("");
   useEffect(() => {
-    if (month_number && year) {
+    if (month_number !== undefined && year) {
       const month = StringHelper.capitalize(
         `${TranslationHelper.polishMonths[month_number]} ${year}`
       );
+
       setActualMonth(month);
     }
   }, [month_number, year]);
-  return actualMonth;
+
+  if (actualMonth === "")
+    return `${TranslationHelper.polishMonths[new Date().getMonth()]} ${new Date().getFullYear()}`;
+  else return actualMonth;
 }

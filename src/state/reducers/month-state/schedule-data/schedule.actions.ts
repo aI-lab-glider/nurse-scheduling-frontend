@@ -22,6 +22,8 @@ export enum ScheduleActionType {
   UPDATE = "UPDATE_SCHEDULE",
   ADD_NEW = "ADD_NEW_SCHEDULE",
   COPY_TO_MONTH = "COPY_TO_MONTH",
+  ADD_NEW_WORKER = "ADD_NEW_WORKER",
+  MODIFY_WORKER = "MODIFY_WORKER",
 }
 
 export function createActionName(name: string, action: ScheduleActionType): string {
