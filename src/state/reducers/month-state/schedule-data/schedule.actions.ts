@@ -19,7 +19,6 @@ export type ScheduleActionModel = ActionModel<ScheduleDataModel>;
 export enum ScheduleActionType {
   UPDATE = "UPDATE_SCHEDULE",
   ADD_NEW = "ADD_NEW_SCHEDULE",
-  COPY_TO_MONTH = "COPY_TO_MONTH",
 }
 
 export function createActionName(name: string, action: ScheduleActionType): string {
@@ -30,7 +29,7 @@ function updatePersistentSchedule(
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<ScheduleDataModel>>,
   state: ScheduleDataModel
 ): void {
-  dispatch(ScheduleDataActionCreator.addScheduleDM(state));
+  dispatch(ScheduleDataActionCreator.setScheduleFromScheduleDM(state));
 }
 
 export const PERSISTENT_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {

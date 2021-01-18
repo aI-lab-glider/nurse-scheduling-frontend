@@ -89,13 +89,13 @@ export class ScheduleLogic implements ScheduleProvider {
   public tryGetCurrentMonthSchedule(): void {
     const [month, year] = this.sections.Metadata.monthLogic.currentDate;
     this.dispatchScheduleUpdate(
-      ScheduleDataActionCreator.addScheduleFromMonth(new ScheduleKey(month, year))
+      ScheduleDataActionCreator.setScheduleFromKeyIfExists(new ScheduleKey(month, year))
     );
   }
 
   public updateActualRevision(): void {
     this.dispatchScheduleUpdate(
-      ScheduleDataActionCreator.addScheduleDM(this.schedule.getDataModel())
+      ScheduleDataActionCreator.setScheduleFromScheduleDM(this.schedule.getDataModel())
     );
   }
 

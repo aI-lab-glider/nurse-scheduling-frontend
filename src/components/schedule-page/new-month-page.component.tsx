@@ -30,7 +30,7 @@ export function NewMonthPlanComponent(): JSX.Element {
 
   useEffect(() => {
     if (scheduleModel) {
-      const action = ScheduleDataActionCreator.addScheduleDM(scheduleModel);
+      const action = ScheduleDataActionCreator.setScheduleFromScheduleDM(scheduleModel);
       dispatch(action);
     }
   });
@@ -53,7 +53,7 @@ export function NewMonthPlanComponent(): JSX.Element {
           {hasPrevious && (
             <Button
               onClick={(): void => {
-                dispatch(MonthSwitchActionCreator.copyMonth(-1));
+                dispatch(MonthSwitchActionCreator.copyActualMonthToMonthWithOffset(-1));
               }}
               size="small"
               className="submit-button"
@@ -69,7 +69,7 @@ export function NewMonthPlanComponent(): JSX.Element {
           {hasNext && !hasPrevious && (
             <Button
               onClick={(): void => {
-                dispatch(MonthSwitchActionCreator.copyMonth(1));
+                dispatch(MonthSwitchActionCreator.copyActualMonthToMonthWithOffset(1));
               }}
               size="small"
               className="submit-button"

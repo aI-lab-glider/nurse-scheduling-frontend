@@ -7,7 +7,13 @@ import { ScheduleMetadata } from "./schedule.model";
 import { ShiftCode, ShiftInfoModel } from "./shift-info.model";
 import { ScheduleKey } from "../api/persistance-store.model";
 import _ from "lodash";
-import { daysInMonth } from "../state/reducers/month-state/schedule-data/common-reducers";
+import {
+  calculateMissingFullWeekDays,
+  cropMonthInfoToMonth,
+  cropShiftsToMonth,
+  daysInMonth,
+} from "../state/reducers/month-state/schedule-data/common-reducers";
+
 /* eslint-disable @typescript-eslint/camelcase */
 
 export interface ScheduleDataModel {
@@ -59,4 +65,62 @@ export function getScheduleKey(newSchedule: ScheduleDataModel): ScheduleKey {
     newSchedule.schedule_info.month_number ?? new Date().getMonth(),
     newSchedule.schedule_info.year ?? new Date().getFullYear()
   );
+}
+
+export function extendMonthDMToScheduleDM(
+  prevMonthData: MonthDataModel,
+  currentMonthData: MonthDataModel,
+  nextMonthData: MonthDataModel
+): ScheduleDataModel {
+  const { scheduleKey } = currentMonthData;
+  const [missingFromPrev, missingFromNext] = calculateMissingFullWeekDays(scheduleKey);
+
+  const extendSchedule = <T>(sectionKey: string, valueKey: string): T[] =>
+    extend<T>(
+      prevMonthData[sectionKey][valueKey],
+      missingFromPrev,
+      currentMonthData[sectionKey][valueKey],
+      nextMonthData[sectionKey][valueKey],
+      missingFromNext
+    );
+
+  const shifts: ShiftInfoModel = {};
+  Object.keys(currentMonthData.shifts).forEach((key) => {
+    shifts[key] = extendSchedule("shifts", key);
+  });
+
+  const monthInfoModel: MonthInfoModel = {
+    children_number: extendSchedule("month_info", "children_number"),
+    extra_workers: extendSchedule("month_info", "extra_workers"),
+    dates: extendSchedule("month_info", "dates"),
+    frozen_shifts: [],
+  };
+
+  return {
+    schedule_info: {
+      UUID: "0",
+      month_number: scheduleKey.month,
+      year: scheduleKey.year,
+    },
+    month_info: monthInfoModel,
+    employee_info: currentMonthData.employee_info,
+    shifts,
+  };
+}
+
+function extend<T>(arr1: T[], count1: number, curr: T[], arr2: T[], count2: number): T[] {
+  return [...arr1.slice(arr1.length - count1), ...curr, ...arr2.slice(0, count2)];
+}
+
+export function cropScheduleDMToMonthDM(schedule: Required<ScheduleDataModel>): MonthDataModel {
+  const { dates } = schedule.month_info;
+  const monthStart = dates.findIndex((v) => v === 1);
+  const monthKey = getScheduleKey(schedule);
+
+  return {
+    scheduleKey: monthKey,
+    shifts: cropShiftsToMonth(monthKey, schedule.shifts, monthStart),
+    month_info: cropMonthInfoToMonth(monthKey, schedule.month_info, monthStart),
+    employee_info: schedule.employee_info,
+  };
 }

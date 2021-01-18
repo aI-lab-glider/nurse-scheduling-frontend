@@ -8,10 +8,7 @@ import { ScheduleError } from "../../../common-models/schedule-error.model";
 import { ScheduleExportLogic } from "../../../logic/schedule-exporter/schedule-export.logic";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import {
-  cropScheduleToMonthDM,
-  ScheduleDataActionCreator,
-} from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
 import {
   ButtonData,
@@ -19,6 +16,7 @@ import {
 } from "../../common-components/dropdown-buttons/dropdown-buttons.component";
 import { useScheduleConverter } from "./hooks/use-schedule-converter";
 import ParseErrorModal from "../../common-components/modal/error-modal/errors.modal.component";
+import { cropScheduleDMToMonthDM } from "../../../common-models/schedule-data.model";
 
 export function ImportButtonsComponent(): JSX.Element {
   const DEFAULT_FILENAME = "grafik.xlsx";
@@ -44,8 +42,8 @@ export function ImportButtonsComponent(): JSX.Element {
   const btnData = [btnData1, btnData2];
   useEffect(() => {
     if (scheduleModel) {
-      const action = ScheduleDataActionCreator.addScheduleFromMonthModel(
-        cropScheduleToMonthDM(scheduleModel)
+      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(
+        cropScheduleDMToMonthDM(scheduleModel)
       );
       scheduleDipatcher(action);
     } else if (scheduleErrors) {

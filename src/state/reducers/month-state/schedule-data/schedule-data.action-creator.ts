@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import {
   createEmptyMonthDataModel,
-  getScheduleKey,
+  extendMonthDMToScheduleDM,
   MonthDataModel,
   ScheduleDataModel,
 } from "../../../../common-models/schedule-data.model";
@@ -13,25 +13,13 @@ import { ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.mo
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 import { HistoryStateModel } from "../../../models/application-state.model";
-import { ShiftInfoModel } from "../../../../common-models/shift-info.model";
-import { MonthInfoModel } from "../../../../common-models/month-info.model";
-import {
-  calculateMissingFullWeekDays,
-  cropMonthInfoToMonth,
-  copyShiftsToMonth,
-  cropShiftsToMonth,
-} from "./common-reducers";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import _ from "lodash";
 
-export interface CopyMonthActionPayload {
-  month: number;
-  year: number;
-  monthDataModel: MonthDataModel;
-}
-
 export class ScheduleDataActionCreator {
-  static addScheduleDM(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
+  static setScheduleFromScheduleDM(
+    newSchedule: ScheduleDataModel
+  ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
       await new LocalStorageProvider().saveSchedule("actual", newSchedule);
@@ -45,11 +33,11 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static addScheduleFromMonthModel(newMonth: MonthDataModel): ThunkFunction<ScheduleDataModel> {
+  static setScheduleFromMonthDM(newMonth: MonthDataModel): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
       const history = getState().history;
-      const [prevMonth, nextMonth] = await getSurroundingMonths(newMonth, history);
-      const newSchedule = extendMonthToScheduleDM(prevMonth, newMonth, nextMonth);
+      const [prevMonth, nextMonth] = await getMonthNeighbours(newMonth, history);
+      const newSchedule = extendMonthDMToScheduleDM(prevMonth, newMonth, nextMonth);
 
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
       destinations.forEach((destination) => {
@@ -62,21 +50,12 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static addScheduleFromMonth(monthKey: ScheduleKey): ThunkFunction<ScheduleDataModel> {
+  static setScheduleFromKeyIfExists(monthKey: ScheduleKey): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
       const history = getState().history;
-      let monthDataModel = history[monthKey.key];
-      if (_.isNil(monthDataModel)) {
-        const monthModel = await new LocalStorageProvider().getMonthRevision({
-          revisionType: "actual",
-          validityPeriod: monthKey.key,
-        });
-        if (!_.isNil(monthModel)) {
-          monthDataModel = monthModel;
-        }
-      }
+      const monthDataModel = await fetchMonthDM(monthKey, history);
       if (!_.isNil(monthDataModel)) {
-        dispatch(this.addScheduleFromMonthModel(monthDataModel));
+        dispatch(this.setScheduleFromMonthDM(monthDataModel));
       }
     };
   }
@@ -89,95 +68,43 @@ export class ScheduleDataActionCreator {
   }
 }
 
-async function getSurroundingMonths(
-  baseMonth: MonthDataModel,
+async function getMonthNeighbours(
+  month: MonthDataModel,
   history: HistoryStateModel
 ): Promise<[MonthDataModel, MonthDataModel]> {
-  const scheduleKey = new ScheduleKey(baseMonth.scheduleKey.month, baseMonth.scheduleKey.year);
+  const scheduleKey = new ScheduleKey(month.scheduleKey.month, month.scheduleKey.year);
   return [
-    await fetchOrCreateMonthDM(scheduleKey.prevMonthKey, history, baseMonth),
-    await fetchOrCreateMonthDM(scheduleKey.nextMonthKey, history, baseMonth),
+    await fetchOrCreateMonthDM(scheduleKey.prevMonthKey, history, month),
+    await fetchOrCreateMonthDM(scheduleKey.nextMonthKey, history, month),
   ];
 }
 
-async function fetchOrCreateMonthDM(
+export async function fetchOrCreateMonthDM(
   monthKey: ScheduleKey,
   history: HistoryStateModel,
   baseMonth: MonthDataModel
 ): Promise<MonthDataModel> {
-  let monthDataModel = history[monthKey.key];
-
+  let monthDataModel = await fetchMonthDM(monthKey, history);
   if (_.isNil(monthDataModel)) {
     const storageProvider = new LocalStorageProvider();
-    const newMonthDataModel = await storageProvider.getMonthRevision({
-      revisionType: "actual",
-      validityPeriod: monthKey.key,
-    });
-
-    if (_.isNil(newMonthDataModel)) {
-      monthDataModel = createEmptyMonthDataModel(monthKey, baseMonth);
-      await storageProvider.saveMonthRevision("actual", monthDataModel);
-    } else {
-      monthDataModel = newMonthDataModel;
-    }
+    monthDataModel = createEmptyMonthDataModel(monthKey, baseMonth);
+    await storageProvider.saveMonthRevision("actual", monthDataModel);
   }
   return monthDataModel;
 }
 
-function extendMonthToScheduleDM(
-  prevMonthData: MonthDataModel,
-  currentMonthData: MonthDataModel,
-  nextMonthData: MonthDataModel
-): ScheduleDataModel {
-  const { scheduleKey } = currentMonthData;
-  const [missingFromPrev, missingFromNext] = calculateMissingFullWeekDays(scheduleKey);
+export async function fetchMonthDM(
+  monthKey: ScheduleKey,
+  history: HistoryStateModel
+): Promise<MonthDataModel | undefined> {
+  let monthDataModel: MonthDataModel | undefined = history[monthKey.key];
 
-  const extendSchedule = <T>(sectionKey: string, valueKey: string): T[] =>
-    extend<T>(
-      prevMonthData[sectionKey][valueKey],
-      missingFromPrev,
-      currentMonthData[sectionKey][valueKey],
-      nextMonthData[sectionKey][valueKey],
-      missingFromNext
-    );
-
-  const shifts: ShiftInfoModel = {};
-  Object.keys(currentMonthData.shifts).forEach((key) => {
-    shifts[key] = extendSchedule("shifts", key);
-  });
-
-  const monthInfoModel: MonthInfoModel = {
-    children_number: extendSchedule("month_info", "children_number"),
-    extra_workers: extendSchedule("month_info", "extra_workers"),
-    dates: extendSchedule("month_info", "dates"),
-    frozen_shifts: [],
-  };
-
-  return {
-    schedule_info: {
-      UUID: "0",
-      month_number: scheduleKey.month,
-      year: scheduleKey.year,
-    },
-    month_info: monthInfoModel,
-    employee_info: currentMonthData.employee_info,
-    shifts,
-  };
-}
-
-function extend<T>(arr1: T[], count1: number, curr: T[], arr2: T[], count2: number): T[] {
-  return [...arr1.slice(arr1.length - count1), ...curr, ...arr2.slice(0, count2)];
-}
-
-export function cropScheduleToMonthDM(schedule: Required<ScheduleDataModel>): MonthDataModel {
-  const { dates } = schedule.month_info;
-  const monthStart = dates.findIndex((v) => v === 1);
-  const monthKey = getScheduleKey(schedule);
-
-  return {
-    scheduleKey: monthKey,
-    shifts: cropShiftsToMonth(monthKey, schedule.shifts, monthStart),
-    month_info: cropMonthInfoToMonth(monthKey, schedule.month_info, monthStart),
-    employee_info: schedule.employee_info,
-  };
+  if (_.isNil(monthDataModel)) {
+    const storageProvider = new LocalStorageProvider();
+    monthDataModel = await storageProvider.getMonthRevision({
+      revisionType: "actual",
+      validityPeriod: monthKey.key,
+    });
+  }
+  return monthDataModel;
 }

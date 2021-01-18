@@ -3,13 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import PouchDB from "pouchdb-browser";
 import {
+  cropScheduleDMToMonthDM,
   getScheduleKey,
   isMonthModelEmpty,
   MonthDataModel,
   ScheduleDataModel,
 } from "../common-models/schedule-data.model";
 
-import { cropScheduleToMonthDM } from "../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import {
   MonthRevision,
   PersistenceStoreProvider,
@@ -33,8 +33,6 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
   }
 
   async saveMonthRevision(type: RevisionType, monthDataModel: MonthDataModel): Promise<void> {
-    debugger;
-
     if (isMonthModelEmpty(monthDataModel)) {
       return;
     }
@@ -53,9 +51,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
   }
 
   async saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void> {
-    debugger;
-
-    const monthDataModel = cropScheduleToMonthDM(scheduleDataModel);
+    const monthDataModel = cropScheduleDMToMonthDM(scheduleDataModel);
     await this.saveMonthRevision(type, monthDataModel);
     const [missingFromPrev] = calculateMissingFullWeekDays(monthDataModel.scheduleKey);
     const lastMonthDayIdx = _.findLast(scheduleDataModel.month_info.dates, (day) => day === 1);
@@ -93,7 +89,6 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     updateShifts: ShiftInfoModel,
     updatePosition: UpdatePosition
   ): Promise<void> {
-    debugger;
     try {
       const document = await this.storage.get(monthKey.key);
       const revision = document._rev;
@@ -112,7 +107,6 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
         }
       });
       document.data.shifts = newShifts;
-      debugger;
       this.storage.put({
         _rev: revision,
         _id: monthKey.key,

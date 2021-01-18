@@ -30,7 +30,9 @@ function App(): JSX.Element {
 
   useEffect(() => {
     if (process.env.REACT_APP_DEV_MODE === "true") {
-      const action = ScheduleDataActionCreator.addScheduleDM(schedule as ScheduleDataModel);
+      const action = ScheduleDataActionCreator.setScheduleFromScheduleDM(
+        schedule as ScheduleDataModel
+      );
       scheduleDispatcher(action);
     }
   }, [scheduleDispatcher]);

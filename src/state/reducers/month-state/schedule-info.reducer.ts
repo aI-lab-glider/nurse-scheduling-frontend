@@ -1,13 +1,11 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { ActionModel } from "../../models/action.model";
 import { ScheduleMetadata } from "../../../common-models/schedule.model";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
-import { CopyMonthActionPayload } from "./schedule-data/schedule-data.action-creator";
 import {
-  ScheduleActionModel,
   createActionName,
+  ScheduleActionModel,
   ScheduleActionType,
 } from "./schedule-data/schedule.actions";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
@@ -19,7 +17,7 @@ let uuid = 0;
 export function scheduleInfoReducerF(name: string) {
   return (
     state: ScheduleMetadata = scheduleDataInitialState.schedule_info,
-    action: ScheduleActionModel | ActionModel<CopyMonthActionPayload>
+    action: ScheduleActionModel
   ): ScheduleMetadata => {
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
@@ -31,9 +29,6 @@ export function scheduleInfoReducerF(name: string) {
         const { schedule_info } = action.payload as ScheduleDataModel;
         if (!schedule_info) return state;
         return { ...state, ...schedule_info };
-      // case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
-      //   const { month, year } = action.payload as CopyMonthActionPayload;
-      //   return { month_number: month, year };
       default:
         return state;
     }
