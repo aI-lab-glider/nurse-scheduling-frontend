@@ -13,6 +13,7 @@ import { NewMonthPlanComponent } from "./components/schedule-page/new-month-page
 import { SchedulePage } from "./components/schedule-page/schedule-page.component";
 import ManagementPage from "./components/workers-page/management-page.component";
 import { ScheduleDataActionCreator } from "./state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { NotificationProvider } from "./components/common-components/notification/notification.context";
 
 interface TabData {
   label: string;
@@ -40,16 +41,18 @@ function App(): JSX.Element {
   return (
     <>
       <div>
-        <Switch>
-          <Route path="/next-month">
-            <HeaderComponent isNewMonthPage={true} />
-            <NewMonthPlanComponent />
-          </Route>
-          <Route path="/">
-            <HeaderComponent isNewMonthPage={false} />
-            <RouteButtonsComponent tabs={tabs} disabled={editMode} />
-          </Route>
-        </Switch>
+        <NotificationProvider>
+          <Switch>
+            <Route path="/next-month">
+              <HeaderComponent isNewMonthPage={true} />
+              <NewMonthPlanComponent />
+            </Route>
+            <Route path="/">
+              <HeaderComponent isNewMonthPage={false} />
+              <RouteButtonsComponent tabs={tabs} disabled={editMode} />
+            </Route>
+          </Switch>
+        </NotificationProvider>
       </div>
     </>
   );

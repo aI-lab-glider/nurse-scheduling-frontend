@@ -12,6 +12,8 @@ import {
 import { ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
+import { WorkerInfoExtendedInterface } from "../../../../components/namestable/worker-edit.component";
+
 import { HistoryStateModel } from "../../../models/application-state.model";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import _ from "lodash";
@@ -64,6 +66,26 @@ export class ScheduleDataActionCreator {
     return {
       type: createActionName(TEMPORARY_SCHEDULE_NAME, ScheduleActionType.UPDATE),
       payload: newScheduleModel,
+    };
+  }
+
+  static addNewWorker(worker: WorkerInfoExtendedInterface): (dispatch) => Promise<void> {
+    return async (dispatch): Promise<void> => {
+      const action = {
+        type: ScheduleActionType.ADD_NEW_WORKER,
+        payload: { ...worker },
+      };
+      dispatch(action);
+    };
+  }
+
+  static modifyWorker(worker: WorkerInfoExtendedInterface): (dispatch) => Promise<void> {
+    return async (dispatch): Promise<void> => {
+      const action = {
+        type: ScheduleActionType.MODIFY_WORKER,
+        payload: { ...worker },
+      };
+      dispatch(action);
     };
   }
 }
