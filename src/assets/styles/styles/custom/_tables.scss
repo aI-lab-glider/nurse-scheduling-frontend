@@ -277,5 +277,20 @@ p {
   border-radius: 4px;
   position: absolute;
   margin-left: 35px;
+  z-index: 3;
+}
+
+.right-click-popper {
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  padding: 10px;
+  font-size: 13px;
+  border-radius: 4px;
+  position: absolute;
+  margin-left: 35px;
   z-index: 2;
+  box-shadow: 0 1.4px 1.1px rgba(0, 0, 0, 0.034), 0 3.3px 2.7px rgba(0, 0, 0, 0.048),
+    0 6.2px 5px rgba(0, 0, 0, 0.06), 0 11.1px 8.5px rgba(0, 0, 0, 0.072),
+    0 20.8px 25.4px rgba(0, 0, 0, 0.086), 0 50px 50px rgba(0, 0, 0, 0.12);
 }

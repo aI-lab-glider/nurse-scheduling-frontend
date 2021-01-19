@@ -1,0 +1,48 @@
+.shift-time-container {
+  width: 100%;
+  margin: auto;
+  height: 40px;
+  align-content: stretch;
+  padding-top: 10px;
+  display: flex;
+}
+
+.shift-time {
+  color: white;
+  opacity: 0.3;
+  padding: 7px;
+  padding-right: 13px;
+  height: 100%;
+  display: inline-block;
+}
+
+.shift-time-rectangle {
+  opacity: 1;
+  width: 5px;
+  height: 100%;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.shift-time-from-to {
+  padding-top: 10px;
+  padding-left: 10px;
+  vertical-align: middle;
+  font-weight: lighter;
+}
+
+.exit-button {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding-top: 5px;
+  padding-right: 5px;
+}
+
+.align-to-the-left {
+  text-align: left;
+  line-height: normal;
+}

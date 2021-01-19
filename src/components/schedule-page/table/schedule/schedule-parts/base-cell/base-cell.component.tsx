@@ -12,6 +12,9 @@ import { getEmptyImage } from "react-dnd-html5-backend";
 import { useRef } from "react";
 import { usePopper } from "react-popper";
 import { Popper } from "./popper";
+import { RightClickPopperContent } from "./right-click-popper-content.component";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 
 export enum CellManagementKeys {
   Enter = "Enter",
@@ -69,6 +72,9 @@ export function BaseCellComponent({
   onDragEnd,
   sectionKey,
 }: BaseCellOptions): JSX.Element {
+  const { year } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
+  );
   const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
   const errorTriangle = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -77,6 +83,10 @@ export function BaseCellComponent({
 
   const [isToolTipOpen, setToolTipOpen] = useState(false);
   const { styles, attributes } = usePopper(errorTriangle.current, tooltipRef.current);
+
+  const [showDetails, setShowDetails] = useState(false);
+  const rightClickPopperRef = useRef<HTMLDivElement>(null);
+  document.addEventListener("click", hideRightClickPopper);
 
   function showErrorTooltip(): void {
     setToolTipOpen(true);
@@ -142,12 +152,23 @@ export function BaseCellComponent({
     return "thisMonth";
   }
 
+  function displayRightClickPopper(e): void {
+    e.preventDefault();
+    if (isBlocked) setShowDetails(true);
+  }
+
+  function hideRightClickPopper(): void {
+    setShowDetails(false);
+  }
+
   //  #region view
   return (
     <td
       ref={drop}
       className={classNames("mainCell", { selection: isSelected, blocked: isBlocked })}
       id={getId()}
+      onContextMenu={displayRightClickPopper}
+      onClick={hideRightClickPopper}
       onBlur={(): void => {
         onBlur?.();
       }}
@@ -169,11 +190,31 @@ export function BaseCellComponent({
             {...attributes}
             data={
               <div>
-                <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Bład w linii: {rowIndex}
+                <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Błąd w linii: {rowIndex}
                 , pozycji: {index}. Wartość komórki: {value}
               </div>
             }
             isOpen={isToolTipOpen}
+          />
+          <Popper
+            ref={rightClickPopperRef}
+            className="right-click-popper"
+            style={
+              usePopper(useRef<HTMLDivElement>(null).current, rightClickPopperRef.current).styles
+            }
+            isOpen={showDetails}
+            data={
+              <RightClickPopperContent
+                index={index}
+                day={verboseDate?.date || 0}
+                month={monthNumber || 0}
+                year={year}
+                rowIndex={rowIndex}
+                shift={value}
+                sectionKey={sectionKey}
+                close={hideRightClickPopper}
+              />
+            }
           />
           <div className={"leftBorder leftBorderColor"} />
           {(!isPointerOn || (isPointerOn && isBlocked)) && (
