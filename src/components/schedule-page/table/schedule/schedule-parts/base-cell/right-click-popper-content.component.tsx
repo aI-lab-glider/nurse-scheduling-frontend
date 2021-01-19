@@ -30,7 +30,7 @@ export function RightClickPopperContent(props: DisplayDetailsOptions): JSX.Eleme
     }
   }
   let shiftcode = shift;
-  if (shiftcode == "") shiftcode = "W";
+  if (shiftcode === "") shiftcode = "W";
   const foundShift = shifts[shiftcode];
 
   return (
