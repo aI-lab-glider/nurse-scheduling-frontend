@@ -1,32 +1,31 @@
 name: CI
 
-on:
-  push:
-    branches: [ master, develop ]
-  pull_request:
-    branches: [ master, develop ]
+on: [push]
 
 jobs:
-  build:
+  cypress-run:
+    name: Cypress run
     runs-on: self-hosted
-    env:
-      frontend-folder: .
-
+    strategy:
+        fail-fast: false
+        matrix:
+            containers: [1, 2, 3, 4, 5]
     steps:
-      - uses: actions/checkout@v2
+        - name: Checkout
+          uses: actions/checkout@v2
 
-      - name: Instal npm packages
-        run: npm install
-        working-directory: ${{env.frontend-folder}}
+        - name: Install npm packages
+          run: npm install
 
-      - name: Run application
-        run: npm start &
-        working-directory: ${{env.frontend-folder}}
+        - name: Run lint
+          run: npm run lint-warn
 
-      - name: Run lint
-        run: npm run lint-warn
-        working-directory: ${{env.frontend-folder}}
-
-      - name: Run cypress
-        run: npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --parallel
-        working-directory: ${{env.frontend-folder}}
+        - name: Run cypress
+          uses: cypress-io/github-action@v2
+          with:
+              record: true
+              parallel: true
+              start: npm start
+          env:
+              CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
