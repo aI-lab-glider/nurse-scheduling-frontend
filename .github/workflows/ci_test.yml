@@ -14,12 +14,6 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v2
 
-        - name: Install npm packages
-          run: npm install
-
-        - name: Run lint
-          run: npm run lint-warn
-
         - name: Run cypress
           uses: cypress-io/github-action@v2
           with:
