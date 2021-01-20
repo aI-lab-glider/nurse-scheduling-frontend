@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  cypress-run:
+  cypress:
     name: Cypress run
     runs-on: self-hosted
     strategy:
