@@ -5,14 +5,19 @@ import React from "react";
 import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import gliderLogo from "../../../assets/images/gliderLogo.png";
 
 const useStyles = makeStyles({
   footer: {
     background: ScssVars.white,
-    padding: 20,
+    padding: 10,
     borderTop: "1px solid #E9EEF9",
     width: "100%",
     color: ScssVars.primary,
+  },
+  logo: {
+    height: 46,
+    margin: "0px 10px",
   },
 });
 
@@ -20,7 +25,13 @@ export function NetlifyProFooter(): JSX.Element {
   const classes = useStyles();
   return (
     <Grid container className={classes.footer} justify="space-between" alignItems="center">
-      <Grid item>Wszelkie prawa zastrzeżone. Copyright © 2020-2021: Glider</Grid>
+      <Grid item>
+        Wszelkie prawa zastrzeżone. Copyright © 2020-2021:
+        <a href="http://www.glider.agh.edu.pl/" target="_blank" rel="noopener noreferrer">
+          <img className={classes.logo} src={gliderLogo} alt="Logo koła naukowego Glider" />
+          Glider
+        </a>
+      </Grid>
       <Grid item>
         <a href="https://www.netlify.com">
           <img
