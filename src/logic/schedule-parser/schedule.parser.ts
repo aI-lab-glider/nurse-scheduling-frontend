@@ -9,16 +9,16 @@ import { MetaDataParser } from "./metadata.parser";
 import { ShiftsInfoParser } from "./shifts-info.parser";
 import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
 import { ExtraWorkersParser } from "./extra-workers.parser";
-import { ChildrenSectionKey, MetaDataRowLabel, MetaDataSectionKey } from "../section.model";
-import { TranslationHelper } from "../../helpers/translations.helper";
+import { ChildrenSectionKey, MetaDataRowLabel } from "../section.model";
 import { InputFileErrorCode } from "../../common-models/schedule-error.model";
 import { FoundationInfoParser } from "./foundation-info.parser";
 import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
+
 export class ScheduleParser implements ScheduleProvider {
   readonly sections: Sections;
   readonly schedule: Schedule;
 
-  constructor(rawSchedule: string[][]) {
+  constructor(readonly month, readonly year, rawSchedule: string[][]) {
     this.sections = this.parseSections(rawSchedule);
     this.schedule = new Schedule(this);
   }
@@ -59,42 +59,13 @@ export class ScheduleParser implements ScheduleProvider {
   }
 
   private initMetadataAndCleanUp(rowParsers: DataRowParser[]): [MetaDataParser, DataRowParser[]] {
-    const [dataRow, start] = this.findRowByKey(rowParsers, MetaDataRowLabel);
+    const [, start] = this.findRowByKey(rowParsers, MetaDataRowLabel);
 
-    if (
-      !dataRow ||
-      dataRow.rowData().length === 4 ||
-      !this.isValidMonthInfo(dataRow) ||
-      !this.isValidYearInfo(dataRow) ||
-      !this.isValidWorkerInfo(dataRow)
-    ) {
-      throw new Error(InputFileErrorCode.INVALID_METADATA);
-    }
     // + 1, because in first row goes metadata
     const daysRow = rowParsers[start + 1];
     const notSectionsRowsCountFromBeginning = 3;
     rowParsers = rowParsers.slice(start + notSectionsRowsCountFromBeginning);
-    return [new MetaDataParser(dataRow, daysRow), rowParsers];
-  }
-
-  private isValidMonthInfo(dataRow: DataRowParser): boolean {
-    const monthTimeRegx = new RegExp(
-      MetaDataSectionKey.Month + " [" + TranslationHelper.polishMonths.join("|") + "]"
-    );
-    return monthTimeRegx.test(dataRow.rowData()[0]);
-  }
-
-  private isValidYearInfo(dataRow: DataRowParser): boolean {
-    const yearTimeRegx = new RegExp(MetaDataSectionKey.Year + " [0-9]{4}");
-
-    return yearTimeRegx.test(dataRow.rowData()[1]);
-  }
-
-  private isValidWorkerInfo(dataRow: DataRowParser): boolean {
-    const workersTimeRegx = new RegExp(
-      MetaDataSectionKey.RequiredavailableWorkersWorkTime + " [0-9]+"
-    );
-    return workersTimeRegx.test(dataRow.rowData()[2]);
+    return [new MetaDataParser(this.month, this.year, daysRow), rowParsers];
   }
 
   private groupParsersBySections(
