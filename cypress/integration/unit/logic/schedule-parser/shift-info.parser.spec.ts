@@ -42,7 +42,8 @@ const TestCases: { data: DataRowParser[]; expectedData: DataRowParser[]; errorCo
 ];
 
 const metaData: MetaDataParser = new MetaDataParser(
-  new DataRowParser(["Grafik ", "miesiąc listopad", "rok 2020", "ilość godz 0"]),
+  2020,
+  10,
   new DataRowParser(["Dni miesiąca", "28", "29", "30", "31", "1", "2", "3", "4", "5"])
 );
 

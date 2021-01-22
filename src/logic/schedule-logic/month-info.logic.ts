@@ -125,14 +125,6 @@ export class MonthInfoLogic {
     }
     return verboseDates;
   }
-  private isDateFrozen(date: Date, dayBelongToPreviousMonth: boolean): boolean {
-    const today = new Date();
-    return (
-      (date.getDate() < today.getDate() && date.getMonth() <= today.getMonth()) ||
-      date.getFullYear() < today.getFullYear() ||
-      dayBelongToPreviousMonth
-    );
-  }
 
   private isDateBelongsToMonth(date: number, month: string, year: string): boolean {
     return (
