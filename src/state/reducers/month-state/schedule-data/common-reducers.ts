@@ -54,20 +54,30 @@ export function copyShiftsToMonth(
       [ShiftCode.L4, ShiftCode.U, ShiftCode.K].includes(shift) ? ShiftCode.W : shift
     );
   });
+
   const copiedWeek: ShiftInfoModel = {};
   Object.keys(copiedShifts).forEach((key) => {
-    const shifts = copiedShifts[key].slice(firstMonday, firstMonday + 7);
-    copiedWeek[key] = shifts;
+    copiedWeek[key] = copiedShifts[key].slice(firstMonday, firstMonday + 7);
   });
+
   Object.keys(copiedShifts).forEach((key) => {
     const shifts = copiedShifts[key];
     let index = 0;
-    shifts.forEach((element) => {
+    shifts.forEach(() => {
       const dayofWeek = new Date(year, month, index).getDay();
       shifts[index] = copiedWeek[key][dayofWeek];
       index += 1;
     });
     copiedShifts[key] = shifts;
+  });
+
+  Object.keys(copiedShifts).forEach((key) => {
+    const monthsLengthDiff = days - shifts[key].length;
+    if (monthsLengthDiff > 0) {
+      for (let i = 0; i < monthsLengthDiff; i++) {
+        copiedShifts[key].push(ShiftCode.W);
+      }
+    }
   });
 
   return copiedShifts;
