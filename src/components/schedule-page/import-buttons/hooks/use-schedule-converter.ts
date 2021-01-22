@@ -49,6 +49,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
         setScheduleModel(undefined);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileContent]);
 
   return {

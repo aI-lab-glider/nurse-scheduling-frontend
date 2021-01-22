@@ -9,9 +9,6 @@ import { ActionModel } from "../../models/action.model";
 import { WorkerInfoExtendedInterface } from "../../../components/namestable/worker-edit.component";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { CopyMonthActionPayload } from "./schedule-data/schedule-data.action-creator";
-import {
-  ScheduleActionModel,
-} from "./schedule-data/schedule.actions";
 
 function fromFractionToHours(fraction: string): number {
   const result = fraction.split("/");
@@ -22,7 +19,10 @@ function fromFractionToHours(fraction: string): number {
 export function employeeInfoReducerF(name: string) {
   return (
     state: WorkersInfoModel = scheduleDataInitialState.employee_info,
-    action: ActionModel<ScheduleDataModel> | ActionModel<WorkerInfoExtendedInterface>| ActionModel<CopyMonthActionPayload>
+    action:
+      | ActionModel<ScheduleDataModel>
+      | ActionModel<WorkerInfoExtendedInterface>
+      | ActionModel<CopyMonthActionPayload>
   ): WorkersInfoModel => {
     let data;
     let workerName, prevName, workerType, contractType, employmentTime;

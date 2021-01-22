@@ -35,6 +35,7 @@ export enum HoursInfoCells {
 export type ScheduleName = "example.xlsx" | "grafik.xlsx" | "example_2.xlsx";
 
 Cypress.Commands.add("loadSchedule", (scheduleName: ScheduleName = "example.xlsx") => {
+  cy.clock(Date.UTC(2020, 10, 22), ["Date"]);
   cy.visit(Cypress.env("baseUrl"));
   cy.get("[data-cy=file-dropdown]").click();
   cy.get('[data-cy="file-input"]').attachFile(scheduleName);
