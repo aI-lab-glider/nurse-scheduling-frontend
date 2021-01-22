@@ -20,11 +20,11 @@ export interface CellDetailsOptions {
 }
 
 export function CellDetails(props: CellDetailsOptions): JSX.Element {
-  const { index, day, month, year, shift, close } = props;
+  const { index, day, month, year, shift, close, sectionKey, rowIndex } = props;
   const closeRef = useRef<HTMLDivElement>(null);
   const state = useSelector((state: ApplicationStateModel) => state);
   const workers = Object.keys(state.actualState.persistentSchedule.present.shifts);
-  const worker = workers[index];
+  const worker = workers[rowIndex];
   let displayedYear = year;
   let monthName = `${TranslationHelper.polishMonthsGenetivus[month]}`;
   if (index < day) {
@@ -47,7 +47,9 @@ export function CellDetails(props: CellDetailsOptions): JSX.Element {
       <div style={{ fontWeight: "lighter" }}>
         {day} {monthName} {displayedYear} r.
       </div>
-      <div>{worker}</div>
+      <div>
+        {worker}, {sectionKey}
+      </div>
       <div className="shift-time-container">
         <div className="shift-time-rectangle" style={{ backgroundColor: `#${foundShift.color}` }} />
         <div className="shift-time" style={{ backgroundColor: `#${foundShift.color}` }}>
