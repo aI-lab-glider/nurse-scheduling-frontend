@@ -8,6 +8,7 @@ import { ApplicationStateModel } from "../../../state/models/application-state.m
 import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
 import ErrorLoader from "./error-loader.component";
 import { NetworkErrorCode } from "../../../common-models/schedule-error.model";
+import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
 
 export interface ValidationDrawerContentOptions {
   setOpen: (boolean) => void;
@@ -44,14 +45,15 @@ export default function ValidationDrawerContentComponent(
     const noErrors = {
       state: ErrorLoaderState.NOERRORS,
     };
-    if (scheduleErrors?.find((element) => element.kind === NetworkErrorCode.NETWORK_ERROR)) {
+    if (scheduleErrors[NetworkErrorCode.NETWORK_ERROR]) {
       setIsNetworkError(true);
     } else {
       setIsNetworkError(false);
     }
     if (scheduleErrors) {
-      if (scheduleErrors.length > 0) {
-        setMappedErrors(scheduleErrors);
+      const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors);
+      if (errors.length > 0) {
+        setMappedErrors(errors);
         setLoadingState(errorsFound);
       } else {
         setLoadingState(spinner);

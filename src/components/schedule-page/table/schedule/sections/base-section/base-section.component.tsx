@@ -14,6 +14,10 @@ import { Sections } from "../../../../../../logic/providers/schedule-provider.mo
 import { DataRowHelper } from "../../../../../../helpers/data-row.helper";
 import { ScheduleLogicContext } from "../../use-schedule-state";
 import { useSelectionMatrix } from "./use-selection-matrix";
+import {
+  GroupedScheduleErrors,
+  ScheduleError,
+} from "../../../../../../common-models/schedule-error.model";
 
 export enum DirectionKey {
   ArrowRight = "ArrowRight",
@@ -30,6 +34,11 @@ export interface BaseSectionOptions {
   rowComponent?: React.FC<ShiftRowOptions>;
   sectionKey: keyof Sections;
   onRowKeyClicked?: (rowIndex: number) => void;
+  errorSelector?: (
+    worker: string,
+    cellIndex: number,
+    scheduleErrors: GroupedScheduleErrors
+  ) => ScheduleError[];
 }
 
 function BaseSectionComponentF({
@@ -38,6 +47,7 @@ function BaseSectionComponentF({
   cellComponent = BaseCellComponent,
   rowComponent: RowComponent = BaseRowComponent,
   sectionKey,
+  errorSelector,
 }: BaseSectionOptions): JSX.Element {
   const scheduleLogic = useContext(ScheduleLogicContext);
   const [pointerPosition, setPointerPosition] = useState<PointerPosition>({ row: -1, cell: -1 });
@@ -117,6 +127,9 @@ function BaseSectionComponentF({
           onSave={(newValue): void => onSave(newValue)}
           onBlur={resetSelection}
           isEditable={dataRow.isEditable}
+          errorSelector={(cellIndex, scheduleErrors): ScheduleError[] =>
+            errorSelector?.(dataRow.rowKey, cellIndex, scheduleErrors) ?? []
+          }
         />
       ))}
     </>

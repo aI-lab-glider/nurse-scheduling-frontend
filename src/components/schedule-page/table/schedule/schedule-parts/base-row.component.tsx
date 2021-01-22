@@ -10,6 +10,10 @@ import { Sections } from "../../../../../logic/providers/schedule-provider.model
 import { DataRowHelper } from "../../../../../helpers/data-row.helper";
 import { ArrayHelper } from "../../../../../helpers/array.helper";
 import { useScheduleStyling } from "../../../../common-components/use-schedule-styling/use-schedule-styling";
+import {
+  GroupedScheduleErrors,
+  ScheduleError,
+} from "../../../../../common-models/schedule-error.model";
 
 export interface BaseRowOptions {
   uuid: string;
@@ -27,6 +31,7 @@ export interface BaseRowOptions {
   onSave?: (newValue: string) => void;
   selection?: boolean[];
   isEditable?: boolean;
+  errorSelector?: (cellIndex: number, scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
 }
 
 export function BaseRowComponentF({
@@ -44,6 +49,7 @@ export function BaseRowComponentF({
   onSave,
   selection = [],
   isEditable = true,
+  errorSelector,
 }: BaseRowOptions): JSX.Element {
   const scheduleLogic = useContext(ScheduleLogicContext);
   const verboseDates = scheduleLogic?.sections.Metadata?.verboseDates;
@@ -86,6 +92,9 @@ export function BaseRowComponentF({
             verboseDate={verboseDates?.[cellIndex]}
             onDrag={(pivot): void => onDrag?.(pivot, cellIndex)}
             onDragEnd={(): void => onDragEnd?.(index, cellIndex)}
+            errorSelector={(scheduleErrors): ScheduleError[] =>
+              errorSelector?.(cellIndex, scheduleErrors) ?? []
+            }
           />
         );
       })}

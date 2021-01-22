@@ -9,6 +9,8 @@ import { ScheduleErrorMessageModel } from "../../../../common-models/schedule-er
 import { Button } from "../..";
 import DefaultModal from "../modal.component";
 import ModalErrorList from "./error.modal.list.component";
+import { ErrorMessageHelper } from "../../../../helpers/error-message.helper";
+import { ScheduleError } from "../../../../common-models/schedule-error.model";
 
 export interface ErrorsModalComponent {
   setOpen: (open: boolean) => void;
@@ -25,8 +27,9 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
 
   useEffect(() => {
-    if (scheduleErrors?.length) {
-      setMappedErrors(scheduleErrors);
+    const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors);
+    if (errors) {
+      setMappedErrors(errors);
     }
   }, [scheduleErrors]);
 

@@ -4,11 +4,12 @@
 import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
 import { ScheduleErrorMessageModel } from "../../common-models/schedule-error-message.model";
 import { StateWithHistory } from "redux-undo";
+import { GroupedScheduleErrors } from "../../common-models/schedule-error.model";
 
 export interface ScheduleStateModel {
   persistentSchedule: StateWithHistory<ScheduleDataModel>;
   temporarySchedule: StateWithHistory<ScheduleDataModel>;
-  scheduleErrors?: ScheduleErrorMessageModel[];
+  scheduleErrors: GroupedScheduleErrors;
 }
 
 export type HistoryStateModel = { [key: string]: MonthDataModel };

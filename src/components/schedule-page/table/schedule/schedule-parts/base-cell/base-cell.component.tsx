@@ -13,10 +13,16 @@ import { useRef } from "react";
 import { usePopper } from "react-popper";
 import { Popper } from "./popper";
 import { CellDetails } from "./cell-details-content.component";
+import {
+  GroupedScheduleErrors,
+  ScheduleError,
+} from "../../../../../../common-models/schedule-error.model";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 import useComponentVisible from "./use-component-visible";
 import mergeRefs from "react-merge-refs";
+import ErrorListItem from "../../../../validation-drawer/error-list-item.component";
+import { ErrorMessageHelper } from "../../../../../../helpers/error-message.helper";
 
 export enum CellManagementKeys {
   Enter = "Enter",
@@ -52,6 +58,7 @@ export interface BaseCellOptions {
   onDrag?: (pivotCell: PivotCell) => void;
   onDragEnd?: () => void;
   sectionKey: string;
+  errorSelector?: (scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
 }
 
 export function BaseCellComponent({
@@ -73,9 +80,12 @@ export function BaseCellComponent({
   onDrag,
   onDragEnd,
   sectionKey,
+  errorSelector,
 }: BaseCellOptions): JSX.Element {
   const { year } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info);
+  const errors = useSelector(
+    (state: ApplicationStateModel) => errorSelector?.(state.actualState.scheduleErrors) ?? []
   );
   const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
   const errorTriangle = useRef<HTMLDivElement>(null);
@@ -189,10 +199,16 @@ export function BaseCellComponent({
             style={styles}
             {...attributes}
             data={
-              <div>
-                <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Błąd w linii: {rowIndex}
-                , pozycji: {index}. Wartość komórki: {value}
-              </div>
+              <>
+                <div>
+                  <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Błąd w linii: {rowIndex}
+                  , pozycji: {index}. Wartość komórki: {value}
+                </div>
+
+                {errors.map((error) => (
+                  <ErrorListItem error={ErrorMessageHelper.getErrorMessage(error)} />
+                ))}
+              </>
             }
             isOpen={isToolTipOpen}
           />
@@ -226,7 +242,7 @@ export function BaseCellComponent({
               }}
             >
               {
-                value === "N" && (
+                errors.length !== 0 && (
                   <span
                     onMouseEnter={showErrorTooltip}
                     onMouseLeave={hideErrorTooltip}
