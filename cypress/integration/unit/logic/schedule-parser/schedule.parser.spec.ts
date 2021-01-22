@@ -38,7 +38,6 @@ const babysitterSection = [
 ];
 
 const exampleData = [
-  ["Grafik ", "miesiąc listopad", "rok 2020", "ilość godz 0"],
   ["Dni miesiąca", ...dates.map((x) => x.toString())],
   emptyRow,
   ["Dzieci", ...dates.map((x) => "1")],
@@ -68,7 +67,7 @@ const expectedSchedule: ScheduleDataModel = {
 //#endregion
 
 describe("Schedule parser", () => {
-  const scheduleParser = new ScheduleParser(exampleData);
+  const scheduleParser = new ScheduleParser(10, 2020, exampleData);
   const result = scheduleParser.schedule.getDataModel();
   it("check if workerType was parsed correctly ", () => {
     for (const [key, value] of Object.entries(result.employee_info.type)) {

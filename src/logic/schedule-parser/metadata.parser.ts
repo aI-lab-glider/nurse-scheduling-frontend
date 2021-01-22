@@ -10,17 +10,10 @@ import { DataRowParser } from "./data-row.parser";
 export class MetaDataParser extends MetadataProvider {
   public monthLogic: MonthInfoLogic;
 
-  constructor(headerRow: DataRowParser, private daysRow: DataRowParser) {
+  constructor(month: number, year: number, private daysRow: DataRowParser) {
     super();
-    const [month, year] = headerRow
-      .findValues(
-        MetaDataSectionKey.Month,
-        MetaDataSectionKey.Year,
-        MetaDataSectionKey.RequiredavailableWorkersWorkTime
-      )
-      .slice(0, 2);
     daysRow.rowKey = MetaDataSectionKey.MonthDays;
-    this.monthLogic = new MonthInfoLogic(month, year, this.extractDates(daysRow));
+    this.monthLogic = new MonthInfoLogic(month, year.toString(), this.extractDates(daysRow));
   }
 
   private extractDates(dataRowParser: DataRowParser): number[] {

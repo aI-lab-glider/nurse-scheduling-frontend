@@ -14,6 +14,8 @@ import { SchedulePage } from "./components/schedule-page/schedule-page.component
 import ManagementPage from "./components/workers-page/management-page.component";
 import { ScheduleDataActionCreator } from "./state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { NotificationProvider } from "./components/common-components/notification/notification.context";
+import { NetlifyProFooter } from "./components/common-components/netlify-pro-footer/netlify-pro-footer.component";
+import isElectron from "is-electron";
 
 interface TabData {
   label: string;
@@ -50,6 +52,7 @@ function App(): JSX.Element {
             <Route path="/">
               <HeaderComponent isNewMonthPage={false} />
               <RouteButtonsComponent tabs={tabs} disabled={editMode} />
+              {isElectron() ? <></> : <NetlifyProFooter />}
             </Route>
           </Switch>
         </NotificationProvider>
