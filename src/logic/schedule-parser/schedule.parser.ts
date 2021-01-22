@@ -14,11 +14,12 @@ import { TranslationHelper } from "../../helpers/translations.helper";
 import { InputFileErrorCode } from "../../common-models/schedule-error.model";
 import { FoundationInfoParser } from "./foundation-info.parser";
 import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
+
 export class ScheduleParser implements ScheduleProvider {
   readonly sections: Sections;
   readonly schedule: Schedule;
 
-  constructor(rawSchedule: string[][]) {
+  constructor(readonly month, readonly year, rawSchedule: string[][]) {
     this.sections = this.parseSections(rawSchedule);
     this.schedule = new Schedule(this);
   }
@@ -74,7 +75,7 @@ export class ScheduleParser implements ScheduleProvider {
     const daysRow = rowParsers[start + 1];
     const notSectionsRowsCountFromBeginning = 3;
     rowParsers = rowParsers.slice(start + notSectionsRowsCountFromBeginning);
-    return [new MetaDataParser(dataRow, daysRow), rowParsers];
+    return [new MetaDataParser(this.month, this.year, daysRow), rowParsers];
   }
 
   private isValidMonthInfo(dataRow: DataRowParser): boolean {
