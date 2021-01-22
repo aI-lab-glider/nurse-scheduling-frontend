@@ -1,12 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
+import React, { useRef } from "react";
 import { TranslationHelper } from "../../../../../../helpers/translations.helper";
 import { shifts } from "../../../../../../common-models/shift-info.model";
 import { MdClose } from "react-icons/md";
 
-export interface DisplayDetailsOptions {
+export interface CellDetailsOptions {
   index: number;
   day: number;
   month: number;
@@ -17,8 +17,9 @@ export interface DisplayDetailsOptions {
   close: () => void;
 }
 
-export function RightClickPopperContent(props: DisplayDetailsOptions): JSX.Element {
+export function CellDetails(props: CellDetailsOptions): JSX.Element {
   const { index, day, month, year, rowIndex, shift, sectionKey, close } = props;
+  const closeRef = useRef<HTMLDivElement>(null);
   let displayedYear = year;
   let monthName = `${TranslationHelper.polishMonthsGenetivus[month]}`;
   if (index < day) {
@@ -35,7 +36,7 @@ export function RightClickPopperContent(props: DisplayDetailsOptions): JSX.Eleme
 
   return (
     <div className="align-to-the-left">
-      <div className="exit-button" onClick={close}>
+      <div ref={closeRef} className="exit-button" onClick={close}>
         <MdClose />
       </div>
       <div style={{ fontWeight: "lighter" }}>

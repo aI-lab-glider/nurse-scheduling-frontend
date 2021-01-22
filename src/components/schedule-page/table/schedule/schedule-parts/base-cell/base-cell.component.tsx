@@ -12,9 +12,11 @@ import { getEmptyImage } from "react-dnd-html5-backend";
 import { useRef } from "react";
 import { usePopper } from "react-popper";
 import { Popper } from "./popper";
-import { RightClickPopperContent } from "./right-click-popper-content.component";
+import { CellDetails } from "./cell-details-content.component";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
+import useComponentVisible from "./use-component-visible";
+import mergeRefs from "react-merge-refs";
 
 export enum CellManagementKeys {
   Enter = "Enter",
@@ -84,9 +86,9 @@ export function BaseCellComponent({
   const [isToolTipOpen, setToolTipOpen] = useState(false);
   const { styles, attributes } = usePopper(errorTriangle.current, tooltipRef.current);
 
-  const [showDetails, setShowDetails] = useState(false);
-  const rightClickPopperRef = useRef<HTMLDivElement>(null);
-  document.addEventListener("click", hideRightClickPopper);
+  const cellDetailsPopperRef = useRef<HTMLDivElement>(null);
+
+  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
 
   function showErrorTooltip(): void {
     setToolTipOpen(true);
@@ -152,23 +154,13 @@ export function BaseCellComponent({
     return "thisMonth";
   }
 
-  function displayRightClickPopper(e): void {
-    e.preventDefault();
-    if (isBlocked) setShowDetails(true);
-  }
-
-  function hideRightClickPopper(): void {
-    setShowDetails(false);
-  }
-
   //  #region view
   return (
     <td
-      ref={drop}
+      ref={mergeRefs([ref, drop])}
       className={classNames("mainCell", { selection: isSelected, blocked: isBlocked })}
       id={getId()}
-      onContextMenu={displayRightClickPopper}
-      onClick={hideRightClickPopper}
+      onClick={(): void => setIsComponentVisible(true)}
       onBlur={(): void => {
         onBlur?.();
       }}
@@ -197,14 +189,14 @@ export function BaseCellComponent({
             isOpen={isToolTipOpen}
           />
           <Popper
-            ref={rightClickPopperRef}
-            className="right-click-popper"
+            ref={cellDetailsPopperRef}
+            className="cell-details-popper"
             style={
-              usePopper(useRef<HTMLDivElement>(null).current, rightClickPopperRef.current).styles
+              usePopper(useRef<HTMLDivElement>(null).current, cellDetailsPopperRef.current).styles
             }
-            isOpen={showDetails}
+            isOpen={isComponentVisible}
             data={
-              <RightClickPopperContent
+              <CellDetails
                 index={index}
                 day={verboseDate?.date || 0}
                 month={monthNumber || 0}
@@ -212,7 +204,7 @@ export function BaseCellComponent({
                 rowIndex={rowIndex}
                 shift={value}
                 sectionKey={sectionKey}
-                close={hideRightClickPopper}
+                close={(): void => setIsComponentVisible(false)}
               />
             }
           />
