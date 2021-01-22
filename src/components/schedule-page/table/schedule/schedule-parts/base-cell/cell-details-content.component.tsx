@@ -5,6 +5,8 @@ import React, { useRef } from "react";
 import { TranslationHelper } from "../../../../../../helpers/translations.helper";
 import { shifts } from "../../../../../../common-models/shift-info.model";
 import { MdClose } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 
 export interface CellDetailsOptions {
   index: number;
@@ -18,8 +20,11 @@ export interface CellDetailsOptions {
 }
 
 export function CellDetails(props: CellDetailsOptions): JSX.Element {
-  const { index, day, month, year, rowIndex, shift, sectionKey, close } = props;
+  const { index, day, month, year, shift, close } = props;
   const closeRef = useRef<HTMLDivElement>(null);
+  const state = useSelector((state: ApplicationStateModel) => state);
+  const workers = Object.keys(state.actualState.persistentSchedule.present.shifts);
+  const worker = workers[index];
   let displayedYear = year;
   let monthName = `${TranslationHelper.polishMonthsGenetivus[month]}`;
   if (index < day) {
@@ -42,9 +47,7 @@ export function CellDetails(props: CellDetailsOptions): JSX.Element {
       <div style={{ fontWeight: "lighter" }}>
         {day} {monthName} {displayedYear} r.
       </div>
-      <div>
-        Pracownik o indeksie {rowIndex} w sekcji {sectionKey}
-      </div>
+      <div>{worker}</div>
       <div className="shift-time-container">
         <div className="shift-time-rectangle" style={{ backgroundColor: `#${foundShift.color}` }} />
         <div className="shift-time" style={{ backgroundColor: `#${foundShift.color}` }}>
