@@ -1,30 +1,21 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { IconButton } from "@material-ui/core";
-import { MdChevronRight, MdChevronLeft } from "react-icons/md";
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useActualMonth } from "./use-actual-month";
 import { MonthSwitchActionCreator } from "../../../state/reducers/month-state/schedule-data/month-switch.action-creator";
+import { IconButton } from "@material-ui/core";
 
-interface MonthSwitchOpions {
-  key?: string;
-}
-export function MonthSwitchComponent(options: MonthSwitchOpions): JSX.Element {
-  const arrowSize = "small";
+export function MonthSwitchComponent(): JSX.Element {
   const actualMonth = useActualMonth();
   const dispatch = useDispatch();
   return (
-    <>
+    <div id="month-switch">
       {actualMonth && (
-        <div>
-          <IconButton
-            className="arrow-button"
-            size={arrowSize}
-            id="month-switch"
-            data-cy="switch-prev-month"
-          >
+        <div className="switch-container">
+          <IconButton className="arrow-button" id="month-switch" data-cy="switch-prev-month">
             <MdChevronLeft
               onClick={(): void => {
                 dispatch(MonthSwitchActionCreator.switchToNewMonth(-1));
@@ -32,14 +23,9 @@ export function MonthSwitchComponent(options: MonthSwitchOpions): JSX.Element {
             />
           </IconButton>
 
-          <span>{actualMonth}</span>
+          <h2 className="month-tittle">{actualMonth}</h2>
 
-          <IconButton
-            className="arrow-button"
-            size={arrowSize}
-            id="month-switch"
-            data-cy="switch-next-month"
-          >
+          <IconButton className="arrow-button" id="month-switch" data-cy="switch-next-month">
             <MdChevronRight
               onClick={(): void => {
                 dispatch(MonthSwitchActionCreator.switchToNewMonth(1));
@@ -48,6 +34,6 @@ export function MonthSwitchComponent(options: MonthSwitchOpions): JSX.Element {
           </IconButton>
         </div>
       )}
-    </>
+    </div>
   );
 }
