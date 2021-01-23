@@ -43,7 +43,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
           if (b === " ") {
             a[innerId + 1] = "W";
           } else {
-            if (typeof b !== "string" || !(b in ShiftCode)) {
+            if (typeof b !== "string" || !(b in ShiftCode || b === "*")) {
               this.logLoadFileError(
                 "" +
                   " Błąd w sekcji " +

@@ -101,7 +101,7 @@ describe("DataRowParser", () => {
         "schedule",
         "november",
         "year 2020",
-        null,
+        "",
       ]);
       expect(dataRowParser.createWithCroppedData(2, 4).rowData(true, true)).to.eql([
         "schedule",
