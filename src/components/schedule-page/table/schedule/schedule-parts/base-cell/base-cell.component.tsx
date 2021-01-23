@@ -177,7 +177,21 @@ export function BaseCellComponent({
         onBlur?.();
       }}
     >
-      <ErrorTooltip errorSelector={errorSelector} className="wrapContent">
+      <div
+        className={"wrapContent"}
+        ref={drag}
+        onClick={(): void => {
+          if (!isBlocked) onClick?.();
+        }}
+      >
+        {isPointerOn && !isBlocked && (
+          <InputComponent
+            className="cell-input"
+            onValueChange={(value): void => _onValueChange(value)}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
+          />
+        )}
+
         <Popper
             ref={cellDetailsPopperRef}
             className="cell-details-popper"
@@ -197,31 +211,20 @@ export function BaseCellComponent({
                 close={(): void => setIsComponentVisible(false)}
               />
           </Popper>
-        <div className={"wrapContent"} ref={drag}>
-          <div className={"content " + hasNextClass + " " + keepOnClass} data-cy="highlighted-cell">
-            {isPointerOn && !isBlocked && (
-              <InputComponent
-                className="cell-input"
-                onValueChange={(value): void => _onValueChange(value)}
-                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
-              />
-            )}
 
-            <div className={"leftBorder leftBorderColor"} />
-            {(!isPointerOn || (isPointerOn && isBlocked)) && (
-              <p
-                data-cy="cell"
-                className={"relative "}
-                onClick={(): void => {
-                  if (!isBlocked) onClick?.();
-                }}
-              >
+
+        <div className={"content " + hasNextClass + " " + keepOnClass} data-cy="highlighted-cell">
+          {(!isPointerOn || (isPointerOn && isBlocked)) && (
+            <ErrorTooltip errorSelector={errorSelector} className={"content"}>
+              
+              <div className={"leftBorder leftBorderColor"} />
+              <p data-cy="cell" className={"relative "}>
                 {keepOn ? "" : value}
               </p>
-            )}
-          </div>
+            </ErrorTooltip>
+          )}
         </div>
-      </ErrorTooltip>
+      </div>
     </td>
   );
   //#endregion

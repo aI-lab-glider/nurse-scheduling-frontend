@@ -64,6 +64,7 @@
         display: flex;
         justify-content: flex-start;
         height: 100% !important;
+        width: 100%;
 
         p {
           display: flex;
@@ -274,7 +275,7 @@ span {
 
   &.error-triangle {
     position: absolute;
-    top: 0px;
+    top: -5px;
     right: -5px;
 
     display: block;

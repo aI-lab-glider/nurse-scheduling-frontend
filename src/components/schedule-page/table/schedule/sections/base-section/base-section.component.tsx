@@ -18,6 +18,7 @@ import {
   GroupedScheduleErrors,
   ScheduleError,
 } from "../../../../../../common-models/schedule-error.model";
+import { useCallback } from "react";
 
 export enum DirectionKey {
   ArrowRight = "ArrowRight",
@@ -83,14 +84,14 @@ function BaseSectionComponentF({
     }
   }
 
-  function resetSelection(): void {
-    setPointerPosition({ row: -1, cell: -1 });
-    resetSelectionMatrix();
-  }
-
   const { selectionMatrix, setSelectionMatrix, resetSelectionMatrix } = useSelectionMatrix(
     data.map((d) => d.rowData())
   );
+
+  const resetSelection = useCallback((): void => {
+    setPointerPosition({ row: -1, cell: -1 });
+    resetSelectionMatrix();
+  }, [resetSelectionMatrix, setPointerPosition]);
 
   function onDrag(pivot: PivotCell, rowInd: number, cellInd: number): void {
     setSelectionMatrix(selectionMatrix, pivot.cellIndex, pivot.rowIndex, cellInd, rowInd);
@@ -101,10 +102,13 @@ function BaseSectionComponentF({
     setPointerPosition({ row: rowInd, cell: cellInd });
   }
 
-  function onSave(newValue: string): void {
-    scheduleLogic?.updateSection(sectionKey, selectionMatrix, newValue);
-    resetSelection();
-  }
+  const onSave = useCallback(
+    (newValue: string): void => {
+      scheduleLogic?.updateSection(sectionKey, selectionMatrix, newValue);
+      resetSelection();
+    },
+    [selectionMatrix, sectionKey, scheduleLogic, resetSelection]
+  );
 
   return (
     <>
@@ -124,7 +128,7 @@ function BaseSectionComponentF({
           onDragEnd={(rowIndex, cellIndex): void =>
             setPointerPosition({ row: rowIndex, cell: cellIndex })
           }
-          onSave={(newValue): void => onSave(newValue)}
+          onSave={onSave}
           onBlur={resetSelection}
           isEditable={dataRow.isEditable}
           errorSelector={(cellIndex, scheduleErrors): ScheduleError[] =>

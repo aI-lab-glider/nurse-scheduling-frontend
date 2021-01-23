@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode, useRef, useState } from "react";
+import React, { ReactNode, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useSelector } from "react-redux";
 import {
@@ -15,15 +15,19 @@ export interface ErrorTooltipOptions {
   errorSelector?: (scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
   className?: string;
   showErrorTitle?: boolean;
-  errorTriangleStyle?: CSSProperties;
+  errorTriangleOffset?: TriangleOffset;
 }
 
+interface TriangleOffset {
+  top?: number;
+  right?: number;
+}
 export function ErrorTooltip({
   showErrorTitle,
   children,
   errorSelector,
   className,
-  errorTriangleStyle = {},
+  errorTriangleOffset = {},
 }: ErrorTooltipOptions): JSX.Element {
   const errors = useSelector(
     (state: ApplicationStateModel) => errorSelector?.(state.actualState.scheduleErrors) ?? []
@@ -46,7 +50,8 @@ export function ErrorTooltip({
     }
   }
 
-  function handeTriangleClick(): void {
+  function handeTriangleClick(event: React.MouseEvent<HTMLHRElement, MouseEvent>): void {
+    event.stopPropagation();
     if (!isFixed) {
       setIsFixed(true);
     } else {
@@ -65,9 +70,11 @@ export function ErrorTooltip({
           marginLeft: container.current?.offsetWidth,
         }}
         onMouseLeave={(): void => hideErrorTooltip(false)}
+        onClick={handeTriangleClick}
       >
-        {errors.map((error) => (
+        {errors.map((error, index) => (
           <ErrorListItem
+            key={`${error.kind}_${index}`}
             error={ErrorMessageHelper.getErrorMessage(error)}
             interactable={false}
             className="errorTootlip-item"
@@ -89,7 +96,7 @@ export function ErrorTooltip({
             className="error-triangle"
             onMouseLeave={(): void => hideErrorTooltip(false)}
             onClick={handeTriangleClick}
-            style={errorTriangleStyle}
+            style={errorTriangleOffset}
           />
         )}
         {children}
