@@ -194,7 +194,7 @@ export function BaseCellComponent({
             style={
               usePopper(useRef<HTMLDivElement>(null).current, cellDetailsPopperRef.current).styles
             }
-            isOpen={isComponentVisible}
+            isOpen={isComponentVisible && isBlocked}
             data={
               <CellDetails
                 index={index}
