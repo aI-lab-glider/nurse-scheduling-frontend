@@ -5,16 +5,23 @@ import { MonthInfoModel } from "../../../../common-models/month-info.model";
 import { ScheduleMetadata } from "../../../../common-models/schedule.model";
 import { ShiftInfoModel } from "../../../../common-models/shift-info.model";
 import { WorkersInfoModel } from "../../../../common-models/worker-info.model";
+import { daysInMonth } from "./common-reducers";
 
 /* eslint-disable @typescript-eslint/camelcase */
 const employeeInfoinitialState: WorkersInfoModel = { time: {}, type: {} };
+const initialDate = new Date();
+const monthDays = daysInMonth(initialDate.getMonth(), initialDate.getFullYear());
+
 const monthInfoinitialState: MonthInfoModel = {
+  children_number: new Array(monthDays.length).fill(0),
+  extra_workers: new Array(monthDays.length).fill(0),
   frozen_shifts: [],
-  dates: [],
+  dates: monthDays,
 };
+
 export const scheduleInfoInitialState: ScheduleMetadata = {
-  year: new Date().getFullYear(),
-  month_number: new Date().getMonth(),
+  year: initialDate.getFullYear(),
+  month_number: initialDate.getMonth(),
 };
 export const shiftInfoInitialState: ShiftInfoModel = {};
 
