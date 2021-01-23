@@ -40,16 +40,19 @@ export class ShiftsInfoParser extends ShiftsProvider {
         );
       } else {
         a.slice(1).forEach((b, innerId) => {
-          if (typeof b !== "string" || !(b in ShiftCode || b === " ")) {
+          if (b === " ") {
+            b = "W";
+            a[innerId + 1] = b;
+          }
+          if (typeof b !== "string" || !(b in ShiftCode)) {
             this.logLoadFileError(
               "" +
-                b +
                 " Błąd w sekcji " +
                 WorkerTypeHelper.translate(typeOfPersonel, true) +
                 " wiersz numer " +
-                id +
+                (id + 1) +
                 " kolumna " +
-                innerId
+                (innerId + 1)
             );
           }
         });
