@@ -29,8 +29,8 @@ export class DataRowParser {
   public rowData(includeNulls = false, includeKey = false): string[] {
     const keyPosition = 1;
     return includeKey
-      ? this.data.filter((c) => includeNulls || c != null)
-      : this.data.filter((c) => includeNulls || c != null).slice(keyPosition);
+      ? this.data.filter((c) => includeNulls || c != null || c !== "")
+      : this.data.filter((c) => includeNulls || c != null || c !== "").slice(keyPosition);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
