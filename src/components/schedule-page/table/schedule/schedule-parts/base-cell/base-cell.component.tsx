@@ -1,18 +1,15 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useEffect, useState } from "react";
-import { CellColorSet } from "../../../../../../helpers/colors/cell-color-set.model";
-import { BaseCellInputComponent, BaseCellInputOptions } from "./base-cell-input.component";
-import { VerboseDate, WeekDay } from "../../../../../../common-models/month-info.model";
-import { TranslationHelper } from "../../../../../../helpers/translations.helper";
-import { useDrag, useDrop } from "react-dnd";
 import classNames from "classnames/bind";
+import React, { useEffect, useState } from "react";
+import { useDrag, useDrop } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { useRef } from "react";
 import { usePopper } from "react-popper";
 import { Popper } from "./popper";
 import { CellDetails } from "./cell-details-content.component";
+import { VerboseDate, WeekDay } from "../../../../../../common-models/month-info.model";
 import {
   GroupedScheduleErrors,
   ScheduleError,
@@ -23,6 +20,10 @@ import useComponentVisible from "./use-component-visible";
 import mergeRefs from "react-merge-refs";
 import ErrorListItem from "../../../../validation-drawer/error-list-item.component";
 import { ErrorMessageHelper } from "../../../../../../helpers/error-message.helper";
+import { CellColorSet } from "../../../../../../helpers/colors/cell-color-set.model";
+import { TranslationHelper } from "../../../../../../helpers/translations.helper";
+import { ErrorTooltip } from "../error-tooltip.component";
+import { BaseCellInputComponent, BaseCellInputOptions } from "./base-cell-input.component";
 
 export enum CellManagementKeys {
   Enter = "Enter",
@@ -88,13 +89,10 @@ export function BaseCellComponent({
     (state: ApplicationStateModel) => errorSelector?.(state.actualState.scheduleErrors) ?? []
   );
   const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
-  const errorTriangle = useRef<HTMLDivElement>(null);
-  const tooltipRef = useRef<HTMLDivElement>(null);
   const keepOnClass = "keepOn" + keepOn + value;
   const hasNextClass = "hasNext" + hasNext;
 
   const [isToolTipOpen, setToolTipOpen] = useState(false);
-  const { styles, attributes } = usePopper(errorTriangle.current, tooltipRef.current);
 
   const cellDetailsPopperRef = useRef<HTMLDivElement>(null);
 
@@ -121,6 +119,7 @@ export function BaseCellComponent({
       onDragEnd?.();
     },
   });
+
   const [, drag, preview] = useDrag({
     item: {
       type: dragAnDropType,
@@ -178,48 +177,15 @@ export function BaseCellComponent({
         onBlur?.();
       }}
     >
-      <div className={"wrapContent"} ref={drag}>
-        <div className={"content " + hasNextClass + " " + keepOnClass} data-cy="highlighted-cell">
-          {isPointerOn && !isBlocked && (
-            <InputComponent
-              className={classNames(
-                "cell-input",
-                `${
-                  (value === "U" || value === "L4" || value === "K") && !keepOn ? "moreMargin" : ""
-                }`
-              )}
-              onValueChange={(value): void => _onValueChange(value)}
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
-            />
-          )}
-
-          <Popper
-            ref={tooltipRef}
-            className="errorTooltip"
-            style={styles}
-            {...attributes}
-            data={
-              <>
-                <div>
-                  <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Błąd w linii: {rowIndex}
-                  , pozycji: {index}. Wartość komórki: {value}
-                </div>
-
-                {errors.map((error) => (
-                  <ErrorListItem error={ErrorMessageHelper.getErrorMessage(error)} />
-                ))}
-              </>
-            }
-            isOpen={isToolTipOpen}
-          />
-          <Popper
+      <ErrorTooltip errorSelector={errorSelector} className="wrapContent">
+        <Popper
             ref={cellDetailsPopperRef}
             className="cell-details-popper"
             style={
               usePopper(useRef<HTMLDivElement>(null).current, cellDetailsPopperRef.current).styles
             }
             isOpen={isComponentVisible && isBlocked && value !== ""}
-            data={
+            >
               <CellDetails
                 index={index}
                 day={verboseDate?.date || 0}
@@ -230,33 +196,32 @@ export function BaseCellComponent({
                 sectionKey={sectionKey}
                 close={(): void => setIsComponentVisible(false)}
               />
-            }
-          />
-          <div className={"leftBorder leftBorderColor"} />
-          {(!isPointerOn || (isPointerOn && isBlocked)) && (
-            <p
-              data-cy="cell"
-              className={"relative "}
-              onClick={(): void => {
-                if (!isBlocked) onClick?.();
-              }}
-            >
-              {
-                errors.length !== 0 && (
-                  <span
-                    onMouseEnter={showErrorTooltip}
-                    onMouseLeave={hideErrorTooltip}
-                    ref={errorTriangle}
-                    className="error-triangle"
-                  />
-                ) //todo change to proper error flag
-              }
+          </Popper>
+        <div className={"wrapContent"} ref={drag}>
+          <div className={"content " + hasNextClass + " " + keepOnClass} data-cy="highlighted-cell">
+            {isPointerOn && !isBlocked && (
+              <InputComponent
+                className="cell-input"
+                onValueChange={(value): void => _onValueChange(value)}
+                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
+              />
+            )}
 
-              {keepOn ? "" : value}
-            </p>
-          )}
+            <div className={"leftBorder leftBorderColor"} />
+            {(!isPointerOn || (isPointerOn && isBlocked)) && (
+              <p
+                data-cy="cell"
+                className={"relative "}
+                onClick={(): void => {
+                  if (!isBlocked) onClick?.();
+                }}
+              >
+                {keepOn ? "" : value}
+              </p>
+            )}
+          </div>
         </div>
-      </div>
+      </ErrorTooltip>
     </td>
   );
   //#endregion

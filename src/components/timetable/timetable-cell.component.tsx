@@ -8,9 +8,10 @@ import { TranslationHelper } from "../../helpers/translations.helper";
 export interface TimeTableCellOptions {
   value: VerboseDate;
   currMonth: number;
+  index: number;
 }
 
-function TimeTableCellF({ value, currMonth }: TimeTableCellOptions): JSX.Element {
+function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.Element {
   function getId(): string {
     if (value.month !== TranslationHelper.englishMonths[currMonth]) {
       return "otherMonthHeader";

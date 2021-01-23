@@ -11,9 +11,17 @@ import { useSelector } from "react-redux";
 
 interface Options {
   error: ScheduleErrorMessageModel;
+  interactable?: boolean;
+  className?: string;
+  showTitle?: boolean;
 }
 
-export default function ErrorListItem({ error }: Options): JSX.Element {
+export default function ErrorListItem({
+  error,
+  interactable = true,
+  className = "",
+  showTitle = true,
+}: Options): JSX.Element {
   /* eslint-disable @typescript-eslint/camelcase */
   const { month_number } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
@@ -45,8 +53,9 @@ export default function ErrorListItem({ error }: Options): JSX.Element {
   const month = errorDayIndex < monthStartIndex ? prevMonthGenetivus : currMonthGenetivus;
 
   return (
-    <div className="error-list-item">
+    <div className={`error-list-item ${className}`}>
       <div className="red-rectangle" />
+<<<<<<< HEAD
       <div className="error-title">
         <p className="error-title-content">
           {error.title === "date" ? `${errorDay} ` + month : `${error.title}`}
@@ -58,6 +67,23 @@ export default function ErrorListItem({ error }: Options): JSX.Element {
           Pokaż
         </Button>
       </div>
+=======
+      {showTitle && (
+        <div className="error-title">
+          <p className="error-title-content">
+            {error.title === "date" ? `${errorDay} ` + month : `${error.title}`}
+          </p>
+        </div>
+      )}
+      <div className="error-text">{error.message}</div>
+      {interactable && (
+        <div className="error-btn">
+          <Button variant="primary" id="error-buttons" style={{ width: "90px", height: "26px" }}>
+            Pokaż
+          </Button>
+        </div>
+      )}
+>>>>>>> 8419bc6 (Adds badges to namestable)
     </div>
   );
 }

@@ -9,7 +9,7 @@ interface BackendErrorObject extends Omit<ScheduleError, "kind"> {
   code: string;
 }
 
-function escapeJuliaIndexes(error: ScheduleError) {
+function escapeJuliaIndexes(error: ScheduleError): ScheduleError {
   const indexFields = ["day", "week"];
   indexFields.forEach((field) => {
     if (error[field]) {

@@ -37,7 +37,14 @@ export enum NetworkErrorCode {
 }
 
 export type ScheduleError = UnknownValueError | InputFileError | AlgorithmError | NetworkError;
-
+export type AlgorithmError =
+  | AlwaysAtLeastOneNurse
+  | WorkerNumberDuringDay
+  | WorkerNumberDuringNight
+  | DissalowedShiftSequence
+  | LackingLongBreak
+  | WorkerUnderTime
+  | WorkerOvertime;
 interface UnknownValueError {
   kind: ParseErrorCode.UNKNOWN_VALUE;
   actual: string;
@@ -55,14 +62,6 @@ export interface NetworkError {
 
 export type DayTime = "MORNING" | "AFTERNOON" | "NIGHT";
 
-export type AlgorithmError =
-  | AlwaysAtLeastOneNurse
-  | WorkerNumberDuringDay
-  | WorkerNumberDuringNight
-  | DissalowedShiftSequence
-  | LackingLongBreak
-  | WorkerUnderTime
-  | WorkerOvertime;
 export interface AlwaysAtLeastOneNurse {
   kind: AlgorithmErrorCode.AlwaysAtLeastOneNurse;
   day: number;
@@ -85,8 +84,8 @@ export interface DissalowedShiftSequence {
   kind: AlgorithmErrorCode.DissalowedShiftSequence;
   day: number;
   worker: string;
-  preceding: ShiftCode[];
-  succeeding: ShiftCode[];
+  preceding: ShiftCode;
+  succeeding: ShiftCode;
 }
 export interface LackingLongBreak {
   kind: AlgorithmErrorCode.LackingLongBreak;

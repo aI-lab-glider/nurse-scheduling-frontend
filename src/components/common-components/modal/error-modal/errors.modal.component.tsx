@@ -4,13 +4,12 @@
 
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../../state/models/application-state.model";
-import { ScheduleErrorMessageModel } from "../../../../common-models/schedule-error-message.model";
 import { Button } from "../..";
+import { ScheduleErrorMessageModel } from "../../../../common-models/schedule-error-message.model";
+import { ErrorMessageHelper } from "../../../../helpers/error-message.helper";
+import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 import DefaultModal from "../modal.component";
 import ModalErrorList from "./error.modal.list.component";
-import { ErrorMessageHelper } from "../../../../helpers/error-message.helper";
-import { ScheduleError } from "../../../../common-models/schedule-error.model";
 
 export interface ErrorsModalComponent {
   setOpen: (open: boolean) => void;

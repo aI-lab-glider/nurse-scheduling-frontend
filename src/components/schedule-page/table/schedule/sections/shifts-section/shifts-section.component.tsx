@@ -4,9 +4,7 @@
 import React from "react";
 import {
   AlgorithmErrorCode,
-  DissalowedShiftSequence,
   GroupedScheduleErrors,
-  LackingLongBreak,
   ScheduleError,
 } from "../../../../../../common-models/schedule-error.model";
 import { WorkerType } from "../../../../../../common-models/worker-info.model";
@@ -26,10 +24,16 @@ function shiftSectionErrorSelector(
 ): ScheduleError[] {
   const errors = [
     ...(scheduleErrors[AlgorithmErrorCode.DissalowedShiftSequence]?.filter(
-      (error: any) => error.worker === worker && error.day === cellIndex
+      (error) =>
+        error.kind === AlgorithmErrorCode.DissalowedShiftSequence &&
+        error.worker === worker &&
+        error.day === cellIndex
     ) ?? []),
     ...(scheduleErrors[AlgorithmErrorCode.LackingLongBreak]?.filter(
-      (error: any) => error.worker === worker && Math.floor(cellIndex / 7) === error.week
+      (error) =>
+        error.kind === AlgorithmErrorCode.LackingLongBreak &&
+        error.worker === worker &&
+        Math.floor(cellIndex / 7) === error.week
     ) ?? []),
   ];
   return errors;

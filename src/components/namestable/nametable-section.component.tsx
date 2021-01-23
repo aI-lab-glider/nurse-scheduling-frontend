@@ -14,15 +14,22 @@ import { MetadataLogic } from "../../logic/schedule-logic/metadata.logic";
 import { ArrayHelper } from "../../helpers/array.helper";
 import { VerboseDate } from "../../common-models/month-info.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
+import { BaseSectionOptions } from "../schedule-page/table/schedule/sections/base-section/base-section.component";
+import { ErrorTooltip } from "../schedule-page/table/schedule/schedule-parts/error-tooltip.component";
+import { ScheduleError } from "../../common-models/schedule-error.model";
 
-export interface NameTableCellOptions {
+export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "errorSelector"> {
   dataRow: DataRow[];
   workerType?: WorkerType;
 }
 
 let workerInfo: WorkerInfoModel = { name: "", time: 0 };
 
-export function NameTableSection({ dataRow, workerType }: NameTableCellOptions): JSX.Element {
+export function NameTableSection({
+  dataRow,
+  workerType,
+  errorSelector,
+}: NameTableSectionOptions): JSX.Element {
   const mode = WorkerDrawerMode.INFO;
   const [open, setIsOpen] = useState(false);
 
@@ -70,16 +77,27 @@ export function NameTableSection({ dataRow, workerType }: NameTableCellOptions):
         <tbody>
           {data.map((cellData) => {
             return (
-              <tr
-                key={cellData}
-                onClick={(): void => toggleDrawer(true, cellData)}
+              <ErrorTooltip
+                errorSelector={(scheduleErrors): ScheduleError[] =>
+                  errorSelector?.(cellData, 0, scheduleErrors) ?? []
+                }
                 className="nametableRow"
+                showErrorTitle={false}
+                errorTriangleStyle={{
+                  right: -2,
+                }}
               >
-                <td>
-                  <span>{cellData}</span>
-                  <span className="underline" />
-                </td>
-              </tr>
+                <tr
+                  key={cellData}
+                  onClick={(): void => toggleDrawer(true, cellData)}
+                  className="nametableRow"
+                >
+                  <td>
+                    <span>{cellData}</span>
+                    <span className="underline" />
+                  </td>
+                </tr>
+              </ErrorTooltip>
             );
           })}
         </tbody>
