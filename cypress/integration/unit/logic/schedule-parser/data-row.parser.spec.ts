@@ -73,7 +73,7 @@ describe("DataRowParser", () => {
         " Schedule ",
         "november",
         "year 2020",
-        null,
+        "",
         "number of hours 10",
       ]);
     });
