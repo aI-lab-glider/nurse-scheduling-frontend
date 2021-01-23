@@ -38,13 +38,10 @@ const babysitterSection = [
 ];
 
 const exampleData = [
-  ["Dni miesiąca", ...dates.map((x) => x.toString())],
-  emptyRow,
-  ["Dzieci", ...dates.map(() => "1")],
-  emptyRow,
-  ...nurseSection,
-  emptyRow,
-  ...babysitterSection,
+  [["Dni miesiąca", ...dates.map((x) => x.toString())]],
+  [["Dzieci", ...dates.map((x) => "1")]],
+  [...nurseSection],
+  [...babysitterSection],
 ];
 
 const shifts: ShiftInfoModel = {};

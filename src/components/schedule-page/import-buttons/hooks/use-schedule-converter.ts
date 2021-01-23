@@ -67,7 +67,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
     const outerArray = Array<Array<Array<string>>>();
     let innerArray = Array<Array<string>>();
 
-    sheet.eachRow((row, _) => {
+    sheet.eachRow((row) => {
       const rowValues = row.values as Array<string>;
       rowValues.shift();
 
@@ -87,7 +87,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
     });
 
     if (Object.keys(outerArray).length !== 0) {
-      const parser = new ScheduleParser(outerArray);
+      const parser = new ScheduleParser(month, year, outerArray);
 
       setScheduleErrors([
         ...parser._parseErrors,
