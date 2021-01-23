@@ -1,3 +1,8 @@
+.cell-details-date {
+  font-weight: lighter;
+  padding-right: 20px;
+}
+
 .shift-time-container {
   width: 100%;
   margin: auto;
@@ -16,6 +21,15 @@
   display: inline-block;
 }
 
+.black-letters {
+  color: black;
+  opacity: 1;
+  display: inline;
+  position: absolute;
+  top: 57px;
+  left: 22px;
+}
+
 .shift-time-rectangle {
   opacity: 1;
   width: 5px;
@@ -26,19 +40,22 @@
 
 .shift-time-from-to {
   padding-top: 10px;
-  padding-left: 10px;
+  padding-right: 20px;
+  position: relative;
+  left: 15px;
   vertical-align: middle;
   font-weight: lighter;
 }
 
 .exit-button {
   cursor: pointer;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   position: absolute;
   top: 0;
   right: 0;
   padding-top: 5px;
+  padding-left: 20px;
   padding-right: 5px;
 }
 

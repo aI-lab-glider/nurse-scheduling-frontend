@@ -44,7 +44,7 @@ export function CellDetails(props: CellDetailsOptions): JSX.Element {
       <div ref={closeRef} className="exit-button" onClick={close}>
         <MdClose />
       </div>
-      <div style={{ fontWeight: "lighter" }}>
+      <div className="cell-details-date">
         {day} {monthName} {displayedYear} r.
       </div>
       <div>
@@ -55,6 +55,7 @@ export function CellDetails(props: CellDetailsOptions): JSX.Element {
         <div className="shift-time" style={{ backgroundColor: `#${foundShift.color}` }}>
           {foundShift.name}
         </div>
+        <div className="black-letters">{foundShift.name}</div>
         <div className="shift-time-from-to">
           {foundShift.isWorkingShift ? `${foundShift.from}:00 -` : ""}
           {foundShift.isWorkingShift ? ` ${foundShift.to}:00` : ""}
