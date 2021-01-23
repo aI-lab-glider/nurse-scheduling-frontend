@@ -100,7 +100,7 @@ export function cropMonthInfoToMonth(
 export function calculateMissingFullWeekDays({ month, year }: ScheduleKey): [number, number] {
   const firstMonthDay = new Date(year, month, 1).getDay();
   const lastMonthDay = new Date(year, month + 1, 0).getDay();
-  return [firstMonthDay === 0 ? 0 : firstMonthDay - 1, lastMonthDay === 0 ? 0 : 7 - lastMonthDay];
+  return [firstMonthDay === 0 ? 6 : firstMonthDay - 1, lastMonthDay === 0 ? 0 : 7 - lastMonthDay];
 }
 
 export function getDateWithMonthOffset(month: number, year: number, offset: number): Date {

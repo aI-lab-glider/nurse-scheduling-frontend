@@ -30,7 +30,7 @@ export function NewMonthPlanComponent(): JSX.Element {
 
   useEffect(() => {
     if (scheduleModel) {
-      const action = ScheduleDataActionCreator.setScheduleFromScheduleDM(scheduleModel);
+      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(scheduleModel);
       dispatch(action);
     }
   });

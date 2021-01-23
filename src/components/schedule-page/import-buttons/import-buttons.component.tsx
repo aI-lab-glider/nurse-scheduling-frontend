@@ -16,7 +16,6 @@ import {
 } from "../../common-components/dropdown-buttons/dropdown-buttons.component";
 import { useScheduleConverter } from "./hooks/use-schedule-converter";
 import ParseErrorModal from "../../common-components/modal/error-modal/errors.modal.component";
-import { cropScheduleDMToMonthDM } from "../../../common-models/schedule-data.model";
 
 export function ImportButtonsComponent(): JSX.Element {
   const DEFAULT_FILENAME = "grafik.xlsx";
@@ -42,9 +41,7 @@ export function ImportButtonsComponent(): JSX.Element {
   const btnData = [btnData1, btnData2];
   useEffect(() => {
     if (scheduleModel) {
-      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(
-        cropScheduleDMToMonthDM(scheduleModel)
-      );
+      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(scheduleModel);
       scheduleDipatcher(action);
     } else if (scheduleErrors) {
       setOpen(true);
