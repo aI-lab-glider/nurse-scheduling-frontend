@@ -38,21 +38,22 @@ export class ShiftsInfoParser extends ShiftsProvider {
             WorkerTypeHelper.translate(typeOfPersonel, true) +
             " ma nieodpowiednią długośc"
         );
+      } else {
+        a.slice(1).forEach((b, innerId) => {
+          if (typeof b !== "string" || !(b in ShiftCode || b === " ")) {
+            this.logLoadFileError(
+              "" +
+                b +
+                " Błąd w sekcji " +
+                WorkerTypeHelper.translate(typeOfPersonel, true) +
+                " wiersz numer " +
+                id +
+                " kolumna " +
+                innerId
+            );
+          }
+        });
       }
-      a.slice(1).forEach((b, innerId) => {
-        if (typeof b !== "string" || !(b in ShiftCode || b === " ")) {
-          this.logLoadFileError(
-            "" +
-              b +
-              " Błąd w sekcji " +
-              WorkerTypeHelper.translate(typeOfPersonel, true) +
-              " wiersz numer " +
-              id +
-              " kolumna " +
-              innerId
-          );
-        }
-      });
 
       sectionData.push(new DataRowParser(a));
     });
