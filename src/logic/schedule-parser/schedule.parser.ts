@@ -79,7 +79,9 @@ export class ScheduleParser implements ScheduleProvider {
       ChildrenInfo: children,
       NurseInfo: nurses,
       BabysitterInfo: babysiter,
-      ExtraWorkersInfo: new ExtraWorkersParser(0),
+      ExtraWorkersInfo: new ExtraWorkersParser(
+        metadata ? (metadata as MetaDataParser).dates.length : 0
+      ),
     };
 
     const foundationParser = new FoundationInfoParser(parsers);
