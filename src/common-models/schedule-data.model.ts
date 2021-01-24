@@ -78,6 +78,7 @@ export function extendMonthDMToScheduleDM(
 ): ScheduleDataModel {
   const { scheduleKey } = currentMonthData;
   const [missingFromPrev, missingFromNext] = calculateMissingFullWeekDays(scheduleKey);
+  debugger;
   const extendSchedule = <T>(sectionKey: string, valueKey: string): T[] =>
     extend<T>(
       prevMonthData[sectionKey][valueKey],
@@ -113,7 +114,13 @@ export function extendMonthDMToScheduleDM(
 }
 
 function extend<T>(arr1: T[], count1: number, curr: T[], arr2: T[], count2: number): T[] {
-  return [...arr1.slice(arr1.length - count1), ...curr, ...arr2.slice(0, count2)];
+  const prev_month_data = arr1 ?? [];
+  const next_month_data = arr2 ?? [];
+
+  const prev_month = prev_month_data.slice(prev_month_data.length - count1);
+  const next_month = next_month_data.slice(0, count2);
+
+  return [...prev_month, ...curr, ...next_month];
 }
 
 export function cropScheduleDMToMonthDM(schedule: ScheduleDataModel): MonthDataModel {
