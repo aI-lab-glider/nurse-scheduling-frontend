@@ -36,7 +36,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     if (isMonthModelEmpty(monthDataModel)) {
       return;
     }
-    const id = monthDataModel.scheduleKey.key;
+    const id = monthDataModel.scheduleKey.dbKey;
     let revision = "";
     try {
       const document = await this.storage.get(id);
@@ -90,7 +90,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     updatePosition: UpdatePosition
   ): Promise<void> {
     try {
-      const document = await this.storage.get(monthKey.key);
+      const document = await this.storage.get(monthKey.dbKey);
       const revision = document._rev;
 
       const newShifts = _.cloneDeep(document.data.shifts);
@@ -109,7 +109,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       document.data.shifts = newShifts;
       this.storage.put({
         _rev: revision,
-        _id: monthKey.key,
+        _id: monthKey.dbKey,
         data: document.data,
         revisionType: type,
       });

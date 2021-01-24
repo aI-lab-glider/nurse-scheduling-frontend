@@ -27,7 +27,7 @@ export function historyReducer(
   }
   switch (action.type) {
     case HistoryReducerAction.ADD_MONTH_STATE:
-      return { ...state, [action.payload.scheduleKey.key]: action.payload };
+      return { ...state, [action.payload.scheduleKey.dbKey]: action.payload };
     default:
       return state;
   }

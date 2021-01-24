@@ -111,13 +111,13 @@ export async function fetchMonthDM(
   monthKey: ScheduleKey,
   history: HistoryStateModel
 ): Promise<MonthDataModel | undefined> {
-  let monthDataModel: MonthDataModel | undefined = history[monthKey.key];
+  let monthDataModel: MonthDataModel | undefined = history[monthKey.dbKey];
 
   if (_.isNil(monthDataModel)) {
     const storageProvider = new LocalStorageProvider();
     monthDataModel = await storageProvider.getMonthRevision({
       revisionType: "actual",
-      validityPeriod: monthKey.key,
+      validityPeriod: monthKey.dbKey,
     });
   }
   return monthDataModel;

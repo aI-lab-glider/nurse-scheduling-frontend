@@ -44,7 +44,7 @@ export class MonthSwitchActionCreator {
       if (month === undefined || year === undefined) return;
       const fromDate = getDateWithMonthOffset(month, year, offset);
       const copyingSchedule = getState().history[
-        new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).key
+        new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).dbKey
       ];
       const monthDataModel = copyMonthDM(new ScheduleKey(month, year), copyingSchedule);
       dispatch(ScheduleDataActionCreator.setScheduleFromMonthDM(monthDataModel));

@@ -19,7 +19,7 @@ export type UpdatePosition = "HEAD" | "TAIL";
 export class ScheduleKey {
   constructor(public month: number, public year: number) {}
 
-  get key(): ScheduleKeyString {
+  get dbKey(): ScheduleKeyString {
     return `${this.month}_${this.year}`;
   }
 
