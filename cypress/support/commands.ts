@@ -80,7 +80,7 @@ Cypress.Commands.add(
     if (desiredShiftCode === ShiftCode.W) {
       return cy.getWorkerShift(getWorkerShiftOptions).should("be.empty");
     } else {
-      return cy.getWorkerShift(getWorkerShiftOptions).contains(desiredShiftCode);
+      return cy.getWorkerShift(getWorkerShiftOptions).should("contain", desiredShiftCode);
     }
   }
 );
@@ -111,7 +111,7 @@ Cypress.Commands.add(
           .eq(workerIdx)
           .children()
           .eq(Number(key))
-          .contains(hoursInfo[key]);
+          .should("contain", hoursInfo[key]);
       });
   }
 );
