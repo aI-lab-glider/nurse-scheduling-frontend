@@ -68,7 +68,7 @@ describe("Schedule preprocessor functions", () => {
 });
 
 describe("Number of weeks in month", () => {
-  it(`Function daysInMonth`, () => {
+  it(`Should calculate proper month number`, () => {
     expect(numberOfWeeksInMonth(0, 2021)).eql(5);
     expect(numberOfWeeksInMonth(1, 2021)).eql(4);
     expect(numberOfWeeksInMonth(2, 2021)).eql(5);

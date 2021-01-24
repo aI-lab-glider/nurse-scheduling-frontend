@@ -56,7 +56,7 @@ Cypress.Commands.add(
       .its("present")
       .its("month_info")
       .its("children_number")
-      .its(numberOfWeeksInMonth(month, year) * numberOfDaysInWeek);
+      .should("have.length", numberOfWeeksInMonth(month ?? 10, year ?? 2020) * numberOfDaysInWeek);
   }
 );
 
@@ -133,6 +133,7 @@ Cypress.Commands.add("leaveEditMode", () => {
 export function numberOfWeeksInMonth(month: number, year: number): number {
   const [missingPrev, missingNext] = calculateMissingFullWeekDays(new ScheduleKey(month, year));
   const monthLength = daysInMonth(month, year).length;
+  const fullScheduleDays = missingPrev + monthLength + missingNext;
 
-  return (missingPrev + monthLength + missingNext) / numberOfDaysInWeek;
+  return Math.ceil(fullScheduleDays / numberOfDaysInWeek);
 }

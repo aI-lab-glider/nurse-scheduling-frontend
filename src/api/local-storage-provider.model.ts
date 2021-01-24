@@ -131,6 +131,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     if (!result?.doc) {
       return undefined;
     }
+
     return result.doc.data;
   }
 }

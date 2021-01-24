@@ -16,8 +16,8 @@ context("Load schedule", () => {
     cy.checkWorkerShift({
       workerType: WorkerType.NURSE,
       workerIdx: 0,
-      shiftIdx: 0,
-      desiredShiftCode: ShiftCode.N,
+      shiftIdx: 7,
+      desiredShiftCode: ShiftCode.U,
     });
   });
 

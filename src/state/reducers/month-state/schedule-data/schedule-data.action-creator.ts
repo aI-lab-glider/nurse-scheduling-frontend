@@ -40,15 +40,7 @@ export class ScheduleDataActionCreator {
       const history = getState().history;
       const [prevMonth, nextMonth] = await getMonthNeighbours(newMonth, history);
       const newSchedule = extendMonthDMToScheduleDM(prevMonth, newMonth, nextMonth);
-
-      const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
-      destinations.forEach((destination) => {
-        const action = {
-          type: createActionName(destination, ScheduleActionType.ADD_NEW),
-          payload: newSchedule,
-        };
-        dispatch(action);
-      });
+      await this.setScheduleFromScheduleDM(newSchedule)(dispatch, getState);
     };
   }
 
