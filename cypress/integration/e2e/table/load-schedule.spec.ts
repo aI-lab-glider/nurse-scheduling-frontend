@@ -12,11 +12,11 @@ context("Load schedule", () => {
     cy.get("[data-cy=edit-mode-button]").click();
     cy.saveToDatabase();
     cy.get("[data-cy=leave-edit-mode]").click();
-    cy.loadScheduleToMonth("example_2.xlsx");
+    cy.loadScheduleToMonth("example.xlsx");
     cy.checkWorkerShift({
       workerType: WorkerType.NURSE,
       workerIdx: 0,
-      shiftIdx: 7,
+      shiftIdx: 6,
       desiredShiftCode: ShiftCode.U,
     });
   });
@@ -25,12 +25,12 @@ context("Load schedule", () => {
     const cell = {
       workerType: WorkerType.NURSE,
       workerIdx: 0,
-      shiftIdx: 0,
+      shiftIdx: 6,
     };
     cy.loadScheduleToMonth("example.xlsx");
     cy.checkWorkerShift({
       ...cell,
-      desiredShiftCode: ShiftCode.DN,
+      desiredShiftCode: ShiftCode.U,
     });
     cy.enterEditMode();
     cy.saveToDatabase();
