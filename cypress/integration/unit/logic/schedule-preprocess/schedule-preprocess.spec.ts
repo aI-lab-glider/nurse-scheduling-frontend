@@ -18,7 +18,7 @@ interface TestCase {
 
 const testCases: TestCase[] = [
   {
-    title: "should work properly in january (31 days)",
+    title: "january (31 days)",
     monthNumber: 0,
     year: 2021,
     dayInMonth: 31,
@@ -28,7 +28,7 @@ const testCases: TestCase[] = [
     },
   },
   {
-    title: "should work with month conisting of full weeks",
+    title: "month consisting only of full weeks",
     monthNumber: 1,
     year: 2021,
     dayInMonth: 28,
@@ -38,7 +38,7 @@ const testCases: TestCase[] = [
     },
   },
   {
-    title: "should work properly in february with leap day (29 days)",
+    title: "february with leap day (29 days)",
     monthNumber: 1,
     year: 2020,
     dayInMonth: 29,
@@ -51,13 +51,13 @@ const testCases: TestCase[] = [
 
 describe("Schedule preprocessor functions", () => {
   testCases.forEach((test) => {
-    it(`Function daysInMonth ${test.title}`, () => {
+    it(`Should calculate proper month length for ${test.title}`, () => {
       const days = daysInMonth(test.monthNumber, test.year);
       cy.log(`${days}`);
       expect(days.length).eql(test.dayInMonth);
     });
 
-    it(`Function calculateMissingFullWeekDays ${test.title}`, () => {
+    it(`Should calculate how many days are missing from previous and next month to create full weeks for ${test.title}`, () => {
       const [prev, next] = calculateMissingFullWeekDays(
         new ScheduleKey(test.monthNumber, test.year)
       );
@@ -65,10 +65,8 @@ describe("Schedule preprocessor functions", () => {
       expect(next).eql(test.missingDaysToFullWeek.nextMonth);
     });
   });
-});
 
-describe("Number of weeks in month", () => {
-  it(`Should calculate proper month number`, () => {
+  it(`Should calculate proper weeks number for different months`, () => {
     expect(numberOfWeeksInMonth(0, 2021)).eql(5);
     expect(numberOfWeeksInMonth(1, 2021)).eql(4);
     expect(numberOfWeeksInMonth(2, 2021)).eql(5);

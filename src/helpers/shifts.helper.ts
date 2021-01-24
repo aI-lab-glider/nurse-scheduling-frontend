@@ -85,7 +85,7 @@ export class ShiftHelper {
 
     const monthData = ArrayHelper.zip(shifts, dates).slice(
       firstDayOfCurrentMonth,
-      lastDayOfCurrentMonth
+      lastDayOfCurrentMonth + 1
     );
     const workingDaysCount = monthData.filter(
       (d) => VerboseDateHelper.isWorkingDay(d[1]!) && !this.isNotWorkingShift(d[0]!)

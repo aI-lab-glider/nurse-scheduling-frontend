@@ -7,19 +7,19 @@ import { HoursInfo, HoursInfoCells } from "../../../support/commands";
 
 const nurseInitialWorkHours: HoursInfo[] = [
   {
-    [HoursInfoCells.required]: 120,
+    [HoursInfoCells.required]: 128,
     [HoursInfoCells.actual]: 152,
-    [HoursInfoCells.overtime]: 32,
+    [HoursInfoCells.overtime]: 24,
   },
   {
-    [HoursInfoCells.required]: 152,
-    [HoursInfoCells.actual]: 216,
-    [HoursInfoCells.overtime]: 64,
+    [HoursInfoCells.required]: 160,
+    [HoursInfoCells.actual]: 240,
+    [HoursInfoCells.overtime]: 80,
   },
   {
-    [HoursInfoCells.required]: 120,
-    [HoursInfoCells.actual]: 252,
-    [HoursInfoCells.overtime]: 132,
+    [HoursInfoCells.required]: 128,
+    [HoursInfoCells.actual]: 264,
+    [HoursInfoCells.overtime]: 136,
   },
   {
     [HoursInfoCells.required]: 128,
@@ -27,21 +27,21 @@ const nurseInitialWorkHours: HoursInfo[] = [
     [HoursInfoCells.overtime]: 16,
   },
   {
-    [HoursInfoCells.required]: 152,
-    [HoursInfoCells.actual]: 128,
-    [HoursInfoCells.overtime]: -24,
+    [HoursInfoCells.required]: 160,
+    [HoursInfoCells.actual]: 144,
+    [HoursInfoCells.overtime]: -16,
   },
   {
-    [HoursInfoCells.required]: 40,
+    [HoursInfoCells.required]: 48,
     [HoursInfoCells.actual]: 84,
-    [HoursInfoCells.overtime]: 44,
+    [HoursInfoCells.overtime]: 36,
   },
 ];
 const babysitterInitialWorkHours: HoursInfo[] = [
   {
-    [HoursInfoCells.required]: 80,
+    [HoursInfoCells.required]: 88,
     [HoursInfoCells.actual]: 116,
-    [HoursInfoCells.overtime]: 36,
+    [HoursInfoCells.overtime]: 28,
   },
   {
     [HoursInfoCells.required]: 72,
@@ -54,18 +54,18 @@ const babysitterInitialWorkHours: HoursInfo[] = [
     [HoursInfoCells.overtime]: 8,
   },
   {
-    [HoursInfoCells.required]: 64,
-    [HoursInfoCells.actual]: 84,
-    [HoursInfoCells.overtime]: 20,
+    [HoursInfoCells.required]: 72,
+    [HoursInfoCells.actual]: 108,
+    [HoursInfoCells.overtime]: 36,
   },
   {
-    [HoursInfoCells.required]: 152,
-    [HoursInfoCells.actual]: 248,
-    [HoursInfoCells.overtime]: 96,
+    [HoursInfoCells.required]: 160,
+    [HoursInfoCells.actual]: 260,
+    [HoursInfoCells.overtime]: 100,
   },
   {
-    [HoursInfoCells.required]: 152,
-    [HoursInfoCells.actual]: 216,
+    [HoursInfoCells.required]: 160,
+    [HoursInfoCells.actual]: 224,
     [HoursInfoCells.overtime]: 64,
   },
 ];

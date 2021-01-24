@@ -14,7 +14,7 @@ export type ThunkFunction<T> = (
 ) => Promise<unknown> | unknown;
 
 export type ScheduleKeyString = string;
-export type UpdatePosition = "START" | "END";
+export type UpdatePosition = "HEAD" | "TAIL";
 
 export class ScheduleKey {
   constructor(public month: number, public year: number) {}

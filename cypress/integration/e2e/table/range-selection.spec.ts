@@ -239,7 +239,7 @@ context("Shift range selection", () => {
           .eq(dataKey)
           .children()
           .eq(dayIdx)
-          .contains(desiredNumber);
+          .should("contain", desiredNumber);
       }
     });
   });

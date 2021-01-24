@@ -65,7 +65,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
         type,
         getScheduleKey(scheduleDataModel).prevMonthKey,
         prevMonthShifts,
-        "START"
+        "TAIL"
       );
     }
 
@@ -78,7 +78,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
         type,
         getScheduleKey(scheduleDataModel).nextMonthKey,
         nextMonthShifts,
-        "END"
+        "HEAD"
       );
     }
   }
@@ -96,7 +96,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       const newShifts = _.cloneDeep(document.data.shifts);
 
       Object.keys(document.data.shifts).forEach((key) => {
-        if (updatePosition === "START") {
+        if (updatePosition === "TAIL") {
           newShifts[key].splice(0, updateShifts[key].length, ...updateShifts[key]);
         } else {
           newShifts[key].splice(
