@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 
 export interface UseScheduleConverterOutput {
-  scheduleModel?: MonthDataModel;
+  monthModel?: MonthDataModel;
   scheduleSheet?: Array<object>;
   setSrcFile: (srcFile: File) => void;
   scheduleErrors: ScheduleError[];
@@ -25,7 +25,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
   const [scheduleErrors, setScheduleErrors] = useState<ScheduleError[]>([]);
   const [scheduleSheet, setScheduleSheet] = useState<Array<object>>();
   const [fileContent, setSrcFile] = useFileReader();
-  const [scheduleModel, setScheduleModel] = useState<MonthDataModel>();
+  const [monthModel, setMonthModel] = useState<MonthDataModel>();
   const [errorOccurred, setErrorOccurredFlag] = useState<boolean>(false);
   const { month_number: month, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
@@ -49,14 +49,14 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
           },
         ]);
 
-        setScheduleModel(undefined);
+        setMonthModel(undefined);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileContent]);
 
   return {
-    scheduleModel: scheduleModel,
+    monthModel: monthModel,
     scheduleSheet: scheduleSheet,
     setSrcFile: setSrcFile,
     scheduleErrors: scheduleErrors,
@@ -86,7 +86,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
         ...parser.sections.NurseInfo.errors,
         ...parser.sections.BabysitterInfo.errors,
       ]);
-      setScheduleModel(cropScheduleDMToMonthDM(parser.schedule.getDataModel()));
+      setMonthModel(cropScheduleDMToMonthDM(parser.schedule.getDataModel()));
     }
     return;
   }
