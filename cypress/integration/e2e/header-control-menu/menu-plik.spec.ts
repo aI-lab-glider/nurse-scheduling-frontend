@@ -16,7 +16,7 @@ context("Menu 'plik'", () => {
 
   describe("Load schedule", () => {
     it("Should be able to load and show the schedule", () => {
-      cy.loadSchedule();
+      cy.loadScheduleToMonth();
       cy.contains("Pielęgniarki");
     });
   });

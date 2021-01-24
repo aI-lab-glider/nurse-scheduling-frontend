@@ -41,7 +41,7 @@ function performShiftChanges(testCase: TestCase): void {
 
 context("Undo/Redo test", () => {
   before(() => {
-    cy.loadSchedule();
+    cy.loadScheduleToMonth();
     cy.enterEditMode();
   });
 

@@ -3,6 +3,7 @@ import {
   daysInMonth,
 } from "../../../../../src/state/reducers/month-state/schedule-data/common-reducers";
 import { ScheduleKey } from "../../../../../src/api/persistance-store.model";
+import { numberOfWeeksInMonth } from "../../../../support/commands";
 
 interface TestCase {
   title: string;
@@ -63,5 +64,20 @@ describe("Schedule preprocessor functions", () => {
       expect(prev).eql(test.missingDaysToFullWeek.prevMonth);
       expect(next).eql(test.missingDaysToFullWeek.nextMonth);
     });
+  });
+});
+
+describe("Number of weeks in month", () => {
+  it(`Function daysInMonth`, () => {
+    expect(numberOfWeeksInMonth(0, 2021)).eql(5);
+    expect(numberOfWeeksInMonth(1, 2021)).eql(4);
+    expect(numberOfWeeksInMonth(2, 2021)).eql(5);
+    expect(numberOfWeeksInMonth(3, 2021)).eql(5);
+    expect(numberOfWeeksInMonth(4, 2021)).eql(6);
+    expect(numberOfWeeksInMonth(5, 2021)).eql(5);
+    expect(numberOfWeeksInMonth(6, 2021)).eql(5);
+    expect(numberOfWeeksInMonth(7, 2021)).eql(6);
+
+    expect(numberOfWeeksInMonth(11, 2019)).eql(6);
   });
 });

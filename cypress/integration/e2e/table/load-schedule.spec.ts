@@ -12,7 +12,7 @@ context("Load schedule", () => {
     cy.get("[data-cy=edit-mode-button]").click();
     cy.saveToDatabase();
     cy.get("[data-cy=leave-edit-mode]").click();
-    cy.loadSchedule("example_2.xlsx");
+    cy.loadScheduleToMonth("example_2.xlsx");
     cy.checkWorkerShift({
       workerType: WorkerType.NURSE,
       workerIdx: 0,
@@ -27,7 +27,7 @@ context("Load schedule", () => {
       workerIdx: 0,
       shiftIdx: 0,
     };
-    cy.loadSchedule("example.xlsx");
+    cy.loadScheduleToMonth("example.xlsx");
     cy.checkWorkerShift({
       ...cell,
       desiredShiftCode: ShiftCode.DN,
@@ -35,7 +35,7 @@ context("Load schedule", () => {
     cy.enterEditMode();
     cy.saveToDatabase();
     cy.leaveEditMode();
-    cy.loadSchedule("example_2.xlsx");
+    cy.loadScheduleToMonth("example_2.xlsx");
     cy.checkWorkerShift({
       ...cell,
       desiredShiftCode: ShiftCode.N,
@@ -43,7 +43,7 @@ context("Load schedule", () => {
   });
 
   it("Should be able to save file and load the exported file", () => {
-    cy.loadSchedule();
+    cy.loadScheduleToMonth();
 
     cy.get("[data-cy=export-schedule-button]").click();
 

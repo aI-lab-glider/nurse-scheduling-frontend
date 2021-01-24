@@ -4,6 +4,11 @@
 import "cypress-file-upload";
 import { ShiftCode } from "../../src/common-models/shift-info.model";
 import { WorkerType } from "../../src/common-models/worker-info.model";
+import {
+  calculateMissingFullWeekDays,
+  daysInMonth,
+} from "../../src/state/reducers/month-state/schedule-data/common-reducers";
+import { ScheduleKey } from "../../src/api/persistance-store.model";
 export interface GetWorkerShiftOptions {
   workerType: WorkerType;
   workerIdx: number;
@@ -33,23 +38,27 @@ export enum HoursInfoCells {
   overtime = 2,
 }
 export type ScheduleName = "example.xlsx" | "grafik.xlsx" | "example_2.xlsx";
+const numberOfDaysInWeek = 7;
 
-Cypress.Commands.add("loadSchedule", (scheduleName: ScheduleName = "example.xlsx") => {
-  cy.clock(Date.UTC(2020, 10, 22), ["Date"]);
-  cy.visit(Cypress.env("baseUrl"));
-  cy.get("[data-cy=file-dropdown]").click();
-  cy.get('[data-cy="file-input"]').attachFile(scheduleName);
-  cy.get(`[data-cy=nurseShiftsTable]`, { timeout: 10000 });
-  cy.window()
-    .its("store")
-    .invoke("getState")
-    .its("actualState")
-    .its("temporarySchedule")
-    .its("present")
-    .its("month_info")
-    .its("children_number")
-    .should("have.length", 36);
-});
+Cypress.Commands.add(
+  "loadScheduleToMonth",
+  (scheduleName: ScheduleName = "example.xlsx", month: number, year: number) => {
+    cy.clock(Date.UTC(year ?? 2020, month ?? 10, 15), ["Date"]);
+    cy.visit(Cypress.env("baseUrl"));
+    cy.get("[data-cy=file-dropdown]").click();
+    cy.get('[data-cy="file-input"]').attachFile(scheduleName);
+    cy.get(`[data-cy=nurseShiftsTable]`, { timeout: 10000 });
+    cy.window()
+      .its("store")
+      .invoke("getState")
+      .its("actualState")
+      .its("temporarySchedule")
+      .its("present")
+      .its("month_info")
+      .its("children_number")
+      .its(numberOfWeeksInMonth(month, year) * numberOfDaysInWeek);
+  }
+);
 
 Cypress.Commands.add(
   "getWorkerShift",
@@ -120,3 +129,10 @@ Cypress.Commands.add("leaveEditMode", () => {
   cy.get("[data-cy=leave-edit-mode]").click();
   return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
 });
+
+export function numberOfWeeksInMonth(month: number, year: number): number {
+  const [missingPrev, missingNext] = calculateMissingFullWeekDays(new ScheduleKey(month, year));
+  const monthLength = daysInMonth(month, year).length;
+
+  return (missingPrev + monthLength + missingNext) / numberOfDaysInWeek;
+}

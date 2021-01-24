@@ -3,7 +3,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 declare namespace Cypress {
   interface Chainable {
-    loadSchedule(scheduleName?: import("./commands").ScheduleName): Chainable<Element>;
+    loadScheduleToMonth(
+      scheduleName?: import("./commands").ScheduleName,
+      month?: number,
+      year?: number
+    ): Chainable<Element>;
 
     useAutocomplete(
       newShiftCode: import("../../src/common-models/shift-info.model").ShiftCode

@@ -14,7 +14,7 @@ const testedCell = {
 
 context("Schedule modes spec", () => {
   beforeEach(() => {
-    cy.loadSchedule();
+    cy.loadScheduleToMonth();
   });
 
   it("Should not be able to change shift in readonly mode", () => {

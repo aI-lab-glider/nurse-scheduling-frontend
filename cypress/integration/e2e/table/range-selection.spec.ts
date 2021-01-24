@@ -254,7 +254,7 @@ function validateChange({ startShiftCell, endShiftCell, desiredShiftCode }: Work
 
 context("Shift range selection", () => {
   before(() => {
-    cy.loadSchedule();
+    cy.loadScheduleToMonth();
     cy.enterEditMode();
   });
 

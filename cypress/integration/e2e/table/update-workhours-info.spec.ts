@@ -47,7 +47,7 @@ async function testWorkHoursInfoUpdate({
 context("Work hours info (summary table)", () => {
   // sanity check in case schedule in the docs gets changed and these tests start failing because of it
   before("Has expected initial values of workHourInfo in example schedule", () => {
-    cy.loadSchedule();
+    cy.loadScheduleToMonth();
     cy.enterEditMode();
 
     cy.checkHoursInfo({
@@ -63,7 +63,7 @@ context("Work hours info (summary table)", () => {
   });
 
   beforeEach(() => {
-    cy.loadSchedule();
+    cy.loadScheduleToMonth();
   });
 
   it("Is added, should add 12 to actual and overtime hours and not change required", async () => {
