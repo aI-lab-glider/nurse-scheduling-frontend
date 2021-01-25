@@ -14,6 +14,8 @@ export type ThunkFunction<T> = (
 ) => Promise<unknown> | unknown;
 
 export type ScheduleKeyString = string;
+type BorderMonthOfYear = 0 | 11;
+type YearOffset = -1 | 1;
 
 export class ScheduleKey {
   constructor(public month: number, public year: number) {}
@@ -23,16 +25,20 @@ export class ScheduleKey {
   }
 
   get nextMonthKey(): ScheduleKey {
-    const isLastYearMonth = this.month === 11;
-    const month = isLastYearMonth ? 0 : this.month + 1;
-    const year = isLastYearMonth ? this.year + 1 : this.year;
-    return new ScheduleKey(month, year);
+    return this.getMonthNeighbour(11, 1);
   }
 
   get prevMonthKey(): ScheduleKey {
-    const isFirstYearMonth = this.month === 0;
-    const month = isFirstYearMonth ? 11 : this.month - 1;
-    const year = isFirstYearMonth ? this.year - 1 : this.year;
+    return this.getMonthNeighbour(0, -1);
+  }
+
+  private getMonthNeighbour(
+    yearBorderMonth: BorderMonthOfYear,
+    yearOffset: YearOffset
+  ): ScheduleKey {
+    const isYearBorderMonth = this.month === yearBorderMonth;
+    const month = isYearBorderMonth ? 11 - yearBorderMonth : this.month + yearOffset;
+    const year = isYearBorderMonth ? this.year + yearOffset : this.year;
     return new ScheduleKey(month, year);
   }
 }

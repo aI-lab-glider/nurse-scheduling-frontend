@@ -38,7 +38,7 @@ export enum HoursInfoCells {
   overtime = 2,
 }
 export type ScheduleName = "example.xlsx" | "grafik.xlsx" | "example_2.xlsx";
-const numberOfDaysInWeek = 7;
+const NUMBER_OF_DAYS_IN_WEEK = 7;
 
 Cypress.Commands.add(
   "loadScheduleToMonth",
@@ -56,7 +56,10 @@ Cypress.Commands.add(
       .its("present")
       .its("month_info")
       .its("children_number")
-      .should("have.length", numberOfWeeksInMonth(month ?? 10, year ?? 2020) * numberOfDaysInWeek);
+      .should(
+        "have.length",
+        numberOfWeeksInMonth(month ?? 10, year ?? 2020) * NUMBER_OF_DAYS_IN_WEEK
+      );
   }
 );
 
@@ -135,5 +138,5 @@ export function numberOfWeeksInMonth(month: number, year: number): number {
   const monthLength = daysInMonth(month, year).length;
   const fullScheduleDays = missingPrev + monthLength + missingNext;
 
-  return Math.ceil(fullScheduleDays / numberOfDaysInWeek);
+  return fullScheduleDays / NUMBER_OF_DAYS_IN_WEEK;
 }

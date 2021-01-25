@@ -53,7 +53,6 @@ describe("Schedule preprocessor functions", () => {
   testCases.forEach((test) => {
     it(`Should calculate proper month length for ${test.title}`, () => {
       const days = daysInMonth(test.monthNumber, test.year);
-      cy.log(`${days}`);
       expect(days.length).eql(test.dayInMonth);
     });
 
