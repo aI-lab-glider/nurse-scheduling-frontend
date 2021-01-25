@@ -1,6 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* eslint-disable @typescript-eslint/camelcase */
+
 import PouchDB from "pouchdb-browser";
 import {
   cropScheduleDMToMonthDM,
@@ -16,11 +19,10 @@ import {
   RevisionFilter,
   RevisionType,
   ScheduleKey,
-  UpdatePosition,
 } from "./persistance-store.model";
 import _ from "lodash";
 import { calculateMissingFullWeekDays } from "../state/reducers/month-state/schedule-data/common-reducers";
-import { ShiftInfoModel } from "../common-models/shift-info.model";
+import { ArrayHelper, ArrayPositionPointer } from "../helpers/array.helper";
 
 export const DATABASE_NAME = "nurse-scheduling";
 
@@ -53,73 +55,81 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
   async saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void> {
     const monthDataModel = cropScheduleDMToMonthDM(scheduleDataModel);
     await this.saveMonthRevision(type, monthDataModel);
-    const [missingFromPrev] = calculateMissingFullWeekDays(monthDataModel.scheduleKey);
-    const lastMonthDayIdx = _.findLast(scheduleDataModel.month_info.dates, (day) => day === 1);
-
-    const prevMonthShifts = {};
-    Object.keys(scheduleDataModel.shifts).forEach((key) => {
-      prevMonthShifts[key] = scheduleDataModel.shifts[key].slice(0, missingFromPrev);
-    });
-    if (!_.isEmpty(prevMonthShifts)) {
-      await this.updateMonthRevision(
+    const [missingFromPrev, missingFromNext] = calculateMissingFullWeekDays(
+      monthDataModel.scheduleKey
+    );
+    if (missingFromPrev !== 0) {
+      await this.updateMonthPartBasedOnScheduleDM(
         type,
         getScheduleKey(scheduleDataModel).prevMonthKey,
-        prevMonthShifts,
+        scheduleDataModel,
+        missingFromPrev,
         "TAIL"
       );
     }
 
-    const nextMonthShifts = {};
-    Object.keys(scheduleDataModel.shifts).forEach((key) => {
-      nextMonthShifts[key] = scheduleDataModel.shifts[key].slice(lastMonthDayIdx);
-    });
-    if (!_.isEmpty(nextMonthShifts)) {
-      await this.updateMonthRevision(
+    if (missingFromNext !== 0) {
+      await this.updateMonthPartBasedOnScheduleDM(
         type,
         getScheduleKey(scheduleDataModel).nextMonthKey,
-        nextMonthShifts,
+        scheduleDataModel,
+        missingFromNext,
         "HEAD"
       );
     }
   }
 
-  async updateMonthRevision(
+  async updateMonthPartBasedOnScheduleDM(
     type: RevisionType,
     monthKey: ScheduleKey,
-    updateShifts: ShiftInfoModel,
-    updatePosition: UpdatePosition
+    scheduleDataModel: ScheduleDataModel,
+    missingDays: number,
+    updatePosition: ArrayPositionPointer
   ): Promise<void> {
     try {
       const document = await this.storage.get(monthKey.dbKey);
+      const updatedMonthDataModel = document.data;
       const revision = document._rev;
 
-      const newShifts = _.cloneDeep(document.data.shifts);
+      const newShifts = _.cloneDeep(updatedMonthDataModel.shifts);
 
-      Object.keys(document.data.shifts).forEach((key) => {
-        if (updatePosition === "TAIL") {
-          newShifts[key].splice(0, updateShifts[key].length, ...updateShifts[key]);
-        } else {
-          newShifts[key].splice(
-            newShifts[key].length - updateShifts[key].length,
-            newShifts[key].length,
-            ...updateShifts[key]
-          );
-        }
+      Object.keys(updatedMonthDataModel.shifts).forEach((key) => {
+        newShifts[key] = ArrayHelper.update(
+          updatedMonthDataModel.shifts[key],
+          updatePosition,
+          scheduleDataModel.shifts[key],
+          missingDays
+        );
       });
-      document.data.shifts = newShifts;
+
+      updatedMonthDataModel.shifts = newShifts;
+      updatedMonthDataModel.month_info = {
+        ...updatedMonthDataModel.month_info,
+        children_number: ArrayHelper.update(
+          updatedMonthDataModel.month_info.children_number ?? [],
+          updatePosition,
+          scheduleDataModel.month_info.children_number ?? [],
+          missingDays
+        ),
+        extra_workers: ArrayHelper.update(
+          updatedMonthDataModel.month_info.extra_workers ?? [],
+          updatePosition,
+          scheduleDataModel.month_info.extra_workers ?? [],
+          missingDays
+        ),
+      };
+
       this.storage.put({
         _rev: revision,
         _id: monthKey.dbKey,
-        data: document.data,
+        data: updatedMonthDataModel,
         revisionType: type,
       });
     } catch {
       //TODO: Something should be done here :)
     }
   }
-
   async getMonthRevision(filter: RevisionFilter): Promise<MonthDataModel | undefined> {
-    // eslint-disable-next-line @typescript-eslint/camelcase
     const revisions = await this.storage.allDocs({ include_docs: true });
     const result = revisions.rows.find((r) => {
       if (r.doc?.data.scheduleKey) {

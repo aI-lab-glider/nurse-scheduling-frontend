@@ -6,7 +6,7 @@ import { MonthDataModel, ScheduleDataModel } from "../common-models/schedule-dat
 import { WorkerInfoModel } from "../common-models/worker-info.model";
 import { ActionModel } from "../state/models/action.model";
 import { ApplicationStateModel } from "../state/models/application-state.model";
-import { ShiftInfoModel } from "../common-models/shift-info.model";
+import { ArrayPositionPointer } from "../helpers/array.helper";
 
 export type ThunkFunction<T> = (
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<T>>,
@@ -14,7 +14,6 @@ export type ThunkFunction<T> = (
 ) => Promise<unknown> | unknown;
 
 export type ScheduleKeyString = string;
-export type UpdatePosition = "HEAD" | "TAIL";
 
 export class ScheduleKey {
   constructor(public month: number, public year: number) {}
@@ -69,10 +68,11 @@ export abstract class PersistenceStoreProvider {
     scheduleDataModel: ScheduleDataModel
   ): Promise<void>;
 
-  abstract async updateMonthRevision(
+  abstract async updateMonthPartBasedOnScheduleDM(
     type: RevisionType,
     monthKey: ScheduleKey,
-    updateShifts: ShiftInfoModel,
-    updatePosition: UpdatePosition
+    scheduleDataModel: ScheduleDataModel,
+    missingDays: number,
+    updatePosition: ArrayPositionPointer
   ): Promise<void>;
 }
