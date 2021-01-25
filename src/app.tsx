@@ -6,7 +6,7 @@ import { Route, Switch } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import schedule from "./assets/devMode/schedule";
-import { ScheduleDataModel } from "./common-models/schedule-data.model";
+import { cropScheduleDMToMonthDM, ScheduleDataModel } from "./common-models/schedule-data.model";
 import { HeaderComponent } from "./components/common-components";
 import RouteButtonsComponent from "./components/common-components/route-buttons/route-buttons.component";
 import { SchedulePage } from "./components/schedule-page/schedule-page.component";
@@ -32,9 +32,8 @@ function App(): JSX.Element {
 
   useEffect(() => {
     if (process.env.REACT_APP_DEV_MODE === "true") {
-      const action = ScheduleDataActionCreator.setScheduleFromScheduleDM(
-        schedule as ScheduleDataModel
-      );
+      const monthModel = cropScheduleDMToMonthDM(schedule as ScheduleDataModel);
+      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel);
       scheduleDispatcher(action);
     }
   }, [scheduleDispatcher]);
