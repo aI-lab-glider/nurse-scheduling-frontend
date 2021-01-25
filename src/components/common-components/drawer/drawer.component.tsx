@@ -18,6 +18,7 @@ import classNames from "classnames";
 const useStyles = makeStyles({
   drawer: {
     minWidth: 500,
+    overflow: "hidden",
   },
   drawerContentMargin: {
     paddingTop: 25,
@@ -27,6 +28,7 @@ const useStyles = makeStyles({
   },
   fullHeight: {
     height: "100%",
+    overflowY: "scroll",
   },
   exitButton: {
     margin: "-7px -8px",
