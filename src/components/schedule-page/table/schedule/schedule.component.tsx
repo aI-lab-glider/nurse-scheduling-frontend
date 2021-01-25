@@ -58,6 +58,7 @@ export function ScheduleComponent({
                     uuid={scheduleLocalState.uuid}
                     workerType={WorkerType.NURSE}
                     data={scheduleLocalState.nurseShiftsSection}
+                    clickable={true}
                   />
                 </td>
                 <td>
@@ -88,6 +89,7 @@ export function ScheduleComponent({
                     uuid={scheduleLocalState.uuid}
                     workerType={WorkerType.OTHER}
                     data={scheduleLocalState.babysitterShiftsSection}
+                    clickable={true}
                   />
                 </td>
                 <td>
@@ -117,6 +119,7 @@ export function ScheduleComponent({
                   <NameTableComponent
                     uuid={scheduleLocalState.uuid}
                     data={scheduleLocalState.foundationInfoSection}
+                    clickable={false}
                   />
                 </td>
                 <td>

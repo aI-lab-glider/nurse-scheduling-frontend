@@ -18,11 +18,16 @@ import { ShiftCode } from "../../common-models/shift-info.model";
 export interface NameTableCellOptions {
   dataRow: DataRow[];
   workerType?: WorkerType;
+  clickable: boolean;
 }
 
 let workerInfo: WorkerInfoModel = { name: "", time: 0 };
 
-export function NameTableSection({ dataRow, workerType }: NameTableCellOptions): JSX.Element {
+export function NameTableSection({
+  dataRow,
+  workerType,
+  clickable,
+}: NameTableCellOptions): JSX.Element {
   const mode = WorkerDrawerMode.INFO;
   const [open, setIsOpen] = useState(false);
 
@@ -58,6 +63,14 @@ export function NameTableSection({ dataRow, workerType }: NameTableCellOptions):
     }
   }
 
+  function isClickable(flag: boolean): string {
+    if (flag) {
+      return "pointer";
+    }
+
+    return "default";
+  }
+
   function getNames(): string[] {
     return dataRow.map((a) => a.rowKey);
   }
@@ -74,6 +87,7 @@ export function NameTableSection({ dataRow, workerType }: NameTableCellOptions):
                 key={cellData}
                 onClick={(): void => toggleDrawer(true, cellData)}
                 className="nametableRow"
+                id={isClickable(clickable)}
               >
                 <td>
                   <span>{cellData}</span>

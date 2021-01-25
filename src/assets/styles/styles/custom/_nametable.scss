@@ -22,10 +22,17 @@
 
     color: $primary;
     border-bottom: 1px solid $table-border-color-grey;
-    cursor: pointer;
   }
 
   .nametableRow:last-child {
     border-bottom: 0;
+  }
+
+  #pointer {
+    cursor: pointer;
+  }
+
+  #default {
+    cursor: default;
   }
 }

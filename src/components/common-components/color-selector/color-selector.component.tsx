@@ -69,8 +69,13 @@ export function ColorSelector({
             <div className={classes.colorSample} style={{ backgroundColor: `#${colorPicked}` }} />
           </IconButton>
         )}
-        {mainLabel}
-        <ArrowDropDownIcon />
+
+        <div className="beCenteredDamnit">
+          <div>{mainLabel}</div>
+          <div>
+            <ArrowDropDownIcon />
+          </div>
+        </div>
       </Button>
       <Popper
         open={open}
@@ -149,8 +154,13 @@ export function ColorSelector({
               <div className={classes.colorSample} style={{ backgroundColor: `#${colorPicked}` }} />
             </IconButton>
           )}
-          {mainLabel}
-          <ArrowDropDownIcon />
+
+          <div className="beCenteredDamnit">
+            <div>{mainLabel}</div>
+            <div>
+              <ArrowDropDownIcon />
+            </div>
+          </div>
         </Button>
       </Popper>
     </div>

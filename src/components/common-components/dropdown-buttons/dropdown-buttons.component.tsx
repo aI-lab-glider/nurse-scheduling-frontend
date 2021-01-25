@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Button, ButtonVariant } from "../button-component/button.component";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
@@ -40,40 +40,38 @@ export function DropdownButtons({
   }
 
   return (
-    <div>
+    <div className="dropdown-container">
       <Button
         variant={variant}
+        id="onTopButton"
         onClick={handleToggle}
         ref={anchorRef}
         data-cy={dataCy}
         disabled={disabled}
       >
-        {mainLabel}
-        <ArrowDropDownIcon />
+        <div className="beCenteredDamnit">
+          <div>{mainLabel}</div>
+          <div>
+            <ArrowDropDownIcon />
+          </div>
+        </div>
       </Button>
       <Popper
-        className="dropdown-buttons-z-index"
         data-cy="openedDropdown"
         open={open}
         placement="bottom"
-        anchorEl={anchorRef.current}
-      >
-        <div
-          className={`${
-            variant === "outlined" ? "display-main-button-outlined" : "display-main-button"
-          }`}
-        >
-          <Button variant={variant}>
-            {mainLabel}
-            <ArrowDropDownIcon />
-          </Button>
-        </div>
+        anchorEl={anchorRef.current}>
         <ClickAwayListener onClickAway={handleClickAway}>
-          <div className="dropdown-buttons-container">
+          <div className="dropdown-buttons-list">
             {buttons.map((item) => (
-              <Button key={item.label} onClick={item.action} data-cy={item.dataCy}>
+              <div
+                className="dropdown-button"
+                key={item.label}
+                onClick={item.action}
+                data-cy={item.dataCy}
+              >
                 {item.label}
-              </Button>
+              </div>
             ))}
           </div>
         </ClickAwayListener>

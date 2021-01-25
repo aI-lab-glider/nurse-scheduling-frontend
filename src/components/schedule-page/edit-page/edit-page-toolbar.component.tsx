@@ -97,29 +97,29 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
 
         <div className="filler" />
 
+        <Link to="/">
+          <Button
+            onClick={closeEdit}
+            size="small"
+            className="submit-button"
+            variant="outlined"
+            data-cy="leave-edit-mode"
+          >
+            Wyjdź
+          </Button>
+        </Link>
+
         <Button
           size="small"
           className="submit-button"
           data-cy="save-schedule-button"
-          variant="outlined"
+          variant="primary"
           onClick={(): void => {
             handleSaveClick();
           }}
         >
           Zapisz
         </Button>
-
-        <Link to="/">
-          <Button
-            onClick={closeEdit}
-            size="small"
-            className="submit-button"
-            variant="primary"
-            data-cy="leave-edit-mode"
-          >
-            Wyjdź
-          </Button>
-        </Link>
       </div>
     </div>
   );
