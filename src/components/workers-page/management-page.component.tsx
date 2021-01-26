@@ -6,6 +6,7 @@ import ShiftTab from "./shifts-tab/shifts-tab.component";
 import ConstraintTab from "./constraints-tab/constraints-tab.component";
 import WorkersTab from "./workers-tab/workers-tab.component";
 import RouteButtonsComponent from "../common-components/route-buttons/route-buttons.component";
+import { useScheduleMargin } from "../schedule-page/schedule-margin-context/schedule-margin-context";
 
 interface TabData {
   label: string;
@@ -18,11 +19,12 @@ export default function ManagementPage(): JSX.Element {
     { label: "ZMIANY", component: <ShiftTab /> },
     { label: "OGRANICZENIA", component: <ConstraintTab /> },
   ];
+  const { scheduleMargin } = useScheduleMargin();
 
   return (
-    <div className="management-page">
+    <div className="management-page" style={{ padding: `0px ${scheduleMargin}` }}>
       <h1>Panel zarządzania</h1>
-      <RouteButtonsComponent id="adjusted-tab-padding" tabs={tabs} />
+      <RouteButtonsComponent id="adjusted-tab-padding" tabs={tabs} fullWidth={true} />
     </div>
   );
 }
