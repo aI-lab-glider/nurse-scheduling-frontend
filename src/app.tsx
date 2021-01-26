@@ -15,6 +15,7 @@ import { ScheduleDataActionCreator } from "./state/reducers/month-state/schedule
 import { NotificationProvider } from "./components/common-components/notification/notification.context";
 import { NetlifyProFooter } from "./components/common-components/netlify-pro-footer/netlify-pro-footer.component";
 import isElectron from "is-electron";
+import { ScheduleMarginProvider } from "./components/schedule-page/schedule-margin-context/schedule-margin-context";
 
 interface TabData {
   label: string;
@@ -42,13 +43,15 @@ function App(): JSX.Element {
     <>
       <div>
         <NotificationProvider>
-          <Switch>
-            <Route path="/">
-              <HeaderComponent isNewMonthPage={false} />
-              <RouteButtonsComponent tabs={tabs} disabled={editMode} />
-              {isElectron() ? <></> : <NetlifyProFooter />}
-            </Route>
-          </Switch>
+          <ScheduleMarginProvider>
+            <Switch>
+              <Route path="/">
+                <HeaderComponent isNewMonthPage={false} />
+                <RouteButtonsComponent tabs={tabs} disabled={editMode} />
+                {isElectron() ? <></> : <NetlifyProFooter />}
+              </Route>
+            </Switch>
+          </ScheduleMarginProvider>
         </NotificationProvider>
       </div>
     </>
