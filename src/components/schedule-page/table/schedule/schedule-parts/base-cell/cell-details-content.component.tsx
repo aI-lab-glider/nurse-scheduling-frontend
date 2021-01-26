@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useRef } from "react";
+import React from "react";
 import { TranslationHelper } from "../../../../../../helpers/translations.helper";
 import { shifts } from "../../../../../../common-models/shift-info.model";
 import { MdClose } from "react-icons/md";
@@ -21,7 +21,6 @@ export interface CellDetailsOptions {
 
 export function CellDetails(props: CellDetailsOptions): JSX.Element {
   const { index, day, month, year, shift, close, sectionKey, rowIndex } = props;
-  const closeRef = useRef<HTMLDivElement>(null);
   const state = useSelector((state: ApplicationStateModel) => state);
   const workers = Object.keys(state.actualState.persistentSchedule.present.shifts);
   const worker = workers[rowIndex];
@@ -41,7 +40,7 @@ export function CellDetails(props: CellDetailsOptions): JSX.Element {
 
   return (
     <div className="align-to-the-left">
-      <div ref={closeRef} className="exit-button" onClick={close}>
+      <div className="exit-button" onClick={close}>
         <MdClose />
       </div>
       <div className="cell-details-date">

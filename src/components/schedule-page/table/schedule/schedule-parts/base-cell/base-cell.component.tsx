@@ -154,13 +154,18 @@ export function BaseCellComponent({
     return "thisMonth";
   }
 
+  function handleClick(): void {
+    if (isComponentVisible) {
+      setIsComponentVisible(false);
+    } else setIsComponentVisible(true);
+  }
   //  #region view
   return (
     <td
       ref={mergeRefs([ref, drop])}
       className={classNames("mainCell", { selection: isSelected, blocked: isBlocked })}
       id={getId()}
-      onClick={(): void => setIsComponentVisible(true)}
+      onClick={(): void => handleClick()}
       onBlur={(): void => {
         onBlur?.();
       }}
@@ -194,7 +199,7 @@ export function BaseCellComponent({
             style={
               usePopper(useRef<HTMLDivElement>(null).current, cellDetailsPopperRef.current).styles
             }
-            isOpen={isComponentVisible && isBlocked}
+            isOpen={isComponentVisible && isBlocked && value !== ""}
             data={
               <CellDetails
                 index={index}
