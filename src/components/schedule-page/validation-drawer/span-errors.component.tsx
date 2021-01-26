@@ -17,14 +17,6 @@ export function SpanErrors({ errors = [] }: SpanErrorOptions): JSX.Element {
           <div className={"error-numbers"}>
             <p>Błędy : {errors?.length}</p>
           </div>
-          <div className={"error-buttons-row"}>
-            <Button id={"error-buttons"} variant="outlined">
-              Ukryj błędy
-            </Button>
-            <Button id={"error-buttons"} variant="primary">
-              Pokaż błędy
-            </Button>
-          </div>
         </div>
       </div>
     </>
