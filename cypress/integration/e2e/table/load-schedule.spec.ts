@@ -12,12 +12,12 @@ context("Load schedule", () => {
     cy.get("[data-cy=edit-mode-button]").click();
     cy.saveToDatabase();
     cy.get("[data-cy=leave-edit-mode]").click();
-    cy.loadSchedule("example_2.xlsx");
+    cy.loadScheduleToMonth("example.xlsx");
     cy.checkWorkerShift({
       workerType: WorkerType.NURSE,
       workerIdx: 0,
-      shiftIdx: 0,
-      desiredShiftCode: ShiftCode.N,
+      shiftIdx: 6,
+      desiredShiftCode: ShiftCode.U,
     });
   });
 
@@ -25,17 +25,17 @@ context("Load schedule", () => {
     const cell = {
       workerType: WorkerType.NURSE,
       workerIdx: 0,
-      shiftIdx: 0,
+      shiftIdx: 6,
     };
-    cy.loadSchedule("example.xlsx");
+    cy.loadScheduleToMonth("example.xlsx");
     cy.checkWorkerShift({
       ...cell,
-      desiredShiftCode: ShiftCode.DN,
+      desiredShiftCode: ShiftCode.U,
     });
     cy.enterEditMode();
     cy.saveToDatabase();
     cy.leaveEditMode();
-    cy.loadSchedule("example_2.xlsx");
+    cy.loadScheduleToMonth("example_2.xlsx");
     cy.checkWorkerShift({
       ...cell,
       desiredShiftCode: ShiftCode.N,
@@ -43,7 +43,7 @@ context("Load schedule", () => {
   });
 
   it("Should be able to save file and load the exported file", () => {
-    cy.loadSchedule();
+    cy.loadScheduleToMonth();
 
     cy.get("[data-cy=export-schedule-button]").click();
 

@@ -4,13 +4,9 @@
 import { ScheduleDataModel } from "../../common-models/schedule-data.model";
 import xlsx from "exceljs";
 import { ShiftCode } from "../../common-models/shift-info.model";
-import { MonthInfoLogic } from "../../logic/schedule-logic/month-info.logic";
+import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
 import { WorkerType } from "../../common-models/worker-info.model";
-import {
-  ChildrenSectionKey,
-  MetaDataRowLabel,
-  MetaDataSectionKey,
-} from "../../logic/section.model";
+import { ChildrenSectionKey, MetaDataRowLabel, MetaDataSectionKey } from "../section.model";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { ColorHelper } from "../../helpers/colors/color.helper";
 import { Color } from "../../helpers/colors/color.model";
@@ -65,8 +61,7 @@ export class ScheduleExportLogic {
     const monthLogic = new MonthInfoLogic(
       monthInfo?.month_number || 0,
       monthInfo?.year + "" || "",
-      this.scheduleModel.month_info?.dates || [],
-      true
+      this.scheduleModel.month_info?.dates || []
     );
     const verboseDates = monthLogic.verboseDates;
     workSheet.addRows(rows);
@@ -202,8 +197,7 @@ export class ScheduleExportLogic {
     const metadataLogic = new MetadataLogic(
       scheduleModel.schedule_info.year?.toString(),
       scheduleModel.schedule_info.month_number,
-      scheduleModel.month_info.dates,
-      scheduleModel.schedule_info.daysFromPreviousMonthExists
+      scheduleModel.month_info.dates
     );
     const nurseShiftsInfoLogic = new ShiftsInfoLogic(
       scheduleModel.shifts,

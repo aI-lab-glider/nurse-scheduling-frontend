@@ -1,14 +1,16 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-
+import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { WorkersInfoModel } from "../../../common-models/worker-info.model";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
-import { createActionName, ScheduleActionType } from "./schedule-data/schedule.actions";
-import { ActionModel } from "../../models/action.model";
 import { WorkerInfoExtendedInterface } from "../../../components/namestable/worker-edit.component";
-import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
-import { CopyMonthActionPayload } from "./schedule-data/schedule-data.action-creator";
+import {
+  createActionName,
+  ScheduleActionModel,
+  ScheduleActionType,
+} from "./schedule-data/schedule.actions";
+import { ActionModel } from "../../models/action.model";
 
 function fromFractionToHours(fraction: string): number {
   const result = fraction.split("/");
@@ -19,10 +21,7 @@ function fromFractionToHours(fraction: string): number {
 export function employeeInfoReducerF(name: string) {
   return (
     state: WorkersInfoModel = scheduleDataInitialState.employee_info,
-    action:
-      | ActionModel<ScheduleDataModel>
-      | ActionModel<WorkerInfoExtendedInterface>
-      | ActionModel<CopyMonthActionPayload>
+    action: ScheduleActionModel | ActionModel<WorkerInfoExtendedInterface>
   ): WorkersInfoModel => {
     let data;
     let workerName, prevName, workerType, contractType, employmentTime;
@@ -45,9 +44,6 @@ export function employeeInfoReducerF(name: string) {
         data = (action.payload as ScheduleDataModel)?.employee_info;
         if (!data) return state;
         return { ...state, ...data };
-      case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
-        data = (action.payload as CopyMonthActionPayload).scheduleData.employee_info;
-        return { ...data };
       case ScheduleActionType.ADD_NEW_WORKER:
         return {
           time: {

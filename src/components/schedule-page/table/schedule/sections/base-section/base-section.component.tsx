@@ -2,16 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useContext, useState } from "react";
-import { BaseCellComponent, PivotCell } from "../../schedule-parts/base-cell/base-cell.component";
+import {
+  BaseCellComponent,
+  BaseCellOptions,
+  PivotCell,
+} from "../../schedule-parts/base-cell/base-cell.component";
 import { BaseRowComponent } from "../../schedule-parts/base-row.component";
 import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
 import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
-import { BaseCellOptions } from "../../schedule-parts/base-cell/base-cell.component";
 import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
 import { DataRowHelper } from "../../../../../../helpers/data-row.helper";
 import { ScheduleLogicContext } from "../../use-schedule-state";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
 import { useSelectionMatrix } from "./use-selection-matrix";
 
 export enum DirectionKey {
@@ -96,7 +97,7 @@ function BaseSectionComponentF({
   }
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <>
       {data.map((dataRow, rowInd) => (
         <RowComponent
           selection={selectionMatrix[rowInd]}
@@ -118,7 +119,7 @@ function BaseSectionComponentF({
           isEditable={dataRow.isEditable}
         />
       ))}
-    </DndProvider>
+    </>
   );
 }
 

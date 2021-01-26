@@ -1,9 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 export type Primitive = undefined | null | boolean | number | string | bigint | symbol;
 
 type ValueOrNotDefined<T> = T extends NonNullable<T> ? T : T | null | undefined;
+export type ArrayPositionPointer = "HEAD" | "TAIL";
+
 export class ArrayHelper {
   public static zip<T1, T2>(
     array1: ValueOrNotDefined<T1>[] = [],
@@ -38,5 +41,40 @@ export class ArrayHelper {
       }
     }
     return true;
+  }
+
+  public static replace<T>(arr: T[], replaceArr: T[], replacePosition: ArrayPositionPointer): T[] {
+    if (replacePosition === "TAIL") {
+      arr.splice(0, replaceArr.length, ...replaceArr);
+    } else {
+      arr.splice(arr.length - replaceArr.length, arr.length, ...replaceArr);
+    }
+    return arr;
+  }
+
+  public static update<T>(
+    updatedArr: T[],
+    updatePosition: ArrayPositionPointer,
+    baseArr: T[],
+    numerOfElement: number
+  ): T[] {
+    let updateElements;
+    if (updatePosition === "TAIL") {
+      updateElements = baseArr.slice(0, numerOfElement);
+    } else {
+      updateElements = baseArr.slice(baseArr.length - numerOfElement);
+    }
+
+    return ArrayHelper.replace(updatedArr, updateElements, updatePosition);
+  }
+
+  public static extend<T>(arr1: T[], count1: number, curr: T[], arr2: T[], count2: number): T[] {
+    const prevMonthData = arr1 ?? [];
+    const nextMonthData = arr2 ?? [];
+
+    const prevMonth = prevMonthData.slice(prevMonthData.length - count1);
+    const nextMonth = nextMonthData.slice(0, count2);
+
+    return [...prevMonth, ...curr, ...nextMonth];
   }
 }

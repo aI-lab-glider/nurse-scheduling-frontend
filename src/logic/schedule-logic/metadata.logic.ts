@@ -33,22 +33,12 @@ export class MetadataLogic extends BaseSectionLogic implements MetadataProvider 
   public monthLogic: MonthInfoLogic;
   private _year: string;
   private month: number;
-  constructor(
-    year?: string,
-    month?: number,
-    monthDates: number[] = [],
-    public daysFromPreviousMonthExists: boolean = false
-  ) {
+  constructor(year?: string, month?: number, monthDates: number[] = []) {
     super([new DataRow(MetaDataSectionKey.MonthDays, monthDates)]);
     const today = new Date();
     this._year = year ?? today.getFullYear().toString();
     this.month = month ?? today.getMonth();
-    this.monthLogic = new MonthInfoLogic(
-      this.month,
-      this._year,
-      monthDates,
-      daysFromPreviousMonthExists
-    );
+    this.monthLogic = new MonthInfoLogic(this.month, this._year, monthDates);
   }
 
   public get verboseDates(): VerboseDate[] {

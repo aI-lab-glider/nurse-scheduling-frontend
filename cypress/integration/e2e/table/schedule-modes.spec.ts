@@ -7,14 +7,14 @@ import { WorkerType } from "../../../../src/common-models/worker-info.model";
 const testedCell = {
   workerType: WorkerType.NURSE,
   workerIdx: 0,
-  shiftIdx: 4,
+  shiftIdx: 6,
   initialShiftCode: ShiftCode.U,
   desiredShiftCode: ShiftCode.W,
 };
 
 context("Schedule modes spec", () => {
   beforeEach(() => {
-    cy.loadSchedule();
+    cy.loadScheduleToMonth();
   });
 
   it("Should not be able to change shift in readonly mode", () => {

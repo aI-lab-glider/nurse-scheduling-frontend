@@ -12,25 +12,26 @@ interface TestCase {
   firstShift: ShiftCode;
   secondShift: ShiftCode;
 }
+const daysFromPrevMonths = 6;
 
 const testCases: TestCase[] = [
   {
     testedShiftCell: {
       workerType: WorkerType.NURSE,
       workerIdx: 0,
-      shiftIdx: 0,
+      shiftIdx: daysFromPrevMonths + 9,
     },
-    firstShift: ShiftCode.R,
-    secondShift: ShiftCode.P,
+    firstShift: ShiftCode.P,
+    secondShift: ShiftCode.R,
   },
   {
     testedShiftCell: {
       workerType: WorkerType.OTHER,
       workerIdx: 3,
-      shiftIdx: 5,
+      shiftIdx: daysFromPrevMonths + 2,
     },
-    firstShift: ShiftCode.N,
-    secondShift: ShiftCode.DN,
+    firstShift: ShiftCode.DN,
+    secondShift: ShiftCode.N,
   },
 ];
 
@@ -41,7 +42,7 @@ function performShiftChanges(testCase: TestCase): void {
 
 context("Undo/Redo test", () => {
   before(() => {
-    cy.loadSchedule();
+    cy.loadScheduleToMonth();
     cy.enterEditMode();
   });
 
@@ -51,10 +52,10 @@ context("Undo/Redo test", () => {
       performShiftChanges(testCase);
 
       cy.get("[data-cy=undo-button]").click();
-      cy.getWorkerShift(testCase.testedShiftCell).contains(testCase.firstShift);
+      cy.getWorkerShift(testCase.testedShiftCell).should("contain", testCase.firstShift);
 
       cy.get("[data-cy=redo-button]").click();
-      cy.getWorkerShift(testCase.testedShiftCell).contains(testCase.secondShift);
+      cy.getWorkerShift(testCase.testedShiftCell).should("contain", testCase.secondShift);
     });
   });
 
@@ -64,10 +65,10 @@ context("Undo/Redo test", () => {
       performShiftChanges(testCase);
 
       cy.get("body").type("{ctrl}{z}");
-      cy.getWorkerShift(testCase.testedShiftCell).contains(testCase.firstShift);
+      cy.getWorkerShift(testCase.testedShiftCell).should("contain", testCase.firstShift);
 
       cy.get("body").type("{ctrl}{shift}{z}");
-      cy.getWorkerShift(testCase.testedShiftCell).contains(testCase.secondShift);
+      cy.getWorkerShift(testCase.testedShiftCell).should("contain", testCase.secondShift);
     });
   });
 });
