@@ -9,6 +9,7 @@ interface AutocompleteOptions<T> {
   getOptionLabel: (option: T) => string;
   onValueChange: (newValue: T) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  getOptionColor: (option: T) => string;
   className?: string;
 }
 export function AutocompleteComponent<T>({
@@ -17,6 +18,7 @@ export function AutocompleteComponent<T>({
   getOptionLabel,
   onValueChange,
   onKeyDown,
+  getOptionColor,
 }: AutocompleteOptions<T>): JSX.Element {
   const [value, setValue] = useState<T>();
   useEffect(() => {
@@ -36,6 +38,7 @@ export function AutocompleteComponent<T>({
     getOptionLabel,
     open: true,
   });
+
   return (
     <div data-cy="shiftDropdown">
       <div {...getRootProps()}>
@@ -57,7 +60,13 @@ export function AutocompleteComponent<T>({
                 setValue(option);
               }}
             >
-              {getOptionLabel(option)}
+              <div className="container">
+                <div className="optionLabel">{getOptionLabel(option)}</div>
+                <div
+                  className="colorSample"
+                  style={{ backgroundColor: `#${getOptionColor(option)}` }}
+                />
+              </div>
             </li>
           ))}
         </ul>
