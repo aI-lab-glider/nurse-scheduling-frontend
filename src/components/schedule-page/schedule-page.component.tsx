@@ -31,8 +31,8 @@ export function SchedulePage(props: SchedulePageOptions): JSX.Element {
     <>
       <div className="schedule-container">
         <Switch>
-          <Route path="/" component={ViewOnly} exact />
           <Route path="/schedule-editing" component={Edit} />
+          <Route path="/" component={ViewOnly} exact />
         </Switch>
       </div>
       )

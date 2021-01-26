@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 export function useActualMonth(): string {
   /* eslint-disable @typescript-eslint/camelcase */
   const { month_number, year } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
   );
 
   const [actualMonth, setActualMonth] = useState<string>("");
