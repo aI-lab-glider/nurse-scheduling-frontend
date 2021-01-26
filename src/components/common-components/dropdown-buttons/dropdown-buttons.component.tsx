@@ -60,7 +60,8 @@ export function DropdownButtons({
         data-cy="openedDropdown"
         open={open}
         placement="bottom"
-        anchorEl={anchorRef.current}>
+        anchorEl={anchorRef.current}
+        id="z-index1300">
         <ClickAwayListener onClickAway={handleClickAway}>
           <div className="dropdown-buttons-list">
             {buttons.map((item) => (
