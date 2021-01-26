@@ -1,12 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
+import React, { useContext } from "react";
 import { TranslationHelper } from "../../../../../../helpers/translations.helper";
 import { shifts } from "../../../../../../common-models/shift-info.model";
 import { MdClose } from "react-icons/md";
-import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
+import { ScheduleLogicContext } from "../../use-schedule-state";
+import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
+import { ShiftsInfoLogic } from "../../../../../../logic/schedule-logic/shifts-info.logic";
 
 export interface CellDetailsOptions {
   index: number;
@@ -21,9 +22,6 @@ export interface CellDetailsOptions {
 
 export function CellDetails(props: CellDetailsOptions): JSX.Element {
   const { index, day, month, year, shift, close, sectionKey, rowIndex } = props;
-  const state = useSelector((state: ApplicationStateModel) => state);
-  const workers = Object.keys(state.actualState.persistentSchedule.present.shifts);
-  const worker = workers[rowIndex];
   let displayedYear = year;
   let monthName = `${TranslationHelper.polishMonthsGenetivus[month]}`;
   if (index < day) {
@@ -34,9 +32,14 @@ export function CellDetails(props: CellDetailsOptions): JSX.Element {
       displayedYear = year - 1;
     }
   }
-  let shiftcode = shift;
-  if (shiftcode === "") shiftcode = "W";
+  const shiftcode = shift;
   const foundShift = shifts[shiftcode];
+
+  const scheduleLogic = useContext(ScheduleLogicContext);
+  const sKey: keyof Sections = sectionKey === "NurseInfo" ? "NurseInfo" : "BabysitterInfo";
+  const workerShifts = scheduleLogic?.getSection<ShiftsInfoLogic>(sKey)?.workerShifts;
+  const workers = Object.keys(workerShifts ? workerShifts : 0);
+  const worker = workers[rowIndex];
 
   return (
     <div className="align-to-the-left">
@@ -46,9 +49,7 @@ export function CellDetails(props: CellDetailsOptions): JSX.Element {
       <div className="cell-details-date">
         {day} {monthName} {displayedYear} r.
       </div>
-      <div>
-        {worker}, {sectionKey}
-      </div>
+      <div>{worker}</div>
       <div className="shift-time-container">
         <div className="shift-time-rectangle" style={{ backgroundColor: `#${foundShift.color}` }} />
         <div className="shift-time" style={{ backgroundColor: `#${foundShift.color}` }}>
