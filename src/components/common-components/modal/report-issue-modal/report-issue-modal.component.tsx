@@ -10,6 +10,7 @@ import DefaultModal from "../modal.component";
 export interface ReportIssueModalOptions {
   setOpen: (open: boolean) => void;
   open: boolean;
+  screenshot?;
 }
 
 export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.Element {
@@ -18,11 +19,12 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
     setIssueDescription(value);
   }
 
-  const { open, setOpen } = options;
+  const { open, setOpen, screenshot } = options;
   const [issueDescription, setIssueDescription] = useState("");
   const title = "Zgłoś błąd";
   const body = (
     <div>
+      {screenshot && <img src={screenshot} alt="Zrzut ekranu" />}
       <Typography color="textPrimary">Jaki błąd wystąpił?</Typography>
       <TextField
         placeholder="Opisz błąd"

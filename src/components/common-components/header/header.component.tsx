@@ -6,6 +6,7 @@ import { MonthSwitchComponent } from "../month-switch/month-switch.component";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import { Button } from "../button-component/button.component";
 import { Link } from "react-router-dom";
+import { useScreenshot } from "use-screenshot-hook";
 import ReportIssueModal from "../modal/report-issue-modal/report-issue-modal.component";
 
 interface HeaderCheckInterface {
@@ -14,6 +15,12 @@ interface HeaderCheckInterface {
 
 export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.Element {
   const [modalOpen, modalSetOpen] = useState(false);
+  const { image, takeScreenshot } = useScreenshot();
+
+  function onReportIssueButtonClick(): void {
+    takeScreenshot();
+    modalSetOpen(true);
+  }
 
   return (
     <div id={"header"}>
@@ -28,10 +35,10 @@ export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.E
       <div className={"filler"} />
       <MonthSwitchComponent />
       <div className={"filler"} />
-      <Button onClick={(): void => modalSetOpen(true)} size="small" variant="secondary">
+      <Button onClick={(): void => onReportIssueButtonClick()} size="small" variant="secondary">
         Zgłoś błąd
       </Button>
-      <ReportIssueModal open={modalOpen} setOpen={modalSetOpen} />
+      <ReportIssueModal open={modalOpen} setOpen={modalSetOpen} screenshot={image} />
     </div>
   );
 }
