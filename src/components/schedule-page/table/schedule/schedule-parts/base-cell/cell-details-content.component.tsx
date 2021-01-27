@@ -20,8 +20,12 @@ export interface CellDetailsOptions {
   close: () => void;
 }
 
-export function CellDetails(props: CellDetailsOptions): JSX.Element {
-  const { index, day, month, year, shiftcode, close, sectionKey, rowIndex } = props;
+function prepareYearAndMonth(
+  index: number,
+  day: number,
+  month: number,
+  year: number
+): [number, string] {
   let displayedYear = year;
   let monthName = `${TranslationHelper.polishMonthsGenetivus[month]}`;
 
@@ -32,7 +36,12 @@ export function CellDetails(props: CellDetailsOptions): JSX.Element {
     monthName = `${TranslationHelper.polishMonthsGenetivus[(month + 1) % 12]}`;
     displayedYear = month < 11 ? year : year + 1;
   }
+  return [displayedYear, monthName];
+}
 
+export function CellDetails(props: CellDetailsOptions): JSX.Element {
+  const { index, day, month, year, shiftcode, close, sectionKey, rowIndex } = props;
+  const [displayedYear, monthName] = prepareYearAndMonth(index, day, month, year);
   const foundShift = shifts[shiftcode];
 
   const scheduleLogic = useContext(ScheduleLogicContext);
