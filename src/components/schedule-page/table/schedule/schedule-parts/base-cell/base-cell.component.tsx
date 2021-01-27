@@ -154,10 +154,8 @@ export function BaseCellComponent({
     return "thisMonth";
   }
 
-  function handleClick(): void {
-    if (isComponentVisible) {
-      setIsComponentVisible(false);
-    } else setIsComponentVisible(true);
+  function toggleComponentVisibility(): void {
+    setIsComponentVisible(!isComponentVisible);
   }
   //  #region view
   return (
@@ -165,7 +163,7 @@ export function BaseCellComponent({
       ref={mergeRefs([ref, drop])}
       className={classNames("mainCell", { selection: isSelected, blocked: isBlocked })}
       id={getId()}
-      onClick={(): void => handleClick()}
+      onClick={(): void => toggleComponentVisibility()}
       onBlur={(): void => {
         onBlur?.();
       }}
@@ -207,7 +205,7 @@ export function BaseCellComponent({
                 month={monthNumber || 0}
                 year={year}
                 rowIndex={rowIndex}
-                shift={value}
+                shiftcode={value}
                 sectionKey={sectionKey}
                 close={(): void => setIsComponentVisible(false)}
               />

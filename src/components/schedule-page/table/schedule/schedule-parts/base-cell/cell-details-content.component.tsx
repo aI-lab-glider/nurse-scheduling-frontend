@@ -15,24 +15,24 @@ export interface CellDetailsOptions {
   month: number;
   year: number;
   rowIndex: number;
-  shift: string;
+  shiftcode: string;
   sectionKey: string;
   close: () => void;
 }
 
 export function CellDetails(props: CellDetailsOptions): JSX.Element {
-  const { index, day, month, year, shift, close, sectionKey, rowIndex } = props;
+  const { index, day, month, year, shiftcode, close, sectionKey, rowIndex } = props;
   let displayedYear = year;
   let monthName = `${TranslationHelper.polishMonthsGenetivus[month]}`;
-  if (index < day) {
-    if (month > 0) {
-      monthName = `${TranslationHelper.polishMonthsGenetivus[month - 1]}`;
-    } else {
-      monthName = `${TranslationHelper.polishMonthsGenetivus[month + 11]}`;
-      displayedYear = year - 1;
-    }
+
+  if (index < day - 1) {
+    monthName = `${TranslationHelper.polishMonthsGenetivus[(month + 11) % 12]}`;
+    displayedYear = month > 0 ? year : year - 1;
+  } else if (index > 20 && day < 8) {
+    monthName = `${TranslationHelper.polishMonthsGenetivus[(month + 1) % 12]}`;
+    displayedYear = month < 11 ? year : year + 1;
   }
-  const shiftcode = shift;
+
   const foundShift = shifts[shiftcode];
 
   const scheduleLogic = useContext(ScheduleLogicContext);
@@ -57,8 +57,7 @@ export function CellDetails(props: CellDetailsOptions): JSX.Element {
         </div>
         <div className="black-letters">{foundShift.name}</div>
         <div className="shift-time-from-to">
-          {foundShift.isWorkingShift ? `${foundShift.from}:00 -` : ""}
-          {foundShift.isWorkingShift ? ` ${foundShift.to}:00` : ""}
+          {foundShift.isWorkingShift ? `${foundShift.from}:00 - ${foundShift.to}:00` : ""}
         </div>
       </div>
     </div>

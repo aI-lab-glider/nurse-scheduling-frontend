@@ -4,18 +4,16 @@
 import { useState, useEffect, useRef } from "react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 export default function useComponentVisible(initialIsVisible: boolean): any {
   const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible);
   const ref = useRef(null);
 
-  const handleClickOutside = (event): void => {
-    if (ref.current && !(ref.current! as any).contains(event.target)) {
-      setIsComponentVisible(false);
-    }
-  };
-
   useEffect((): any => {
+    const handleClickOutside = (event): void => {
+      if (ref.current && !(ref.current! as any).contains(event.target)) {
+        setIsComponentVisible(false);
+      }
+    };
     document.addEventListener("click", handleClickOutside, true);
     return (): any => {
       document.removeEventListener("click", handleClickOutside, true);
