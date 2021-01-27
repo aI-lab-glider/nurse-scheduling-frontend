@@ -10,10 +10,10 @@ interface AutocompleteOptions<T> {
   onValueChange: (newValue: T) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   getOptionColor: (option: T) => string;
-  className?: string;
+  className: string;
 }
 export function AutocompleteComponent<T>({
-  className = "",
+  className,
   options,
   getOptionLabel,
   onValueChange,
@@ -39,6 +39,8 @@ export function AutocompleteComponent<T>({
     open: true,
   });
 
+  const moreLeftMargin = className.indexOf("moreMargin") > -1 ? "more-left-margin" : "";
+
   return (
     <div data-cy="shiftDropdown">
       <div {...getRootProps()}>
@@ -51,7 +53,7 @@ export function AutocompleteComponent<T>({
         />
       </div>
       {groupedOptions.length > 0 ? (
-        <ul {...getListboxProps()} className="listbox">
+        <ul {...getListboxProps()} className={"listbox " + moreLeftMargin}>
           {groupedOptions.map((option, index) => (
             <li
               {...getOptionProps({ option, index })}
