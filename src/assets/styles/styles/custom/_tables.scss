@@ -32,6 +32,9 @@
 
     &:not(:last-child) {
       border-bottom: 1px solid $table-border-color-grey;
+      &.selection {
+        border-color: white !important;
+      }
     }
 
     .mainCell {
@@ -42,6 +45,10 @@
       height: 100%;
       cursor: cell;
       padding: 0;
+      overflow: hidden;
+      &.selection {
+        border-left: 1px solid white !important;
+      }
 
       &.blocked {
         cursor: default !important;
@@ -73,7 +80,20 @@
         }
 
         input {
-          margin: 1%;
+          position: relative;
+          padding-left: 60%;
+          outline: none;
+          border: none;
+          overflow: hidden;
+          width: 170%;
+          height: 50px;
+          left: -2px;
+          top: -5px;
+          font-size: 14px;
+          font-family: Roboto, serif;
+          line-height: 20px;
+          letter-spacing: 0.75px;
+          margin-bottom: -8px;
         }
       }
 
@@ -83,7 +103,13 @@
     }
 
     .selection {
-      background-color: $selection-color !important;
+      background-color: white !important;
+      outline-width: 1px;
+      outline-style: solid;
+      outline-color: white;
+      box-shadow: 0px 4px 7px rgba(16, 32, 70, 0.2), 0px 0px 7px rgba(16, 32, 70, 0.2);
+      overflow: hidden;
+      z-index: 2;
     }
 
     .summaryCell {
