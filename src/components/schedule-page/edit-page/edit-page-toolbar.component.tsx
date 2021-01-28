@@ -16,6 +16,8 @@ import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
 import { UndoActionCreator } from "../../../state/reducers/undoable.action-creator";
 import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
 import { useNotification } from "../../common-components/notification/notification.context";
+import { useJiraLikeDrawer } from "../../common-components/drawer/jira-like-drawer-context";
+import ValidationDrawerContentComponent from "../validation-drawer/validation-drawer.component";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;
@@ -46,9 +48,13 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
     }
   }
 
+  const { setTitle, setOpen, setChildrenComponent } = useJiraLikeDrawer();
+
   function prepareDrawer(): void {
     updateScheduleErrors();
-    setOpenDrawer(true);
+    setTitle("Sprawdź plan");
+    setChildrenComponent(<ValidationDrawerContentComponent setOpen={setOpen} />);
+    setOpen(true);
   }
 
   function handleSaveClick(): void {
@@ -82,8 +88,6 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
         <div id="edit-panel-text-container">
           <p>Tryb edycji aktywny</p>
         </div>
-
-        <ValidationDrawerComponent open={openDrawer} setOpen={setOpenDrawer} />
 
         <Button
           size="small"

@@ -9,8 +9,7 @@ import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error
 import ErrorLoader from "./error-loader.component";
 import { NetworkErrorCode } from "../../../common-models/schedule-error.model";
 
-export interface ValidationDrawerOptions {
-  open: boolean;
+export interface ValidationDrawerContentOptions {
   setOpen: (boolean) => void;
 }
 
@@ -20,18 +19,20 @@ export enum ErrorLoaderState {
   ERRORS = "ERRORS",
 }
 
-export interface ValidationDrawerState {
+export interface ValidationDrawerContentState {
   state: ErrorLoaderState;
 }
 
-export type Props = ValidationDrawerState;
+export type Props = ValidationDrawerContentState;
 
-export default function ValidationDrawerComponent(options: ValidationDrawerOptions): JSX.Element {
-  const { open, setOpen } = options;
+export default function ValidationDrawerContentComponent(
+  options: ValidationDrawerContentOptions
+): JSX.Element {
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
   const [loadingState, setLoadingState] = useState<Props>();
   const [isNetworkError, setIsNetworkError] = useState(false);
   const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const setOpen = options.setOpen;
 
   useEffect(() => {
     const spinner = {
@@ -60,24 +61,12 @@ export default function ValidationDrawerComponent(options: ValidationDrawerOptio
     }
   }, [scheduleErrors]);
 
-  function closeDrawer(): void {
-    setOpen(false);
-  }
-
   return (
-    <Drawer
-      title="Sprawdź plan"
+    <ErrorLoader
+      state={loadingState}
+      errors={mappedErrors}
+      isNetworkError={isNetworkError}
       setOpen={setOpen}
-      open={open}
-      onClose={(): void => closeDrawer()}
-      anchor="right"
-    >
-      <ErrorLoader
-        state={loadingState}
-        errors={mappedErrors}
-        isNetworkError={isNetworkError}
-        setOpen={setOpen}
-      />
-    </Drawer>
+    />
   );
 }
