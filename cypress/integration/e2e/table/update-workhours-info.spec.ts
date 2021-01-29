@@ -86,7 +86,7 @@ function testWorkHoursInfoUpdate({
   initialShiftCode,
   desiredShiftCode,
   expectedWorkHoursInfo,
-}: TestCase) {
+}: TestCase): void {
   const workerData = {
     workerType: workerType,
     workerIdx: workerIdx,
