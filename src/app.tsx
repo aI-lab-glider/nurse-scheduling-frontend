@@ -18,6 +18,7 @@ import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import JiraLikeDrawer from "./components/common-components/drawer/jira-like-drawer.component";
 import { JiraLikeDrawerProvider } from "./components/common-components/drawer/jira-like-drawer-context";
+import ScssVars from "./assets/styles/styles/custom/_variables.module.scss";
 
 interface TabData {
   label: string;
@@ -27,15 +28,18 @@ interface TabData {
 const useStyles = makeStyles(() => ({
   root: {
     display: "flex",
+    overflow: "hidden",
+  },
+  content: {
     overflowX: "auto",
     overflowY: "hidden",
   },
-  content: {
-    flexGrow: 1,
-  },
   drawer: {
     marginTop: 52,
-    flexShrink: 0,
+    background: ScssVars.white,
+    boxShadow: "-10px 0px 20px rgb(0,0,0,0.3)",
+    position: "relative",
+    zIndex: 80,
   },
 }));
 

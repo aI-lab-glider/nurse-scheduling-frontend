@@ -6,15 +6,10 @@ import DrawerContent from "./drawer-content.component";
 import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useJiraLikeDrawer } from "./jira-like-drawer-context";
-import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 
 const useStyles = makeStyles({
   drawer: {
-    minWidth: 600,
-    overflow: "hidden",
-    background: ScssVars.white,
-    height: "100vh",
-    boxShadow: "-10px 0px 20px rgb(0,0,0,0.3)",
+    minWidth: 750,
   },
 });
 
