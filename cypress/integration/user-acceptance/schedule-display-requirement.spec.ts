@@ -22,7 +22,7 @@ context("Display schedule", () => {
     cy.get("[data-cy=foundationInfoSection]").children().eq(0).children().eq(31).contains(0);
   });
 
-  it("Should be able to read number of wards of children in 2nd, 15th and 28th November 2020", () => {
+  it("Should be able to read number of children in 2nd, 15th and 28th November 2020", () => {
     cy.get("[data-cy=foundationInfoSection]").children().eq(1).children().eq(5).contains(24);
     cy.get("[data-cy=foundationInfoSection]").children().eq(1).children().eq(18).contains(24);
     cy.get("[data-cy=foundationInfoSection]").children().eq(1).children().eq(31).contains(24);
@@ -36,10 +36,6 @@ context("Display schedule", () => {
     cy.get(".nametable").children().eq(1).children().eq(1).contains("opiekunka 10");
 
     cy.get(".nametable").children().eq(1).children().eq(8).contains("opiekunka 8");
-  });
-
-  it("Should be able to read name and surname of worker", () => {
-    cy.get(".nametable").children().eq(0).children().eq(0).contains("pielęgniarka 1");
   });
 
   const shiftCodes = [

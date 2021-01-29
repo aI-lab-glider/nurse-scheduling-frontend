@@ -1,11 +1,3 @@
-context("Worker management requirement", () => {
-  it("Should be able to switch from main page to worker management page", () => {
-    cy.visit(Cypress.env("baseUrl"));
-    cy.get(".MuiTabs-flexContainer").children().eq(1).click();
-    cy.get(".management-page", { timeout: 100 }).should("exist");
-  });
-});
-
 context("Worker management page requirement - add worker", () => {
   const wokerName = "TestName";
 
@@ -23,7 +15,7 @@ context("Worker management page requirement - add worker", () => {
     cy.get("[data-cy=name]").type(wokerName);
   });
 
-  it("Should be change the worker type", () => {
+  it("Should be able to change the worker type", () => {
     cy.get("[data-cy=position]").click();
     cy.get("[data-cy=openedDropdown]").click();
   });
@@ -32,7 +24,7 @@ context("Worker management page requirement - add worker", () => {
     cy.get("[data-cy=saveWorkerInfoBtn]").click();
   });
 
-  it("Should be change the contract type", () => {
+  it("Should be able to change the contract type", () => {
     cy.get("[data-cy=contract]").click();
     cy.get("[data-cy=openedDropdown]").click();
   });
