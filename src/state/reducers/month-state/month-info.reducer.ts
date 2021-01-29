@@ -3,21 +3,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { MonthInfoModel } from "../../../common-models/month-info.model";
-import { ActionModel } from "../../models/action.model";
-import { copyMonthInfo } from "./schedule-data/common-reducers";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
-import { CopyMonthActionPayload } from "./schedule-data/schedule-data.action-creator";
 import {
-  ScheduleActionModel,
   createActionName,
-  ScheduleActionType,
   isScheduleAction,
+  ScheduleActionModel,
+  ScheduleActionType,
 } from "./schedule-data/schedule.actions";
 
 export function monthInfoReducerF(name: string) {
   return (
     state: MonthInfoModel = scheduleDataInitialState.month_info,
-    action: ScheduleActionModel | ActionModel<CopyMonthActionPayload>
+    action: ScheduleActionModel
   ): MonthInfoModel => {
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
@@ -30,9 +27,6 @@ export function monthInfoReducerF(name: string) {
           return state;
         }
         return { ...data };
-      case createActionName(name, ScheduleActionType.COPY_TO_MONTH):
-        const { month, year, scheduleData } = action.payload as CopyMonthActionPayload;
-        return copyMonthInfo(month, year, scheduleData.month_info);
       default:
         return state;
     }

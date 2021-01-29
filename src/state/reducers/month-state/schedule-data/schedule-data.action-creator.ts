@@ -1,28 +1,30 @@
-/* eslint-disable @typescript-eslint/camelcase */
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
-import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
+
+/* eslint-disable @typescript-eslint/camelcase */
 import {
-  PERSISTENT_SCHEDULE_NAME,
-  ScheduleActionDestination,
-  TEMPORARY_SCHEDULE_NAME,
-} from "../../../app.reducer";
-import { MonthStateModel } from "../../../models/application-state.model";
-import { createMonthKey } from "../../history.reducer";
-import { getDateWithMonthOffset } from "./common-reducers";
+  createEmptyMonthDataModel,
+  extendMonthDMToScheduleDM,
+  MonthDataModel,
+  ScheduleDataModel,
+} from "../../../../common-models/schedule-data.model";
+import { ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
+import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 import { WorkerInfoExtendedInterface } from "../../../../components/namestable/worker-edit.component";
 
-export interface CopyMonthActionPayload extends ScheduleKey {
-  scheduleData: ScheduleDataModel;
-}
+import { HistoryStateModel } from "../../../models/application-state.model";
+import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
+import _ from "lodash";
 
 export class ScheduleDataActionCreator {
-  static setSchedule(newSchedule: ScheduleDataModel): ThunkFunction<ScheduleDataModel> {
+  static setScheduleFromScheduleDM(
+    newSchedule: ScheduleDataModel
+  ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
+      await new LocalStorageProvider().saveSchedule("actual", newSchedule);
       destinations.forEach((destination) => {
         const action = {
           type: createActionName(destination, ScheduleActionType.ADD_NEW),
@@ -33,46 +35,29 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static copyMonth(offset: number): ThunkFunction<unknown> {
+  static setScheduleFromMonthDM(newMonth: MonthDataModel): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
-      const {
-        month_number,
-        year,
-      } = getState().actualState.persistentSchedule.present.schedule_info;
-      if (month_number === undefined || year === undefined) return;
-      const date = getDateWithMonthOffset(month_number, year, offset);
-      dispatch(
-        ScheduleDataActionCreator.copyFromMonth(
-          date.getMonth(),
-          date.getFullYear(),
-          month_number,
-          year
-        )
-      );
+      const history = getState().history;
+      const [prevMonth, nextMonth] = await getMonthNeighbours(newMonth, history);
+      const newSchedule = extendMonthDMToScheduleDM(prevMonth, newMonth, nextMonth);
+      await this.setScheduleFromScheduleDM(newSchedule)(dispatch, getState);
     };
   }
 
-  static copyFromMonth(
-    month: number,
-    year: number,
-    toMonth: number,
-    toYear: number
-  ): ThunkFunction<CopyMonthActionPayload | MonthStateModel> {
+  static setScheduleFromKeyIfExists(monthKey: ScheduleKey): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
-      const copyingSchedule = getState().history[createMonthKey(month, year)].persistentSchedule
-        .present;
-      const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
-      destinations.forEach((destination) => {
-        const action = {
-          type: createActionName(destination, ScheduleActionType.COPY_TO_MONTH),
-          payload: {
-            month: toMonth,
-            year: toYear,
-            scheduleData: copyingSchedule,
-          },
-        };
-        dispatch(action);
-      });
+      const history = getState().history;
+      const monthDataModel = await fetchMonthDM(monthKey, history);
+      if (!_.isNil(monthDataModel)) {
+        dispatch(this.setScheduleFromMonthDM(monthDataModel));
+      }
+    };
+  }
+
+  static updateSchedule(newScheduleModel: ScheduleDataModel): ScheduleActionModel {
+    return {
+      type: createActionName(TEMPORARY_SCHEDULE_NAME, ScheduleActionType.UPDATE),
+      payload: newScheduleModel,
     };
   }
 
@@ -95,21 +80,45 @@ export class ScheduleDataActionCreator {
       dispatch(action);
     };
   }
+}
 
-  static addNewSchedule(
-    destination: ScheduleActionDestination,
-    newSchedule: ScheduleDataModel
-  ): ScheduleActionModel {
-    return {
-      type: createActionName(destination, ScheduleActionType.ADD_NEW),
-      payload: newSchedule,
-    };
-  }
+async function getMonthNeighbours(
+  month: MonthDataModel,
+  history: HistoryStateModel
+): Promise<[MonthDataModel, MonthDataModel]> {
+  const scheduleKey = new ScheduleKey(month.scheduleKey.month, month.scheduleKey.year);
+  return [
+    await fetchOrCreateMonthDM(scheduleKey.prevMonthKey, history, month),
+    await fetchOrCreateMonthDM(scheduleKey.nextMonthKey, history, month),
+  ];
+}
 
-  static updateSchedule(newScheduleModel: ScheduleDataModel): ScheduleActionModel {
-    return {
-      type: createActionName(TEMPORARY_SCHEDULE_NAME, ScheduleActionType.UPDATE),
-      payload: newScheduleModel,
-    };
+export async function fetchOrCreateMonthDM(
+  monthKey: ScheduleKey,
+  history: HistoryStateModel,
+  baseMonth: MonthDataModel
+): Promise<MonthDataModel> {
+  let monthDataModel = await fetchMonthDM(monthKey, history);
+  if (_.isNil(monthDataModel)) {
+    const storageProvider = new LocalStorageProvider();
+    monthDataModel = createEmptyMonthDataModel(monthKey, baseMonth);
+    await storageProvider.saveMonthRevision("actual", monthDataModel);
   }
+  return monthDataModel;
+}
+
+export async function fetchMonthDM(
+  monthKey: ScheduleKey,
+  history: HistoryStateModel
+): Promise<MonthDataModel | undefined> {
+  let monthDataModel: MonthDataModel | undefined = history[monthKey.dbKey];
+
+  if (_.isNil(monthDataModel)) {
+    const storageProvider = new LocalStorageProvider();
+    monthDataModel = await storageProvider.getMonthRevision({
+      revisionType: "actual",
+      validityPeriod: monthKey.dbKey,
+    });
+  }
+  return monthDataModel;
 }

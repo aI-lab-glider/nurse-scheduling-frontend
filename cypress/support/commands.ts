@@ -4,13 +4,21 @@
 import "cypress-file-upload";
 import { ShiftCode } from "../../src/common-models/shift-info.model";
 import { WorkerType } from "../../src/common-models/worker-info.model";
+import {
+  calculateMissingFullWeekDays,
+  daysInMonth,
+} from "../../src/state/reducers/month-state/schedule-data/common-reducers";
+import { ScheduleKey } from "../../src/api/persistance-store.model";
+export type CypressScreenshotOptions = Partial<
+  Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions
+>;
+
 export interface GetWorkerShiftOptions {
   workerType: WorkerType;
   workerIdx: number;
   shiftIdx: number;
   selector?: "cell" | "highlighted-cell";
 }
-
 export interface CheckWorkerShiftOptions extends GetWorkerShiftOptions {
   desiredShiftCode: ShiftCode;
 }
@@ -33,22 +41,30 @@ export enum HoursInfoCells {
   overtime = 2,
 }
 export type ScheduleName = "example.xlsx" | "grafik.xlsx" | "example_2.xlsx";
+const NUMBER_OF_DAYS_IN_WEEK = 7;
 
-Cypress.Commands.add("loadSchedule", (scheduleName: ScheduleName = "example.xlsx") => {
-  cy.visit(Cypress.env("baseUrl"));
-  cy.get("[data-cy=file-dropdown]").click();
-  cy.get('[data-cy="file-input"]').attachFile(scheduleName);
-  cy.get(`[data-cy=nurseShiftsTable]`, { timeout: 10000 });
-  cy.window()
-    .its("store")
-    .invoke("getState")
-    .its("actualState")
-    .its("temporarySchedule")
-    .its("present")
-    .its("month_info")
-    .its("children_number")
-    .should("have.length", 35);
-});
+Cypress.Commands.add(
+  "loadScheduleToMonth",
+  (scheduleName: ScheduleName = "example.xlsx", month: number, year: number) => {
+    cy.clock(Date.UTC(year ?? 2020, month ?? 10, 15), ["Date"]);
+    cy.visit(Cypress.env("baseUrl"));
+    cy.get("[data-cy=file-dropdown]").click();
+    cy.get('[data-cy="file-input"]').attachFile(scheduleName);
+    cy.get(`[data-cy=nurseShiftsTable]`, { timeout: 10000 });
+    cy.window()
+      .its("store")
+      .invoke("getState")
+      .its("actualState")
+      .its("temporarySchedule")
+      .its("present")
+      .its("month_info")
+      .its("children_number")
+      .should(
+        "have.length",
+        numberOfWeeksInMonth(month ?? 10, year ?? 2020) * NUMBER_OF_DAYS_IN_WEEK
+      );
+  }
+);
 
 Cypress.Commands.add(
   "getWorkerShift",
@@ -70,7 +86,7 @@ Cypress.Commands.add(
     if (desiredShiftCode === ShiftCode.W) {
       return cy.getWorkerShift(getWorkerShiftOptions).should("be.empty");
     } else {
-      return cy.getWorkerShift(getWorkerShiftOptions).contains(desiredShiftCode);
+      return cy.getWorkerShift(getWorkerShiftOptions).should("contain", desiredShiftCode);
     }
   }
 );
@@ -101,7 +117,7 @@ Cypress.Commands.add(
           .eq(workerIdx)
           .children()
           .eq(Number(key))
-          .contains(hoursInfo[key]);
+          .should("contain", hoursInfo[key]);
       });
   }
 );
@@ -119,3 +135,54 @@ Cypress.Commands.add("leaveEditMode", () => {
   cy.get("[data-cy=leave-edit-mode]").click();
   return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
 });
+
+Cypress.Commands.add(
+  "screenshotSync",
+  (awaitTime = 100, cyScreenshotOptions?: CypressScreenshotOptions) => {
+    cy.get("#header").invoke("css", "position", "absolute");
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.screenshot(cyScreenshotOptions).wait(awaitTime);
+    return cy.get("#header").invoke("css", "position", null);
+  }
+);
+
+export enum FoundationInfoRowType {
+  ExtraWorkersRow = 0,
+  ChildrenInfoRow = 1,
+  NurseCountRow = 2,
+  BabysitterCountRow = 3,
+}
+export interface GetFoundationInfoCellOptions {
+  rowType: FoundationInfoRowType;
+  cellIdx: number;
+  actualValue: number;
+}
+Cypress.Commands.add(
+  "getFoundationInfoCell",
+  ({ cellIdx, rowType, actualValue }: GetFoundationInfoCellOptions) => {
+    cy.get("[data-cy=foundationInfoSection]")
+      .children()
+      .eq(rowType)
+      .children()
+      .eq(cellIdx)
+      .contains(actualValue);
+  }
+);
+
+export interface ChangeFoundationInfoCellOptions extends GetFoundationInfoCellOptions {
+  newValue: number;
+}
+Cypress.Commands.add(
+  "changeFoundationInfoCell",
+  ({ newValue, ...getCellOptions }: ChangeFoundationInfoCellOptions) => {
+    cy.getFoundationInfoCell(getCellOptions).type(`${newValue}{enter}`);
+  }
+);
+
+export function numberOfWeeksInMonth(month: number, year: number): number {
+  const [missingPrev, missingNext] = calculateMissingFullWeekDays(new ScheduleKey(month, year));
+  const monthLength = daysInMonth(month, year).length;
+  const fullScheduleDays = missingPrev + monthLength + missingNext;
+
+  return fullScheduleDays / NUMBER_OF_DAYS_IN_WEEK;
+}

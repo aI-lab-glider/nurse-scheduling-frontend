@@ -11,7 +11,7 @@ context("Schedule errors", () => {
         response: json,
       });
     });
-    cy.loadSchedule();
+    cy.loadScheduleToMonth();
     cy.enterEditMode();
   });
 

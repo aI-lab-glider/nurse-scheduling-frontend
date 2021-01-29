@@ -2,7 +2,7 @@
 
 context("Tab 'zarządzanie'", () => {
   beforeEach(() => {
-    cy.loadSchedule();
+    cy.loadScheduleToMonth();
     cy.contains("Zarządzanie").click();
     cy.contains("opiekunka 1").parent().contains("Edytuj").click();
   });

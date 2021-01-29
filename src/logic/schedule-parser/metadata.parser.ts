@@ -10,22 +10,10 @@ import { DataRowParser } from "./data-row.parser";
 export class MetaDataParser extends MetadataProvider {
   public monthLogic: MonthInfoLogic;
 
-  constructor(headerRow: DataRowParser, private daysRow: DataRowParser) {
+  constructor(month: number, year: number, private daysRow: DataRowParser) {
     super();
-    const [month, year] = headerRow
-      .findValues(
-        MetaDataSectionKey.Month,
-        MetaDataSectionKey.Year,
-        MetaDataSectionKey.RequiredavailableWorkersWorkTime
-      )
-      .slice(0, 2);
     daysRow.rowKey = MetaDataSectionKey.MonthDays;
-    this.monthLogic = new MonthInfoLogic(
-      month,
-      year,
-      this.extractDates(daysRow),
-      this.daysFromPreviousMonthExists
-    );
+    this.monthLogic = new MonthInfoLogic(month, year.toString(), this.extractDates(daysRow));
   }
 
   private extractDates(dataRowParser: DataRowParser): number[] {
@@ -35,20 +23,8 @@ export class MetaDataParser extends MetadataProvider {
       .filter((i) => i <= 31);
   }
 
-  public get daysFromPreviousMonthExists(): boolean {
-    return this._daysFromPreviousMonthExists(this.daysRow);
-  }
-
   public get dates(): number[] {
     return this.monthLogic.dates;
-  }
-  private _daysFromPreviousMonthExists(daysRow?: DataRowParser): boolean {
-    if (!daysRow) {
-      // TODO implement logger
-      return false;
-    }
-    const firstDayIndex = daysRow.rowData(true, false).map(parseInt).indexOf(1);
-    return firstDayIndex !== 0;
   }
 
   get frozenDates(): [string | number, number][] {

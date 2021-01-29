@@ -1,0 +1,28 @@
+name: CI
+
+on: [push]
+
+jobs:
+  cypress:
+    name: Cypress check
+    runs-on: self-hosted
+    strategy:
+        fail-fast: false
+        matrix:
+            containers: [1, 2, 3, 4, 5]
+    steps:
+        - name: Checkout project
+          uses: actions/checkout@v2
+
+        - name: Run Cypress
+          uses: cypress-io/github-action@v2
+          with:
+              group: 'Nurse project workers'
+              record: true
+              parallel: true
+              start: npm start
+              browser: electron
+              headless: true
+          env:
+              CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

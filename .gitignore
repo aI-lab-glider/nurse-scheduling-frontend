@@ -5,6 +5,7 @@
 
 # testing
 /coverage
+/cypress/screenshots
 /cypress/videos
 /cypress/fixtures/grafik.xlsx
 

@@ -53,6 +53,7 @@ export function DropdownButtons({
       </Button>
       <Popper
         className="dropdown-buttons-z-index"
+        data-cy="openedDropdown"
         open={open}
         placement="bottom"
         anchorEl={anchorRef.current}

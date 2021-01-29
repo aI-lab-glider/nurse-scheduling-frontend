@@ -3,13 +3,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useEffect, useState } from "react";
 import Excel from "exceljs";
-import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
+import {
+  cropScheduleDMToMonthDM,
+  MonthDataModel,
+} from "../../../../common-models/schedule-data.model";
 import { InputFileErrorCode, ScheduleError } from "../../../../common-models/schedule-error.model";
 import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
 import { useFileReader } from "./use-file-reader";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 
 export interface UseScheduleConverterOutput {
-  scheduleModel?: ScheduleDataModel;
+  monthModel?: MonthDataModel;
   scheduleSheet?: Array<object>;
   setSrcFile: (srcFile: File) => void;
   scheduleErrors: ScheduleError[];
@@ -20,8 +25,11 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
   const [scheduleErrors, setScheduleErrors] = useState<ScheduleError[]>([]);
   const [scheduleSheet, setScheduleSheet] = useState<Array<object>>();
   const [fileContent, setSrcFile] = useFileReader();
-  const [scheduleModel, setScheduleModel] = useState<ScheduleDataModel>();
+  const [monthModel, setMonthModel] = useState<MonthDataModel>();
   const [errorOccurred, setErrorOccurredFlag] = useState<boolean>(false);
+  const { month_number: month, year } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
+  );
 
   useEffect(() => {
     if (!fileContent) {
@@ -41,13 +49,14 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
           },
         ]);
 
-        setScheduleModel(undefined);
+        setMonthModel(undefined);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileContent]);
 
   return {
-    scheduleModel: scheduleModel,
+    monthModel: monthModel,
     scheduleSheet: scheduleSheet,
     setSrcFile: setSrcFile,
     scheduleErrors: scheduleErrors,
@@ -72,12 +81,12 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
 
     setScheduleSheet(parsedFileContent);
     if (Object.keys(parsedFileContent).length !== 0) {
-      const parser = new ScheduleParser(parsedFileContent);
+      const parser = new ScheduleParser(month, year, parsedFileContent);
       setScheduleErrors([
         ...parser.sections.NurseInfo.errors,
         ...parser.sections.BabysitterInfo.errors,
       ]);
-      setScheduleModel(parser.schedule.getDataModel());
+      setMonthModel(cropScheduleDMToMonthDM(parser.schedule.getDataModel()));
     }
     return;
   }
