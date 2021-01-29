@@ -24,7 +24,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   const title = "Zgłoś błąd";
   const body = (
     <div>
-      {screenshot && <img src={screenshot} alt="Zrzut ekranu" />}
+      {screenshot && <img src={screenshot} height="200px" alt="Zrzut ekranu" />}
       <Typography color="textPrimary">Jaki błąd wystąpił?</Typography>
       <TextField
         placeholder="Opisz błąd"

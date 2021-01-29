@@ -8,6 +8,8 @@ import { Button } from "../button-component/button.component";
 import { Link } from "react-router-dom";
 import { useScreenshot } from "use-screenshot-hook";
 import ReportIssueModal from "../modal/report-issue-modal/report-issue-modal.component";
+import { Typography } from "@material-ui/core";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 interface HeaderCheckInterface {
   isNewMonthPage: boolean;
@@ -17,7 +19,7 @@ export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.E
   const [modalOpen, modalSetOpen] = useState(false);
   const { image, takeScreenshot } = useScreenshot();
 
-  function onReportIssueButtonClick(): void {
+  function onReportIssueClick(): void {
     takeScreenshot();
     modalSetOpen(true);
   }
@@ -35,9 +37,12 @@ export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.E
       <div className={"filler"} />
       <MonthSwitchComponent />
       <div className={"filler"} />
-      <Button onClick={(): void => onReportIssueButtonClick()} size="small" variant="secondary">
-        Zgłoś błąd
-      </Button>
+      <Link onClick={(): void => onReportIssueClick()}>
+        <Typography className={"reportIssueLink"}>
+          Zgłoś błąd
+          <SettingsIcon />
+        </Typography>
+      </Link>
       <ReportIssueModal open={modalOpen} setOpen={modalSetOpen} screenshot={image} />
     </div>
   );
