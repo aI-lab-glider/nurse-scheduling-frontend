@@ -19,7 +19,6 @@ interface RouteButtonsOptions {
   tabs: Tabs[];
   disabled?: boolean;
   id?: string;
-  fullWidth?: boolean;
 }
 
 const useStyles = makeStyles(() => ({
@@ -78,10 +77,7 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
     <div className={"tabs-and-buttons"}>
       <TabContext value={tab}>
         <div className={"tabs-row"} id={id}>
-          <div
-            className={"tabs-and-buttons"}
-            style={props.fullWidth ? {} : { padding: `0px ${scheduleMargin}` }}
-          >
+          <div className={"tabs-and-buttons"} style={{ padding: `0px ${scheduleMargin}` }}>
             <TabList
               classes={{ indicator: classes.indicatorStyle }}
               onChange={!props.disabled ? handleChange : void 0}
