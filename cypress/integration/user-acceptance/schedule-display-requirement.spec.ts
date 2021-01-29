@@ -3,7 +3,7 @@ import { ShiftCode } from "../../../src/common-models/shift-info.model";
 
 context("Display schedule", () => {
   it("Should be able to load and display schedule", () => {
-    cy.loadSchedule("example_2.xlsx");
+    cy.loadScheduleToMonth("example_2.xlsx");
     cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 }).should("exist");
   });
 
@@ -17,15 +17,45 @@ context("Display schedule", () => {
   });
 
   it("Should be able to read number of workers in 2nd, 15th and 28th November 2020", () => {
-    cy.get("[data-cy=foundationInfoSection]").children().eq(0).children().eq(5).contains(0);
-    cy.get("[data-cy=foundationInfoSection]").children().eq(0).children().eq(18).contains(0);
-    cy.get("[data-cy=foundationInfoSection]").children().eq(0).children().eq(31).contains(0);
+    cy.get("[data-cy=foundationInfoSection]")
+      .children()
+      .eq(0)
+      .children()
+      .eq(5 + 2)
+      .contains(0);
+    cy.get("[data-cy=foundationInfoSection]")
+      .children()
+      .eq(0)
+      .children()
+      .eq(5 + 15)
+      .contains(0);
+    cy.get("[data-cy=foundationInfoSection]")
+      .children()
+      .eq(0)
+      .children()
+      .eq(5 + 28)
+      .contains(0);
   });
 
   it("Should be able to read number of children in 2nd, 15th and 28th November 2020", () => {
-    cy.get("[data-cy=foundationInfoSection]").children().eq(1).children().eq(5).contains(24);
-    cy.get("[data-cy=foundationInfoSection]").children().eq(1).children().eq(18).contains(24);
-    cy.get("[data-cy=foundationInfoSection]").children().eq(1).children().eq(31).contains(24);
+    cy.get("[data-cy=foundationInfoSection]")
+      .children()
+      .eq(1)
+      .children()
+      .eq(5 + 2)
+      .contains(24);
+    cy.get("[data-cy=foundationInfoSection]")
+      .children()
+      .eq(1)
+      .children()
+      .eq(5 + 15)
+      .contains(24);
+    cy.get("[data-cy=foundationInfoSection]")
+      .children()
+      .eq(1)
+      .children()
+      .eq(5 + 28)
+      .contains(24);
   });
 
   it("Should be able to read name and surname of worker", () => {
@@ -39,10 +69,12 @@ context("Display schedule", () => {
   });
 
   const shiftCodes = [
-    "PN",
     "W",
     "W",
-    "DN",
+    "W",
+    "W",
+    "W",
+    "W",
     "W",
     "D",
     "R",
@@ -73,6 +105,11 @@ context("Display schedule", () => {
     "PN",
     "W",
     "DN",
+    "W",
+    "W",
+    "W",
+    "W",
+    "W",
     "W",
   ];
 

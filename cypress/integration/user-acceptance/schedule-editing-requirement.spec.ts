@@ -1,5 +1,5 @@
 import { ShiftCode } from "../../../src/common-models/shift-info.model";
-import { WorkerInfoModel, WorkerType } from "../../../src/common-models/worker-info.model";
+import { WorkerType } from "../../../src/common-models/worker-info.model";
 import { ChangeFoundationInfoCellOptions, FoundationInfoRowType } from "../../support/commands";
 
 interface WorkerCellDescription {
@@ -13,8 +13,8 @@ const workerCells: WorkerCellDescription[] = [
   {
     workerType: WorkerType.NURSE,
     workerIdx: 0,
-    shiftIdx: 0,
-    actualShiftCode: ShiftCode.DN,
+    shiftIdx: 6,
+    actualShiftCode: ShiftCode.U,
     newShiftCode: ShiftCode.D,
   },
 ];
@@ -23,18 +23,18 @@ const childrenInfoCell: ChangeFoundationInfoCellOptions = {
   newValue: 1,
   actualValue: 24,
   rowType: FoundationInfoRowType.ChildrenInfoRow,
-  cellIdx: 0,
+  cellIdx: 6,
 };
 
 const extraWorkerInfoCell: ChangeFoundationInfoCellOptions = {
   newValue: 10,
   actualValue: 0,
   rowType: FoundationInfoRowType.ExtraWorkersRow,
-  cellIdx: 0,
+  cellIdx: 6,
 };
 describe("schedule editing requirement", () => {
   beforeEach(() => {
-    cy.loadSchedule();
+    cy.loadScheduleToMonth();
     cy.enterEditMode();
   });
 
