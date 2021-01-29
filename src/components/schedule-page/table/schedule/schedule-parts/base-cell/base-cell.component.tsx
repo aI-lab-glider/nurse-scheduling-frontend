@@ -12,6 +12,11 @@ import { getEmptyImage } from "react-dnd-html5-backend";
 import { useRef } from "react";
 import { usePopper } from "react-popper";
 import { Popper } from "./popper";
+import { CellDetails } from "./cell-details-content.component";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
+import useComponentVisible from "./use-component-visible";
+import mergeRefs from "react-merge-refs";
 
 export enum CellManagementKeys {
   Enter = "Enter",
@@ -69,6 +74,9 @@ export function BaseCellComponent({
   onDragEnd,
   sectionKey,
 }: BaseCellOptions): JSX.Element {
+  const { year } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
+  );
   const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
   const errorTriangle = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -80,6 +88,10 @@ export function BaseCellComponent({
 
   const [isToolTipOpen, setToolTipOpen] = useState(false);
   const { styles, attributes } = usePopper(errorTriangle.current, tooltipRef.current);
+
+  const cellDetailsPopperRef = useRef<HTMLDivElement>(null);
+
+  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
 
   function showErrorTooltip(): void {
     setToolTipOpen(true);
@@ -145,12 +157,16 @@ export function BaseCellComponent({
     return "thisMonth";
   }
 
+  function toggleComponentVisibility(): void {
+    setIsComponentVisible(!isComponentVisible);
+  }
   //  #region view
   return (
     <td
-      ref={drop}
+      ref={mergeRefs([ref, drop])}
       className={classNames("mainCell", { selection: isSelected, blocked: isBlocked })}
       id={getId()}
+      onClick={(): void => toggleComponentVisibility()}
       onBlur={(): void => {
         onBlur?.();
       }}
@@ -172,11 +188,31 @@ export function BaseCellComponent({
             {...attributes}
             data={
               <div>
-                <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Bład w linii: {rowIndex}
+                <h3>{TranslationHelper.polishMonths[monthNumber || 0]}</h3> Błąd w linii: {rowIndex}
                 , pozycji: {index}. Wartość komórki: {value}
               </div>
             }
             isOpen={isToolTipOpen}
+          />
+          <Popper
+            ref={cellDetailsPopperRef}
+            className="cell-details-popper"
+            style={
+              usePopper(useRef<HTMLDivElement>(null).current, cellDetailsPopperRef.current).styles
+            }
+            isOpen={isComponentVisible && isBlocked && value !== ""}
+            data={
+              <CellDetails
+                index={index}
+                day={verboseDate?.date || 0}
+                month={monthNumber || 0}
+                year={year}
+                rowIndex={rowIndex}
+                shiftcode={value}
+                sectionKey={sectionKey}
+                close={(): void => setIsComponentVisible(false)}
+              />
+            }
           />
           <div className={"leftBorder leftBorderColor"} />
           {(!isPointerOn || (isPointerOn && isBlocked)) && (
