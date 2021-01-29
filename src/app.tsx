@@ -14,7 +14,6 @@ import { ScheduleDataActionCreator } from "./state/reducers/month-state/schedule
 import { NotificationProvider } from "./components/common-components/notification/notification.context";
 import { NetlifyProFooter } from "./components/common-components/netlify-pro-footer/netlify-pro-footer.component";
 import isElectron from "is-electron";
-import { ScheduleMarginProvider } from "./components/schedule-page/schedule-margin-context/schedule-margin-context";
 import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import JiraLikeDrawer from "./components/common-components/drawer/jira-like-drawer.component";
@@ -62,24 +61,22 @@ function App(): JSX.Element {
     <>
       <div>
         <NotificationProvider>
-          <ScheduleMarginProvider>
-            <JiraLikeDrawerProvider>
-              <Switch>
-                <Route path="/">
-                  <Box className={classes.root}>
-                    <Box className={classes.content}>
-                      <HeaderComponent isNewMonthPage={false} />
-                      <RouteButtonsComponent tabs={tabs} disabled={editMode} />
-                    </Box>
-                    <Box className={classes.drawer}>
-                      <JiraLikeDrawer />
-                    </Box>
+          <JiraLikeDrawerProvider>
+            <Switch>
+              <Route path="/">
+                <Box className={classes.root}>
+                  <Box className={classes.content}>
+                    <HeaderComponent isNewMonthPage={false} />
+                    <RouteButtonsComponent tabs={tabs} disabled={editMode} />
                   </Box>
-                  {isElectron() ? <></> : <NetlifyProFooter />}
-                </Route>
-              </Switch>
-            </JiraLikeDrawerProvider>
-          </ScheduleMarginProvider>
+                  <Box className={classes.drawer}>
+                    <JiraLikeDrawer />
+                  </Box>
+                </Box>
+                {isElectron() ? <></> : <NetlifyProFooter />}
+              </Route>
+            </Switch>
+          </JiraLikeDrawerProvider>
         </NotificationProvider>
       </div>
     </>

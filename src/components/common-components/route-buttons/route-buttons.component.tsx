@@ -8,7 +8,6 @@ import TabList from "@material-ui/lab/TabList";
 import TabPanel from "@material-ui/lab/TabPanel";
 import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_route-buttons.module.scss";
-import { useScheduleMargin } from "../../schedule-page/schedule-margin-context/schedule-margin-context";
 
 interface Tabs {
   label: string;
@@ -71,13 +70,11 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
     },
   }))((props) => <Tab disableRipple {...props} />);
 
-  const { scheduleMargin } = useScheduleMargin();
-
   return (
     <div className={"tabs-and-buttons"}>
       <TabContext value={tab}>
         <div className={"tabs-row"} id={id}>
-          <div className={"tabs-and-buttons"} style={{ padding: `0px ${scheduleMargin}` }}>
+          <div className={"tabs-and-buttons"}>
             <TabList
               classes={{ indicator: classes.indicatorStyle }}
               onChange={!props.disabled ? handleChange : void 0}

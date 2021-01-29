@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
+import { Button } from "../../common-components";
 
 interface SpanErrorOptions {
   errors?: ScheduleErrorMessageModel[];
