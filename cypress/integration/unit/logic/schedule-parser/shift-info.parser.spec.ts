@@ -25,7 +25,7 @@ const TestCases: { data: string[][]; expectedData: DataRowParser[]; errorCount: 
     ],
     expectedData: [
       new DataRowParser(["opiekunka 1", "N", "W", "N", "W", "D", "N", "W", "L4", "U"]),
-      new DataRowParser(["opiekunka 2", "W", "L4", "L4", "L4", "L4", "N", "W", "L4", "U"]),
+      new DataRowParser(["opiekunka 2", "W", "L4", "L4", "L4", "W", "N", "W", "L4", "U"]),
       new DataRowParser(["opiekunka 3", "N", "W", "N", "W", "D", "N", "W", "L4", "U"]),
     ],
     errorCount: 5,
