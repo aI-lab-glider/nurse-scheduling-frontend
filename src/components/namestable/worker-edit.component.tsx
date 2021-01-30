@@ -91,6 +91,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     return {
       label: translateAndCapitalizeWorkerType(workerType),
       action: (): void => updateWorkerInfo("workerType", workerType),
+      dataCy: "worker-button",
     };
   });
 
@@ -99,6 +100,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     return {
       label: translateAndCapitalizeContractType(contractType),
       action: (): void => updateWorkerInfo("contractType", contractType),
+      dataCy: "contract-button",
     };
   });
 
@@ -107,6 +109,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     return {
       label: timeType,
       action: (): void => updateWorkerInfo("employmentTime", timeType),
+      dataCy: "time-contract-button",
     };
   });
 
