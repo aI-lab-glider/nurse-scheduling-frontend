@@ -9,13 +9,17 @@ import {
   daysInMonth,
 } from "../../src/state/reducers/month-state/schedule-data/common-reducers";
 import { ScheduleKey } from "../../src/api/persistance-store.model";
+export type CypressScreenshotOptions = Partial<
+  Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions
+  >;
+
+
 export interface GetWorkerShiftOptions {
   workerType: WorkerType;
   workerIdx: number;
   shiftIdx: number;
   selector?: "cell" | "highlighted-cell";
 }
-
 export interface CheckWorkerShiftOptions extends GetWorkerShiftOptions {
   desiredShiftCode: ShiftCode;
 }
@@ -132,6 +136,49 @@ Cypress.Commands.add("leaveEditMode", () => {
   cy.get("[data-cy=leave-edit-mode]").click();
   return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
 });
+
+Cypress.Commands.add(
+  "screenshotSync",
+  (awaitTime = 100, cyScreenshotOptions?: CypressScreenshotOptions) => {
+    cy.get("#header").invoke("css", "position", "absolute");
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.screenshot(cyScreenshotOptions).wait(awaitTime);
+    return cy.get("#header").invoke("css", "position", null);
+  }
+);
+
+export enum FoundationInfoRowType {
+  ExtraWorkersRow = 0,
+  ChildrenInfoRow = 1,
+  NurseCountRow = 2,
+  BabysitterCountRow = 3,
+}
+export interface GetFoundationInfoCellOptions {
+  rowType: FoundationInfoRowType;
+  cellIdx: number;
+  actualValue: number;
+}
+Cypress.Commands.add(
+  "getFoundationInfoCell",
+  ({ cellIdx, rowType, actualValue }: GetFoundationInfoCellOptions) => {
+    cy.get("[data-cy=foundationInfoSection]")
+      .children()
+      .eq(rowType)
+      .children()
+      .eq(cellIdx)
+      .contains(actualValue);
+  }
+);
+
+export interface ChangeFoundationInfoCellOptions extends GetFoundationInfoCellOptions {
+  newValue: number;
+}
+Cypress.Commands.add(
+  "changeFoundationInfoCell",
+  ({ newValue, ...getCellOptions }: ChangeFoundationInfoCellOptions) => {
+    cy.getFoundationInfoCell(getCellOptions).type(`${newValue}{enter}`);
+  }
+);
 
 export function numberOfWeeksInMonth(month: number, year: number): number {
   const [missingPrev, missingNext] = calculateMissingFullWeekDays(new ScheduleKey(month, year));
