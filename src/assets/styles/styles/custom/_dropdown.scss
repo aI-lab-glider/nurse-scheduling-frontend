@@ -1,5 +1,5 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public 
- * License, v. 2.0. If a copy of the MPL was not distributed with this 
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 .dropdown-container {
@@ -12,7 +12,6 @@
   border-bottom-right-radius: 4px;
   box-shadow: 0 2.8px 2.2px $gray-400, 0 6.7px 5.3px $gray-400;
   position: relative;
-  width: 118px;
   margin-top: -20px;
   background-color: white;
 
@@ -40,17 +39,42 @@
 }
 
 .beCenteredDamnit {
-  width: 150%;
-  margin-left: -25%;
+  width: calc(100% + 70px);
+  margin-left: -30px;
+  padding-left: 10px;
+  padding-right: 10px;
   display: flex;
   justify-content: space-between;
 }
 
-#onTopButton {
+#z-index1300 {
+  z-index: 1300;
+}
+
+#contract-onTopButton,
+#file-dropdown-onTopButton,
+#position-onTopButton,
+#contract-time-dropdown-onTopButton {
   z-index: 20000;
   position: relative;
 }
 
-#z-index1300 {
-  z-index: 1300;
+#file-dropdown,
+#file-dropdown-onTopButton {
+  width: 108px;
+}
+
+#position,
+#position-onTopButton {
+  width: 164px;
+}
+
+#contract,
+#contract-onTopButton {
+  width: 192px;
+}
+
+#contract-time-dropdown,
+#contract-time-dropdown-onTopButton {
+  width: 112px;
 }

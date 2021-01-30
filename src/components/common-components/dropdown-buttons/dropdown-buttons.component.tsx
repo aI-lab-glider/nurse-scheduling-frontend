@@ -43,7 +43,7 @@ export function DropdownButtons({
     <div className="dropdown-container">
       <Button
         variant={variant}
-        id="onTopButton"
+        id={dataCy + "-onTopButton"}
         onClick={handleToggle}
         ref={anchorRef}
         data-cy={dataCy}
@@ -61,9 +61,11 @@ export function DropdownButtons({
         open={open}
         placement="bottom"
         anchorEl={anchorRef.current}
-        id="z-index1300">
+        disablePortal
+        id="z-index1300"
+      >
         <ClickAwayListener onClickAway={handleClickAway}>
-          <div className="dropdown-buttons-list">
+          <div className="dropdown-buttons-list" id={dataCy}>
             {buttons.map((item) => (
               <div
                 className="dropdown-button"

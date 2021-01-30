@@ -70,12 +70,8 @@ export function ColorSelector({
           </IconButton>
         )}
 
-        <div className="beCenteredDamnit">
-          <div>{mainLabel}</div>
-          <div>
-            <ArrowDropDownIcon />
-          </div>
-        </div>
+        {mainLabel}
+        <ArrowDropDownIcon />
       </Button>
       <Popper
         open={open}
@@ -155,12 +151,8 @@ export function ColorSelector({
             </IconButton>
           )}
 
-          <div className="beCenteredDamnit">
-            <div>{mainLabel}</div>
-            <div>
-              <ArrowDropDownIcon />
-            </div>
-          </div>
+          {mainLabel}
+          <ArrowDropDownIcon />
         </Button>
       </Popper>
     </div>
