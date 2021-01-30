@@ -2,21 +2,19 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import {WeekDay} from "../../common-models/month-info.model";
-import {MetadataProvider} from "../providers/metadata-provider.model";
-import {MonthInfoLogic} from "../schedule-logic/month-info.logic";
-import {InputFileErrorCode, ScheduleError} from "../../common-models/schedule-error.model";
+import { WeekDay } from "../../common-models/month-info.model";
+import { MetadataProvider } from "../providers/metadata-provider.model";
+import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
+import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
 
 export class MetaDataParser extends MetadataProvider {
   public monthLogic: MonthInfoLogic;
   private _parseErrors: ScheduleError[] = [];
-  private _days: number[] = [];
 
   constructor(month: number, year: number, raw: string[][]) {
     super();
 
     const [days] = this.extractMetadata(raw);
-    this._days = days;
     this.monthLogic = new MonthInfoLogic(month, year.toString(), days);
   }
 
@@ -42,13 +40,12 @@ export class MetaDataParser extends MetadataProvider {
       return [[]];
     }
 
-
     const monthDays = raw[1].slice(1);
 
     const days = Array<number>();
 
     monthDays.forEach((a, id) => {
-      var numDay = parseInt(a);
+      let numDay = parseInt(a);
       if (typeof numDay !== "number" || numDay < 1 || numDay > 31) {
         this.logLoadFIleError(
           "Nieodpowiednie dane wpisane w dniu miesiąca w kolumnie numer " + (id + 1)
@@ -60,7 +57,6 @@ export class MetaDataParser extends MetadataProvider {
 
     return [days];
   }
-
 
   public get dates(): number[] {
     return this.monthLogic.dates;

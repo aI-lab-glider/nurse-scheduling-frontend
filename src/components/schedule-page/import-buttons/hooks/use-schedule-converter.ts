@@ -52,7 +52,6 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
 
   return {
     monthModel: monthModel,
-    scheduleSheet: scheduleSheet,
     setSrcFile: setSrcFile,
     scheduleErrors: scheduleErrors,
   };
