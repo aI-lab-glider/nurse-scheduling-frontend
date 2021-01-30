@@ -85,6 +85,10 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       }
     });
 
+    if (outerArray.length === 0) {
+      throw new Error(InputFileErrorCode.EMPTY_FILE);
+    }
+
     if (Object.keys(outerArray).length !== 0) {
       const parser = new ScheduleParser(month, year, outerArray);
 
@@ -95,7 +99,6 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
         ...parser.sections.NurseInfo.errors,
         ...parser.sections.BabysitterInfo.errors,
       ]);
-      //todo coto
       setMonthModel(cropScheduleDMToMonthDM(parser.schedule.getDataModel()));
     }
     return;
