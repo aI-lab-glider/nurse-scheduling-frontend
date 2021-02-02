@@ -49,7 +49,7 @@ export function DropdownButtons({
         data-cy={dataCy}
         disabled={disabled}
       >
-        <div className="beCenteredDamnit">
+        <div className="centeredButtonWithArrow">
           <div>{mainLabel}</div>
           <div>
             <ArrowDropDownIcon />
@@ -62,7 +62,7 @@ export function DropdownButtons({
         placement="bottom"
         anchorEl={anchorRef.current}
         disablePortal
-        id="z-index1300"
+        className={"z-index1300"}
       >
         <ClickAwayListener onClickAway={handleClickAway}>
           <div className="dropdown-buttons-list" id={dataCy}>

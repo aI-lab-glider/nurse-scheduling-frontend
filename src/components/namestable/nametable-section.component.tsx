@@ -14,6 +14,7 @@ import { MetadataLogic } from "../../logic/schedule-logic/metadata.logic";
 import { ArrayHelper } from "../../helpers/array.helper";
 import { VerboseDate } from "../../common-models/month-info.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
+import classNames from "classnames/bind";
 
 export interface NameTableCellOptions {
   dataRow: DataRow[];
@@ -63,14 +64,6 @@ export function NameTableSection({
     }
   }
 
-  function isClickable(flag: boolean): string {
-    if (flag) {
-      return "pointer";
-    }
-
-    return "default";
-  }
-
   function getNames(): string[] {
     return dataRow.map((a) => a.rowKey);
   }
@@ -86,8 +79,10 @@ export function NameTableSection({
               <tr
                 key={cellData}
                 onClick={(): void => toggleDrawer(true, cellData)}
-                className="nametableRow"
-                id={isClickable(clickable)}
+                className={classNames(
+                  "nametableRow",
+                  clickable ? "pointerCursor" : "defaultCursor"
+                )}
               >
                 <td>
                   <span>{cellData}</span>

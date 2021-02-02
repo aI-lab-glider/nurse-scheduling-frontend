@@ -13,7 +13,7 @@
   box-shadow: 0 2.8px 2.2px $gray-400, 0 6.7px 5.3px $gray-400;
   position: relative;
   margin-top: -20px;
-  background-color: white;
+  background-color: $white;
 
   .dropdown-button {
     position: relative;
@@ -23,13 +23,12 @@
 
     &:hover {
       cursor: pointer;
-      font-weight: 100;
       box-shadow: 0 0;
       background-color: rgba(29, 53, 87, 0.1);
     }
 
     padding: 7px 16px 7px;
-    background-color: white;
+    background-color: $white;
     color: $primary;
   }
 
@@ -38,7 +37,7 @@
   }
 }
 
-.beCenteredDamnit {
+.centeredButtonWithArrow {
   width: calc(100% + 70px);
   margin-left: -30px;
   padding-left: 10px;
@@ -47,7 +46,7 @@
   justify-content: space-between;
 }
 
-#z-index1300 {
+.z-index1300 {
   z-index: 1300;
 }
 
