@@ -10,8 +10,8 @@ import { ActionModel } from "../../../state/models/action.model";
 import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
 import { Button } from "../../common-components";
 import ValidationDrawerComponent from "../validation-drawer/validation-drawer.component";
-import UndoIcon from "@material-ui/icons/Undo";
-import RedoIcon from "@material-ui/icons/Redo";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
 import { UndoActionCreator } from "../../../state/reducers/undoable.action-creator";
 import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
@@ -63,10 +63,10 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
           onClick={(): void => {
             dispatcher(UndoActionCreator.undo(TEMPORARY_SCHEDULE_UNDOABLE_CONFIG));
           }}
-          variant="circle-outlined"
+          variant="circle"
           data-cy="undo-button"
         >
-          <UndoIcon className="edit-icons" />
+          <ArrowBackIcon className="edit-icons" />
         </Button>
 
         <Button
@@ -74,9 +74,9 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
             dispatcher(UndoActionCreator.redo(TEMPORARY_SCHEDULE_UNDOABLE_CONFIG));
           }}
           data-cy="redo-button"
-          variant="circle-outlined"
+          variant="circle"
         >
-          <RedoIcon className="edit-icons" />
+          <ArrowForwardIcon className="edit-icons" />
         </Button>
 
         <div id="edit-panel-text-container">
@@ -85,33 +85,19 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
 
         <ValidationDrawerComponent open={openDrawer} setOpen={setOpenDrawer} />
 
-        <Button
-          size="small"
-          data-cy="check-schedule-button"
-          className="submit-button"
-          variant="primary"
-          onClick={prepareDrawer}
-        >
+        <Button data-cy="check-schedule-button" variant="primary" onClick={prepareDrawer}>
           Sprawdź Plan
         </Button>
 
         <div className="filler" />
 
         <Link to="/">
-          <Button
-            onClick={closeEdit}
-            size="small"
-            className="submit-button"
-            variant="outlined"
-            data-cy="leave-edit-mode"
-          >
+          <Button onClick={closeEdit} variant="secondary" data-cy="leave-edit-mode">
             Wyjdź
           </Button>
         </Link>
 
         <Button
-          size="small"
-          className="submit-button"
           data-cy="save-schedule-button"
           variant="primary"
           onClick={(): void => {
