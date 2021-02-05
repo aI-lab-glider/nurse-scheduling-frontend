@@ -41,6 +41,15 @@
     }
   }
 
+  .revision-select {
+    font-size: $font-size-base;
+    letter-spacing: 0.75px;
+    border: 0;
+    background: inherit;
+    font-family: $font-family-primary;
+    color: $primary;
+  }
+
   .filler {
     flex-grow: 1;
   }
