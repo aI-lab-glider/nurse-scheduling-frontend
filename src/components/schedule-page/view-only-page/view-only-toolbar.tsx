@@ -10,8 +10,25 @@ interface ViewOnlyToolbarOptions {
   openEdit: () => void;
 }
 export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Element {
+  const [revisionType, setRevisionType] = React.useState<string>("actual");
+
+  const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>) => {
+    setRevisionType(event.target.value);
+  };
+
   return (
     <div className="buttons">
+      <form>
+        <select
+          value={revisionType}
+          onChange={handleChange}
+          className="revision-select"
+          data-cy="revision-select"
+        >
+          <option value="primary">wersja podstawowa</option>
+          <option value="actual">wersja aktualna</option>
+        </select>
+      </form>
       <div className="filler" />
       <ImportButtonsComponent />
       <Link to="/schedule-editing">
