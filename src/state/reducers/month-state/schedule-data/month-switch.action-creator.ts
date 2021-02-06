@@ -19,15 +19,16 @@ export class MonthSwitchActionCreator {
     return async (dispatch, getState): Promise<void> => {
       const history = getState().history;
       const actualSchedule = getState().actualState.persistentSchedule.present;
+      const { revision } = getState().actualState;
       const actualMonth = cropScheduleDMToMonthDM(actualSchedule);
       const { month, year } = actualMonth.scheduleKey;
 
-      const historyAction = HistoryReducerActionCreator.addToMonthHistory(actualMonth);
+      const historyAction = HistoryReducerActionCreator.addToMonthHistory(actualMonth, revision);
 
       const newDate = getDateWithMonthOffset(month, year, offset);
       const newMonthKey = new ScheduleKey(newDate.getMonth(), newDate.getFullYear());
 
-      const nextMonth = await fetchOrCreateMonthDM(newMonthKey, history, actualMonth);
+      const nextMonth = await fetchOrCreateMonthDM(newMonthKey, history, actualMonth, revision);
       const addNewScheduleAction = ScheduleDataActionCreator.setScheduleFromMonthDM(nextMonth);
 
       dispatch(historyAction);

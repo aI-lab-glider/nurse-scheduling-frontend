@@ -4,16 +4,21 @@
 import { MonthDataModel } from "../../common-models/schedule-data.model";
 import { ActionModel } from "../models/action.model";
 import { HistoryStateModel } from "../models/application-state.model";
+import { RevisionType } from "../../api/persistance-store.model";
 
 enum HistoryReducerAction {
   ADD_MONTH_STATE = "ADD_MONTH_STATE",
 }
 
 export class HistoryReducerActionCreator {
-  static addToMonthHistory(monthModel: MonthDataModel): ActionModel<MonthDataModel> {
+  static addToMonthHistory(
+    monthModel: MonthDataModel,
+    revision: RevisionType
+  ): ActionModel<MonthDataModel> {
     return {
       type: HistoryReducerAction.ADD_MONTH_STATE,
       payload: monthModel,
+      meta: revision,
     };
   }
 }
@@ -22,12 +27,14 @@ export function historyReducer(
   state: HistoryStateModel = {},
   action: ActionModel<MonthDataModel>
 ): HistoryStateModel {
-  if (!action.payload) {
+  if (!action.payload || !action.meta) {
     return state;
   }
   switch (action.type) {
     case HistoryReducerAction.ADD_MONTH_STATE:
-      return { ...state, [action.payload.scheduleKey.dbKey]: action.payload };
+      const dbKey = action.payload.scheduleKey.dbKey;
+      const revision = action.meta;
+      return { ...state, [`${dbKey}_${revision}`]: action.payload };
     default:
       return state;
   }

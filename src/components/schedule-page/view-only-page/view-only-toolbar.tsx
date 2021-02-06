@@ -26,11 +26,16 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
   useEffect(() => {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
-    if (currentYear > year || (currentYear === year && currentMonth >= month)) {
-      setIsScheduleMonthInFuture(true);
+    let currentRev, isFuture;
+    if (year > currentYear || (year === currentYear && month > currentMonth)) {
+      isFuture = true;
+      currentRev = "primary";
     } else {
-      setIsScheduleMonthInFuture(false);
+      isFuture = false;
+      currentRev = "actual";
     }
+    setIsScheduleMonthInFuture(isFuture);
+    dispatch(RevisionReducerActionCreator.changeRevision(currentRev));
   }, [year, month]);
 
   function isRevisionType(value: string): value is RevisionType {
@@ -38,9 +43,9 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
   }
 
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>) => {
-    const { value } = event.target;
-    if (isRevisionType(value)) {
-      dispatch(RevisionReducerActionCreator.changeRevision(value));
+    const currentRev = event.target.value;
+    if (isRevisionType(currentRev)) {
+      dispatch(RevisionReducerActionCreator.changeRevision(currentRev));
     }
   };
 
@@ -48,6 +53,8 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
     <div className="buttons">
       <div className="revision-type-container">
         {isScheduleMonthInFuture ? (
+          <p>wersja podstawowa</p>
+        ) : (
           <form>
             <select
               value={revision}
@@ -59,8 +66,6 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
               <option value="actual">wersja aktualna</option>
             </select>
           </form>
-        ) : (
-          <p>wersja podstawowa</p>
         )}
       </div>
       <div className="filler" />
