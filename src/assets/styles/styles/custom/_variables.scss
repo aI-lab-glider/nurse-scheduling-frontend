@@ -11,12 +11,17 @@ $enable-grid-classes: true !default;
 $enable-print-styles: true !default;
 
 // Header
+$header-height: 52px !default;
 $primary-header-color: #1d3557 !default;
 $header-text-color: #ffffff !default;
 
 $babysitter-label-background: #ffd100 !default;
 $nurse-label-background: #c8dfff !default;
 $worker-table-border-color: #d5e6fe !default;
+
+// Drawer
+
+$drawer-header-height: 67px !default;
 
 // Shifts
 
@@ -1036,6 +1041,7 @@ $footer-link-color: $gray-600 !default;
 $footer-link-hover-color: $gray-700 !default;
 $footer-heading-color: $gray-600 !default;
 $footer-heading-font-size: $font-size-sm !default;
+$footer-height: 72px !default;
 
 // Alert
 

@@ -33,11 +33,11 @@ const useStyles = makeStyles(() => ({
     display: "block",
     overflowX: "auto",
     overflowY: "auto",
-    height: "calc(100vh - 72px)",
+    height: `calc(100vh - ${parseInt(ScssVars.footerHeight.slice(0, -2))}px)`,
     flexGrow: 1,
   },
   drawer: {
-    marginTop: 52,
+    marginTop: ScssVars.headerHeight,
     background: ScssVars.white,
     borderLeft: "1px solid #EFF0F6",
     boxShadow: "0px 0px 5px 0px #00000015",

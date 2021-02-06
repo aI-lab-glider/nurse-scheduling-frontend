@@ -5,7 +5,7 @@ import { Drawer as MaterialDrawer, DrawerProps } from "@material-ui/core";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
-import DrawerContent from "./drawer-content.component";
+import DrawerHeader from "./drawer-header.component";
 
 const useStyles = makeStyles({
   drawer: {
@@ -47,9 +47,9 @@ export default function Drawer(options: DrawerOptions): JSX.Element {
 
   return (
     <MaterialDrawer classes={{ paper: classes.drawer }} {...otherOptions} anchor={"right"}>
-      <DrawerContent title={title} setOpen={setOpen}>
+      <DrawerHeader title={title} setOpen={setOpen}>
         {children}
-      </DrawerContent>
+      </DrawerHeader>
     </MaterialDrawer>
   );
 }

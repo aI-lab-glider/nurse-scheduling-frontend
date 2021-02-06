@@ -10,10 +10,8 @@ import classNames from "classnames";
 
 const useStyles = makeStyles({
   drawerContentMargin: {
-    paddingTop: 25,
-    paddingLeft: 24,
-    paddingRight: 24,
-    paddingBottom: 15,
+    padding: "25px 24px 15px 24px",
+    height: ScssVars.drawerHeaderHeight,
   },
   fullHeight: {
     height: "100%",
@@ -33,12 +31,12 @@ const useStyles = makeStyles({
   },
 });
 
-export interface DrawerContentOptions extends DrawerProps {
+export interface DrawerHeaderOptions extends DrawerProps {
   title: string;
   setOpen: (open: boolean) => void;
 }
 
-export default function DrawerContent(options: DrawerContentOptions): JSX.Element {
+export default function DrawerHeader(options: DrawerHeaderOptions): JSX.Element {
   const classes = useStyles();
   const { title, setOpen, children } = options;
 
