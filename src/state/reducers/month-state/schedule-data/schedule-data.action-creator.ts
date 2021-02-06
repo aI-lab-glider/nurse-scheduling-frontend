@@ -36,10 +36,15 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static setScheduleFromMonthDM(newMonth: MonthDataModel): ThunkFunction<ScheduleDataModel> {
+  static setScheduleFromMonthDM(
+    newMonth: MonthDataModel,
+    revision?: RevisionType
+  ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
       const history = getState().history;
-      const { revision } = getState().actualState;
+      if (_.isNil(revision)) {
+        revision = getState().actualState.revision;
+      }
       const [prevMonth, nextMonth] = await getMonthNeighbours(newMonth, history, revision);
       const newSchedule = extendMonthDMToScheduleDM(prevMonth, newMonth, nextMonth);
       await this.setScheduleFromScheduleDM(newSchedule)(dispatch, getState);

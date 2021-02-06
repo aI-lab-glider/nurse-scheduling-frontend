@@ -1,15 +1,39 @@
-import { RevisionType } from "../../../api/persistance-store.model";
+import { RevisionType, ThunkFunction } from "../../../api/persistance-store.model";
 import { ActionModel } from "../../models/action.model";
+import {
+  fetchOrCreateMonthDM,
+  ScheduleDataActionCreator,
+} from "./schedule-data/schedule-data.action-creator";
+import { cropScheduleDMToMonthDM } from "../../../common-models/schedule-data.model";
 
 enum RevisionReducerAction {
   CHANGE_REVISION = "CHANGE_REVISION",
 }
 
 export class RevisionReducerActionCreator {
-  static changeRevision(revision: RevisionType): ActionModel<RevisionType> {
-    return {
-      type: RevisionReducerAction.CHANGE_REVISION,
-      payload: revision,
+  static changeRevision(revision: RevisionType): ThunkFunction<unknown> {
+    return async (dispatch, getState): Promise<void> => {
+      const history = getState().history;
+      const actualSchedule = getState().actualState.persistentSchedule.present;
+      const actualMonth = cropScheduleDMToMonthDM(actualSchedule);
+
+      const newMonth = await fetchOrCreateMonthDM(
+        actualMonth.scheduleKey,
+        history,
+        actualMonth,
+        revision
+      );
+      const setRevisionAction = ScheduleDataActionCreator.setScheduleFromMonthDM(
+        newMonth,
+        revision
+      );
+
+      dispatch({
+        type: RevisionReducerAction.CHANGE_REVISION,
+        payload: revision,
+      });
+
+      dispatch(setRevisionAction);
     };
   }
 }
