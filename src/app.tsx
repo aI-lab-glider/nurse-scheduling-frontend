@@ -28,16 +28,19 @@ interface TabData {
 const useStyles = makeStyles(() => ({
   root: {
     display: "flex",
-    overflow: "hidden",
   },
   content: {
+    display: "block",
     overflowX: "auto",
-    overflowY: "hidden",
+    overflowY: "auto",
+    height: "calc(100vh - 72px)",
+    flexGrow: 1,
   },
   drawer: {
     marginTop: 52,
     background: ScssVars.white,
-    boxShadow: "-10px 0px 20px rgb(0,0,0,0.3)",
+    borderLeft: "1px solid #EFF0F6",
+    boxShadow: "0px 0px 5px 0px #00000015",
     position: "relative",
     zIndex: 80,
   },

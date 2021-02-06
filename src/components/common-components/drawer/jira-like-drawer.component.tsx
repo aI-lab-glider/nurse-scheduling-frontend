@@ -9,7 +9,8 @@ import { useJiraLikeDrawer } from "./jira-like-drawer-context";
 
 const useStyles = makeStyles({
   drawer: {
-    minWidth: 750,
+    minWidth: 600,
+    height: "calc(100vh - 191px)",
   },
 });
 
