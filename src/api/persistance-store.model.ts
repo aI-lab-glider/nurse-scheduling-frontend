@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ThunkDispatch } from "redux-thunk";
 import { MonthDataModel, ScheduleDataModel } from "../common-models/schedule-data.model";
-import { WorkerInfoModel } from "../common-models/worker-info.model";
 import { ActionModel } from "../state/models/action.model";
 import { ApplicationStateModel } from "../state/models/application-state.model";
 import { ArrayPositionPointer } from "../helpers/array.helper";
@@ -54,13 +53,6 @@ export interface MonthRevision {
   _id: string;
   revisionType: RevisionType;
   data: MonthDataModel;
-}
-
-export interface MonthRecord {
-  primaryRevision: MonthRevision;
-  actualRevision: MonthRevision;
-  validityPeriod: ScheduleKeyString;
-  workersInfo: WorkerInfoModel[];
 }
 
 export abstract class PersistenceStoreProvider {
