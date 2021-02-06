@@ -90,8 +90,11 @@ export class ErrorMessageHelper {
       case InputFileErrorCode.EMPTY_FILE:
         message = `Błąd podczas wczytywania pliku wejściowego: Pusty plik`;
         break;
+      case InputFileErrorCode.UNHANDLED_FILE_EXTENSION:
+        message = `Błąd podczas wczytywania pliku wejściowego: Nieodpowiedni typ pliku`;
+        break;
       case InputFileErrorCode.LOAD_FILE_ERROR:
-        message = `${error.message}`;
+        message = `Napotkano błąd podczas wczytywania pliku: ${error.message}`;
         break;
       case NetworkErrorCode.NETWORK_ERROR:
         message = "Błąd połączenia";
