@@ -12,6 +12,7 @@ import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parse
 import { useFileReader } from "./use-file-reader";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { fromBuffer } from "file-type/browser";
 
 export interface UseScheduleConverterOutput {
   monthModel?: MonthDataModel;
@@ -27,24 +28,45 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
   const { month_number: month, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
+  const isFileMetaCorrect = async (fileContent: ArrayBuffer): Promise<boolean> => {
+    const ext = await fromBuffer(fileContent);
+    if (
+      !ext ||
+      ext.ext !== "xlsx" ||
+      ext.mime !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ) {
+      setScheduleErrors([
+        {
+          kind: InputFileErrorCode.UNHANDLED_FILE_EXTENSION,
+        },
+      ]);
+      setMonthModel(undefined);
+      return false;
+    }
+    return true;
+  };
 
   useEffect(() => {
     if (!fileContent) {
       return;
     }
 
-    const workbook = new Excel.Workbook();
-    workbook.xlsx.load(fileContent).then(() => {
-      try {
-        readFileContent(workbook);
-      } catch (e) {
-        setScheduleErrors([
-          {
-            kind: InputFileErrorCode.EMPTY_FILE,
-          },
-        ]);
-
-        setMonthModel(undefined);
+    isFileMetaCorrect(fileContent).then((val) => {
+      if (val) {
+        const workbook = new Excel.Workbook();
+        workbook.xlsx.load(fileContent).then(() => {
+          try {
+            readFileContent(workbook);
+          } catch (e) {
+            setScheduleErrors([
+              {
+                kind: InputFileErrorCode.LOAD_FILE_ERROR,
+                message: e.toString(),
+              },
+            ]);
+            setMonthModel(undefined);
+          }
+        });
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

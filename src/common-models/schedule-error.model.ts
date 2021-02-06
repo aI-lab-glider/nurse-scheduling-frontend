@@ -20,6 +20,7 @@ export enum ParseErrorCode {
 export enum InputFileErrorCode {
   EMPTY_FILE = "EMPTY_FILE",
   LOAD_FILE_ERROR = "LOAD_FILE_ERROR",
+  UNHANDLED_FILE_EXTENSION = "UNHANDLED_FILE_EXTENSION",
 }
 
 export enum NetworkErrorCode {
