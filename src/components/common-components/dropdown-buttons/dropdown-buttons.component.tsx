@@ -16,7 +16,8 @@ export interface ButtonData {
 interface DropdownOptions {
   buttons: ButtonData[];
   mainLabel: string;
-  variant?: ButtonVariant;
+  buttonVariant?: ButtonVariant;
+  variant?: string;
   dataCy?: string;
   disabled?: boolean;
 }
@@ -24,6 +25,7 @@ interface DropdownOptions {
 export function DropdownButtons({
   buttons,
   mainLabel,
+  buttonVariant,
   variant,
   dataCy,
   disabled = false,
@@ -42,8 +44,8 @@ export function DropdownButtons({
   return (
     <div className="dropdown-container">
       <Button
-        variant={variant}
-        id={dataCy + "-onTopButton"}
+        variant={buttonVariant}
+        id={variant + "-onTopButton"}
         onClick={handleToggle}
         ref={anchorRef}
         data-cy={dataCy}

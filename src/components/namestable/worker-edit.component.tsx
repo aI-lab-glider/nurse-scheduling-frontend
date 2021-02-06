@@ -138,7 +138,8 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
                   ? translateAndCapitalizeWorkerType(workerInfo.workerType)
                   : "Stanowisko"
               }
-              variant="secondary"
+              buttonVariant="secondary"
+              variant="position"
             />
           </Grid>
           <Grid item xs={12}>
@@ -153,7 +154,8 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
                       ? translateAndCapitalizeContractType(workerInfo.contractType)
                       : "Typ umowy"
                   }
-                  variant="secondary"
+                  buttonVariant="secondary"
+                  variant="contract"
                 />
               </Grid>
               <Grid item>
@@ -161,7 +163,8 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
                   dataCy="contract-time-dropdown"
                   buttons={contractTimeDrawerOptions}
                   mainLabel={workerInfo.employmentTime}
-                  variant="secondary"
+                  buttonVariant="secondary"
+                  variant="contract-time-dropdown"
                   disabled={workerInfo.contractType !== ContractType.EMPLOYMENT_CONTRACT}
                 />
               </Grid>
