@@ -19,8 +19,8 @@ type YearOffset = -1 | 1;
 export class ScheduleKey {
   constructor(public month: number, public year: number) {}
 
-  get dbKey(): ScheduleKeyString {
-    return `${this.month}_${this.year}`;
+  getRevisionKey(revision: RevisionType): RevisionKey {
+    return `${this.month}_${this.year}_${revision}`;
   }
 
   get nextMonthKey(): ScheduleKey {
@@ -43,32 +43,20 @@ export class ScheduleKey {
 }
 
 export type RevisionType = "primary" | "actual";
-
-export interface RevisionFilter {
-  revisionType: RevisionType;
-  validityPeriod: ScheduleKeyString;
-}
+export type RevisionKey = string;
 
 export interface MonthRevision {
-  _id: string;
-  revisionType: RevisionType;
+  _id: RevisionKey;
   data: MonthDataModel;
 }
 
 export abstract class PersistenceStoreProvider {
-  abstract async saveMonthRevision(
-    type: RevisionType,
-    monthDataModel: MonthDataModel
-  ): Promise<void>;
-  abstract async getMonthRevision(filter: RevisionFilter): Promise<MonthDataModel | undefined>;
-  abstract async saveSchedule(
-    type: RevisionType,
-    scheduleDataModel: ScheduleDataModel
-  ): Promise<void>;
+  abstract saveMonthRevision(type: RevisionType, monthDataModel: MonthDataModel): Promise<void>;
+  abstract getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined>;
+  abstract saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void>;
 
-  abstract async updateMonthPartBasedOnScheduleDM(
-    type: RevisionType,
-    monthKey: ScheduleKey,
+  abstract updateMonthPartBasedOnScheduleDM(
+    revisionKey: RevisionKey,
     scheduleDataModel: ScheduleDataModel,
     missingDays: number,
     updatePosition: ArrayPositionPointer

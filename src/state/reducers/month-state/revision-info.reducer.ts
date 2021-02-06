@@ -23,9 +23,9 @@ export class RevisionReducerActionCreator {
 
       const newMonth = await fetchOrCreateMonthDM(
         actualMonth.scheduleKey,
+        revision,
         history,
-        actualMonth,
-        revision
+        actualMonth
       );
       const setRevisionAction = ScheduleDataActionCreator.setScheduleFromMonthDM(
         newMonth,

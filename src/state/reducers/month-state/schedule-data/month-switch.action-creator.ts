@@ -28,7 +28,7 @@ export class MonthSwitchActionCreator {
       const newDate = getDateWithMonthOffset(month, year, offset);
       const newMonthKey = new ScheduleKey(newDate.getMonth(), newDate.getFullYear());
 
-      const nextMonth = await fetchOrCreateMonthDM(newMonthKey, history, actualMonth, revision);
+      const nextMonth = await fetchOrCreateMonthDM(newMonthKey, revision, history, actualMonth);
       const addNewScheduleAction = ScheduleDataActionCreator.setScheduleFromMonthDM(nextMonth);
 
       dispatch(historyAction);
@@ -44,8 +44,9 @@ export class MonthSwitchActionCreator {
       } = getState().actualState.persistentSchedule.present.schedule_info;
       if (month === undefined || year === undefined) return;
       const fromDate = getDateWithMonthOffset(month, year, offset);
+      const { revision } = getState().actualState;
       const copyingSchedule = getState().history[
-        new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).dbKey
+        new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).getRevisionKey(revision)
       ];
       const monthDataModel = copyMonthDM(new ScheduleKey(month, year), copyingSchedule);
       dispatch(ScheduleDataActionCreator.setScheduleFromMonthDM(monthDataModel));

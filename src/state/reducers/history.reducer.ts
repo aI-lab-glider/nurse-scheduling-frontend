@@ -32,9 +32,9 @@ export function historyReducer(
   }
   switch (action.type) {
     case HistoryReducerAction.ADD_MONTH_STATE:
-      const dbKey = action.payload.scheduleKey.dbKey;
-      const revision = action.meta;
-      return { ...state, [`${dbKey}_${revision}`]: action.payload };
+      const revision = action.meta as RevisionType;
+      const revisionKey = action.payload.scheduleKey.getRevisionKey(revision);
+      return { ...state, [revisionKey]: action.payload };
     default:
       return state;
   }

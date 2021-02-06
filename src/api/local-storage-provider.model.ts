@@ -16,9 +16,8 @@ import {
 import {
   MonthRevision,
   PersistenceStoreProvider,
-  RevisionFilter,
+  RevisionKey,
   RevisionType,
-  ScheduleKey,
 } from "./persistance-store.model";
 import _ from "lodash";
 import { calculateMissingFullWeekDays } from "../state/reducers/month-state/schedule-data/common-reducers";
@@ -38,17 +37,16 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     if (isMonthModelEmpty(monthDataModel)) {
       return;
     }
-    const id = `${monthDataModel.scheduleKey.dbKey}_${type}`;
+    const revisionKey = monthDataModel.scheduleKey.getRevisionKey(type);
     let revision = "";
     try {
-      const document = await this.storage.get(id);
+      const document = await this.storage.get(revisionKey);
       revision = document._rev;
     } catch {}
     this.storage.put({
       _rev: revision,
-      _id: id,
+      _id: revisionKey,
       data: monthDataModel,
-      revisionType: type,
     });
   }
 
@@ -60,8 +58,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     );
     if (missingFromPrev !== 0) {
       await this.updateMonthPartBasedOnScheduleDM(
-        type,
-        getScheduleKey(scheduleDataModel).prevMonthKey,
+        getScheduleKey(scheduleDataModel).prevMonthKey.getRevisionKey(type),
         scheduleDataModel,
         missingFromPrev,
         "TAIL"
@@ -70,8 +67,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
 
     if (missingFromNext !== 0) {
       await this.updateMonthPartBasedOnScheduleDM(
-        type,
-        getScheduleKey(scheduleDataModel).nextMonthKey,
+        getScheduleKey(scheduleDataModel).nextMonthKey.getRevisionKey(type),
         scheduleDataModel,
         missingFromNext,
         "HEAD"
@@ -80,14 +76,13 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
   }
 
   async updateMonthPartBasedOnScheduleDM(
-    type: RevisionType,
-    monthKey: ScheduleKey,
+    revisionKey: RevisionKey,
     scheduleDataModel: ScheduleDataModel,
     missingDays: number,
     updatePosition: ArrayPositionPointer
   ): Promise<void> {
     try {
-      const document = await this.storage.get(monthKey.dbKey);
+      const document = await this.storage.get(revisionKey);
       const updatedMonthDataModel = document.data;
       const revision = document._rev;
 
@@ -121,19 +116,18 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
 
       this.storage.put({
         _rev: revision,
-        _id: monthKey.dbKey,
+        _id: revisionKey,
         data: updatedMonthDataModel,
-        revisionType: type,
       });
     } catch {
       //TODO: Something should be done here :)
     }
   }
-  async getMonthRevision(filter: RevisionFilter): Promise<MonthDataModel | undefined> {
+  async getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined> {
     const revisions = await this.storage.allDocs({ include_docs: true });
     const result = revisions.rows.find((r) => {
       if (r.doc?.data.scheduleKey) {
-        return r.id === `${filter.validityPeriod}_${filter.revisionType}`;
+        return r.id === revisionKey;
       } else {
         return undefined;
       }

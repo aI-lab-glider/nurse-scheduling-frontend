@@ -16,12 +16,18 @@ export function NewMonthPlanComponent(): JSX.Element {
   const state = useSelector((state: ApplicationStateModel) => state);
   const currentMonth = state.actualState.persistentSchedule.present.schedule_info.month_number;
   const currentYear = state.actualState.persistentSchedule.present.schedule_info.year;
+  const { revision } = state.actualState;
+
   const nextDate = getDateWithMonthOffset(currentMonth, currentYear, 1);
   const prevDate = getDateWithMonthOffset(currentMonth, currentYear, -1);
   const nextMonth =
-    state.history[new ScheduleKey(nextDate.getMonth(), nextDate.getFullYear()).dbKey];
+    state.history[
+      new ScheduleKey(nextDate.getMonth(), nextDate.getFullYear()).getRevisionKey(revision)
+    ];
   const prevMonth =
-    state.history[new ScheduleKey(prevDate.getMonth(), prevDate.getFullYear()).dbKey];
+    state.history[
+      new ScheduleKey(prevDate.getMonth(), prevDate.getFullYear()).getRevisionKey(revision)
+    ];
   const { monthModel, setSrcFile } = useScheduleConverter();
 
   const hasValidNext =
