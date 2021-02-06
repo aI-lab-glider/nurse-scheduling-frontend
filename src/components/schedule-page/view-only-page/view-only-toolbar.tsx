@@ -5,18 +5,23 @@ import React, { useEffect } from "react";
 import { ImportButtonsComponent } from "../import-buttons/import-buttons.component";
 import { Link } from "react-router-dom";
 import { Button } from "../../common-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { RevisionReducerActionCreator } from "../../../state/reducers/month-state/revision-info.reducer";
+import { RevisionType } from "../../../api/persistance-store.model";
 
 interface ViewOnlyToolbarOptions {
   openEdit: () => void;
 }
 export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Element {
-  const [revisionType, setRevisionType] = React.useState<string>("actual");
   const [isScheduleMonthInFuture, setIsScheduleMonthInFuture] = React.useState<boolean>(false);
+  const dispatch = useDispatch();
+
   const { year, month_number: month } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
   );
+
+  const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
@@ -28,8 +33,15 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
     }
   }, [year, month]);
 
+  function isRevisionType(value: string): value is RevisionType {
+    return value === "primary" || value === "actual";
+  }
+
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>) => {
-    setRevisionType(event.target.value);
+    const { value } = event.target;
+    if (isRevisionType(value)) {
+      dispatch(RevisionReducerActionCreator.changeRevision(value));
+    }
   };
 
   return (
@@ -38,7 +50,7 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
         {isScheduleMonthInFuture ? (
           <form>
             <select
-              value={revisionType}
+              value={revision}
               onChange={handleChange}
               className="revision-select"
               data-cy="revision-select"
