@@ -62,7 +62,7 @@ export function DropdownButtons({
         placement="bottom"
         anchorEl={anchorRef.current}
         disablePortal
-        className={"z-index1300"}
+        className={"z-index100"}
       >
         <ClickAwayListener onClickAway={handleClickAway}>
           <div className="dropdown-buttons-list" id={dataCy}>

@@ -47,15 +47,15 @@
   justify-content: space-between;
 }
 
-.z-index1300 {
-  z-index: 1300;
+.z-index100 {
+  z-index: 100;
 }
 
 #contract-onTopButton,
 #file-dropdown-onTopButton,
 #position-onTopButton,
 #contract-time-dropdown-onTopButton {
-  z-index: 20000;
+  z-index: 200;
   position: relative;
 }
 
