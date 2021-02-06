@@ -83,9 +83,6 @@ export function BaseCellComponent({
   const keepOnClass = "keepOn" + keepOn + value;
   const hasNextClass = "hasNext" + hasNext;
 
-  const moreMarginClasss =
-    (value === "U" || value === "L4" || value === "K") && !keepOn && hasNext ? "moreMargin" : "";
-
   const [isToolTipOpen, setToolTipOpen] = useState(false);
   const { styles, attributes } = usePopper(errorTriangle.current, tooltipRef.current);
 
@@ -175,7 +172,12 @@ export function BaseCellComponent({
         <div className={"content " + hasNextClass + " " + keepOnClass} data-cy="highlighted-cell">
           {isPointerOn && !isBlocked && (
             <InputComponent
-              className={"cell-input " + moreMarginClasss}
+              className={classNames(
+                "cell-input",
+                `${
+                  (value === "U" || value === "L4" || value === "K") && !keepOn ? "moreMargin" : ""
+                }`
+              )}
               onValueChange={(value): void => _onValueChange(value)}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
             />

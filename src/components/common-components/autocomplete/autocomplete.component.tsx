@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useAutocomplete } from "@material-ui/lab";
 import React, { useEffect, useState } from "react";
+import classNames from "classnames/bind";
 
 interface AutocompleteOptions<T> {
   options: T[];
@@ -39,8 +40,6 @@ export function AutocompleteComponent<T>({
     open: true,
   });
 
-  const moreLeftMargin = className.indexOf("moreMargin") > -1 ? "more-left-margin" : "";
-
   return (
     <div data-cy="shiftDropdown">
       <div {...getRootProps()}>
@@ -53,7 +52,13 @@ export function AutocompleteComponent<T>({
         />
       </div>
       {groupedOptions.length > 0 ? (
-        <ul {...getListboxProps()} className={"listbox " + moreLeftMargin}>
+        <ul
+          {...getListboxProps()}
+          className={classNames(
+            "listbox",
+            className.indexOf("moreMargin") > -1 ? "more-left-margin" : ""
+          )}
+        >
           {groupedOptions.map((option, index) => (
             <li
               {...getOptionProps({ option, index })}
