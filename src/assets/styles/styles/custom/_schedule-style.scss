@@ -151,6 +151,7 @@
       background-color: $l4;
     }
 
+    margin-left: 4px;
     background-color: change-color($color: $l4, $alpha: 0.3);
     color: $white;
   }
@@ -160,6 +161,7 @@
       background-color: $kwaratanna;
     }
 
+    margin-left: 4px;
     background-color: change-color($color: $kwaratanna, $alpha: 0.3);
     color: $white;
   }
@@ -169,6 +171,7 @@
       background-color: $urlop;
     }
 
+    margin-left: 4px;
     background-color: change-color($color: $urlop, $alpha: 0.3);
   }
 }
