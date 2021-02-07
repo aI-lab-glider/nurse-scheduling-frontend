@@ -51,7 +51,10 @@ export interface MonthRevision {
 }
 
 export abstract class PersistenceStoreProvider {
-  abstract saveMonthRevision(type: RevisionType, monthDataModel: MonthDataModel): Promise<void>;
+  abstract checkAndSafeMonthRevisions(
+    type: RevisionType,
+    monthDataModel: MonthDataModel
+  ): Promise<void>;
   abstract getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined>;
   abstract saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void>;
 

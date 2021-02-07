@@ -117,7 +117,7 @@ export async function fetchOrCreateMonthDM(
   if (_.isNil(monthDataModel)) {
     const storageProvider = new LocalStorageProvider();
     monthDataModel = createEmptyMonthDataModel(monthKey, baseMonth);
-    await storageProvider.saveMonthRevision(revision, monthDataModel);
+    await storageProvider.checkAndSafeMonthRevisions(revision, monthDataModel);
   }
   return monthDataModel;
 }
