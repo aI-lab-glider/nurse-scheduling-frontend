@@ -1,39 +1,56 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public 
  * License, v. 2.0. If a copy of the MPL was not distributed with this 
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+.more-left-margin {
+  margin-left: -6px !important;
+}
+
 .listbox {
   position: absolute;
-  margin: 0;
-  padding: 10px;
+  padding: 10px 0;
+  margin: -5px 0 0 -2px;
   z-index: 1;
-  background-color: $white;
   list-style: none;
   overflow: auto;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
-    "Open Sans", "Helvetica Neue", sans-serif;
-  font-size: medium;
+  font-family: $font-family-primary;
+  font-size: $font-size-lg;
+  line-height: 175%;
   text-align: left;
-  color: black;
-  background-color: whitesmoke;
-  box-shadow: 2px 2px rgb(150, 150, 150);
+  color: $primary;
+  background-color: $white;
+  font-weight: $font-weight-normal;
+  box-shadow: 0px 4px 7px rgba(16, 32, 70, 0.2);
   max-height: 200;
-  width: 230px;
+  border-radius: 7px;
+  min-width: 250px;
+
   & li {
-    &:active {
-      background-color: "#2977f5";
-      color: "white";
-    }
+    letter-spacing: 0.75px;
     &:hover {
-      color: black;
       font-style: italic;
-      font-weight: 700;
-      box-shadow: 0px 3px gray;
+      font-weight: $font-weight-extra-bold;
       cursor: pointer;
     }
     &[data-focus="true"] {
-      background-color: "#4a8df6";
-      color: "white";
       cursor: "pointer";
+    }
+
+    .container {
+      display: block;
+      margin-left: 15px;
+
+      .colorSample {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        float: left;
+        margin: 8.5px 20px 0 10px;
+      }
+
+      .optionLabel {
+        float: left;
+        clear: both;
+      }
     }
   }
 }
