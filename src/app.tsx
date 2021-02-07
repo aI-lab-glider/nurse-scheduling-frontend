@@ -33,7 +33,7 @@ function App(): JSX.Element {
   useEffect(() => {
     if (process.env.REACT_APP_DEV_MODE === "true") {
       const monthModel = cropScheduleDMToMonthDM(schedule as ScheduleDataModel);
-      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel);
+      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel, true);
       scheduleDispatcher(action);
     }
   }, [scheduleDispatcher]);

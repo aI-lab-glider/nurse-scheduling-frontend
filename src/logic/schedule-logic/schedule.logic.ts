@@ -97,7 +97,7 @@ export class ScheduleLogic implements ScheduleProvider {
 
   public updateActualRevision(): void {
     this.dispatchScheduleUpdate(
-      ScheduleDataActionCreator.setScheduleFromScheduleDM(this.schedule.getDataModel())
+      ScheduleDataActionCreator.setScheduleFromScheduleDM(this.schedule.getDataModel(), true)
     );
   }
 

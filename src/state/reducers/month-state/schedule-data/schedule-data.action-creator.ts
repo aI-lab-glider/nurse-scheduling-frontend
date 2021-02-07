@@ -9,28 +9,25 @@ import {
   MonthDataModel,
   ScheduleDataModel,
 } from "../../../../common-models/schedule-data.model";
-import {
-  RevisionType,
-  RevisionKey,
-  ScheduleKey,
-  ThunkFunction,
-} from "../../../../api/persistance-store.model";
+import { RevisionType, ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 import { WorkerInfoExtendedInterface } from "../../../../components/namestable/worker-edit.component";
-
-import { HistoryStateModel } from "../../../models/application-state.model";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import _ from "lodash";
 
 export class ScheduleDataActionCreator {
   static setScheduleFromScheduleDM(
-    newSchedule: ScheduleDataModel
+    newSchedule: ScheduleDataModel,
+    saveInDatabase = true
   ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
-      const { revision } = getState().actualState;
-      await new LocalStorageProvider().saveSchedule(revision, newSchedule);
+      if (saveInDatabase) {
+        const { revision } = getState().actualState;
+        debugger;
+        await new LocalStorageProvider().saveSchedule(revision, newSchedule);
+      }
       destinations.forEach((destination) => {
         const action = {
           type: createActionName(destination, ScheduleActionType.ADD_NEW),
@@ -43,26 +40,29 @@ export class ScheduleDataActionCreator {
 
   static setScheduleFromMonthDM(
     newMonth: MonthDataModel,
+    saveInDatabase = true,
     revision?: RevisionType
   ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
-      const history = getState().history;
       if (_.isNil(revision)) {
         revision = getState().actualState.revision;
       }
-      const [prevMonth, nextMonth] = await getMonthNeighbours(newMonth, history, revision);
+      const [prevMonth, nextMonth] = await getMonthNeighbours(newMonth, revision);
       const newSchedule = extendMonthDMToScheduleDM(prevMonth, newMonth, nextMonth);
-      await this.setScheduleFromScheduleDM(newSchedule)(dispatch, getState);
+      debugger;
+      await this.setScheduleFromScheduleDM(newSchedule, saveInDatabase)(dispatch, getState);
     };
   }
 
   static setScheduleFromKeyIfExists(monthKey: ScheduleKey): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
-      const { history } = getState();
       const { revision } = getState().actualState;
-      const monthDataModel = await fetchMonthDM(monthKey.getRevisionKey(revision), history);
+      const storageProvider = new LocalStorageProvider();
+      const monthDataModel = await storageProvider.getMonthRevision(
+        monthKey.getRevisionKey(revision)
+      );
       if (!_.isNil(monthDataModel)) {
-        dispatch(this.setScheduleFromMonthDM(monthDataModel));
+        dispatch(this.setScheduleFromMonthDM(monthDataModel, false, revision));
       }
     };
   }
@@ -97,40 +97,28 @@ export class ScheduleDataActionCreator {
 
 async function getMonthNeighbours(
   month: MonthDataModel,
-  history: HistoryStateModel,
   revision: RevisionType
 ): Promise<[MonthDataModel, MonthDataModel]> {
   const scheduleKey = new ScheduleKey(month.scheduleKey.month, month.scheduleKey.year);
   return [
-    await fetchOrCreateMonthDM(scheduleKey.prevMonthKey, revision, history, month),
-    await fetchOrCreateMonthDM(scheduleKey.nextMonthKey, revision, history, month),
+    await fetchOrCreateMonthDM(scheduleKey.prevMonthKey, revision, month),
+    await fetchOrCreateMonthDM(scheduleKey.nextMonthKey, revision, month),
   ];
 }
 
 export async function fetchOrCreateMonthDM(
   monthKey: ScheduleKey,
   revision: RevisionType,
-  history: HistoryStateModel,
   baseMonth: MonthDataModel
 ): Promise<MonthDataModel> {
-  let monthDataModel = await fetchMonthDM(monthKey.getRevisionKey(revision), history);
+  const storageProvider = new LocalStorageProvider();
+  let monthDataModel = await storageProvider.getMonthRevision(monthKey.getRevisionKey(revision));
+
   if (_.isNil(monthDataModel)) {
     const storageProvider = new LocalStorageProvider();
     monthDataModel = createEmptyMonthDataModel(monthKey, baseMonth);
+    debugger;
     await storageProvider.checkAndSafeMonthRevisions(revision, monthDataModel);
-  }
-  return monthDataModel;
-}
-
-export async function fetchMonthDM(
-  revisionKey: RevisionKey,
-  history: HistoryStateModel
-): Promise<MonthDataModel | undefined> {
-  let monthDataModel: MonthDataModel | undefined = history[revisionKey];
-
-  if (_.isNil(monthDataModel)) {
-    const storageProvider = new LocalStorageProvider();
-    monthDataModel = await storageProvider.getMonthRevision(revisionKey);
   }
   return monthDataModel;
 }

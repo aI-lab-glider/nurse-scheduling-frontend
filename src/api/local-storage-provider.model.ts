@@ -40,10 +40,14 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     if (isMonthModelEmpty(monthDataModel)) {
       return;
     }
-    let oppositeRevisionType: RevisionType = "actual";
+
+    let oppositeRevisionType: RevisionType;
     if (type === "actual") {
       oppositeRevisionType = "primary";
+    } else {
+      oppositeRevisionType = "actual";
     }
+
     const oppositeRevision = await this.getMonthRevision(
       monthDataModel.scheduleKey.getRevisionKey(oppositeRevisionType)
     );
@@ -51,10 +55,11 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       debugger;
       await this.saveMonthRevision(oppositeRevisionType, monthDataModel);
     }
+
     await this.saveMonthRevision(type, monthDataModel);
   }
 
-  public async saveMonthRevision(
+  private async saveMonthRevision(
     revisionType: RevisionType,
     monthDataModel: MonthDataModel
   ): Promise<void> {
@@ -144,7 +149,10 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       //TODO: Something should be done here :)
     }
   }
-  async getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined> {
+  async getMonthRevision(
+    revisionKey: RevisionKey,
+    createIfNotExist = false
+  ): Promise<MonthDataModel | undefined> {
     const revisions = await this.storage.allDocs({ include_docs: true });
     const result = revisions.rows.find((r) => {
       if (r.doc?.data.scheduleKey) {

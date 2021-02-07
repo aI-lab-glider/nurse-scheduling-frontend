@@ -15,26 +15,27 @@ enum RevisionReducerAction {
 }
 
 export class RevisionReducerActionCreator {
-  static changeRevision(revision: RevisionType): ThunkFunction<unknown> {
+  static changeRevision(newRevisionType: RevisionType): ThunkFunction<unknown> {
     return async (dispatch, getState): Promise<void> => {
-      const history = getState().history;
+      debugger;
       const actualSchedule = getState().actualState.persistentSchedule.present;
       const actualMonth = cropScheduleDMToMonthDM(actualSchedule);
 
-      const newMonth = await fetchOrCreateMonthDM(
+      const newRevisionDM = await fetchOrCreateMonthDM(
         actualMonth.scheduleKey,
-        revision,
-        history,
+        newRevisionType,
         actualMonth
       );
+
       const setRevisionAction = ScheduleDataActionCreator.setScheduleFromMonthDM(
-        newMonth,
-        revision
+        newRevisionDM,
+        false,
+        newRevisionType
       );
 
       dispatch({
         type: RevisionReducerAction.CHANGE_REVISION,
-        payload: revision,
+        payload: newRevisionType,
       });
 
       dispatch(setRevisionAction);

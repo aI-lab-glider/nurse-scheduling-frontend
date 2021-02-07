@@ -5,8 +5,7 @@
 import { combineReducers } from "redux";
 import undoable from "redux-undo";
 import { ActionModel } from "./models/action.model";
-import { ScheduleStateModel, ApplicationStateModel } from "./models/application-state.model";
-import { historyReducer } from "./reducers/history.reducer";
+import { ApplicationStateModel, ScheduleStateModel } from "./models/application-state.model";
 import {
   PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
   TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
@@ -39,5 +38,4 @@ const monthStateReducer = combineReducers({
 
 export const appReducer = combineReducers({
   actualState: monthStateReducer,
-  history: historyReducer,
 } as CombinedReducers<ApplicationStateModel>);

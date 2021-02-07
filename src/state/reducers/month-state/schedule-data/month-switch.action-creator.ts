@@ -7,31 +7,30 @@
 import { ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
 import { fetchOrCreateMonthDM, ScheduleDataActionCreator } from "./schedule-data.action-creator";
 import * as _ from "lodash";
-import { HistoryReducerActionCreator } from "../../history.reducer";
 import { copyShiftsToMonth, cropMonthInfoToMonth, getDateWithMonthOffset } from "./common-reducers";
 import {
   cropScheduleDMToMonthDM,
   MonthDataModel,
 } from "../../../../common-models/schedule-data.model";
+import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 
 export class MonthSwitchActionCreator {
   static switchToNewMonth(offset: number): ThunkFunction<unknown> {
     return async (dispatch, getState): Promise<void> => {
-      const history = getState().history;
       const actualSchedule = getState().actualState.persistentSchedule.present;
       const { revision } = getState().actualState;
       const actualMonth = cropScheduleDMToMonthDM(actualSchedule);
       const { month, year } = actualMonth.scheduleKey;
 
-      const historyAction = HistoryReducerActionCreator.addToMonthHistory(actualMonth, revision);
-
       const newDate = getDateWithMonthOffset(month, year, offset);
       const newMonthKey = new ScheduleKey(newDate.getMonth(), newDate.getFullYear());
 
-      const nextMonth = await fetchOrCreateMonthDM(newMonthKey, revision, history, actualMonth);
-      const addNewScheduleAction = ScheduleDataActionCreator.setScheduleFromMonthDM(nextMonth);
+      const nextMonth = await fetchOrCreateMonthDM(newMonthKey, revision, actualMonth);
+      const addNewScheduleAction = ScheduleDataActionCreator.setScheduleFromMonthDM(
+        nextMonth,
+        false
+      );
 
-      dispatch(historyAction);
       dispatch(addNewScheduleAction);
     };
   }
@@ -45,11 +44,14 @@ export class MonthSwitchActionCreator {
       if (month === undefined || year === undefined) return;
       const fromDate = getDateWithMonthOffset(month, year, offset);
       const { revision } = getState().actualState;
-      const copyingSchedule = getState().history[
+      const storageProvider = new LocalStorageProvider();
+      const copyingSchedule = await storageProvider.getMonthRevision(
         new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).getRevisionKey(revision)
-      ];
-      const monthDataModel = copyMonthDM(new ScheduleKey(month, year), copyingSchedule);
-      dispatch(ScheduleDataActionCreator.setScheduleFromMonthDM(monthDataModel));
+      );
+      if (copyingSchedule) {
+        const monthDataModel = copyMonthDM(new ScheduleKey(month, year), copyingSchedule);
+        dispatch(ScheduleDataActionCreator.setScheduleFromMonthDM(monthDataModel, true));
+      }
     };
   }
 }
