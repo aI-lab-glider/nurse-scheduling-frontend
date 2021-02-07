@@ -51,12 +51,13 @@ export interface MonthRevision {
 }
 
 export abstract class PersistenceStoreProvider {
-  abstract checkAndSafeMonthRevisions(
+  abstract getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined>;
+  abstract saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void>;
+
+  abstract saveBothMonthRevisionsIfNeeded(
     type: RevisionType,
     monthDataModel: MonthDataModel
   ): Promise<void>;
-  abstract getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined>;
-  abstract saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void>;
 
   abstract updateMonthPartBasedOnScheduleDM(
     revisionKey: RevisionKey,
@@ -64,4 +65,15 @@ export abstract class PersistenceStoreProvider {
     missingDays: number,
     updatePosition: ArrayPositionPointer
   ): Promise<void>;
+
+  abstract fetchOrCreateMonthNeighbours(
+    month: MonthDataModel,
+    revision: RevisionType
+  ): Promise<[MonthDataModel, MonthDataModel]>;
+
+  abstract fetchOrCreateMonthRevision(
+    monthKey: ScheduleKey,
+    revision: RevisionType,
+    baseMonth: MonthDataModel
+  ): Promise<MonthDataModel>;
 }

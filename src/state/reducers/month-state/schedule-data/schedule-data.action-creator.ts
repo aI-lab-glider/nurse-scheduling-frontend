@@ -4,7 +4,6 @@
 
 /* eslint-disable @typescript-eslint/camelcase */
 import {
-  createEmptyMonthDataModel,
   extendMonthDMToScheduleDM,
   MonthDataModel,
   ScheduleDataModel,
@@ -25,7 +24,6 @@ export class ScheduleDataActionCreator {
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
       if (saveInDatabase) {
         const { revision } = getState().actualState;
-        debugger;
         await new LocalStorageProvider().saveSchedule(revision, newSchedule);
       }
       destinations.forEach((destination) => {
@@ -47,14 +45,16 @@ export class ScheduleDataActionCreator {
       if (_.isNil(revision)) {
         revision = getState().actualState.revision;
       }
-      const [prevMonth, nextMonth] = await getMonthNeighbours(newMonth, revision);
+      const [prevMonth, nextMonth] = await new LocalStorageProvider().fetchOrCreateMonthNeighbours(
+        newMonth,
+        revision
+      );
       const newSchedule = extendMonthDMToScheduleDM(prevMonth, newMonth, nextMonth);
-      debugger;
       await this.setScheduleFromScheduleDM(newSchedule, saveInDatabase)(dispatch, getState);
     };
   }
 
-  static setScheduleFromKeyIfExists(monthKey: ScheduleKey): ThunkFunction<ScheduleDataModel> {
+  static setScheduleFromKeyIfExistsInDB(monthKey: ScheduleKey): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
       const { revision } = getState().actualState;
       const storageProvider = new LocalStorageProvider();
@@ -93,32 +93,4 @@ export class ScheduleDataActionCreator {
       dispatch(action);
     };
   }
-}
-
-async function getMonthNeighbours(
-  month: MonthDataModel,
-  revision: RevisionType
-): Promise<[MonthDataModel, MonthDataModel]> {
-  const scheduleKey = new ScheduleKey(month.scheduleKey.month, month.scheduleKey.year);
-  return [
-    await fetchOrCreateMonthDM(scheduleKey.prevMonthKey, revision, month),
-    await fetchOrCreateMonthDM(scheduleKey.nextMonthKey, revision, month),
-  ];
-}
-
-export async function fetchOrCreateMonthDM(
-  monthKey: ScheduleKey,
-  revision: RevisionType,
-  baseMonth: MonthDataModel
-): Promise<MonthDataModel> {
-  const storageProvider = new LocalStorageProvider();
-  let monthDataModel = await storageProvider.getMonthRevision(monthKey.getRevisionKey(revision));
-
-  if (_.isNil(monthDataModel)) {
-    const storageProvider = new LocalStorageProvider();
-    monthDataModel = createEmptyMonthDataModel(monthKey, baseMonth);
-    debugger;
-    await storageProvider.checkAndSafeMonthRevisions(revision, monthDataModel);
-  }
-  return monthDataModel;
 }

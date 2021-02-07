@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
 import { ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
-import { fetchOrCreateMonthDM, ScheduleDataActionCreator } from "./schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
 import * as _ from "lodash";
 import { copyShiftsToMonth, cropMonthInfoToMonth, getDateWithMonthOffset } from "./common-reducers";
 import {
@@ -25,7 +25,11 @@ export class MonthSwitchActionCreator {
       const newDate = getDateWithMonthOffset(month, year, offset);
       const newMonthKey = new ScheduleKey(newDate.getMonth(), newDate.getFullYear());
 
-      const nextMonth = await fetchOrCreateMonthDM(newMonthKey, revision, actualMonth);
+      const nextMonth = await new LocalStorageProvider().fetchOrCreateMonthRevision(
+        newMonthKey,
+        revision,
+        actualMonth
+      );
       const addNewScheduleAction = ScheduleDataActionCreator.setScheduleFromMonthDM(
         nextMonth,
         false

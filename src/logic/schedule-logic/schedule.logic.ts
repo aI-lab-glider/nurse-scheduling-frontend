@@ -91,7 +91,7 @@ export class ScheduleLogic implements ScheduleProvider {
   public tryGetCurrentMonthSchedule(): void {
     const [month, year] = this.sections.Metadata.monthLogic.currentDate;
     this.dispatchScheduleUpdate(
-      ScheduleDataActionCreator.setScheduleFromKeyIfExists(new ScheduleKey(month, year))
+      ScheduleDataActionCreator.setScheduleFromKeyIfExistsInDB(new ScheduleKey(month, year))
     );
   }
 
