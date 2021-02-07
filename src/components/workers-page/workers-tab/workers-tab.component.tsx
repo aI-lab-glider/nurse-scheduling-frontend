@@ -122,7 +122,7 @@ export default function WorkersTab(): JSX.Element {
                     >
                       Edytuj
                     </Button>
-                    <Button variant="outlined" className="action-button">
+                    <Button variant="secondary" className="action-button">
                       Usuń
                     </Button>
                   </TableCell>

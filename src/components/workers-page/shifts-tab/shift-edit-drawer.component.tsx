@@ -113,13 +113,11 @@ export default function ShiftEditDrower(): JSX.Element {
         <ColorSelector
           shiftType={valueRadio}
           mainLabel="Wybierz kolory"
-          variant="outlined"
+          variant="secondary"
           position={"bottom"}
           colorClicker={colorClicked}
         />
         <Button
-          size="small"
-          className="submit-button"
           variant="primary"
           onClick={(): void => {
             setNewShift({

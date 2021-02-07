@@ -34,7 +34,7 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
 
   const footer = (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Button onClick={handleClose} size="small" className="submit-button" variant="primary">
+      <Button onClick={handleClose} variant="primary">
         OK
       </Button>
     </div>
