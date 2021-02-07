@@ -54,13 +54,26 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static setScheduleFromKeyIfExistsInDB(monthKey: ScheduleKey): ThunkFunction<ScheduleDataModel> {
+  static setScheduleFromKeyIfExistsInDB(
+    monthKey: ScheduleKey,
+    baseMonthModel?: MonthDataModel
+  ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
       const { revision } = getState().actualState;
-      const storageProvider = new LocalStorageProvider();
-      const monthDataModel = await storageProvider.getMonthRevision(
-        monthKey.getRevisionKey(revision)
-      );
+      let monthDataModel;
+
+      if (baseMonthModel) {
+        monthDataModel = await new LocalStorageProvider().fetchOrCreateMonthRevision(
+          monthKey,
+          revision,
+          baseMonthModel
+        );
+      } else {
+        monthDataModel = await new LocalStorageProvider().getMonthRevision(
+          monthKey.getRevisionKey(revision)
+        );
+      }
+
       if (!_.isNil(monthDataModel)) {
         dispatch(this.setScheduleFromMonthDM(monthDataModel, false, revision));
       }

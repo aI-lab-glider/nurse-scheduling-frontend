@@ -30,12 +30,11 @@ export class RevisionReducerActionCreator {
         newRevisionType
       );
 
+      dispatch(setRevisionAction);
       dispatch({
         type: RevisionReducerAction.CHANGE_REVISION,
         payload: newRevisionType,
       });
-
-      dispatch(setRevisionAction);
     };
   }
 }

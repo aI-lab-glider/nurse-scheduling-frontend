@@ -18,21 +18,15 @@ export class MonthSwitchActionCreator {
   static switchToNewMonth(offset: number): ThunkFunction<unknown> {
     return async (dispatch, getState): Promise<void> => {
       const actualSchedule = getState().actualState.persistentSchedule.present;
-      const { revision } = getState().actualState;
-      const actualMonth = cropScheduleDMToMonthDM(actualSchedule);
-      const { month, year } = actualMonth.scheduleKey;
+      const actualMonthDM = cropScheduleDMToMonthDM(actualSchedule);
+      const { month, year } = actualMonthDM.scheduleKey;
 
       const newDate = getDateWithMonthOffset(month, year, offset);
       const newMonthKey = new ScheduleKey(newDate.getMonth(), newDate.getFullYear());
 
-      const nextMonth = await new LocalStorageProvider().fetchOrCreateMonthRevision(
+      const addNewScheduleAction = ScheduleDataActionCreator.setScheduleFromKeyIfExistsInDB(
         newMonthKey,
-        revision,
-        actualMonth
-      );
-      const addNewScheduleAction = ScheduleDataActionCreator.setScheduleFromMonthDM(
-        nextMonth,
-        false
+        actualMonthDM
       );
 
       dispatch(addNewScheduleAction);
@@ -45,13 +39,15 @@ export class MonthSwitchActionCreator {
         month_number: month,
         year,
       } = getState().actualState.persistentSchedule.present.schedule_info;
+
       if (month === undefined || year === undefined) return;
       const fromDate = getDateWithMonthOffset(month, year, offset);
       const { revision } = getState().actualState;
-      const storageProvider = new LocalStorageProvider();
-      const copyingSchedule = await storageProvider.getMonthRevision(
+
+      const copyingSchedule = await new LocalStorageProvider().getMonthRevision(
         new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).getRevisionKey(revision)
       );
+
       if (copyingSchedule) {
         const monthDataModel = copyMonthDM(new ScheduleKey(month, year), copyingSchedule);
         dispatch(ScheduleDataActionCreator.setScheduleFromMonthDM(monthDataModel, true));

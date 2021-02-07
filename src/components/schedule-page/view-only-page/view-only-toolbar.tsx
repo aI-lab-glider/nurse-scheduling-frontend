@@ -14,7 +14,7 @@ interface ViewOnlyToolbarOptions {
   openEdit: () => void;
 }
 export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Element {
-  const [isScheduleMonthInFuture, setIsScheduleMonthInFuture] = React.useState<boolean>(false);
+  const [isRevisionEditDisabled, setIsRevisionEditDisable] = React.useState<boolean>(false);
   const dispatch = useDispatch();
 
   const { year, month_number: month } = useSelector(
@@ -24,19 +24,15 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
   const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   useEffect(() => {
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth();
-    let currentRev, isFuture;
-    if (year > currentYear || (year === currentYear && month > currentMonth)) {
-      isFuture = true;
-      currentRev = "primary";
+    if (revision === "actual") {
+      setIsRevisionEditDisable(false);
     } else {
-      isFuture = false;
-      currentRev = "actual";
+      const currentYear = new Date().getFullYear();
+      const currentMonth = new Date().getMonth();
+      const isFuture = year > currentYear || (year === currentYear && month > currentMonth);
+      setIsRevisionEditDisable(!isFuture);
     }
-    setIsScheduleMonthInFuture(isFuture);
-    dispatch(RevisionReducerActionCreator.changeRevision(currentRev));
-  }, [year, month]);
+  }, [year, month, revision]);
 
   function isRevisionType(value: string): value is RevisionType {
     return value === "primary" || value === "actual";
@@ -52,21 +48,17 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
   return (
     <div className="buttons">
       <div className="revision-type-container">
-        {isScheduleMonthInFuture ? (
-          <p>wersja podstawowa</p>
-        ) : (
-          <form>
-            <select
-              value={revision}
-              onChange={handleChange}
-              className="revision-select"
-              data-cy="revision-select"
-            >
-              <option value="primary">wersja podstawowa</option>
-              <option value="actual">wersja aktualna</option>
-            </select>
-          </form>
-        )}
+        <form>
+          <select
+            value={revision}
+            onChange={handleChange}
+            className="revision-select"
+            data-cy="revision-select"
+          >
+            <option value="primary">wersja bazowa</option>
+            <option value="actual">wersja aktualna</option>
+          </select>
+        </form>
       </div>
       <div className="filler" />
       <ImportButtonsComponent />
@@ -77,6 +69,7 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
           className="submit-button"
           variant="primary"
           data-cy="edit-mode-button"
+          disabled={isRevisionEditDisabled}
         >
           Edytuj
         </Button>
