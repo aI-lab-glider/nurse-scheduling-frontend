@@ -25,7 +25,7 @@ const useStyles = makeStyles({
   title: {
     fontFamily: ScssVars.fontFamilyPrimary,
     fontWeight: 700,
-    fontSize: 18,
+    fontSize: ScssVars.h4FontSize,
     lineHeight: 1.1,
     color: ScssVars.primary,
   },

@@ -32,7 +32,7 @@ export default function ValidationDrawerContentComponent(
   const [loadingState, setLoadingState] = useState<Props>();
   const [isNetworkError, setIsNetworkError] = useState(false);
   const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
-  const setOpen = options.setOpen;
+  const { setOpen } = options;
 
   useEffect(() => {
     const spinner = {

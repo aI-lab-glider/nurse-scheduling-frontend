@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useJiraLikeDrawer } from "./jira-like-drawer-context";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 
-console.log(ScssVars.headerHeight);
 const useStyles = makeStyles({
   drawer: {
     minWidth: 600,
