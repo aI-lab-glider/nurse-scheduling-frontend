@@ -22,6 +22,7 @@ import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scs
 import classNames from "classnames/bind";
 import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
 import WorkerDrawerComponent, { WorkerDrawerMode } from "./worker-drawer.component";
+import DeleteUserModalComponent from "../../common-components/modal/delete-user-modal/delete-user.modal.component";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -51,6 +52,7 @@ export default function WorkersTab(): JSX.Element {
   );
   const [workerData, setWorkerData] = useState([] as WorkerInfoModel[]);
   const [open, setIsOpen] = useState(false);
+  const [openDelModal, setDelModalOpen] = useState(false);
   const [mode, setMode] = useState(WorkerDrawerMode.ADD_NEW);
   const [worker, setWorker] = useState<WorkerInfoModel | undefined>(undefined);
 
@@ -122,9 +124,18 @@ export default function WorkersTab(): JSX.Element {
                     >
                       Edytuj
                     </Button>
-                    <Button variant="outlined" className="action-button">
+                    <Button
+                      variant="outlined"
+                      className="action-button"
+                      onClick={(): void => setDelModalOpen(true)}
+                    >
                       Usuń
                     </Button>
+                    <DeleteUserModalComponent
+                      setOpen={setDelModalOpen}
+                      open={openDelModal}
+                      worker={worker}
+                    />
                   </TableCell>
                 </TableRow>
               );
