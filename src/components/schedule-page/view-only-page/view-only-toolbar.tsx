@@ -8,7 +8,7 @@ import { Button } from "../../common-components";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { RevisionReducerActionCreator } from "../../../state/reducers/month-state/revision-info.reducer";
-import { RevisionType } from "../../../api/persistance-store.model";
+import { isRevisionType } from "../../../api/persistance-store.model";
 
 interface ViewOnlyToolbarOptions {
   openEdit: () => void;
@@ -33,10 +33,6 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
       setIsRevisionEditDisable(!isFuture);
     }
   }, [year, month, revision]);
-
-  function isRevisionType(value: string): value is RevisionType {
-    return value === "primary" || value === "actual";
-  }
 
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>): void => {
     const currentRev = event.target.value;

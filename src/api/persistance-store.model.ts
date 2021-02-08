@@ -42,6 +42,10 @@ export class ScheduleKey {
   }
 }
 
+export function isRevisionType(value: string): value is RevisionType {
+  return value === "primary" || value === "actual";
+}
+
 export type RevisionType = "primary" | "actual";
 export type RevisionKey = string;
 
