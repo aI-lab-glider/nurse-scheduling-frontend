@@ -6,10 +6,11 @@ import { ShiftCode } from "../../../../src/common-models/shift-info.model";
 import { WorkerType } from "../../../../src/common-models/worker-info.model";
 
 context("Load schedule", () => {
-  it("Shoud be able to load schedule after clicking save with  empty state to database", () => {
+  it("Should be able to load schedule after clicking save with  empty state to database", () => {
     cy.visit(Cypress.env("baseUrl"));
     cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 }).should("not.exist");
-    cy.enterEditMode();
+    cy.get("[data-cy=revision-select]").select("wersja aktualna").should("have.value", "actual");
+    cy.get("[data-cy=edit-mode-button]", { timeout: 10000 }).click();
     cy.saveToDatabase();
     cy.get("[data-cy=leave-edit-mode]").click();
     cy.loadScheduleToMonth("example.xlsx");

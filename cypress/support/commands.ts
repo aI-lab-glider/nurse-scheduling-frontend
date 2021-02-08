@@ -127,8 +127,8 @@ Cypress.Commands.add("saveToDatabase", () => {
 });
 
 Cypress.Commands.add("enterEditMode", () => {
-  cy.get("[data-cy=revision-select]").select("actual");
-  cy.get("[data-cy=edit-mode-button]").click();
+  cy.get("[data-cy=revision-select]").select("wersja aktualna").should("have.value", "actual");
+  cy.get("[data-cy=edit-mode-button]", { timeout: 10000 }).click();
   return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
 });
 
