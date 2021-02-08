@@ -18,7 +18,7 @@
     flex-direction: row;
     align-items: center;
     width: 100%;
-    margin: 10px;
+    margin: 5px;
   }
 
   .revision-type-container {
@@ -26,6 +26,7 @@
     letter-spacing: 0.75px;
     font-family: $font-family-primary;
     color: $primary;
+    padding: 0 25px 0 25px;
     .revision-select {
       border: 0;
       background: inherit;
@@ -33,6 +34,9 @@
       letter-spacing: inherit;
       font-family: inherit;
       color: inherit;
+    }
+    select:focus {
+      outline: none !important;
     }
   }
 
