@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { RevisionReducerActionCreator } from "../../../state/reducers/month-state/revision-info.reducer";
 import { isRevisionType } from "../../../api/persistance-store.model";
+import classNames from "classnames/bind";
 
 interface ViewOnlyToolbarOptions {
   openEdit: () => void;
@@ -66,7 +67,7 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
         <Button
           onClick={openEdit}
           size="small"
-          className="submit-button"
+          className={classNames(isRevisionEditDisabled && "disabled-submit-button")}
           variant="primary"
           data-cy="edit-mode-button"
           disabled={isRevisionEditDisabled}
