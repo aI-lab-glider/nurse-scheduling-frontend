@@ -6,7 +6,6 @@ import { RevisionType, ThunkFunction } from "../../../api/persistance-store.mode
 import { ActionModel } from "../../models/action.model";
 import { ScheduleDataActionCreator } from "./schedule-data/schedule-data.action-creator";
 import { cropScheduleDMToMonthDM } from "../../../common-models/schedule-data.model";
-import { LocalStorageProvider } from "../../../api/local-storage-provider.model";
 
 enum RevisionReducerAction {
   CHANGE_REVISION = "CHANGE_REVISION",
@@ -16,18 +15,11 @@ export class RevisionReducerActionCreator {
   static changeRevision(newRevisionType: RevisionType): ThunkFunction<unknown> {
     return async (dispatch, getState): Promise<void> => {
       const actualSchedule = getState().actualState.persistentSchedule.present;
-      const actualMonth = cropScheduleDMToMonthDM(actualSchedule);
+      const actualMonthDM = cropScheduleDMToMonthDM(actualSchedule);
 
-      const newRevisionDM = await new LocalStorageProvider().fetchOrCreateMonthRevision(
-        actualMonth.scheduleKey,
-        newRevisionType,
-        actualMonth
-      );
-
-      const setRevisionAction = ScheduleDataActionCreator.setScheduleFromMonthDM(
-        newRevisionDM,
-        false,
-        newRevisionType
+      const setRevisionAction = ScheduleDataActionCreator.setScheduleFromKeyIfExistsInDB(
+        actualMonthDM.scheduleKey,
+        actualMonthDM
       );
 
       dispatch(setRevisionAction);
