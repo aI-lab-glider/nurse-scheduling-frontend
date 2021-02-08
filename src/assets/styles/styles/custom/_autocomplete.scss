@@ -36,9 +36,8 @@
     }
 
     .container {
-      display: flex;
+      display: block;
       margin-left: 15px;
-      flex-direction: row;
 
       .colorSample {
         width: 9px;
@@ -46,6 +45,11 @@
         border-radius: 50%;
         float: left;
         margin: 8.5px 20px 0 10px;
+      }
+
+      .optionLabel {
+        float: left;
+        clear: both;
       }
     }
   }

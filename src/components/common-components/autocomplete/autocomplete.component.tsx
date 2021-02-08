@@ -73,7 +73,6 @@ export function AutocompleteComponent<T>({
                   className="colorSample"
                   style={{ backgroundColor: `#${getOptionColor(option)}` }}
                 />
-                <div className={"filler"} />
               </div>
             </li>
           ))}
