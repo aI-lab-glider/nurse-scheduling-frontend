@@ -13,6 +13,8 @@ import {
   MonthDataModel,
 } from "../../../../common-models/schedule-data.model";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
+import { RevisionReducerAction } from "../revision-info.reducer";
+import { VerboseDateHelper } from "../../../../helpers/verbose-date.helper";
 
 export class MonthSwitchActionCreator {
   static switchToNewMonth(offset: number): ThunkFunction<unknown> {
@@ -22,14 +24,26 @@ export class MonthSwitchActionCreator {
       const { month, year } = actualMonthDM.scheduleKey;
 
       const newDate = getDateWithMonthOffset(month, year, offset);
+      const newYear = newDate.getFullYear();
+      const newMonth = newDate.getMonth();
       const newMonthKey = new ScheduleKey(newDate.getMonth(), newDate.getFullYear());
 
       const addNewScheduleAction = ScheduleDataActionCreator.setScheduleFromKeyIfExistsInDB(
         newMonthKey,
         actualMonthDM
       );
-
       dispatch(addNewScheduleAction);
+
+      // Set default revision type - primary in future, actual for present and past
+      const { revision } = getState().actualState;
+      const isFuture = VerboseDateHelper.isMonthInFuture(newMonth, newYear);
+      const newRevisionType = isFuture ? "primary" : "actual";
+      if (revision != newRevisionType) {
+        dispatch({
+          type: RevisionReducerAction.CHANGE_REVISION,
+          payload: newRevisionType,
+        });
+      }
     };
   }
 

@@ -49,6 +49,11 @@ export function isRevisionType(value: string): value is RevisionType {
 export type RevisionType = "primary" | "actual";
 export type RevisionKey = string;
 
+export const RevisionTypeLabels: { [key: string]: string } = {
+  primary: "wersja bazowa",
+  actual: "wersja aktualna",
+};
+
 export interface MonthRevision {
   _id: RevisionKey;
   data: MonthDataModel;

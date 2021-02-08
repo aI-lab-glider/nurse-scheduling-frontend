@@ -8,14 +8,16 @@ import { Button } from "../../common-components";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { RevisionReducerActionCreator } from "../../../state/reducers/month-state/revision-info.reducer";
-import { isRevisionType } from "../../../api/persistance-store.model";
+import { isRevisionType, RevisionTypeLabels } from "../../../api/persistance-store.model";
 import classNames from "classnames/bind";
+import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
 
 interface ViewOnlyToolbarOptions {
   openEdit: () => void;
 }
 export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Element {
   const [isRevisionEditDisabled, setIsRevisionEditDisable] = React.useState<boolean>(false);
+  const [isMonthFromFuture, setIsMonthFromFuture] = React.useState<boolean>(false);
   const dispatch = useDispatch();
 
   const { year, month_number: month } = useSelector(
@@ -25,15 +27,14 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
   const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   useEffect(() => {
+    const isFuture = VerboseDateHelper.isMonthInFuture(month, year);
+    setIsMonthFromFuture(isFuture);
     if (revision === "actual") {
       setIsRevisionEditDisable(false);
     } else {
-      const currentYear = new Date().getFullYear();
-      const currentMonth = new Date().getMonth();
-      const isFuture = year > currentYear || (year === currentYear && month > currentMonth);
       setIsRevisionEditDisable(!isFuture);
     }
-  }, [year, month, revision]);
+  }, [year, month]);
 
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>): void => {
     const currentRev = event.target.value;
@@ -45,21 +46,25 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
   return (
     <div className="buttons">
       <div className="revision-type-container">
-        <form>
-          <select
-            value={revision}
-            onChange={handleChange}
-            className="revision-select"
-            data-cy="revision-select"
-          >
-            <option value="primary" data-cy="primary-revision">
-              wersja bazowa
-            </option>
-            <option value="actual" data-cy="actual-revision">
-              wersja aktualna
-            </option>
-          </select>
-        </form>
+        {isMonthFromFuture ? (
+          <p>{RevisionTypeLabels[revision]}</p>
+        ) : (
+          <form>
+            <select
+              value={revision}
+              onChange={handleChange}
+              className="revision-select"
+              data-cy="revision-select"
+            >
+              <option value="primary" data-cy="primary-revision">
+                {RevisionTypeLabels["primary"]}
+              </option>
+              <option value="actual" data-cy="actual-revision">
+                {RevisionTypeLabels["actual"]}
+              </option>
+            </select>
+          </form>
+        )}
       </div>
       <div className="filler" />
       <ImportButtonsComponent />

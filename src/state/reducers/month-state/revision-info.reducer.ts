@@ -7,7 +7,7 @@ import { ActionModel } from "../../models/action.model";
 import { ScheduleDataActionCreator } from "./schedule-data/schedule-data.action-creator";
 import { cropScheduleDMToMonthDM } from "../../../common-models/schedule-data.model";
 
-enum RevisionReducerAction {
+export enum RevisionReducerAction {
   CHANGE_REVISION = "CHANGE_REVISION",
 }
 
