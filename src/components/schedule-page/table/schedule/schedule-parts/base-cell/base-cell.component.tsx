@@ -172,7 +172,12 @@ export function BaseCellComponent({
         <div className={"content " + hasNextClass + " " + keepOnClass} data-cy="highlighted-cell">
           {isPointerOn && !isBlocked && (
             <InputComponent
-              className="cell-input"
+              className={classNames(
+                "cell-input",
+                `${
+                  (value === "U" || value === "L4" || value === "K") && !keepOn ? "moreMargin" : ""
+                }`
+              )}
               onValueChange={(value): void => _onValueChange(value)}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
             />
