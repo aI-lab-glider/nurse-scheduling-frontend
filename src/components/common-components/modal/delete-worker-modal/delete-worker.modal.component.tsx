@@ -1,37 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button } from "../../button-component/button.component";
 import DefaultModal from "../modal.component";
 import { WorkerInfoModel } from "../../../../common-models/worker-info.model";
 
-interface DeleteUserModalOptions {
+interface DeleteWorkerModalOptions {
   setOpen: (open: boolean) => void;
   open: boolean;
-  worker: WorkerInfoModel;
+  worker?: WorkerInfoModel;
 }
 
-export default function DeleteUserModalComponent(options: DeleteUserModalOptions): JSX.Element {
+export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOptions): JSX.Element {
   const { setOpen, open, worker } = options;
 
   const handleClose = (): void => {
     setOpen(false);
   };
 
-  const title = "Czy naprawde chcesz usunąć użytkownika " + worker.name + "?";
+  const title = "Potwierdź akcję";
 
   const body = (
-    <>
-      <p>Imie</p>
-      <br />
-      <p>Nazwisko</p>
-      <br />
-      <p>Stanowisko</p>
-    </>
+    <div className={"span-errors workers-table"}>
+      <p>Czy naprawde chcesz usunąć pracownika {worker?.name} ?</p>
+    </div>
   );
 
   const footer = (
     <div style={{ display: "flex", justifyContent: "center" }}>
+      <Button onClick={handleClose} size="small" className="submit-button" variant="secondary">
+        Anuluj
+      </Button>
       <Button onClick={handleClose} size="small" className="submit-button" variant="primary">
-        OK
+        Zaakceptuj
       </Button>
     </div>
   );

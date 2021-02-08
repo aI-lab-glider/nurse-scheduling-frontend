@@ -22,7 +22,7 @@ import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scs
 import classNames from "classnames/bind";
 import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
 import WorkerDrawerComponent, { WorkerDrawerMode } from "./worker-drawer.component";
-import DeleteUserModalComponent from "../../common-components/modal/delete-user-modal/delete-user.modal.component";
+import DeleteWorkerModalComponent from "../../common-components/modal/delete-worker-modal/delete-worker.modal.component";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -84,6 +84,11 @@ export default function WorkersTab(): JSX.Element {
     setWorker(workerData);
   }
 
+  function workerDeleteModal(open: boolean, workerData?: WorkerInfoModel): void {
+    setDelModalOpen(open);
+    setWorker(workerData);
+  }
+
   return (
     <div className="workers-table">
       <TableContainer className={classes.root}>
@@ -127,15 +132,10 @@ export default function WorkersTab(): JSX.Element {
                     <Button
                       variant="outlined"
                       className="action-button"
-                      onClick={(): void => setDelModalOpen(true)}
+                      onClick={(): void => workerDeleteModal(true, worker)}
                     >
                       Usuń
                     </Button>
-                    <DeleteUserModalComponent
-                      setOpen={setDelModalOpen}
-                      open={openDelModal}
-                      worker={worker}
-                    />
                   </TableCell>
                 </TableRow>
               );
@@ -150,6 +150,7 @@ export default function WorkersTab(): JSX.Element {
         worker={worker}
         setOpen={setIsOpen}
       />
+      <DeleteWorkerModalComponent setOpen={setDelModalOpen} open={openDelModal} worker={worker} />
     </div>
   );
 }
