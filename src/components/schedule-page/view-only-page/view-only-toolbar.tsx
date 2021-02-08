@@ -38,7 +38,7 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
     return value === "primary" || value === "actual";
   }
 
-  const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>) => {
+  const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>): void => {
     const currentRev = event.target.value;
     if (isRevisionType(currentRev)) {
       dispatch(RevisionReducerActionCreator.changeRevision(currentRev));

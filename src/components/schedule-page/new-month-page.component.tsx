@@ -26,7 +26,7 @@ export function NewMonthPlanComponent(): JSX.Element {
   const { monthModel, setSrcFile } = useScheduleConverter();
 
   useEffect(() => {
-    const setNeighbours = async () => {
+    const setNeighbours = async (): Promise<void> => {
       const storageProvider = new LocalStorageProvider();
       const nextMonth = await storageProvider.getMonthRevision(
         new ScheduleKey(nextDate.getMonth(), nextDate.getFullYear()).getRevisionKey(revision)
@@ -46,7 +46,7 @@ export function NewMonthPlanComponent(): JSX.Element {
       );
     };
     setNeighbours();
-  }, []);
+  }, [prevDate, nextDate, revision]);
 
   const dispatch = useDispatch();
 
