@@ -55,8 +55,12 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
             className="revision-select"
             data-cy="revision-select"
           >
-            <option value="primary">wersja bazowa</option>
-            <option value="actual">wersja aktualna</option>
+            <option value="primary" data-cy="primary-revision">
+              wersja bazowa
+            </option>
+            <option value="actual" data-cy="actual-revision">
+              wersja aktualna
+            </option>
           </select>
         </form>
       </div>

@@ -9,7 +9,7 @@ context("Load schedule", () => {
   it("Shoud be able to load schedule after clicking save with  empty state to database", () => {
     cy.visit(Cypress.env("baseUrl"));
     cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 }).should("not.exist");
-    cy.get("[data-cy=edit-mode-button]").click();
+    cy.enterEditMode();
     cy.saveToDatabase();
     cy.get("[data-cy=leave-edit-mode]").click();
     cy.loadScheduleToMonth("example.xlsx");
