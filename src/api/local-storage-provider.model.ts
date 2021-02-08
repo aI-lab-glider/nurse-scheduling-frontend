@@ -154,6 +154,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     const revisions = await this.storage.allDocs({ include_docs: true });
     const result = revisions.rows.find((r) => {
       if (r.doc?.data.scheduleKey) {
+        debugger;
         return r.id === revisionKey;
       } else {
         return undefined;
