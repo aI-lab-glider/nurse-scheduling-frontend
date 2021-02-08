@@ -12,8 +12,8 @@ const useStyles = makeStyles({
     background: ScssVars.white,
     padding: 10,
     borderTop: "1px solid #E9EEF9",
-    width: "100%",
     color: ScssVars.primary,
+    height: ScssVars.footerHeight,
   },
   logo: {
     height: 46,
