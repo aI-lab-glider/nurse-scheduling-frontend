@@ -60,7 +60,7 @@ describe("schedule editing requirement", () => {
   it("shows how to make undo in schedule", () => {
     cy.getWorkerShift(workerCells[0]).click().screenshotSync();
     cy.useAutocomplete(workerCells[0].newShiftCode).screenshotSync();
-    cy.get("[data-cy=undo-button]").click();
+    cy.get("[data-cy=undo-button]").click({ force: true });
     cy.getWorkerShift(workerCells[0]).contains(workerCells[0].actualShiftCode).screenshotSync();
   });
 });

@@ -34,9 +34,9 @@ export class ErrorMessageHelper {
 
     switch (error.kind) {
       case AlgorithmErrorCode.AON:
-        message = `Brak pielęgniarek w dniu ${error.day} na zmianie ${
+        message = `Brak pielęgniarek w dniu <strong>${error.day}</strong> na zmianie <strong>${
           error.day_time ? dayTimeTranslations[error.day_time] : ""
-        }`;
+        }</strong>`;
         type = ScheduleErrorType.AON;
         title = "date";
         if (error.day) {
@@ -44,7 +44,7 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.WND:
-        message = `Za mało pracowników w trakcie dnia w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
+        message = `Za mało pracowników w trakcie dnia w dniu <strong>${error.day}</strong>, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
         type = ScheduleErrorType.WND;
         title = "date";
         if (error.day) {
@@ -52,7 +52,7 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.WNN:
-        message = `Za mało pracowników w nocy w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
+        message = `Za mało pracowników w nocy w dniu <strong>${error.day}</strong>, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
         type = ScheduleErrorType.WNN;
         title = "date";
         if (error.day) {
@@ -60,7 +60,7 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.DSS:
-        message = `Niedozwolona sekwencja zmian dla pracownika ${error.worker} w dniu ${error.day}: ${error.succeeding} po ${error.preceding}`;
+        message = `Niedozwolona sekwencja zmian dla pracownika <strong>${error.worker}</strong> w dniu <strong>${error.day}</strong>: <strong>${error.succeeding}</strong> po <strong>${error.preceding}</strong>`;
         type = ScheduleErrorType.DSS;
         title = "date";
         if (error.day) {
@@ -68,17 +68,17 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.LLB:
-        message = `Brak wymaganej długiej przerwy dla pracownika ${error.worker} w tygodniu ${error.week}`;
+        message = `Brak wymaganej długiej przerwy dla pracownika <strong>${error.worker}</strong> w tygodniu <strong>${error.week}</strong>`;
         type = ScheduleErrorType.LLB;
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WUH:
-        message = `Pracownik ${error.worker} ma ${error.hours} niedogodzin`;
+        message = `Pracownik <strong>${error.worker}</strong> ma <strong>${error.hours}</strong> niedogodzin`;
         type = ScheduleErrorType.WUH;
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WOH:
-        message = `Pracownik ${error.worker} ma ${error.hours} nadgodzin`;
+        message = `Pracownik <strong>${error.worker}</strong> ma <strong>${error.hours}</strong> nadgodzin`;
         type = ScheduleErrorType.WOH;
         title = `${error.worker}`;
         break;
