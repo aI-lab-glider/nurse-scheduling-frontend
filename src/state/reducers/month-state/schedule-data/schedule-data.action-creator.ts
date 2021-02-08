@@ -56,12 +56,14 @@ export class ScheduleDataActionCreator {
 
   static setScheduleFromKeyIfExistsInDB(
     monthKey: ScheduleKey,
+    revision?: RevisionType,
     baseMonthModel?: MonthDataModel
   ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
-      const { revision } = getState().actualState;
       let monthDataModel;
-
+      if (_.isNil(revision)) {
+        revision = getState().actualState.revision;
+      }
       if (baseMonthModel) {
         monthDataModel = await new LocalStorageProvider().fetchOrCreateMonthRevision(
           monthKey,

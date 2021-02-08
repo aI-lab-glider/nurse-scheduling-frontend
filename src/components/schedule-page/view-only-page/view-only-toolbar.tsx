@@ -34,7 +34,7 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
     } else {
       setIsRevisionEditDisable(!isFuture);
     }
-  }, [year, month]);
+  }, [year, month, revision]);
 
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>): void => {
     const currentRev = event.target.value;

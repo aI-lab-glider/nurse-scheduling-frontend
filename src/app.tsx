@@ -1,9 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Route, Switch } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import schedule from "./assets/devMode/schedule";
 import { cropScheduleDMToMonthDM, ScheduleDataModel } from "./common-models/schedule-data.model";
 import { HeaderComponent } from "./components/common-components";
@@ -19,6 +19,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import JiraLikeDrawer from "./components/common-components/drawer/jira-like-drawer.component";
 import { JiraLikeDrawerProvider } from "./components/common-components/drawer/jira-like-drawer-context";
 import ScssVars from "./assets/styles/styles/custom/_variables.module.scss";
+import { ApplicationStateModel } from "./state/models/application-state.model";
+import { ScheduleKey } from "./api/persistance-store.model";
 
 interface TabData {
   label: string;
@@ -50,19 +52,30 @@ function App(): JSX.Element {
   const classes = useStyles();
   const scheduleDispatcher = useDispatch();
   const [editMode, setEditMode] = useState<boolean>(false);
+  const { month_number: month, year } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
+  );
 
   const tabs: TabData[] = [
     { label: "Plan", component: <SchedulePage editModeHandler={setEditMode} /> },
     { label: "Zarządzanie", component: <ManagementPage /> },
   ];
-
-  useEffect(() => {
+  const fetchGlobalState = useCallback(() => {
     if (process.env.REACT_APP_DEV_MODE === "true") {
       const monthModel = cropScheduleDMToMonthDM(schedule as ScheduleDataModel);
       const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel, true);
       scheduleDispatcher(action);
+    } else {
+      const action = ScheduleDataActionCreator.setScheduleFromKeyIfExistsInDB(
+        new ScheduleKey(month, year),
+        "actual"
+      );
+      scheduleDispatcher(action);
     }
-  }, [scheduleDispatcher]);
+  }, []);
+  useEffect(() => {
+    fetchGlobalState();
+  }, []);
 
   return (
     <>

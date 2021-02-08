@@ -24,6 +24,7 @@ import {
 import _ from "lodash";
 import { calculateMissingFullWeekDays } from "../state/reducers/month-state/schedule-data/common-reducers";
 import { ArrayHelper, ArrayPositionPointer } from "../helpers/array.helper";
+import { VerboseDateHelper } from "../helpers/verbose-date.helper";
 
 export const DATABASE_NAME = "nurse-scheduling";
 
@@ -189,9 +190,17 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     revision: RevisionType
   ): Promise<[MonthDataModel, MonthDataModel]> {
     const scheduleKey = new ScheduleKey(month.scheduleKey.month, month.scheduleKey.year);
+
+    const nextMonthKey = scheduleKey.nextMonthKey;
+    const isNextMonthInFuture = VerboseDateHelper.isMonthInFuture(
+      nextMonthKey.month,
+      nextMonthKey.year
+    );
+    const nextMonthRevision = isNextMonthInFuture ? "primary" : "actual";
+
     return [
-      await this.fetchOrCreateMonthRevision(scheduleKey.prevMonthKey, revision, month),
-      await this.fetchOrCreateMonthRevision(scheduleKey.nextMonthKey, revision, month),
+      await this.fetchOrCreateMonthRevision(scheduleKey.prevMonthKey, "actual", month),
+      await this.fetchOrCreateMonthRevision(nextMonthKey, nextMonthRevision, month),
     ];
   }
 }

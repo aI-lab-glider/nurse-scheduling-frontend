@@ -19,20 +19,21 @@ export class RevisionReducerActionCreator {
 
       const setRevisionAction = ScheduleDataActionCreator.setScheduleFromKeyIfExistsInDB(
         actualMonthDM.scheduleKey,
+        newRevisionType,
         actualMonthDM
       );
 
-      dispatch(setRevisionAction);
       dispatch({
         type: RevisionReducerAction.CHANGE_REVISION,
         payload: newRevisionType,
       });
+      dispatch(setRevisionAction);
     };
   }
 }
 
 export function revisionInfoReducer(
-  state: RevisionType = "primary",
+  state: RevisionType = "actual",
   action: ActionModel<RevisionType>
 ): RevisionType {
   switch (action.type) {
