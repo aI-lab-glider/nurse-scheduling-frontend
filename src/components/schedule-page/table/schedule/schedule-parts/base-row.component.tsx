@@ -30,6 +30,11 @@ export function BaseRowComponentF({
   const verboseDates = scheduleLogic?.sections.Metadata?.verboseDates;
   const currMonthNumber = scheduleLogic?.sections.Metadata.monthNumber;
   const numberOfDays = verboseDates?.length;
+  const firstMonthDayIndex = scheduleLogic?.sections.Metadata.dates.findIndex((day) => day === 1);
+
+  const isCellFromPrevMonth = (index, firstMonthDayIndex): boolean => {
+    return index < firstMonthDayIndex;
+  };
 
   function saveValue(newValue: string): void {
     if (sectionKey) onSave?.(newValue);
@@ -58,7 +63,7 @@ export function BaseRowComponentF({
             isSelected={selection[cellIndex]}
             style={ShiftHelper.getShiftColor(cellData, verboseDates?.[cellIndex])}
             isPointerOn={cellIndex === pointerPosition}
-            isBlocked={!isEditable}
+            isBlocked={!isEditable || isCellFromPrevMonth(cellIndex, firstMonthDayIndex)}
             onKeyDown={(event): void => onKeyDown?.(cellIndex, event)}
             onValueChange={saveValue}
             onClick={(): void => onClick?.(cellIndex)}
