@@ -70,9 +70,11 @@ function App(): JSX.Element {
         new ScheduleKey(month, year),
         "actual"
       );
+
       scheduleDispatcher(action);
     }
-  }, [month, year, scheduleDispatcher]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     fetchGlobalState();
