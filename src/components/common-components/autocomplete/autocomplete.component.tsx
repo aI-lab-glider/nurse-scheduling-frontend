@@ -68,7 +68,9 @@ export function AutocompleteComponent<T>({
               data-cy={option["data-cy"]}
             >
               <div className="container">
-                <div className="optionLabel">{getOptionLabel(option)}</div>
+                <div className="optionLabel" data-cy={option["data-cy"]}>
+                  {getOptionLabel(option)}
+                </div>
                 <div
                   className="colorSample"
                   style={{ backgroundColor: `#${getOptionColor(option)}` }}
