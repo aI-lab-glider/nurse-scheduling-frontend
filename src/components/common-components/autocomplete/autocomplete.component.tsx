@@ -62,13 +62,14 @@ export function AutocompleteComponent<T>({
           {groupedOptions.map((option, index) => (
             <li
               {...getOptionProps({ option, index })}
-              data-cy={option["data-cy"]}
               onClick={(): void => {
                 setValue(option);
               }}
             >
               <div className="container">
-                <div className="optionLabel">{getOptionLabel(option)}</div>
+                <div className="optionLabel" data-cy={option["data-cy"]}>
+                  {getOptionLabel(option)}
+                </div>
                 <div
                   className="colorSample"
                   style={{ backgroundColor: `#${getOptionColor(option)}` }}

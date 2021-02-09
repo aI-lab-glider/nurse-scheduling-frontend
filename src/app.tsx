@@ -72,10 +72,11 @@ function App(): JSX.Element {
       );
       scheduleDispatcher(action);
     }
-  }, []);
+  }, [month, year, scheduleDispatcher]);
+
   useEffect(() => {
     fetchGlobalState();
-  }, []);
+  }, [fetchGlobalState]);
 
   return (
     <>

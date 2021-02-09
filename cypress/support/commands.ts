@@ -93,7 +93,7 @@ Cypress.Commands.add(
 
 Cypress.Commands.add("useAutocomplete", (newShiftCode: ShiftCode) => {
   return cy
-    .get(`[data-cy=autocomplete-${newShiftCode}]`, { timeout: 100000 })
+    .get(`[data-cy=autocomplete-${newShiftCode}]`, { timeout: 10000 })
     .click({ force: true });
 });
 
@@ -101,7 +101,9 @@ Cypress.Commands.add(
   "changeWorkerShift",
   ({ newShiftCode, ...getWorkerShiftOptions }: ChangeWorkerShiftOptions) => {
     cy.getWorkerShift(getWorkerShiftOptions).click();
-    return cy.useAutocomplete(newShiftCode);
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(500);
+    cy.useAutocomplete(newShiftCode);
   }
 );
 
@@ -129,9 +131,15 @@ Cypress.Commands.add("saveToDatabase", () => {
 Cypress.Commands.add("enterEditMode", () => {
   cy.get("[data-cy=revision-select]").select("wersja aktualna").should("have.value", "actual");
   // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(100);
+  cy.wait(500);
   cy.get("[data-cy=edit-mode-button]").click();
-  return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
+  cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
+  cy.getWorkerShift({
+    workerType: WorkerType.NURSE,
+    workerIdx: 0,
+    shiftIdx: 0,
+    selector: "cell",
+  }).click();
 });
 
 Cypress.Commands.add("leaveEditMode", () => {
