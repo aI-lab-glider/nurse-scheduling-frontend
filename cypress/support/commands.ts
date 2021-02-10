@@ -101,8 +101,6 @@ Cypress.Commands.add(
   "changeWorkerShift",
   ({ newShiftCode, ...getWorkerShiftOptions }: ChangeWorkerShiftOptions) => {
     cy.getWorkerShift(getWorkerShiftOptions).click();
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(500);
     cy.useAutocomplete(newShiftCode);
   }
 );
@@ -130,8 +128,6 @@ Cypress.Commands.add("saveToDatabase", () => {
 
 Cypress.Commands.add("enterEditMode", () => {
   cy.get("[data-cy=revision-select]").select("wersja aktualna").should("have.value", "actual");
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(500);
   cy.get("[data-cy=edit-mode-button]").click();
   cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
   cy.getWorkerShift({

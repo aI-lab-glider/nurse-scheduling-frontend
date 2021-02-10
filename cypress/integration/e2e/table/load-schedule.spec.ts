@@ -21,8 +21,6 @@ context("Load schedule", () => {
     cy.saveToDatabase();
     cy.leaveEditMode();
     cy.loadScheduleToMonth("example_2.xlsx");
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(500);
     cy.checkWorkerShift({
       ...cell,
       desiredShiftCode: ShiftCode.N,

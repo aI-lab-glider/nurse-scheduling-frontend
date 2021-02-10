@@ -64,6 +64,7 @@ export class ScheduleDataActionCreator {
       if (_.isNil(revision)) {
         revision = getState().actualState.revision;
       }
+
       if (baseMonthModel) {
         monthDataModel = await new LocalStorageProvider().fetchOrCreateMonthRevision(
           monthKey,

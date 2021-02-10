@@ -29,11 +29,9 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
   useEffect(() => {
     const isFuture = VerboseDateHelper.isMonthInFuture(month, year);
     setIsMonthFromFuture(isFuture);
-    if (revision === "actual") {
-      setIsRevisionEditDisable(false);
-    } else {
-      setIsRevisionEditDisable(!isFuture);
-    }
+
+    const isRevisionEditDisable = revision === "actual" ? false : !isFuture;
+    setIsRevisionEditDisable(isRevisionEditDisable);
   }, [year, month, revision]);
 
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>): void => {
@@ -72,7 +70,7 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
         <Button
           onClick={openEdit}
           size="small"
-          className={classNames(isRevisionEditDisabled && "disabled-submit-button")}
+          className={classNames({ "disabled-submit-button": isRevisionEditDisabled })}
           variant="primary"
           data-cy="edit-mode-button"
           disabled={isRevisionEditDisabled}

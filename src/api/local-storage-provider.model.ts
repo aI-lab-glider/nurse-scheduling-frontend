@@ -44,12 +44,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       return;
     }
 
-    let oppositeRevisionType: RevisionType;
-    if (type === "actual") {
-      oppositeRevisionType = "primary";
-    } else {
-      oppositeRevisionType = "actual";
-    }
+    const oppositeRevisionType = type === "actual" ? "primary" : "actual";
 
     const oppositeRevision = await this.getMonthRevision(
       monthDataModel.scheduleKey.getRevisionKey(oppositeRevisionType)
