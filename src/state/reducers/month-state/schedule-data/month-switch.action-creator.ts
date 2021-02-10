@@ -45,17 +45,6 @@ export class MonthSwitchActionCreator {
         actualMonthDM
       );
       dispatch(addNewScheduleAction);
-
-      // Set default revision type - primary in future, actual for present and past
-      const { revision } = getState().actualState;
-      const isFuture = VerboseDateHelper.isMonthInFuture(newMonth, newYear);
-      const newRevisionType = isFuture ? "primary" : "actual";
-      if (revision != newRevisionType) {
-        dispatch({
-          type: RevisionReducerAction.CHANGE_REVISION,
-          payload: newRevisionType,
-        });
-      }
     };
   }
 
