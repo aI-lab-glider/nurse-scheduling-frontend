@@ -12,25 +12,32 @@ import { Popper } from "./base-cell/popper";
 
 export interface ErrorTooltipOptions {
   children: ReactNode;
-  errorSelector?: (scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
+  errorSelector: (scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
   className?: string;
   showErrorTitle?: boolean;
   errorTriangleOffset?: TriangleOffset;
+  errorTooltipOffset?: TooltipOffset;
 }
 
 interface TriangleOffset {
   top?: number;
   right?: number;
 }
+interface TooltipOffset {
+  top?: number;
+  left?: number;
+}
+
 export function ErrorTooltipProvider({
   showErrorTitle,
   children,
   errorSelector,
   className,
   errorTriangleOffset = {},
+  errorTooltipOffset = {},
 }: ErrorTooltipOptions): JSX.Element {
-  const errors = useSelector(
-    (state: ApplicationStateModel) => errorSelector?.(state.actualState.scheduleErrors) ?? []
+  const errors = useSelector((state: ApplicationStateModel) =>
+    errorSelector(state.actualState.scheduleErrors)
   );
   const errorTriangle = useRef<HTMLDivElement>(null);
   const container = useRef<HTMLDivElement>(null);
@@ -67,7 +74,8 @@ export function ErrorTooltipProvider({
         {...attributes}
         style={{
           ...styles,
-          marginLeft: container.current?.offsetWidth,
+          marginLeft: errorTooltipOffset.left ?? container.current?.offsetWidth,
+          marginTop: errorTooltipOffset.top ?? 0,
         }}
         onMouseLeave={(): void => hideErrorTooltip(false)}
         onClick={handleTriangleClick}

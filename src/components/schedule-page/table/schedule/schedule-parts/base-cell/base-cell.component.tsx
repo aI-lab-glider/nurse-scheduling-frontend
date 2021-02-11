@@ -78,7 +78,7 @@ export function BaseCellComponent({
   onDrag,
   onDragEnd,
   sectionKey,
-  errorSelector,
+  errorSelector = (_) => [],
 }: BaseCellOptions): JSX.Element {
   const { year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
