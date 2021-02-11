@@ -22,7 +22,7 @@ interface TriangleOffset {
   top?: number;
   right?: number;
 }
-export function ErrorTooltip({
+export function ErrorTooltipProvider({
   showErrorTitle,
   children,
   errorSelector,
@@ -50,7 +50,7 @@ export function ErrorTooltip({
     }
   }
 
-  function handeTriangleClick(event: React.MouseEvent<HTMLHRElement, MouseEvent>): void {
+  function handleTriangleClick(event: React.MouseEvent<HTMLHRElement, MouseEvent>): void {
     event.stopPropagation();
     if (!isFixed) {
       setIsFixed(true);
@@ -70,7 +70,7 @@ export function ErrorTooltip({
           marginLeft: container.current?.offsetWidth,
         }}
         onMouseLeave={(): void => hideErrorTooltip(false)}
-        onClick={handeTriangleClick}
+        onClick={handleTriangleClick}
       >
         {errors.map((error, index) => (
           <ErrorListItem
@@ -82,20 +82,21 @@ export function ErrorTooltip({
           />
         ))}
       </Popper>
+
       <div
         ref={container}
         className={className}
         style={{
           position: "relative",
         }}
+        onMouseEnter={showErrorTooltip}
+        onMouseLeave={(): void => hideErrorTooltip(false)}
       >
         {errors.length !== 0 && (
           <span
-            onMouseEnter={showErrorTooltip}
             ref={errorTriangle}
             className="error-triangle"
-            onMouseLeave={(): void => hideErrorTooltip(false)}
-            onClick={handeTriangleClick}
+            onClick={handleTriangleClick}
             style={errorTriangleOffset}
           />
         )}
@@ -104,5 +105,3 @@ export function ErrorTooltip({
     </>
   );
 }
-
-// export const ErrorTooltip = React.forwardRef(ErrorTooltipF);

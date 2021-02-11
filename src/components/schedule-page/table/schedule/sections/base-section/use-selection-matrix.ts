@@ -45,6 +45,7 @@ export function useSelectionMatrix(matrix: unknown[][]): UseSelectionMatrixRetur
     }
     setSelectionMatrix(selection);
   }
+
   function resetSelection(): void {
     setSelectionMatrix((prev) => getFalsyCopy(prev));
   }

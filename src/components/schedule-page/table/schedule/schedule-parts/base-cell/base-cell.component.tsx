@@ -2,28 +2,25 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import classNames from "classnames/bind";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
-import { useRef } from "react";
+import mergeRefs from "react-merge-refs";
 import { usePopper } from "react-popper";
-import { Popper } from "./popper";
-import { CellDetails } from "./cell-details-content.component";
+import { useSelector } from "react-redux";
 import { VerboseDate, WeekDay } from "../../../../../../common-models/month-info.model";
 import {
   GroupedScheduleErrors,
   ScheduleError,
 } from "../../../../../../common-models/schedule-error.model";
-import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
-import useComponentVisible from "./use-component-visible";
-import mergeRefs from "react-merge-refs";
-import ErrorListItem from "../../../../validation-drawer/error-list-item.component";
-import { ErrorMessageHelper } from "../../../../../../helpers/error-message.helper";
 import { CellColorSet } from "../../../../../../helpers/colors/cell-color-set.model";
 import { TranslationHelper } from "../../../../../../helpers/translations.helper";
-import { ErrorTooltip } from "../error-tooltip.component";
+import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
+import { ErrorTooltipProvider } from "../error-tooltip.component";
 import { BaseCellInputComponent, BaseCellInputOptions } from "./base-cell-input.component";
+import { CellDetails } from "./cell-details-content.component";
+import { Popper } from "./popper";
+import useComponentVisible from "./use-component-visible";
 
 export enum CellManagementKeys {
   Enter = "Enter",
@@ -84,27 +81,16 @@ export function BaseCellComponent({
   errorSelector,
 }: BaseCellOptions): JSX.Element {
   const { year } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info);
-  const errors = useSelector(
-    (state: ApplicationStateModel) => errorSelector?.(state.actualState.scheduleErrors) ?? []
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
+
   const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
   const keepOnClass = "keepOn" + keepOn + value;
   const hasNextClass = "hasNext" + hasNext;
 
-  const [isToolTipOpen, setToolTipOpen] = useState(false);
-
   const cellDetailsPopperRef = useRef<HTMLDivElement>(null);
 
   const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
-
-  function showErrorTooltip(): void {
-    setToolTipOpen(true);
-  }
-
-  function hideErrorTooltip(): void {
-    setToolTipOpen(false);
-  }
 
   const [, drop] = useDrop({
     accept: dragAnDropType,
@@ -130,6 +116,7 @@ export function BaseCellComponent({
       if (!monitor.didDrop()) onDragEnd?.();
     },
   });
+
   // Below lines disable default preview image that is inserted by browser on dragging
   useEffect(() => {
     preview(getEmptyImage());
@@ -166,6 +153,7 @@ export function BaseCellComponent({
   function toggleComponentVisibility(): void {
     setIsComponentVisible(!isComponentVisible);
   }
+
   //  #region view
   return (
     <td
@@ -178,7 +166,7 @@ export function BaseCellComponent({
       }}
     >
       <div
-        className={"wrapContent"}
+        className="wrapContent"
         ref={drag}
         onClick={(): void => {
           if (!isBlocked) onClick?.();
@@ -193,35 +181,33 @@ export function BaseCellComponent({
         )}
 
         <Popper
-            ref={cellDetailsPopperRef}
-            className="cell-details-popper"
-            style={
-              usePopper(useRef<HTMLDivElement>(null).current, cellDetailsPopperRef.current).styles
-            }
-            isOpen={isComponentVisible && isBlocked && value !== ""}
-            >
-              <CellDetails
-                index={index}
-                day={verboseDate?.date || 0}
-                month={monthNumber || 0}
-                year={year}
-                rowIndex={rowIndex}
-                shiftcode={value}
-                sectionKey={sectionKey}
-                close={(): void => setIsComponentVisible(false)}
-              />
-          </Popper>
-
+          ref={cellDetailsPopperRef}
+          className="cell-details-popper"
+          style={
+            usePopper(useRef<HTMLDivElement>(null).current, cellDetailsPopperRef.current).styles
+          }
+          isOpen={isComponentVisible && isBlocked && value !== ""}
+        >
+          <CellDetails
+            index={index}
+            day={verboseDate?.date || 0}
+            month={monthNumber || 0}
+            year={year}
+            rowIndex={rowIndex}
+            shiftcode={value}
+            sectionKey={sectionKey}
+            close={(): void => setIsComponentVisible(false)}
+          />
+        </Popper>
 
         <div className={"content " + hasNextClass + " " + keepOnClass} data-cy="highlighted-cell">
           {(!isPointerOn || (isPointerOn && isBlocked)) && (
-            <ErrorTooltip errorSelector={errorSelector} className={"content"}>
-              
+            <ErrorTooltipProvider errorSelector={errorSelector} className={"content"}>
               <div className={"leftBorder leftBorderColor"} />
               <p data-cy="cell" className={"relative "}>
                 {keepOn ? "" : value}
               </p>
-            </ErrorTooltip>
+            </ErrorTooltipProvider>
           )}
         </div>
       </div>

@@ -19,7 +19,6 @@ import {
   ScheduleError,
 } from "../../../../../../common-models/schedule-error.model";
 import { useCallback } from "react";
-
 export enum DirectionKey {
   ArrowRight = "ArrowRight",
   ArrowLeft = "ArrowLeft",
@@ -93,14 +92,20 @@ function BaseSectionComponentF({
     resetSelectionMatrix();
   }, [resetSelectionMatrix, setPointerPosition]);
 
-  function onDrag(pivot: PivotCell, rowInd: number, cellInd: number): void {
-    setSelectionMatrix(selectionMatrix, pivot.cellIndex, pivot.rowIndex, cellInd, rowInd);
-  }
+  const onDrag = useCallback(
+    (pivot: PivotCell, rowInd: number, cellInd: number): void => {
+      setSelectionMatrix(selectionMatrix, pivot.cellIndex, pivot.rowIndex, cellInd, rowInd);
+    },
+    [selectionMatrix, setSelectionMatrix]
+  );
 
-  function handleCellClick(rowInd: number, cellInd: number): void {
-    setSelectionMatrix(selectionMatrix, cellInd, rowInd, cellInd, rowInd);
-    setPointerPosition({ row: rowInd, cell: cellInd });
-  }
+  const handleCellClick = useCallback(
+    (rowInd: number, cellInd: number): void => {
+      setSelectionMatrix(selectionMatrix, cellInd, rowInd, cellInd, rowInd);
+      setPointerPosition({ row: rowInd, cell: cellInd });
+    },
+    [selectionMatrix, setSelectionMatrix, setPointerPosition]
+  );
 
   const onSave = useCallback(
     (newValue: string): void => {
@@ -114,7 +119,7 @@ function BaseSectionComponentF({
     <>
       {data.map((dataRow, rowInd) => (
         <RowComponent
-          selection={selectionMatrix[rowInd]}
+          selection={[...selectionMatrix[rowInd]]}
           uuid={uuid}
           sectionKey={sectionKey}
           key={`${dataRow.rowKey}${rowInd}_${uuid}`}

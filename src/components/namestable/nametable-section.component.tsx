@@ -15,7 +15,7 @@ import { ArrayHelper } from "../../helpers/array.helper";
 import { VerboseDate } from "../../common-models/month-info.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
 import { BaseSectionOptions } from "../schedule-page/table/schedule/sections/base-section/base-section.component";
-import { ErrorTooltip } from "../schedule-page/table/schedule/schedule-parts/error-tooltip.component";
+import { ErrorTooltipProvider } from "../schedule-page/table/schedule/schedule-parts/error-tooltip.component";
 import { ScheduleError } from "../../common-models/schedule-error.model";
 
 export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "errorSelector"> {
@@ -77,7 +77,7 @@ export function NameTableSection({
         <tbody>
           {data.map((cellData) => {
             return (
-              <ErrorTooltip
+              <ErrorTooltipProvider
                 errorSelector={(scheduleErrors): ScheduleError[] =>
                   errorSelector?.(cellData, 0, scheduleErrors) ?? []
                 }
@@ -98,7 +98,7 @@ export function NameTableSection({
                     <span className="underline" />
                   </td>
                 </tr>
-              </ErrorTooltip>
+              </ErrorTooltipProvider>
             );
           })}
         </tbody>

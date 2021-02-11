@@ -55,19 +55,6 @@ export default function ErrorListItem({
   return (
     <div className={`error-list-item ${className}`}>
       <div className="red-rectangle" />
-<<<<<<< HEAD
-      <div className="error-title">
-        <p className="error-title-content">
-          {error.title === "date" ? `${errorDay} ` + month : `${error.title}`}
-        </p>
-      </div>
-      <div className="error-text" dangerouslySetInnerHTML={{ __html: error.message || "" }} />
-      <div className="error-btn">
-        <Button variant="primary" id="error-buttons" style={{ width: "90px", height: "26px" }}>
-          Pokaż
-        </Button>
-      </div>
-=======
       {showTitle && (
         <div className="error-title">
           <p className="error-title-content">
@@ -75,7 +62,7 @@ export default function ErrorListItem({
           </p>
         </div>
       )}
-      <div className="error-text">{error.message}</div>
+      <div className="error-text" dangerouslySetInnerHTML={{ __html: error.message || "" }} />
       {interactable && (
         <div className="error-btn">
           <Button variant="primary" id="error-buttons" style={{ width: "90px", height: "26px" }}>
@@ -83,7 +70,6 @@ export default function ErrorListItem({
           </Button>
         </div>
       )}
->>>>>>> 8419bc6 (Adds badges to namestable)
     </div>
   );
 }
