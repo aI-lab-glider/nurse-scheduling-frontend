@@ -69,7 +69,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
     <>
       {aon.length > 0 && (
         <FoldingSection name={`Brak pielęgniarek (${aon.length})`}>
-          <div className="scrollableContainer75vh">
+          <div>
             {aon.errors?.map(
               (error, index): JSX.Element => (
                 <ErrorListItem
@@ -83,7 +83,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
       )}
       {wnd.length > 0 && (
         <FoldingSection name={`Za mało pracowników w trakcie dnia (${wnd.length})`}>
-          <div className="scrollableContainer75vh">
+          <div>
             {wnd.errors?.map(
               (error, index): JSX.Element => (
                 <ErrorListItem
@@ -97,7 +97,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
       )}
       {wnn.length > 0 && (
         <FoldingSection name={`Za mało pracowników w nocy (${wnn.length})`}>
-          <div className="scrollableContainer75vh">
+          <div>
             {wnn.errors?.map(
               (error, index): JSX.Element => (
                 <ErrorListItem
@@ -111,7 +111,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
       )}
       {dss.length > 0 && (
         <FoldingSection name={`Niedozwolona sekwencja zmian (${dss.length})`}>
-          <div className="scrollableContainer75vh">
+          <div>
             {dss.errors?.map(
               (error, index): JSX.Element => (
                 <ErrorListItem
@@ -125,7 +125,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
       )}
       {llb.length > 0 && (
         <FoldingSection name={`Brak wymaganej długiej przerwy (${llb.length})`}>
-          <div className="scrollableContainer75vh">
+          <div>
             {llb.errors?.map(
               (error, index): JSX.Element => (
                 <ErrorListItem
@@ -139,7 +139,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
       )}
       {wuh.length > 0 && (
         <FoldingSection name={`Niedogodziny (${wuh.length})`}>
-          <div className="scrollableContainer75vh">
+          <div>
             {wuh.errors?.map(
               (error, index): JSX.Element => (
                 <ErrorListItem
@@ -153,7 +153,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
       )}
       {woh.length > 0 && (
         <FoldingSection name={`Nadgodziny (${woh.length})`}>
-          <div className="scrollableContainer75vh">
+          <div>
             {woh.errors?.map(
               (error, index): JSX.Element => (
                 <ErrorListItem
@@ -167,7 +167,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
       )}
       {isv.length > 0 && (
         <FoldingSection name={`Niedozwolona wartość zmiany (${isv.length})`}>
-          <div className="scrollableContainer75vh">
+          <div>
             {isv.errors?.map(
               (error, index): JSX.Element => (
                 <ErrorListItem
@@ -181,7 +181,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
       )}
       {oth.length > 0 && (
         <FoldingSection name={`Pozostałe błędy (${oth.length})`}>
-          <div className="scrollableContainer75vh">
+          <div>
             {oth.errors?.map(
               (error, index): JSX.Element => (
                 <ErrorListItem

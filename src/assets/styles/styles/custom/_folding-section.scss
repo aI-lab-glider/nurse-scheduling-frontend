@@ -55,8 +55,7 @@
 
   .text {
     cursor: pointer;
-    width: auto;
-    position: absolute;
+    white-space: nowrap;
     align-items: center;
     display: flex;
     font-family: $font-family-table;

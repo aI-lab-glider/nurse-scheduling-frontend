@@ -5,14 +5,14 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 52px;
+  height: $header-height;
   background-color: $primary-header-color;
   padding: 0 20px 0 20px;
   align-items: center;
   justify-content: space-around;
   position: fixed;
   top: 0;
-  z-index: 1301;
+  z-index: 110;
 
   #AssignmentIndIcon {
     color: $header-text-color;

@@ -52,7 +52,7 @@ export default function ErrorListItem({ error }: Options): JSX.Element {
           {error.title === "date" ? `${errorDay} ` + month : `${error.title}`}
         </p>
       </div>
-      <div className="error-text">{error.message}</div>
+      <div className="error-text" dangerouslySetInnerHTML={{ __html: error.message || "" }} />
       <div className="error-btn">
         <Button variant="primary" id="error-buttons" style={{ width: "90px", height: "26px" }}>
           Pokaż
