@@ -17,7 +17,7 @@ interface HeaderCheckInterface {
 
 export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.Element {
   const [modalOpen, modalSetOpen] = useState(false);
-  const { image, takeScreenshot } = useScreenshot();
+  const { image, takeScreenshot, clear } = useScreenshot();
 
   function onReportIssueClick(): void {
     takeScreenshot();
@@ -43,7 +43,7 @@ export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.E
           <SettingsIcon />
         </Typography>
       </Link>
-      <ReportIssueModal open={modalOpen} setOpen={modalSetOpen} screenshot={image} />
+      <ReportIssueModal open={modalOpen} setOpen={modalSetOpen} screenshot={image} clear={clear} />
     </div>
   );
 }

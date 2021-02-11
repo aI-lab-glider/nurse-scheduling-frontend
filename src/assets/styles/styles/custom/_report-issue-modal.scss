@@ -1,0 +1,28 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public 
+ * License, v. 2.0. If a copy of the MPL was not distributed with this 
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+.report-issue-modal-body {
+  color: $primary;
+  font-family: $font-family-primary;
+  font-size: $font-size-lg;
+  //line-height: $line-height-base;
+  line-height: 0px !important;
+  padding: 0px 27px;
+
+  p {
+    font-weight: bolder;
+    letter-spacing: 0.75px;
+    margin-top: 24px;
+  }
+
+  TextField {
+    letter-spacing: 0.25px;
+    margin-top: 0px;
+    width: 100%;
+  }
+  .spinner-scaled {
+    height: 100px;
+    width: 100px;
+  }
+}

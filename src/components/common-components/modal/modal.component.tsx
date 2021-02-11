@@ -72,13 +72,15 @@ export interface ModalOptions {
   title: string;
   body: JSX.Element;
   footer: JSX.Element;
+  closeOptions?: () => void;
 }
 
 export default function DefaultModal(options: ModalOptions): JSX.Element {
   const classes = useStyles();
-  const { setOpen, open, title, body, footer } = options;
+  const { setOpen, open, title, body, footer, closeOptions } = options;
 
   const handleClose = (): void => {
+    closeOptions ? closeOptions() : setOpen(false);
     setOpen(false);
   };
 
@@ -109,7 +111,7 @@ export default function DefaultModal(options: ModalOptions): JSX.Element {
                 <h1 className={classes.title}>{title}</h1>
               </Grid>
               <Grid item>
-                <IconButton className={classes.exitButton} onClick={(): void => setOpen(false)}>
+                <IconButton className={classes.exitButton} onClick={(): void => handleClose()}>
                   <MdClose />
                 </IconButton>
               </Grid>
