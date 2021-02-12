@@ -3,12 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 .report-issue-modal-body {
-  color: $primary;
-  font-family: $font-family-primary;
-  font-size: $font-size-lg;
-  line-height: 0px !important;
-  padding: 0px 27px;
-
   p {
     font-weight: bolder;
     letter-spacing: 0.75px;
@@ -37,10 +31,5 @@
         border-color: $primary;
       }
     }
-  }
-
-  .spinner-scaled {
-    height: 100px;
-    width: 100px;
   }
 }

@@ -72,15 +72,13 @@ export interface ModalOptions {
   title: string;
   body: JSX.Element;
   footer: JSX.Element;
-  closeOptions?: () => void;
 }
 
 export default function DefaultModal(options: ModalOptions): JSX.Element {
   const classes = useStyles();
-  const { setOpen, open, title, body, footer, closeOptions } = options;
+  const { setOpen, open, title, body, footer } = options;
 
   const handleClose = (): void => {
-    closeOptions ? closeOptions() : setOpen(false);
     setOpen(false);
   };
 
