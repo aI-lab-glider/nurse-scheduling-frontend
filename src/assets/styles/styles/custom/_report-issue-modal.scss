@@ -6,7 +6,6 @@
   color: $primary;
   font-family: $font-family-primary;
   font-size: $font-size-lg;
-  //line-height: $line-height-base;
   line-height: 0px !important;
   padding: 0px 27px;
 
@@ -19,8 +18,27 @@
   TextField {
     letter-spacing: 0.25px;
     margin-top: 0px;
-    width: 100%;
   }
+
+  .MuiTextField-root {
+    .MuiInput-underline {
+      &:before {
+        border-color: $primary;
+        border-width: 1px;
+      }
+      &:after {
+        border-color: $primary;
+        border-width: 1px;
+      }
+      &:hover:before {
+        border-color: $primary;
+      }
+      &:hover:after {
+        border-color: $primary;
+      }
+    }
+  }
+
   .spinner-scaled {
     height: 100px;
     width: 100px;

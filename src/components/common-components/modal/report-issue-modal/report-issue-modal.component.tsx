@@ -39,6 +39,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
             value={issueDescription}
             onChange={onIssueDescriptionChange}
             fullWidth={true}
+            multiline
           />
         </>
       )}
