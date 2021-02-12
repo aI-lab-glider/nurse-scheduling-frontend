@@ -6,13 +6,9 @@ import { TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { Button } from "../../button-component/button.component";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import { Box, Divider, Grid, IconButton } from "@material-ui/core";
-import { MdClose } from "react-icons/md";
 import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
 import classNames from "classnames";
+import DefaultModal from "../modal.component";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -129,44 +125,14 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   );
 
   return (
-    <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      className={classes.modal}
+    <DefaultModal
       open={open}
-      onClose={handleClose}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
-    >
-      <Fade in={open}>
-        <div className={classes.paper}>
-          <Grid
-            container
-            className={classes.titleMargin}
-            direction="row"
-            justify="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <h1 className={classes.title}>{title}</h1>
-            </Grid>
-            <Grid item>
-              <IconButton className={classes.exitButton} onClick={(): void => handleClose()}>
-                <MdClose />
-              </IconButton>
-            </Grid>
-          </Grid>
-
-          <Divider />
-          <Box className={classes.modalBody}>{body}</Box>
-          <div className={classes.footer}>
-            <Box>{footer}</Box>
-          </div>
-        </div>
-      </Fade>
-    </Modal>
+      setOpen={setOpen}
+      title={title}
+      body={body}
+      footer={footer}
+      closeOptions={clear}
+      classNames={classes}
+    />
   );
 }
