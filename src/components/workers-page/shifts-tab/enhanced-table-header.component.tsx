@@ -22,7 +22,7 @@ const useStyles = makeStyles(() =>
 );
 
 interface EnhancedTableProps {
-  toggleDrawer: (open: boolean, mode?: ShiftDrawerMode) => void;
+  toggleOpen: (shift: Shift, mode: ShiftDrawerMode) => void;
 }
 
 interface ShiftDataCell {
@@ -38,7 +38,7 @@ const headCells: ShiftDataCell[] = [
 ];
 
 export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Element {
-  const { toggleDrawer } = props;
+  const { toggleOpen } = props;
   const classes = useStyles();
 
   return (
@@ -55,7 +55,17 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
           <Button
             variant="primary"
             onClick={(): void => {
-              toggleDrawer(true, ShiftDrawerMode.ADD_NEW);
+              toggleOpen(
+                {
+                  code: "",
+                  name: "Nowa zmiana",
+                  from: 0,
+                  to: 0,
+                  color: "FFD100",
+                  isWorkingShift: true,
+                },
+                ShiftDrawerMode.ADD_NEW
+              );
             }}
             className="header-button"
           >

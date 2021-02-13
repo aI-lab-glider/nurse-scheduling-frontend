@@ -2,10 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useRef, useState } from "react";
-import { Button, ButtonVariant } from "../button-component/button.component";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Popper from "@material-ui/core/Popper";
+import { Button, ButtonVariant } from "..";
 
 export interface ButtonData {
   label: string;
@@ -67,7 +67,7 @@ export function DropdownButtons({
         className={"z-index100"}
       >
         <ClickAwayListener onClickAway={handleClickAway}>
-          <div className="dropdown-buttons-list" id={dataCy}>
+          <div className="dropdown-buttons-list" id={variant}>
             {buttons.map((item) => (
               <div
                 className="dropdown-button"

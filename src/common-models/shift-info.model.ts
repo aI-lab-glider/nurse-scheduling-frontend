@@ -8,7 +8,7 @@ export interface Shift {
   name: string;
   from: number;
   to: number;
-  color?: string;
+  color: string;
   isWorkingShift?: boolean;
 }
 
@@ -23,9 +23,10 @@ export const shifts: { [id: string]: Shift } = {
     name: "Popołudnie + Noc",
     from: 19,
     to: 7,
+    color: "FFD100",
     isWorkingShift: true,
   },
-  W: { code: "W", name: "Wolne", from: 0, to: 24, isWorkingShift: false },
+  W: { code: "W", name: "Wolne", from: 0, to: 24, color: "FF8A00", isWorkingShift: false },
   U: {
     code: "U",
     name: "Urlop wypoczynkowy",

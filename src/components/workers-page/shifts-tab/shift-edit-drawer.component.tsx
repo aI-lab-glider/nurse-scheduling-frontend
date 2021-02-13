@@ -1,44 +1,76 @@
 import TextField from "@material-ui/core/TextField";
 import React, { useState } from "react";
-import { Button } from "../../common-components/button-component/button.component";
-import { ColorSelector } from "../../common-components/color-selector/color-selector.component";
 import { MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { FormControl, RadioGroup, FormControlLabel, Radio } from "@material-ui/core";
+import { FormControl, FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
 import { Shift, shifts } from "../../../common-models/shift-info.model";
 import { AcronymGenerator } from "../../../helpers/acronym-generator.helper";
+import { DropdownColors } from "../../common-components/dropdown-buttons/dropdown-colors.component";
+import classNames from "classnames/bind";
+import { Button } from "../../common-components";
 
-export default function ShiftEditDrower(): JSX.Element {
+interface ShiftEditDrawerOptions {
+  selectedShift: Shift;
+  saveChangedShift: (Shift) => void;
+}
+
+export default function ShiftEditDrawer({
+  selectedShift,
+  saveChangedShift,
+}: ShiftEditDrawerOptions): JSX.Element {
   const shiftNames = Object.values(shifts).map((shift) => shift.name);
   const shiftCodes = Object.values(shifts).map((shift) => shift.code);
-  const [shiftName, setShiftName] = useState("");
-  const [shiftCode, setShiftCode] = useState("");
+  const [shiftName, setShiftName] = useState(selectedShift.name);
+  const [shiftCode, setShiftCode] = useState(selectedShift.code);
 
   const [isInShiftNames, checkShiftName] = useState(false);
   const [isInShiftCodes, checkShiftCode] = useState(false);
+  const [isCodeManuallyChanged, setCodeManuallyChanged] = useState(false);
 
   const shiftNameTextFieldOnChange = (shiftNameActual: string): void => {
     setShiftName(shiftNameActual);
-    setShiftCode(AcronymGenerator.generate(shiftNameActual));
+    !isCodeManuallyChanged && setShiftCode(AcronymGenerator.generate(shiftNameActual));
     checkShiftName(shiftNames.includes(shiftNameActual));
   };
 
-  const [valueTimeStart, onChangeTimeStart] = useState<Date | null>(
-    new Date("2021-01-01T23:00:00.000Z")
+  const [shiftType, setShiftType] = useState(
+    selectedShift.isWorkingShift ? "working" : "not_working"
   );
-  const [valueTimeEnd, onChangeTimeEnd] = useState<Date | null>(
-    new Date("2021-01-01T23:00:00.000Z")
-  );
-  const [valueRadio, setValueRadio] = useState("working");
-  const radioChange = (shiftType: string): void => {
-    setValueRadio(shiftType);
-  };
 
-  const [colorPicked, setPicked] = useState("");
-  const colorClicked = (colorChosen: string): void => setPicked(colorChosen);
+  function changeShiftType(newShiftType: string): void {
+    setShiftType(newShiftType);
 
-  const [, setShift] = useState<Shift | null>(null);
-  const setNewShift = (createdShift: Shift): void => setShift(createdShift);
+    onChangeTimeStart(getNewDate());
+    onChangeTimeEnd(getNewDate());
+
+    if (newShiftType === "working") {
+      setPicked("FFD100");
+    } else {
+      setPicked("FF8A00");
+    }
+  }
+
+  function getNewDate(dateType?: string): Date {
+    const newDate = new Date();
+    switch (dateType) {
+      case "start":
+        newDate.setHours(selectedShift.from, 0, 0, 0);
+        break;
+      case "end":
+        newDate.setHours(selectedShift.to, 0, 0, 0);
+        break;
+      default:
+        newDate.setHours(0, 0, 0, 0);
+        break;
+    }
+
+    return newDate;
+  }
+
+  const [valueTimeStart, onChangeTimeStart] = useState<Date | null>(getNewDate("start"));
+  const [valueTimeEnd, onChangeTimeEnd] = useState<Date | null>(getNewDate("end"));
+
+  const [colorPicked, setPicked] = useState(selectedShift.color);
 
   return (
     <>
@@ -46,7 +78,7 @@ export default function ShiftEditDrower(): JSX.Element {
         <h4>Nazwa zmiany</h4>
         <TextField
           type="text"
-          placeholder="Nazwa zmiany"
+          placeholder={selectedShift.name}
           onChange={(event): void => shiftNameTextFieldOnChange(event.target.value)}
           helperText={isInShiftNames ? "Zmiana z taką nazwą już istnieje" : ""}
           error={isInShiftNames}
@@ -60,8 +92,8 @@ export default function ShiftEditDrower(): JSX.Element {
             row
             aria-label="shiftType"
             name="shiftType"
-            value={valueRadio}
-            onChange={(event): void => radioChange(event.target.value)}
+            value={shiftType}
+            onChange={(event): void => changeShiftType(event.target.value)}
           >
             <FormControlLabel value="working" control={<Radio />} label="Pracująca" />
             <FormControlLabel value="not_working" control={<Radio />} label="Niepracująca" />
@@ -73,6 +105,7 @@ export default function ShiftEditDrower(): JSX.Element {
         <div className={"time-range"}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <TimePicker
+              disabled={shiftType === "not_working"}
               label=""
               placeholder="00:00"
               ampm={false}
@@ -83,6 +116,7 @@ export default function ShiftEditDrower(): JSX.Element {
             />
             <p>&ndash;</p>
             <TimePicker
+              disabled={shiftType === "not_working"}
               label=""
               placeholder="00:00"
               ampm={false}
@@ -103,6 +137,7 @@ export default function ShiftEditDrower(): JSX.Element {
           onChange={(event): void => {
             setShiftCode(event.target.value);
             checkShiftCode(shiftCodes.includes(event.target.value));
+            setCodeManuallyChanged(true);
           }}
           helperText={isInShiftCodes ? "Zmiana z takim kodem już istnieje" : ""}
           error={isInShiftCodes}
@@ -110,27 +145,32 @@ export default function ShiftEditDrower(): JSX.Element {
         <br />
 
         <h4>Kolor zmiany</h4>
-        <ColorSelector
-          shiftType={valueRadio}
+
+        <DropdownColors
+          shiftType={shiftType}
           mainLabel="Wybierz kolory"
-          variant="secondary"
-          position={"bottom"}
-          colorClicker={colorClicked}
+          buttonVariant="secondary"
+          variant="colors"
+          colorClicker={setPicked}
+          selectedColor={colorPicked}
         />
-        <Button
-          variant="primary"
-          onClick={(): void => {
-            setNewShift({
-              code: shiftCode,
-              name: shiftName,
-              from: valueTimeStart?.getHours() ?? 0,
-              to: valueTimeEnd?.getHours() ?? 0,
-              color: colorPicked,
-            });
-          }}
-        >
-          Dodaj zmianę
-        </Button>
+        <div className={classNames("sitBottom", "alignCenter", "margin-24left")}>
+          <Button
+            variant="primary"
+            onClick={(): void => {
+              saveChangedShift({
+                code: shiftCode,
+                name: shiftName,
+                from: valueTimeStart?.getHours() ?? 0,
+                to: valueTimeEnd?.getHours() ?? 0,
+                color: colorPicked,
+                isWorkingShift: shiftType === "working",
+              });
+            }}
+          >
+            Dodaj zmianę
+          </Button>
+        </div>
       </div>
     </>
   );
