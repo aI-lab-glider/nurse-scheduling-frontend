@@ -11,7 +11,7 @@ context("Tab 'zarządzanie'", () => {
     it("Should be able to close edit drawer", () => {
       cy.contains("Edycja pracownika").should("be.visible");
       cy.get('[data-cy="exit-drawer"]').click();
-      cy.contains("Edycja pracownika").should("be.not.visible");
+      cy.contains("Edycja pracownika").should("not.exist");
     });
 
     it("Should be able to edit the name", () => {

@@ -11,8 +11,7 @@ import {
 import { ScheduleKey } from "../../src/api/persistance-store.model";
 export type CypressScreenshotOptions = Partial<
   Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions
-  >;
-
+>;
 
 export interface GetWorkerShiftOptions {
   workerType: WorkerType;
@@ -51,15 +50,13 @@ Cypress.Commands.add(
     cy.visit(Cypress.env("baseUrl"));
     cy.get("[data-cy=file-dropdown]").click();
     cy.get('[data-cy="file-input"]').attachFile(scheduleName);
-    cy.get(`[data-cy=nurseShiftsTable]`, { timeout: 10000 });
+    // Recomended way to retry commands in cypress.
+    // Framework always tries to retry the last command before should
+    cy.get(`[data-cy=nurseShiftsTable]`).should("exist");
     cy.window()
       .its("store")
       .invoke("getState")
-      .its("actualState")
-      .its("temporarySchedule")
-      .its("present")
-      .its("month_info")
-      .its("children_number")
+      .its("actualState.temporarySchedule.present.month_info.children_number")
       .should(
         "have.length",
         numberOfWeeksInMonth(month ?? 10, year ?? 2020) * NUMBER_OF_DAYS_IN_WEEK
@@ -93,9 +90,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("useAutocomplete", (newShiftCode: ShiftCode) => {
-  return cy
-    .get(`[data-cy=autocomplete-${newShiftCode}]`, { timeout: 100000 })
-    .click({ force: true });
+  return cy.get(`[data-cy=autocomplete-${newShiftCode}]`).should("exist").click({ force: true });
 });
 
 Cypress.Commands.add(
@@ -129,17 +124,21 @@ Cypress.Commands.add("saveToDatabase", () => {
 
 Cypress.Commands.add("enterEditMode", () => {
   cy.get("[data-cy=edit-mode-button]").click();
-  return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
+  return cy.get("[data-cy=nurseShiftsTable]").should("exist");
 });
 
 Cypress.Commands.add("leaveEditMode", () => {
   cy.get("[data-cy=leave-edit-mode]").click();
-  return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
+  return cy.get("[data-cy=nurseShiftsTable]").should("exist");
 });
 
 Cypress.Commands.add(
   "screenshotSync",
   (awaitTime = 100, cyScreenshotOptions?: CypressScreenshotOptions) => {
+    // In case if screenshots are disabled, just return `cy`, so command is still chainable
+    if (Cypress.env("makeScreenshots") !== "true") {
+      return cy;
+    }
     cy.get("#header").invoke("css", "position", "absolute");
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.screenshot(cyScreenshotOptions).wait(awaitTime);
