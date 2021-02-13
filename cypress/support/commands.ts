@@ -9,6 +9,14 @@ import {
   daysInMonth,
 } from "../../src/state/reducers/month-state/schedule-data/common-reducers";
 import { ScheduleKey } from "../../src/api/persistance-store.model";
+import { baseRowDataCy } from "../../src/components/schedule-page/table/schedule/schedule-parts/base-row.models";
+import {
+  baseCellDataCy,
+  CellType,
+} from "../../src/components/schedule-page/table/schedule/schedule-parts/base-cell/base-cell.models";
+import { summaryRowDataCy } from "../../src/components/summarytable/summarytable-row.models";
+import { summaryCellDataCy } from "../../src/components/summarytable/summarytable-cell.models";
+
 export type CypressScreenshotOptions = Partial<
   Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions
 >;
@@ -17,7 +25,7 @@ export interface GetWorkerShiftOptions {
   workerType: WorkerType;
   workerIdx: number;
   shiftIdx: number;
-  selector?: "cell" | "highlighted-cell";
+  selector?: CellType;
 }
 export interface CheckWorkerShiftOptions extends GetWorkerShiftOptions {
   desiredShiftCode: ShiftCode;
@@ -50,8 +58,6 @@ Cypress.Commands.add(
     cy.visit(Cypress.env("baseUrl"));
     cy.get("[data-cy=file-dropdown]").click();
     cy.get('[data-cy="file-input"]').attachFile(scheduleName);
-    // Recomended way to retry commands in cypress.
-    // Framework always tries to retry the last command before should
     cy.get(`[data-cy=nurseShiftsTable]`).should("exist");
     cy.window()
       .its("store")
@@ -67,14 +73,10 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   "getWorkerShift",
   ({ workerType, workerIdx, shiftIdx, selector = "cell" }: GetWorkerShiftOptions) => {
-    return cy
-      .get(`[data-cy=${workerType.toLowerCase()}ShiftsTable]`)
-      .children()
-      .children()
-      .eq(workerIdx)
-      .children()
-      .eq(shiftIdx)
-      .find(`[data-cy=${selector}]`);
+    const section = `${workerType.toLowerCase()}ShiftsTable`;
+    const row = baseRowDataCy(workerIdx);
+    const cell = baseCellDataCy(shiftIdx, selector);
+    return cy.get(`[data-cy=${section}] [data-cy=${row}] [data-cy=${cell}]`);
   }
 );
 
@@ -104,16 +106,16 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   "checkHoursInfo",
   ({ workerType, workerIdx, hoursInfo }: CheckHoursInfoOptions) => {
+    const section = `${workerType.toLowerCase()}SummaryTable`;
+    const row = summaryRowDataCy(workerIdx);
     Object.keys(HoursInfoCells)
       .filter((key) => isNaN(Number(HoursInfoCells[key])))
       .forEach((key) => {
-        cy.get(`[data-cy="${workerType.toLowerCase()}SummaryTable"]`)
-          .children()
-          .children()
-          .eq(workerIdx)
-          .children()
-          .eq(Number(key))
-          .should("contain", hoursInfo[key]);
+        const cell = summaryCellDataCy(parseInt(key));
+        cy.get(`[data-cy=${section}] [data-cy=${row}] [data-cy=${cell}]`).should(
+          "contain",
+          hoursInfo[key]
+        );
       });
   }
 );
@@ -160,12 +162,11 @@ export interface GetFoundationInfoCellOptions {
 Cypress.Commands.add(
   "getFoundationInfoCell",
   ({ cellIdx, rowType, actualValue }: GetFoundationInfoCellOptions) => {
-    cy.get("[data-cy=foundationInfoSection]")
-      .children()
-      .eq(rowType)
-      .children()
-      .eq(cellIdx)
-      .contains(actualValue);
+    const row = baseRowDataCy(rowType);
+    const cell = baseCellDataCy(cellIdx, "cell");
+    cy.get(`[data-cy=foundationInfoSection] [data-cy=${row}] [data-cy=${cell}]`).contains(
+      actualValue
+    );
   }
 );
 
