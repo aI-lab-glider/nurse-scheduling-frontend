@@ -10,8 +10,7 @@ export enum CellManagementKeys {
   Escape = "Escape",
 }
 
-export const PivotCellType = "Cell";
-
+export const PivotCellTypePrefix = "Cell";
 export interface PivotCell {
   type: string;
   rowIndex: number;

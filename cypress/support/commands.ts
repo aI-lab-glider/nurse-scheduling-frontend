@@ -50,11 +50,13 @@ export enum HoursInfoCells {
 }
 export type ScheduleName = "example.xlsx" | "grafik.xlsx" | "example_2.xlsx";
 const NUMBER_OF_DAYS_IN_WEEK = 7;
+const TEST_SCHEDULE_MONTH = 10;
+const TEST_SCHEDULE_YEAR = 2020;
 
 Cypress.Commands.add(
   "loadScheduleToMonth",
   (scheduleName: ScheduleName = "example.xlsx", month: number, year: number) => {
-    cy.clock(Date.UTC(year ?? 2020, month ?? 10, 15), ["Date"]);
+    cy.clock(Date.UTC(year ?? TEST_SCHEDULE_YEAR, month ?? TEST_SCHEDULE_MONTH, 15), ["Date"]);
     cy.visit(Cypress.env("baseUrl"));
     cy.get("[data-cy=file-dropdown]").click();
     cy.get('[data-cy="file-input"]').attachFile(scheduleName);
@@ -65,7 +67,8 @@ Cypress.Commands.add(
       .its("actualState.temporarySchedule.present.month_info.children_number")
       .should(
         "have.length",
-        numberOfWeeksInMonth(month ?? 10, year ?? 2020) * NUMBER_OF_DAYS_IN_WEEK
+        numberOfWeeksInMonth(month ?? TEST_SCHEDULE_MONTH, year ?? TEST_SCHEDULE_YEAR) *
+          NUMBER_OF_DAYS_IN_WEEK
       );
   }
 );

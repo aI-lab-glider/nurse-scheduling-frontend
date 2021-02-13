@@ -14,7 +14,7 @@ import { ApplicationStateModel } from "../../../../../../state/models/applicatio
 import { BaseCellInputComponent } from "./base-cell-input.component";
 import {
   BaseCellOptions,
-  PivotCellType,
+  PivotCellTypePrefix,
   PivotCell,
   CellManagementKeys,
   baseCellDataCy,
@@ -46,7 +46,7 @@ export function BaseCellComponent({
   const { year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
-  const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
+  const dragAnDropType = `${PivotCellTypePrefix}${sectionKey ?? ""}`;
   const errorTriangle = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const keepOnClass = "keepOn" + keepOn + value;
@@ -139,7 +139,7 @@ export function BaseCellComponent({
     >
       <div className={"wrapContent"} ref={drag}>
         <div
-          className={"content " + hasNextClass + " " + keepOnClass}
+          className={`content ${hasNextClass} ${keepOnClass}`}
           data-cy={baseCellDataCy(index, "highlighted-cell")}
         >
           {isPointerOn && !isBlocked && (
