@@ -3,6 +3,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 .report-issue-modal-body {
+  img {
+    margin-left: 12px;
+  }
+
   p {
     font-weight: bolder;
     letter-spacing: 0.75px;
