@@ -34,13 +34,13 @@ const BlueCheckBox = withStyles({
 
 export default function ExportModal(options: ExportModalComponent): JSX.Element {
   const { setOpen, open, model } = options;
-  const [exportMode, setexportMode] = React.useState("PDF");
+  const [exportMode, setexportMode] = React.useState("xslx");
   const handleClose = (): void => {
     setOpen(false);
   };
   const DEFAULT_FILENAME = "grafik.xlsx";
   const exportExtensions = {
-    xsl: (): void => {
+    xslx: (): void => {
       new ScheduleExportLogic(model).formatAndSave(DEFAULT_FILENAME);
     },
   };
