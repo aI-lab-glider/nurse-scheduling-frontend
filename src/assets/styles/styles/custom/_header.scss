@@ -24,5 +24,10 @@
 
   .reportIssueLink {
     color: $header-text-color;
+    padding-right: 22.67px;
+    letter-spacing: 0.75px;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }

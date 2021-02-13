@@ -38,12 +38,10 @@ export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.E
       <MonthSwitchComponent />
       <div className={"filler"} />
       <Link onClick={(): void => onReportIssueClick()}>
-        <Typography className={"reportIssueLink"}>
-          Zgłoś błąd
-          <SettingsIcon />
-        </Typography>
+        <Typography className={"reportIssueLink"}>Zgłoś błąd</Typography>
       </Link>
       <ReportIssueModal open={modalOpen} setOpen={modalSetOpen} screenshot={image} clear={clear} />
+      <SettingsIcon />
     </div>
   );
 }
