@@ -5,7 +5,6 @@
 import React, { ChangeEvent, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ScheduleError } from "../../../common-models/schedule-error.model";
-import { ScheduleExportLogic } from "../../../logic/schedule-exporter/schedule-export.logic";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
@@ -16,9 +15,9 @@ import {
 } from "../../common-components/dropdown-buttons/dropdown-buttons.component";
 import { useScheduleConverter } from "./hooks/use-schedule-converter";
 import ParseErrorModal from "../../common-components/modal/error-modal/errors.modal.component";
+import ExportModal from "../../common-components/modal/export-modal/export.modal.component";
 
 export function ImportButtonsComponent(): JSX.Element {
-  const DEFAULT_FILENAME = "grafik.xlsx";
   const { monthModel, setSrcFile, scheduleErrors, errorOccurred } = useScheduleConverter();
   const fileUpload = useRef<HTMLInputElement>(null);
 
@@ -62,11 +61,12 @@ export function ImportButtonsComponent(): JSX.Element {
 
   function handleExport(): void {
     if (stateScheduleModel) {
-      new ScheduleExportLogic(stateScheduleModel).formatAndSave(DEFAULT_FILENAME);
+      setExportModalOpen(true);
     }
   }
 
   const [open, setOpen] = React.useState(false);
+  const [exportModalOpen, setExportModalOpen] = React.useState(false);
 
   return (
     <div>
@@ -87,6 +87,13 @@ export function ImportButtonsComponent(): JSX.Element {
       />
 
       {scheduleErrors.length !== 0 && <ParseErrorModal open={open} setOpen={setOpen} />}
+      {
+        <ExportModal
+          open={exportModalOpen}
+          setOpen={setExportModalOpen}
+          model={stateScheduleModel}
+        />
+      }
     </div>
   );
 }
