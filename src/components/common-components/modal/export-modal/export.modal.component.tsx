@@ -9,7 +9,7 @@ import {
   FormGroup,
   withStyles,
 } from "@material-ui/core";
-import { blue, green } from "@material-ui/core/colors";
+import { blue } from "@material-ui/core/colors";
 import React from "react";
 import { Button } from "../..";
 import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
@@ -40,9 +40,6 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   };
   const DEFAULT_FILENAME = "grafik.xlsx";
   const exportExtensions = {
-    pdf: (): void => {
-      console.log("not implemented");
-    },
     xsl: (): void => {
       new ScheduleExportLogic(model).formatAndSave(DEFAULT_FILENAME);
     },
@@ -79,7 +76,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
       </Button>
     </div>
   );
-  const handleChange = (event) => {
+  const handleChange = (event): void => {
     setExportOptions({
       ...exportOptions,
       [event.target.name]: {
