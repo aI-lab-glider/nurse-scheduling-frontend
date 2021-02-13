@@ -5,7 +5,6 @@ import React, { useContext, useState } from "react";
 import {
   BaseCellComponent,
   BaseCellOptions,
-  PivotCell,
 } from "../../schedule-parts/base-cell/base-cell.component";
 import { BaseRowComponent } from "../../schedule-parts/base-row.component";
 import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
@@ -19,6 +18,7 @@ import {
   ScheduleError,
 } from "../../../../../../common-models/schedule-error.model";
 import { useCallback } from "react";
+import { PivotCell } from "../../schedule-parts/hooks/use-cell-selection";
 export enum DirectionKey {
   ArrowRight = "ArrowRight",
   ArrowLeft = "ArrowLeft",
@@ -35,7 +35,7 @@ export interface BaseSectionOptions {
   sectionKey: keyof Sections;
   onRowKeyClicked?: (rowIndex: number) => void;
   errorSelector?: (
-    worker: string,
+    rowKey: string,
     cellIndex: number,
     scheduleErrors: GroupedScheduleErrors
   ) => ScheduleError[];

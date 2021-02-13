@@ -4,7 +4,7 @@
 import React, { useContext } from "react";
 import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import { ScheduleLogicContext } from "../use-schedule-state";
-import { BaseCellComponent, BaseCellOptions, PivotCell } from "./base-cell/base-cell.component";
+import { BaseCellComponent, BaseCellOptions } from "./base-cell/base-cell.component";
 import { ShiftHelper } from "../../../../../helpers/shifts.helper";
 import { Sections } from "../../../../../logic/providers/schedule-provider.model";
 import { DataRowHelper } from "../../../../../helpers/data-row.helper";
@@ -14,10 +14,11 @@ import {
   GroupedScheduleErrors,
   ScheduleError,
 } from "../../../../../common-models/schedule-error.model";
+import { PivotCell } from "./hooks/use-cell-selection";
 
 export interface BaseRowOptions {
   uuid: string;
-  index: number;
+  rowIndex: number;
   dataRow: DataRow;
   sectionKey: keyof Sections;
   cellComponent?: React.FC<BaseCellOptions>;
@@ -34,23 +35,24 @@ export interface BaseRowOptions {
   errorSelector?: (cellIndex: number, scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
 }
 
-export function BaseRowComponentF({
-  index,
-  dataRow,
-  sectionKey,
-  cellComponent: CellComponent = BaseCellComponent,
-  pointerPosition = -1,
-  onKeyDown,
-  onClick,
-  onBlur,
-  uuid,
-  onDrag,
-  onDragEnd,
-  onSave,
-  selection = [],
-  isEditable = true,
-  errorSelector,
-}: BaseRowOptions): JSX.Element {
+export function BaseRowComponentF(options: BaseRowOptions): JSX.Element {
+  const {
+    rowIndex,
+    dataRow,
+    sectionKey,
+    cellComponent: CellComponent = BaseCellComponent,
+    pointerPosition = -1,
+    onKeyDown,
+    onClick,
+    uuid,
+    onDrag,
+    onDragEnd,
+    onSave,
+    selection = [],
+    isEditable = true,
+    errorSelector,
+  } = options;
+
   const scheduleLogic = useContext(ScheduleLogicContext);
   const verboseDates = scheduleLogic?.sections.Metadata?.verboseDates;
   const currMonthNumber = scheduleLogic?.sections.Metadata.monthNumber;
@@ -60,41 +62,35 @@ export function BaseRowComponentF({
     if (sectionKey) onSave?.(newValue);
   }
   let data = dataRow.rowData(false);
+  data = useScheduleStyling(data);
 
   if (numberOfDays && data.length !== numberOfDays) {
     const diff = numberOfDays - data.length;
     data = [...data, ...Array.from(Array(diff))];
   }
 
-  data = useScheduleStyling(data);
-
   return (
     <tr className="row scheduleStyle" id="mainRow">
       {data.map(({ cellData, keepOn, hasNext }, cellIndex) => {
         return (
           <CellComponent
-            sectionKey={sectionKey}
-            rowIndex={index}
-            keepOn={keepOn}
-            hasNext={hasNext}
-            index={cellIndex}
+            {...options}
+            cellIndex={cellIndex}
             key={`${cellData}${cellIndex}_${uuid}}`}
             value={cellData}
             isSelected={selection[cellIndex]}
-            style={ShiftHelper.getShiftColor(cellData, verboseDates?.[cellIndex])}
-            isPointerOn={cellIndex === pointerPosition}
             isBlocked={!isEditable}
+            isPointerOn={cellIndex === pointerPosition}
             onKeyDown={(event): void => onKeyDown?.(cellIndex, event)}
             onValueChange={saveValue}
             onClick={(): void => onClick?.(cellIndex)}
-            onBlur={(): void => onBlur?.()}
-            monthNumber={currMonthNumber}
             verboseDate={verboseDates?.[cellIndex]}
-            onDrag={(pivot): void => onDrag?.(pivot, cellIndex)}
-            onDragEnd={(): void => onDragEnd?.(index, cellIndex)}
             errorSelector={(scheduleErrors): ScheduleError[] =>
               errorSelector?.(cellIndex, scheduleErrors) ?? []
             }
+            onDrag={(pivot): void => onDrag?.(pivot, cellIndex)}
+            onDragEnd={(): void => onDragEnd?.(rowIndex, cellIndex)}
+            monthNumber={currMonthNumber}
           />
         );
       })}

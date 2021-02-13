@@ -6,6 +6,7 @@ import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import { BaseRowComponent, BaseRowOptions } from "./base-row.component";
 import { ShiftCellComponent } from "./shift-cell/shift-cell.component";
 import { BaseCellOptions } from "./base-cell/base-cell.component";
+import { useScheduleStyling } from "../../../../common-components/use-schedule-styling/use-schedule-styling";
 
 export interface ShiftRowOptions extends BaseRowOptions {
   dataRow: DataRow;
@@ -15,6 +16,8 @@ export interface ShiftRowOptions extends BaseRowOptions {
 
 export function ShiftRowComponent(options: ShiftRowOptions): JSX.Element {
   const { dataRow } = options;
-
+  let data = dataRow.rowData(false);
+  data = useScheduleStyling(data);
+  const styledDataRow = new DataRow(dataRow.rowKey, data);
   return <BaseRowComponent {...options} dataRow={dataRow} cellComponent={ShiftCellComponent} />;
 }

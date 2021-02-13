@@ -2,210 +2,74 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import classNames from "classnames/bind";
-import React, { useEffect, useRef } from "react";
-import { useDrag, useDrop } from "react-dnd";
-import { getEmptyImage } from "react-dnd-html5-backend";
-import mergeRefs from "react-merge-refs";
-import { usePopper } from "react-popper";
-import { useSelector } from "react-redux";
-import { VerboseDate, WeekDay } from "../../../../../../common-models/month-info.model";
+import React from "react";
 import {
   GroupedScheduleErrors,
   ScheduleError,
 } from "../../../../../../common-models/schedule-error.model";
-import { CellColorSet } from "../../../../../../helpers/colors/cell-color-set.model";
-import { TranslationHelper } from "../../../../../../helpers/translations.helper";
-import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
+import {
+  CellBlockableInputComponent,
+  CellBlockableInputComponentOptions,
+} from "../cell-blockable-input.component";
 import { ErrorTooltipProvider } from "../error-tooltip.component";
-import { BaseCellInputComponent, BaseCellInputOptions } from "./base-cell-input.component";
-import { CellDetails } from "./cell-details-content.component";
-import { Popper } from "./popper";
-import useComponentVisible from "./use-component-visible";
+import {
+  useCellBackgroundHighlight,
+  UseCellBackgroundHighlightOptions,
+} from "../hooks/use-cell-highlight";
+import { useCellSelection, UseCellSelectionOptions } from "../hooks/use-cell-selection";
+import { BaseCellInputComponent } from "./base-cell-input.component";
 
-export enum CellManagementKeys {
-  Enter = "Enter",
-  Escape = "Escape",
-}
-
-const PivotCellType = "Cell";
-
-export interface PivotCell {
-  type: string;
+export interface BaseCellOptions
+  extends UseCellSelectionOptions,
+    UseCellBackgroundHighlightOptions,
+    Omit<CellBlockableInputComponentOptions, "input"> {
   rowIndex: number;
-  cellIndex: number;
-}
-
-export interface BaseCellOptions {
-  rowIndex: number;
-  keepOn: boolean;
-  hasNext: boolean;
-  index: number;
   value: string;
-  style?: CellColorSet;
   isBlocked: boolean;
   isPointerOn: boolean;
   isSelected: boolean;
   onClick?: () => void;
-  onContextMenu?: () => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   onValueChange?: (value: string) => void;
   onBlur?: () => void;
-  input?: React.FC<BaseCellInputOptions>;
-  monthNumber?: number;
-  verboseDate?: VerboseDate;
-  onDrag?: (pivotCell: PivotCell) => void;
-  onDragEnd?: () => void;
   sectionKey: string;
   errorSelector?: (scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
 }
 
-export function BaseCellComponent({
-  rowIndex,
-  keepOn,
-  hasNext,
-  index,
-  value,
-  isBlocked,
-  isSelected,
-  isPointerOn,
-  onKeyDown,
-  onValueChange,
-  onClick,
-  onBlur,
-  input: InputComponent = BaseCellInputComponent,
-  monthNumber,
-  verboseDate,
-  onDrag,
-  onDragEnd,
-  sectionKey,
-  errorSelector = (_) => [],
-}: BaseCellOptions): JSX.Element {
-  const { year } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
-  );
+export function BaseCellComponent(options: BaseCellOptions): JSX.Element {
+  const {
+    value,
+    isBlocked,
+    isSelected,
+    isPointerOn,
+    onClick,
+    onBlur,
+    errorSelector = (_) => [],
+  } = options;
 
-  const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
-  const keepOnClass = "keepOn" + keepOn + value;
-  const hasNextClass = "hasNext" + hasNext;
-
-  const cellDetailsPopperRef = useRef<HTMLDivElement>(null);
-
-  const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
-
-  const [, drop] = useDrop({
-    accept: dragAnDropType,
-    collect: (monitor) => {
-      if (monitor.isOver()) {
-        if (!isBlocked) {
-          onDrag?.(monitor.getItem() as PivotCell);
-        }
-      }
-    },
-    drop: () => {
-      onDragEnd?.();
-    },
-  });
-
-  const [, drag, preview] = useDrag({
-    item: {
-      type: dragAnDropType,
-      rowIndex: rowIndex,
-      cellIndex: index,
-    } as PivotCell,
-    end: (item, monitor) => {
-      if (!monitor.didDrop()) onDragEnd?.();
-    },
-  });
-
-  // Below lines disable default preview image that is inserted by browser on dragging
-  useEffect(() => {
-    preview(getEmptyImage());
-  }, [preview]);
-
-  function _onKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
-    if (e.key === CellManagementKeys.Enter) {
-      onValueChange?.(e.currentTarget.value);
-      return;
-    }
-    onKeyDown?.(e);
-  }
-
-  function _onValueChange(newValue: string): void {
-    onValueChange?.(newValue);
-  }
-
-  function getId(): string {
-    if (verboseDate && monthNumber) {
-      if (verboseDate.month !== TranslationHelper.englishMonths[monthNumber]) {
-        return "otherMonth";
-      }
-      if (
-        verboseDate.isPublicHoliday ||
-        verboseDate.dayOfWeek === WeekDay.SA ||
-        verboseDate.dayOfWeek === WeekDay.SU
-      ) {
-        return "weekend";
-      }
-    }
-    return "thisMonth";
-  }
-
-  function toggleComponentVisibility(): void {
-    setIsComponentVisible(!isComponentVisible);
-  }
+  const selectableItemRef = useCellSelection(options);
+  const id = useCellBackgroundHighlight(options);
 
   //  #region view
   return (
     <td
-      ref={mergeRefs([ref, drop])}
+      ref={selectableItemRef}
       className={classNames("mainCell", { selection: isSelected, blocked: isBlocked })}
-      id={getId()}
-      onClick={(): void => toggleComponentVisibility()}
-      onBlur={(): void => {
-        onBlur?.();
-      }}
+      id={id}
+      onBlur={onBlur}
     >
       <div
         className="wrapContent"
-        ref={drag}
         onClick={(): void => {
           if (!isBlocked) onClick?.();
         }}
       >
-        {isPointerOn && !isBlocked && (
-          <InputComponent
-            className="cell-input"
-            onValueChange={(value): void => _onValueChange(value)}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
-          />
-        )}
-
-        <Popper
-          ref={cellDetailsPopperRef}
-          className="cell-details-popper"
-          style={
-            usePopper(useRef<HTMLDivElement>(null).current, cellDetailsPopperRef.current).styles
-          }
-          isOpen={isComponentVisible && isBlocked && value !== ""}
-        >
-          <CellDetails
-            index={index}
-            day={verboseDate?.date || 0}
-            month={monthNumber || 0}
-            year={year}
-            rowIndex={rowIndex}
-            shiftcode={value}
-            sectionKey={sectionKey}
-            close={(): void => setIsComponentVisible(false)}
-          />
-        </Popper>
-
-        <div className={"content " + hasNextClass + " " + keepOnClass} data-cy="highlighted-cell">
+        <CellBlockableInputComponent input={BaseCellInputComponent} {...options} />
+        <div className={"content"}>
           {(!isPointerOn || (isPointerOn && isBlocked)) && (
             <ErrorTooltipProvider errorSelector={errorSelector} className={"content"}>
-              <div className={"leftBorder leftBorderColor"} />
               <p data-cy="cell" className={"relative "}>
-                {keepOn ? "" : value}
+                {value}
               </p>
             </ErrorTooltipProvider>
           )}
