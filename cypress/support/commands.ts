@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import "cypress-file-upload";
-import { ScheduleKey } from "../../src/api/persistance-store.model";
+import { RevisionTypeLabels, ScheduleKey } from "../../src/api/persistance-store.model";
 import { ShiftCode } from "../../src/common-models/shift-info.model";
 import { WorkerType } from "../../src/common-models/worker-info.model";
 import {
@@ -128,12 +128,11 @@ Cypress.Commands.add("saveToDatabase", () => {
 });
 
 Cypress.Commands.add("enterEditMode", () => {
-  // TODO: uncomment and check if everything would work after TASK-180 would be merged
   const actualRevisionValue = "actual";
   cy.get("[data-cy=revision-select]")
-    //   .select(RevisionTypeLabels[actualRevisionValue])
+    .select(RevisionTypeLabels[actualRevisionValue])
     .should("have.value", actualRevisionValue);
-  // cy.get("[data-cy=revision-select]").blur();
+  cy.get("[data-cy=revision-select]").blur();
   cy.get("[data-cy=edit-mode-button]").click();
   return cy.get("[data-cy=nurseShiftsTable]").should("exist");
 });
