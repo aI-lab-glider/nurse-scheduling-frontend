@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ShiftCode } from "../../../src/common-models/shift-info.model";
 import { WorkerType } from "../../../src/common-models/worker-info.model";
 import { ChangeFoundationInfoCellOptions, FoundationInfoRowType } from "../../support/commands";
@@ -60,7 +63,7 @@ describe("schedule editing requirement", () => {
   it("shows how to make undo in schedule", () => {
     cy.getWorkerShift(workerCells[0]).click().screenshotSync();
     cy.useAutocomplete(workerCells[0].newShiftCode).screenshotSync();
-    cy.get("[data-cy=undo-button]").click();
+    cy.get("[data-cy=undo-button]").click({ force: true });
     cy.getWorkerShift(workerCells[0]).contains(workerCells[0].actualShiftCode).screenshotSync();
   });
 });

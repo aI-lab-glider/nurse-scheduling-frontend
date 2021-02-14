@@ -31,7 +31,7 @@ function updatePersistentSchedule(
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<ScheduleDataModel>>,
   state: ScheduleDataModel
 ): void {
-  dispatch(ScheduleDataActionCreator.setScheduleFromScheduleDM(state));
+  dispatch(ScheduleDataActionCreator.setScheduleFromScheduleDM(state, true));
 }
 
 export const PERSISTENT_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {

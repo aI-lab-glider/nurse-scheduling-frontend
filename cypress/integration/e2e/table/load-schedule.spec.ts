@@ -6,21 +6,6 @@ import { ShiftCode } from "../../../../src/common-models/shift-info.model";
 import { WorkerType } from "../../../../src/common-models/worker-info.model";
 
 context("Load schedule", () => {
-  it("Shoud be able to load schedule after clicking save with  empty state to database", () => {
-    cy.visit(Cypress.env("baseUrl"));
-    cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 }).should("not.exist");
-    cy.get("[data-cy=edit-mode-button]").click();
-    cy.saveToDatabase();
-    cy.get("[data-cy=leave-edit-mode]").click();
-    cy.loadScheduleToMonth("example.xlsx");
-    cy.checkWorkerShift({
-      workerType: WorkerType.NURSE,
-      workerIdx: 0,
-      shiftIdx: 6,
-      desiredShiftCode: ShiftCode.U,
-    });
-  });
-
   it("Shoud be able to save file to database and after that load new schedule", () => {
     const cell = {
       workerType: WorkerType.NURSE,

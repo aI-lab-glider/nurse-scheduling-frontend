@@ -1,5 +1,5 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public 
- * License, v. 2.0. If a copy of the MPL was not distributed with this 
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 @import "variables";
 
@@ -11,13 +11,34 @@
 
   .schedule {
     margin: auto;
+    min-height: 80vh;
   }
 
   .buttons {
     display: flex;
     flex-direction: row;
+    align-items: center;
     width: 100%;
-    margin: 10px;
+    margin: 5px;
+  }
+
+  .revision-type-container {
+    font-size: $font-size-base;
+    letter-spacing: 0.75px;
+    font-family: $font-family-primary;
+    color: $primary;
+    padding: 0 25px 0 25px;
+    .revision-select {
+      border: 0;
+      background: inherit;
+      font-size: inherit;
+      letter-spacing: inherit;
+      font-family: inherit;
+      color: inherit;
+    }
+    select:focus {
+      outline: none !important;
+    }
   }
 
   .filler {
@@ -61,5 +82,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
+  }
+
+  .disabled-submit-button {
+    opacity: 50%;
   }
 }
