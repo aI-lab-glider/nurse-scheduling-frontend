@@ -13,10 +13,20 @@ jobs:
     steps:
         - name: Checkout project
           uses: actions/checkout@v2
-
+        
+        - name: Read cypress config
+          id: read_config
+          run: |
+            content=`cat cypress.json`
+            content="${content//'%'/'%25'}"
+            content="${content//$'\n'/'%0A'}"
+            content="${content//$'\r'/'%0D'}"
+            echo "::set-output name=cypressConfig::$content"
+        
         - name: Run Cypress
           uses: cypress-io/github-action@v2
           with:
+              wait-on: ${{ env.APPLICATION_URL }}
               group: 'Nurse project workers'
               record: true
               parallel: true
@@ -26,3 +36,4 @@ jobs:
           env:
               CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              APPLICATION_URL: ${{ fromJson(steps.read_config.outputs.cypressConfig).env.baseUrl }}

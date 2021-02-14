@@ -2,11 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useContext, useState } from "react";
-import {
-  BaseCellComponent,
-  BaseCellOptions,
-  PivotCell,
-} from "../../schedule-parts/base-cell/base-cell.component";
+import { BaseCellComponent } from "../../schedule-parts/base-cell/base-cell.component";
 import { BaseRowComponent } from "../../schedule-parts/base-row.component";
 import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
 import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
@@ -14,6 +10,7 @@ import { Sections } from "../../../../../../logic/providers/schedule-provider.mo
 import { DataRowHelper } from "../../../../../../helpers/data-row.helper";
 import { ScheduleLogicContext } from "../../use-schedule-state";
 import { useSelectionMatrix } from "./use-selection-matrix";
+import { BaseCellOptions, PivotCell } from "../../schedule-parts/base-cell/base-cell.models";
 
 export enum DirectionKey {
   ArrowRight = "ArrowRight",
