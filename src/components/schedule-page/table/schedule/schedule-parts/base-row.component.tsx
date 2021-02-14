@@ -2,18 +2,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useContext } from "react";
-import { DataRow } from "../../../../../logic/schedule-logic/data-row";
-import { ScheduleLogicContext } from "../use-schedule-state";
-import { BaseCellComponent, BaseCellOptions } from "./base-cell/base-cell.component";
-import { ShiftHelper } from "../../../../../helpers/shifts.helper";
-import { Sections } from "../../../../../logic/providers/schedule-provider.model";
-import { DataRowHelper } from "../../../../../helpers/data-row.helper";
-import { ArrayHelper } from "../../../../../helpers/array.helper";
-import { useScheduleStyling } from "../../../../common-components/use-schedule-styling/use-schedule-styling";
 import {
   GroupedScheduleErrors,
   ScheduleError,
 } from "../../../../../common-models/schedule-error.model";
+import { ArrayHelper } from "../../../../../helpers/array.helper";
+import { DataRowHelper } from "../../../../../helpers/data-row.helper";
+import { Sections } from "../../../../../logic/providers/schedule-provider.model";
+import { DataRow } from "../../../../../logic/schedule-logic/data-row";
+import { ScheduleLogicContext } from "../use-schedule-state";
+import { BaseCellComponent, BaseCellOptions } from "./base-cell/base-cell.component";
 import { PivotCell } from "./hooks/use-cell-selection";
 
 export interface BaseRowOptions {
@@ -33,6 +31,18 @@ export interface BaseRowOptions {
   selection?: boolean[];
   isEditable?: boolean;
   errorSelector?: (cellIndex: number, scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
+}
+
+export interface CellDataItem {
+  value: string;
+}
+
+function isCellDataItemArray(array: any[]): array is CellDataItem[] {
+  return array[0].value !== undefined;
+}
+function toCellDataItemArray(array: any[]): CellDataItem[] {
+  if (isCellDataItemArray(array)) return array;
+  return array.map((item) => ({ value: item as string }));
 }
 
 export function BaseRowComponentF(options: BaseRowOptions): JSX.Element {
@@ -61,8 +71,8 @@ export function BaseRowComponentF(options: BaseRowOptions): JSX.Element {
   function saveValue(newValue: string): void {
     if (sectionKey) onSave?.(newValue);
   }
-  let data = dataRow.rowData(false);
-  data = useScheduleStyling(data);
+
+  let data = toCellDataItemArray(dataRow.rowData(false));
 
   if (numberOfDays && data.length !== numberOfDays) {
     const diff = numberOfDays - data.length;
@@ -71,13 +81,15 @@ export function BaseRowComponentF(options: BaseRowOptions): JSX.Element {
 
   return (
     <tr className="row scheduleStyle" id="mainRow">
-      {data.map(({ cellData, keepOn, hasNext }, cellIndex) => {
+      {data.map((dataItem, cellIndex) => {
         return (
           <CellComponent
-            {...options}
+            {...{
+              ...options,
+              ...dataItem,
+            }}
             cellIndex={cellIndex}
-            key={`${cellData}${cellIndex}_${uuid}}`}
-            value={cellData}
+            key={`${dataItem.value}${cellIndex}_${uuid}}`}
             isSelected={selection[cellIndex]}
             isBlocked={!isEditable}
             isPointerOn={cellIndex === pointerPosition}

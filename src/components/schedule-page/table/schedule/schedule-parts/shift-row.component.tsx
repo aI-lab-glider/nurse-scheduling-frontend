@@ -19,5 +19,7 @@ export function ShiftRowComponent(options: ShiftRowOptions): JSX.Element {
   let data = dataRow.rowData(false);
   data = useScheduleStyling(data);
   const styledDataRow = new DataRow(dataRow.rowKey, data);
-  return <BaseRowComponent {...options} dataRow={dataRow} cellComponent={ShiftCellComponent} />;
+  return (
+    <BaseRowComponent {...options} dataRow={styledDataRow} cellComponent={ShiftCellComponent} />
+  );
 }

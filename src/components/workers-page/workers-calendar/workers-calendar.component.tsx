@@ -34,7 +34,7 @@ export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Ele
           {daysToDisplay.map((element) => {
             return <div className={"dayName"}>{element}</div>;
           })}
-          {data?.map(({ cellData, keepOn, hasNext }, index) => {
+          {data?.map(({ value, keepOn, hasNext }, index) => {
             date = shiftsArr[index][0];
             if (date.date === 1) {
               notCurrentMonth = !notCurrentMonth;
@@ -42,7 +42,7 @@ export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Ele
 
             return (
               <WorkersCalendarCell
-                shift={cellData}
+                shift={value}
                 date={date}
                 keepOn={keepOn}
                 hasNext={hasNext}

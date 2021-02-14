@@ -123,7 +123,7 @@ function BaseSectionComponentF({
           uuid={uuid}
           sectionKey={sectionKey}
           key={`${dataRow.rowKey}${rowInd}_${uuid}`}
-          index={rowInd}
+          rowIndex={rowInd}
           dataRow={dataRow}
           cellComponent={cellComponent}
           pointerPosition={pointerPosition.row === rowInd ? pointerPosition.cell : -1}

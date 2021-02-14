@@ -23,8 +23,8 @@ function getShiftCode(value: string | number): ShiftCode {
 }
 
 interface ShiftCellOptions extends BaseCellOptions {
-  keepOn: boolean;
-  hasNext: boolean;
+  keepOn?: boolean;
+  hasNext?: boolean;
 }
 
 export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
@@ -113,7 +113,7 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
             <ErrorTooltipProvider errorSelector={errorSelector} className={"content"}>
               <div className={"leftBorder leftBorderColor"} />
               <p data-cy="cell" className={"relative "}>
-                {keepOn ? "" : getShiftCode(value)}
+                {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
               </p>
             </ErrorTooltipProvider>
           )}
