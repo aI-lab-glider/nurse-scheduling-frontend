@@ -5,7 +5,7 @@ import { ButtonProps } from "@material-ui/core";
 import React, { Ref } from "react";
 import classNames from "classnames/bind";
 
-export type ButtonVariant = "primary" | "secondary" | "outlined" | "circle-outlined";
+export type ButtonVariant = "primary" | "secondary" | "circle";
 export type ButtonOptions = Omit<ButtonProps, "variant"> & {
   variant?: ButtonVariant;
 };
@@ -19,7 +19,12 @@ export const Button = React.forwardRef(
       <button
         {...rest}
         ref={ref}
-        className={classNames("btn", `btn-${variant}`, disabled ? "btn-disabled" : "", className)}
+        className={classNames(
+          "btn",
+          `btn-${variant}`,
+          disabled ? `btn-${variant}-disabled` : "",
+          className
+        )}
         disabled={disabled}
       />
     );
