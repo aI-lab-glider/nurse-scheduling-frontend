@@ -8,7 +8,7 @@ import { ScheduleLogicContext } from "./use-schedule-state";
 import { FoundationInfoComponent } from "./sections/foundation-info-section/foundation-info.component";
 import { TimeTableComponent } from "../../../timetable/timetable.component";
 import { NameTableComponent } from "../../../namestable/nametable.component";
-import { SummaryTableComponent } from "../../../summerytable/summarytable.component";
+import { SummaryTableComponent } from "../../../summarytable/summarytable.component";
 import { OvertimeHeaderComponent } from "../../../overtime-header-table/overtime-header.component";
 import { ScheduleComponentState } from "./schedule-state.model";
 import { ScheduleFoldingSection } from "./schedule-parts/schedule-folding-section.component";
