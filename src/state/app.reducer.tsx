@@ -13,6 +13,7 @@ import {
 import { scheduleReducerF } from "./reducers/month-state/schedule-data/schedule.reducer";
 import { scheduleErrorsReducer } from "./reducers/month-state/schedule-errors.reducer";
 import { revisionInfoReducer } from "./reducers/month-state/revision-info.reducer";
+import { modeInfoReducer } from "./reducers/month-state/mode-info-reducer";
 
 export type CombinedReducers<StateModel> = {
   [key in keyof StateModel]: <T, U>(state: T, action: ActionModel<U>) => T;
@@ -25,6 +26,7 @@ export type ScheduleActionDestination = "PERSISTENT" | "TEMPORARY";
 
 const monthStateReducer = combineReducers({
   revision: revisionInfoReducer,
+  mode: modeInfoReducer,
   persistentSchedule: undoable(scheduleReducerF(PERSISTENT_SCHEDULE_NAME), {
     limit: 50,
     ...PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,

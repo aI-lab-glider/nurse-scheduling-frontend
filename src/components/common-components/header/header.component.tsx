@@ -1,23 +1,22 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import { Button } from "../button-component/button.component";
 import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
 
 interface HeaderCheckInterface {
   isNewMonthPage: boolean;
 }
 
 export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.Element {
-  const location = useLocation();
-  const [isInEditMode, setIsInEditMode] = useState(false);
-  useEffect(() => {
-    setIsInEditMode(location.pathname === "/schedule-editing");
-  }, [location]);
+  const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const isReadOnlyMode = mode === "readonly";
+
   return (
     <>
       <div id={"header"}>
@@ -30,7 +29,7 @@ export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.E
           </Link>
         )}
         <div className={"filler"} />
-        {!isInEditMode && <MonthSwitchComponent />}
+        {isReadOnlyMode && <MonthSwitchComponent />}
         <div className={"filler"} />
       </div>
     </>
