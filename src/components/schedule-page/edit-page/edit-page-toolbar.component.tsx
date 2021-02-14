@@ -1,7 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useContext, useState } from "react";
+
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import backend from "../../../api/backend";
@@ -9,13 +10,14 @@ import { NetworkErrorCode, ScheduleError } from "../../../common-models/schedule
 import { ActionModel } from "../../../state/models/action.model";
 import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
 import { Button } from "../../common-components";
-import ValidationDrawerComponent from "../validation-drawer/validation-drawer.component";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
 import { UndoActionCreator } from "../../../state/reducers/undoable.action-creator";
 import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
 import { useNotification } from "../../common-components/notification/notification.context";
+import { useJiraLikeDrawer } from "../../common-components/drawer/jira-like-drawer-context";
+import ValidationDrawerContentComponent from "../validation-drawer/validation-drawer.component";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;
@@ -25,7 +27,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
   const scheduleLogic = useContext(ScheduleLogicContext);
   const { createNotification } = useNotification();
   const dispatcher = useDispatch();
-  const [openDrawer, setOpenDrawer] = useState(false);
+
   async function updateScheduleErrors(): Promise<void> {
     const schedule = scheduleLogic?.schedule.getDataModel();
     if (schedule) {
@@ -46,9 +48,13 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
     }
   }
 
+  const { setTitle, setOpen, setChildrenComponent } = useJiraLikeDrawer();
+
   function prepareDrawer(): void {
     updateScheduleErrors();
-    setOpenDrawer(true);
+    setTitle("Sprawdź plan");
+    setChildrenComponent(<ValidationDrawerContentComponent setOpen={setOpen} />);
+    setOpen(true);
   }
 
   function handleSaveClick(): void {
@@ -83,9 +89,12 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
           <p>Tryb edycji aktywny</p>
         </div>
 
-        <ValidationDrawerComponent open={openDrawer} setOpen={setOpenDrawer} />
-
-        <Button data-cy="check-schedule-button" variant="primary" onClick={prepareDrawer}>
+        <Button
+          data-cy="check-schedule-button"
+          className="submit-button"
+          variant="primary"
+          onClick={prepareDrawer}
+        >
           Sprawdź Plan
         </Button>
 

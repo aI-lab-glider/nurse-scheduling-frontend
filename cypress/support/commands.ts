@@ -2,23 +2,30 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import "cypress-file-upload";
+import { ScheduleKey } from "../../src/api/persistance-store.model";
 import { ShiftCode } from "../../src/common-models/shift-info.model";
 import { WorkerType } from "../../src/common-models/worker-info.model";
+import {
+  baseCellDataCy,
+  CellType,
+} from "../../src/components/schedule-page/table/schedule/schedule-parts/base-cell/base-cell.models";
+import { baseRowDataCy } from "../../src/components/schedule-page/table/schedule/schedule-parts/base-row.models";
+import { summaryCellDataCy } from "../../src/components/summarytable/summarytable-cell.models";
+import { summaryRowDataCy } from "../../src/components/summarytable/summarytable-row.models";
 import {
   calculateMissingFullWeekDays,
   daysInMonth,
 } from "../../src/state/reducers/month-state/schedule-data/common-reducers";
-import { ScheduleKey } from "../../src/api/persistance-store.model";
+
 export type CypressScreenshotOptions = Partial<
   Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions
-  >;
-
+>;
 
 export interface GetWorkerShiftOptions {
   workerType: WorkerType;
   workerIdx: number;
   shiftIdx: number;
-  selector?: "cell" | "highlighted-cell";
+  selector?: CellType;
 }
 export interface CheckWorkerShiftOptions extends GetWorkerShiftOptions {
   desiredShiftCode: ShiftCode;
@@ -43,26 +50,25 @@ export enum HoursInfoCells {
 }
 export type ScheduleName = "example.xlsx" | "grafik.xlsx" | "example_2.xlsx";
 const NUMBER_OF_DAYS_IN_WEEK = 7;
+const TEST_SCHEDULE_MONTH = 10;
+const TEST_SCHEDULE_YEAR = 2020;
 
 Cypress.Commands.add(
   "loadScheduleToMonth",
   (scheduleName: ScheduleName = "example.xlsx", month: number, year: number) => {
-    cy.clock(Date.UTC(year ?? 2020, month ?? 10, 15), ["Date"]);
+    cy.clock(Date.UTC(year ?? TEST_SCHEDULE_YEAR, month ?? TEST_SCHEDULE_MONTH, 15), ["Date"]);
     cy.visit(Cypress.env("baseUrl"));
     cy.get("[data-cy=file-dropdown]").click();
     cy.get('[data-cy="file-input"]').attachFile(scheduleName);
-    cy.get(`[data-cy=nurseShiftsTable]`, { timeout: 10000 });
+    cy.get(`[data-cy=nurseShiftsTable]`).should("exist");
     cy.window()
       .its("store")
       .invoke("getState")
-      .its("actualState")
-      .its("temporarySchedule")
-      .its("present")
-      .its("month_info")
-      .its("children_number")
+      .its("actualState.temporarySchedule.present.month_info.children_number")
       .should(
         "have.length",
-        numberOfWeeksInMonth(month ?? 10, year ?? 2020) * NUMBER_OF_DAYS_IN_WEEK
+        numberOfWeeksInMonth(month ?? TEST_SCHEDULE_MONTH, year ?? TEST_SCHEDULE_YEAR) *
+          NUMBER_OF_DAYS_IN_WEEK
       );
   }
 );
@@ -70,14 +76,10 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   "getWorkerShift",
   ({ workerType, workerIdx, shiftIdx, selector = "cell" }: GetWorkerShiftOptions) => {
-    return cy
-      .get(`[data-cy=${workerType.toLowerCase()}ShiftsTable]`)
-      .children()
-      .children()
-      .eq(workerIdx)
-      .children()
-      .eq(shiftIdx)
-      .find(`[data-cy=${selector}]`);
+    const section = `${workerType.toLowerCase()}ShiftsTable`;
+    const row = baseRowDataCy(workerIdx);
+    const cell = baseCellDataCy(shiftIdx, selector);
+    return cy.get(`[data-cy=${section}] [data-cy=${row}] [data-cy=${cell}]`);
   }
 );
 
@@ -93,9 +95,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("useAutocomplete", (newShiftCode: ShiftCode) => {
-  return cy
-    .get(`[data-cy=autocomplete-${newShiftCode}]`, { timeout: 100000 })
-    .click({ force: true });
+  return cy.get(`[data-cy=autocomplete-${newShiftCode}]`).should("exist").click({ force: true });
 });
 
 Cypress.Commands.add(
@@ -109,16 +109,16 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   "checkHoursInfo",
   ({ workerType, workerIdx, hoursInfo }: CheckHoursInfoOptions) => {
+    const section = `${workerType.toLowerCase()}SummaryTable`;
+    const row = summaryRowDataCy(workerIdx);
     Object.keys(HoursInfoCells)
       .filter((key) => isNaN(Number(HoursInfoCells[key])))
       .forEach((key) => {
-        cy.get(`[data-cy="${workerType.toLowerCase()}SummaryTable"]`)
-          .children()
-          .children()
-          .eq(workerIdx)
-          .children()
-          .eq(Number(key))
-          .should("contain", hoursInfo[key]);
+        const cell = summaryCellDataCy(parseInt(key));
+        cy.get(`[data-cy=${section}] [data-cy=${row}] [data-cy=${cell}]`).should(
+          "contain",
+          hoursInfo[key]
+        );
       });
   }
 );
@@ -128,18 +128,28 @@ Cypress.Commands.add("saveToDatabase", () => {
 });
 
 Cypress.Commands.add("enterEditMode", () => {
+  // TODO: uncomment and check if everything would work after TASK-180 would be merged
+  const actualRevisionValue = "actual";
+  cy.get("[data-cy=revision-select]")
+    //   .select(RevisionTypeLabels[actualRevisionValue])
+    .should("have.value", actualRevisionValue);
+  // cy.get("[data-cy=revision-select]").blur();
   cy.get("[data-cy=edit-mode-button]").click();
-  return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
+  return cy.get("[data-cy=nurseShiftsTable]").should("exist");
 });
 
 Cypress.Commands.add("leaveEditMode", () => {
   cy.get("[data-cy=leave-edit-mode]").click();
-  return cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 });
+  return cy.get("[data-cy=nurseShiftsTable]").should("exist");
 });
 
 Cypress.Commands.add(
   "screenshotSync",
   (awaitTime = 100, cyScreenshotOptions?: CypressScreenshotOptions) => {
+    // In case if screenshots are disabled, just return `cy`, so command is still chainable
+    if (Cypress.env("makeScreenshots") !== "true") {
+      return cy;
+    }
     cy.get("#header").invoke("css", "position", "absolute");
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.screenshot(cyScreenshotOptions).wait(awaitTime);
@@ -161,12 +171,11 @@ export interface GetFoundationInfoCellOptions {
 Cypress.Commands.add(
   "getFoundationInfoCell",
   ({ cellIdx, rowType, actualValue }: GetFoundationInfoCellOptions) => {
-    cy.get("[data-cy=foundationInfoSection]")
-      .children()
-      .eq(rowType)
-      .children()
-      .eq(cellIdx)
-      .contains(actualValue);
+    const row = baseRowDataCy(rowType);
+    const cell = baseCellDataCy(cellIdx, "cell");
+    cy.get(`[data-cy=foundationInfoSection] [data-cy=${row}] [data-cy=${cell}]`).contains(
+      actualValue
+    );
   }
 );
 

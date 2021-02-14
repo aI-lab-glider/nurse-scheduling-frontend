@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 /// <reference types="cypress" />
 
 context("Tab 'zarządzanie'", () => {
@@ -11,7 +15,7 @@ context("Tab 'zarządzanie'", () => {
     it("Should be able to close edit drawer", () => {
       cy.contains("Edycja pracownika").should("be.visible");
       cy.get('[data-cy="exit-drawer"]').click();
-      cy.contains("Edycja pracownika").should("be.not.visible");
+      cy.contains("Edycja pracownika").should("not.exist");
     });
 
     it("Should be able to edit the name", () => {
