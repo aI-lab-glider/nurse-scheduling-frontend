@@ -8,14 +8,15 @@ import { WorkerType } from "../../common-models/worker-info.model";
 
 interface NameSectionOptions extends Partial<BaseSectionOptions> {
   workerType?: WorkerType;
+  clickable: boolean;
 }
 
 export function NameTableComponent(options: NameSectionOptions): JSX.Element {
-  const { data = [], workerType } = options;
+  const { data = [], workerType, clickable } = options;
 
   return (
     <div>
-      <NameTableSection dataRow={data} workerType={workerType} />
+      <NameTableSection dataRow={data} workerType={workerType} clickable={clickable} />
     </div>
   );
 }

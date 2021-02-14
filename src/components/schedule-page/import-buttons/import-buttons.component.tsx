@@ -73,7 +73,8 @@ export function ImportButtonsComponent(): JSX.Element {
       <DropdownButtons
         buttons={btnData}
         mainLabel="Plik"
-        variant="primary"
+        buttonVariant="primary"
+        variant="file-dropdown"
         dataCy={"file-dropdown"}
       />
       <input

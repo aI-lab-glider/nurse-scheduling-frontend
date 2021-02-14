@@ -41,25 +41,22 @@ describe("schedule editing requirement", () => {
     cy.enterEditMode();
   });
 
-  //     - umożliwia przypisanie zmian w danych dniach dla określonych **pracowników**
   it("shows how to change worker shift", () => {
     cy.getWorkerShift(workerCells[0]).click().screenshotSync();
     cy.useAutocomplete(workerCells[0].newShiftCode).screenshotSync();
     cy.getWorkerShift(workerCells[0]).contains(workerCells[0].newShiftCode).screenshotSync();
   });
 
-  // - umożliwia zmianę liczby podopiecznych w danym dniu
   it("shows how to change children number", () => {
     cy.getFoundationInfoCell(childrenInfoCell).screenshotSync();
     cy.changeFoundationInfoCell(childrenInfoCell).screenshotSync();
   });
-  // - umożliwia zmianę liczby pracowników dodatkowych w danym dniu ( bez konieczności dodawania ich za pomocą widoku zarządzania harmonogramem)
+
   it("shows how to change extra workers info", () => {
     cy.getFoundationInfoCell(extraWorkerInfoCell).screenshotSync();
     cy.changeFoundationInfoCell(extraWorkerInfoCell).screenshotSync();
   });
 
-  // - umożliwia cofanie i ponawianie wykonywanych zmian w grafiku
   it("shows how to make undo in schedule", () => {
     cy.getWorkerShift(workerCells[0]).click().screenshotSync();
     cy.useAutocomplete(workerCells[0].newShiftCode).screenshotSync();
