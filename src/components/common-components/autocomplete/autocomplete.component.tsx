@@ -62,10 +62,10 @@ export function AutocompleteComponent<T>({
           {groupedOptions.map((option, index) => (
             <li
               {...getOptionProps({ option, index })}
-              data-cy={option["data-cy"]}
               onClick={(): void => {
                 setValue(option);
               }}
+              data-cy={option["data-cy"]}
             >
               <div className="container">
                 <div className="optionLabel">{getOptionLabel(option)}</div>

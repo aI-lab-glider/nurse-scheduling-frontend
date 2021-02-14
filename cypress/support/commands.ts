@@ -2,20 +2,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import "cypress-file-upload";
+import { ScheduleKey } from "../../src/api/persistance-store.model";
 import { ShiftCode } from "../../src/common-models/shift-info.model";
 import { WorkerType } from "../../src/common-models/worker-info.model";
-import {
-  calculateMissingFullWeekDays,
-  daysInMonth,
-} from "../../src/state/reducers/month-state/schedule-data/common-reducers";
-import { ScheduleKey } from "../../src/api/persistance-store.model";
-import { baseRowDataCy } from "../../src/components/schedule-page/table/schedule/schedule-parts/base-row.models";
 import {
   baseCellDataCy,
   CellType,
 } from "../../src/components/schedule-page/table/schedule/schedule-parts/base-cell/base-cell.models";
-import { summaryRowDataCy } from "../../src/components/summarytable/summarytable-row.models";
+import { baseRowDataCy } from "../../src/components/schedule-page/table/schedule/schedule-parts/base-row.models";
 import { summaryCellDataCy } from "../../src/components/summarytable/summarytable-cell.models";
+import { summaryRowDataCy } from "../../src/components/summarytable/summarytable-row.models";
+import {
+  calculateMissingFullWeekDays,
+  daysInMonth,
+} from "../../src/state/reducers/month-state/schedule-data/common-reducers";
 
 export type CypressScreenshotOptions = Partial<
   Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions
@@ -128,6 +128,12 @@ Cypress.Commands.add("saveToDatabase", () => {
 });
 
 Cypress.Commands.add("enterEditMode", () => {
+  // TODO: uncomment and check if everything would work after TASK-180 would be merged
+  const actualRevisionValue = "actual";
+  cy.get("[data-cy=revision-select]")
+    //   .select(RevisionTypeLabels[actualRevisionValue])
+    .should("have.value", actualRevisionValue);
+  // cy.get("[data-cy=revision-select]").blur();
   cy.get("[data-cy=edit-mode-button]").click();
   return cy.get("[data-cy=nurseShiftsTable]").should("exist");
 });
