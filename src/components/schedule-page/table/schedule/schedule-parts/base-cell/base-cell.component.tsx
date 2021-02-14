@@ -1,58 +1,27 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useEffect, useState } from "react";
-import { CellColorSet } from "../../../../../../helpers/colors/cell-color-set.model";
-import { BaseCellInputComponent, BaseCellInputOptions } from "./base-cell-input.component";
-import { VerboseDate, WeekDay } from "../../../../../../common-models/month-info.model";
-import { TranslationHelper } from "../../../../../../helpers/translations.helper";
-import { useDrag, useDrop } from "react-dnd";
 import classNames from "classnames/bind";
+import React, { useEffect, useRef, useState } from "react";
+import { useDrag, useDrop } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
-import { useRef } from "react";
-import { usePopper } from "react-popper";
-import { Popper } from "./popper";
-import { CellDetails } from "./cell-details-content.component";
-import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
-import useComponentVisible from "./use-component-visible";
 import mergeRefs from "react-merge-refs";
-
-export enum CellManagementKeys {
-  Enter = "Enter",
-  Escape = "Escape",
-}
-
-const PivotCellType = "Cell";
-
-export interface PivotCell {
-  type: string;
-  rowIndex: number;
-  cellIndex: number;
-}
-
-export interface BaseCellOptions {
-  rowIndex: number;
-  keepOn: boolean;
-  hasNext: boolean;
-  index: number;
-  value: string;
-  style?: CellColorSet;
-  isBlocked: boolean;
-  isPointerOn: boolean;
-  isSelected: boolean;
-  onClick?: () => void;
-  onContextMenu?: () => void;
-  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-  onValueChange?: (value: string) => void;
-  onBlur?: () => void;
-  input?: React.FC<BaseCellInputOptions>;
-  monthNumber?: number;
-  verboseDate?: VerboseDate;
-  onDrag?: (pivotCell: PivotCell) => void;
-  onDragEnd?: () => void;
-  sectionKey: string;
-}
+import { usePopper } from "react-popper";
+import { useSelector } from "react-redux";
+import { WeekDay } from "../../../../../../common-models/month-info.model";
+import { TranslationHelper } from "../../../../../../helpers/translations.helper";
+import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
+import { BaseCellInputComponent } from "./base-cell-input.component";
+import {
+  BaseCellOptions,
+  PivotCellTypePrefix,
+  PivotCell,
+  CellManagementKeys,
+  baseCellDataCy,
+} from "./base-cell.models";
+import { CellDetails } from "./cell-details-content.component";
+import { Popper } from "./popper";
+import useComponentVisible from "./use-component-visible";
 
 export function BaseCellComponent({
   rowIndex,
@@ -77,7 +46,7 @@ export function BaseCellComponent({
   const { year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
-  const dragAnDropType = `${PivotCellType}${sectionKey ?? ""}`;
+  const dragAnDropType = `${PivotCellTypePrefix}${sectionKey ?? ""}`;
   const errorTriangle = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const keepOnClass = "keepOn" + keepOn + value;
@@ -169,7 +138,10 @@ export function BaseCellComponent({
       }}
     >
       <div className={"wrapContent"} ref={drag}>
-        <div className={"content " + hasNextClass + " " + keepOnClass} data-cy="highlighted-cell">
+        <div
+          className={`content ${hasNextClass} ${keepOnClass}`}
+          data-cy={baseCellDataCy(index, "highlighted-cell")}
+        >
           {isPointerOn && !isBlocked && (
             <InputComponent
               className={classNames(
@@ -219,7 +191,7 @@ export function BaseCellComponent({
           <div className={"leftBorder leftBorderColor"} />
           {(!isPointerOn || (isPointerOn && isBlocked)) && (
             <p
-              data-cy="cell"
+              data-cy={baseCellDataCy(index, "cell")}
               className={"relative "}
               onClick={(): void => {
                 if (!isBlocked) onClick?.();
