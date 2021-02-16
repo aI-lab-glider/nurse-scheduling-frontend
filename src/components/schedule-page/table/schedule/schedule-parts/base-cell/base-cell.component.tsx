@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import classNames from "classnames/bind";
 import React from "react";
+import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
 import { CellBlockableInputComponent } from "../cell-blockable-input.component";
 import { ErrorTooltipProvider } from "../error-tooltip.component";
 import { useCellBackgroundHighlight } from "../hooks/use-cell-highlight";
@@ -19,7 +20,7 @@ export function BaseCellComponent(options: BaseCellOptions): JSX.Element {
     isPointerOn,
     onClick,
     onBlur,
-    errorSelector = (_) => [],
+    errorSelector = (_): ScheduleError[] => [],
   } = options;
 
   const selectableItemRef = useCellSelection(options);

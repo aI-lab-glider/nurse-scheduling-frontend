@@ -25,6 +25,7 @@ export function BaseRowComponentF(options: BaseRowOptions): JSX.Element {
     selection = [],
     isEditable = true,
     errorSelector,
+    defaultEmpty = "",
   } = options;
 
   const scheduleLogic = useContext(ScheduleLogicContext);
@@ -45,7 +46,7 @@ export function BaseRowComponentF(options: BaseRowOptions): JSX.Element {
 
   return (
     <tr className="row scheduleStyle" id="mainRow">
-      {data.map((dataItem, cellIndex) => {
+      {data.map((dataItem = { value: defaultEmpty }, cellIndex) => {
         return (
           <CellComponent
             {...{

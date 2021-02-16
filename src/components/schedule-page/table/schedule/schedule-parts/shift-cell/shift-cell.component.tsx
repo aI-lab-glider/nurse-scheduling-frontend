@@ -6,6 +6,7 @@ import React, { useRef } from "react";
 import mergeRefs from "react-merge-refs";
 import { usePopper } from "react-popper";
 import { useSelector } from "react-redux";
+import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
 import { ShiftCode } from "../../../../../../common-models/shift-info.model";
 import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 import { baseCellDataCy, BaseCellOptions } from "../base-cell/base-cell.models";
@@ -40,7 +41,7 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
     onBlur,
     monthNumber,
     verboseDate,
-    errorSelector = (_) => [],
+    errorSelector = (_): ScheduleError[] => [],
     keepOn,
     hasNext,
   } = options;
@@ -98,7 +99,7 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
             year={year}
             shiftcode={value}
             {...options}
-            close={() => setIsComponentVisible(false)}
+            close={(): void => setIsComponentVisible(false)}
           />
         </Popper>
 

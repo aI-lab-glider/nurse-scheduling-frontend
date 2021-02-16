@@ -41,19 +41,23 @@ function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.
 
   const [today, circle] = isToday();
 
-  const errorSelector = useCallback((scheduleErros: GroupedScheduleErrors): ScheduleError[] => {
-    const matchingErrorsByType = [
-      ...(scheduleErros[AlgorithmErrorCode.WorkerNumberDuringDay] ?? []),
-      ...(scheduleErros[AlgorithmErrorCode.WorkerNumberDuringNight] ?? []),
-    ];
-    return matchingErrorsByType.filter((error) => {
-      return (
-        (error.kind === AlgorithmErrorCode.WorkerNumberDuringNight ||
-          error.kind === AlgorithmErrorCode.WorkerNumberDuringDay) &&
-        error.day === value.date
-      );
-    });
-  }, []);
+  const errorSelector = useCallback(
+    (scheduleErros: GroupedScheduleErrors): ScheduleError[] => {
+      const matchingErrorsByType = [
+        ...(scheduleErros[AlgorithmErrorCode.WorkerNumberDuringDay] ?? []),
+        ...(scheduleErros[AlgorithmErrorCode.WorkerNumberDuringNight] ?? []),
+      ];
+      return matchingErrorsByType.filter((error) => {
+        return (
+          (error.kind === AlgorithmErrorCode.WorkerNumberDuringNight ||
+            error.kind === AlgorithmErrorCode.WorkerNumberDuringDay) &&
+          error.day === value.date
+        );
+      });
+    },
+    [value.date]
+  );
+
   return (
     <td className="timetableCell" id={getId()}>
       <ErrorTooltipProvider
