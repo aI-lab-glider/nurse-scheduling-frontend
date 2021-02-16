@@ -3,13 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import classNames from "classnames/bind";
 import React, { useRef } from "react";
+import mergeRefs from "react-merge-refs";
 import { usePopper } from "react-popper";
 import { useSelector } from "react-redux";
 import { ShiftCode } from "../../../../../../common-models/shift-info.model";
 import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
-import { BaseCellOptions } from "../base-cell/base-cell.component";
+import { baseCellDataCy, BaseCellOptions } from "../base-cell/base-cell.models";
 import { CellDetails } from "../base-cell/cell-details-content.component";
-import mergeRefs from "react-merge-refs";
 import { Popper } from "../base-cell/popper";
 import useComponentVisible from "../base-cell/use-component-visible";
 import { CellBlockableInputComponent } from "../cell-blockable-input.component";
@@ -108,11 +108,14 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
           onValueChange={_onValueChange}
           {...options}
         />
-        <div className={"content " + hasNextClass + " " + keepOnClass} data-cy="highlighted-cell">
+        <div
+          className={"content " + hasNextClass + " " + keepOnClass}
+          data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
+        >
           {(!isPointerOn || (isPointerOn && isBlocked)) && (
             <ErrorTooltipProvider errorSelector={errorSelector} className={"content"}>
               <div className={"leftBorder leftBorderColor"} />
-              <p data-cy="cell" className={"relative "}>
+              <p data-cy={baseCellDataCy(cellIndex, "cell")} className={"relative "}>
                 {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
               </p>
             </ErrorTooltipProvider>

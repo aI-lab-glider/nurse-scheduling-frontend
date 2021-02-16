@@ -3,10 +3,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { DataRow } from "../../../../../logic/schedule-logic/data-row";
-import { BaseRowComponent, BaseRowOptions } from "./base-row.component";
-import { ShiftCellComponent } from "./shift-cell/shift-cell.component";
-import { BaseCellOptions } from "./base-cell/base-cell.component";
 import { useScheduleStyling } from "../../../../common-components/use-schedule-styling/use-schedule-styling";
+import { BaseCellOptions } from "./base-cell/base-cell.models";
+import { BaseRowComponent } from "./base-row.component";
+import { BaseRowOptions } from "./base-row.models";
+import { ShiftCellComponent } from "./shift-cell/shift-cell.component";
 
 export interface ShiftRowOptions extends BaseRowOptions {
   dataRow: DataRow;

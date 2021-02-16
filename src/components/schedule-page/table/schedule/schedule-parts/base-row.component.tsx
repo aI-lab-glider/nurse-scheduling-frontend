@@ -2,48 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useContext } from "react";
-import {
-  GroupedScheduleErrors,
-  ScheduleError,
-} from "../../../../../common-models/schedule-error.model";
+import { ScheduleError } from "../../../../../common-models/schedule-error.model";
 import { ArrayHelper } from "../../../../../helpers/array.helper";
 import { DataRowHelper } from "../../../../../helpers/data-row.helper";
-import { Sections } from "../../../../../logic/providers/schedule-provider.model";
-import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import { ScheduleLogicContext } from "../use-schedule-state";
-import { BaseCellComponent, BaseCellOptions } from "./base-cell/base-cell.component";
-import { PivotCell } from "./hooks/use-cell-selection";
-
-export interface BaseRowOptions {
-  uuid: string;
-  rowIndex: number;
-  dataRow: DataRow;
-  sectionKey: keyof Sections;
-  cellComponent?: React.FC<BaseCellOptions>;
-  onKeyDown?: (cellIndex: number, event: React.KeyboardEvent) => void;
-  onClick?: (cellIndex: number) => void;
-  onStateUpdate?: (row: DataRow) => void;
-  pointerPosition?: number;
-  onBlur?: () => void;
-  onDrag?: (pivot: PivotCell, cellInd: number) => void;
-  onDragEnd?: (rowInd: number, cellInd: number) => void;
-  onSave?: (newValue: string) => void;
-  selection?: boolean[];
-  isEditable?: boolean;
-  errorSelector?: (cellIndex: number, scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
-}
-
-export interface CellDataItem {
-  value: string;
-}
-
-function isCellDataItemArray(array: any[]): array is CellDataItem[] {
-  return array[0].value !== undefined;
-}
-function toCellDataItemArray(array: any[]): CellDataItem[] {
-  if (isCellDataItemArray(array)) return array;
-  return array.map((item) => ({ value: item as string }));
-}
+import { BaseCellComponent } from "./base-cell/base-cell.component";
+import { BaseRowOptions, toCellDataItemArray } from "./base-row.models";
 
 export function BaseRowComponentF(options: BaseRowOptions): JSX.Element {
   const {

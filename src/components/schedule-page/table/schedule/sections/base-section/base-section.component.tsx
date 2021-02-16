@@ -1,24 +1,22 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useContext, useState } from "react";
-import {
-  BaseCellComponent,
-  BaseCellOptions,
-} from "../../schedule-parts/base-cell/base-cell.component";
-import { BaseRowComponent } from "../../schedule-parts/base-row.component";
-import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
-import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
-import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
-import { DataRowHelper } from "../../../../../../helpers/data-row.helper";
-import { ScheduleLogicContext } from "../../use-schedule-state";
-import { useSelectionMatrix } from "./use-selection-matrix";
+import React, { useCallback, useContext, useState } from "react";
 import {
   GroupedScheduleErrors,
   ScheduleError,
 } from "../../../../../../common-models/schedule-error.model";
-import { useCallback } from "react";
+import { DataRowHelper } from "../../../../../../helpers/data-row.helper";
+import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
+import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
+import { BaseCellComponent } from "../../schedule-parts/base-cell/base-cell.component";
+import { BaseCellOptions } from "../../schedule-parts/base-cell/base-cell.models";
+import { BaseRowComponent } from "../../schedule-parts/base-row.component";
 import { PivotCell } from "../../schedule-parts/hooks/use-cell-selection";
+import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
+import { ScheduleLogicContext } from "../../use-schedule-state";
+import { useSelectionMatrix } from "./use-selection-matrix";
+
 export enum DirectionKey {
   ArrowRight = "ArrowRight",
   ArrowLeft = "ArrowLeft",

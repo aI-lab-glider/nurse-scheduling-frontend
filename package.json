@@ -34,6 +34,7 @@
     "cross-env": "^7.0.2",
     "date-fns": "^2.15.0",
     "electron-is-dev": "^1.2.0",
+    "eslint-plugin-header": "^3.1.1",
     "exceljs": "^4.1.1",
     "file-saver": "^2.0.2",
     "fontsource-roboto": "^3.0.3",
@@ -71,6 +72,7 @@
     "build": "npm build && npm electron-build",
     "start": "concurrently \"cross-env BROWSER=none npm run b-start\" \"node scripts/await.js && electron .\"",
     "lint": "eslint src/**/*.ts* cypress/**/*.ts*",
+    "lint-fix": "eslint src/**/*.ts* cypress/**/*.ts* --fix",
     "lint-warn": "eslint src/**/*.ts* cypress/**/*.ts* --max-warnings=0",
     "cypress:open": "cypress open"
   },
@@ -94,7 +96,8 @@
   },
   "eslintConfig": {
     "plugins": [
-      "cypress"
+      "cypress",
+      "header"
     ],
     "extends": [
       "react-app",
@@ -105,7 +108,11 @@
     "rules": {
       "no-console": "warn",
       "@typescript-eslint/no-non-null-assertion": "off",
-      "@typescript-eslint/triple-slash-reference": "off"
+      "@typescript-eslint/triple-slash-reference": "off",
+      "header/header": [
+        2,
+        "config/license-header.js"
+      ]
     },
     "overrides": [
       {

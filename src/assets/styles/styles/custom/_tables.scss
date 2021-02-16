@@ -214,11 +214,13 @@
   #timetableRow {
     width: 1156px;
     height: 70px;
+    cursor: default;
   }
 }
 
 #summaryTable {
   width: 102px;
+  cursor: default;
 }
 
 #mainTable {
@@ -228,6 +230,7 @@
 #overtimeHeaderTable {
   width: 102px;
   height: 74px;
+  cursor: default;
 }
 
 .summaryContainer {

@@ -13,6 +13,7 @@ import { NameTableSection } from "./nametable-section.component";
 
 interface NameSectionOptions extends Partial<BaseSectionOptions> {
   workerType?: WorkerType;
+  clickable: boolean;
 }
 
 function nametableErrorSelector(
@@ -32,7 +33,7 @@ function nametableErrorSelector(
 }
 
 export function NameTableComponent(options: NameSectionOptions): JSX.Element {
-  const { data = [], workerType } = options;
+  const { data = [], workerType, clickable } = options;
 
   return (
     <div>
@@ -40,6 +41,7 @@ export function NameTableComponent(options: NameSectionOptions): JSX.Element {
         dataRow={data}
         workerType={workerType}
         errorSelector={nametableErrorSelector}
+        clickable={clickable}
       />
     </div>
   );

@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useAutocomplete } from "@material-ui/lab";
-import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
+import React, { useEffect, useState } from "react";
 
 interface AutocompleteOptions<T> {
   options: T[];

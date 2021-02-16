@@ -57,4 +57,10 @@ export class VerboseDateHelper {
       ? { ...colorSet, backgroundColor: colorSet.backgroundColor.fade() }
       : colorSet;
   }
+
+  static isMonthInFuture(month: number, year: number): boolean {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+    return year > currentYear || (year === currentYear && month > currentMonth);
+  }
 }

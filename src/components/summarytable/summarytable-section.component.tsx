@@ -30,12 +30,13 @@ export function SummaryTableSection({
         data-cy={`${workerType.toLowerCase()}SummaryTable`}
       >
         <tbody>
-          {dataRows.map((dataRow) => {
+          {dataRows.map((dataRow, rowIndex) => {
             return (
               <SummaryTableRow
                 key={`${scheduleLogic?.uuid ?? 0}_${dataRow.rowKey}`}
                 uuid={scheduleLogic?.uuid ?? "0"}
                 data={shiftLogic?.calculateWorkerHourInfo(dataRow.rowKey) ?? []}
+                rowIndex={rowIndex}
               />
             );
           })}
