@@ -14,6 +14,7 @@ import { createActionName, ScheduleActionModel, ScheduleActionType } from "./sch
 import { WorkerInfoExtendedInterface } from "../../../../components/namestable/worker-edit.component";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import _ from "lodash";
+import { WorkerInfoModel } from "../../../../common-models/worker-info.model";
 
 export class ScheduleDataActionCreator {
   static setScheduleFromScheduleDM(
@@ -95,6 +96,22 @@ export class ScheduleDataActionCreator {
       const action = {
         type: ScheduleActionType.ADD_NEW_WORKER,
         payload: { ...worker },
+      };
+      dispatch(action);
+    };
+  }
+
+  static deleteWorker(worker: WorkerInfoModel | undefined): (dispatch) => Promise<void> {
+    return async (dispatch): Promise<void> => {
+      const action = {
+        type: ScheduleActionType.DELETE_WORKER,
+        payload: {
+          workerName: worker?.name,
+          prevName: "",
+          employmentTime: "",
+          employmentTimeOther: "",
+          civilTime: "",
+        },
       };
       dispatch(action);
     };

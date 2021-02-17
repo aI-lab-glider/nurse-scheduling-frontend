@@ -2,6 +2,8 @@ import React from "react";
 import { Button } from "../../button-component/button.component";
 import DefaultModal from "../modal.component";
 import { WorkerInfoModel } from "../../../../common-models/worker-info.model";
+import { ScheduleDataActionCreator } from "../../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { useDispatch } from "react-redux";
 
 interface DeleteWorkerModalOptions {
   setOpen: (open: boolean) => void;
@@ -10,6 +12,8 @@ interface DeleteWorkerModalOptions {
 }
 
 export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOptions): JSX.Element {
+  const dispatcher = useDispatch();
+
   const { setOpen, open, worker } = options;
 
   const handleClose = (): void => {
@@ -29,7 +33,15 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
       <Button onClick={handleClose} size="small" className="submit-button" variant="secondary">
         Anuluj
       </Button>
-      <Button onClick={handleClose} size="small" className="submit-button" variant="primary">
+      <Button
+        onClick={(): void => {
+          dispatcher(ScheduleDataActionCreator.deleteWorker(worker));
+          handleClose();
+        }}
+        size="small"
+        className="submit-button"
+        variant="primary"
+      >
         Zaakceptuj
       </Button>
     </div>

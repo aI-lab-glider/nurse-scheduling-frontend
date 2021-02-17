@@ -26,6 +26,9 @@ export function scheduleShiftsInfoReducerF(name: string) {
       case createActionName(name, ScheduleActionType.UPDATE):
         const data = (action.payload as ScheduleDataModel)?.shifts;
         return { ...data };
+      case ScheduleActionType.DELETE_WORKER:
+        delete state[workerName];
+        return state;
       case ScheduleActionType.ADD_NEW_WORKER:
         const newShiftsArr = [...Array(35).fill("W")];
         return { ...{ [workerName]: newShiftsArr }, ...state };
