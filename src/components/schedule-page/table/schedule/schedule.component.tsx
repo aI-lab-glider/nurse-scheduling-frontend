@@ -11,7 +11,7 @@ import { SummaryTableComponent } from "../../../summarytable/summarytable.compon
 import { OvertimeHeaderComponent } from "../../../overtime-header-table/overtime-header.component";
 import { ScheduleComponentState } from "./schedule-state.model";
 import { ScheduleFoldingSection } from "./schedule-parts/schedule-folding-section.component";
-import { NewMonthPlanComponent } from "../../new-month-page.component";
+import { NewMonthPlanComponent } from "../../new-month-plan.component";
 
 interface ScheduleComponentOptions {
   schedule: ScheduleComponentState;

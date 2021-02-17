@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 import React, { ReactNode, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useSelector } from "react-redux";
@@ -43,7 +47,10 @@ export function ErrorTooltipProvider({
   const container = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [isToolTipOpen, setToolTipOpen] = useState(false);
-  const { styles, attributes } = usePopper(errorTriangle.current, tooltipRef.current);
+  const { styles, attributes } = usePopper(errorTriangle.current, tooltipRef.current, {
+    placement: "right",
+    strategy: "absolute",
+  });
   const [isFixed, setIsFixed] = useState(false);
 
   function showErrorTooltip(): void {
@@ -74,8 +81,8 @@ export function ErrorTooltipProvider({
         {...attributes}
         style={{
           ...styles,
-          marginLeft: errorTooltipOffset.left ?? container.current?.offsetWidth,
-          marginTop: errorTooltipOffset.top ?? 0,
+          marginLeft: container.current?.offsetWidth ?? 0,
+          marginTop: -(tooltipRef.current?.offsetTop ?? 0),
         }}
         onMouseLeave={(): void => hideErrorTooltip(false)}
         onClick={handleTriangleClick}

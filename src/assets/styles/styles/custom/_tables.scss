@@ -331,4 +331,10 @@ p {
 
 .errorTootlip-item {
   margin: 0px !important;
+  .error-title {
+    flex: 0.5 !important;
+  }
+  .error-text {
+    padding: 0px 5px;
+  }
 }

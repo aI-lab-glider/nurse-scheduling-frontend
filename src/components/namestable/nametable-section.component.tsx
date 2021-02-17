@@ -81,6 +81,7 @@ export function NameTableSection({
           {data.map((cellData) => {
             return (
               <ErrorTooltipProvider
+                key={cellData}
                 errorSelector={(scheduleErrors): ScheduleError[] =>
                   errorSelector?.(cellData, 0, scheduleErrors) ?? []
                 }

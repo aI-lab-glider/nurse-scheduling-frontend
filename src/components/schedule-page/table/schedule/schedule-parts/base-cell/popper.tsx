@@ -5,10 +5,14 @@ import { DividerProps } from "@material-ui/core";
 import React, { Ref } from "react";
 
 type PopperArguments = { isOpen: boolean } & PopperOptions;
-export type PopperOptions = Omit<DividerProps, "ref"> & {
-  ref?: Ref<HTMLDivElement>;
-};
+export type PopperOptions = Omit<DividerProps, "ref">;
 
-export function Popper({ ref, isOpen, children, ...popperOptions }: PopperArguments): JSX.Element {
-  return <div ref={ref}>{isOpen && <div {...popperOptions}>{children}</div>}</div>;
-}
+// https://reactjs.org/docs/forwarding-refs.html#forwarding-refs-to-dom-components
+export const Popper = React.forwardRef(
+  (
+    { isOpen, children, ...popperOptions }: PopperArguments,
+    ref: Ref<HTMLDivElement>
+  ): JSX.Element => {
+    return <div ref={ref}>{isOpen && <div {...popperOptions}>{children}</div>}</div>;
+  }
+);

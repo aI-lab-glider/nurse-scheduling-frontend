@@ -12,10 +12,9 @@ import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-s
 export type FoundationInfoOptions = Omit<BaseSectionOptions, "sectionKey">;
 
 // TODO:
-// 1. Define errors as interface with types. Should not be dictionary as it is now
-// 2. Fix bug with monthswitcing
-// 3. Fix paddings in summary row
 // 4. Fix bad positioning in big monthes
+// 1. Define errors as interface with types. Should not be dictionary as it is now
+// 3. Fix paddings in summary row
 function foundationInfoErrorSelector(
   rowKey: string,
   cellIndex: number,
