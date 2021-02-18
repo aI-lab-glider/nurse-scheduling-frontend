@@ -39,6 +39,7 @@ export function employeeInfoReducerF(name: string) {
       case ScheduleActionType.DELETE_WORKER:
         delete state.time[workerName];
         delete state.type[workerName];
+        delete state.contractType?.[workerName];
         return {
           time: { ...state.time },
           type: { ...state.type },

@@ -105,13 +105,7 @@ export class ScheduleDataActionCreator {
     return async (dispatch): Promise<void> => {
       const action = {
         type: ScheduleActionType.DELETE_WORKER,
-        payload: {
-          workerName: worker?.name,
-          prevName: "",
-          employmentTime: "",
-          employmentTimeOther: "",
-          civilTime: "",
-        },
+        payload: { workerName: worker?.name },
       };
       dispatch(action);
     };
