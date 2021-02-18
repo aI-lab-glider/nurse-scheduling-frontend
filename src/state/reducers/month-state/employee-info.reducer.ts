@@ -37,6 +37,16 @@ export function employeeInfoReducerF(name: string) {
     }
 
     switch (action.type) {
+      case ScheduleActionType.DELETE_WORKER:
+        delete state.time[workerName];
+        delete state.type[workerName];
+        delete state.contractType?.[workerName];
+        return {
+          time: { ...state.time },
+          type: { ...state.type },
+          contractType: { ...state.contractType },
+        };
+
       case createActionName(name, ScheduleActionType.ADD_NEW):
         data = (action.payload as ScheduleDataModel)?.employee_info;
         if (!data) return state;
