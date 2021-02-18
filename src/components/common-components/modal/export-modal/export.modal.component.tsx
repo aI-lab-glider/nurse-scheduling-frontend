@@ -34,7 +34,7 @@ const BlueCheckBox = withStyles({
 
 export default function ExportModal(options: ExportModalComponent): JSX.Element {
   const { setOpen, open, model } = options;
-  const [exportMode, setexportMode] = React.useState("xslx");
+  const [exportMode, setexportMode] = React.useState("XSLX");
   const handleClose = (): void => {
     setOpen(false);
   };
@@ -71,7 +71,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
       <Button onClick={handleExport} size="small" variant="primary">
         Potwierdż
       </Button>
-      <Button onClick={handleClose} size="small" variant="outlined">
+      <Button onClick={handleClose} size="small" variant="secondary">
         Anuluj
       </Button>
     </div>
@@ -90,7 +90,12 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
     <div>
       <div style={{ display: "flex", msFlexDirection: "row" }}>
         <p className="makeStyles-title-22">Format pliku: </p>
-        <DropdownButtons buttons={btnData} mainLabel={exportMode} variant="outlined" />
+        <DropdownButtons
+          buttons={btnData}
+          mainLabel={exportMode}
+          buttonVariant="secondary"
+          variant="extension"
+        />
       </div>
       <div>
         <p className="makeStyles-title-22">Opcje pliku: </p>
@@ -110,7 +115,6 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
           ))}
         </FormGroup>
       </div>
-      <div></div>
     </div>
   );
 
