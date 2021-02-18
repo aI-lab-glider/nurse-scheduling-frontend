@@ -87,10 +87,6 @@ export function NameTableSection({
                 }
                 className="nametableRow"
                 showErrorTitle={false}
-                errorTriangleOffset={{
-                  right: -2,
-                  top: 5,
-                }}
               >
                 <tr
                   key={cellData}

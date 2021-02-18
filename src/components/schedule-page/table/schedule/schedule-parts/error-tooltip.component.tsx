@@ -19,17 +19,6 @@ export interface ErrorTooltipOptions {
   errorSelector: (scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
   className?: string;
   showErrorTitle?: boolean;
-  errorTriangleOffset?: TriangleOffset;
-  errorTooltipOffset?: TooltipOffset;
-}
-
-interface TriangleOffset {
-  top?: number;
-  right?: number;
-}
-interface TooltipOffset {
-  top?: number;
-  left?: number;
 }
 
 export function ErrorTooltipProvider({
@@ -37,8 +26,6 @@ export function ErrorTooltipProvider({
   children,
   errorSelector,
   className,
-  errorTriangleOffset = {},
-  errorTooltipOffset = {},
 }: ErrorTooltipOptions): JSX.Element {
   const errors = useSelector((state: ApplicationStateModel) =>
     errorSelector(state.actualState.scheduleErrors)
@@ -47,9 +34,8 @@ export function ErrorTooltipProvider({
   const container = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [isToolTipOpen, setToolTipOpen] = useState(false);
-  const { styles, attributes } = usePopper(errorTriangle.current, tooltipRef.current, {
-    placement: "right",
-    strategy: "absolute",
+  const { styles, attributes } = usePopper(container.current, tooltipRef.current, {
+    placement: "right-start",
   });
   const [isFixed, setIsFixed] = useState(false);
 
@@ -80,9 +66,7 @@ export function ErrorTooltipProvider({
         isOpen={isToolTipOpen}
         {...attributes}
         style={{
-          ...styles,
-          marginLeft: container.current?.offsetWidth ?? 0,
-          marginTop: -(tooltipRef.current?.offsetTop ?? 0),
+          ...styles.popper,
         }}
         onMouseLeave={(): void => hideErrorTooltip(false)}
         onClick={handleTriangleClick}
@@ -108,12 +92,7 @@ export function ErrorTooltipProvider({
         onMouseLeave={(): void => hideErrorTooltip(false)}
       >
         {errors.length !== 0 && (
-          <span
-            ref={errorTriangle}
-            className="error-triangle"
-            onClick={handleTriangleClick}
-            style={errorTriangleOffset}
-          />
+          <span ref={errorTriangle} className="error-triangle" onClick={handleTriangleClick} />
         )}
         {children}
       </div>

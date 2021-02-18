@@ -48,6 +48,7 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
   const { year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
+  const cellRef = useRef<HTMLDivElement>(null);
   const cellDetailsPopperRef = useRef<HTMLDivElement>(null);
   const { componentContainer, isComponentVisible, setIsComponentVisible } = useComponentVisible(
     false
@@ -88,7 +89,9 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
           ref={cellDetailsPopperRef}
           className="cell-details-popper"
           style={
-            usePopper(useRef<HTMLDivElement>(null).current, cellDetailsPopperRef.current).styles
+            usePopper(cellRef.current, cellDetailsPopperRef.current, {
+              placement: "right-start",
+            }).styles.popper
           }
           isOpen={isComponentVisible && isBlocked && value !== ""}
         >
@@ -110,6 +113,7 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
           {...options}
         />
         <div
+          ref={cellRef}
           className={"content " + hasNextClass + " " + keepOnClass}
           data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
         >

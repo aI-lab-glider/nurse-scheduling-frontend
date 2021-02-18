@@ -60,18 +60,7 @@ function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.
 
   return (
     <td className="timetableCell" id={getId()}>
-      <ErrorTooltipProvider
-        className="timetableCell wrapper"
-        errorSelector={errorSelector}
-        errorTriangleOffset={{
-          top: 8,
-          right: -5,
-        }}
-        errorTooltipOffset={{
-          left: 20,
-          top: 8,
-        }}
-      >
+      <ErrorTooltipProvider className="timetableCell wrapper" errorSelector={errorSelector}>
         <span>{TranslationHelper.weekDaysTranslations[value.dayOfWeek]}</span>
         <span className={circle}>
           <span className={today}>{value.date}</span>
