@@ -3,14 +3,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 context("Schedule errors", () => {
   before(() => {
-    cy.server();
-    cy.fixture("scheduleErrors.json").then((json) => {
-      cy.route({
+    cy.intercept(
+      {
         method: "POST",
         url: "**/schedule_errors",
-        response: json,
-      });
-    });
+      },
+      {
+        fixture: "scheduleErrors.json",
+      }
+    );
     cy.loadScheduleToMonth();
     cy.enterEditMode();
   });
