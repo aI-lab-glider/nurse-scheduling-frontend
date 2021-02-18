@@ -69,7 +69,6 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
       <Link to="/schedule-editing">
         <Button
           onClick={openEdit}
-          size="small"
           className={classNames({ "disabled-submit-button": isRevisionEditDisabled })}
           variant="primary"
           data-cy="edit-mode-button"

@@ -77,9 +77,7 @@ export function NewMonthPlanComponent(): JSX.Element {
               onClick={(): void => {
                 dispatch(MonthSwitchActionCreator.copyActualMonthToMonthWithOffset(-1));
               }}
-              size="small"
-              className="submit-button"
-              variant="outlined"
+              variant="secondary"
             >
               {" "}
               {`Kopiuj plan z ${
@@ -93,9 +91,7 @@ export function NewMonthPlanComponent(): JSX.Element {
               onClick={(): void => {
                 dispatch(MonthSwitchActionCreator.copyActualMonthToMonthWithOffset(1));
               }}
-              size="small"
-              className="submit-button"
-              variant="outlined"
+              variant="secondary"
             >
               {`Kopiuj plan z ${
                 TranslationHelper.polishMonths[nextDate.getMonth()]
@@ -103,12 +99,7 @@ export function NewMonthPlanComponent(): JSX.Element {
             </Button>
           )}
 
-          <Button
-            size="small"
-            className="submit-button"
-            variant="primary"
-            onClick={(): void => fileUpload.current?.click()}
-          >
+          <Button variant="primary" onClick={(): void => fileUpload.current?.click()}>
             <input
               ref={fileUpload}
               id="file-input"

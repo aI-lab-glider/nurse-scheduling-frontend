@@ -4,22 +4,21 @@
 .btn {
   background: none;
   border: none;
-  padding: 5px 35px 5px;
-  margin: 5px 10px 0 10px;
+  padding: 6px 20px 6px 20px;
+  margin: 5px 10px 5px 10px;
   white-space: nowrap;
-  border-radius: $btn-border-radius;
+  border-radius: 40px;
   font-family: $btn-font-family;
-  font-size: $btn-font-size-lg;
-  font-weight: $btn-font-weight;
-  line-height: $btn-line-height;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 28px;
   letter-spacing: $btn-letter-spacing;
   text-align: $btn-text-align;
-  transition: box-shadow 0.5s;
 
   &:hover {
     cursor: pointer;
-    font-weight: 600;
-    box-shadow: 1px 3px $gray-500;
+    font-weight: 500;
+    box-shadow: 0px 10px 20px -10px $gray-500;
   }
 
   &:focus {
@@ -29,39 +28,54 @@
 
 .btn-primary {
   background-color: $primary;
-  color: white;
+  color: $white;
 }
-
-.btn-secondary {
-  background-color: $gray-100;
-  color: $secondary;
-}
-
-.btn-outlined {
-  border: 1px solid $primary;
-  background-color: $white;
-  color: $primary;
-}
-
-.btn-disabled {
-  border: 1px solid $gray-400;
-  color: $gray-400;
-
+.btn-primary-disabled {
+  background-color: rgba(141, 153, 170, 255);
+  color: $white;
   &:hover {
     cursor: default;
-    font-weight: $btn-font-weight;
     box-shadow: none;
+    font-weight: 400;
   }
 }
 
-.btn-circle-outlined {
+.btn-secondary {
+  border: 1px solid rgba(29, 53, 87, 1);
+  background-color: rgba(255, 255, 255, 1);
+  color: rgba(29, 53, 87, 1);
+}
+.btn-secondary-disabled {
+  border: 1px solid rgba(141, 153, 170, 255);
+  color: rgba(141, 153, 170, 255);
+  &:hover {
+    cursor: default;
+    box-shadow: none;
+    font-weight: 400;
+  }
+}
+
+.btn-circle {
   padding: 0;
-  height: $btn-circle-outlined-size;
-  width: $btn-circle-outlined-size;
-  margin: auto 10px;
-  background-color: $opacity-0;
+  height: 24px;
+  width: 24px;
+  margin: 15px 10px 15px 10px;
   display: flex;
   justify-content: center;
+  &:hover {
+    cursor: pointer;
+    box-shadow: none;
+    background-color: rgba(233, 235, 239, 255);
+  }
+}
+
+.btn-circle-disabled {
+  color: rgba(141, 153, 170, 255);
+  &:hover {
+    cursor: default;
+    box-shadow: none;
+    background: none;
+  }
 }
 
 .header-button {

@@ -130,7 +130,7 @@ export default function WorkersTab(): JSX.Element {
                       Edytuj
                     </Button>
                     <Button
-                      variant="outlined"
+                      variant="secondary"
                       className="action-button"
                       onClick={(): void => workerDeleteModal(true, worker)}
                     >
