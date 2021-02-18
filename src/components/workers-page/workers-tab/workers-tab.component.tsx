@@ -22,6 +22,7 @@ import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scs
 import classNames from "classnames/bind";
 import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
 import WorkerDrawerComponent, { WorkerDrawerMode } from "./worker-drawer.component";
+import DeleteWorkerModalComponent from "../../common-components/modal/delete-worker-modal/delete-worker.modal.component";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -51,6 +52,7 @@ export default function WorkersTab(): JSX.Element {
   );
   const [workerData, setWorkerData] = useState([] as WorkerInfoModel[]);
   const [open, setIsOpen] = useState(false);
+  const [openDelModal, setDelModalOpen] = useState(false);
   const [mode, setMode] = useState(WorkerDrawerMode.ADD_NEW);
   const [worker, setWorker] = useState<WorkerInfoModel | undefined>(undefined);
 
@@ -79,6 +81,11 @@ export default function WorkersTab(): JSX.Element {
   ): void {
     setIsOpen(open);
     mode !== undefined && setMode(mode);
+    setWorker(workerData);
+  }
+
+  function workerDeleteModal(open: boolean, workerData?: WorkerInfoModel): void {
+    setDelModalOpen(open);
     setWorker(workerData);
   }
 
@@ -122,7 +129,11 @@ export default function WorkersTab(): JSX.Element {
                     >
                       Edytuj
                     </Button>
-                    <Button variant="secondary" className="action-button">
+                    <Button
+                      variant="secondary"
+                      className="action-button"
+                      onClick={(): void => workerDeleteModal(true, worker)}
+                    >
                       Usuń
                     </Button>
                   </TableCell>
@@ -139,6 +150,7 @@ export default function WorkersTab(): JSX.Element {
         worker={worker}
         setOpen={setIsOpen}
       />
+      <DeleteWorkerModalComponent setOpen={setDelModalOpen} open={openDelModal} worker={worker} />
     </div>
   );
 }
