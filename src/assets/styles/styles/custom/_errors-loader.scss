@@ -34,6 +34,8 @@
   img {
     display: block;
     margin: auto;
+    width: 55px;
+    height: 49px;
   }
 }
 
@@ -41,8 +43,8 @@
   display: block;
   margin: auto;
   text-indent: -9999em;
-  width: 11em;
-  height: 11em;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   background: #ffffff;
   background: linear-gradient(to right, $primary 10%, rgba(255, 255, 255, 0) 42%);

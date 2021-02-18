@@ -55,6 +55,7 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
 
       "&:hover": {
         color: props.disabled ? ScssVars.disabledTextColor : ScssVars.indicatorColor,
+        cursor: props.disabled ? "default" : "pointer",
         opacity: 1,
         outline: "none",
       },

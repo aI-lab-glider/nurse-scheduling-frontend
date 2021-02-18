@@ -1,5 +1,5 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public 
- * License, v. 2.0. If a copy of the MPL was not distributed with this 
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 .more-left-margin {
   margin-left: -6px !important;
@@ -19,8 +19,8 @@
   color: $primary;
   background-color: $white;
   font-weight: $font-weight-normal;
-  box-shadow: 0px 4px 7px rgba(16, 32, 70, 0.2);
-  max-height: 200;
+  box-shadow: 0 4px 7px rgba(16, 32, 70, 0.2);
+  max-height: 500px;
   border-radius: 7px;
   min-width: 250px;
 
@@ -32,7 +32,7 @@
       cursor: pointer;
     }
     &[data-focus="true"] {
-      cursor: "pointer";
+      cursor: pointer;
     }
 
     .container {

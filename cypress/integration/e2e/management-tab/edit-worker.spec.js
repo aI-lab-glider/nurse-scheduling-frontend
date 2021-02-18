@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 /// <reference types="cypress" />
 
 context("Tab 'zarządzanie'", () => {
@@ -11,7 +15,7 @@ context("Tab 'zarządzanie'", () => {
     it("Should be able to close edit drawer", () => {
       cy.contains("Edycja pracownika").should("be.visible");
       cy.get('[data-cy="exit-drawer"]').click();
-      cy.contains("Edycja pracownika").should("be.not.visible");
+      cy.contains("Edycja pracownika").should("not.exist");
     });
 
     it("Should be able to edit the name", () => {
@@ -20,46 +24,46 @@ context("Tab 'zarządzanie'", () => {
     });
 
     it("Should be able to edit the position", () => {
-      cy.get(".btn-outlined").contains("Opiekunka").click();
-      cy.get(".btn-primary").contains("Pielęgniarka").click();
-      cy.get(".btn-outlined").contains("Pielęgniarka");
+      cy.get('[data-cy="position"]').contains("Opiekunka").click();
+      cy.get('[data-cy="worker-button"]').contains("Pielęgniarka").click();
+      cy.get('[data-cy="position"]').contains("Pielęgniarka");
     });
 
     context("Editing the time", () => {
       beforeEach(() => {
-        cy.get(".btn-outlined").contains("Typ umowy").click();
+        cy.get('[data-cy="contract"]').contains("Typ umowy").click();
       });
 
       it("Should properly render conditional sections", () => {
-        cy.get(".btn-primary").contains("Umowa o pracę").click();
-        cy.get(".btn-outlined").contains("Umowa o pracę");
-        cy.get(".btn-outlined").contains("1/1").click();
-        cy.get(".btn-primary").contains("inne").click();
+        cy.get('[data-cy="contract-button"]').contains("Umowa o pracę").click();
+        cy.get('[data-cy="contract"]').contains("Umowa o pracę");
+        cy.get('[data-cy="contract-time-dropdown"]').contains("1/1").click();
+        cy.get('[data-cy="time-contract-button"]').contains("inne").click();
         cy.contains("Wpisz wymiar etatu");
-        cy.get(".btn-outlined").contains("Umowa o pracę").click();
-        cy.get(".btn-primary").contains("Umowa zlecenie").click();
-        cy.get(".btn-outlined").contains("Umowa zlecenie");
+        cy.get('[data-cy="contract"]').contains("Umowa o pracę").click();
+        cy.get('[data-cy="contract-button"]').contains("Umowa zlecenie").click();
+        cy.get('[data-cy="contract"]').contains("Umowa zlecenie");
         cy.contains("Ilość godzin");
       });
 
       it("Should properly handle number of hours when employment contract", () => {
-        cy.get(".btn-primary").contains("Umowa zlecenie").click();
+        cy.get('[data-cy="contract-button"]').contains("Umowa zlecenie").click();
         cy.get('[data-cy="civilTime"] input').clear({ force: true }).type("123");
-        cy.get(".btn-outlined").contains("Opiekunka").click(); // unclick
+        cy.get('[data-cy="position"]').contains("Opiekunka").click(); // unclick
         cy.get('[value="123"]').should("be.visible");
       });
 
       it("Should properly translate hours to fractions and fractions to hours", () => {
-        cy.get(".btn-primary").contains("Umowa o pracę").click();
-        cy.get(".btn-outlined").contains("1/1").click();
-        cy.get(".btn-primary").contains("inne").click();
+        cy.get('[data-cy="contract-button"]').contains("Umowa o pracę").click();
+        cy.get('[data-cy="contract-time-dropdown"]').contains("1/1").click();
+        cy.get('[data-cy="time-contract-button"]').contains("inne").click();
         cy.get('[data-cy="employmentTimeOther"] input').clear({ force: true }).type("34");
-        cy.get(".btn-outlined").contains("Umowa o pracę").click();
-        cy.get(".btn-primary").contains("Umowa zlecenie").click();
+        cy.get('[data-cy="contract"]').contains("Umowa o pracę").click();
+        cy.get('[data-cy="contract-button"]').contains("Umowa zlecenie").click();
         cy.get('[data-cy="civilTime"] input').should("have.value", "126");
         cy.get('[data-cy="civilTime"] input').clear({ force: true }).type("88");
-        cy.get(".btn-outlined").contains("Umowa zlecenie").click();
-        cy.get(".btn-primary").contains("Umowa o pracę").click();
+        cy.get('[data-cy="contract"]').contains("Umowa zlecenie").click();
+        cy.get('[data-cy="contract-button"]').contains("Umowa o pracę").click();
         cy.get('[data-cy="employmentTimeOther"] input').should("have.value", "1/2");
       });
     });

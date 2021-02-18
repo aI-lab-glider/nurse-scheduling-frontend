@@ -3,7 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { ShiftCode } from "../../../../../../common-models/shift-info.model";
-import { BaseCellComponent, BaseCellOptions } from "../base-cell/base-cell.component";
+import { BaseCellComponent } from "../base-cell/base-cell.component";
+import { BaseCellOptions } from "../base-cell/base-cell.models";
 import { ShiftAutocompleteComponent } from "./shift-autocomplete.component";
 
 function getShiftCode(value: string | number): ShiftCode {

@@ -91,6 +91,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     return {
       label: translateAndCapitalizeWorkerType(workerType),
       action: (): void => updateWorkerInfo("workerType", workerType),
+      dataCy: "worker-button",
     };
   });
 
@@ -99,6 +100,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     return {
       label: translateAndCapitalizeContractType(contractType),
       action: (): void => updateWorkerInfo("contractType", contractType),
+      dataCy: "contract-button",
     };
   });
 
@@ -107,6 +109,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     return {
       label: timeType,
       action: (): void => updateWorkerInfo("employmentTime", timeType),
+      dataCy: "time-contract-button",
     };
   });
 
@@ -135,7 +138,8 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
                   ? translateAndCapitalizeWorkerType(workerInfo.workerType)
                   : "Stanowisko"
               }
-              variant="outlined"
+              buttonVariant="secondary"
+              variant="position"
             />
           </Grid>
           <Grid item xs={12}>
@@ -150,7 +154,8 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
                       ? translateAndCapitalizeContractType(workerInfo.contractType)
                       : "Typ umowy"
                   }
-                  variant="outlined"
+                  buttonVariant="secondary"
+                  variant="contract"
                 />
               </Grid>
               <Grid item>
@@ -158,7 +163,8 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
                   dataCy="contract-time-dropdown"
                   buttons={contractTimeDrawerOptions}
                   mainLabel={workerInfo.employmentTime}
-                  variant="outlined"
+                  buttonVariant="secondary"
+                  variant="contract-time-dropdown"
                   disabled={workerInfo.contractType !== ContractType.EMPLOYMENT_CONTRACT}
                 />
               </Grid>

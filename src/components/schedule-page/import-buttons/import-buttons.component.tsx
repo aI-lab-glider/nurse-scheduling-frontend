@@ -40,7 +40,7 @@ export function ImportButtonsComponent(): JSX.Element {
   const btnData = [btnData1, btnData2];
   useEffect(() => {
     if (monthModel) {
-      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel);
+      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel, true);
       scheduleDipatcher(action);
     } else if (scheduleErrors) {
       setOpen(true);
@@ -73,7 +73,8 @@ export function ImportButtonsComponent(): JSX.Element {
       <DropdownButtons
         buttons={btnData}
         mainLabel="Plik"
-        variant="primary"
+        buttonVariant="primary"
+        variant="file-dropdown"
         dataCy={"file-dropdown"}
       />
       <input

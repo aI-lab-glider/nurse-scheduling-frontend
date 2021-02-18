@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ThunkDispatch } from "redux-thunk";
 import { MonthDataModel, ScheduleDataModel } from "../common-models/schedule-data.model";
-import { WorkerInfoModel } from "../common-models/worker-info.model";
 import { ActionModel } from "../state/models/action.model";
 import { ApplicationStateModel } from "../state/models/application-state.model";
 import { ArrayPositionPointer } from "../helpers/array.helper";
@@ -20,8 +19,8 @@ type YearOffset = -1 | 1;
 export class ScheduleKey {
   constructor(public month: number, public year: number) {}
 
-  get dbKey(): ScheduleKeyString {
-    return `${this.month}_${this.year}`;
+  getRevisionKey(revision: RevisionType): RevisionKey {
+    return `${this.month}_${this.year}_${revision}`;
   }
 
   get nextMonthKey(): ScheduleKey {
@@ -43,42 +42,47 @@ export class ScheduleKey {
   }
 }
 
-export type RevisionType = "primary" | "actual";
-
-export interface RevisionFilter {
-  revisionType: RevisionType;
-  validityPeriod: ScheduleKeyString;
+export function isRevisionType(value: string): value is RevisionType {
+  return value === "primary" || value === "actual";
 }
 
+export type RevisionType = "primary" | "actual";
+export type RevisionKey = string;
+
+export const RevisionTypeLabels: { [key: string]: string } = {
+  primary: "wersja bazowa",
+  actual: "wersja aktualna",
+};
+
 export interface MonthRevision {
-  _id: string;
-  revisionType: RevisionType;
+  _id: RevisionKey;
   data: MonthDataModel;
 }
 
-export interface MonthRecord {
-  primaryRevision: MonthRevision;
-  actualRevision: MonthRevision;
-  validityPeriod: ScheduleKeyString;
-  workersInfo: WorkerInfoModel[];
-}
-
 export abstract class PersistenceStoreProvider {
-  abstract async saveMonthRevision(
+  abstract getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined>;
+  abstract saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void>;
+
+  abstract saveBothMonthRevisionsIfNeeded(
     type: RevisionType,
     monthDataModel: MonthDataModel
   ): Promise<void>;
-  abstract async getMonthRevision(filter: RevisionFilter): Promise<MonthDataModel | undefined>;
-  abstract async saveSchedule(
-    type: RevisionType,
-    scheduleDataModel: ScheduleDataModel
-  ): Promise<void>;
 
-  abstract async updateMonthPartBasedOnScheduleDM(
-    type: RevisionType,
-    monthKey: ScheduleKey,
+  abstract updateMonthPartBasedOnScheduleDM(
+    revisionKey: RevisionKey,
     scheduleDataModel: ScheduleDataModel,
     missingDays: number,
     updatePosition: ArrayPositionPointer
   ): Promise<void>;
+
+  abstract fetchOrCreateMonthNeighbours(
+    month: MonthDataModel,
+    revision: RevisionType
+  ): Promise<[MonthDataModel, MonthDataModel]>;
+
+  abstract fetchOrCreateMonthRevision(
+    monthKey: ScheduleKey,
+    revision: RevisionType,
+    baseMonth: MonthDataModel
+  ): Promise<MonthDataModel>;
 }

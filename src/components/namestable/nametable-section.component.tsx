@@ -14,15 +14,21 @@ import { MetadataLogic } from "../../logic/schedule-logic/metadata.logic";
 import { ArrayHelper } from "../../helpers/array.helper";
 import { VerboseDate } from "../../common-models/month-info.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
+import classNames from "classnames/bind";
 
 export interface NameTableCellOptions {
   dataRow: DataRow[];
   workerType?: WorkerType;
+  clickable: boolean;
 }
 
 let workerInfo: WorkerInfoModel = { name: "", time: 0 };
 
-export function NameTableSection({ dataRow, workerType }: NameTableCellOptions): JSX.Element {
+export function NameTableSection({
+  dataRow,
+  workerType,
+  clickable,
+}: NameTableCellOptions): JSX.Element {
   const mode = WorkerDrawerMode.INFO;
   const [open, setIsOpen] = useState(false);
 
@@ -73,7 +79,10 @@ export function NameTableSection({ dataRow, workerType }: NameTableCellOptions):
               <tr
                 key={cellData}
                 onClick={(): void => toggleDrawer(true, cellData)}
-                className="nametableRow"
+                className={classNames(
+                  "nametableRow",
+                  clickable ? "pointerCursor" : "defaultCursor"
+                )}
               >
                 <td>
                   <span>{cellData}</span>

@@ -2,32 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useContext } from "react";
-import { DataRow } from "../../../../../logic/schedule-logic/data-row";
-import { ScheduleLogicContext } from "../use-schedule-state";
-import { BaseCellComponent, BaseCellOptions, PivotCell } from "./base-cell/base-cell.component";
-import { ShiftHelper } from "../../../../../helpers/shifts.helper";
-import { Sections } from "../../../../../logic/providers/schedule-provider.model";
-import { DataRowHelper } from "../../../../../helpers/data-row.helper";
 import { ArrayHelper } from "../../../../../helpers/array.helper";
+import { DataRowHelper } from "../../../../../helpers/data-row.helper";
+import { ShiftHelper } from "../../../../../helpers/shifts.helper";
 import { useScheduleStyling } from "../../../../common-components/use-schedule-styling/use-schedule-styling";
-
-export interface BaseRowOptions {
-  uuid: string;
-  index: number;
-  dataRow: DataRow;
-  sectionKey: keyof Sections;
-  cellComponent?: React.FC<BaseCellOptions>;
-  onKeyDown?: (cellIndex: number, event: React.KeyboardEvent) => void;
-  onClick?: (cellIndex: number) => void;
-  onStateUpdate?: (row: DataRow) => void;
-  pointerPosition?: number;
-  onBlur?: () => void;
-  onDrag?: (pivot: PivotCell, cellInd: number) => void;
-  onDragEnd?: (rowInd: number, cellInd: number) => void;
-  onSave?: (newValue: string) => void;
-  selection?: boolean[];
-  isEditable?: boolean;
-}
+import { ScheduleLogicContext } from "../use-schedule-state";
+import { BaseCellComponent } from "./base-cell/base-cell.component";
+import { BaseRowOptions, baseRowDataCy } from "./base-row.models";
 
 export function BaseRowComponentF({
   index,
@@ -63,7 +44,7 @@ export function BaseRowComponentF({
   data = useScheduleStyling(data);
 
   return (
-    <tr className="row scheduleStyle" id="mainRow">
+    <tr className="row scheduleStyle" id="mainRow" data-cy={baseRowDataCy(index)}>
       {data.map(({ cellData, keepOn, hasNext }, cellIndex) => {
         return (
           <CellComponent

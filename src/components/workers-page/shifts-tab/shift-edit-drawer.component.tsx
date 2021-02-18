@@ -1,6 +1,9 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import TextField from "@material-ui/core/TextField";
 import React, { useState } from "react";
-import { Button } from "../../common-components/button-component/button.component";
+import { Button } from "../../common-components";
 import { ColorSelector } from "../../common-components/color-selector/color-selector.component";
 import { MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -113,13 +116,11 @@ export default function ShiftEditDrower(): JSX.Element {
         <ColorSelector
           shiftType={valueRadio}
           mainLabel="Wybierz kolory"
-          variant="outlined"
+          variant="secondary"
           position={"bottom"}
           colorClicker={colorClicked}
         />
         <Button
-          size="small"
-          className="submit-button"
           variant="primary"
           onClick={(): void => {
             setNewShift({
