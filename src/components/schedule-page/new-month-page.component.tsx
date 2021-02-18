@@ -54,7 +54,7 @@ export function NewMonthPlanComponent(): JSX.Element {
       const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel, true);
       dispatch(action);
     }
-  });
+  }, [monthModel]);
 
   function handleImport(event: ChangeEvent<HTMLInputElement>): void {
     const file = event.target?.files && event.target?.files[0];
