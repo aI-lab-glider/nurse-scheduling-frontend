@@ -13,6 +13,7 @@ import { useFileReader } from "./use-file-reader";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 import { fromBuffer } from "file-type/browser";
+import { useNotification } from "../../../common-components/notification/notification.context";
 
 export interface UseScheduleConverterOutput {
   monthModel?: MonthDataModel;
@@ -28,6 +29,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
   const { month_number: month, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
+  const { createNotification } = useNotification();
   const isFileMetaCorrect = async (fileContent: ArrayBuffer): Promise<boolean> => {
     const ext = await fromBuffer(fileContent);
     if (
@@ -42,6 +44,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
         },
       ]);
       setMonthModel(undefined);
+      createNotification({ type: "error", message: "Plan nie został wczytany!" });
       return false;
     }
     return true;
@@ -66,6 +69,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
               },
             ]);
             setMonthModel(undefined);
+            createNotification({ type: "error", message: "Plan nie został wczytany!" });
           }
         });
       }
@@ -136,6 +140,8 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
         ...parser.sections.FoundationInfo.errors,
       ]);
       setMonthModel(cropScheduleDMToMonthDM(parser.schedule.getDataModel()));
+
+      createNotification({ type: "success", message: "Plan został wczytany!" });
     }
     return;
   }
