@@ -6,12 +6,17 @@ import { MonthSwitchComponent } from "../month-switch/month-switch.component";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import { Button } from "../button-component/button.component";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
 
 interface HeaderCheckInterface {
   isNewMonthPage: boolean;
 }
 
 export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.Element {
+  const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const isReadOnlyMode = mode === "readonly";
+
   return (
     <>
       <div id={"header"}>
@@ -24,7 +29,7 @@ export function HeaderComponent({ isNewMonthPage }: HeaderCheckInterface): JSX.E
           </Link>
         )}
         <div className={"filler"} />
-        <MonthSwitchComponent />
+        {isReadOnlyMode && <MonthSwitchComponent />}
         <div className={"filler"} />
       </div>
     </>
