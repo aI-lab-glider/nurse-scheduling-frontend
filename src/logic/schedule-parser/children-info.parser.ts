@@ -3,12 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ChildrenInfoProvider } from "../providers/children-info-provider.model";
 import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
+import { MetaDataParser } from "./metadata.parser";
 
 export class ChildrenInfoParser implements ChildrenInfoProvider {
   private _parseErrors: ScheduleError[] = [];
   private children: number[];
 
-  constructor(data: string[][]) {
+  constructor(private metaData: MetaDataParser, data?: string[][]) {
     this.children = this.generateChildren(data);
   }
 
@@ -27,26 +28,47 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
     });
   }
 
-  private generateChildren(raw: string[][]): number[] {
-    if (raw.length !== 1) {
-      this.logLoadFileError("Sekcja dzieci nie ma oczekiwanych wymiarów");
+  private generateChildren(raw?: string[][]): number[] {
+    if (!raw || raw.length !== 1) {
+      this.logLoadFileError(
+        "Brak informacji o liczbie dzieci. Przyjęto, że w każdym dniu liczba dzieci wynosi 0"
+      );
+
+      const N = this.metaData.dayCount;
+      const children = Array(N);
+      let i = 0;
+
+      while (i < N) children[i++] = 0;
+      return children;
     }
     const childrenRow = raw[0];
-    if (childrenRow.length <= 1) {
-      this.logLoadFileError("Sekcja dzieci nie ma oczekiwanych wymiarów");
-    }
 
-    childrenRow.shift();
+    const slicedChildrenRow = childrenRow.slice(
+      this.metaData.offset,
+      this.metaData.offset + this.metaData.dayCount
+    );
+
+    if (slicedChildrenRow.length !== this.metaData.dayCount) {
+      this.logLoadFileError(
+        "Sekcja dzieci nie ma oczekiwanych wymiarów. Przyjęto, że w brakujących dniach liczba dzieci wynosi 0"
+      );
+    }
 
     const children = Array<number>();
 
-    childrenRow.forEach((a, id) => {
-      const numDay = parseInt(a);
-      if (typeof numDay !== "number" || numDay < 0) {
-        this.logLoadFileError("Błąd w sekcji dzieci w kolumnie numer " + (id + 1));
+    for (let i = 0; i < this.metaData.dayCount; i++) {
+      const numDay = parseInt(slicedChildrenRow[i]);
+      if (isNaN(numDay) || numDay < 0) {
+        this.logLoadFileError(
+          "Nieoczekiwana wartość w sekcji dzieci w dniu " +
+            (i + 1) +
+            ". Przyjęto, że liczba dzieci wynosi 0"
+        );
+        children.push(0);
+      } else {
+        children.push(numDay);
       }
-      children.push(numDay);
-    });
+    }
 
     return children;
   }

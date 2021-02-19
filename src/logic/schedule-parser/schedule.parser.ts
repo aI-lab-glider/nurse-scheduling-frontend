@@ -2,15 +2,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import {WorkerType} from "../../common-models/worker-info.model";
-import {ChildrenInfoParser} from "./children-info.parser";
-import {MetaDataParser} from "./metadata.parser";
-import {ShiftsInfoParser} from "./shifts-info.parser";
-import {Schedule, ScheduleProvider, Sections} from "../providers/schedule-provider.model";
-import {ExtraWorkersParser} from "./extra-workers.parser";
-import {InputFileErrorCode, ScheduleError} from "../../common-models/schedule-error.model";
-import {FoundationInfoParser} from "./foundation-info.parser";
-import {FoundationInfoOptions} from "../providers/foundation-info-provider.model";
+import { WorkerType } from "../../common-models/worker-info.model";
+import { ChildrenInfoParser } from "./children-info.parser";
+import { MetaDataParser } from "./metadata.parser";
+import { ShiftsInfoParser } from "./shifts-info.parser";
+import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
+import { ExtraWorkersParser } from "./extra-workers.parser";
+import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
+import { FoundationInfoParser } from "./foundation-info.parser";
+import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
 
 export class ScheduleParser implements ScheduleProvider {
   readonly sections: Sections;
@@ -32,56 +32,42 @@ export class ScheduleParser implements ScheduleProvider {
   }
 
   private parseSections(rawSchedule: string[][][]): Sections {
-    if (rawSchedule.length !== 4) {
-      this.logLoadFileError("Nie znaleziono 4 wydzielonych sekcji");
-    }
-
-    const s = new Set(rawSchedule.flat().map((a) => a.length));
-
-    if (s.size !== 2 && !s.has(4)) {
-      this.logLoadFileError("Długości sekcji nie są zgodne");
-    }
-
-    const seenTable = [false, false, false, false];
-    const seenTableName = ["dane", "dzieci", "pielęgniarki", "opiekunowie"];
-
     let children;
     let nurses;
-    let metadata;
     let babysiter;
+
+    const metadataRaw = rawSchedule.find((r) => r[0][0].toLowerCase().trim() === "dni miesiąca");
+    const metadata = new MetaDataParser(this.month, this.year, metadataRaw);
 
     rawSchedule.forEach((r) => {
       if (r && r.length !== 0 && r[0].length !== 0) {
         const rKey = r[0][0].toLowerCase().trim();
-        if (rKey === "grafik") {
-          metadata = new MetaDataParser(this.month, this.year, r);
-          seenTable[0] = true;
+        if (rKey === "dni miesiąca") {
         } else if (rKey === "dzieci") {
-          children = new ChildrenInfoParser(r);
-          seenTable[1] = true;
-        } else if (seenTable[2] === false) {
-          nurses = new ShiftsInfoParser(r, WorkerType.NURSE, metadata);
-          seenTable[2] = true;
+          children = new ChildrenInfoParser(metadata, r);
+        } else if (!nurses) {
+          nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata, r);
         } else {
-          babysiter = new ShiftsInfoParser(r, WorkerType.OTHER, metadata);
-          seenTable[3] = true;
+          babysiter = new ShiftsInfoParser(WorkerType.OTHER, metadata, r);
         }
       }
     });
 
-    seenTable.forEach((s, id) => {
-      if (s === false) {
-        this.logLoadFileError("Nie znaleziono sekcji " + seenTableName[id]);
-      }
-    });
+    if (!children) {
+      children = new ChildrenInfoParser(metadata);
+    }
+    if (!nurses) {
+      nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata);
+    }
+    if (!babysiter) {
+      babysiter = new ShiftsInfoParser(WorkerType.OTHER, metadata);
+    }
 
     const parsers: FoundationInfoOptions = {
       ChildrenInfo: children,
       NurseInfo: nurses,
       BabysitterInfo: babysiter,
-      ExtraWorkersInfo: new ExtraWorkersParser(
-        metadata ? (metadata as MetaDataParser).dates.length : 0
-      ),
+      ExtraWorkersInfo: new ExtraWorkersParser(metadata.dates.length),
     };
 
     const foundationParser = new FoundationInfoParser(parsers);

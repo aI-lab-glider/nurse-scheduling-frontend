@@ -83,7 +83,7 @@ export class ErrorMessageHelper {
         title = `${error.worker}`;
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
-        message = `Niedozwolona wartość zmiany: ${error.actual}, w dniu ${error.day} u pracownika ${error.worker}`;
+        message = `Niedozwolona wartość zmiany: "${error.actual}" dla pracownika  ${error.worker} w dniu ${error.day}. Przyjęto, że zmiana to wolne.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
         title = `${error.worker}`;
         break;
@@ -91,10 +91,10 @@ export class ErrorMessageHelper {
         message = `Błąd podczas wczytywania pliku wejściowego: Pusty plik`;
         break;
       case InputFileErrorCode.UNHANDLED_FILE_EXTENSION:
-        message = `Błąd podczas wczytywania pliku wejściowego: Nieodpowiedni typ pliku`;
+        message = `Nieobsługiwane rozszerzenie pliku: .${error.filename}`;
         break;
       case InputFileErrorCode.LOAD_FILE_ERROR:
-        message = `Napotkano błąd podczas wczytywania pliku: ${error.message}`;
+        message = `${error.message}`;
         break;
       case NetworkErrorCode.NETWORK_ERROR:
         message = "Błąd połączenia";

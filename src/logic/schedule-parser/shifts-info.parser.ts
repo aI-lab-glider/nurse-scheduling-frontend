@@ -16,50 +16,60 @@ export class ShiftsInfoParser extends ShiftsProvider {
   private _sectionRows: { [key: string]: DataRowParser } = {};
   private _parseErrors: ScheduleError[] = [];
 
-  constructor(data: string[][], typeOfPersonel: WorkerType, private metaData: MetaDataParser) {
+  constructor(typeOfPersonel: WorkerType, private metaData: MetaDataParser, data?: string[][]) {
     super();
-    this.myPersonel(data, typeOfPersonel).forEach((row) => {
-      this._sectionRows[row.rowKey] = row;
-    });
+
+    if (data) {
+      this.myPersonel(data).forEach((row) => {
+        this._sectionRows[row.rowKey] = row;
+      });
+    } else {
+      this.logLoadFileError(
+        "Nie znaleziono sekcji : " + WorkerTypeHelper.translate(typeOfPersonel, true)
+      );
+    }
   }
 
   public get errors(): ScheduleError[] {
     return [...this._parseErrors];
   }
 
-  private myPersonel(raw: string[][], typeOfPersonel: WorkerType): DataRowParser[] {
+  private myPersonel(raw: string[][]): DataRowParser[] {
     const sectionData: DataRowParser[] = [];
-    raw.forEach((a, id) => {
-      if (a.length <= 1) {
-        this.logLoadFileError(
-          "Wiersz numer" +
-            id +
-            "w sekcji " +
-            WorkerTypeHelper.translate(typeOfPersonel, true) +
-            " ma nieodpowiednią długośc"
+
+    raw.forEach((personelRow) => {
+      if (personelRow.length > 1) {
+        const slicedPersonelRow = personelRow.slice(
+          this.metaData.offset,
+          this.metaData.offset + this.metaData.dayCount
         );
-      } else {
-        a.slice(1).forEach((b, innerId) => {
-          if (b === " ") {
-            a[innerId + 1] = "W";
+
+        if (slicedPersonelRow.length !== this.metaData.dayCount) {
+          this.logLoadFileError(
+            "Sekcja nie ma oczekiwanych wymiarów. Przyjęto, że w brakujących dniach liczba dzieci wynosi 0"
+          );
+        }
+
+        const personel = Array<string>();
+
+        const name = personelRow[0];
+        personel.push(name);
+        for (let i = 0; i < this.metaData.dayCount; i++) {
+          const b = slicedPersonelRow[i];
+          if (b === " " || b === "") {
+            personel.push("W");
           } else {
             if (typeof b !== "string" || !(b in ShiftCode)) {
-              this.logLoadFileError(
-                "" +
-                  " Błąd w sekcji " +
-                  WorkerTypeHelper.translate(typeOfPersonel, true) +
-                  " wiersz numer " +
-                  (id + 1) +
-                  " kolumna " +
-                  (innerId + 1)
-              );
-              a[innerId + 1] = "W";
+              this.logUnknownValue(i + 1, name, b);
+              personel.push("W");
+            } else {
+              personel.push(b);
             }
           }
-        });
-      }
+        }
 
-      sectionData.push(new DataRowParser(a));
+        sectionData.push(new DataRowParser(personel));
+      }
     });
     return sectionData;
   }
@@ -84,11 +94,15 @@ export class ShiftsInfoParser extends ShiftsProvider {
   }
 
   public get workerShifts(): { [workerName: string]: ShiftCode[] } {
-    return this.sectionData
-      .map((row) => ({
-        [row.rowKey]: this.fillRowWithShifts(row),
-      }))
-      .reduce((prev, curr) => ({ ...prev, ...curr }));
+    if (this.workersCount > 0) {
+      return this.sectionData
+        .map((row) => ({
+          [row.rowKey]: this.fillRowWithShifts(row),
+        }))
+        .reduce((prev, curr) => ({ ...prev, ...curr }));
+    } else {
+      return {};
+    }
   }
 
   private static getShiftFromCell(cell: string): ShiftCode | null {

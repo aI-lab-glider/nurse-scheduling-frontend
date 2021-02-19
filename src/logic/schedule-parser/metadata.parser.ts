@@ -9,12 +9,28 @@ import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-
 
 export class MetaDataParser extends MetadataProvider {
   public monthLogic: MonthInfoLogic;
+  public offset: number;
   private _parseErrors: ScheduleError[] = [];
 
-  constructor(month: number, year: number, raw: string[][]) {
+  constructor(month: number, year: number, raw: string[][] | undefined) {
     super();
 
-    const [days] = this.extractMetadata(raw);
+    if (raw) {
+      this.offset = this.extractMetadata(raw);
+    } else {
+      this.offset = 1;
+      this.logLoadFIleError(
+        "Brak nagłówka z informacją o datach. Przyjęto, że pierwsza kolumna to pierwszy dzień miesiąca"
+      );
+    }
+
+    const N = new Date(year, month + 1, 0).getDate();
+
+    const days = Array(N);
+    let i = 0;
+
+    while (i < N) days[i++] = i;
+
     this.monthLogic = new MonthInfoLogic(month, year.toString(), days);
   }
 
@@ -29,33 +45,24 @@ export class MetaDataParser extends MetadataProvider {
     });
   }
 
-  private extractMetadata(raw: string[][]): [number[]] {
-    if (raw.length !== 2) {
+  private extractMetadata(raw: string[][]): number {
+    if (raw.length !== 1) {
       this.logLoadFIleError("Nie znaleziono spdoziewanej ilości wierszy w sekcji dane");
-      return [[]];
+      return 0;
     }
 
-    if (raw[1].length < 2) {
-      this.logLoadFIleError("Nie znaleziono dni miesiąca w sekcji danych");
-      return [[]];
+    const monthDays = raw[0];
+
+    const startOfMonth = monthDays.findIndex((a) => a.toString() === `1`);
+
+    if (startOfMonth === -1) {
+      this.logLoadFIleError(
+        "Brak nagłówka z informacją o datach. Przyjęto, że pierwsza kolumna to pierwszy dzień miesiąca"
+      );
+      return 0;
     }
 
-    const monthDays = raw[1].slice(1);
-
-    const days = Array<number>();
-
-    monthDays.forEach((a, id) => {
-      let numDay = parseInt(a);
-      if (typeof numDay !== "number" || numDay < 1 || numDay > 31) {
-        this.logLoadFIleError(
-          "Nieodpowiednie dane wpisane w dniu miesiąca w kolumnie numer " + (id + 1)
-        );
-        numDay = days[days.length] + 1;
-      }
-      days.push(numDay);
-    });
-
-    return [days];
+    return startOfMonth;
   }
 
   public get dates(): number[] {

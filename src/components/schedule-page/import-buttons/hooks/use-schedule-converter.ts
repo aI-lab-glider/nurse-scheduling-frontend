@@ -38,6 +38,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       setScheduleErrors([
         {
           kind: InputFileErrorCode.UNHANDLED_FILE_EXTENSION,
+          filename: ext?.ext.toString(),
         },
       ]);
       setMonthModel(undefined);
@@ -92,12 +93,27 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       const rowValues = row.values as Array<string>;
       rowValues.shift();
 
-      function notEmpty() {
-        const rowValuesSet = new Set(rowValues.map((x) => x.toString()));
-        return rowValuesSet.size === 1 && rowValuesSet.values().next().value === "";
+      function isEmpty() {
+        const rowValuesSet = new Set(rowValues.map((a) => a.toString()));
+        let undefinedSeen = false;
+        rowValuesSet.forEach((a) => {
+          if (typeof a === "undefined") {
+            undefinedSeen = true;
+            return;
+          }
+        });
+        return (
+          undefinedSeen ||
+          (rowValuesSet.size === 4 &&
+            rowValuesSet.has("Nadgodziny") &&
+            rowValuesSet.has("Godziny wypracowane") &&
+            rowValuesSet.has("Godziny wymagane") &&
+            rowValuesSet.has("")) ||
+          (rowValuesSet.size === 1 && rowValuesSet.has(""))
+        );
       }
 
-      if (notEmpty()) {
+      if (isEmpty()) {
         if (innerArray.length !== 0) {
           outerArray.push(innerArray);
         }
@@ -118,8 +134,6 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
         ...parser._parseErrors,
         ...parser.sections.Metadata.errors,
         ...parser.sections.FoundationInfo.errors,
-        ...parser.sections.NurseInfo.errors,
-        ...parser.sections.BabysitterInfo.errors,
       ]);
       setMonthModel(cropScheduleDMToMonthDM(parser.schedule.getDataModel()));
     }

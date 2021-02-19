@@ -15,7 +15,12 @@ export interface FoundationInfoOptions extends Pick<Sections, "NurseInfo" | "Bab
 
 export abstract class FoundationInfoProvider {
   get errors(): ScheduleError[] {
-    return [];
+    return [
+      ...this.sections.NurseInfo.errors,
+      ...this.sections.BabysitterInfo.errors,
+      ...this.sections.ChildrenInfo.errors,
+      ...this.sections.ExtraWorkersInfo.errors,
+    ];
   }
   get childrenInfo(): number[] {
     return this.sections.ChildrenInfo.registeredChildrenNumber;
@@ -29,6 +34,14 @@ export abstract class FoundationInfoProvider {
     if (type === WorkerType.NURSE) {
       return ShiftHelper.getWorkersCount(this.sections.NurseInfo.workerShifts);
     } else return ShiftHelper.getWorkersCount(this.sections.BabysitterInfo.workerShifts);
+  }
+
+  getAllWorkersNumber(): number {
+    return (
+      this.sections.NurseInfo.workersCount +
+      this.sections.BabysitterInfo.workersCount +
+      this.sections.ExtraWorkersInfo.workersCount
+    );
   }
 
   constructor(protected sections: FoundationInfoOptions) {}
