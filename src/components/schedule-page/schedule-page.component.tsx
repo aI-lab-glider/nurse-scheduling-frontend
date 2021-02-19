@@ -5,12 +5,14 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { ScheduleEditPage } from "./edit-page/schedule-edit.page";
 import { ScheduleViewOnlyPage } from "./view-only-page/schedule-view-only.page";
+import { useJiraLikeDrawer } from "../common-components/drawer/jira-like-drawer-context";
 
 interface SchedulePageOptions {
   editModeHandler: (editMode: boolean) => void;
 }
 
 export function SchedulePage(props: SchedulePageOptions): JSX.Element {
+  const { setOpen: setDrawerOpen } = useJiraLikeDrawer();
   function ViewOnly(): JSX.Element {
     return (
       <>
@@ -19,10 +21,15 @@ export function SchedulePage(props: SchedulePageOptions): JSX.Element {
     );
   }
 
+  function handleEditButton(): void {
+    props.editModeHandler(false);
+    setDrawerOpen(false);
+  }
+
   function Edit(): JSX.Element {
     return (
       <>
-        <ScheduleEditPage closeEdit={(): void => props.editModeHandler(false)} />
+        <ScheduleEditPage closeEdit={(): void => handleEditButton()} />
       </>
     );
   }

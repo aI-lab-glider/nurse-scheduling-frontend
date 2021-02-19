@@ -4,7 +4,7 @@
 import React, { useContext } from "react";
 import { Button } from "../../common-components";
 import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
-import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
+import { ScheduleLogicContext, useScheduleState } from "../table/schedule/use-schedule-state";
 import { TranslationHelper } from "../../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { useSelector } from "react-redux";
@@ -30,9 +30,11 @@ export default function ErrorListItem({ error }: Options): JSX.Element {
     }
   }
 
-  const scheduleLogic = useContext(ScheduleLogicContext);
+  const { scheduleLogic } = useScheduleState(
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present,
+    "edit"
+  );
   const mappedDays = scheduleLogic?.sections.Metadata?.verboseDates.map((d) => d.date);
-
   const monthStartIndex = scheduleLogic?.sections.Metadata?.dates.findIndex((d) => d === 1) ?? 0;
 
   let errorDayIndex = -1;
