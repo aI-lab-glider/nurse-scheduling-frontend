@@ -39,6 +39,7 @@ interface UnknownValueError {
 interface InputFileError {
   kind: InputFileErrorCode;
   message?: string;
+  filename?: string;
 }
 
 export interface NetworkError {
