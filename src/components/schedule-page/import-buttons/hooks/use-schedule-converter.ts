@@ -106,13 +106,15 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
             return;
           }
         });
+
+        const cellsToAvoid = ["godziny wymagane", "godziny wypracowane", "nadgodziny", "grafik"];
+
         return (
           undefinedSeen ||
           (rowValuesSet.size === 4 &&
-            rowValuesSet.has("Nadgodziny") &&
-            rowValuesSet.has("Godziny wypracowane") &&
-            rowValuesSet.has("Godziny wymagane") &&
-            rowValuesSet.has("")) ||
+            Array.from(rowValuesSet).some((setItem) =>
+              cellsToAvoid.some((cellToAvoid) => setItem.trim().toLowerCase().includes(cellToAvoid))
+            )) ||
           (rowValuesSet.size === 1 && rowValuesSet.has(""))
         );
       }
