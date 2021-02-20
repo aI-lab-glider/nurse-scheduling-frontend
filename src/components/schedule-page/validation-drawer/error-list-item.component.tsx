@@ -1,13 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useContext } from "react";
-import { Button } from "../../common-components";
+import React from "react";
+import { useSelector } from "react-redux";
 import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
-import { ScheduleLogicContext, useScheduleState } from "../table/schedule/use-schedule-state";
 import { TranslationHelper } from "../../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { useSelector } from "react-redux";
+import { Button } from "../../common-components";
+import { useScheduleState } from "../table/schedule/use-schedule-state";
 
 interface Options {
   error: ScheduleErrorMessageModel;

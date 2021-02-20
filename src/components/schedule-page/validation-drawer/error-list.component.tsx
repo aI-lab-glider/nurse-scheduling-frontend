@@ -68,7 +68,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
     },
   ];
 
-  const renderOneTypeOfErrors = (errorData: ErrorTypes) => {
+  const renderOneTypeOfErrors = (errorData: ErrorTypes): JSX.Element => {
     return errorData.errors && errorData.errors.length > 0 ? (
       <FoldingSection name={`${errorData.errorDescription} (${errorData.errors.length})`}>
         {errorData.errors.map(
