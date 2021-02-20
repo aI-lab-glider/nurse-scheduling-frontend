@@ -89,7 +89,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   const body = (
     <div>
       <div style={{ display: "flex", msFlexDirection: "row" }}>
-        <p className="makeStyles-title-22">Format pliku: </p>
+        <p className="label">Format pliku: </p>
         <DropdownButtons
           buttons={btnData}
           mainLabel={exportMode}
@@ -98,7 +98,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
         />
       </div>
       <div>
-        <p className="makeStyles-title-22">Opcje pliku: </p>
+        <p className="label">Opcje pliku: </p>
         <FormGroup row>
           {Object.keys(exportOptions).map((key) => (
             <FormControlLabel
@@ -120,7 +120,14 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
 
   return (
     <div>
-      <DefaultModal open={open} setOpen={setOpen} title={title} body={body} footer={footer} />
+      <DefaultModal
+        height={500}
+        open={open}
+        setOpen={setOpen}
+        title={title}
+        body={body}
+        footer={footer}
+      />
     </div>
   );
 }
