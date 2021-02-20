@@ -19,7 +19,7 @@ import ParseErrorModal from "../../common-components/modal/error-modal/errors.mo
 
 export function ImportButtonsComponent(): JSX.Element {
   const DEFAULT_FILENAME = "grafik.xlsx";
-  const { monthModel, setSrcFile, scheduleErrors, errorOccurred } = useScheduleConverter();
+  const { monthModel, setSrcFile, scheduleErrors } = useScheduleConverter();
   const fileUpload = useRef<HTMLInputElement>(null);
 
   const stateScheduleModel = useSelector(
@@ -51,7 +51,7 @@ export function ImportButtonsComponent(): JSX.Element {
       type: ScheduleErrorActionType.UPDATE,
       payload: scheduleErrors,
     } as ActionModel<ScheduleError[]>);
-  }, [monthModel, scheduleDipatcher, scheduleErrors, errorOccurred]);
+  }, [monthModel, scheduleDipatcher, scheduleErrors]);
 
   function handleImport(event: ChangeEvent<HTMLInputElement>): void {
     const file = event.target?.files && event.target?.files[0];

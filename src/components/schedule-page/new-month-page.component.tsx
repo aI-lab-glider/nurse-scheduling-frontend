@@ -31,6 +31,7 @@ export function NewMonthPlanComponent(): JSX.Element {
   const fileUpload = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    let mounted = true;
     const setNeighbours = async (): Promise<void> => {
       const storageProvider = new LocalStorageProvider();
       const nextMonth = await storageProvider.getMonthRevision(
@@ -42,7 +43,13 @@ export function NewMonthPlanComponent(): JSX.Element {
       setHasValidNext(isMonthValid(nextMonth));
       setHasValidPrevious(isMonthValid(prevMonth));
     };
-    setNeighbours();
+    if (mounted) {
+      setNeighbours();
+    }
+    // return called on component destroy
+    return (): void => {
+      mounted = false;
+    };
   }, [prevDate, nextDate, revision]);
 
   const isMonthValid = (month: MonthDataModel | undefined): boolean => {
