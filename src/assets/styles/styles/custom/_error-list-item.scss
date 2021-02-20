@@ -11,6 +11,8 @@
   margin-bottom: 8px;
   display: flex;
   align-items: stretch;
+  align-content: center;
+  justify-items: center;
   position: relative;
 
   .red-rectangle {
@@ -41,21 +43,16 @@
   .error-text {
     color: $primary-text-color;
     size: 13px;
-    flex: 1.5;
+    flex: 2.5;
     margin: 10px 0;
     text-align: justify;
     font-family: "Roboto";
   }
 
   .error-btn {
-    position: relative;
     flex: 1;
-
-    Button {
-      position: absolute;
-      bottom: 50%;
-      left: 50%;
-      transform: translate(-50%, 50%);
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

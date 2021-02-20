@@ -22,15 +22,15 @@ export interface NameTableCellOptions {
   clickable: boolean;
 }
 
-let workerInfo: WorkerInfoModel = { name: "", time: 0 };
+const initialWorkerInfo: WorkerInfoModel = { name: "", time: 0 };
 
 export function NameTableSection({
   dataRow,
   workerType,
   clickable,
 }: NameTableCellOptions): JSX.Element {
-  const mode = WorkerDrawerMode.INFO;
   const [open, setIsOpen] = useState(false);
+  const [workerInfo, setWorkerInfo] = useState<WorkerInfoModel>(initialWorkerInfo);
 
   const scheduleLogic = useContext(ScheduleLogicContext);
   const sectionKey: keyof Sections =
@@ -52,14 +52,14 @@ export function NameTableSection({
           shifts?.[name]
         );
 
-        workerInfo = {
+        setWorkerInfo({
           name: name,
           time: actualHours,
           type: workerType,
           shifts: workersWithDates,
           requiredHours,
           overtime,
-        };
+        });
       }
     }
   }
@@ -74,18 +74,18 @@ export function NameTableSection({
     <React.Fragment>
       <table className="nametable">
         <tbody>
-          {data.map((cellData) => {
+          {data.map((workerName) => {
             return (
               <tr
-                key={cellData}
-                onClick={(): void => toggleDrawer(true, cellData)}
+                key={workerName}
+                onClick={(): void => toggleDrawer(true, workerName)}
                 className={classNames(
                   "nametableRow",
                   clickable ? "pointerCursor" : "defaultCursor"
                 )}
               >
                 <td>
-                  <span>{cellData}</span>
+                  <span>{workerName}</span>
                   <span className="underline" />
                 </td>
               </tr>
@@ -96,7 +96,7 @@ export function NameTableSection({
       <WorkerDrawerComponent
         open={open}
         onClose={(): void => toggleDrawer(false, "")}
-        mode={mode}
+        mode={WorkerDrawerMode.INFO}
         worker={workerInfo}
         setOpen={setIsOpen}
       />

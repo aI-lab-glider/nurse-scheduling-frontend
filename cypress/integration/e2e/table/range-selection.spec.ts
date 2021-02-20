@@ -8,6 +8,8 @@ import * as _ from "lodash";
 import { Simulate } from "react-dom/test-utils";
 import error = Simulate.error;
 
+const prevMonthDays = 6;
+
 interface WorkerTestCase {
   title: string;
   startShiftCell: GetWorkerShiftOptions;
@@ -35,12 +37,12 @@ const workerTestCases: WorkerTestCase[] = [
     startShiftCell: {
       workerType: WorkerType.NURSE,
       workerIdx: 3,
-      shiftIdx: 3,
+      shiftIdx: prevMonthDays + 3,
     },
     endShiftCell: {
       workerType: WorkerType.NURSE,
       workerIdx: 3,
-      shiftIdx: 0,
+      shiftIdx: prevMonthDays,
     },
     desiredShiftCode: ShiftCode.U,
   },
@@ -49,12 +51,12 @@ const workerTestCases: WorkerTestCase[] = [
     startShiftCell: {
       workerType: WorkerType.NURSE,
       workerIdx: 0,
-      shiftIdx: 5,
+      shiftIdx: prevMonthDays + 5,
     },
     endShiftCell: {
       workerType: WorkerType.NURSE,
       workerIdx: 2,
-      shiftIdx: 5,
+      shiftIdx: prevMonthDays + 5,
     },
     desiredShiftCode: ShiftCode.L4,
   },
@@ -68,7 +70,7 @@ const workerTestCases: WorkerTestCase[] = [
     endShiftCell: {
       workerType: WorkerType.OTHER,
       workerIdx: 0,
-      shiftIdx: 8,
+      shiftIdx: prevMonthDays + 8,
     },
     desiredShiftCode: ShiftCode.L4,
   },
@@ -77,12 +79,12 @@ const workerTestCases: WorkerTestCase[] = [
     startShiftCell: {
       workerType: WorkerType.OTHER,
       workerIdx: 3,
-      shiftIdx: 3,
+      shiftIdx: prevMonthDays + 3,
     },
     endShiftCell: {
       workerType: WorkerType.OTHER,
       workerIdx: 3,
-      shiftIdx: 6,
+      shiftIdx: prevMonthDays + 6,
     },
     desiredShiftCode: ShiftCode.L4,
   },
@@ -105,15 +107,15 @@ const foundationTestCases: FoundationTestCase[] = [
   {
     title: "Should be able to edit extra workers number with range selection",
     dataKey: FoundationInfoKeys.EXTRA_WORKERS,
-    startDayIdx: 3,
-    endDayIdx: 8,
+    startDayIdx: prevMonthDays + 3,
+    endDayIdx: prevMonthDays + 8,
     desiredNumber: 10,
   },
   {
     title: "Should be able to edit children number with range selection",
     dataKey: FoundationInfoKeys.CHILDREN,
-    startDayIdx: 12,
-    endDayIdx: 3,
+    startDayIdx: prevMonthDays + 12,
+    endDayIdx: prevMonthDays + 3,
     desiredNumber: 13,
   },
 ];

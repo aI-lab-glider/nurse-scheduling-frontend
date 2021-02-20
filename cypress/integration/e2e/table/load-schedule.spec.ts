@@ -29,7 +29,7 @@ context("Load schedule", () => {
 
   it("Should be able to save file and load the exported file", () => {
     cy.loadScheduleToMonth();
-
+    cy.get("[data-cy=file-dropdown]").click();
     cy.get("[data-cy=export-schedule-button]").click();
     cy.get("[data-cy=confirm-export-button]").click();
 
