@@ -186,20 +186,16 @@ context("Work hours info (summary table)", () => {
     testWorkHoursInfoUpdate(data);
   });
 
-  it("When changing previous month shift from W to DN, shouldn't change work hours info at all", () => {
+  it("Cannot change previous month shifts", () => {
     const data = {
       workerType: WorkerType.NURSE,
       workerIdx: 4,
-      shiftIndex: prevMonthDays - 2,
-      initialShiftCode: ShiftCode.W,
-      desiredShiftCode: ShiftCode.U,
-      expectedWorkHoursInfo: {
-        [HoursInfoCells.required]: nurseInitialWorkHours[4][HoursInfoCells.required],
-        [HoursInfoCells.actual]: nurseInitialWorkHours[4][HoursInfoCells.actual],
-        [HoursInfoCells.overtime]: nurseInitialWorkHours[4][HoursInfoCells.overtime],
-      },
+      shiftIdx: prevMonthDays - 2,
     };
-    testWorkHoursInfoUpdate(data);
+
+    cy.getWorkerShift(data).click();
+    const exampleShiftCode = ShiftCode.D;
+    cy.get(`[data-cy=autocomplete-${exampleShiftCode}]`).should("not.exist");
   });
 
   it("When L4 for current month weekday is added, should subtract 8 from required hours, add 8 to overtime and not change actual", () => {
@@ -275,22 +271,6 @@ context("Work hours info (summary table)", () => {
         [HoursInfoCells.required]: babysitterInitialWorkHours[3][HoursInfoCells.required] + 8,
         [HoursInfoCells.actual]: babysitterInitialWorkHours[3][HoursInfoCells.actual],
         [HoursInfoCells.overtime]: babysitterInitialWorkHours[3][HoursInfoCells.overtime] - 8,
-      },
-    };
-    testWorkHoursInfoUpdate(data);
-  });
-
-  it("When changing previous month shift from W to N, shouldn't change work hours info at all", () => {
-    const data = {
-      workerType: WorkerType.OTHER,
-      workerIdx: 4,
-      shiftIndex: prevMonthDays - 1,
-      initialShiftCode: ShiftCode.W,
-      desiredShiftCode: ShiftCode.N,
-      expectedWorkHoursInfo: {
-        [HoursInfoCells.required]: babysitterInitialWorkHours[4][HoursInfoCells.required],
-        [HoursInfoCells.actual]: babysitterInitialWorkHours[4][HoursInfoCells.actual],
-        [HoursInfoCells.overtime]: babysitterInitialWorkHours[4][HoursInfoCells.overtime],
       },
     };
     testWorkHoursInfoUpdate(data);

@@ -12,7 +12,7 @@ export enum ModeInfoReducer {
 export type ModeInfoActionModel = ActionModel<ScheduleMode>;
 
 export class ModeInfoActionCreator {
-  static setMode(mode: ScheduleMode) {
+  static setMode(mode: ScheduleMode): ActionModel<ScheduleMode> {
     return {
       type: ModeInfoReducer.SET_MODE,
       payload: mode,
