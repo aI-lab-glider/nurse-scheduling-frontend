@@ -11,7 +11,7 @@ import WorkersCalendar from "../workers-page/workers-calendar/workers-calendar.c
 export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
   return (
     <>
-      <div className={"span-errors workers-table"}>
+      <div className={"span-primary workers-table"}>
         <div className={"workers-table"}>
           <p>{StringHelper.capitalizeEach(info.name)}</p>
 

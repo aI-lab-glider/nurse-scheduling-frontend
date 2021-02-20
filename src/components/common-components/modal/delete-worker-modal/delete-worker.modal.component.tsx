@@ -26,7 +26,7 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
   const title = "Potwierdź akcję";
 
   const body = (
-    <div className={"span-errors workers-table"}>
+    <div className={"span-primary workers-table"}>
       <p>Czy naprawde chcesz usunąć pracownika {worker?.name} ?</p>
     </div>
   );
