@@ -2,14 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /// <reference types="cypress" />
-import { DataRowParser } from "../../../../../src/logic/schedule-parser/data-row.parser";
-import { MetaDataParser } from "../../../../../src/logic/schedule-parser/metadata.parser";
-import { ShiftsInfoParser } from "../../../../../src/logic/schedule-parser/shifts-info.parser";
-import { WorkerType } from "../../../../../src/common-models/worker-info.model";
+// import { DataRowParser } from "../../../../../src/logic/schedule-parser/data-row.parser";
+// import { MetaDataParser } from "../../../../../src/logic/schedule-parser/metadata.parser";
+// import { ShiftsInfoParser } from "../../../../../src/logic/schedule-parser/shifts-info.parser";
+// import { WorkerType } from "../../../../../src/common-models/worker-info.model";
 
 //#region  data declaration
 
-const TestCases: { data: string[][]; expectedData: DataRowParser[]; errorCount: number }[] = [
+/*const TestCases: { data: string[][]; expectedData: DataRowParser[]; errorCount: number }[] = [
   {
     data: [["opiekunka 1", "N", "Error", "N", " ", "D", "N", "NotValid", "L4", "U"]],
     expectedData: [
@@ -42,7 +42,7 @@ const TestCases: { data: string[][]; expectedData: DataRowParser[]; errorCount: 
 
 const metaData: MetaDataParser = new MetaDataParser(2020, 10, [
   ["Dni miesiąca", "28", "29", "30", "31", "1", "2", "3", "4", "5"],
-]);
+]);*/
 
 //#region
 
