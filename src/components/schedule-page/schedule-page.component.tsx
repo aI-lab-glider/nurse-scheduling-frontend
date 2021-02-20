@@ -11,7 +11,7 @@ interface SchedulePageOptions {
   editModeHandler: (editMode: boolean) => void;
 }
 
-export function SchedulePage({editModeHandler}: SchedulePageOptions): JSX.Element {
+export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Element {
   const { setOpen: setDrawerOpen } = useJiraLikeDrawer();
   const ViewOnly = useCallback(
     (): JSX.Element => (
@@ -32,7 +32,7 @@ export function SchedulePage({editModeHandler}: SchedulePageOptions): JSX.Elemen
         <ScheduleEditPage closeEdit={handleEditButton} />
       </>
     ),
-    [editModeHandler]
+    [handleEditButton]
   );
 
   return (
