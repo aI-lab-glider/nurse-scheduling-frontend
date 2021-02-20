@@ -44,7 +44,6 @@ export class MonthSwitchActionCreator {
         newRevisionType,
         actualMonthDM
       );
-
       dispatch(addNewScheduleAction);
     };
   }

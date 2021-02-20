@@ -20,9 +20,11 @@ export interface useScheduleStateReturn {
 
 export const ScheduleLogicContext = React.createContext<ScheduleLogic | null>(null);
 
+export type ScheduleMode = "readonly" | "edit";
+
 export function useScheduleState(
   scheduleSelector: (applicationStateModel: ApplicationStateModel) => ScheduleDataModel,
-  mode: "readonly" | "edit"
+  mode: ScheduleMode
 ): useScheduleStateReturn {
   const dispatchGlobalState = useDispatch();
   const scheduleState = useSelector(scheduleSelector);
@@ -36,9 +38,9 @@ export function useScheduleState(
   );
 
   useEffect(() => {
-    scheduleLogic.update(scheduleState);
+    scheduleLogic.update(scheduleState, mode);
     setScheduleLocalState(extractScheduleLocalState(scheduleLogic));
-  }, [scheduleLogic, scheduleState]);
+  }, [scheduleLogic, scheduleState, mode]);
 
   return { scheduleLogic, scheduleLocalState };
 }
