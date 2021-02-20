@@ -97,7 +97,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       const rowValues = row.values as Array<string>;
       rowValues.shift();
 
-      function isEmpty() {
+      function isEmpty(): boolean {
         const rowValuesSet = new Set(rowValues.map((a) => a.toString()));
         let undefinedSeen = false;
         rowValuesSet.forEach((a) => {
