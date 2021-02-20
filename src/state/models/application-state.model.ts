@@ -5,12 +5,14 @@ import { StateWithHistory } from "redux-undo";
 import { RevisionType } from "../../api/persistance-store.model";
 import { ScheduleDataModel } from "../../common-models/schedule-data.model";
 import { GroupedScheduleErrors } from "../../common-models/schedule-error.model";
+import { ScheduleMode } from "../../components/schedule-page/table/schedule/use-schedule-state";
 
 export interface ScheduleStateModel {
   persistentSchedule: StateWithHistory<ScheduleDataModel>;
   temporarySchedule: StateWithHistory<ScheduleDataModel>;
   scheduleErrors: GroupedScheduleErrors;
   revision: RevisionType;
+  mode: ScheduleMode;
 }
 
 export interface ApplicationStateModel {

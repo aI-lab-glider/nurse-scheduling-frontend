@@ -9,12 +9,21 @@ hr {
   border: 1px solid #f5f5f5;
 }
 
-.span-errors {
+%span {
   font-family: $font-family-primary;
   font-weight: $font-weight-extra-bold;
   font-size: $font-size-base;
   line-height: 28px;
-  color: #1d3557;
+}
+
+.span-primary {
+  @extend %span;
+  color: $primary-text-color;
+}
+
+.span-errors {
+  @extend %span;
+  color: $error-red;
 }
 
 .error-span-header {

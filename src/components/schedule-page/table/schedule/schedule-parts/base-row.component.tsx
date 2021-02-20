@@ -32,6 +32,11 @@ export function BaseRowComponentF(options: BaseRowOptions): JSX.Element {
   const verboseDates = scheduleLogic?.sections.Metadata?.verboseDates;
   const currMonthNumber = scheduleLogic?.sections.Metadata.monthNumber;
   const numberOfDays = verboseDates?.length;
+  const firstMonthDayIndex = scheduleLogic?.sections.Metadata.dates.findIndex((day) => day === 1);
+
+  const isCellFromPrevMonth = (index, firstMonthDayIndex): boolean => {
+    return index < firstMonthDayIndex;
+  };
 
   function saveValue(newValue: string): void {
     if (sectionKey) onSave?.(newValue);
@@ -56,8 +61,8 @@ export function BaseRowComponentF(options: BaseRowOptions): JSX.Element {
             cellIndex={cellIndex}
             key={`${dataItem.value}${cellIndex}_${uuid}}`}
             isSelected={selection[cellIndex]}
-            isBlocked={!isEditable}
             isPointerOn={cellIndex === pointerPosition}
+            isBlocked={!isEditable || isCellFromPrevMonth(cellIndex, firstMonthDayIndex)}
             onKeyDown={(event): void => onKeyDown?.(cellIndex, event)}
             onValueChange={saveValue}
             onClick={(): void => onClick?.(cellIndex)}

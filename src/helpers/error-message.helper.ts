@@ -56,7 +56,7 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.WorkerNumberDuringDay:
-      message = `Za mało pracowników w trakcie dnia w dniu <strong>${error.day}</strong>, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
+        message = `Za mało pracowników w trakcie dnia w dniu <strong>${error.day}</strong>, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
         type = ScheduleErrorType.WND;
         title = "date";
         if (error.day) {
@@ -95,27 +95,18 @@ export class ErrorMessageHelper {
         title = `${error.worker}`;
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
-        message = `Niedozwolona wartość zmiany: ${error.actual}, w dniu ${error.day} u pracownika ${error.worker}`;
+        message = `Niedozwolona wartość zmiany: "${error.actual}" dla pracownika  ${error.worker} w dniu ${error.day}. Przyjęto, że zmiana to wolne.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
         title = `${error.worker}`;
         break;
       case InputFileErrorCode.EMPTY_FILE:
         message = `Błąd podczas wczytywania pliku wejściowego: Pusty plik`;
         break;
-      case InputFileErrorCode.NO_BABYSITTER_SECTION:
-        message = `Błąd podczas wczytywania pliku wejściowego: Nie znaleziono sekcji "opiekunki"`;
+      case InputFileErrorCode.UNHANDLED_FILE_EXTENSION:
+        message = `Nieobsługiwane rozszerzenie pliku: .${error.filename}`;
         break;
-      case InputFileErrorCode.NO_NURSE_SECTION:
-        message = `Błąd podczas wczytywania pliku wejściowego: Nie znaleziono sekcji "pielęgniarki"`;
-        break;
-      case InputFileErrorCode.NO_CHILDREN_SECTION:
-        message = `Błąd podczas wczytywania pliku wejściowego: Nie znaleziono sekcji "dzieci"`;
-        break;
-      case InputFileErrorCode.INVALID_METADATA:
-        message = `Błąd podczas wczytywania pliku wejściowego: Wykryto błędy w sekcji informacyjnej`;
-        break;
-      case InputFileErrorCode.NO_CHILDREN_QUANTITY:
-        message = "Błąd podczas wczytywania pliku wejściowego: Nie podano liczby dzieci";
+      case InputFileErrorCode.LOAD_FILE_ERROR:
+        message = `${error.message}`;
         break;
       case NetworkErrorCode.NETWORK_ERROR:
         message = "Błąd połączenia";

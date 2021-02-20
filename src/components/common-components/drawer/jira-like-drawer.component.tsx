@@ -10,7 +10,7 @@ import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scs
 
 const useStyles = makeStyles({
   drawer: {
-    minWidth: 600,
+    minWidth: 690,
     height: `calc(100vh - ${
       parseInt(ScssVars.headerHeight.slice(0, -2)) +
       parseInt(ScssVars.drawerHeaderHeight.slice(0, -2)) +

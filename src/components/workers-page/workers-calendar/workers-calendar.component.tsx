@@ -39,12 +39,16 @@ export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Ele
             if (date.date === 1) {
               notCurrentMonth = !notCurrentMonth;
             }
+            if (cellData === "W") {
+              cellData = "" as ShiftCode;
+            }
 
             return (
               <WorkersCalendarCell
                 shift={value}
                 date={date}
                 keepOn={keepOn}
+                workersCalendar={true}
                 hasNext={hasNext}
                 notCurrentMonth={notCurrentMonth}
               />

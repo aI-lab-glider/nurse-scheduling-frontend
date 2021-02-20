@@ -25,11 +25,8 @@ export enum ParseErrorCode {
 
 export enum InputFileErrorCode {
   EMPTY_FILE = "EMPTY_FILE",
-  NO_BABYSITTER_SECTION = "NO_BABYSITTER_SECTION",
-  NO_NURSE_SECTION = "NO_NURSE_SECTION",
-  NO_CHILDREN_SECTION = "NO_CHILDREN_SECTION",
-  INVALID_METADATA = "INVALID_METADATA",
-  NO_CHILDREN_QUANTITY = "NO_CHILDREN_QUANTITY",
+  LOAD_FILE_ERROR = "LOAD_FILE_ERROR",
+  UNHANDLED_FILE_EXTENSION = "UNHANDLED_FILE_EXTENSION",
 }
 
 export enum NetworkErrorCode {
@@ -54,6 +51,8 @@ interface UnknownValueError {
 
 interface InputFileError {
   kind: InputFileErrorCode;
+  message?: string;
+  filename?: string;
 }
 
 export interface NetworkError {

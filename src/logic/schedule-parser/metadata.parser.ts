@@ -1,26 +1,68 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 import { WeekDay } from "../../common-models/month-info.model";
 import { MetadataProvider } from "../providers/metadata-provider.model";
 import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
-import { MetaDataSectionKey } from "../section.model";
-import { DataRowParser } from "./data-row.parser";
+import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
 
 export class MetaDataParser extends MetadataProvider {
   public monthLogic: MonthInfoLogic;
+  public offset: number;
+  private _parseErrors: ScheduleError[] = [];
 
-  constructor(month: number, year: number, private daysRow: DataRowParser) {
+  constructor(month: number, year: number, raw: string[][] | undefined) {
     super();
-    daysRow.rowKey = MetaDataSectionKey.MonthDays;
-    this.monthLogic = new MonthInfoLogic(month, year.toString(), this.extractDates(daysRow));
+
+    if (raw) {
+      this.offset = this.extractMetadata(raw);
+    } else {
+      this.offset = 1;
+      this.logLoadFIleError(
+        "Brak nagłówka z informacją o datach. Przyjęto, że pierwsza kolumna to pierwszy dzień miesiąca"
+      );
+    }
+
+    const N = new Date(year, month + 1, 0).getDate();
+
+    const days = Array(N);
+    let i = 0;
+
+    while (i < N) days[i++] = i;
+
+    this.monthLogic = new MonthInfoLogic(month, year.toString(), days);
   }
 
-  private extractDates(dataRowParser: DataRowParser): number[] {
-    return dataRowParser
-      .rowData(false, false)
-      .map((i) => parseInt(i))
-      .filter((i) => i <= 31);
+  public get errors(): ScheduleError[] {
+    return [...this._parseErrors];
+  }
+
+  private logLoadFIleError(msg: string): void {
+    this._parseErrors.push({
+      kind: InputFileErrorCode.LOAD_FILE_ERROR,
+      message: msg,
+    });
+  }
+
+  private extractMetadata(raw: string[][]): number {
+    if (raw.length !== 1) {
+      this.logLoadFIleError("Nie znaleziono spdoziewanej ilości wierszy w sekcji dane");
+      return 0;
+    }
+
+    const monthDays = raw[0];
+
+    const startOfMonth = monthDays.findIndex((a) => a.toString() === `1`);
+
+    if (startOfMonth === -1) {
+      this.logLoadFIleError(
+        "Brak nagłówka z informacją o datach. Przyjęto, że pierwsza kolumna to pierwszy dzień miesiąca"
+      );
+      return 0;
+    }
+
+    return startOfMonth;
   }
 
   public get dates(): number[] {
@@ -55,16 +97,6 @@ export class MetaDataParser extends MetadataProvider {
 
   public get dayNumbers(): number[] {
     return this.monthLogic.dates;
-  }
-
-  public get dayNumbersAsDataRow(): DataRowParser {
-    const datesAsObject = this.monthLogic.dates.reduce(
-      (storage, date, index) => {
-        return { ...storage, [index + " "]: date };
-      },
-      { key: MetaDataSectionKey.MonthDays }
-    );
-    return new DataRowParser(datesAsObject);
   }
 
   public get validDataStart(): number {

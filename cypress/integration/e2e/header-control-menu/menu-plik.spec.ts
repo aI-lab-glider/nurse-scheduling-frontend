@@ -8,16 +8,11 @@ context("Menu 'plik'", () => {
 
   describe("File button", () => {
     it("Should open options menu", () => {
+      cy.loadScheduleToMonth();
+      cy.contains("Pielęgniarki");
       cy.get("[data-cy=file-dropdown]").click();
       cy.get("[data-cy=load-schedule-button]");
       cy.get("[data-cy=export-schedule-button]");
-    });
-  });
-
-  describe("Load schedule", () => {
-    it("Should be able to load and show the schedule", () => {
-      cy.loadScheduleToMonth();
-      cy.contains("Pielęgniarki");
     });
   });
 });
