@@ -46,6 +46,9 @@ export interface WorkersInfoModel {
   time: { [key: string]: number };
   type: { [workerName: string]: WorkerType };
   contractType?: { [workerName: string]: ContractType };
+  employmentTime?: { [workerName: string]: string };
+  employmentTimeOther?: { [workerName: string]: string };
+  civilTime?: { [workerName: string]: string };
 }
 
 export interface WorkerInfoModel {

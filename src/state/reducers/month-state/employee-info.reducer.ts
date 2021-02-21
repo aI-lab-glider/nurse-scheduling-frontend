@@ -25,7 +25,13 @@ export function employeeInfoReducerF(name: string) {
     action: ScheduleActionModel | ActionModel<WorkerInfoExtendedInterface>
   ): WorkersInfoModel => {
     let data;
-    let workerName, prevName, workerType, contractType, employmentTime;
+    let workerName,
+      prevName,
+      workerType,
+      contractType,
+      employmentTime,
+      employmentTimeOther,
+      civilTime;
     if ((action.payload as WorkerInfoExtendedInterface) !== undefined) {
       ({
         workerName,
@@ -33,6 +39,8 @@ export function employeeInfoReducerF(name: string) {
         workerType,
         contractType,
         employmentTime,
+        employmentTimeOther,
+        civilTime,
       } = action.payload as WorkerInfoExtendedInterface);
     }
 
@@ -41,10 +49,16 @@ export function employeeInfoReducerF(name: string) {
         delete state.time[workerName];
         delete state.type[workerName];
         delete state.contractType?.[workerName];
+        delete state.employmentTime?.[workerName];
+        delete state.employmentTimeOther?.[workerName];
+        delete state.civilTime?.[workerName];
         return {
           time: { ...state.time },
           type: { ...state.type },
           contractType: { ...state.contractType },
+          employmentTime: { [workerName]: employmentTime, ...state.employmentTime },
+          employmentTimeOther: { [workerName]: employmentTimeOther, ...state.employmentTimeOther },
+          civilTime: { [workerName]: civilTime, ...state.civilTime },
         };
 
       case createActionName(name, ScheduleActionType.ADD_NEW):
@@ -63,10 +77,16 @@ export function employeeInfoReducerF(name: string) {
           },
           type: { [workerName]: workerType, ...state.type },
           contractType: { [workerName]: contractType, ...state.contractType },
+          employmentTime: { [workerName]: employmentTime, ...state.employmentTime },
+          employmentTimeOther: { [workerName]: employmentTimeOther, ...state.employmentTimeOther },
+          civilTime: { [workerName]: civilTime, ...state.civilTime },
         };
       case ScheduleActionType.MODIFY_WORKER:
         delete state.time[prevName];
         delete state.type[prevName];
+        delete state.employmentTime?.[workerName];
+        delete state.employmentTimeOther?.[workerName];
+        delete state.civilTime?.[workerName];
         return {
           time: {
             [workerName]: fromFractionToHours(employmentTime),
@@ -74,6 +94,9 @@ export function employeeInfoReducerF(name: string) {
           },
           type: { [workerName]: workerType, ...state.type },
           contractType: { [workerName]: contractType, ...state.contractType },
+          employmentTime: { [workerName]: employmentTime, ...state.employmentTime },
+          employmentTimeOther: { [workerName]: employmentTimeOther, ...state.employmentTimeOther },
+          civilTime: { [workerName]: civilTime, ...state.civilTime },
         };
       default:
         return state;
