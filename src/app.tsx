@@ -89,7 +89,7 @@ function App(): JSX.Element {
               <Route path="/">
                 <Box className={classes.root}>
                   <Box className={classes.content}>
-                    <HeaderComponent isNewMonthPage={false} />
+                    <HeaderComponent />
                     <RouteButtonsComponent tabs={tabs} disabled={editMode} />
                   </Box>
                   <Box className={classes.drawer}>
