@@ -31,15 +31,15 @@ const useStyles = (
         border: "0",
         boxShadow: "-3px 4px 20px 4px rgba(0, 0, 0, 0.15)",
         padding: theme.spacing(2, 1, 3),
-        maxWidth: `${height}px`,
-        maxHeight: `${width}px`,
+        maxWidth: `${width}px`,
+        maxHeight: `${height}px`,
         minWidth: "424px",
         minHeight: "198px",
       },
       titleMargin: {
-        paddingTop: 15,
+        paddingTop: 5,
         paddingLeft: 25,
-        paddingBottom: 15,
+        paddingBottom: 5,
       },
 
       modalBody: {
@@ -48,6 +48,7 @@ const useStyles = (
         overflow: "auto",
         overflowX: "hidden",
         alignItems: "center",
+        maxHeight: `${width - 217}px`,
       },
 
       footer: {
