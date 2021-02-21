@@ -27,6 +27,16 @@
 
 .returnToNowBtn {
   margin-top: 0 !important;
+  font-size: small !important;
+  padding: 0px 10px !important;
+  margin-bottom: 0px !important;
+}
+.hidden {
+  opacity: 0;
+}
+.month-switch-container {
+  position: relative;
+  left: -5%;
 }
 
 .newMonthComponents {
