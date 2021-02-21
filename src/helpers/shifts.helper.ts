@@ -30,14 +30,15 @@ export class ShiftHelper {
   }
 
   public static isNotWorkingShift(shiftCode: ShiftCode): boolean {
-    return ["L4", "U"].includes(shiftCode);
+    const shift = SHIFTS[shiftCode] as Shift;
+    return shift.isWorkingShift ?? false;
   }
 
   public static shiftCodeToWorkTime(shift: Shift): number {
     if (!shift.isWorkingShift) {
       return 0;
     }
-    const duration = shift.from - shift.to;
+    const duration = Math.abs(shift.from - shift.to);
     return duration === 0 ? 24 : duration;
   }
 
