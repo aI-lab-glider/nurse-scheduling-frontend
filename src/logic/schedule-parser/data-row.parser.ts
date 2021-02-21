@@ -15,7 +15,7 @@ export class DataRowParser {
     if (this.isEmpty) {
       throw new Error("Trying to access key from an empty row");
     }
-    return this.rowData(false, true)[0];
+    return this.rowData(false, true)[0].trim();
   }
 
   public set rowKey(value: string) {
