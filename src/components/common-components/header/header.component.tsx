@@ -8,6 +8,7 @@ import { ApplicationStateModel } from "../../../state/models/application-state.m
 import { MonthSwitchActionCreator } from "../../../state/reducers/month-state/schedule-data/month-switch.action-creator";
 import { Button } from "../button-component/button.component";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
+import classNames from "classnames/bind";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -41,15 +42,13 @@ export function HeaderComponent(): JSX.Element {
     <>
       <div id={"header"}>
         <AssignmentIndIcon id={"AssignmentIndIcon"} />
-        {isNewMonth && (
-          <Button
-            className="submit-button returnToNowBtn"
-            variant="secondary"
-            onClick={returnToCurrentMonth}
-          >
-            Wróć do teraz
-          </Button>
-        )}
+        <Button
+          className={classNames("submit-button", "returnToNowBtn", { hidden: !isNewMonth })}
+          variant="secondary"
+          onClick={returnToCurrentMonth}
+        >
+          Wróć do teraz
+        </Button>
         <div className={"filler"} />
         {isReadOnlyMode && <MonthSwitchComponent />}
         <div className={"filler"} />
