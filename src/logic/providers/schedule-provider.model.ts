@@ -32,7 +32,7 @@ export class Schedule {
     return {
       schedule_info: {
         month_number: sections.Metadata !== undefined ? sections.Metadata.monthNumber : 0,
-        year: sections.Metadata !== undefined ? sections.Metadata?.year : 0
+        year: sections.Metadata !== undefined ? sections.Metadata?.year : 0,
       },
       shifts: {
         ...sections.BabysitterInfo.workerShifts,

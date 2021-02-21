@@ -78,3 +78,10 @@
 #contract-time-dropdown-onTopButton {
   width: 112px;
 }
+
+#extension,
+#extension-onTopButton {
+  width: 100px;
+  z-index: 200;
+  position: relative;
+}
