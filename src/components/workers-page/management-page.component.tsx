@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import ShiftTab from "./shifts-tab/shifts-tab.component";
-import ConstraintTab from "./constraints-tab/constraints-tab.component";
 import WorkersTab from "./workers-tab/workers-tab.component";
 import RouteButtonsComponent from "../common-components/route-buttons/route-buttons.component";
 
