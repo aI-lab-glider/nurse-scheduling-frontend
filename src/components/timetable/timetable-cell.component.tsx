@@ -1,16 +1,23 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
+import React, { useCallback } from "react";
 import { VerboseDate, WeekDay } from "../../common-models/month-info.model";
+import {
+  AlgorithmErrorCode,
+  GroupedScheduleErrors,
+  ScheduleError,
+} from "../../common-models/schedule-error.model";
 import { TranslationHelper } from "../../helpers/translations.helper";
+import { ErrorTooltipProvider } from "../schedule-page/table/schedule/schedule-parts/error-tooltip-provider.component";
 
 export interface TimeTableCellOptions {
   value: VerboseDate;
   currMonth: number;
+  index: number;
 }
 
-function TimeTableCellF({ value, currMonth }: TimeTableCellOptions): JSX.Element {
+function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.Element {
   function getId(): string {
     if (value.month !== TranslationHelper.englishMonths[currMonth]) {
       return "otherMonthHeader";
@@ -34,12 +41,28 @@ function TimeTableCellF({ value, currMonth }: TimeTableCellOptions): JSX.Element
 
   const [today, circle] = isToday();
 
+  const errorSelector = useCallback(
+    (scheduleErros: GroupedScheduleErrors): ScheduleError[] => {
+      const matchingErrorTypes = [
+        ...(scheduleErros[AlgorithmErrorCode.WorkerNumberDuringDay] ?? []),
+        ...(scheduleErros[AlgorithmErrorCode.WorkerNumberDuringNight] ?? []),
+      ];
+      return matchingErrorTypes.filter((error) => error.day === value.date);
+    },
+    [value.date]
+  );
+
   return (
     <td className="timetableCell" id={getId()}>
-      <span>{TranslationHelper.weekDaysTranslations[value.dayOfWeek]}</span>
-      <span className={circle}>
-        <span className={today}>{value.date}</span>
-      </span>
+      <ErrorTooltipProvider
+        className="timetableCell timetable-error-tooltip"
+        errorSelector={errorSelector}
+      >
+        <span>{TranslationHelper.weekDaysTranslations[value.dayOfWeek]}</span>
+        <span className={circle}>
+          <span className={today}>{value.date}</span>
+        </span>
+      </ErrorTooltipProvider>
     </td>
   );
 }

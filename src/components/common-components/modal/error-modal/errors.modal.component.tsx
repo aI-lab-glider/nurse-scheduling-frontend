@@ -4,9 +4,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../../state/models/application-state.model";
-import { ScheduleErrorMessageModel } from "../../../../common-models/schedule-error-message.model";
 import { Button } from "../..";
+import { ScheduleErrorMessageModel } from "../../../../common-models/schedule-error-message.model";
+import { ErrorMessageHelper } from "../../../../helpers/error-message.helper";
+import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 import DefaultModal from "../modal.component";
 import ModalErrorList from "./error.modal.list.component";
 
@@ -25,8 +26,9 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
 
   useEffect(() => {
-    if (scheduleErrors?.length) {
-      setMappedErrors(scheduleErrors);
+    const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors);
+    if (errors) {
+      setMappedErrors(errors);
     }
   }, [scheduleErrors]);
 

@@ -69,6 +69,7 @@
         display: flex;
         justify-content: flex-start;
         height: 100% !important;
+        width: 100%;
 
         p {
           display: flex;
@@ -266,18 +267,23 @@ span {
     transform: rotate(180deg);
   }
 
+  .container {
+    position: relative;
+  }
+
   &.error-triangle {
+    $border-width: 7px;
     position: absolute;
-    top: -11px;
-    right: -15px;
+    top: 0px;
+    right: -5px;
 
     display: block;
     width: 0;
     height: 0;
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
+    border-left: $border-width solid transparent;
+    border-right: $border-width solid transparent;
 
-    border-bottom: 7px solid $error-red;
+    border-bottom: $border-width solid $error-red;
     box-shadow: $error-triangle-box-shadow;
 
     transform: rotate(45deg);
@@ -296,11 +302,8 @@ p {
   background-color: white;
   color: black;
   font-weight: bold;
-  padding: 4px 8px;
   font-size: 13px;
   border-radius: 4px;
-  position: absolute;
-  margin-left: 35px;
   z-index: 3;
 }
 
@@ -311,10 +314,39 @@ p {
   padding: 10px;
   font-size: 13px;
   border-radius: 4px;
-  position: absolute;
-  margin-left: 35px;
+  // position: absolute;
+  // margin-left: 35px;
   z-index: 2;
   box-shadow: 0 1.4px 1.1px rgba(0, 0, 0, 0.034), 0 3.3px 2.7px rgba(0, 0, 0, 0.048),
     0 6.2px 5px rgba(0, 0, 0, 0.06), 0 11.1px 8.5px rgba(0, 0, 0, 0.072),
     0 20.8px 25.4px rgba(0, 0, 0, 0.086), 0 50px 50px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.errorTootlip-item {
+  margin: 0px !important;
+  .error-title {
+    flex: 0.5 !important;
+  }
+  .error-text {
+    padding: 0px 5px;
+  }
+}
+
+.timetable-error-tooltip {
+  height: 75px;
+  padding-top: 40% !important;
+
+  .circle {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    margin-bottom: -5%;
+    padding-top: 5%;
+    background: $primary;
+  }
+}
+
+.nametableRow-error-tooltip {
+  right: -3px !important;
 }

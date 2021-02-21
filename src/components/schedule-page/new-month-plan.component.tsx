@@ -31,6 +31,8 @@ export function NewMonthPlanComponent(): JSX.Element {
   const fileUpload = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    // To prevent a memory leak
+    // https://www.debuggr.io/react-update-unmounted-component/
     let mounted = true;
     const setNeighbours = async (): Promise<void> => {
       const storageProvider = new LocalStorageProvider();
@@ -40,13 +42,12 @@ export function NewMonthPlanComponent(): JSX.Element {
       const prevMonth = await storageProvider.getMonthRevision(
         new ScheduleKey(prevDate.getMonth(), prevDate.getFullYear()).getRevisionKey(revision)
       );
-      setHasValidNext(isMonthValid(nextMonth));
-      setHasValidPrevious(isMonthValid(prevMonth));
+      if (mounted) {
+        setHasValidNext(isMonthValid(nextMonth));
+        setHasValidPrevious(isMonthValid(prevMonth));
+      }
     };
-    if (mounted) {
-      setNeighbours();
-    }
-    // return called on component destroy
+    setNeighbours();
     return (): void => {
       mounted = false;
     };

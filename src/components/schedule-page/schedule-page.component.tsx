@@ -13,6 +13,7 @@ interface SchedulePageOptions {
 
 export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Element {
   const { setOpen: setDrawerOpen } = useJiraLikeDrawer();
+
   const ViewOnly = useCallback(
     (): JSX.Element => (
       <>

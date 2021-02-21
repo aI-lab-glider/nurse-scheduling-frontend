@@ -28,7 +28,9 @@ export class MonthInfoLogic {
     return this._verboseDates.map((d) => d.dayOfWeek);
   }
 
-  constructor(monthId: string | number, public year: string, monthDates: number[]) {
+  public readonly year: string;
+  constructor(monthId: string | number, year: string | number, monthDates: number[]) {
+    this.year = year.toString();
     if (typeof monthId == "string") {
       monthId = TranslationHelper.polishMonths.findIndex(
         (month) => StringHelper.getRawValue(month) === monthId
@@ -42,12 +44,12 @@ export class MonthInfoLogic {
 
     this.monthNumber = monthId;
 
-    this.publicHolidaysLogic = new PublicHolidaysLogic(year);
+    this.publicHolidaysLogic = new PublicHolidaysLogic(year.toString());
 
-    this._verboseDates = this.createCalendar(this.monthNumber, parseInt(year));
+    this._verboseDates = this.createCalendar(this.monthNumber, parseInt(this.year));
   }
 
-  private generateMonthDates(monthNumber: number, year: string): number[] {
+  private generateMonthDates(monthNumber: number, year: string | number): number[] {
     const dates: number[] = [];
     const month = TranslationHelper.englishMonths[monthNumber];
     let day = 1;
@@ -108,7 +110,7 @@ export class MonthInfoLogic {
     return verboseDates;
   }
 
-  private isDateBelongsToMonth(date: number, month: string, year: string): boolean {
+  private isDateBelongsToMonth(date: number, month: string, year: string | number): boolean {
     return (
       TranslationHelper.englishMonths[new Date(`${date} ${month} ${year}`).getMonth()] === month
     );
