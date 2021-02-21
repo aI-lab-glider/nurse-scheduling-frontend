@@ -15,6 +15,7 @@ import { WorkerInfoExtendedInterface } from "../../../../components/namestable/w
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import _ from "lodash";
 import { WorkerInfoModel } from "../../../../common-models/worker-info.model";
+import { ActionModel } from "../../../models/action.model";
 
 export class ScheduleDataActionCreator {
   static setScheduleFromScheduleDM(
@@ -119,5 +120,12 @@ export class ScheduleDataActionCreator {
       };
       dispatch(action);
     };
+  }
+
+  static cleanErrors(): ActionModel<unknown> {
+    const action = {
+      type: ScheduleActionType.CLEAN_ERRORS,
+    };
+    return action;
   }
 }
