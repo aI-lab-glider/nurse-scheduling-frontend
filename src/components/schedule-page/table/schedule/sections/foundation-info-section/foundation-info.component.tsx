@@ -11,10 +11,6 @@ import { FoundationSectionKey } from "../../../../../../logic/section.model";
 import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-section.component";
 export type FoundationInfoOptions = Omit<BaseSectionOptions, "sectionKey">;
 
-// TODO:
-// 4. Fix bad positioning in big monthes
-// 1. Define errors as interface with types. Should not be dictionary as it is now
-// 3. Fix paddings in summary row
 function foundationInfoErrorSelector(
   rowKey: string,
   cellIndex: number,
@@ -28,12 +24,7 @@ function foundationInfoErrorSelector(
     ...(errors[AlgorithmErrorCode.WorkerNumberDuringDay] ?? []),
     ...(errors[AlgorithmErrorCode.WorkerNumberDuringNight] ?? []),
   ];
-  return foundationInfoErrors.filter(
-    (error) =>
-      (error.kind === AlgorithmErrorCode.AlwaysAtLeastOneNurse && error.day === cellIndex) ||
-      (error.kind === AlgorithmErrorCode.WorkerNumberDuringDay && error.day === cellIndex) ||
-      (error.kind === AlgorithmErrorCode.WorkerNumberDuringNight && error.day === cellIndex)
-  );
+  return foundationInfoErrors.filter((error) => error.day === cellIndex);
 }
 
 export function FoundationInfoComponent(options: FoundationInfoOptions): JSX.Element {

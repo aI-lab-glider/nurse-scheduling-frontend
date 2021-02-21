@@ -2,69 +2,77 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import classNames from "classnames/bind";
 import React, { ReactNode, useRef, useState } from "react";
-import { usePopper } from "react-popper";
 import { useSelector } from "react-redux";
 import {
   GroupedScheduleErrors,
   ScheduleError,
 } from "../../../../../common-models/schedule-error.model";
-import { ErrorMessageHelper } from "../../../../../helpers/error-message.helper";
 import { ApplicationStateModel } from "../../../../../state/models/application-state.model";
-import ErrorListItem from "../../../validation-drawer/error-list-item.component";
-import { Popper } from "./base-cell/popper";
 
 export interface ErrorTooltipOptions {
   children: ReactNode;
   errorSelector: (scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
   className?: string;
   showErrorTitle?: boolean;
+  id?: string;
+  tooltipClassname?: string;
 }
 
-export function ErrorTooltipProvider({
+export function ErrorTooltipProviderF({
   showErrorTitle,
   children,
   errorSelector,
   className,
+  id,
+  tooltipClassname,
 }: ErrorTooltipOptions): JSX.Element {
   const errors = useSelector((state: ApplicationStateModel) =>
     errorSelector(state.actualState.scheduleErrors)
   );
   const errorTriangle = useRef<HTMLDivElement>(null);
-  const container = useRef<HTMLDivElement>(null);
-  const tooltipRef = useRef<HTMLDivElement>(null);
-  const [isToolTipOpen, setToolTipOpen] = useState(false);
-  const { styles, attributes } = usePopper(container.current, tooltipRef.current, {
-    placement: "right-start",
-  });
+  const container = useRef<HTMLDivElement>(null); // TODO TASK-182
+
+  // TODO TASK-182
+  // const tooltipRef = useRef<HTMLDivElement>(null);
+  // const [isToolTipOpen, setToolTipOpen] = useState(false);
+  // const { styles, attributes } = usePopper(container.current, tooltipRef.current, {
+  //   placement: "right-start",
+  // });
+
   const [isFixed, setIsFixed] = useState(false);
 
-  function showErrorTooltip(): void {
-    setToolTipOpen(true);
-  }
+  // TODO TASK-182
+  // function showErrorTooltip(): void {
+  //   setToolTipOpen(true);
+  // }
 
-  function hideErrorTooltip(ignoreFixed = false): void {
-    if (!isFixed || (ignoreFixed && isFixed)) {
-      setToolTipOpen(false);
-      setIsFixed(false);
-    }
-  }
+  // function hideErrorTooltip(ignoreFixed = false): void {
+  //   if (!isFixed || (ignoreFixed && isFixed)) {
+  //     setToolTipOpen(false);
+  //     setIsFixed(false);
+  //   }
+  // }
 
   function handleTriangleClick(event: React.MouseEvent<HTMLHRElement, MouseEvent>): void {
     event.stopPropagation();
     if (!isFixed) {
       setIsFixed(true);
     } else {
-      hideErrorTooltip(true);
+      // hideErrorTooltip(true);
     }
   }
+
   return (
     <>
+      {/* // TODO TASK-182 
+
       <Popper
         ref={tooltipRef}
         className="errorTooltip"
         isOpen={isToolTipOpen}
-        {...attributes}
+        {...attributes.popper}
         style={{
           ...styles.popper,
         }}
@@ -80,22 +88,32 @@ export function ErrorTooltipProvider({
             showTitle={showErrorTitle}
           />
         ))}
-      </Popper>
+      </Popper> */}
 
       <div
+        id={id}
         ref={container}
         className={className}
         style={{
           position: "relative",
         }}
-        onMouseEnter={showErrorTooltip}
-        onMouseLeave={(): void => hideErrorTooltip(false)}
+        // onMouseEnter={showErrorTooltip}
+        // onMouseLeave={(): void => hideErrorTooltip(false)}
       >
         {errors.length !== 0 && (
-          <span ref={errorTriangle} className="error-triangle" onClick={handleTriangleClick} />
+          <span
+            ref={errorTriangle}
+            className={classNames("error-triangle", tooltipClassname)}
+            onClick={handleTriangleClick}
+          />
         )}
         {children}
       </div>
     </>
   );
 }
+
+export const ErrorTooltipProvider = React.memo(ErrorTooltipProviderF, () => {
+  const areTooltipsSame = true;
+  return areTooltipsSame;
+});

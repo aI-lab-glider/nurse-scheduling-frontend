@@ -277,17 +277,18 @@ span {
   }
 
   &.error-triangle {
+    $border-width: 7px;
     position: absolute;
-    top: -5px;
+    top: 0px;
     right: -5px;
 
     display: block;
     width: 0;
     height: 0;
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
+    border-left: $border-width solid transparent;
+    border-right: $border-width solid transparent;
 
-    border-bottom: 7px solid $error-red;
+    border-bottom: $border-width solid $error-red;
     box-shadow: $error-triangle-box-shadow;
 
     transform: rotate(45deg);
@@ -335,4 +336,22 @@ p {
   .error-text {
     padding: 0px 5px;
   }
+}
+
+.timetable-error-tooltip {
+  height: 75px;
+  padding-top: 40% !important;
+
+  .circle {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    margin-bottom: -5%;
+    padding-top: 5%;
+    background: $primary;
+  }
+}
+
+.nametableRow-error-tooltip {
+  right: -3px !important;
 }

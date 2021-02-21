@@ -10,7 +10,7 @@ interface UseScheduleStylingReturn extends CellDataItem {
   hasNext: boolean;
 }
 
-export function useScheduleStyling(data: ShiftCode[]): UseScheduleStylingReturn[] {
+export function applyScheduleStyling(data: ShiftCode[]): UseScheduleStylingReturn[] {
   let prevShift: ShiftCode | null = null;
   let nextShift: ShiftCode | null = null;
   let keepOn: boolean;

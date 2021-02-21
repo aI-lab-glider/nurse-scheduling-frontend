@@ -2,12 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { useSelector } from "react-redux";
+import { VerboseDate } from "../../../common-models/month-info.model";
 import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
 import { TranslationHelper } from "../../../helpers/translations.helper";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { Button } from "../../common-components";
-import { useScheduleState } from "../table/schedule/use-schedule-state";
+import { useMonthInfo } from "./use-verbose-dates";
 
 interface Options {
   error: ScheduleErrorMessageModel;
@@ -22,28 +21,20 @@ export default function ErrorListItem({
   className = "",
   showTitle = true,
 }: Options): JSX.Element {
-  /* eslint-disable @typescript-eslint/camelcase */
-  const { month_number } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
-  );
+  const { verboseDates, monthNumber } = useMonthInfo();
+  const mappedDays = verboseDates.map((d: VerboseDate) => d.date);
+  const monthStartIndex = verboseDates.findIndex((d: VerboseDate) => d.date === 1) ?? 0;
 
   let currMonthGenetivus = "";
   let prevMonthGenetivus = "";
-  if (month_number) {
-    currMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[month_number]}`;
-    if (month_number > 0) {
-      prevMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[month_number - 1]}`;
+  if (monthNumber) {
+    currMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[monthNumber]}`;
+    if (monthNumber > 0) {
+      prevMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[monthNumber - 1]}`;
     } else {
-      prevMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[month_number + 11]}`;
+      prevMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[monthNumber + 11]}`;
     }
   }
-
-  const { scheduleLogic } = useScheduleState(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present,
-    "edit"
-  );
-  const mappedDays = scheduleLogic?.sections.Metadata?.verboseDates.map((d) => d.date);
-  const monthStartIndex = scheduleLogic?.sections.Metadata?.dates.findIndex((d) => d === 1) ?? 0;
 
   let errorDayIndex = -1;
   let errorDay = -1;
@@ -52,7 +43,7 @@ export default function ErrorListItem({
     errorDay = mappedDays[errorDayIndex];
   }
 
-  const month = errorDayIndex < monthStartIndex ? prevMonthGenetivus : currMonthGenetivus;
+  const monthName = errorDayIndex < monthStartIndex ? prevMonthGenetivus : currMonthGenetivus;
 
   return (
     <div className={`error-list-item ${className}`}>
@@ -60,7 +51,7 @@ export default function ErrorListItem({
       {showTitle && (
         <div className="error-title">
           <p className="error-title-content">
-            {error.title === "date" ? `${errorDay} ` + month : `${error.title}`}
+            {error.title === "date" ? `${errorDay} ` + monthName : `${error.title}`}
           </p>
         </div>
       )}

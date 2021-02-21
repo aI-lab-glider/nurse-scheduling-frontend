@@ -7,7 +7,7 @@ import { ArrayHelper } from "../../../../../helpers/array.helper";
 import { DataRowHelper } from "../../../../../helpers/data-row.helper";
 import { ScheduleLogicContext } from "../use-schedule-state";
 import { BaseCellComponent } from "./base-cell/base-cell.component";
-import { BaseRowOptions, toCellDataItemArray } from "./base-row.models";
+import { baseRowDataCy, BaseRowOptions, toCellDataItemArray } from "./base-row.models";
 
 export function BaseRowComponentF(options: BaseRowOptions): JSX.Element {
   const {
@@ -50,7 +50,7 @@ export function BaseRowComponentF(options: BaseRowOptions): JSX.Element {
   }
 
   return (
-    <tr className="row scheduleStyle" id="mainRow">
+    <tr className="row scheduleStyle" id="mainRow" data-cy={baseRowDataCy(rowIndex)}>
       {data.map((dataItem = { value: defaultEmpty }, cellIndex) => {
         return (
           <CellComponent

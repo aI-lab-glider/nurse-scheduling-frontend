@@ -21,15 +21,11 @@ function nametableErrorSelector(
   cellIndex: number,
   scheduleErrors: GroupedScheduleErrors
 ): ScheduleError[] {
-  const errors = [
-    ...(scheduleErrors[AlgorithmErrorCode.WorkerOvertime]?.filter(
-      (error) => error.kind === AlgorithmErrorCode.WorkerOvertime && error.worker === worker
-    ) ?? []),
-    ...(scheduleErrors[AlgorithmErrorCode.WorkerNumberDuringNight]?.filter(
-      (error) => error.kind === AlgorithmErrorCode.WorkerUnderTime && error.worker === worker
-    ) ?? []),
+  const errorsByType = [
+    ...(scheduleErrors[AlgorithmErrorCode.WorkerOvertime] ?? []),
+    ...(scheduleErrors[AlgorithmErrorCode.WorkerUnderTime] ?? []),
   ];
-  return errors;
+  return errorsByType.filter((error) => error.worker === worker);
 }
 
 export function NameTableComponent(options: NameSectionOptions): JSX.Element {

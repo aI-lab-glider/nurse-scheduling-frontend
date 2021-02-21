@@ -15,7 +15,7 @@ import { ArrayHelper } from "../../helpers/array.helper";
 import { VerboseDate } from "../../common-models/month-info.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
 import { BaseSectionOptions } from "../schedule-page/table/schedule/sections/base-section/base-section.component";
-import { ErrorTooltipProvider } from "../schedule-page/table/schedule/schedule-parts/error-tooltip.component";
+import { ErrorTooltipProvider } from "../schedule-page/table/schedule/schedule-parts/error-tooltip-provider.component";
 import { ScheduleError } from "../../common-models/schedule-error.model";
 import classNames from "classnames/bind";
 
@@ -32,7 +32,7 @@ export function NameTableSection({
   workerType,
   errorSelector,
   clickable,
-}: NameTableCellOptions): JSX.Element {
+}: NameTableSectionOptions): JSX.Element {
   const [open, setIsOpen] = useState(false);
   const [workerInfo, setWorkerInfo] = useState<WorkerInfoModel>(initialWorkerInfo);
 
@@ -86,6 +86,7 @@ export function NameTableSection({
                   errorSelector?.(workerName, 0, scheduleErrors) ?? []
                 }
                 className="nametableRow"
+                tooltipClassname="nametableRow-error-tooltip"
                 showErrorTitle={false}
               >
                 <tr

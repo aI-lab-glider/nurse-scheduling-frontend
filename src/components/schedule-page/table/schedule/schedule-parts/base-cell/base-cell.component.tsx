@@ -5,7 +5,7 @@ import classNames from "classnames/bind";
 import React from "react";
 import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
 import { CellBlockableInputComponent } from "../cell-blockable-input.component";
-import { ErrorTooltipProvider } from "../error-tooltip.component";
+import { ErrorTooltipProvider } from "../error-tooltip-provider.component";
 import { useCellBackgroundHighlight } from "../hooks/use-cell-highlight";
 import { useCellSelection } from "../hooks/use-cell-selection";
 import { BaseCellInputComponent } from "./base-cell-input.component";
@@ -20,12 +20,13 @@ export function BaseCellComponent(options: BaseCellOptions): JSX.Element {
     isPointerOn,
     onClick,
     onBlur,
-    errorSelector = (_): ScheduleError[] => [],
+    errorSelector = (): ScheduleError[] => [],
   } = options;
 
   const selectableItemRef = useCellSelection(options);
   const id = useCellBackgroundHighlight(options);
 
+  const hideInput = !isPointerOn || (isPointerOn && isBlocked);
   //  #region view
   return (
     <td
@@ -34,23 +35,33 @@ export function BaseCellComponent(options: BaseCellOptions): JSX.Element {
       id={id}
       onBlur={onBlur}
     >
-      <div
-        className="wrapContent"
-        onClick={(): void => {
-          if (!isBlocked) onClick?.();
-        }}
-      >
-        <CellBlockableInputComponent input={BaseCellInputComponent} {...options} />
-        <div className={"content"}>
-          {(!isPointerOn || (isPointerOn && isBlocked)) && (
-            <ErrorTooltipProvider errorSelector={errorSelector} className={"content"}>
+      {!hideInput && (
+        <div
+          className="wrapContent"
+          onClick={(): void => {
+            if (!isBlocked) onClick?.();
+          }}
+        >
+          <CellBlockableInputComponent input={BaseCellInputComponent} {...options} />
+        </div>
+      )}
+
+      {hideInput && (
+        <ErrorTooltipProvider errorSelector={errorSelector} className={"content"}>
+          <div
+            className="wrapContent"
+            onClick={(): void => {
+              if (!isBlocked) onClick?.();
+            }}
+          >
+            <div className={"content"}>
               <p data-cy={baseCellDataCy(cellIndex, "cell")} className={"relative "}>
                 {value}
               </p>
-            </ErrorTooltipProvider>
-          )}
-        </div>
-      </div>
+            </div>
+          </div>
+        </ErrorTooltipProvider>
+      )}
     </td>
   );
   //#endregion

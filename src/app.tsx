@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import schedule from "./assets/devMode/schedule";
@@ -56,10 +56,14 @@ function App(): JSX.Element {
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
   );
 
-  const tabs: TabData[] = [
-    { label: "Plan", component: <SchedulePage editModeHandler={setEditMode} /> },
-    { label: "Zarządzanie", component: <ManagementPage /> },
-  ];
+  const tabs: TabData[] = useMemo(
+    () => [
+      { label: "Plan", component: <SchedulePage editModeHandler={setEditMode} /> },
+      { label: "Zarządzanie", component: <ManagementPage /> },
+    ],
+    [setEditMode]
+  );
+
   const fetchGlobalState = useCallback(() => {
     if (process.env.REACT_APP_DEV_MODE === "true") {
       const monthModel = cropScheduleDMToMonthDM(schedule as ScheduleDataModel);

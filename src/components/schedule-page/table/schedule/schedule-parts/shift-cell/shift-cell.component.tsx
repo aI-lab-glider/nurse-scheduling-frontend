@@ -14,7 +14,7 @@ import { CellDetails } from "../base-cell/cell-details-content.component";
 import { Popper } from "../base-cell/popper";
 import useComponentVisible from "../base-cell/use-component-visible";
 import { CellBlockableInputComponent } from "../cell-blockable-input.component";
-import { ErrorTooltipProvider } from "../error-tooltip.component";
+import { ErrorTooltipProvider } from "../error-tooltip-provider.component";
 import { useCellBackgroundHighlight } from "../hooks/use-cell-highlight";
 import { useCellSelection } from "../hooks/use-cell-selection";
 import { ShiftAutocompleteComponent } from "./shift-autocomplete.component";
@@ -39,8 +39,8 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
     onValueChange,
     onClick,
     onBlur,
-    monthNumber,
     verboseDate,
+    monthNumber,
     errorSelector = (_): ScheduleError[] => [],
     keepOn,
     hasNext,
@@ -68,6 +68,11 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
   const selectableItemRef = useCellSelection(options);
   const id = useCellBackgroundHighlight(options);
 
+  const hideInput = !isPointerOn || (isPointerOn && isBlocked);
+  const styles = usePopper(cellRef.current, cellDetailsPopperRef.current, {
+    placement: "right-start",
+  }).styles.popper;
+
   //  #region view
   return (
     <td
@@ -79,54 +84,61 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
         onBlur?.();
       }}
     >
-      <div
-        className="wrapContent"
-        onClick={(): void => {
-          if (!isBlocked) onClick?.();
-        }}
-      >
-        <Popper
-          ref={cellDetailsPopperRef}
-          className="cell-details-popper"
-          style={
-            usePopper(cellRef.current, cellDetailsPopperRef.current, {
-              placement: "right-start",
-            }).styles.popper
-          }
-          isOpen={isComponentVisible && isBlocked && value !== ""}
-        >
-          <CellDetails
-            index={cellIndex}
-            day={verboseDate?.date ?? 0}
-            month={monthNumber ?? new Date().getMonth()}
-            year={year}
-            shiftcode={value}
-            {...options}
-            close={(): void => setIsComponentVisible(false)}
-          />
-        </Popper>
-
-        <CellBlockableInputComponent
-          input={ShiftAutocompleteComponent}
-          onKeyDown={onKeyDown}
-          onValueChange={_onValueChange}
-          {...options}
-        />
+      {!hideInput && (
         <div
-          ref={cellRef}
-          className={"content " + hasNextClass + " " + keepOnClass}
-          data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
+          className="wrapContent"
+          onClick={(): void => {
+            if (!isBlocked) onClick?.();
+          }}
         >
-          {(!isPointerOn || (isPointerOn && isBlocked)) && (
-            <ErrorTooltipProvider errorSelector={errorSelector} className={"content"}>
-              <div className={"leftBorder leftBorderColor"} />
-              <p data-cy={baseCellDataCy(cellIndex, "cell")} className={"relative "}>
-                {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
-              </p>
-            </ErrorTooltipProvider>
-          )}
+          <CellBlockableInputComponent
+            input={ShiftAutocompleteComponent}
+            onKeyDown={onKeyDown}
+            onValueChange={_onValueChange}
+            {...options}
+          />
         </div>
-      </div>
+      )}
+
+      {hideInput && (
+        <ErrorTooltipProvider className="wrapContent" errorSelector={errorSelector}>
+          <div
+            className="wrapContent"
+            onClick={(): void => {
+              if (!isBlocked) onClick?.();
+            }}
+          >
+            <Popper
+              ref={cellDetailsPopperRef}
+              className="cell-details-popper"
+              style={styles}
+              isOpen={isComponentVisible && isBlocked && value !== ""}
+            >
+              <CellDetails
+                index={cellIndex}
+                day={verboseDate?.date ?? 0}
+                month={monthNumber ?? new Date().getMonth()}
+                year={year}
+                shiftcode={value}
+                {...options}
+                close={(): void => setIsComponentVisible(false)}
+              />
+            </Popper>
+            <div
+              ref={cellRef}
+              className={`content ${hasNextClass} ${keepOnClass}`}
+              data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
+            >
+              <>
+                <div className={"leftBorder leftBorderColor"} />
+                <p data-cy={baseCellDataCy(cellIndex, "cell")} className={"relative "}>
+                  {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
+                </p>
+              </>
+            </div>
+          </div>
+        </ErrorTooltipProvider>
+      )}
     </td>
   );
 }

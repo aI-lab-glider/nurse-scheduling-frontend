@@ -9,7 +9,7 @@ import {
   ScheduleError,
 } from "../../common-models/schedule-error.model";
 import { TranslationHelper } from "../../helpers/translations.helper";
-import { ErrorTooltipProvider } from "../schedule-page/table/schedule/schedule-parts/error-tooltip.component";
+import { ErrorTooltipProvider } from "../schedule-page/table/schedule/schedule-parts/error-tooltip-provider.component";
 
 export interface TimeTableCellOptions {
   value: VerboseDate;
@@ -43,24 +43,21 @@ function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.
 
   const errorSelector = useCallback(
     (scheduleErros: GroupedScheduleErrors): ScheduleError[] => {
-      const matchingErrorsByType = [
+      const matchingErrorTypes = [
         ...(scheduleErros[AlgorithmErrorCode.WorkerNumberDuringDay] ?? []),
         ...(scheduleErros[AlgorithmErrorCode.WorkerNumberDuringNight] ?? []),
       ];
-      return matchingErrorsByType.filter((error) => {
-        return (
-          (error.kind === AlgorithmErrorCode.WorkerNumberDuringNight ||
-            error.kind === AlgorithmErrorCode.WorkerNumberDuringDay) &&
-          error.day === value.date
-        );
-      });
+      return matchingErrorTypes.filter((error) => error.day === value.date);
     },
     [value.date]
   );
 
   return (
     <td className="timetableCell" id={getId()}>
-      <ErrorTooltipProvider className="timetableCell wrapper" errorSelector={errorSelector}>
+      <ErrorTooltipProvider
+        className="timetableCell timetable-error-tooltip"
+        errorSelector={errorSelector}
+      >
         <span>{TranslationHelper.weekDaysTranslations[value.dayOfWeek]}</span>
         <span className={circle}>
           <span className={today}>{value.date}</span>

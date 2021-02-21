@@ -36,7 +36,7 @@ export interface CellDataItem {
 }
 
 export function isCellDataItemArray(array: unknown[]): array is CellDataItem[] {
-  return (array[0] as CellDataItem).value !== undefined;
+  return array.length !== 0 && (array[0] as CellDataItem).value !== undefined;
 }
 
 export function toCellDataItemArray(array: unknown[]): CellDataItem[] {

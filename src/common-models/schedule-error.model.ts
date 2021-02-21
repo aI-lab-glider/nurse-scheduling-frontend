@@ -3,12 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ShiftCode } from "./shift-info.model";
 
-export type GroupedScheduleErrors = {
-  [key in ErrorCode]?: ScheduleError[];
-};
-
-export type ErrorCode = AlgorithmErrorCode | ParseErrorCode | InputFileErrorCode;
-
 export enum AlgorithmErrorCode {
   AlwaysAtLeastOneNurse = "AON",
   WorkerNumberDuringDay = "WND",
@@ -33,15 +27,6 @@ export enum NetworkErrorCode {
   NETWORK_ERROR = "NETWORK_ERROR",
 }
 
-export type ScheduleError = UnknownValueError | InputFileError | AlgorithmError | NetworkError;
-export type AlgorithmError =
-  | AlwaysAtLeastOneNurse
-  | WorkerNumberDuringDay
-  | WorkerNumberDuringNight
-  | DissalowedShiftSequence
-  | LackingLongBreak
-  | WorkerUnderTime
-  | WorkerOvertime;
 interface UnknownValueError {
   kind: ParseErrorCode.UNKNOWN_VALUE;
   actual: string;
@@ -58,6 +43,8 @@ interface InputFileError {
 export interface NetworkError {
   kind: NetworkErrorCode;
 }
+
+//#region  alghorithm errors
 
 export type DayTime = "MORNING" | "AFTERNOON" | "NIGHT";
 
@@ -101,3 +88,30 @@ export interface WorkerOvertime {
   hours: number;
   worker: string;
 }
+
+//#endregion
+
+export type AlgorithmError =
+  | AlwaysAtLeastOneNurse
+  | WorkerNumberDuringDay
+  | WorkerNumberDuringNight
+  | DissalowedShiftSequence
+  | LackingLongBreak
+  | WorkerUnderTime
+  | WorkerOvertime;
+
+export type ScheduleError = UnknownValueError | InputFileError | NetworkError | AlgorithmError;
+
+export type ErrorCode = ParseErrorCode | InputFileErrorCode;
+
+export type GroupedScheduleErrors = {
+  [key in ErrorCode]?: ScheduleError[];
+} & {
+  [AlgorithmErrorCode.AlwaysAtLeastOneNurse]?: AlwaysAtLeastOneNurse[];
+  [AlgorithmErrorCode.WorkerNumberDuringDay]?: WorkerNumberDuringDay[];
+  [AlgorithmErrorCode.WorkerNumberDuringNight]?: WorkerNumberDuringNight[];
+  [AlgorithmErrorCode.DissalowedShiftSequence]?: DissalowedShiftSequence[];
+  [AlgorithmErrorCode.LackingLongBreak]?: LackingLongBreak[];
+  [AlgorithmErrorCode.WorkerUnderTime]?: WorkerUnderTime[];
+  [AlgorithmErrorCode.WorkerOvertime]?: WorkerOvertime[];
+};

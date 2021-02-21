@@ -5,7 +5,7 @@ import React from "react";
 import { VerboseDate } from "../../../common-models/month-info.model";
 import { ShiftCode } from "../../../common-models/shift-info.model";
 import { WorkersCalendarCell } from "./worker-calendar-cell.component";
-import { useScheduleStyling } from "../../common-components/use-schedule-styling/use-schedule-styling";
+import { applyScheduleStyling } from "../../common-components/use-schedule-styling/use-schedule-styling";
 
 interface CalendarOptions {
   shiftsArr: [VerboseDate, ShiftCode][];
@@ -25,7 +25,7 @@ export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Ele
     daysToDisplay.push(dayOfWeekNames[i]);
   }
 
-  const data = useScheduleStyling(shiftsArr.map((x) => x[1]));
+  const data = applyScheduleStyling(shiftsArr.map((x) => x[1]));
 
   return (
     <>
@@ -39,8 +39,8 @@ export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Ele
             if (date.date === 1) {
               notCurrentMonth = !notCurrentMonth;
             }
-            if (cellData === "W") {
-              cellData = "" as ShiftCode;
+            if (value === "W") {
+              value = "" as ShiftCode;
             }
 
             return (
