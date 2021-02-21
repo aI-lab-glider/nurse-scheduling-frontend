@@ -16,7 +16,6 @@ export default function ManagementPage(): JSX.Element {
   const tabs: TabData[] = [
     { label: "PRACOWNICY", component: <WorkersTab /> },
     { label: "ZMIANY", component: <ShiftTab /> },
-    { label: "OGRANICZENIA", component: <ConstraintTab /> },
   ];
 
   return (
