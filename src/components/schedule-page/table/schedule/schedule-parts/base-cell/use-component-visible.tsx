@@ -4,18 +4,18 @@
 import { useState, useEffect, useRef, RefObject } from "react";
 
 interface ComponentVisibleInterface {
-  ref: RefObject<HTMLElement>;
+  componentContainer: RefObject<HTMLElement>;
   isComponentVisible: boolean;
   setIsComponentVisible: (prevState: boolean) => void;
 }
 
 export default function useComponentVisible(initialIsVisible: boolean): ComponentVisibleInterface {
   const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible);
-  const ref = useRef(null) as RefObject<HTMLElement>;
+  const componentContainer = useRef(null) as RefObject<HTMLElement>;
 
   useEffect((): { (): void } => {
     const handleClickOutside = (event): void => {
-      if (ref.current && !ref.current!.contains(event.target)) {
+      if (componentContainer.current && !componentContainer.current!.contains(event.target)) {
         setIsComponentVisible(false);
       }
     };
@@ -25,5 +25,5 @@ export default function useComponentVisible(initialIsVisible: boolean): Componen
     };
   });
 
-  return { ref, isComponentVisible, setIsComponentVisible };
+  return { componentContainer, isComponentVisible, setIsComponentVisible };
 }

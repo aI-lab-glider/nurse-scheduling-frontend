@@ -2,6 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
+import {
+  AlgorithmErrorCode,
+  GroupedScheduleErrors,
+  ScheduleError,
+} from "../../../../../../common-models/schedule-error.model";
 import { WorkerType } from "../../../../../../common-models/worker-info.model";
 import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
 import { ShiftCellComponent } from "../../schedule-parts/shift-cell/shift-cell.component";
@@ -10,6 +15,22 @@ import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-s
 
 export interface ShiftsSectionOptions extends Omit<BaseSectionOptions, "sectionKey"> {
   workerType: WorkerType;
+}
+
+function shiftSectionErrorSelector(
+  worker: string,
+  cellIndex: number,
+  scheduleErrors: GroupedScheduleErrors
+): ScheduleError[] {
+  const errors = [
+    ...(scheduleErrors[AlgorithmErrorCode.DissalowedShiftSequence]?.filter(
+      (error) => error.worker === worker && error.day === cellIndex
+    ) ?? []),
+    ...(scheduleErrors[AlgorithmErrorCode.LackingLongBreak]?.filter(
+      (error) => error.worker === worker && Math.floor(cellIndex / 7) === error.week
+    ) ?? []),
+  ];
+  return errors;
 }
 
 export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Element {
@@ -27,6 +48,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
           sectionKey={sectionKey}
           cellComponent={ShiftCellComponent}
           rowComponent={ShiftRowComponent}
+          errorSelector={shiftSectionErrorSelector}
         />
       </table>
     </>

@@ -13,6 +13,16 @@ interface BackendShiftModel extends Shift {
   is_working_shift: boolean;
 }
 
+function escapeJuliaIndexes(error: ScheduleError): ScheduleError {
+  const indexFields = ["day", "week"];
+  indexFields.forEach((field) => {
+    if (error[field]) {
+      error = { ...error, [field]: error[field] - 1 };
+    }
+  });
+  return error;
+}
+
 class Backend {
   axios: AxiosInstance;
 
@@ -39,6 +49,7 @@ class Backend {
       this.axios
         .post("/schedule_errors", schedule)
         .then((resp) => resp.data.map((el: BackendErrorObject) => ({ ...el, kind: el.code })))
+        .then((errors) => errors.map(escapeJuliaIndexes))
     );
   }
 
