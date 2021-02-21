@@ -25,6 +25,7 @@ import classNames from "classnames/bind";
 import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
 import WorkerDrawerComponent, { WorkerDrawerMode } from "./worker-drawer.component";
 import DeleteWorkerModalComponent from "../../common-components/modal/delete-worker-modal/delete-worker.modal.component";
+import { WorkingTimeHelper } from "../../namestable/working-time.helper";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -49,7 +50,7 @@ export default function WorkersTab(): JSX.Element {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof WorkerInfoModel>("name");
-  const { type, time, contractType, employmentTime, employmentTimeOther, civilTime } = useSelector(
+  const { type, time, contractType } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.employee_info
   );
   const [workerData, setWorkerData] = useState([] as WorkerInfoModel[]);
@@ -106,20 +107,6 @@ export default function WorkersTab(): JSX.Element {
             {ComparatorHelper.stableSort(workerData, order, orderBy).map((worker) => {
               const workerType = worker.type ?? WorkerType.NURSE;
 
-              let employmentTimeActual = "";
-              if (employmentTimeOther && contractType && employmentTime && civilTime) {
-                if (contractType[worker.name] === ContractType.EMPLOYMENT_CONTRACT) {
-                  if (employmentTime[worker.name] === "inne") {
-                    employmentTimeActual = employmentTimeOther[worker.name];
-                  } else {
-                    employmentTimeActual = employmentTime[worker.name];
-                  }
-                }
-                if (contractType[worker.name] === ContractType.CIVIL_CONTRACT) {
-                  employmentTimeActual = civilTime[worker.name] + " h";
-                }
-              }
-
               return (
                 <TableRow key={worker.name} className={classes.row}>
                   <TableCell className={classes.tableCell} data-cy="workerName">
@@ -136,9 +123,12 @@ export default function WorkersTab(): JSX.Element {
                     </span>
                   </TableCell>
                   <TableCell className={classes.tableCell} align="left">
-                    {ContractTypeHelper.translate((contractType ?? "")[worker.name])}{" "}
-                    {employmentTimeActual}
-                    {(!contractType || (contractType && !contractType[worker.name])) && "1"}
+                    {ContractTypeHelper.translate((contractType ?? "")[worker.name]) ||
+                      ((!contractType || (contractType && !contractType[worker.name])) &&
+                        "umowa o pracę")}{" "}
+                    {(contractType ?? "")[worker.name] === ContractType.CIVIL_CONTRACT
+                      ? time[worker.name] + " h"
+                      : WorkingTimeHelper.fromHoursToFraction(time[worker.name] * 168, 168)}
                   </TableCell>
                   <TableCell align="right">
                     <Button
