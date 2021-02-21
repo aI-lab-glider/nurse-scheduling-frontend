@@ -11,7 +11,7 @@ interface SchedulePageOptions {
   editModeHandler: (editMode: boolean) => void;
 }
 
-export function SchedulePage({editModeHandler}: SchedulePageOptions): JSX.Element {
+export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Element {
   const { setOpen: setDrawerOpen } = useJiraLikeDrawer();
   const ViewOnly = useCallback(
     (): JSX.Element => (
@@ -22,18 +22,17 @@ export function SchedulePage({editModeHandler}: SchedulePageOptions): JSX.Elemen
     [editModeHandler]
   );
 
-  function handleEditButton(): void {
-    editModeHandler(false);
-    setDrawerOpen(false);
-  }
-  const Edit = useCallback(
-    (): JSX.Element => (
+  const Edit = useCallback((): JSX.Element => {
+    function handleEditButton(): void {
+      editModeHandler(false);
+      setDrawerOpen(false);
+    }
+    return (
       <>
         <ScheduleEditPage closeEdit={handleEditButton} />
       </>
-    ),
-    [editModeHandler]
-  );
+    );
+  }, [editModeHandler, setDrawerOpen]);
 
   return (
     <>
