@@ -100,7 +100,10 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   return (
     <td
       ref={mergeRefs([selectableItemRef, componentContainer])}
-      className={classNames("mainCell", { selection: isSelected, blocked: isBlocked })}
+      className={classNames("mainCell", {
+        selection: isSelected || (isComponentVisible && isBlocked),
+        blocked: isBlocked,
+      })}
       onClick={(): void => toggleComponentVisibility()}
       id={id}
       onBlur={(): void => {
