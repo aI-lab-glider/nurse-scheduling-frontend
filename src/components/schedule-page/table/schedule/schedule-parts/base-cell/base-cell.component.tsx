@@ -130,7 +130,10 @@ export function BaseCellComponent({
   return (
     <td
       ref={mergeRefs([ref, drop])}
-      className={classNames("mainCell", { selection: isSelected, blocked: isBlocked })}
+      className={classNames("mainCell", {
+        selection: isSelected || (isComponentVisible && isBlocked),
+        blocked: isBlocked,
+      })}
       id={getId()}
       onClick={(): void => toggleComponentVisibility()}
       onBlur={(): void => {

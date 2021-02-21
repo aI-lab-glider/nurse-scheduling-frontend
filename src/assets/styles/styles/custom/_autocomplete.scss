@@ -25,6 +25,8 @@
   min-width: 250px;
 
   & li {
+    clear: both;
+    min-height: 25px;
     letter-spacing: 0.75px;
     &:hover {
       font-style: italic;
