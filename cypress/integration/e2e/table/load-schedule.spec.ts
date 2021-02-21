@@ -31,6 +31,7 @@ context("Load schedule", () => {
     cy.loadScheduleToMonth();
     cy.get("[data-cy=file-dropdown]").click();
     cy.get("[data-cy=export-schedule-button]").click();
+    cy.get("[data-cy=confirm-export-button]").click();
 
     cy.get("a[download]")
       .then(

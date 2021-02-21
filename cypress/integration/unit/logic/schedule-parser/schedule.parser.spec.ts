@@ -22,7 +22,7 @@ function fillWorkerInfo(
 }
 
 //#region data declaration
-const emptyRow = [""];
+//const emptyRow = [""];
 const dates = [28, 29, 30, 31, 1, 2, 3, 4, 5, 6];
 const nurseSection = [
   ["pielęgniarka 1", "DN", " ", " ", " ", "U", "U", "U", "U", "U", "D"],
