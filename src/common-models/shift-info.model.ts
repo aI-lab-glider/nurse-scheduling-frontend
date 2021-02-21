@@ -12,7 +12,101 @@ export interface Shift {
   isWorkingShift?: boolean;
 }
 
-export const shifts: { [id: string]: Shift } = {
+export enum ShiftCode {
+  RP = "RP",
+  RPN = "RPN",
+  N8 = "N8",
+  RN8 = "RN8",
+  DN8 = "DN8",
+  D1 = "D1",
+  D2 = "D2",
+  P1 = "P1",
+  R1 = "R1",
+  R = "R",
+  P = "P",
+  D = "D",
+  N = "N",
+  DN = "DN",
+  PN = "PN",
+  W = "W",
+  U = "U",
+  L4 = "L4",
+  K = "K",
+}
+export const SHIFTS: { [code in ShiftCode]: Shift } = {
+  RP: {
+    code: "RP",
+    name: "Rano popłudnie",
+    from: 7,
+    to: 19,
+    color: "FFD100",
+    isWorkingShift: true,
+  },
+  RPN: {
+    code: "RPN",
+    name: "Rano, popołudni, noc",
+    from: 7,
+    to: 7,
+    color: "FFD100",
+    isWorkingShift: true,
+  },
+  N8: {
+    code: "N8",
+    name: "Noc na 8 godzin",
+    from: 23,
+    to: 7,
+    color: "FFD100",
+    isWorkingShift: true,
+  },
+  RN8: {
+    code: "RN8",
+    name: "Noc na 8 godzin + Rano",
+    from: 23,
+    to: 15,
+    color: "FFD100",
+    isWorkingShift: true,
+  },
+  DN8: {
+    code: "DN8",
+    name: "Dzień + noc 8 godzin",
+    from: 23,
+    to: 19,
+    color: "FFD100",
+    isWorkingShift: true,
+  },
+  D1: {
+    code: "D1",
+    name: "Dzień 1",
+    from: 7,
+    to: 17,
+    color: "FFD100",
+    isWorkingShift: true,
+  },
+  D2: {
+    code: "D2",
+    name: "Dzień 2",
+    from: 7,
+    to: 16,
+    color: "FFD100",
+    isWorkingShift: true,
+  },
+  P1: {
+    code: "P1",
+    name: "Popupułudnie 1",
+    from: 15,
+    to: 21,
+    color: "FFD100",
+    isWorkingShift: true,
+  },
+  R1: {
+    code: "R1",
+    name: "Rano 1",
+    from: 7,
+    to: 13,
+    color: "FFD100",
+    isWorkingShift: true,
+  },
+
   R: { code: "R", name: "Rano", from: 7, to: 15, color: "FFD100", isWorkingShift: true },
   P: { code: "P", name: "Popołudnie", from: 15, to: 19, color: "00A3FF", isWorkingShift: true },
   D: { code: "D", name: "Dzień", from: 7, to: 19, color: "73B471", isWorkingShift: true },
@@ -51,19 +145,6 @@ export const shifts: { [id: string]: Shift } = {
     isWorkingShift: false,
   },
 };
-
-export enum ShiftCode {
-  R = "R",
-  P = "P",
-  D = "D",
-  N = "N",
-  DN = "DN",
-  PN = "PN",
-  W = "W",
-  U = "U",
-  L4 = "L4",
-  K = "K",
-}
 
 export interface ShiftInfoModel {
   [nurseName: string]: ShiftCode[];

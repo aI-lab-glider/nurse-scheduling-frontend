@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useContext } from "react";
 import { TranslationHelper } from "../../../../../../helpers/translations.helper";
-import { shifts } from "../../../../../../common-models/shift-info.model";
+import { SHIFTS as shifts } from "../../../../../../common-models/shift-info.model";
 import { MdClose } from "react-icons/md";
 import { ScheduleLogicContext } from "../../use-schedule-state";
 import { Sections } from "../../../../../../logic/providers/schedule-provider.model";

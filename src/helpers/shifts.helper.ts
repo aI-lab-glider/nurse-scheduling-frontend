@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { WorkerType } from "../common-models/worker-info.model";
-import { ShiftCode, ShiftInfoModel } from "../common-models/shift-info.model";
+import { Shift, ShiftCode, ShiftInfoModel, SHIFTS } from "../common-models/shift-info.model";
 import { ArrayHelper } from "./array.helper";
 import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
@@ -20,33 +20,25 @@ export class ShiftHelper {
     if (shiftsArray.length === 0) return [];
     for (let i = 0; i < shiftsArray[0].length; i++) {
       workersPerDays.push(
-        shiftsArray.reduce((a, b) => a + (this.shiftCodeToWorkTime(b[i]) ? 1 : 0), 0)
+        shiftsArray.reduce((a, b) => {
+          const shift = SHIFTS[b[i]];
+          return a + (this.shiftCodeToWorkTime(shift) ? 1 : 0);
+        }, 0)
       );
     }
     return workersPerDays;
   }
 
   public static isNotWorkingShift(shiftCode: ShiftCode): boolean {
-    return [ShiftCode.L4, ShiftCode.U].includes(shiftCode);
+    return ["L4", "U"].includes(shiftCode);
   }
 
-  public static shiftCodeToWorkTime(shiftCode: ShiftCode): number {
-    switch (shiftCode) {
-      case ShiftCode.R:
-        return 8;
-      case ShiftCode.P:
-        return 4;
-      case ShiftCode.D:
-        return 12;
-      case ShiftCode.N:
-        return 12;
-      case ShiftCode.DN:
-        return 24;
-      case ShiftCode.PN:
-        return 16;
-      default:
-        return 0;
+  public static shiftCodeToWorkTime(shift: Shift): number {
+    if (!shift.isWorkingShift) {
+      return 0;
     }
+    const duration = shift.from - shift.to;
+    return duration === 0 ? 24 : duration;
   }
 
   public static groupShiftsByWorkerType(
@@ -87,18 +79,21 @@ export class ShiftHelper {
       firstDayOfCurrentMonth,
       lastDayOfCurrentMonth + 1
     );
+
     const workingDaysCount = monthData.filter(
       (d) => VerboseDateHelper.isWorkingDay(d[1]!) && !this.isNotWorkingShift(d[0]!)
     ).length;
+
     const holidaySaturdaysCount = monthData.filter((d) =>
       VerboseDateHelper.isHolidaySaturday(d[1]!)
     ).length;
+
     const requiredHours =
       workerNorm * WORK_HOURS_PER_DAY * (workingDaysCount - holidaySaturdaysCount);
-    const actualHours = monthData.reduce(
-      (a, s) => a + workerNorm * this.shiftCodeToWorkTime(s[0]!),
-      0
-    );
+    const actualHours = monthData.reduce((a, s) => {
+      const shift = SHIFTS[s[0]];
+      return a + workerNorm * this.shiftCodeToWorkTime(shift!);
+    }, 0);
     const overtime = actualHours - requiredHours;
     return [requiredHours, actualHours, overtime];
   }
