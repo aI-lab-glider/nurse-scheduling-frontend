@@ -6,7 +6,7 @@ import {
   GroupedScheduleErrors,
   ScheduleError,
 } from "../../../../../../common-models/schedule-error.model";
-import { CellBlockableInputComponentOptions } from "../cell-blockable-input.component";
+import { CellInputOptions } from "../cell-blockable-input.component";
 import { UseCellBackgroundHighlightOptions } from "../hooks/use-cell-highlight";
 import { UseCellSelectionOptions } from "../hooks/use-cell-selection";
 
@@ -28,7 +28,7 @@ export interface PivotCell {
 export interface BaseCellOptions
   extends UseCellSelectionOptions,
     UseCellBackgroundHighlightOptions,
-    Omit<CellBlockableInputComponentOptions, "input"> {
+    Omit<CellInputOptions, "input" | "isVisible"> {
   rowIndex: number;
   value: string;
   isBlocked: boolean;

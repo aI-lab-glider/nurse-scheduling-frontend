@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import classNames from "classnames/bind";
-import React, { useRef } from "react";
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import mergeRefs from "react-merge-refs";
 import { usePopper } from "react-popper";
 import { useSelector } from "react-redux";
@@ -13,7 +13,7 @@ import { baseCellDataCy, BaseCellOptions } from "../base-cell/base-cell.models";
 import { CellDetails } from "../base-cell/cell-details-content.component";
 import { Popper } from "../base-cell/popper";
 import useComponentVisible from "../base-cell/use-component-visible";
-import { CellBlockableInputComponent } from "../cell-blockable-input.component";
+import { CellInput } from "../cell-blockable-input.component";
 import { ErrorTooltipProvider } from "../error-tooltip-provider.component";
 import { useCellBackgroundHighlight } from "../hooks/use-cell-highlight";
 import { useCellSelection } from "../hooks/use-cell-selection";
@@ -28,7 +28,7 @@ interface ShiftCellOptions extends BaseCellOptions {
   hasNext?: boolean;
 }
 
-export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
+export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   const {
     cellIndex,
     value,
@@ -49,7 +49,9 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
   const cellRef = useRef<HTMLDivElement>(null);
+
   const cellDetailsPopperRef = useRef<HTMLDivElement>(null);
+
   const { componentContainer, isComponentVisible, setIsComponentVisible } = useComponentVisible(
     false
   );
@@ -58,6 +60,9 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
     setIsComponentVisible(!isComponentVisible);
   }
 
+  const isEditMode = useSelector(
+    (state: ApplicationStateModel) => state.actualState.mode === "edit"
+  );
   const shiftCode = getShiftCode(value);
   const keepOnClass = "keepOn" + keepOn + shiftCode;
   const hasNextClass = "hasNext" + hasNext;
@@ -68,10 +73,28 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
   const selectableItemRef = useCellSelection(options);
   const id = useCellBackgroundHighlight(options);
 
-  const hideInput = !isPointerOn || (isPointerOn && isBlocked);
-  const styles = usePopper(cellRef.current, cellDetailsPopperRef.current, {
+  const [showInput, setShowInput] = useState(isPointerOn && !isBlocked);
+  useEffect(() => {
+    setShowInput(isPointerOn && !isBlocked);
+  }, [isPointerOn, isBlocked]);
+
+  const styles = usePopper(cellRef.current, cellDetailsPopperRef?.current, {
     placement: "right-start",
   }).styles.popper;
+
+  const WrapContentDiv = useCallback(
+    ({ children }: { children: ReactNode }) => (
+      <div
+        className="wrapContent"
+        onClick={(): void => {
+          if (!isBlocked) onClick?.();
+        }}
+      >
+        {children}
+      </div>
+    ),
+    [isBlocked, onClick]
+  );
 
   //  #region view
   return (
@@ -84,61 +107,64 @@ export function ShiftCellComponent(options: ShiftCellOptions): JSX.Element {
         onBlur?.();
       }}
     >
-      {!hideInput && (
-        <div
-          className="wrapContent"
-          onClick={(): void => {
-            if (!isBlocked) onClick?.();
-          }}
-        >
-          <CellBlockableInputComponent
+      {showInput && (
+        <WrapContentDiv>
+          <CellInput
             input={ShiftAutocompleteComponent}
             onKeyDown={onKeyDown}
             onValueChange={_onValueChange}
             {...options}
           />
-        </div>
+        </WrapContentDiv>
       )}
-
-      {hideInput && (
-        <ErrorTooltipProvider className="wrapContent" errorSelector={errorSelector}>
+      <ErrorTooltipProvider
+        className="wrapContent"
+        errorSelector={errorSelector}
+        showTooltip={!showInput}
+      >
+        <WrapContentDiv>
           <div
-            className="wrapContent"
-            onClick={(): void => {
-              if (!isBlocked) onClick?.();
-            }}
+            ref={cellRef}
+            className={`content ${hasNextClass} ${keepOnClass}`}
+            data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
           >
-            <Popper
-              ref={cellDetailsPopperRef}
-              className="cell-details-popper"
-              style={styles}
-              isOpen={isComponentVisible && isBlocked && value !== ""}
-            >
-              <CellDetails
-                index={cellIndex}
-                day={verboseDate?.date ?? 0}
-                month={monthNumber ?? new Date().getMonth()}
-                year={year}
-                shiftcode={value}
-                {...options}
-                close={(): void => setIsComponentVisible(false)}
-              />
-            </Popper>
-            <div
-              ref={cellRef}
-              className={`content ${hasNextClass} ${keepOnClass}`}
-              data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
-            >
-              <>
-                <div className={"leftBorder leftBorderColor"} />
-                <p data-cy={baseCellDataCy(cellIndex, "cell")} className={"relative "}>
-                  {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
-                </p>
-              </>
-            </div>
+            <div className={"leftBorder leftBorderColor"} />
+            <p data-cy={baseCellDataCy(cellIndex, "cell")} className={"relative "}>
+              {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
+            </p>
           </div>
-        </ErrorTooltipProvider>
+        </WrapContentDiv>
+      </ErrorTooltipProvider>
+      {!isEditMode && (
+        <Popper
+          ref={cellDetailsPopperRef}
+          className="cell-details-popper"
+          style={styles}
+          isOpen={isComponentVisible && isBlocked && value !== ""}
+        >
+          <CellDetails
+            index={cellIndex}
+            day={verboseDate?.date ?? 0}
+            month={monthNumber ?? new Date().getMonth()}
+            year={year}
+            shiftcode={value}
+            {...options}
+            close={(): void => setIsComponentVisible(false)}
+          />
+        </Popper>
       )}
+      )
     </td>
   );
 }
+
+export const ShiftCellComponent = React.memo(ShiftCellComponentF, (prev, next) => {
+  return (
+    prev.value === next.value &&
+    prev.isPointerOn === next.isPointerOn &&
+    prev.isSelected === next.isSelected &&
+    prev.isBlocked === next.isBlocked &&
+    prev.keepOn === next.keepOn &&
+    prev.hasNext === next.hasNext
+  );
+});

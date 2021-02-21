@@ -4,7 +4,7 @@
 import classNames from "classnames/bind";
 import React from "react";
 import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
-import { CellBlockableInputComponent } from "../cell-blockable-input.component";
+import { CellInput } from "../cell-blockable-input.component";
 import { ErrorTooltipProvider } from "../error-tooltip-provider.component";
 import { useCellBackgroundHighlight } from "../hooks/use-cell-highlight";
 import { useCellSelection } from "../hooks/use-cell-selection";
@@ -26,7 +26,7 @@ export function BaseCellComponent(options: BaseCellOptions): JSX.Element {
   const selectableItemRef = useCellSelection(options);
   const id = useCellBackgroundHighlight(options);
 
-  const hideInput = !isPointerOn || (isPointerOn && isBlocked);
+  const showInput = isPointerOn && !isBlocked;
   //  #region view
   return (
     <td
@@ -35,33 +35,28 @@ export function BaseCellComponent(options: BaseCellOptions): JSX.Element {
       id={id}
       onBlur={onBlur}
     >
-      {!hideInput && (
+      <ErrorTooltipProvider
+        errorSelector={errorSelector}
+        className="content"
+        showTooltip={!showInput}
+      >
         <div
           className="wrapContent"
           onClick={(): void => {
             if (!isBlocked) onClick?.();
           }}
         >
-          <CellBlockableInputComponent input={BaseCellInputComponent} {...options} />
-        </div>
-      )}
+          <CellInput input={BaseCellInputComponent} {...options} isVisible={showInput} />
 
-      {hideInput && (
-        <ErrorTooltipProvider errorSelector={errorSelector} className={"content"}>
-          <div
-            className="wrapContent"
-            onClick={(): void => {
-              if (!isBlocked) onClick?.();
-            }}
-          >
-            <div className={"content"}>
+          {!showInput && (
+            <div className="content">
               <p data-cy={baseCellDataCy(cellIndex, "cell")} className={"relative "}>
                 {value}
               </p>
             </div>
-          </div>
-        </ErrorTooltipProvider>
-      )}
+          )}
+        </div>
+      </ErrorTooltipProvider>
     </td>
   );
   //#endregion

@@ -4,12 +4,16 @@
 
 import classNames from "classnames/bind";
 import React, { ReactNode, useRef, useState } from "react";
+import { usePopper } from "react-popper";
 import { useSelector } from "react-redux";
 import {
   GroupedScheduleErrors,
   ScheduleError,
 } from "../../../../../common-models/schedule-error.model";
+import { ErrorMessageHelper } from "../../../../../helpers/error-message.helper";
 import { ApplicationStateModel } from "../../../../../state/models/application-state.model";
+import ErrorListItem from "../../../validation-drawer/error-list-item.component";
+import { Popper } from "./base-cell/popper";
 
 export interface ErrorTooltipOptions {
   children: ReactNode;
@@ -18,9 +22,10 @@ export interface ErrorTooltipOptions {
   showErrorTitle?: boolean;
   id?: string;
   tooltipClassname?: string;
+  showTooltip?: boolean;
 }
 
-export function ErrorTooltipProviderF({
+export function ErrorTooltipProvider({
   showErrorTitle,
   children,
   errorSelector,
@@ -32,49 +37,49 @@ export function ErrorTooltipProviderF({
     errorSelector(state.actualState.scheduleErrors)
   );
   const errorTriangle = useRef<HTMLDivElement>(null);
-  const container = useRef<HTMLDivElement>(null); // TODO TASK-182
+  const container = useRef<HTMLDivElement>(null);
 
-  // TODO TASK-182
-  // const tooltipRef = useRef<HTMLDivElement>(null);
-  // const [isToolTipOpen, setToolTipOpen] = useState(false);
-  // const { styles, attributes } = usePopper(container.current, tooltipRef.current, {
-  //   placement: "right-start",
-  // });
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const [isToolTipOpen, setToolTipOpen] = useState(false);
+  const { styles, attributes } = usePopper(
+    container.current,
+    isToolTipOpen && errors.length !== 0 ? tooltipRef.current : null,
+    {
+      placement: "right-start",
+    }
+  );
 
   const [isFixed, setIsFixed] = useState(false);
 
-  // TODO TASK-182
-  // function showErrorTooltip(): void {
-  //   setToolTipOpen(true);
-  // }
+  function showErrorTooltip(): void {
+    setToolTipOpen(true);
+  }
 
-  // function hideErrorTooltip(ignoreFixed = false): void {
-  //   if (!isFixed || (ignoreFixed && isFixed)) {
-  //     setToolTipOpen(false);
-  //     setIsFixed(false);
-  //   }
-  // }
+  function hideErrorTooltip(ignoreFixed = false): void {
+    if (!isFixed || (ignoreFixed && isFixed)) {
+      setToolTipOpen(false);
+      setIsFixed(false);
+    }
+  }
 
   function handleTriangleClick(event: React.MouseEvent<HTMLHRElement, MouseEvent>): void {
     event.stopPropagation();
     if (!isFixed) {
       setIsFixed(true);
     } else {
-      // hideErrorTooltip(true);
+      hideErrorTooltip(true);
     }
   }
 
   return (
     <>
-      {/* // TODO TASK-182 
-
       <Popper
         ref={tooltipRef}
         className="errorTooltip"
         isOpen={isToolTipOpen}
         {...attributes.popper}
         style={{
-          ...styles.popper,
+          ...(isToolTipOpen && errors.length !== 0 ? styles.popper : {}),
         }}
         onMouseLeave={(): void => hideErrorTooltip(false)}
         onClick={handleTriangleClick}
@@ -88,7 +93,7 @@ export function ErrorTooltipProviderF({
             showTitle={showErrorTitle}
           />
         ))}
-      </Popper> */}
+      </Popper>
 
       <div
         id={id}
@@ -97,8 +102,8 @@ export function ErrorTooltipProviderF({
         style={{
           position: "relative",
         }}
-        // onMouseEnter={showErrorTooltip}
-        // onMouseLeave={(): void => hideErrorTooltip(false)}
+        onMouseEnter={showErrorTooltip}
+        onMouseLeave={(): void => hideErrorTooltip(false)}
       >
         {errors.length !== 0 && (
           <span
@@ -112,8 +117,3 @@ export function ErrorTooltipProviderF({
     </>
   );
 }
-
-export const ErrorTooltipProvider = React.memo(ErrorTooltipProviderF, () => {
-  const areTooltipsSame = true;
-  return areTooltipsSame;
-});

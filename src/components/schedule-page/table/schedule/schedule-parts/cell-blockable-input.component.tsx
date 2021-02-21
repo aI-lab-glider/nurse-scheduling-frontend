@@ -9,21 +9,19 @@ export enum CellManagementKeys {
   Escape = "Escape",
 }
 
-export interface CellBlockableInputComponentOptions {
-  isPointerOn: boolean;
-  isBlocked: boolean;
+export interface CellInputOptions {
   input: React.FC<BaseCellInputOptions>;
   onValueChange?: (value: string) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  isVisible?: boolean;
 }
 
-export function CellBlockableInputComponent({
-  isBlocked,
-  isPointerOn,
+export function CellInput({
   input: InputComponent,
   onValueChange,
   onKeyDown,
-}: CellBlockableInputComponentOptions): JSX.Element {
+  isVisible = true,
+}: CellInputOptions): JSX.Element {
   function _onKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
     if (e.key === CellManagementKeys.Enter) {
       onValueChange?.(e.currentTarget.value);
@@ -34,7 +32,7 @@ export function CellBlockableInputComponent({
 
   return (
     <>
-      {isPointerOn && !isBlocked && (
+      {isVisible && (
         <InputComponent
           className="cell-input"
           onValueChange={(value): void => onValueChange?.(value)}

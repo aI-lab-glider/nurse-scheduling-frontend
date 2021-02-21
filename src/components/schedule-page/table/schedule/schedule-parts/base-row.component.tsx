@@ -3,13 +3,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useContext } from "react";
 import { ScheduleError } from "../../../../../common-models/schedule-error.model";
-import { ArrayHelper } from "../../../../../helpers/array.helper";
-import { DataRowHelper } from "../../../../../helpers/data-row.helper";
 import { ScheduleLogicContext } from "../use-schedule-state";
 import { BaseCellComponent } from "./base-cell/base-cell.component";
 import { baseRowDataCy, BaseRowOptions, toCellDataItemArray } from "./base-row.models";
 
-export function BaseRowComponentF(options: BaseRowOptions): JSX.Element {
+export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
   const {
     rowIndex,
     dataRow,
@@ -79,11 +77,3 @@ export function BaseRowComponentF(options: BaseRowOptions): JSX.Element {
     </tr>
   );
 }
-
-export const BaseRowComponent = React.memo(BaseRowComponentF, (prev, next) => {
-  return (
-    DataRowHelper.areDataRowsEqual(prev.dataRow, next.dataRow) &&
-    ArrayHelper.arePrimitiveArraysEqual(prev.selection ?? [], next.selection ?? []) &&
-    prev.pointerPosition === next.pointerPosition
-  );
-});
