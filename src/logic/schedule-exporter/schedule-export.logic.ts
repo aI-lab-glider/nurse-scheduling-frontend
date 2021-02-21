@@ -6,7 +6,12 @@ import xlsx from "exceljs";
 import { ShiftCode } from "../../common-models/shift-info.model";
 import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
 import { WorkerType } from "../../common-models/worker-info.model";
-import { ChildrenSectionKey, MetaDataRowLabel, MetaDataSectionKey } from "../section.model";
+import {
+  ChildrenSectionKey,
+  ExtraWorkersSectionKey,
+  MetaDataRowLabel,
+  MetaDataSectionKey,
+} from "../section.model";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { ColorHelper } from "../../helpers/colors/color.helper";
 import { Color } from "../../helpers/colors/color.model";
@@ -18,21 +23,35 @@ import { MetadataLogic } from "../schedule-logic/metadata.logic";
 const EMPTY_ROW = Array(100).fill("");
 
 export class ScheduleExportLogic {
-  constructor(private scheduleModel: ScheduleDataModel) {}
+  constructor(
+    private scheduleModel: ScheduleDataModel,
+    private overtimeExport: boolean = true,
+    private extraWorkersExport?: boolean
+  ) {}
   static readonly WORKSHEET_NAME = "grafik";
   public formatAndSave(filename: string): void {
     const [workbook, workSheet] = this.createWorkArea();
     const headerRow = this.createHeader(this.scheduleModel);
     const datesSection = this.createDatesSection(this.scheduleModel);
+    const extraWorkersSection = this.createExtraWorkersSection(this.scheduleModel);
     const childrenInfoSection = this.createChildrenInfoSection(this.scheduleModel);
     const overtimeInfoHeader = this.createWorkHoursInfoHeader(childrenInfoSection[0].length);
     const [nurseShifts, babysitterShifts] = this.createShiftsSections(this.scheduleModel);
-    const schedule = [
-      headerRow,
-      ...datesSection,
-      EMPTY_ROW,
-      ...childrenInfoSection,
-      overtimeInfoHeader,
+    const schedule: (
+      | string[]
+      | (number | ExtraWorkersSectionKey | MetaDataSectionKey | ChildrenSectionKey)[]
+    )[] = [headerRow, ...datesSection];
+    if (this.extraWorkersExport) {
+      schedule.push(...extraWorkersSection);
+    } else {
+      schedule.push(EMPTY_ROW);
+    }
+    schedule.push(...childrenInfoSection);
+    if (this.overtimeExport) {
+      schedule.push(overtimeInfoHeader);
+    }
+
+    schedule.push(
       ...nurseShifts,
       EMPTY_ROW,
       ...babysitterShifts,
@@ -40,8 +59,9 @@ export class ScheduleExportLogic {
       EMPTY_ROW,
       EMPTY_ROW,
       EMPTY_ROW,
-      EMPTY_ROW,
-    ];
+      EMPTY_ROW
+    );
+
     this.addStyles(workSheet, schedule);
     this.saveToFile(workbook, filename);
   }
@@ -125,8 +145,12 @@ export class ScheduleExportLogic {
       const shiftsRow: string[] = [
         key,
         ...scheduleModel.shifts[key]?.map((s) => (s === ShiftCode.W ? "" : s)),
-        ...shiftInfoLogics[category].calculateWorkerHourInfo(key).map((e) => e.toString()),
       ];
+      if (this.overtimeExport) {
+        shiftsRow.push(
+          ...shiftInfoLogics[category].calculateWorkerHourInfo(key).map((e) => e.toString())
+        );
+      }
       grouped[category].push(shiftsRow);
     });
     return [grouped[WorkerType.NURSE], grouped[WorkerType.OTHER]];
@@ -162,7 +186,16 @@ export class ScheduleExportLogic {
     header[startIndex + 2] = TranslationHelper.workHoursInfoHeader.overtime;
     return header;
   }
-
+  private createExtraWorkersSection(
+    scheduleModel: ScheduleDataModel
+  ): (number | ExtraWorkersSectionKey)[][] {
+    return [
+      [
+        ExtraWorkersSectionKey.ExtraWorkersCount,
+        ...(scheduleModel?.month_info?.extra_workers || []),
+      ],
+    ];
+  }
   private createDatesSection(scheduleModel: ScheduleDataModel): (number | MetaDataSectionKey)[][] {
     return [[MetaDataSectionKey.MonthDays, ...(scheduleModel?.month_info?.dates || [])]];
   }

@@ -34,22 +34,27 @@ const BlueCheckBox = withStyles({
 
 export default function ExportModal(options: ExportModalComponent): JSX.Element {
   const { setOpen, open, model } = options;
-  const [exportMode, setexportMode] = React.useState("XSLX");
+  const [exportMode, setexportMode] = React.useState("XLSX");
   const handleClose = (): void => {
     setOpen(false);
   };
-  const DEFAULT_FILENAME = "grafik.xlsx";
-  const exportExtensions = {
-    xslx: (): void => {
-      new ScheduleExportLogic(model).formatAndSave(DEFAULT_FILENAME);
-    },
-  };
+  const date = new Date();
+  const DEFAULT_FILENAME = `${date.getDate()}_${date.getMonth() + 1}_${date.getFullYear()}.xlsx`;
+
   const [exportOptions, setExportOptions] = React.useState({
-    extraWorkers: { value: false, label: "dzienni pracownicy" },
-    overtime: { value: false, label: "nadgodzinny" },
-    gray: { value: false, label: "bez koloru" },
+    extraWorkers: { value: true, label: "dzienni pracownicy" },
+    overtime: { value: true, label: "nadgodzinny" },
   });
 
+  const exportExtensions = {
+    xlsx: (): void => {
+      new ScheduleExportLogic(
+        model,
+        exportOptions.overtime.value,
+        exportOptions.extraWorkers.value
+      ).formatAndSave(DEFAULT_FILENAME);
+    },
+  };
   const handleExport = (): void => {
     exportExtensions[exportMode.toLowerCase()]();
     setOpen(false);
@@ -90,12 +95,14 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
     <div>
       <div style={{ display: "flex", msFlexDirection: "row" }}>
         <p className="label">Format pliku: </p>
-        <DropdownButtons
-          buttons={btnData}
-          mainLabel={exportMode}
-          buttonVariant="secondary"
-          variant="extension"
-        />
+        <div style={{ top: "50%", marginTop: "-15px" }}>
+          <DropdownButtons
+            buttons={btnData}
+            mainLabel={exportMode}
+            buttonVariant="secondary"
+            variant="extension"
+          />
+        </div>
       </div>
       <div>
         <p className="label">Opcje pliku: </p>
