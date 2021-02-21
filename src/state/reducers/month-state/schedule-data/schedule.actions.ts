@@ -22,6 +22,7 @@ export enum ScheduleActionType {
   ADD_NEW_WORKER = "ADD_NEW_WORKER",
   MODIFY_WORKER = "MODIFY_WORKER",
   DELETE_WORKER = "DELETE_WORKER",
+  CLEAN_ERRORS = "CLEAN_ERRORS",
 }
 
 export function createActionName(name: string, action: ScheduleActionType): string {
