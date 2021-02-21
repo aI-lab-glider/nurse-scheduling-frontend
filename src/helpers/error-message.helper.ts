@@ -83,7 +83,7 @@ export class ErrorMessageHelper {
         title = `${error.worker}`;
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
-        message = `Niedozwolona wartość zmiany: "${error.actual}" dla pracownika  ${error.worker} w dniu ${error.day}. Przyjęto, że zmiana to wolne.`;
+        message = `Nieznana wartość zmiany: "${error.actual}" dla pracownika  ${error.worker} w dniu ${error.day}. Przyjęto, że zmiana to wolne.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
         title = `${error.worker}`;
         break;

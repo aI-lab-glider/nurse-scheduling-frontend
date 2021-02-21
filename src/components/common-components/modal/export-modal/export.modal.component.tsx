@@ -92,7 +92,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   };
 
   const body = (
-    <div>
+    <div style={{ paddingLeft: "15px" }}>
       <div style={{ display: "flex", msFlexDirection: "row" }}>
         <p className="label">Format pliku: </p>
         <div style={{ top: "50%", marginTop: "-15px" }}>
@@ -128,7 +128,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   return (
     <div>
       <DefaultModal
-        height={500}
+        width={500}
         open={open}
         setOpen={setOpen}
         title={title}

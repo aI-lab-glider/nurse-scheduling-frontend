@@ -44,7 +44,14 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
 
   return (
     <div>
-      <DefaultModal open={open} setOpen={setOpen} title={title} body={body} footer={footer} />
+      <DefaultModal
+        open={open}
+        setOpen={setOpen}
+        title={title}
+        body={body}
+        footer={footer}
+        height={1400}
+      />
     </div>
   );
 }

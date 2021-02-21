@@ -11,6 +11,7 @@ import { ShiftsProvider } from "../providers/shifts-provider.model";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { WorkerType, WorkerTypeHelper } from "../../common-models/worker-info.model";
+import { StringHelper } from "../../helpers/string.helper";
 
 export class ShiftsInfoParser extends ShiftsProvider {
   private _sectionRows: { [key: string]: DataRowParser } = {};
@@ -52,7 +53,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
 
         const personel = Array<string>();
 
-        const name = personelRow[0];
+        const name = StringHelper.capitalizeEach(personelRow[0].toLowerCase(), " ");
         personel.push(name);
         for (let i = 0; i < this.metaData.dayCount; i++) {
           const b = slicedPersonelRow[i];

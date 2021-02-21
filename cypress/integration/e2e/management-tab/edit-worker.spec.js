@@ -8,7 +8,7 @@ context("Tab 'zarządzanie'", () => {
   beforeEach(() => {
     cy.loadScheduleToMonth();
     cy.contains("Zarządzanie").click();
-    cy.contains("opiekunka 1").parent().contains("Edytuj").click();
+    cy.contains("Opiekunka 1").parent().contains("Edytuj").click();
   });
 
   describe("Edit worker", () => {
@@ -19,7 +19,7 @@ context("Tab 'zarządzanie'", () => {
     });
 
     it("Should be able to edit the name", () => {
-      cy.contains("opiekunka 1").get("input").clear().type("Ala Makota");
+      cy.contains("Opiekunka 1").get("input").clear().type("Ala Makota");
       cy.get('[value="Ala Makota"]').should("be.visible");
     });
 

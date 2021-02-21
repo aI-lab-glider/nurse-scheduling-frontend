@@ -62,13 +62,13 @@ context("Display schedule", () => {
   });
 
   it("Should be able to read name and surname of worker", () => {
-    cy.get(".nametable").children().eq(0).children().eq(0).contains("pielęgniarka 1");
+    cy.get(".nametable").children().eq(0).children().eq(0).contains("Pielęgniarka 1");
 
-    cy.get(".nametable").children().eq(0).children().eq(4).contains("pielęgniarka 5");
+    cy.get(".nametable").children().eq(0).children().eq(4).contains("Pielęgniarka 5");
 
-    cy.get(".nametable").children().eq(1).children().eq(1).contains("opiekunka 10");
+    cy.get(".nametable").children().eq(1).children().eq(1).contains("Opiekunka 10");
 
-    cy.get(".nametable").children().eq(1).children().eq(8).contains("opiekunka 8");
+    cy.get(".nametable").children().eq(1).children().eq(8).contains("Opiekunka 8");
   });
 
   const shiftCodes = [
