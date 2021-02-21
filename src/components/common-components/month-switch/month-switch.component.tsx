@@ -12,7 +12,7 @@ export function MonthSwitchComponent(): JSX.Element {
   const actualMonth = useActualMonth();
   const dispatch = useDispatch();
   return (
-    <div id="month-switch">
+    <div id="month-switch" className="month-switch-container">
       {actualMonth && (
         <div className="switch-container">
           <IconButton className="arrow-button" id="month-switch" data-cy="switch-prev-month">
