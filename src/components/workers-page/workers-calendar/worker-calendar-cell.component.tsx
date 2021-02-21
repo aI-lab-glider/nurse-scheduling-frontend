@@ -11,6 +11,7 @@ interface CellOptions {
   shift: ShiftCode;
   hasNext: boolean;
   notCurrentMonth: boolean;
+  workersCalendar: boolean;
 }
 
 export function WorkersCalendarCell(params: CellOptions): JSX.Element {
@@ -19,12 +20,14 @@ export function WorkersCalendarCell(params: CellOptions): JSX.Element {
   const keepOn = "keepOn" + params.keepOn;
   const hasNext = "hasNext" + params.hasNext;
   const notCurrentMonth = "notCurrentMonth" + params.notCurrentMonth;
+  const workersCalendar =
+    params.keepOn || params.hasNext ? "" : "_workersCalendar" + params.workersCalendar;
 
   return (
     <>
       <div className={"workersCalendarCell"}>
         <div className={"TopCellPart " + notCurrentMonth}>{date!["date"]}</div>
-        <div className={"BottomCellPart " + keepOn + shift + " " + hasNext}>
+        <div className={"BottomCellPart " + keepOn + workersCalendar + shift + " " + hasNext}>
           <div className={"leftBorder leftBorderColor"} />
           <p>{params.keepOn ? void 0 : shift}</p>
         </div>

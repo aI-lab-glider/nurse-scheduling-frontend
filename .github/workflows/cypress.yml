@@ -32,7 +32,11 @@ jobs:
               parallel: true
               start: npm start
               browser: electron
-              headless: true
+              # Headless mode should be disabled, because locally we run tests with UI,
+              # so we should test it in the same environment. Otherwise, we can get 
+              # non deterministic behaviour when tests passes locally, but not remotely
+              # https://github.com/cypress-io/cypress/issues/1297#issuecomment-365011845
+              headless: false
           env:
               CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

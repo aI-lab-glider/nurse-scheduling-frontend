@@ -4,6 +4,7 @@
 import { DataRow } from "./data-row";
 import { ExtraWorkersSectionKey } from "../section.model";
 import { ExtraWorkersInfoProvider } from "../providers/extra-workers-info-provider.model";
+import { ScheduleError } from "../../common-models/schedule-error.model";
 
 export class ExtraWorkersLogic implements ExtraWorkersInfoProvider {
   private extraWorkersInfoAsDataRows: { [key: string]: DataRow } = {};
@@ -34,5 +35,13 @@ export class ExtraWorkersLogic implements ExtraWorkersInfoProvider {
       return true;
     }
     return false;
+  }
+
+  get errors(): ScheduleError[] {
+    return [];
+  }
+
+  public get workersCount(): number {
+    return this.sectionData.length;
   }
 }

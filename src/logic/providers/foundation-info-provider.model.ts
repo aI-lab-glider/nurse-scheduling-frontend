@@ -6,19 +6,26 @@ import { ShiftHelper } from "../../helpers/shifts.helper";
 import { ChildrenInfoProvider } from "./children-info-provider.model";
 import { ExtraWorkersInfoProvider } from "./extra-workers-info-provider.model";
 import { Sections } from "./schedule-provider.model";
-import { ShiftsProvider } from "./shifts-provider.model";
+import { ScheduleError } from "../../common-models/schedule-error.model";
 
 export interface FoundationInfoOptions extends Pick<Sections, "NurseInfo" | "BabysitterInfo"> {
-  NurseInfo: ShiftsProvider;
-  BabysitterInfo: ShiftsProvider;
   ChildrenInfo: ChildrenInfoProvider;
   ExtraWorkersInfo: ExtraWorkersInfoProvider;
 }
 
 export abstract class FoundationInfoProvider {
+  get errors(): ScheduleError[] {
+    return [
+      ...this.sections.NurseInfo.errors,
+      ...this.sections.BabysitterInfo.errors,
+      ...this.sections.ChildrenInfo.errors,
+      ...this.sections.ExtraWorkersInfo.errors,
+    ];
+  }
   get childrenInfo(): number[] {
     return this.sections.ChildrenInfo.registeredChildrenNumber;
   }
+
   get extraWorkersInfo(): number[] {
     return this.sections.ExtraWorkersInfo.extraWorkers;
   }
@@ -27,6 +34,14 @@ export abstract class FoundationInfoProvider {
     if (type === WorkerType.NURSE) {
       return ShiftHelper.getWorkersCount(this.sections.NurseInfo.workerShifts);
     } else return ShiftHelper.getWorkersCount(this.sections.BabysitterInfo.workerShifts);
+  }
+
+  getAllWorkersNumber(): number {
+    return (
+      this.sections.NurseInfo.workersCount +
+      this.sections.BabysitterInfo.workersCount +
+      this.sections.ExtraWorkersInfo.workersCount
+    );
   }
 
   constructor(protected sections: FoundationInfoOptions) {}

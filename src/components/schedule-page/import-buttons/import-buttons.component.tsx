@@ -19,7 +19,7 @@ import ParseErrorModal from "../../common-components/modal/error-modal/errors.mo
 
 export function ImportButtonsComponent(): JSX.Element {
   const DEFAULT_FILENAME = "grafik.xlsx";
-  const { monthModel, setSrcFile, scheduleErrors, errorOccurred } = useScheduleConverter();
+  const { monthModel, setSrcFile, scheduleErrors } = useScheduleConverter();
   const fileUpload = useRef<HTMLInputElement>(null);
 
   const stateScheduleModel = useSelector(
@@ -41,7 +41,7 @@ export function ImportButtonsComponent(): JSX.Element {
   const btnData = [btnData1, btnData2];
   useEffect(() => {
     if (monthModel) {
-      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel);
+      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel, true);
       scheduleDipatcher(action);
     } else if (scheduleErrors) {
       setOpen(true);
@@ -51,7 +51,7 @@ export function ImportButtonsComponent(): JSX.Element {
       type: ScheduleErrorActionType.UPDATE,
       payload: scheduleErrors,
     } as ActionModel<ScheduleError[]>);
-  }, [monthModel, scheduleDipatcher, scheduleErrors, errorOccurred]);
+  }, [monthModel, scheduleDipatcher, scheduleErrors]);
 
   function handleImport(event: ChangeEvent<HTMLInputElement>): void {
     const file = event.target?.files && event.target?.files[0];
@@ -73,7 +73,8 @@ export function ImportButtonsComponent(): JSX.Element {
       <DropdownButtons
         buttons={btnData}
         mainLabel="Plik"
-        variant="primary"
+        buttonVariant="primary"
+        variant="file-dropdown"
         dataCy={"file-dropdown"}
       />
       <input

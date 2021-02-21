@@ -21,4 +21,9 @@ export class StringHelper {
   static capitalize(value: string): string {
     return value.charAt(0).toUpperCase() + value.slice(1);
   }
+
+  static capitalizeEach(value: string, separator = " "): string {
+    const values = value.split(separator).map(this.capitalize);
+    return values.join(separator);
+  }
 }

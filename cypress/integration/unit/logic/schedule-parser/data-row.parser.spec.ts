@@ -60,7 +60,7 @@ describe("DataRowParser", () => {
       expect(dataRowParser.rowData(true)).to.eql([
         "november",
         "year 2020",
-        null,
+        "",
         "number of hours 10",
       ]);
       expect(dataRowParser.rowData(false, true)).to.eql([
@@ -73,7 +73,7 @@ describe("DataRowParser", () => {
         " Schedule ",
         "november",
         "year 2020",
-        null,
+        "",
         "number of hours 10",
       ]);
     });
@@ -101,11 +101,11 @@ describe("DataRowParser", () => {
         "schedule",
         "november",
         "year 2020",
-        null,
+        "",
       ]);
       expect(dataRowParser.createWithCroppedData(2, 4).rowData(true, true)).to.eql([
         "schedule",
-        null,
+        "",
         "number of hours 10",
       ]);
     });

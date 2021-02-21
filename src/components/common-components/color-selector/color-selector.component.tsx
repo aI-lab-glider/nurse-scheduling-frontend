@@ -68,10 +68,11 @@ export function ColorSelector({
     <div>
       <Button variant={variant} onClick={handleToggle} ref={anchorRef}>
         {colorPicked !== "-1" && (
-          <IconButton className={"color-button picked-color"} size={"small"}>
+          <IconButton className={"color-button picked-color"}>
             <div className={classes.colorSample} style={{ backgroundColor: `#${colorPicked}` }} />
           </IconButton>
         )}
+
         {mainLabel}
         <ArrowDropDownIcon />
       </Button>
@@ -89,7 +90,7 @@ export function ColorSelector({
       >
         <div
           className={`${
-            variant === "outlined" ? "display-main-button-outlined" : "display-main-button"
+            variant === "secondary" ? "display-main-button-outlined" : "display-main-button"
           }`}
         />
         <ClickAwayListener onClickAway={handleClickAway}>
@@ -103,7 +104,7 @@ export function ColorSelector({
                       return (
                         <>
                           {index !== 0 && index % 6 === 0 && <br />}
-                          <IconButton className={"color-button"} size={"small"}>
+                          <IconButton className={"color-button"}>
                             <div
                               className={classes.colorSample}
                               onClick={(): void => {
@@ -127,7 +128,7 @@ export function ColorSelector({
                       return (
                         <>
                           {index !== 0 && index % 6 === 0 && <br />}
-                          <IconButton className={"color-button"} size={"small"}>
+                          <IconButton className={"color-button"}>
                             <div
                               className={classes.colorSample}
                               onClick={(): void => {
@@ -148,10 +149,11 @@ export function ColorSelector({
         </ClickAwayListener>
         <Button variant={variant} className={"button-helper"}>
           {colorPicked !== "-1" && (
-            <IconButton className={"color-button-selected picked-color"} size={"small"}>
+            <IconButton className={"color-button-selected picked-color"}>
               <div className={classes.colorSample} style={{ backgroundColor: `#${colorPicked}` }} />
             </IconButton>
           )}
+
           {mainLabel}
           <ArrowDropDownIcon />
         </Button>

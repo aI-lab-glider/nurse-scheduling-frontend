@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { VerboseDate } from "../../common-models/month-info.model";
 import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
+import { ScheduleError } from "../../common-models/schedule-error.model";
 
 export abstract class MetadataProvider {
   abstract get monthNumber(): number;
@@ -11,6 +12,9 @@ export abstract class MetadataProvider {
   abstract get dates(): number[];
   abstract get monthLogic(): MonthInfoLogic;
   get verboseDates(): VerboseDate[] {
+    return [];
+  }
+  get errors(): ScheduleError[] {
     return [];
   }
   changeShiftFrozenState(rowind: number, shiftIndex: number): [number, number][] {

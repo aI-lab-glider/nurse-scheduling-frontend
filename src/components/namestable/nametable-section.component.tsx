@@ -14,17 +14,23 @@ import { MetadataLogic } from "../../logic/schedule-logic/metadata.logic";
 import { ArrayHelper } from "../../helpers/array.helper";
 import { VerboseDate } from "../../common-models/month-info.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
+import classNames from "classnames/bind";
 
 export interface NameTableCellOptions {
   dataRow: DataRow[];
   workerType?: WorkerType;
+  clickable: boolean;
 }
 
-let workerInfo: WorkerInfoModel = { name: "", time: 0 };
+const initialWorkerInfo: WorkerInfoModel = { name: "", time: 0 };
 
-export function NameTableSection({ dataRow, workerType }: NameTableCellOptions): JSX.Element {
-  const mode = WorkerDrawerMode.INFO;
+export function NameTableSection({
+  dataRow,
+  workerType,
+  clickable,
+}: NameTableCellOptions): JSX.Element {
   const [open, setIsOpen] = useState(false);
+  const [workerInfo, setWorkerInfo] = useState<WorkerInfoModel>(initialWorkerInfo);
 
   const scheduleLogic = useContext(ScheduleLogicContext);
   const sectionKey: keyof Sections =
@@ -46,14 +52,14 @@ export function NameTableSection({ dataRow, workerType }: NameTableCellOptions):
           shifts?.[name]
         );
 
-        workerInfo = {
+        setWorkerInfo({
           name: name,
           time: actualHours,
           type: workerType,
           shifts: workersWithDates,
           requiredHours,
           overtime,
-        };
+        });
       }
     }
   }
@@ -68,15 +74,18 @@ export function NameTableSection({ dataRow, workerType }: NameTableCellOptions):
     <React.Fragment>
       <table className="nametable">
         <tbody>
-          {data.map((cellData) => {
+          {data.map((workerName) => {
             return (
               <tr
-                key={cellData}
-                onClick={(): void => toggleDrawer(true, cellData)}
-                className="nametableRow"
+                key={workerName}
+                onClick={(): void => toggleDrawer(true, workerName)}
+                className={classNames(
+                  "nametableRow",
+                  clickable ? "pointerCursor" : "defaultCursor"
+                )}
               >
                 <td>
-                  <span>{cellData}</span>
+                  <span>{workerName}</span>
                   <span className="underline" />
                 </td>
               </tr>
@@ -87,7 +96,7 @@ export function NameTableSection({ dataRow, workerType }: NameTableCellOptions):
       <WorkerDrawerComponent
         open={open}
         onClose={(): void => toggleDrawer(false, "")}
-        mode={mode}
+        mode={WorkerDrawerMode.INFO}
         worker={workerInfo}
         setOpen={setIsOpen}
       />

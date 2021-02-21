@@ -4,8 +4,10 @@
 import { ExtraWorkersInfoProvider } from "../providers/extra-workers-info-provider.model";
 import { DataRow } from "../schedule-logic/data-row";
 import { ExtraWorkersSectionKey } from "../section.model";
+import { ScheduleError } from "../../common-models/schedule-error.model";
 
 export class ExtraWorkersParser implements ExtraWorkersInfoProvider {
+  private _parseErrors: ScheduleError[] = [];
   private extraWorkersInfoAsDataRows: { [key: string]: DataRow } = {};
 
   constructor(numberOfDays: number) {
@@ -26,5 +28,13 @@ export class ExtraWorkersParser implements ExtraWorkersInfoProvider {
 
   public get sectionData(): DataRow[] {
     return Object.values(this.extraWorkersInfoAsDataRows);
+  }
+
+  public get errors(): ScheduleError[] {
+    return [...this._parseErrors];
+  }
+
+  public get workersCount(): number {
+    return this.sectionData.length;
   }
 }
