@@ -7,7 +7,7 @@ import mergeRefs from "react-merge-refs";
 import { usePopper } from "react-popper";
 import { useSelector } from "react-redux";
 import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
-import { ShiftCode } from "../../../../../../common-models/shift-info.model";
+import { ShiftCode, SHIFTS } from "../../../../../../common-models/shift-info.model";
 import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 import { baseCellDataCy, BaseCellOptions } from "../base-cell/base-cell.models";
 import { CellDetails } from "../base-cell/cell-details-content.component";
@@ -70,6 +70,11 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   function _onValueChange(inputValue: string): void {
     onValueChange && onValueChange(getShiftCode(inputValue));
   }
+
+  function getColor(value: string): string {
+    return Object.values(SHIFTS).filter((s) => s.code === value)[0].color ?? "FFD100";
+  }
+
   const selectableItemRef = useCellSelection(options);
   const id = useCellBackgroundHighlight(options);
 
@@ -132,7 +137,11 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
             data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
           >
             <div className={"leftBorder leftBorderColor"} />
-            <p data-cy={baseCellDataCy(cellIndex, "cell")} className={"relative "}>
+            <p
+              data-cy={baseCellDataCy(cellIndex, "cell")}
+              className={"relative "}
+              style={{ color: `#${getColor(shiftCode)}` }}
+            >
               {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
             </p>
           </div>

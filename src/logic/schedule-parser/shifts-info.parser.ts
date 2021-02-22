@@ -56,7 +56,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
         const name = StringHelper.capitalizeEach(personelRow[0].toLowerCase(), " ");
         personel.push(name);
         for (let i = 0; i < this.metaData.dayCount; i++) {
-          const b = slicedPersonelRow[i];
+          const b = slicedPersonelRow[i].trim();
           if (b === " " || b === "") {
             personel.push("W");
           } else {
@@ -106,24 +106,9 @@ export class ShiftsInfoParser extends ShiftsProvider {
     }
   }
 
-  private static getShiftFromCell(cell: string): ShiftCode | null {
-    return ShiftCode[cell?.trim().slice(0, 2).trim()];
-  }
-
   private fillRowWithShifts(row: DataRowParser): ShiftCode[] {
-    const continuousShifts = [ShiftCode.L4, ShiftCode.U];
-    let previousShift: ShiftCode = ShiftCode.W;
     return row.rowData(true, false).map((cellValue, cellInd) => {
-      let currentShiftValue = ShiftsInfoParser.getShiftFromCell(cellValue);
-      if (!currentShiftValue) {
-        if (cellValue && cellValue.trim()) {
-          const currDate = this.metaData.dates[cellInd];
-          this.logUnknownValue(currDate, row.rowKey, cellValue);
-        }
-        currentShiftValue = continuousShifts.includes(previousShift) ? previousShift : ShiftCode.W;
-      }
-      previousShift = currentShiftValue;
-      return currentShiftValue;
+      return ShiftCode[cellValue];
     });
   }
 
