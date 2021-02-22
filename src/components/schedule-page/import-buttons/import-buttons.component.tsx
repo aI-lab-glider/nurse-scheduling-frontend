@@ -42,7 +42,8 @@ export function ImportButtonsComponent(): JSX.Element {
     if (monthModel) {
       const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel, true);
       scheduleDipatcher(action);
-    } else if (scheduleErrors) {
+    }
+    if (scheduleErrors) {
       setOpen(true);
     }
 
