@@ -31,14 +31,18 @@ export class ShiftHelper {
 
   public static isNotWorkingShift(shiftCode: ShiftCode): boolean {
     const shift = SHIFTS[shiftCode] as Shift;
-    return shift.isWorkingShift ?? false;
+    return (!shift.isWorkingShift && shift.code !== ShiftCode.W) ?? false;
   }
 
   public static shiftCodeToWorkTime(shift: Shift): number {
     if (!shift.isWorkingShift) {
       return 0;
     }
-    const duration = Math.abs(shift.from - shift.to);
+    let duration = shift.to - shift.from;
+    if (shift.to < shift.from) {
+      const dayLenght = 24;
+      duration = dayLenght - shift.from + shift.to;
+    }
     return duration === 0 ? 24 : duration;
   }
 
@@ -91,6 +95,7 @@ export class ShiftHelper {
 
     const requiredHours =
       workerNorm * WORK_HOURS_PER_DAY * (workingDaysCount - holidaySaturdaysCount);
+
     const actualHours = monthData.reduce((a, s) => {
       const shift = SHIFTS[s[0]];
       return a + workerNorm * this.shiftCodeToWorkTime(shift!);
