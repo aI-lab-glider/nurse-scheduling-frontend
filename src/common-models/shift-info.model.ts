@@ -53,15 +53,15 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   N8: {
     code: "N8",
     name: "Noc na 8 godzin",
-    from: 23,
-    to: 7,
+    from: 22,
+    to: 6,
     color: "FFD100",
     isWorkingShift: true,
   },
   RN8: {
     code: "RN8",
     name: "Noc na 8 godzin + Rano",
-    from: 23,
+    from: 22,
     to: 15,
     color: "FFD100",
     isWorkingShift: true,
@@ -69,7 +69,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   DN8: {
     code: "DN8",
     name: "Dzień + noc 8 godzin",
-    from: 23,
+    from: 22,
     to: 19,
     color: "FFD100",
     isWorkingShift: true,
@@ -93,8 +93,8 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   P1: {
     code: "P1",
     name: "Popupułudnie 1",
-    from: 15,
-    to: 21,
+    from: 13,
+    to: 19,
     color: "FFD100",
     isWorkingShift: true,
   },
@@ -115,7 +115,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   PN: {
     code: "PN",
     name: "Popołudnie + Noc",
-    from: 19,
+    from: 15,
     to: 7,
     isWorkingShift: true,
   },
