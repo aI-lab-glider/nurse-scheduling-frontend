@@ -56,7 +56,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
         const name = StringHelper.capitalizeEach(personelRow[0].toLowerCase(), " ");
         personel.push(name);
         for (let i = 0; i < this.metaData.dayCount; i++) {
-          const b = slicedPersonelRow[i].trim();
+          const b = slicedPersonelRow[i]?.trim();
           if (b === " " || b === "") {
             personel.push("W");
           } else {
