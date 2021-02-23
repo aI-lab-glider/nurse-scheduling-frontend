@@ -4,41 +4,44 @@ on: [push]
 
 jobs:
   cypress:
-    name: Cypress check
-    runs-on: self-hosted
+    name: Run checks on ${{ matrix.browser }}
+    runs-on: [self-hosted, '${{ matrix.browser }}']
     strategy:
-        fail-fast: false
-        matrix:
-            containers: [1, 2, 3, 4, 5, 6, 7]
+      fail-fast: false
+      matrix:
+        browser: [google-chrome]
+        containers: [1, 2, 3, 4, 5]
     timeout-minutes: 10
     steps:
-        - name: Checkout project
-          uses: actions/checkout@v2
-        
-        - name: Read cypress config
-          id: read_config
-          run: |
-            content=`cat cypress.json`
-            content="${content//'%'/'%25'}"
-            content="${content//$'\n'/'%0A'}"
-            content="${content//$'\r'/'%0D'}"
-            echo "::set-output name=cypressConfig::$content"
-        
-        - name: Run Cypress
-          uses: cypress-io/github-action@v2
-          with:
-              wait-on: ${{ env.APPLICATION_URL }}
-              group: 'Nurse project workers'
-              record: true
-              parallel: true
-              start: npm start
-              browser: electron
-              # Headless mode should be disabled, because locally we run tests with UI,
-              # so we should test it in the same environment. Otherwise, we can get 
-              # non deterministic behaviour when tests passes locally, but not remotely
-              # https://github.com/cypress-io/cypress/issues/1297#issuecomment-365011845
-              headless: false
-          env:
-              CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              APPLICATION_URL: ${{ fromJson(steps.read_config.outputs.cypressConfig).env.baseUrl }}
+      - name: Checkout project
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+
+      - name: Read cypress config
+        id: read_config
+        run: |
+          content=`cat cypress.json`
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          echo "::set-output name=cypressConfig::$content"
+
+      - name: Run Cypress
+        uses: cypress-io/github-action@v2
+        with:
+          wait-on: ${{ env.APPLICATION_URL }}
+          group: Nurse project workers
+          record: true
+          parallel: true
+          start: npm start
+          browser: /usr/bin/${{ matrix.browser }}
+          tag: ${{ matrix.browser }}
+          headless: false
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APPLICATION_URL: ${{ fromJson(steps.read_config.outputs.cypressConfig).env.baseUrl }}
