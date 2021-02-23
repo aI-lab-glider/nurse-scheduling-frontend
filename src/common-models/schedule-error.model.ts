@@ -4,13 +4,13 @@
 import { ShiftCode } from "./shift-info.model";
 
 export enum AlgorithmErrorCode {
-  AON = "AON",
-  WND = "WND",
-  WNN = "WNN",
-  DSS = "DSS",
-  LLB = "LLB",
-  WUH = "WUH",
-  WOH = "WOH",
+  AlwaysAtLeastOneNurse = "AON",
+  WorkerNumberDuringDay = "WND",
+  WorkerNumberDuringNight = "WNN",
+  DissalowedShiftSequence = "DSS",
+  LackingLongBreak = "LLB",
+  WorkerUnderTime = "WUH",
+  WorkerOvertime = "WOH",
 }
 
 export enum ParseErrorCode {
@@ -26,8 +26,6 @@ export enum InputFileErrorCode {
 export enum NetworkErrorCode {
   NETWORK_ERROR = "NETWORK_ERROR",
 }
-
-export type ScheduleError = UnknownValueError | InputFileError | AlgorithmError | NetworkError;
 
 interface UnknownValueError {
   kind: ParseErrorCode.UNKNOWN_VALUE;
@@ -46,17 +44,74 @@ export interface NetworkError {
   kind: NetworkErrorCode;
 }
 
+//#region  alghorithm errors
+
 export type DayTime = "MORNING" | "AFTERNOON" | "NIGHT";
 
-export interface AlgorithmError {
-  kind: AlgorithmErrorCode;
-  worker?: string;
-  week?: number;
-  actual?: string | number;
-  required?: number;
-  hours?: number;
-  day?: number;
-  day_time?: DayTime;
-  preceding?: ShiftCode;
-  succeeding?: ShiftCode;
+export interface AlwaysAtLeastOneNurse {
+  kind: AlgorithmErrorCode.AlwaysAtLeastOneNurse;
+  day: number;
+  day_time: number;
 }
+
+export interface WorkerNumberDuringDay {
+  kind: AlgorithmErrorCode.WorkerNumberDuringDay;
+  day: number;
+  required: number;
+  actual: number;
+}
+export interface WorkerNumberDuringNight {
+  kind: AlgorithmErrorCode.WorkerNumberDuringNight;
+  day: number;
+  required: number;
+  actual: number;
+}
+export interface DissalowedShiftSequence {
+  kind: AlgorithmErrorCode.DissalowedShiftSequence;
+  day: number;
+  worker: string;
+  preceding: ShiftCode;
+  succeeding: ShiftCode;
+}
+export interface LackingLongBreak {
+  kind: AlgorithmErrorCode.LackingLongBreak;
+  week: number;
+  worker: string;
+}
+export interface WorkerUnderTime {
+  kind: AlgorithmErrorCode.WorkerUnderTime;
+  hours: number;
+  worker: string;
+}
+export interface WorkerOvertime {
+  kind: AlgorithmErrorCode.WorkerOvertime;
+  hours: number;
+  worker: string;
+}
+
+//#endregion
+
+export type AlgorithmError =
+  | AlwaysAtLeastOneNurse
+  | WorkerNumberDuringDay
+  | WorkerNumberDuringNight
+  | DissalowedShiftSequence
+  | LackingLongBreak
+  | WorkerUnderTime
+  | WorkerOvertime;
+
+export type ScheduleError = UnknownValueError | InputFileError | NetworkError | AlgorithmError;
+
+export type ErrorCode = ParseErrorCode | InputFileErrorCode;
+
+export type GroupedScheduleErrors = {
+  [key in ErrorCode]?: ScheduleError[];
+} & {
+  [AlgorithmErrorCode.AlwaysAtLeastOneNurse]?: AlwaysAtLeastOneNurse[];
+  [AlgorithmErrorCode.WorkerNumberDuringDay]?: WorkerNumberDuringDay[];
+  [AlgorithmErrorCode.WorkerNumberDuringNight]?: WorkerNumberDuringNight[];
+  [AlgorithmErrorCode.DissalowedShiftSequence]?: DissalowedShiftSequence[];
+  [AlgorithmErrorCode.LackingLongBreak]?: LackingLongBreak[];
+  [AlgorithmErrorCode.WorkerUnderTime]?: WorkerUnderTime[];
+  [AlgorithmErrorCode.WorkerOvertime]?: WorkerOvertime[];
+};

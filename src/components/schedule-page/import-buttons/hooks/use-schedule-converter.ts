@@ -83,6 +83,28 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
     scheduleErrors: scheduleErrors,
   };
 
+  function isEmpty(rowValues: Array<string>): boolean {
+    const rowValuesSet = new Set(rowValues.map((a) => a.toString()));
+    let undefinedSeen = false;
+    rowValuesSet.forEach((a) => {
+      if (typeof a === "undefined") {
+        undefinedSeen = true;
+        return;
+      }
+    });
+
+    const cellsToAvoid = ["godziny wymagane", "godziny wypracowane", "nadgodziny", "grafik"];
+
+    return (
+      undefinedSeen ||
+      (rowValuesSet.size === 4 &&
+        Array.from(rowValuesSet).some((setItem) =>
+          cellsToAvoid.some((cellToAvoid) => setItem.trim().toLowerCase().includes(cellToAvoid))
+        )) ||
+      (rowValuesSet.size === 1 && rowValuesSet.has(""))
+    );
+  }
+
   function readFileContent(workbook): void {
     const sheet = workbook.getWorksheet(1);
 
@@ -93,41 +115,34 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
     const outerArray = Array<Array<Array<string>>>();
     let innerArray = Array<Array<string>>();
 
-    sheet.eachRow((row) => {
-      const rowValues = row.values as Array<string>;
-      rowValues.shift();
+    let emptyCounter = 0;
 
-      function isEmpty(): boolean {
-        const rowValuesSet = new Set(rowValues.map((a) => a.toString()));
-        let undefinedSeen = false;
-        rowValuesSet.forEach((a) => {
-          if (typeof a === "undefined") {
-            undefinedSeen = true;
-            return;
-          }
-        });
+    let rowIter;
+    for (rowIter = 1; rowIter <= sheet.rowCount; rowIter++) {
+      const row = sheet.getRow(rowIter);
 
-        const cellsToAvoid = ["godziny wymagane", "godziny wypracowane", "nadgodziny", "grafik"];
+      const rowValues = Array<string>();
 
-        return (
-          undefinedSeen ||
-          (rowValuesSet.size === 4 &&
-            Array.from(rowValuesSet).some((setItem) =>
-              cellsToAvoid.some((cellToAvoid) => setItem.trim().toLowerCase().includes(cellToAvoid))
-            )) ||
-          (rowValuesSet.size === 1 && rowValuesSet.has(""))
-        );
+      let iter;
+      for (iter = 1; iter <= row.cellCount; iter++) {
+        rowValues.push(row.getCell(iter).text);
       }
 
-      if (isEmpty()) {
+      if (isEmpty(rowValues)) {
         if (innerArray.length !== 0) {
           outerArray.push(innerArray);
         }
         innerArray = Array<Array<string>>();
+        emptyCounter++;
       } else {
         innerArray.push(rowValues);
+        emptyCounter = 0;
       }
-    });
+
+      if (emptyCounter > 4) {
+        break;
+      }
+    }
 
     if (outerArray.length === 0) {
       throw new Error(InputFileErrorCode.EMPTY_FILE);

@@ -4,9 +4,23 @@
 import axios, { AxiosInstance } from "axios";
 import { ScheduleDataModel } from "../common-models/schedule-data.model";
 import { ScheduleError } from "../common-models/schedule-error.model";
+import { Shift, SHIFTS } from "../common-models/shift-info.model";
 
 interface BackendErrorObject extends Omit<ScheduleError, "kind"> {
   code: string;
+}
+interface BackendShiftModel extends Shift {
+  is_working_shift: boolean;
+}
+
+function escapeJuliaIndexes(error: ScheduleError): ScheduleError {
+  const indexFields = ["day", "week"];
+  indexFields.forEach((field) => {
+    if (error[field]) {
+      error = { ...error, [field]: error[field] - 1 };
+    }
+  });
+  return error;
 }
 
 class Backend {
@@ -23,10 +37,19 @@ class Backend {
   }
 
   public getErrors(schedule: ScheduleDataModel): Promise<ScheduleError[]> {
+    /* eslint-disable @typescript-eslint/camelcase */
+    schedule.shift_types = {};
+    Object.keys(SHIFTS).forEach((shiftCode) => {
+      schedule.shift_types![shiftCode] = {
+        ...SHIFTS[shiftCode],
+        is_working_shift: SHIFTS[shiftCode].isWorkingShift,
+      };
+    });
     return this.sleep(1000).then(() =>
       this.axios
         .post("/schedule_errors", schedule)
         .then((resp) => resp.data.map((el: BackendErrorObject) => ({ ...el, kind: el.code })))
+        .then((errors) => errors.map(escapeJuliaIndexes))
     );
   }
 

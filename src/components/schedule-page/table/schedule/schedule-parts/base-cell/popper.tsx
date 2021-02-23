@@ -2,16 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { DividerProps } from "@material-ui/core";
-import React, { RefObject } from "react";
-import { ReactNode } from "react";
+import React, { Ref } from "react";
 
-type PopperArguments = { isOpen: boolean; data: ReactNode } & PopperOptions;
-export type PopperOptions = Omit<DividerProps, "ref"> & {
-  ref?: RefObject<HTMLDivElement>;
-};
+type PopperArguments = { isOpen: boolean } & PopperOptions;
+export type PopperOptions = Omit<DividerProps, "ref">;
 
-export function Popper(props: PopperArguments): JSX.Element {
-  return (
-    <div ref={props.ref}>{props.isOpen && <div className={props.className}>{props.data}</div>}</div>
-  );
-}
+// https://reactjs.org/docs/forwarding-refs.html#forwarding-refs-to-dom-components
+export const Popper = React.forwardRef(
+  (
+    { isOpen, children, ...popperOptions }: PopperArguments,
+    ref: Ref<HTMLDivElement>
+  ): JSX.Element => {
+    return <div ref={ref}>{isOpen && <div {...popperOptions}>{children}</div>}</div>;
+  }
+);

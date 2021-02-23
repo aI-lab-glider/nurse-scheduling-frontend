@@ -8,6 +8,7 @@ import {
 } from "../common-models/schedule-error-message.model";
 import {
   AlgorithmErrorCode,
+  GroupedScheduleErrors,
   InputFileErrorCode,
   NetworkErrorCode,
   ParseErrorCode,
@@ -19,6 +20,17 @@ import { Color, Colors } from "./colors/color.model";
 type Error = ScheduleErrorLevel;
 
 export class ErrorMessageHelper {
+  public static mapScheduleErrors(errors: GroupedScheduleErrors): ScheduleErrorMessageModel[] {
+    const mappedErrors = Object.values(errors).reduce(
+      (previous, current) => [
+        ...previous,
+        ...(current ?? []).map(ErrorMessageHelper.getErrorMessage),
+      ],
+      [] as ScheduleErrorMessageModel[]
+    );
+    return mappedErrors;
+  }
+
   public static getErrorMessage(error: ScheduleError): ScheduleErrorMessageModel {
     const dayTimeTranslations = {
       MORNING: "porannej",
@@ -33,8 +45,8 @@ export class ErrorMessageHelper {
     let type = ScheduleErrorType.OTH;
 
     switch (error.kind) {
-      case AlgorithmErrorCode.AON:
-        message = `Brak pielęgniarek w dniu <strong>${error.day}</strong> na zmianie <strong>${
+      case AlgorithmErrorCode.AlwaysAtLeastOneNurse:
+        message = `Brak pielęgniarek w dniu <strong>${error.day} na zmianie ${
           error.day_time ? dayTimeTranslations[error.day_time] : ""
         }</strong>`;
         type = ScheduleErrorType.AON;
@@ -43,7 +55,7 @@ export class ErrorMessageHelper {
           day += error.day;
         }
         break;
-      case AlgorithmErrorCode.WND:
+      case AlgorithmErrorCode.WorkerNumberDuringDay:
         message = `Za mało pracowników w trakcie dnia w dniu <strong>${error.day}</strong>, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
         type = ScheduleErrorType.WND;
         title = "date";
@@ -51,7 +63,7 @@ export class ErrorMessageHelper {
           day += error.day;
         }
         break;
-      case AlgorithmErrorCode.WNN:
+      case AlgorithmErrorCode.WorkerNumberDuringNight:
         message = `Za mało pracowników w nocy w dniu <strong>${error.day}</strong>, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
         type = ScheduleErrorType.WNN;
         title = "date";
@@ -59,7 +71,7 @@ export class ErrorMessageHelper {
           day += error.day;
         }
         break;
-      case AlgorithmErrorCode.DSS:
+      case AlgorithmErrorCode.DissalowedShiftSequence:
         message = `Niedozwolona sekwencja zmian dla pracownika <strong>${error.worker}</strong> w dniu <strong>${error.day}</strong>: <strong>${error.succeeding}</strong> po <strong>${error.preceding}</strong>`;
         type = ScheduleErrorType.DSS;
         title = "date";
@@ -67,23 +79,23 @@ export class ErrorMessageHelper {
           day += error.day;
         }
         break;
-      case AlgorithmErrorCode.LLB:
+      case AlgorithmErrorCode.LackingLongBreak:
         message = `Brak wymaganej długiej przerwy dla pracownika <strong>${error.worker}</strong> w tygodniu <strong>${error.week}</strong>`;
         type = ScheduleErrorType.LLB;
         title = `${error.worker}`;
         break;
-      case AlgorithmErrorCode.WUH:
+      case AlgorithmErrorCode.WorkerUnderTime:
         message = `Pracownik <strong>${error.worker}</strong> ma <strong>${error.hours}</strong> niedogodzin`;
         type = ScheduleErrorType.WUH;
         title = `${error.worker}`;
         break;
-      case AlgorithmErrorCode.WOH:
+      case AlgorithmErrorCode.WorkerOvertime:
         message = `Pracownik <strong>${error.worker}</strong> ma <strong>${error.hours}</strong> nadgodzin`;
         type = ScheduleErrorType.WOH;
         title = `${error.worker}`;
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
-        message = `Niedozwolona wartość zmiany: "${error.actual}" dla pracownika  ${error.worker} w dniu ${error.day}. Przyjęto, że zmiana to wolne.`;
+        message = `Nieznana wartość zmiany: "${error.actual}" dla pracownika  ${error.worker} w dniu ${error.day}. Przyjęto, że zmiana to wolne.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
         title = `${error.worker}`;
         break;

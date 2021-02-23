@@ -11,6 +11,7 @@ import { ShiftsProvider } from "../providers/shifts-provider.model";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { WorkerType, WorkerTypeHelper } from "../../common-models/worker-info.model";
+import { StringHelper } from "../../helpers/string.helper";
 
 export class ShiftsInfoParser extends ShiftsProvider {
   private _sectionRows: { [key: string]: DataRowParser } = {};
@@ -52,10 +53,10 @@ export class ShiftsInfoParser extends ShiftsProvider {
 
         const personel = Array<string>();
 
-        const name = personelRow[0];
+        const name = StringHelper.capitalizeEach(personelRow[0].toLowerCase(), " ");
         personel.push(name);
         for (let i = 0; i < this.metaData.dayCount; i++) {
-          const b = slicedPersonelRow[i];
+          const b = slicedPersonelRow[i]?.trim();
           if (b === " " || b === "") {
             personel.push("W");
           } else {
@@ -105,24 +106,9 @@ export class ShiftsInfoParser extends ShiftsProvider {
     }
   }
 
-  private static getShiftFromCell(cell: string): ShiftCode | null {
-    return ShiftCode[cell?.trim().slice(0, 2).trim()];
-  }
-
   private fillRowWithShifts(row: DataRowParser): ShiftCode[] {
-    const continuousShifts = [ShiftCode.L4, ShiftCode.U];
-    let previousShift: ShiftCode = ShiftCode.W;
     return row.rowData(true, false).map((cellValue, cellInd) => {
-      let currentShiftValue = ShiftsInfoParser.getShiftFromCell(cellValue);
-      if (!currentShiftValue) {
-        if (cellValue && cellValue.trim()) {
-          const currDate = this.metaData.dates[cellInd];
-          this.logUnknownValue(currDate, row.rowKey, cellValue);
-        }
-        currentShiftValue = continuousShifts.includes(previousShift) ? previousShift : ShiftCode.W;
-      }
-      previousShift = currentShiftValue;
-      return currentShiftValue;
+      return ShiftCode[cellValue];
     });
   }
 

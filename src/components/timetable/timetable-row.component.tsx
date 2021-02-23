@@ -2,11 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useContext, useMemo } from "react";
-import { DataRow } from "../../logic/schedule-logic/data-row";
-import { ScheduleLogicContext } from "../schedule-page/table/schedule/use-schedule-state";
-import { DataRowHelper } from "../../helpers/data-row.helper";
-import { MonthInfoLogic } from "../../logic/schedule-logic/month-info.logic";
 import { VerboseDate } from "../../common-models/month-info.model";
+import { DataRowHelper } from "../../helpers/data-row.helper";
+import { DataRow } from "../../logic/schedule-logic/data-row";
+import { MonthInfoLogic } from "../../logic/schedule-logic/month-info.logic";
+import { ScheduleLogicContext } from "../schedule-page/table/schedule/use-schedule-state";
 import { TimeTableCell } from "./timetable-cell.component";
 
 export interface TimeTableRowOptions {
@@ -50,6 +50,7 @@ export function TimeTableRowF({ dataRow, uuid }: TimeTableRowOptions): JSX.Eleme
             key={`${dataRow.rowKey}_${cellData}_${cellIndex}${uuid}}`}
             value={verboseDates[cellIndex]}
             currMonth={currMont}
+            index={cellIndex}
           />
         );
       })}

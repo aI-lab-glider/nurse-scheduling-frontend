@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useAutocomplete } from "@material-ui/lab";
-import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
+import React, { useEffect, useState } from "react";
 
 interface AutocompleteOptions<T> {
   options: T[];
@@ -13,6 +13,12 @@ interface AutocompleteOptions<T> {
   getOptionColor: (option: T) => string;
   className: string;
 }
+/**
+ * Creates a dropdown with value set to options.
+ * Important!
+ * Dropdown create by this function is always opened.
+ * To close the dropdown, you should destroy this component
+ */
 export function AutocompleteComponent<T>({
   className,
   options,
@@ -62,10 +68,11 @@ export function AutocompleteComponent<T>({
           {groupedOptions.map((option, index) => (
             <li
               {...getOptionProps({ option, index })}
-              onClick={(): void => {
+              data-cy={option["data-cy"]}
+              onClick={(e: React.MouseEvent): void => {
+                e.stopPropagation();
                 setValue(option);
               }}
-              data-cy={option["data-cy"]}
             >
               <div className="container">
                 <div className="optionLabel">{getOptionLabel(option)}</div>

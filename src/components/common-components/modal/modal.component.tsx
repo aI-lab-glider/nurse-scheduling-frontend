@@ -11,60 +11,67 @@ import { Box, Divider, Grid, IconButton } from "@material-ui/core";
 import { MdClose } from "react-icons/md";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    modal: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      position: "relative",
-    },
-    paper: {
-      backgroundColor: "#FFFFFF",
-      border: "0",
-      boxShadow: "-3px 4px 20px 4px rgba(0, 0, 0, 0.15)",
-      padding: theme.spacing(2, 1, 3),
-      maxWidth: "600px",
-      maxHeight: "350px",
-      minWidth: "424px",
-      minHeight: "198px",
-    },
-    titleMargin: {
-      paddingTop: 15,
-      paddingLeft: 25,
-      paddingBottom: 15,
-    },
+const useStyles = (
+  height: number,
+  width: number
+): Record<
+  "modal" | "paper" | "titleMargin" | "modalBody" | "footer" | "exitButton" | "title",
+  string
+> =>
+  makeStyles((theme: Theme) =>
+    createStyles({
+      modal: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "relative",
+      },
+      paper: {
+        backgroundColor: "#FFFFFF",
+        border: "0",
+        boxShadow: "-3px 4px 20px 4px rgba(0, 0, 0, 0.15)",
+        padding: theme.spacing(2, 1, 3),
+        maxWidth: `${width}px`,
+        maxHeight: `${height}px`,
+        minWidth: "424px",
+        minHeight: "198px",
+      },
+      titleMargin: {
+        paddingTop: 5,
+        paddingLeft: 25,
+        paddingBottom: 5,
+      },
 
-    modalBody: {
-      paddingTop: 25,
-      position: "relative",
-      overflow: "auto",
-      overflowX: "hidden",
-      maxHeight: "147px",
-      alignItems: "center",
-    },
+      modalBody: {
+        paddingTop: 25,
+        position: "relative",
+        overflow: "auto",
+        overflowX: "hidden",
+        alignItems: "center",
+        maxHeight: `${width - 217}px`,
+      },
 
-    footer: {
-      paddingTop: 15,
-      position: "relative",
-    },
+      footer: {
+        paddingTop: 15,
+        position: "relative",
+      },
 
-    exitButton: {
-      color: ScssVars.primary,
-      marginRight: "20px",
-      marginBottom: "10px",
-    },
-    title: {
-      fontFamily: ScssVars.fontFamilyPrimary,
-      fontWeight: 700,
-      fontSize: 18,
-      lineHeight: 1.1,
-      color: ScssVars.primary,
-      display: "flex",
-      alignItems: "center",
-    },
-  })
-);
+      exitButton: {
+        color: ScssVars.primary,
+        marginRight: "20px",
+        marginBottom: "10px",
+      },
+      title: {
+        fontFamily: ScssVars.fontFamilyPrimary,
+        fontWeight: 700,
+        fontSize: 18,
+        lineHeight: 1.1,
+        color: ScssVars.primary,
+        display: "flex",
+        alignItems: "center",
+      },
+    })
+  )();
 
 export interface ModalOptions {
   setOpen: (open: boolean) => void;
@@ -72,6 +79,8 @@ export interface ModalOptions {
   title: string;
   body: JSX.Element;
   footer: JSX.Element;
+  height?: number;
+  width?: number;
   closeOptions?: () => void;
   classNames?: Record<
     "modal" | "paper" | "titleMargin" | "modalBody" | "footer" | "exitButton" | "title",
@@ -81,7 +90,7 @@ export interface ModalOptions {
 
 export default function DefaultModal(options: ModalOptions): JSX.Element {
   const { setOpen, open, title, body, footer, closeOptions, classNames } = options;
-  let classes = useStyles();
+  let classes = useStyles(options.height ?? 350, options.width ?? 600);
   classes = classNames ? classNames : classes;
 
   const handleClose = (): void => {

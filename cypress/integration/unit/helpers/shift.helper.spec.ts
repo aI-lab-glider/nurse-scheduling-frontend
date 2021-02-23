@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ShiftHelper } from "../../../../src/helpers/shifts.helper";
-import { ShiftCode, ShiftInfoModel } from "../../../../src/common-models/shift-info.model";
+import { ShiftCode, ShiftInfoModel, SHIFTS } from "../../../../src/common-models/shift-info.model";
 import { VerboseDate, WeekDay } from "../../../../src/common-models/month-info.model";
 
 //#region getWorkersCount data
@@ -74,11 +74,10 @@ type CaclulateWorkHoursInfoTestData = {
   expectedRequiredHours: number;
 };
 
-// December 2019
-const month = "December";
-const dayCount = 31;
-const holidayCount = 2; // 25 december, 26 december
-const weekendCount = 9;
+const month = "February";
+const dayCount = 28;
+const holidayCount = 0;
+const weekendCount = 8;
 const workdayCount = dayCount - holidayCount - weekendCount;
 
 const weekendTemplate = {
@@ -113,28 +112,19 @@ const CaclulateWorkHoursInfoTestCases: CaclulateWorkHoursInfoTestData[] = [
     dates: dates,
     shifts: [
       ShiftCode.D,
-      ShiftCode.PN,
+      ShiftCode.N,
       ShiftCode.W,
-      ShiftCode.DN,
-      ShiftCode.W,
-      ShiftCode.DN,
       ShiftCode.W,
       ShiftCode.D,
       ShiftCode.N,
-      ShiftCode.W,
-      ShiftCode.DN,
-      ShiftCode.W,
-      ShiftCode.DN,
-      ShiftCode.W,
-      ShiftCode.DN,
-      ShiftCode.W,
-      ShiftCode.DN,
-      ShiftCode.W,
       ShiftCode.N,
       ShiftCode.W,
-      ShiftCode.DN,
+      ShiftCode.D,
+      ShiftCode.RP,
+      ShiftCode.N,
       ShiftCode.W,
-      ShiftCode.W,
+      ShiftCode.D,
+      ShiftCode.N,
       ShiftCode.W,
       ShiftCode.W,
       ShiftCode.D,
@@ -142,55 +132,53 @@ const CaclulateWorkHoursInfoTestCases: CaclulateWorkHoursInfoTestData[] = [
       ShiftCode.W,
       ShiftCode.W,
       ShiftCode.D,
+      ShiftCode.N,
+      ShiftCode.W,
+      ShiftCode.W,
+      ShiftCode.D,
+      ShiftCode.W,
+      ShiftCode.W,
       ShiftCode.W,
     ],
     workerNorm: 1,
-    expectedActualWorkHours: 268,
+    expectedActualWorkHours: 180,
     expectedRequiredHours: 160,
   },
-  {
-    dates: dates,
-    shifts: [
-      ShiftCode.D,
-      ShiftCode.PN,
-      ShiftCode.W,
-      ShiftCode.DN,
-      ShiftCode.W,
-      ShiftCode.DN,
-      ShiftCode.W,
-      ShiftCode.D,
-      ShiftCode.N,
-      ShiftCode.W,
-      ShiftCode.DN,
-      ShiftCode.W,
-      ShiftCode.DN,
-      ShiftCode.W,
-      ShiftCode.DN,
-      ShiftCode.W,
-      ShiftCode.DN,
-      ShiftCode.W,
-      ShiftCode.N,
-      ShiftCode.W,
-      ShiftCode.DN,
-      ShiftCode.W,
-      ShiftCode.W,
-      ShiftCode.W,
-      ShiftCode.W,
-      ShiftCode.D,
-      ShiftCode.N,
-      ShiftCode.U,
-      ShiftCode.U,
-      ShiftCode.U,
-      ShiftCode.U,
-    ],
-    workerNorm: 1,
-    expectedActualWorkHours: 256,
-    expectedRequiredHours: 128, // 160 - 4 vacation days
-  },
 ];
+
 //#endregion
 
 describe("ShiftHelper", () => {
+  const expectedHours = {
+    [ShiftCode.RP]: 12,
+    [ShiftCode.RPN]: 24,
+    [ShiftCode.N8]: 8,
+    [ShiftCode.RN8]: 17,
+    [ShiftCode.DN8]: 21,
+    [ShiftCode.D1]: 10,
+    [ShiftCode.D2]: 9,
+    [ShiftCode.P1]: 6,
+    [ShiftCode.R1]: 6,
+    [ShiftCode.R]: 8,
+    [ShiftCode.P]: 4,
+    [ShiftCode.D]: 12,
+    [ShiftCode.N]: 12,
+    [ShiftCode.DN]: 24,
+    [ShiftCode.PN]: 16,
+    [ShiftCode.W]: 0,
+    [ShiftCode.U]: 0,
+    [ShiftCode.L4]: 0,
+    [ShiftCode.K]: 0,
+  };
+
+  Object.values(SHIFTS).forEach((shift) => {
+    it(`Should calculate correct duration ${shift.code}`, () => {
+      const shiftCode = ShiftCode[shift.code];
+      const hours = ShiftHelper.shiftCodeToWorkTime(shift);
+      expect(hours).to.equal(expectedHours[shiftCode]);
+    });
+  });
+
   GetWorkersCountTestCases.forEach((testCase) => {
     describe("getWorkersCount", () => {
       const shifts = Object.values(testCase.arr);
@@ -212,6 +200,7 @@ describe("ShiftHelper", () => {
         });
       });
     });
+
     describe("for cases with additional holiday on Saturday", () => {
       describe("for case with 1 such holiday", () => {
         const saturdayHolidayCaseWeekends = [...weekends.slice(0, -1), saturdayHolidayTemplate];
@@ -230,6 +219,7 @@ describe("ShiftHelper", () => {
           });
         });
       });
+
       describe("for case with 3 such holidays", () => {
         const saturdayHolidayCaseWeekends = [
           ...weekends.slice(0, -3),

@@ -3,14 +3,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { WorkersInfoModel } from "../../../common-models/worker-info.model";
-import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import { WorkerInfoExtendedInterface } from "../../../components/namestable/worker-edit.component";
+import { ActionModel } from "../../models/action.model";
+import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import {
   createActionName,
   ScheduleActionModel,
   ScheduleActionType,
 } from "./schedule-data/schedule.actions";
-import { ActionModel } from "../../models/action.model";
 
 function fromFractionToHours(fraction: string): number {
   const result = fraction.split("/");

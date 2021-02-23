@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 import { WorkerType } from "../../common-models/worker-info.model";
 import { DataRowHelper } from "../../helpers/data-row.helper";
 import { FoundationInfoProvider } from "../providers/foundation-info-provider.model";
@@ -8,6 +9,7 @@ import { Sections } from "../providers/schedule-provider.model";
 import { ChildrenSectionKey, ExtraWorkersSectionKey, FoundationSectionKey } from "../section.model";
 import { BaseSectionLogic } from "./base-section-logic.model";
 import { DataRow } from "./data-row";
+
 export class FoundationInfoLogic
   extends FoundationInfoProvider
   implements Omit<BaseSectionLogic, "addDataRow"> {
