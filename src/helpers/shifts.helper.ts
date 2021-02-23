@@ -1,16 +1,17 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { WorkerType } from "../common-models/worker-info.model";
+import * as _ from "lodash";
+import { VerboseDate } from "../common-models/month-info.model";
 import { Shift, ShiftCode, ShiftInfoModel, SHIFTS } from "../common-models/shift-info.model";
+import { WorkerType } from "../common-models/worker-info.model";
+import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
 import { ArrayHelper } from "./array.helper";
 import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Colors } from "./colors/color.model";
+import { TranslationHelper } from "./translations.helper";
 import { VerboseDateHelper } from "./verbose-date.helper";
-import { VerboseDate, WeekDay } from "../common-models/month-info.model";
-import * as _ from "lodash";
-import { PublicHolidaysLogic } from "../logic/schedule-logic/public-holidays.logic";
 
 const WORK_HOURS_PER_DAY = 8;
 
@@ -70,27 +71,7 @@ export class ShiftHelper {
   }
 
   public static calculateWorkNormForMonth(month: number, year: number): number {
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const publicHolidaysLogic = new PublicHolidaysLogic(year.toString());
-    const weekDays = [
-      WeekDay.SU,
-      WeekDay.MO,
-      WeekDay.TU,
-      WeekDay.WE,
-      WeekDay.TH,
-      WeekDay.FR,
-      WeekDay.SA,
-    ];
-    const dates = _.range(firstDay.getDay(), lastDay.getDate() + 1).map(
-      (d) =>
-        ({
-          date: d,
-          isPublicHoliday: publicHolidaysLogic.isPublicHoliday(d, month),
-          dayOfWeek: weekDays[new Date(year, month, d).getDay()],
-        } as VerboseDate)
-    );
-
+    const dates = VerboseDateHelper.generateVerboseDatesForMonth(month, year);
     return this.calculateRequiredHoursFromVerboseDates(dates);
   }
 
@@ -104,6 +85,17 @@ export class ShiftHelper {
 
     return requiredHours;
   }
+  public static caclulateWorkHoursInfoForDates(
+    shifts: ShiftCode[],
+    workerNorm: number,
+    month: number,
+    year: number,
+    dates: number[]
+  ): number[] {
+    const verboseDates = new MonthInfoLogic(month, year, dates).verboseDates;
+    const monthName = TranslationHelper.englishMonths[month];
+    return this.caclulateWorkHoursInfo(shifts, workerNorm, verboseDates, monthName);
+  }
 
   public static caclulateWorkHoursInfo(
     shifts: ShiftCode[],
@@ -111,9 +103,13 @@ export class ShiftHelper {
     dates: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek" | "month">[],
     currentMonth: string
   ): number[] {
+    if (shifts === undefined) {
+      return [];
+    }
     if (shifts.length !== dates.length) {
       throw Error("Shifts should be defined for each day");
     }
+    // TODO integrate with calculateRequiredHoursFromVerboseDates
     const firstDayOfCurrentMonth = dates.findIndex((d) => d.month === currentMonth);
     const lastDayOfCurrentMonth = _.findLastIndex(dates, (d) => d.month === currentMonth);
 
@@ -121,16 +117,21 @@ export class ShiftHelper {
       firstDayOfCurrentMonth,
       lastDayOfCurrentMonth + 1
     );
-    const notWorkingShiftsCount = monthData.filter((d) => this.isNotWorkingShift(d[0]!)).length;
-    const monthNorm = this.calculateRequiredHoursFromVerboseDates(
-      dates.slice(firstDayOfCurrentMonth, lastDayOfCurrentMonth + 1)
-    );
 
-    const requiredHours = (monthNorm - notWorkingShiftsCount * WORK_HOURS_PER_DAY) * workerNorm;
+    const workingDaysCount = monthData.filter(
+      (d) => VerboseDateHelper.isWorkingDay(d[1]!) && !this.isNotWorkingShift(d[0]!)
+    ).length;
+
+    const holidaySaturdaysCount = monthData.filter((d) =>
+      VerboseDateHelper.isHolidaySaturday(d[1]!)
+    ).length;
+
+    const requiredHours =
+      workerNorm * WORK_HOURS_PER_DAY * (workingDaysCount - holidaySaturdaysCount);
 
     const actualHours = monthData.reduce((a, s) => {
       const shift = SHIFTS[s[0]];
-      return a + workerNorm * this.shiftCodeToWorkTime(shift!);
+      return a + this.shiftCodeToWorkTime(shift!);
     }, 0);
     const overtime = actualHours - requiredHours;
     return [requiredHours, actualHours, overtime];
