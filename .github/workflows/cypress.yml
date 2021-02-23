@@ -34,6 +34,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           wait-on: ${{ env.APPLICATION_URL }}
+          group: Nurse project workers
           record: true
           parallel: true
           start: npm start
