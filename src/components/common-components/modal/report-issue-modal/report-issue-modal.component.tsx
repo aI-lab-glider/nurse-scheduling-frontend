@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import { Button } from "../../button-component/button.component";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
-import classNames from "classnames";
 import DefaultModal from "../modal.component";
 import { send, init } from "emailjs-com";
 
@@ -93,13 +92,13 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   }
 
   const classes = useStyles();
-  const { open, setOpen, screenshot, clear } = options;
+  const { open, setOpen, clear } = options;
   const [issueDescription, setIssueDescription] = useState("");
   const title = "Zgłoś błąd";
 
   useEffect(() => {
     init("user_gkDGsV6502nLQs0mPf4xk");
-  }, [init]);
+  });
 
   const body = (
     <div className="report-issue-modal-body">
@@ -114,7 +113,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
     </div>
   );
 
-  function handleSend() {
+  function handleSend(): void {
     send("service_74nkmaq", "template_120y7az", {
       message: issueDescription,
     }).then(() => {
@@ -124,7 +123,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
 
   const footer = (
     <div>
-      <Button variant="primary" onClick={() => handleSend()}>
+      <Button variant="primary" onClick={handleSend}>
         Wyślij
       </Button>
       <Button variant="secondary" color="secondary" onClick={handleClose}>
