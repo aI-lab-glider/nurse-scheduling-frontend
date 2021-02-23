@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [firefox, google-chrome]
+        browser: [google-chrome]
         containers: [1, 2, 3, 4, 5]
     timeout-minutes: 10
     steps:
