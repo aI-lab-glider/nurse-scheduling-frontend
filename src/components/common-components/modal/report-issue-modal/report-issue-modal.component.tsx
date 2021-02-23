@@ -118,7 +118,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
       <Button variant="primary" onClick={handleClose}>
         Wyślij
       </Button>
-      <Button variant="outlined" color="secondary" onClick={handleClose}>
+      <Button variant="secondary" color="secondary" onClick={handleClose}>
         Anuluj
       </Button>
     </div>
