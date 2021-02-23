@@ -8,6 +8,7 @@ import DrawerHeader from "./drawer-header.component";
 
 const useStyles = makeStyles({
   drawer: {
+    marginTop: 52,
     minWidth: 500,
     overflow: "hidden",
   },
