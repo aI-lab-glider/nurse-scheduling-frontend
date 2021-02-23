@@ -97,20 +97,14 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   const title = "Zgłoś błąd";
   const body = (
     <div className="report-issue-modal-body">
-      {screenshot && (
-        <>
-          <img src={screenshot} height="200px" alt="Zrzut ekranu" />
-          <p>Jaki błąd wystąpił?</p>
-          <TextField
-            placeholder="Opisz błąd"
-            value={issueDescription}
-            onChange={onIssueDescriptionChange}
-            fullWidth={true}
-            multiline
-          />
-        </>
-      )}
-      {!screenshot && <div className={classNames("spinner", classes.spinnerScaled)} />}
+      <p>Jaki błąd wystąpił?</p>
+      <TextField
+        placeholder="Opisz błąd"
+        value={issueDescription}
+        onChange={onIssueDescriptionChange}
+        fullWidth={true}
+        multiline
+      />
     </div>
   );
   const footer = (
