@@ -3,12 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../../button-component/button.component";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
 import classNames from "classnames";
 import DefaultModal from "../modal.component";
+import { send, init } from "emailjs-com";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -95,6 +96,11 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   const { open, setOpen, screenshot, clear } = options;
   const [issueDescription, setIssueDescription] = useState("");
   const title = "Zgłoś błąd";
+
+  useEffect(() => {
+    init("user_gkDGsV6502nLQs0mPf4xk");
+  }, [init]);
+
   const body = (
     <div className="report-issue-modal-body">
       <p>Jaki błąd wystąpił?</p>
@@ -107,9 +113,18 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
       />
     </div>
   );
+
+  function handleSend() {
+    send("service_74nkmaq", "template_120y7az", {
+      message: issueDescription,
+    }).then(() => {
+      handleClose();
+    });
+  }
+
   const footer = (
     <div>
-      <Button variant="primary" onClick={handleClose}>
+      <Button variant="primary" onClick={() => handleSend()}>
         Wyślij
       </Button>
       <Button variant="secondary" color="secondary" onClick={handleClose}>
