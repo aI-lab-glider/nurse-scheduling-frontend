@@ -9,15 +9,15 @@ import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-
 import {
   createActionName,
   ScheduleActionModel,
-  ScheduleActionType
+  ScheduleActionType,
 } from "./schedule-data/schedule.actions";
-
 
 function fromFractionToHours(fraction: string): number {
   const result = fraction.split("/");
   const [dividend, divisor] = result.map((string) => Number.parseInt(string));
   return dividend / divisor;
 }
+
 /* eslint-disable @typescript-eslint/camelcase */
 export function employeeInfoReducerF(name: string) {
   return (

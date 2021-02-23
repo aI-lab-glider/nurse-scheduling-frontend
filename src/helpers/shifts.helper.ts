@@ -8,8 +8,9 @@ import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Colors } from "./colors/color.model";
 import { VerboseDateHelper } from "./verbose-date.helper";
-import { VerboseDate } from "../common-models/month-info.model";
+import { VerboseDate, WeekDay } from "../common-models/month-info.model";
 import * as _ from "lodash";
+import { PublicHolidaysLogic } from "../logic/schedule-logic/public-holidays.logic";
 
 const WORK_HOURS_PER_DAY = 8;
 
@@ -68,6 +69,42 @@ export class ShiftHelper {
     return grouped;
   }
 
+  public static calculateWorkNormForMonth(month: number, year: number): number {
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const publicHolidaysLogic = new PublicHolidaysLogic(year.toString());
+    const weekDays = [
+      WeekDay.SU,
+      WeekDay.MO,
+      WeekDay.TU,
+      WeekDay.WE,
+      WeekDay.TH,
+      WeekDay.FR,
+      WeekDay.SA,
+    ];
+    const dates = _.range(firstDay.getDay(), lastDay.getDate() + 1).map(
+      (d) =>
+        ({
+          date: d,
+          isPublicHoliday: publicHolidaysLogic.isPublicHoliday(d, month),
+          dayOfWeek: weekDays[new Date(year, month, d).getDay()],
+        } as VerboseDate)
+    );
+
+    return this.calculateRequiredHoursFromVerboseDates(dates);
+  }
+
+  public static calculateRequiredHoursFromVerboseDates(
+    verboseDates: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek">[]
+  ): number {
+    const workingDaysCount = verboseDates.filter((d) => VerboseDateHelper.isWorkingDay(d)).length;
+    const holidaySaturdaysCount = verboseDates.filter((d) => VerboseDateHelper.isHolidaySaturday(d))
+      .length;
+    const requiredHours = WORK_HOURS_PER_DAY * (workingDaysCount - holidaySaturdaysCount);
+
+    return requiredHours;
+  }
+
   public static caclulateWorkHoursInfo(
     shifts: ShiftCode[],
     workerNorm: number,
@@ -84,17 +121,12 @@ export class ShiftHelper {
       firstDayOfCurrentMonth,
       lastDayOfCurrentMonth + 1
     );
+    const notWorkingShiftsCount = monthData.filter((d) => !this.isNotWorkingShift(d[0]!)).length;
+    const monthNorm = this.calculateRequiredHoursFromVerboseDates(
+      dates.slice(firstDayOfCurrentMonth, lastDayOfCurrentMonth + 1)
+    );
 
-    const workingDaysCount = monthData.filter(
-      (d) => VerboseDateHelper.isWorkingDay(d[1]!) && !this.isNotWorkingShift(d[0]!)
-    ).length;
-
-    const holidaySaturdaysCount = monthData.filter((d) =>
-      VerboseDateHelper.isHolidaySaturday(d[1]!)
-    ).length;
-
-    const requiredHours =
-      workerNorm * WORK_HOURS_PER_DAY * (workingDaysCount - holidaySaturdaysCount);
+    const requiredHours = (monthNorm - notWorkingShiftsCount * WORK_HOURS_PER_DAY) * workerNorm;
 
     const actualHours = monthData.reduce((a, s) => {
       const shift = SHIFTS[s[0]];
