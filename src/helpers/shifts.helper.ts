@@ -121,7 +121,7 @@ export class ShiftHelper {
       firstDayOfCurrentMonth,
       lastDayOfCurrentMonth + 1
     );
-    const notWorkingShiftsCount = monthData.filter((d) => !this.isNotWorkingShift(d[0]!)).length;
+    const notWorkingShiftsCount = monthData.filter((d) => this.isNotWorkingShift(d[0]!)).length;
     const monthNorm = this.calculateRequiredHoursFromVerboseDates(
       dates.slice(firstDayOfCurrentMonth, lastDayOfCurrentMonth + 1)
     );
