@@ -179,6 +179,11 @@ describe("ShiftHelper", () => {
     });
   });
 
+  it("Should calculate correct work hours for month", () => {
+    const workNorm = ShiftHelper.calculateWorkNormForMonth(10, 2020);
+    expect(workNorm).to.equal(160);
+  });
+
   GetWorkersCountTestCases.forEach((testCase) => {
     describe("getWorkersCount", () => {
       const shifts = Object.values(testCase.arr);
