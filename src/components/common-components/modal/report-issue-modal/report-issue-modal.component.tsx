@@ -125,7 +125,9 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
             fullWidth={true}
             multiline
             helperText={
-              isLongEnough ? "" : "Treść wiadomości jest za krótka! Wiadomość nie zostanie wyłana."
+              isLongEnough
+                ? " "
+                : "Treść wiadomości jest za krótka! Wiadomość nie zostanie wysłana."
             }
           />
         </>
