@@ -26,8 +26,11 @@
     color: $header-text-color;
     padding-right: 22.67px;
     letter-spacing: 0.75px;
+    outline: none;
+    text-transform: none;
     &:hover {
       text-decoration: underline;
+      transform: none;
     }
   }
 }

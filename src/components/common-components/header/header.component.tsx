@@ -9,9 +9,8 @@ import { MonthSwitchActionCreator } from "../../../state/reducers/month-state/sc
 import { Button } from "../button-component/button.component";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
 import classNames from "classnames/bind";
-import { Link } from "react-router-dom";
+import { Button as MaterialButton } from "@material-ui/core";
 import ReportIssueModal from "../modal/report-issue-modal/report-issue-modal.component";
-import { Typography } from "@material-ui/core";
 import SettingsIcon from "@material-ui/icons/Settings";
 
 function monthDiff(d1: Date, d2: Date): number {
@@ -41,10 +40,10 @@ export function HeaderComponent(): JSX.Element {
     dispatch(MonthSwitchActionCreator.switchToNewMonth(offset));
   }
   const isReadOnlyMode = mode === "readonly";
-  const [modalOpen, modalSetOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   function onReportIssueClick(): void {
-    modalSetOpen(true);
+    setIsModalOpen(true);
   }
 
   return (
@@ -61,10 +60,10 @@ export function HeaderComponent(): JSX.Element {
         <div className={"filler"} />
         {isReadOnlyMode && <MonthSwitchComponent />}
         <div className={"filler"} />
-        <Link onClick={(): void => onReportIssueClick()}>
-          <Typography className={"reportIssueLink"}>Zgłoś błąd</Typography>
-        </Link>
-        <ReportIssueModal open={modalOpen} setOpen={modalSetOpen} />
+        <MaterialButton className={"reportIssueLink"} onClick={onReportIssueClick}>
+          Zgłoś błąd
+        </MaterialButton>
+        <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
         <SettingsIcon />
       </div>
     </>

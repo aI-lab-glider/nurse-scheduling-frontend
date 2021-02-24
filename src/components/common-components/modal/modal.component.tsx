@@ -125,7 +125,7 @@ export default function DefaultModal(options: ModalOptions): JSX.Element {
                 <h1 className={classes.title}>{title}</h1>
               </Grid>
               <Grid item>
-                <IconButton className={classes.exitButton} onClick={(): void => handleClose()}>
+                <IconButton className={classes.exitButton} onClick={handleClose}>
                   <MdClose />
                 </IconButton>
               </Grid>

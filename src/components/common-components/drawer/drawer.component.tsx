@@ -5,10 +5,11 @@ import { Drawer as MaterialDrawer, DrawerProps } from "@material-ui/core";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import DrawerHeader from "./drawer-header.component";
+import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 
 const useStyles = makeStyles({
   drawer: {
-    marginTop: 52,
+    marginTop: ScssVars.headerHeight,
     minWidth: 500,
     overflow: "hidden",
   },

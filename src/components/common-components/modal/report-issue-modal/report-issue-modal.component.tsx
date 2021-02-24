@@ -42,7 +42,7 @@ const useStyles = makeStyles(() =>
     },
 
     textField: {
-      overflowY: "scroll",
+      overflowY: "auto",
       overflowX: "hidden",
       maxHeight: "600px",
     },
@@ -90,15 +90,19 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   function onIssueDescriptionChange(event): void {
     const { value } = event.target;
     setIssueDescription(value);
+    setIsLongEnough(issueDescription.length > 20);
   }
 
   function handleClose(): void {
-    if (clear) clear();
+    clear && clear();
     setIssueDescription("");
+    setIsSent(false);
     setOpen(false);
   }
 
   const classes = useStyles();
+  const [isLongEnough, setIsLongEnough] = useState(false);
+  const [isSent, setIsSent] = useState(false);
   const { open, setOpen, clear } = options;
   const [issueDescription, setIssueDescription] = useState("");
   const title = "Zgłoś błąd";
@@ -109,34 +113,53 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
 
   const body = (
     <div className="report-issue-modal-body">
-      <p>Jaki błąd wystąpił?</p>
-      <TextField
-        className={classes.textField}
-        placeholder="Opisz błąd"
-        value={issueDescription}
-        onChange={onIssueDescriptionChange}
-        fullWidth={true}
-        multiline
-      />
+      {isSent && <p>Wysłano powiadomienie o błędzie.</p>}
+      {!isSent && (
+        <>
+          <p>Jaki błąd wystąpił?</p>
+          <TextField
+            className={classes.textField}
+            placeholder="Opisz błąd"
+            value={issueDescription}
+            onChange={onIssueDescriptionChange}
+            fullWidth={true}
+            multiline
+            helperText={
+              isLongEnough ? "" : "Treść wiadomości jest za krótka! Wiadomość nie zostanie wyłana."
+            }
+          />
+        </>
+      )}
     </div>
   );
 
   function handleSend(): void {
-    send("service_74nkmaq", "template_120y7az", {
-      message: issueDescription,
-    }).then(() => {
-      handleClose();
-    });
+    if (isLongEnough) {
+      send("service_74nkmaq", "template_120y7az", {
+        message: issueDescription,
+      }).then(() => {
+        setIsSent(true);
+      });
+    }
   }
 
   const footer = (
     <div>
-      <Button variant="primary" onClick={handleSend}>
-        Wyślij
-      </Button>
-      <Button variant="secondary" color="secondary" onClick={handleClose}>
-        Anuluj
-      </Button>
+      {!isSent && (
+        <>
+          <Button variant="primary" onClick={handleSend} disabled={!isLongEnough}>
+            Wyślij
+          </Button>
+          <Button variant="secondary" color="secondary" onClick={handleClose}>
+            Anuluj
+          </Button>
+        </>
+      )}
+      {isSent && (
+        <Button variant="primary" onClick={handleClose}>
+          Zamknij
+        </Button>
+      )}
     </div>
   );
 
