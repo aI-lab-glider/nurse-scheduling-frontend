@@ -45,7 +45,7 @@ export interface WorkerInfoExtendedInterface {
 export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
   const classes = useStyles();
   const dispatcher = useDispatch();
-  let civilTimeValid = true;
+  const [isCivilTimeValid, setCivilTimeValid] = useState(true);
 
   const [workerInfo, setWorkerInfo] = useState<WorkerInfoExtendedInterface>({
     workerName: info.name,
@@ -70,7 +70,7 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
         civilTime: WorkingTimeHelper.fromFractionToHours(value, 168),
       });
     } else if (name === "civilTime") {
-      validateTime();
+      validateTime(value);
       updateWorkerInfoBatch({
         civilTime: value,
         employmentTimeOther: WorkingTimeHelper.fromHoursToFraction(value, 168),
@@ -97,8 +97,8 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     };
   });
 
-  function validateTime(): void {
-    civilTimeValid = +workerInfo.civilTime < 744;
+  function validateTime(value: string): void {
+    setCivilTimeValid(+value < 744);
   }
 
   const contractOptions = Object.keys(ContractType).map((contractTypeName) => {
@@ -191,9 +191,11 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
               />
             </Grid>
           )}
-          {workerInfo.contractType === ContractType.CIVIL_CONTRACT && !civilTimeValid && (
+          {workerInfo.contractType === ContractType.CIVIL_CONTRACT && !isCivilTimeValid && (
             <Grid item xs={6}>
-              <Typography className={classes.label}>Ilość godzin jest za duża</Typography>
+              <Typography className={classes.label} style={{ color: "red" }}>
+                Ilość godzin jest za duża
+              </Typography>
             </Grid>
           )}
           {workerInfo.contractType === ContractType.EMPLOYMENT_CONTRACT &&
@@ -217,9 +219,10 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
       </Grid>
       <Grid item>
         <Button
+          variant={isCivilTimeValid ? "primary" : "secondary"}
           data-cy="saveWorkerInfoBtn"
           onClick={(): void => {
-            if (civilTimeValid) {
+            if (isCivilTimeValid) {
               workerInfo.prevName === ""
                 ? dispatcher(ScheduleDataActionCreator.addNewWorker(workerInfo))
                 : dispatcher(ScheduleDataActionCreator.modifyWorker(workerInfo));
