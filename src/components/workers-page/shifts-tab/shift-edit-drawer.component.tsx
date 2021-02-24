@@ -8,12 +8,12 @@ import { ColorSelector } from "../../common-components/color-selector/color-sele
 import { MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { FormControl, RadioGroup, FormControlLabel, Radio } from "@material-ui/core";
-import { Shift, shifts } from "../../../common-models/shift-info.model";
+import { Shift, SHIFTS } from "../../../common-models/shift-info.model";
 import { AcronymGenerator } from "../../../helpers/acronym-generator.helper";
 
 export default function ShiftEditDrower(): JSX.Element {
-  const shiftNames = Object.values(shifts).map((shift) => shift.name);
-  const shiftCodes = Object.values(shifts).map((shift) => shift.code);
+  const shiftNames = Object.values(SHIFTS).map((shift) => shift.name);
+  const shiftCodes = Object.values(SHIFTS).map((shift) => shift.code);
   const [shiftName, setShiftName] = useState("");
   const [shiftCode, setShiftCode] = useState("");
 
