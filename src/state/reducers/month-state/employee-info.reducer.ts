@@ -4,8 +4,13 @@
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ContractType, WorkersInfoModel } from "../../../common-models/worker-info.model";
 import { WorkerInfoExtendedInterface } from "../../../components/namestable/worker-edit.component";
+import { ShiftHelper } from "../../../helpers/shifts.helper";
 import { ActionModel } from "../../models/action.model";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
+import {
+  AddNewWorkerActionPayload,
+  UpdateNewWorkerActionPayload,
+} from "./schedule-data/schedule-data.action-creator";
 import {
   createActionName,
   ScheduleActionModel,
@@ -18,44 +23,49 @@ function fromFractionToHours(fraction: string): number {
   return dividend / divisor;
 }
 
+function getEmployeeWorkTime({
+  contractType,
+  employmentTime,
+  employmentTimeOther,
+  civilTime,
+  monthNumber,
+  year,
+}: UpdateNewWorkerActionPayload): number {
+  if (monthNumber === undefined || year === undefined) {
+    throw Error("Month number and year are required");
+  }
+  switch (contractType) {
+    case ContractType.EMPLOYMENT_CONTRACT:
+      const timeAsFraction =
+        (employmentTime === "inne" ? employmentTimeOther : employmentTime) ?? "0/1";
+      return fromFractionToHours(timeAsFraction);
+    case ContractType.CIVIL_CONTRACT:
+      const requiredHoursForMonth = ShiftHelper.calculateWorkNormForMonth(monthNumber, year);
+      return parseInt(civilTime) / requiredHoursForMonth;
+    default:
+      return 0;
+  }
+}
 /* eslint-disable @typescript-eslint/camelcase */
 export function employeeInfoReducerF(name: string) {
   return (
     state: WorkersInfoModel = scheduleDataInitialState.employee_info,
-    action: ScheduleActionModel | ActionModel<WorkerInfoExtendedInterface>
+    action:
+      | ScheduleActionModel
+      | ActionModel<WorkerInfoExtendedInterface>
+      | ActionModel<UpdateNewWorkerActionPayload>
+      | ActionModel<AddNewWorkerActionPayload>
   ): WorkersInfoModel => {
     let data;
-    let workerName,
-      prevName,
-      workerType,
-      contractType,
-      employmentTime,
-      employmentTimeOther,
-      civilTime;
+    let workerName, prevName, workerType, contractType;
     if ((action.payload as WorkerInfoExtendedInterface) !== undefined) {
       ({
         workerName,
         prevName,
         workerType,
         contractType,
-        employmentTime,
-        employmentTimeOther,
-        civilTime,
       } = action.payload as WorkerInfoExtendedInterface);
     }
-
-    let employmentTimeActual = "0/1";
-    if (contractType === ContractType.EMPLOYMENT_CONTRACT) {
-      if (employmentTime === "inne") {
-        employmentTimeActual = employmentTimeOther;
-      } else {
-        employmentTimeActual = employmentTime;
-      }
-    }
-    if (contractType === ContractType.CIVIL_CONTRACT) {
-      employmentTimeActual = civilTime + "/1";
-    }
-
     switch (action.type) {
       case ScheduleActionType.DELETE_WORKER:
         delete state.time[workerName];
@@ -78,7 +88,7 @@ export function employeeInfoReducerF(name: string) {
       case ScheduleActionType.ADD_NEW_WORKER:
         return {
           time: {
-            [workerName]: fromFractionToHours(employmentTimeActual),
+            [workerName]: getEmployeeWorkTime(action.payload as AddNewWorkerActionPayload),
             ...state.time,
           },
           type: { [workerName]: workerType, ...state.type },
@@ -90,7 +100,7 @@ export function employeeInfoReducerF(name: string) {
         delete state.contractType?.[workerName];
         return {
           time: {
-            [workerName]: fromFractionToHours(employmentTimeActual),
+            [workerName]: getEmployeeWorkTime(action.payload as UpdateNewWorkerActionPayload),
             ...state.time,
           },
           type: { [workerName]: workerType, ...state.type },

@@ -17,9 +17,14 @@ import _ from "lodash";
 import { WorkerInfoModel } from "../../../../common-models/worker-info.model";
 import { ActionModel } from "../../../models/action.model";
 
-export interface AddNewWorkerActionPayload extends WorkerInfoExtendedInterface {
+export interface UpdateNewWorkerActionPayload extends WorkerInfoExtendedInterface {
+  monthNumber: number;
+  year: number;
+}
+export interface AddNewWorkerActionPayload extends UpdateNewWorkerActionPayload {
   shiftCountInActualSchedule: number;
 }
+
 export class ScheduleDataActionCreator {
   static setScheduleFromScheduleDM(
     newSchedule: ScheduleDataModel,
@@ -123,11 +128,15 @@ export class ScheduleDataActionCreator {
 
   static modifyWorker(
     worker: WorkerInfoExtendedInterface
-  ): ThunkFunction<WorkerInfoExtendedInterface> {
-    return async (dispatch): Promise<void> => {
+  ): ThunkFunction<UpdateNewWorkerActionPayload> {
+    return async (dispatch, getState): Promise<void> => {
+      const {
+        month_number: monthNumber,
+        year,
+      } = getState().actualState.persistentSchedule.present.schedule_info;
       const action = {
         type: ScheduleActionType.MODIFY_WORKER,
-        payload: { ...worker },
+        payload: { ...worker, monthNumber, year },
       };
       dispatch(action);
     };

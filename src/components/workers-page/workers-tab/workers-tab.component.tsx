@@ -103,7 +103,7 @@ export default function WorkersTab(): JSX.Element {
       const contractTypeLabel = ContractTypeHelper.translate(workerContractType);
       const workerTimeLabel =
         workerContractType === ContractType.CIVIL_CONTRACT
-          ? time[workerName] + " godz."
+          ? time[workerName] * workHourNormInMonth + " godz."
           : WorkingTimeHelper.fromHoursToFraction(
               time[workerName] * workHourNormInMonth,
               workHourNormInMonth
