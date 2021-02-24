@@ -44,7 +44,7 @@ export class ArrayHelper {
   }
 
   public static replace<T>(arr: T[], replaceArr: T[], replacePosition: ArrayPositionPointer): T[] {
-    if (replacePosition === "TAIL") {
+    if (replacePosition === "HEAD") {
       arr.splice(0, replaceArr.length, ...replaceArr);
     } else {
       arr.splice(arr.length - replaceArr.length, arr.length, ...replaceArr);
