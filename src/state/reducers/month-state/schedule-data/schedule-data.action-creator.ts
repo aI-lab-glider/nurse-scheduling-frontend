@@ -17,6 +17,9 @@ import _ from "lodash";
 import { WorkerInfoModel } from "../../../../common-models/worker-info.model";
 import { ActionModel } from "../../../models/action.model";
 
+export interface AddNewWorkerActionPayload extends WorkerInfoExtendedInterface {
+  shiftCountInActualSchedule: number;
+}
 export class ScheduleDataActionCreator {
   static setScheduleFromScheduleDM(
     newSchedule: ScheduleDataModel,
@@ -92,17 +95,23 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static addNewWorker(worker: WorkerInfoExtendedInterface): (dispatch) => Promise<void> {
-    return async (dispatch): Promise<void> => {
+  static addNewWorker(
+    worker: WorkerInfoExtendedInterface
+  ): ThunkFunction<AddNewWorkerActionPayload> {
+    return async (dispatch, getState): Promise<void> => {
+      const { dates } = getState().actualState.persistentSchedule.present.month_info;
       const action = {
         type: ScheduleActionType.ADD_NEW_WORKER,
-        payload: { ...worker },
+        payload: {
+          ...worker,
+          shiftCountInActualSchedule: dates.length,
+        } as AddNewWorkerActionPayload,
       };
       dispatch(action);
     };
   }
 
-  static deleteWorker(worker: WorkerInfoModel | undefined): (dispatch) => Promise<void> {
+  static deleteWorker(worker: WorkerInfoModel | undefined): ThunkFunction<unknown> {
     return async (dispatch): Promise<void> => {
       const action = {
         type: ScheduleActionType.DELETE_WORKER,
@@ -112,7 +121,9 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static modifyWorker(worker: WorkerInfoExtendedInterface): (dispatch) => Promise<void> {
+  static modifyWorker(
+    worker: WorkerInfoExtendedInterface
+  ): ThunkFunction<WorkerInfoExtendedInterface> {
     return async (dispatch): Promise<void> => {
       const action = {
         type: ScheduleActionType.MODIFY_WORKER,
