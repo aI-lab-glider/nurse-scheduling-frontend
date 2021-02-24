@@ -287,6 +287,23 @@ span {
     box-shadow: $error-triangle-box-shadow;
 
     transform: rotate(45deg);
+    &.bottom-mirrored {
+      transform: rotate(225deg);
+      right: 32px;
+      top: 33px;
+    }
+    &.bottom {
+      top: 33px;
+      transform: rotate(135deg);
+    }
+    &.line {
+      right: 0px;
+      top: 35px;
+      transform: rotate(0deg);
+      border-left: $border-width solid $error-red;
+      border-right: 5 * $border-width solid $error-red;
+      border-bottom: $border-width/2 solid $error-red;
+    }
   }
 }
 

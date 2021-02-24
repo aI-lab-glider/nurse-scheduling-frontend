@@ -33,7 +33,7 @@ export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>
       {
         {
-          [WorkerDrawerMode.EDIT]: worker && <WorkerEditComponent {...worker} />,
+          [WorkerDrawerMode.EDIT]: worker && <WorkerEditComponent setOpen={setOpen} {...worker} />,
           [WorkerDrawerMode.ADD_NEW]: <WorkerEditComponent {...{ name: "", time: 0 }} />,
           [WorkerDrawerMode.INFO]: worker && <WorkerInfoComponent {...worker} />,
         }[mode]
