@@ -10,7 +10,6 @@ import { Button } from "../button-component/button.component";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
 import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
-import { useScreenshot } from "use-screenshot-hook";
 import ReportIssueModal from "../modal/report-issue-modal/report-issue-modal.component";
 import { Typography } from "@material-ui/core";
 import SettingsIcon from "@material-ui/icons/Settings";
@@ -43,10 +42,8 @@ export function HeaderComponent(): JSX.Element {
   }
   const isReadOnlyMode = mode === "readonly";
   const [modalOpen, modalSetOpen] = useState(false);
-  const { image, takeScreenshot, clear } = useScreenshot();
 
   function onReportIssueClick(): void {
-    takeScreenshot();
     modalSetOpen(true);
   }
 
@@ -67,12 +64,7 @@ export function HeaderComponent(): JSX.Element {
         <Link onClick={(): void => onReportIssueClick()}>
           <Typography className={"reportIssueLink"}>Zgłoś błąd</Typography>
         </Link>
-        <ReportIssueModal
-          open={modalOpen}
-          setOpen={modalSetOpen}
-          screenshot={image}
-          clear={clear}
-        />
+        <ReportIssueModal open={modalOpen} setOpen={modalSetOpen} />
         <SettingsIcon />
       </div>
     </>

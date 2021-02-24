@@ -24,7 +24,7 @@ const useStyles = makeStyles(() =>
       border: "0",
       boxShadow: "-3px 4px 20px 4px rgba(0, 0, 0, 0.15)",
       width: "483px",
-      minHeight: "442px",
+      minHeight: "142px",
     },
 
     modalBody: {
@@ -39,6 +39,12 @@ const useStyles = makeStyles(() =>
       fontSize: 16,
       lineHeight: 0,
       padding: "15px 27px 23px 27px",
+    },
+
+    textField: {
+      overflowY: "scroll",
+      overflowX: "hidden",
+      maxHeight: "600px",
     },
 
     titleMargin: {
@@ -77,7 +83,7 @@ export interface ReportIssueModalOptions {
   setOpen: (open: boolean) => void;
   open: boolean;
   screenshot?;
-  clear: () => void;
+  clear?: () => void;
 }
 
 export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.Element {
@@ -87,7 +93,8 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   }
 
   function handleClose(): void {
-    clear();
+    if (clear) clear();
+    setIssueDescription("");
     setOpen(false);
   }
 
@@ -104,6 +111,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
     <div className="report-issue-modal-body">
       <p>Jaki błąd wystąpił?</p>
       <TextField
+        className={classes.textField}
         placeholder="Opisz błąd"
         value={issueDescription}
         onChange={onIssueDescriptionChange}
@@ -139,7 +147,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
       title={title}
       body={body}
       footer={footer}
-      closeOptions={clear}
+      closeOptions={handleClose}
       classNames={classes}
     />
   );
