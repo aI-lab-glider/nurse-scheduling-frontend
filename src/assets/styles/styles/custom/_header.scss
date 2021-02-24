@@ -12,7 +12,7 @@
   justify-content: space-around;
   position: fixed;
   top: 0;
-  z-index: 110;
+  z-index: 1301;
 
   #AssignmentIndIcon {
     color: $header-text-color;
@@ -20,5 +20,17 @@
 
   .filler {
     flex-grow: 1;
+  }
+
+  .reportIssueLink {
+    color: $header-text-color;
+    padding-right: 22.67px;
+    letter-spacing: 0.75px;
+    outline: none;
+    text-transform: none;
+    &:hover {
+      text-decoration: underline;
+      transform: none;
+    }
   }
 }
