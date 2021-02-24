@@ -23,7 +23,7 @@ import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles({
   container: {
-    height: "100%",
+    height: "93%",
   },
   label: {
     fontSize: ScssVars.fontSizeBase,
