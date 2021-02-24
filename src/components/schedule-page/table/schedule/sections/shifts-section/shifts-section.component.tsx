@@ -30,7 +30,14 @@ function shiftSectionErrorSelector(
       (error) => error.worker === worker && Math.floor(cellIndex / 7) === error.week
     ) ?? []),
   ];
-  return errors;
+
+  return errors.map((x) => {
+    if ("week" in x) {
+      if (Math.floor(cellIndex % 7) === 0) return { ...x, className: "left" };
+      else if (Math.floor(cellIndex % 7) === 6) return { ...x, className: "right" };
+      else return { ...x, className: "middle" };
+    } else return x;
+  });
 }
 
 export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Element {
