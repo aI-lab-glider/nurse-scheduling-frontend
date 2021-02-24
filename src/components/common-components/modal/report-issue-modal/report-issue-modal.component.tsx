@@ -108,7 +108,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   const title = "Zgłoś błąd";
 
   useEffect(() => {
-    init("user_gkDGsV6502nLQs0mPf4xk");
+    init(`${process.env.EMAIL_KEY}`);
   });
 
   const body = (
