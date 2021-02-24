@@ -34,8 +34,8 @@ export function scheduleShiftsInfoReducerF(name: string) {
         delete state[workerName];
         return { ...state };
       case ScheduleActionType.ADD_NEW_WORKER:
-        const { dayCountInMonth } = action.payload as AddNewWorkerActionPayload;
-        const newShiftsArr = [...Array(dayCountInMonth).fill(ShiftCode.W)];
+        const { shiftCountInActualSchedule } = action.payload as AddNewWorkerActionPayload;
+        const newShiftsArr = [...Array(shiftCountInActualSchedule).fill(ShiftCode.W)];
         return { ...{ [workerName]: newShiftsArr }, ...state };
       case ScheduleActionType.MODIFY_WORKER:
         const shiftsArr = state[prevName];
