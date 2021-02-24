@@ -51,10 +51,16 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
   const { setTitle, setOpen, setChildrenComponent } = useJiraLikeDrawer();
 
   function prepareDrawer(): void {
-    updateScheduleErrors();
+    setChildrenComponent(
+      <ValidationDrawerContentComponent setOpen={setOpen} loadingErrors={true} />
+    );
     setTitle("Sprawdź plan");
-    setChildrenComponent(<ValidationDrawerContentComponent setOpen={setOpen} />);
     setOpen(true);
+    updateScheduleErrors().then(() =>
+      setChildrenComponent(
+        <ValidationDrawerContentComponent setOpen={setOpen} loadingErrors={false} />
+      )
+    );
   }
 
   function handleSaveClick(): void {

@@ -42,9 +42,9 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
   public calculateWorkerHourInfo(workerName: string): number[] {
     const shifts = this.shifts[workerName].rowData(false, false) as ShiftCode[];
     const workerNorm = this._availableWorkersWorkTime[workerName];
-    const verboseDate = this.metadata.verboseDates;
+    const verboseDates = this.metadata.verboseDates;
     const currentMonth = TranslationHelper.englishMonths[this.metadata.monthNumber];
-    return ShiftHelper.caclulateWorkHoursInfo(shifts, workerNorm, verboseDate, currentMonth);
+    return ShiftHelper.caclulateWorkHoursInfo(shifts, workerNorm, verboseDates, currentMonth);
   }
 
   public get errors(): ScheduleError[] {

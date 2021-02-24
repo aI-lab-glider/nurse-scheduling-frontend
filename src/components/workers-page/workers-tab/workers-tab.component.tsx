@@ -1,13 +1,15 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import {
+  ContractType,
+  ContractTypeHelper,
   WorkerInfoModel,
   WorkerType,
   WorkerTypeHelper,
@@ -23,6 +25,8 @@ import classNames from "classnames/bind";
 import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
 import WorkerDrawerComponent, { WorkerDrawerMode } from "./worker-drawer.component";
 import DeleteWorkerModalComponent from "../../common-components/modal/delete-worker-modal/delete-worker.modal.component";
+import { WorkingTimeHelper } from "../../namestable/working-time.helper";
+import { ShiftHelper } from "../../../helpers/shifts.helper";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -47,8 +51,11 @@ export default function WorkersTab(): JSX.Element {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof WorkerInfoModel>("name");
-  const { type, time } = useSelector(
+  const { type, time, contractType } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.employee_info
+  );
+  const { year, month_number: monthNumber } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
   );
   const [workerData, setWorkerData] = useState([] as WorkerInfoModel[]);
   const [open, setIsOpen] = useState(false);
@@ -89,6 +96,23 @@ export default function WorkersTab(): JSX.Element {
     setWorker(workerData);
   }
 
+  const getWorkerTimeLabel = useCallback(
+    (workerName: string) => {
+      const workHourNormInMonth = ShiftHelper.calculateWorkNormForMonth(year, monthNumber);
+      const workerContractType = contractType?.[workerName] ?? ContractType.EMPLOYMENT_CONTRACT;
+      const contractTypeLabel = ContractTypeHelper.translate(workerContractType);
+      const workerTimeLabel =
+        workerContractType === ContractType.CIVIL_CONTRACT
+          ? time[workerName] + " godz."
+          : WorkingTimeHelper.fromHoursToFraction(
+              time[workerName] * workHourNormInMonth,
+              workHourNormInMonth
+            );
+      return `${contractTypeLabel} ${workerTimeLabel}`;
+    },
+    [year, monthNumber, time, contractType]
+  );
+
   return (
     <div className="workers-table">
       <TableContainer className={classes.root}>
@@ -103,6 +127,7 @@ export default function WorkersTab(): JSX.Element {
           <TableBody>
             {ComparatorHelper.stableSort(workerData, order, orderBy).map((worker) => {
               const workerType = worker.type ?? WorkerType.NURSE;
+
               return (
                 <TableRow key={worker.name} className={classes.row}>
                   <TableCell className={classes.tableCell} data-cy="workerName">
@@ -119,7 +144,7 @@ export default function WorkersTab(): JSX.Element {
                     </span>
                   </TableCell>
                   <TableCell className={classes.tableCell} align="left">
-                    {worker.time}
+                    {getWorkerTimeLabel(worker.name)}
                   </TableCell>
                   <TableCell align="right">
                     <Button

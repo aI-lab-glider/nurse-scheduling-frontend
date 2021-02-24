@@ -12,6 +12,7 @@ import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
 
 export interface ValidationDrawerContentOptions {
   setOpen: (boolean) => void;
+  loadingErrors?: boolean;
 }
 
 export enum ErrorLoaderState {
@@ -33,7 +34,7 @@ export default function ValidationDrawerContentComponent(
   const [loadingState, setLoadingState] = useState<Props>();
   const [isNetworkError, setIsNetworkError] = useState(false);
   const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
-  const { setOpen } = options;
+  const { setOpen, loadingErrors } = options;
 
   useEffect(() => {
     const spinner = {
@@ -50,18 +51,22 @@ export default function ValidationDrawerContentComponent(
     } else {
       setIsNetworkError(false);
     }
-    if (scheduleErrors) {
-      const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors);
-      if (errors.length > 0) {
-        setMappedErrors(errors);
-        setLoadingState(errorsFound);
-      } else {
-        setLoadingState(spinner);
-      }
+    if (loadingErrors) {
+      setLoadingState(spinner);
     } else {
-      setLoadingState(noErrors);
+      if (scheduleErrors) {
+        const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors);
+        if (errors.length > 0) {
+          setMappedErrors(errors);
+          setLoadingState(errorsFound);
+        } else {
+          setLoadingState(spinner);
+        }
+      } else {
+        setLoadingState(noErrors);
+      }
     }
-  }, [scheduleErrors]);
+  }, [scheduleErrors, loadingErrors]);
 
   return (
     <ErrorLoader
