@@ -55,4 +55,5 @@ export interface WorkerInfoModel {
   shifts?: [VerboseDate, ShiftCode][];
   requiredHours?: number;
   overtime?: number;
+  setOpen?: (open: boolean) => void;
 }
