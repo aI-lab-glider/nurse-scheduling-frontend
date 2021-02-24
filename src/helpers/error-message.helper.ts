@@ -48,7 +48,7 @@ export class ErrorMessageHelper {
       case AlgorithmErrorCode.AlwaysAtLeastOneNurse:
         message = `Brak pielęgniarek w dniu <strong>${error.day} na zmianie ${
           error.day_time ? dayTimeTranslations[error.day_time] : ""
-        }</strong>`;
+        }</strong> w godzinach <strong>${error.segments[0][0]}-${error.segments[0][1]}</strong>`;
         type = ScheduleErrorType.AON;
         title = "date";
         if (error.day) {

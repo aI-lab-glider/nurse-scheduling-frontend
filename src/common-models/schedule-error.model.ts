@@ -52,6 +52,7 @@ export interface AlwaysAtLeastOneNurse {
   kind: AlgorithmErrorCode.AlwaysAtLeastOneNurse;
   day: number;
   day_time: number;
+  segments: [number];
 }
 
 export interface WorkerNumberDuringDay {
