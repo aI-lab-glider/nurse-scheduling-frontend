@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
 import { useMonthInfo } from "../schedule-page/validation-drawer/use-verbose-dates";
 import { ShiftHelper } from "../../helpers/shifts.helper";
+import classNames from "classnames/bind";
 
 const useStyles = makeStyles({
   container: {
@@ -259,15 +260,17 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
       <Grid item>
         <Button
           variant={isCivilTimeValid ? "primary" : "secondary"}
+          className={classNames({ "disabled-submit-button": workerInfo.workerName === "" })}
           data-cy="saveWorkerInfoBtn"
           onClick={(): void => {
             if (isCivilTimeValid) {
-              workerInfo.prevName === ""
-                ? dispatcher(ScheduleDataActionCreator.addNewWorker(workerInfo))
-                : dispatcher(ScheduleDataActionCreator.modifyWorker(workerInfo));
               if (info.setOpen) {
                 info.setOpen(false);
               }
+
+              workerInfo.prevName === ""
+                ? dispatcher(ScheduleDataActionCreator.addNewWorker(workerInfo))
+                : dispatcher(ScheduleDataActionCreator.modifyWorker(workerInfo));
             }
           }}
         >

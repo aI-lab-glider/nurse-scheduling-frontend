@@ -105,11 +105,17 @@ export class ScheduleDataActionCreator {
   ): ThunkFunction<AddNewWorkerActionPayload> {
     return async (dispatch, getState): Promise<void> => {
       const { dates } = getState().actualState.persistentSchedule.present.month_info;
+      const {
+        month_number: monthNumber,
+        year,
+      } = getState().actualState.persistentSchedule.present.schedule_info;
       const action = {
         type: ScheduleActionType.ADD_NEW_WORKER,
         payload: {
           ...worker,
           shiftCountInActualSchedule: dates.length,
+          monthNumber,
+          year,
         } as AddNewWorkerActionPayload,
       };
       dispatch(action);

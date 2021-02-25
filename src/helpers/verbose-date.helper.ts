@@ -22,7 +22,7 @@ export class VerboseDateHelper {
       WeekDay.FR,
       WeekDay.SA,
     ];
-    const dates = _.range(firstDay.getDay(), lastDay.getDate() + 1).map(
+    const dates = _.range(firstDay.getDate(), lastDay.getDate() + 1).map(
       (d) =>
         ({
           date: d,

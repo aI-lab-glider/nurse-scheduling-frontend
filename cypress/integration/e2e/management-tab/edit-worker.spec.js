@@ -35,9 +35,7 @@ context("Tab 'zarządzanie'", () => {
       });
 
       it("Should properly render conditional sections", () => {
-        cy.get('[data-cy="contract-button"]').contains("Umowa o pracę").click();
-        cy.get('[data-cy="contract"]').contains("Umowa o pracę");
-        cy.get('[data-cy="contract-time-dropdown"]').contains("1/1").click();
+        cy.get('[data-cy="contract-button"]').contains("1/1").click();
         cy.get('[data-cy="time-contract-button"]').contains("inne").click();
         cy.contains("Wpisz wymiar etatu");
         cy.get('[data-cy="contract"]').contains("Umowa o pracę").click();
