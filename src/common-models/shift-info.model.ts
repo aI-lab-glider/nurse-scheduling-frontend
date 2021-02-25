@@ -147,10 +147,10 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   NZ: {
     code: "NZ",
-    name: "Nie zatrudniony",
+    name: "Niezatrudniony",
     from: 0,
     to: 24,
-    color: "FF8A00",
+    color: "000000",
     isWorkingShift: false,
   },
 };

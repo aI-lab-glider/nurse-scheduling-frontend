@@ -18,6 +18,7 @@ import { ScheduleActionType } from "./month-state/schedule-data/schedule.actions
 import { LocalStorageProvider } from "../../api/local-storage-provider.model";
 import { ScheduleDataModel } from "../../common-models/schedule-data.model";
 import { getEmployeeWorkTime } from "./month-state/employee-info.reducer";
+import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 
 export interface WorkerActionPayload {
   updatedShifts: ShiftInfoModel;
@@ -59,7 +60,8 @@ export class WorkerActionCreator {
     };
   }
 
-  private static async updateStateAndDb(dispatch, schedule): Promise<void> {
+  private static async updateStateAndDb(dispatch, schedule: ScheduleDataModel): Promise<void> {
+    const { month_number: monthNumber, year } = schedule.schedule_info;
     const action = {
       type: ScheduleActionType.UPDATE_WORKER_INFO,
       payload: {
@@ -69,6 +71,9 @@ export class WorkerActionCreator {
     };
     dispatch(action);
 
+    if (VerboseDateHelper.isMonthInFuture(monthNumber, year)) {
+      await new LocalStorageProvider().saveSchedule("primary", schedule);
+    }
     await new LocalStorageProvider().saveSchedule("actual", schedule);
   }
 
@@ -93,9 +98,19 @@ export class WorkerActionCreator {
     const { year, month_number: monthNumber } = schedule.schedule_info;
     const { workerName, workerType, contractType } = worker;
 
+    const today = new Date();
+    const newWorkerShifts = new Array(schedule.month_info.dates.length).fill(ShiftCode.W);
+    if (today.getMonth() === monthNumber && today.getFullYear() === year) {
+      newWorkerShifts.splice(
+        0,
+        today.getDate() - 1,
+        ...new Array(today.getDate() - 1).fill(ShiftCode.NZ)
+      );
+    }
+
     updatedSchedule.shifts = {
       ...updatedSchedule.shifts,
-      [workerName]: new Array(schedule.month_info.dates.length).fill(ShiftCode.W),
+      [workerName]: newWorkerShifts,
     };
 
     updatedSchedule.employee_info = {
