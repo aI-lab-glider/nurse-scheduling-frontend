@@ -156,7 +156,9 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
   function isValidInfo(worker: WorkerInfoExtendedInterface): boolean {
     const validCivilTime =
       worker.contractType !== undefined &&
-      ((worker.contractType === ContractType.CIVIL_CONTRACT && worker.civilTime !== "0") ||
+      ((worker.contractType === ContractType.CIVIL_CONTRACT &&
+        worker.civilTime !== "0" &&
+        parseInt(worker.civilTime) < 700) ||
         worker.contractType !== ContractType.CIVIL_CONTRACT);
 
     return (
