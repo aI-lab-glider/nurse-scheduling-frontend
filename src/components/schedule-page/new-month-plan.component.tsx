@@ -13,6 +13,7 @@ import { ScheduleKey } from "../../api/persistance-store.model";
 import { MonthSwitchActionCreator } from "../../state/reducers/month-state/schedule-data/month-switch.action-creator";
 import { LocalStorageProvider } from "../../api/local-storage-provider.model";
 import { MonthDataModel } from "../../common-models/schedule-data.model";
+import nurse from "../../assets/images/nurse.png";
 
 export function NewMonthPlanComponent(): JSX.Element {
   const { month_number: currentMonth, year: currentYear } = useSelector(
@@ -74,10 +75,7 @@ export function NewMonthPlanComponent(): JSX.Element {
   return (
     <>
       <div className={"newMonthComponents"}>
-        <img
-          src="https://filestore.community.support.microsoft.com/api/images/72e3f188-79a1-465f-90ca-27262d769841"
-          alt=""
-        />
+        <img src={nurse} alt="" />
         <p>Nie masz planu na ten miesiąc</p>
         <div className={"newPageButtonsPane"}>
           {hasValidPrevious && (
