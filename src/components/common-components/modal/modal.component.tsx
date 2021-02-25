@@ -81,13 +81,20 @@ export interface ModalOptions {
   footer: JSX.Element;
   height?: number;
   width?: number;
+  closeOptions?: () => void;
+  classNames?: Record<
+    "modal" | "paper" | "titleMargin" | "modalBody" | "footer" | "exitButton" | "title",
+    string
+  >;
 }
 
 export default function DefaultModal(options: ModalOptions): JSX.Element {
-  const classes = useStyles(options.height ?? 350, options.width ?? 600);
-  const { setOpen, open, title, body, footer } = options;
+  const { setOpen, open, title, body, footer, closeOptions, classNames } = options;
+  let classes = useStyles(options.height ?? 350, options.width ?? 600);
+  classes = classNames ? classNames : classes;
 
   const handleClose = (): void => {
+    closeOptions ? closeOptions() : setOpen(false);
     setOpen(false);
   };
 
@@ -118,7 +125,7 @@ export default function DefaultModal(options: ModalOptions): JSX.Element {
                 <h1 className={classes.title}>{title}</h1>
               </Grid>
               <Grid item>
-                <IconButton className={classes.exitButton} onClick={(): void => setOpen(false)}>
+                <IconButton className={classes.exitButton} onClick={handleClose}>
                   <MdClose />
                 </IconButton>
               </Grid>

@@ -18,7 +18,7 @@ import { WorkerInfoModel } from "../../../../common-models/worker-info.model";
 import { ActionModel } from "../../../models/action.model";
 
 export interface AddNewWorkerActionPayload extends WorkerInfoExtendedInterface {
-  dayCountInMonth: number;
+  shiftCountInActualSchedule: number;
 }
 export class ScheduleDataActionCreator {
   static setScheduleFromScheduleDM(
@@ -99,17 +99,13 @@ export class ScheduleDataActionCreator {
     worker: WorkerInfoExtendedInterface
   ): ThunkFunction<AddNewWorkerActionPayload> {
     return async (dispatch, getState): Promise<void> => {
-      const {
-        month_number: currentMonth,
-        year,
-      } = getState().actualState.persistentSchedule.present.schedule_info;
-      const lastMonthDate = new Date(year, currentMonth + 1, 0).getDate();
+      const { dates } = getState().actualState.persistentSchedule.present.month_info;
       const action = {
         type: ScheduleActionType.ADD_NEW_WORKER,
         payload: {
           ...worker,
-          dayCountInMonth: lastMonthDate,
-        },
+          shiftCountInActualSchedule: dates.length,
+        } as AddNewWorkerActionPayload,
       };
       dispatch(action);
     };
