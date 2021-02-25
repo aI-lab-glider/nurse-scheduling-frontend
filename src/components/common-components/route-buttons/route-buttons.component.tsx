@@ -8,10 +8,12 @@ import TabList from "@material-ui/lab/TabList";
 import TabPanel from "@material-ui/lab/TabPanel";
 import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_route-buttons.module.scss";
+import _ from "lodash";
 
 interface Tabs {
   label: string;
   component: JSX.Element;
+  onChange?: () => void;
 }
 
 interface RouteButtonsOptions {
@@ -41,6 +43,10 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
   const classes = useStyles();
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string): void => {
     setTab(newValue);
+    const tabObj = _.find(tabs, (tab) => tab.label === newValue);
+    if (tabObj && tabObj.onChange) {
+      tabObj.onChange();
+    }
   };
 
   // eslint-disable-next-line
