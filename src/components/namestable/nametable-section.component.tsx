@@ -15,6 +15,7 @@ import { ShiftsInfoLogic } from "../../logic/schedule-logic/shifts-info.logic";
 import { ErrorTooltipProvider } from "../schedule-page/table/schedule/schedule-parts/error-tooltip-provider.component";
 import { BaseSectionOptions } from "../schedule-page/table/schedule/sections/base-section/base-section.component";
 import { ScheduleLogicContext } from "../schedule-page/table/schedule/use-schedule-state";
+
 import WorkerDrawerComponent, {
   WorkerDrawerMode,
 } from "../workers-page/workers-tab/worker-drawer.component";
@@ -85,7 +86,10 @@ export function NameTableSection({
                 errorSelector={(scheduleErrors): ScheduleError[] =>
                   errorSelector?.(workerName, 0, scheduleErrors) ?? []
                 }
-                className="nametableRow"
+                className={classNames(
+                  "nametableRow",
+                  clickable ? "pointerCursor" : "defaultCursor"
+                )}
                 tooltipClassname="nametableRow-error-tooltip"
                 showErrorTitle={false}
               >
