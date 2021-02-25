@@ -27,6 +27,7 @@ import WorkerDrawerComponent, { WorkerDrawerMode } from "./worker-drawer.compone
 import DeleteWorkerModalComponent from "../../common-components/modal/delete-worker-modal/delete-worker.modal.component";
 import { WorkingTimeHelper } from "../../namestable/working-time.helper";
 import { ShiftHelper } from "../../../helpers/shifts.helper";
+import { useMonthInfo } from "../../schedule-page/validation-drawer/use-verbose-dates";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -54,9 +55,8 @@ export default function WorkersTab(): JSX.Element {
   const { type, time, contractType } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.employee_info
   );
-  const { year, month_number: monthNumber } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
-  );
+  const { year, monthNumber } = useMonthInfo();
+
   const [workerData, setWorkerData] = useState([] as WorkerInfoModel[]);
   const [open, setIsOpen] = useState(false);
   const [openDelModal, setDelModalOpen] = useState(false);
@@ -98,12 +98,12 @@ export default function WorkersTab(): JSX.Element {
 
   const getWorkerTimeLabel = useCallback(
     (workerName: string) => {
-      const workHourNormInMonth = ShiftHelper.calculateWorkNormForMonth(year, monthNumber);
+      const workHourNormInMonth = ShiftHelper.calculateWorkNormForMonth(monthNumber, year);
       const workerContractType = contractType?.[workerName] ?? ContractType.EMPLOYMENT_CONTRACT;
       const contractTypeLabel = ContractTypeHelper.translate(workerContractType);
       const workerTimeLabel =
         workerContractType === ContractType.CIVIL_CONTRACT
-          ? time[workerName] + " godz."
+          ? time[workerName] * workHourNormInMonth + " godz."
           : WorkingTimeHelper.fromHoursToFraction(
               time[workerName] * workHourNormInMonth,
               workHourNormInMonth

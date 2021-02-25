@@ -46,7 +46,7 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
     }
   };
 
-  const onEditClick = () => {
+  const onEditClick = (): void => {
     openEdit();
     history.push("/schedule-editing");
   };
