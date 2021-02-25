@@ -134,7 +134,7 @@ export class ShiftHelper {
       return a + this.shiftCodeToWorkTime(shift!);
     }, 0);
     const overtime = actualHours - requiredHours;
-    return [requiredHours, actualHours, overtime];
+    return [requiredHours, actualHours, overtime].map((n) => Math.round(n));
   }
 
   static getShiftColor(

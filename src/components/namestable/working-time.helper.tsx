@@ -42,4 +42,10 @@ export class WorkingTimeHelper {
     const number = from.reduce((a, b) => (Math.abs(b - search) < Math.abs(a - search) ? b : a));
     return from.indexOf(number);
   }
+
+  static isTimeFractionValid(fraction: string): boolean {
+    const result = fraction.split("/");
+    const [dividend, divisor] = result.map((string) => Number.parseInt(string));
+    return dividend / divisor <= 1;
+  }
 }
