@@ -1,0 +1,115 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+/* eslint-disable @typescript-eslint/camelcase */
+
+import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
+import {
+  ContractType,
+  WorkerInfoModel,
+  WorkersInfoModel,
+  WorkerType,
+} from "../../common-models/worker-info.model";
+import { WorkerInfoExtendedInterface } from "../../components/namestable/worker-edit.component";
+import { ThunkFunction } from "../../api/persistance-store.model";
+import _ from "lodash";
+import { ScheduleActionType } from "./month-state/schedule-data/schedule.actions";
+import { LocalStorageProvider } from "../../api/local-storage-provider.model";
+import { ScheduleDataModel } from "../../common-models/schedule-data.model";
+import { getEmployeeWorkTime } from "./month-state/employee-info.reducer";
+
+export interface WorkerActionPayload {
+  updatedShifts: ShiftInfoModel;
+  updatedEmployeeInfo: WorkersInfoModel;
+}
+
+export class WorkerActionCreator {
+  static addNewWorker(worker: WorkerInfoExtendedInterface): ThunkFunction<WorkerActionPayload> {
+    return async (dispatch, getState): Promise<void> => {
+      const actualSchedule = getState().actualState.persistentSchedule.present;
+
+      const updatedSchedule = WorkerActionCreator.addWorkerInfo(actualSchedule, worker);
+      await WorkerActionCreator.updateStateAndDb(dispatch, updatedSchedule);
+    };
+  }
+
+  static deleteWorker(worker: WorkerInfoModel | undefined): ThunkFunction<unknown> {
+    return async (dispatch, getState): Promise<void> => {
+      if (!worker) return;
+
+      const { name } = worker;
+      const actualSchedule = _.cloneDeep(getState().actualState.persistentSchedule.present);
+      const updatedSchedule = WorkerActionCreator.deleteWorkerFromScheduleDM(actualSchedule, name);
+      await WorkerActionCreator.updateStateAndDb(dispatch, updatedSchedule);
+    };
+  }
+
+  static modifyWorker(worker: WorkerInfoExtendedInterface): ThunkFunction<WorkerActionPayload> {
+    return async (dispatch, getState): Promise<void> => {
+      const { prevName } = worker;
+      debugger;
+      const actualSchedule = _.cloneDeep(getState().actualState.persistentSchedule.present);
+      let updatedSchedule = WorkerActionCreator.deleteWorkerFromScheduleDM(
+        actualSchedule,
+        prevName
+      );
+      updatedSchedule = WorkerActionCreator.addWorkerInfo(updatedSchedule, worker);
+      await WorkerActionCreator.updateStateAndDb(dispatch, updatedSchedule);
+    };
+  }
+
+  private static async updateStateAndDb(dispatch, schedule): Promise<void> {
+    const action = {
+      type: ScheduleActionType.UPDATE_WORKER_INFO,
+      payload: {
+        updatedShifts: schedule.shifts,
+        updatedEmployeeInfo: schedule.employee_info,
+      },
+    };
+    dispatch(action);
+
+    await new LocalStorageProvider().saveSchedule("actual", schedule);
+  }
+
+  private static deleteWorkerFromScheduleDM(
+    schedule: ScheduleDataModel,
+    workerName
+  ): ScheduleDataModel {
+    const scheduleCopy = _.cloneDeep(schedule);
+    delete scheduleCopy.employee_info.time[workerName];
+    delete scheduleCopy.employee_info.type[workerName];
+    delete scheduleCopy.employee_info.contractType?.[workerName];
+    delete scheduleCopy.shifts[workerName];
+
+    return scheduleCopy;
+  }
+
+  private static addWorkerInfo(
+    schedule: ScheduleDataModel,
+    worker: WorkerInfoExtendedInterface
+  ): ScheduleDataModel {
+    const updatedSchedule = _.cloneDeep(schedule);
+    const { year, month_number: monthNumber } = schedule.schedule_info;
+    const { workerName, workerType, contractType } = worker;
+
+    updatedSchedule.shifts = {
+      ...updatedSchedule.shifts,
+      [workerName]: new Array(schedule.month_info.dates.length).fill(ShiftCode.W),
+    };
+
+    updatedSchedule.employee_info = {
+      time: {
+        [workerName]: getEmployeeWorkTime({ ...worker, monthNumber, year }),
+        ...updatedSchedule.employee_info.time,
+      },
+      type: { [workerName]: workerType ?? WorkerType.NURSE, ...updatedSchedule.employee_info.type },
+      contractType: {
+        [workerName]: contractType ?? ContractType.EMPLOYMENT_CONTRACT,
+        ...updatedSchedule.employee_info.contractType,
+      },
+    };
+
+    return updatedSchedule;
+  }
+}

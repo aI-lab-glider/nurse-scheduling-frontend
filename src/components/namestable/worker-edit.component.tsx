@@ -19,12 +19,12 @@ import {
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
-import { ScheduleDataActionCreator } from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { Button } from "../common-components";
 import { DropdownButtons } from "../common-components/dropdown-buttons/dropdown-buttons.component";
 import { TextMaskCustom } from "../common-components/text-mask-custom/text-mask-custom.component";
 import { useMonthInfo } from "../schedule-page/validation-drawer/use-verbose-dates";
 import { WorkingTimeHelper } from "./working-time.helper";
+import { WorkerActionCreator } from "../../state/reducers/worker.action-creator";
 
 const useStyles = makeStyles({
   container: {
@@ -201,8 +201,8 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
 
   function handleClose(): void {
     options.mode === WorkerEditComponentMode.ADD
-      ? dispatcher(ScheduleDataActionCreator.addNewWorker(workerInfo))
-      : dispatcher(ScheduleDataActionCreator.modifyWorker(workerInfo));
+      ? dispatcher(WorkerActionCreator.addNewWorker(workerInfo))
+      : dispatcher(WorkerActionCreator.modifyWorker(workerInfo));
 
     setWorkerInfo(initialWorkerModel);
     options.setOpen(false);
