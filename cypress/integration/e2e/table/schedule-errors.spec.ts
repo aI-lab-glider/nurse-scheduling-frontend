@@ -3,14 +3,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 context("Schedule errors", () => {
   before(() => {
-    cy.server();
-    cy.fixture("scheduleErrors.json").then((json) => {
-      cy.route({
+    cy.intercept(
+      {
         method: "POST",
         url: "**/schedule_errors",
-        response: json,
-      });
-    });
+      },
+      {
+        fixture: "scheduleErrors.json",
+      }
+    );
     cy.loadScheduleToMonth();
     cy.enterEditMode();
   });
@@ -19,8 +20,8 @@ context("Schedule errors", () => {
     cy.get("[data-cy=save-schedule-button]").click();
     cy.get("[data-cy=check-schedule-button]").click();
     cy.get("[data-cy=open-folding-section]").click({ multiple: true });
-    cy.contains("Za mało pracowników w trakcie dnia w dniu 1, potrzeba 8, jest 5");
-    cy.contains("Za mało pracowników w trakcie dnia w dniu 2, potrzeba 8, jest 0");
-    cy.contains("Za mało pracowników w nocy w dniu 2, potrzeba 5, jest 0");
+    cy.contains("Za mało pracowników w trakcie dnia w dniu 0, potrzeba 8, jest 5");
+    cy.contains("Za mało pracowników w trakcie dnia w dniu 1, potrzeba 8, jest 0");
+    cy.contains("Za mało pracowników w nocy w dniu 1, potrzeba 5, jest 0");
   });
 });

@@ -26,7 +26,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
-    "@types/lodash": "^4.14.167",
+    "@types/lodash": "^4.14.168",
     "@types/pouchdb": "^6.4.0",
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
@@ -34,12 +34,15 @@
     "cross-env": "^7.0.2",
     "date-fns": "^2.15.0",
     "electron-is-dev": "^1.2.0",
+    "emailjs-com": "^2.6.4",
     "exceljs": "^4.1.1",
     "file-saver": "^2.0.2",
+    "file-type": "^16.2.0",
     "fontsource-roboto": "^3.0.3",
     "immutable": "^4.0.0-rc.12",
     "is-electron": "^2.2.0",
     "node-sass": "^4.14.1",
+    "npm": "^7.5.3",
     "pouchdb-browser": "^7.2.2",
     "react": "^16.13.1",
     "react-datasheet": "^1.4.8",
@@ -71,6 +74,7 @@
     "build": "npm build && npm electron-build",
     "start": "concurrently \"cross-env BROWSER=none npm run b-start\" \"node scripts/await.js && electron .\"",
     "lint": "eslint src/**/*.ts* cypress/**/*.ts*",
+    "lint-fix": "eslint src/**/*.ts* cypress/**/*.ts* --fix",
     "lint-warn": "eslint src/**/*.ts* cypress/**/*.ts* --max-warnings=0",
     "cypress:open": "cypress open"
   },
@@ -86,6 +90,7 @@
     "electron-builder": "^22.9.1",
     "eslint-import-resolver-typescript": "^2.3.0",
     "eslint-plugin-cypress": "^2.11.2",
+    "eslint-plugin-header": "^3.1.1",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.2",
     "lodash": "^4.17.20",
@@ -94,7 +99,8 @@
   },
   "eslintConfig": {
     "plugins": [
-      "cypress"
+      "cypress",
+      "header"
     ],
     "extends": [
       "react-app",
@@ -105,7 +111,11 @@
     "rules": {
       "no-console": "warn",
       "@typescript-eslint/no-non-null-assertion": "off",
-      "@typescript-eslint/triple-slash-reference": "off"
+      "@typescript-eslint/triple-slash-reference": "off",
+      "header/header": [
+        2,
+        "config/license-header.js"
+      ]
     },
     "overrides": [
       {

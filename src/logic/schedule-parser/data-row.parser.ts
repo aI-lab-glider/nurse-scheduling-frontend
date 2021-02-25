@@ -2,17 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { StringHelper } from "../../helpers/string.helper";
-import { ShiftCode } from "../../common-models/shift-info.model";
 
 export class DataRowParser {
-  private data: string[];
-  public isShiftRow: boolean;
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(data: Record<string, any>) {
-    this.data = Object.values(data).map((x) => x?.toString() || null);
-    this.isShiftRow = this.checkShiftRowPattern();
-  }
+  constructor(private data: string[]) {}
 
   public get isEmpty(): boolean {
     return this.rowData(false, true).length === 0;
@@ -22,7 +15,7 @@ export class DataRowParser {
     if (this.isEmpty) {
       throw new Error("Trying to access key from an empty row");
     }
-    return StringHelper.getRawValue(this.rowData(false, true)[0]);
+    return this.rowData(false, true)[0].trim();
   }
 
   public set rowKey(value: string) {
@@ -36,8 +29,8 @@ export class DataRowParser {
   public rowData(includeNulls = false, includeKey = false): string[] {
     const keyPosition = 1;
     return includeKey
-      ? this.data.filter((c) => includeNulls || c != null)
-      : this.data.filter((c) => includeNulls || c != null).slice(keyPosition);
+      ? this.data.filter((c) => includeNulls || !(c === null || c === ""))
+      : this.data.filter((c) => includeNulls || !(c === null || c === "")).slice(keyPosition);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,26 +59,5 @@ export class DataRowParser {
 
   public findValues(...args: string[]): string[] {
     return args.map((arg) => this.findValue(arg));
-  }
-
-  private checkShiftRowPattern(): boolean {
-    const containsNotEmptyKey = this.data[0] !== null && this.data[0] !== "";
-
-    const containsShiftCode = this.data.filter((c) => c in ShiftCode).length !== 0;
-
-    // TODO: Validate constraint with new schedules
-    const dataLen = this.data.length;
-    const hoursCellsNumber = 3;
-    if (this.data.length < hoursCellsNumber) {
-      return false;
-    }
-    let containsHoursInfo = true;
-    for (let i = 1; i < hoursCellsNumber + 1; i++) {
-      if (typeof parseInt(this.data[dataLen - i]) !== "number") {
-        containsHoursInfo = false;
-      }
-    }
-
-    return containsNotEmptyKey && containsShiftCode && containsHoursInfo;
   }
 }

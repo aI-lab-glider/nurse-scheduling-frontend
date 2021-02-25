@@ -1,9 +1,12 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import TextField from "@material-ui/core/TextField";
 import React, { useState } from "react";
 import { MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { FormControl, FormControlLabel, Grid, Radio, RadioGroup } from "@material-ui/core";
-import { Shift, shifts } from "../../../common-models/shift-info.model";
+import { Shift, SHIFTS } from "../../../common-models/shift-info.model";
 import { AcronymGenerator } from "../../../helpers/acronym-generator.helper";
 import { DropdownColors } from "../../common-components/dropdown-buttons/dropdown-colors.component";
 import { Button } from "../../common-components";
@@ -20,8 +23,8 @@ export default function ShiftEditDrawer({
   saveChangedShift,
   mode,
 }: ShiftEditDrawerOptions): JSX.Element {
-  const shiftNames = Object.values(shifts).map((shift) => shift.name);
-  const shiftCodes = Object.values(shifts).map((shift) => shift.code);
+  const shiftNames = Object.values(SHIFTS).map((shift) => shift.name);
+  const shiftCodes = Object.values(SHIFTS).map((shift) => shift.code);
   const [shiftName, setShiftName] = useState(selectedShift.name);
   const [shiftCode, setShiftCode] = useState(selectedShift.code);
 

@@ -44,7 +44,7 @@ export class ArrayHelper {
   }
 
   public static replace<T>(arr: T[], replaceArr: T[], replacePosition: ArrayPositionPointer): T[] {
-    if (replacePosition === "TAIL") {
+    if (replacePosition === "HEAD") {
       arr.splice(0, replaceArr.length, ...replaceArr);
     } else {
       arr.splice(arr.length - replaceArr.length, arr.length, ...replaceArr);
@@ -68,13 +68,20 @@ export class ArrayHelper {
     return ArrayHelper.replace(updatedArr, updateElements, updatePosition);
   }
 
-  public static extend<T>(arr1: T[], count1: number, curr: T[], arr2: T[], count2: number): T[] {
-    const prevMonthData = arr1 ?? [];
-    const nextMonthData = arr2 ?? [];
+  public static extend<T>(
+    arr1: T[],
+    count1: number,
+    curr: T[],
+    arr2: T[],
+    count2: number,
+    defaultValue: T
+  ): T[] {
+    const prevArrData = arr1 ?? Array(count1).fill(defaultValue);
+    const nextArrData = arr2 ?? Array(count2).fill(defaultValue);
 
-    const prevMonth = prevMonthData.slice(prevMonthData.length - count1);
-    const nextMonth = nextMonthData.slice(0, count2);
+    const left = prevArrData.slice(prevArrData.length - count1);
+    const right = nextArrData.slice(0, count2);
 
-    return [...prevMonth, ...curr, ...nextMonth];
+    return [...left, ...curr, ...right];
   }
 }

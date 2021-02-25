@@ -14,7 +14,11 @@ export default function ModalErrorList({ errors = [] }: Options): JSX.Element {
   return (
     <>
       {errors?.length > 0 &&
-        errors.map((error): JSX.Element => <ModalErrorListItem error={error} />)}
+        errors.map(
+          (error): JSX.Element => (
+            <ModalErrorListItem key={error.message?.slice(2, 9)} error={error} />
+          )
+        )}
       {errors?.length === 0 && "Nie znaleziono błędów"}{" "}
     </>
   );

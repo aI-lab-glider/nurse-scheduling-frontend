@@ -39,7 +39,7 @@ describe("DataRowParser", () => {
       const dataRowParser = new DataRowParser(dataRow);
 
       it("should return row key", () => {
-        expect(dataRowParser.rowKey).to.equal("schedule");
+        expect(dataRowParser.rowKey).to.equal("Schedule");
       });
     });
 
@@ -60,7 +60,7 @@ describe("DataRowParser", () => {
       expect(dataRowParser.rowData(true)).to.eql([
         "november",
         "year 2020",
-        null,
+        "",
         "number of hours 10",
       ]);
       expect(dataRowParser.rowData(false, true)).to.eql([
@@ -73,7 +73,7 @@ describe("DataRowParser", () => {
         " Schedule ",
         "november",
         "year 2020",
-        null,
+        "",
         "number of hours 10",
       ]);
     });
@@ -89,7 +89,7 @@ describe("DataRowParser", () => {
       expect(dataRowParser.createWithProcessedRow(processingFunctionMock)).to.be.a("Object");
       expect(
         dataRowParser.createWithProcessedRow(processingFunctionMock).rowData(true, true)
-      ).to.eql(["schedule", "alice", "has", "a", "cat"]);
+      ).to.eql(["Schedule", "alice", "has", "a", "cat"]);
     });
   });
 
@@ -98,14 +98,14 @@ describe("DataRowParser", () => {
 
     it("should return new DataRowParser with cropped data", () => {
       expect(dataRowParser.createWithCroppedData(0, -1).rowData(true, true)).to.eql([
-        "schedule",
+        "Schedule",
         "november",
         "year 2020",
-        null,
+        "",
       ]);
       expect(dataRowParser.createWithCroppedData(2, 4).rowData(true, true)).to.eql([
-        "schedule",
-        null,
+        "Schedule",
+        "",
         "number of hours 10",
       ]);
     });

@@ -5,63 +5,82 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
 import { ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
-import { fetchOrCreateMonthDM, ScheduleDataActionCreator } from "./schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
 import * as _ from "lodash";
-import { HistoryReducerActionCreator } from "../../history.reducer";
 import { copyShiftsToMonth, cropMonthInfoToMonth, getDateWithMonthOffset } from "./common-reducers";
 import {
   cropScheduleDMToMonthDM,
   MonthDataModel,
 } from "../../../../common-models/schedule-data.model";
+import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
+import { RevisionReducerAction } from "../revision-info.reducer";
+import { VerboseDateHelper } from "../../../../helpers/verbose-date.helper";
+
+type MonthOffset = -1 | 1;
 
 export class MonthSwitchActionCreator {
   static switchToNewMonth(offset: number): ThunkFunction<unknown> {
     return async (dispatch, getState): Promise<void> => {
-      const history = getState().history;
       const actualSchedule = getState().actualState.persistentSchedule.present;
-      const actualMonth = cropScheduleDMToMonthDM(actualSchedule);
-      const { month, year } = actualMonth.scheduleKey;
-
-      const historyAction = HistoryReducerActionCreator.addToMonthHistory(actualMonth);
+      const actualMonthDM = cropScheduleDMToMonthDM(actualSchedule);
+      const { month, year } = actualMonthDM.scheduleKey;
 
       const newDate = getDateWithMonthOffset(month, year, offset);
+      const newYear = newDate.getFullYear();
+      const newMonth = newDate.getMonth();
       const newMonthKey = new ScheduleKey(newDate.getMonth(), newDate.getFullYear());
 
-      const nextMonth = await fetchOrCreateMonthDM(newMonthKey, history, actualMonth);
-      const addNewScheduleAction = ScheduleDataActionCreator.setScheduleFromMonthDM(nextMonth);
+      // Set default revision type - primary in future, actual for present and past
+      const { revision } = getState().actualState;
+      const isFuture = VerboseDateHelper.isMonthInFuture(newMonth, newYear);
+      const newRevisionType = isFuture ? "primary" : "actual";
+      if (revision !== newRevisionType) {
+        dispatch({
+          type: RevisionReducerAction.CHANGE_REVISION,
+          payload: newRevisionType,
+        });
+      }
 
-      dispatch(historyAction);
+      const addNewScheduleAction = ScheduleDataActionCreator.setScheduleFromKeyIfExistsInDB(
+        newMonthKey,
+        newRevisionType,
+        actualMonthDM
+      );
       dispatch(addNewScheduleAction);
     };
   }
 
-  static copyActualMonthToMonthWithOffset(offset: number): ThunkFunction<unknown> {
+  static copyActualMonthToMonthWithOffset(offset: MonthOffset): ThunkFunction<unknown> {
     return async (dispatch, getState): Promise<void> => {
       const {
         month_number: month,
         year,
       } = getState().actualState.persistentSchedule.present.schedule_info;
-      if (month === undefined || year === undefined) return;
-      const fromDate = getDateWithMonthOffset(month, year, offset);
-      const copyingSchedule = getState().history[
-        new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).dbKey
-      ];
-      const monthDataModel = copyMonthDM(new ScheduleKey(month, year), copyingSchedule);
-      dispatch(ScheduleDataActionCreator.setScheduleFromMonthDM(monthDataModel));
+      if (!_.isNil(month) && !_.isNil(year)) {
+        const fromDate = getDateWithMonthOffset(month, year, offset);
+        const { revision } = getState().actualState;
+
+        const baseSchedule = await new LocalStorageProvider().getMonthRevision(
+          new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).getRevisionKey(revision)
+        );
+
+        const currentSchedule = await new LocalStorageProvider().getMonthRevision(
+          new ScheduleKey(month, year).getRevisionKey(revision)
+        );
+        if (baseSchedule && currentSchedule) {
+          const monthDataModel = copyMonthDM(currentSchedule, baseSchedule);
+          dispatch(ScheduleDataActionCreator.setScheduleFromMonthDM(monthDataModel, true));
+        }
+      }
     };
   }
 }
 
-function copyMonthDM(newMonthKey: ScheduleKey, baseMonth: MonthDataModel): MonthDataModel {
-  const { month, year } = newMonthKey;
+function copyMonthDM(currentSchedule: MonthDataModel, baseMonth: MonthDataModel): MonthDataModel {
   return {
-    scheduleKey: newMonthKey,
-    shifts: copyShiftsToMonth(
-      new ScheduleKey(month, year),
-      baseMonth.shifts,
-      baseMonth.month_info.dates
-    ),
-    month_info: cropMonthInfoToMonth(new ScheduleKey(month, year), baseMonth.month_info),
+    scheduleKey: currentSchedule.scheduleKey,
+    shifts: copyShiftsToMonth(currentSchedule, baseMonth),
+    month_info: cropMonthInfoToMonth(currentSchedule.scheduleKey, baseMonth.month_info),
     employee_info: _.cloneDeep(baseMonth.employee_info),
     isAutoGenerated: false,
     shift_types: _.cloneDeep(baseMonth.shift_types),

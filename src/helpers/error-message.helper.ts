@@ -8,6 +8,7 @@ import {
 } from "../common-models/schedule-error-message.model";
 import {
   AlgorithmErrorCode,
+  GroupedScheduleErrors,
   InputFileErrorCode,
   NetworkErrorCode,
   ParseErrorCode,
@@ -19,6 +20,17 @@ import { Color, Colors } from "./colors/color.model";
 type Error = ScheduleErrorLevel;
 
 export class ErrorMessageHelper {
+  public static mapScheduleErrors(errors: GroupedScheduleErrors): ScheduleErrorMessageModel[] {
+    const mappedErrors = Object.values(errors).reduce(
+      (previous, current) => [
+        ...previous,
+        ...(current ?? []).map(ErrorMessageHelper.getErrorMessage),
+      ],
+      [] as ScheduleErrorMessageModel[]
+    );
+    return mappedErrors;
+  }
+
   public static getErrorMessage(error: ScheduleError): ScheduleErrorMessageModel {
     const dayTimeTranslations = {
       MORNING: "porannej",
@@ -30,80 +42,104 @@ export class ErrorMessageHelper {
     let message: string;
     let title = "Nie rozpoznano błędu";
     let day = 0;
+    let i = 0;
     let type = ScheduleErrorType.OTH;
 
     switch (error.kind) {
-      case AlgorithmErrorCode.AON:
-        message = `Brak pielęgniarek w dniu ${error.day} na zmianie ${
+      case AlgorithmErrorCode.AlwaysAtLeastOneNurse:
+        i = 0;
+        message = `Brak pielęgniarek w dniu <strong>${error.day} na zmianie ${
           error.day_time ? dayTimeTranslations[error.day_time] : ""
-        }`;
+        }</strong>`;
+        if (error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+          message += ` w godzinach <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+        }
+        while (error.segments[i + 1]) {
+          i++;
+          if (error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+            message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+          }
+        }
         type = ScheduleErrorType.AON;
         title = "date";
         if (error.day) {
           day += error.day;
         }
         break;
-      case AlgorithmErrorCode.WND:
-        message = `Za mało pracowników w trakcie dnia w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
+      case AlgorithmErrorCode.WorkerNumberDuringDay:
+        i = 0;
+        message = `Za mało pracowników w trakcie dnia w dniu <strong>${error.day}</strong>`;
+        if (error.segments && error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+          message += ` w godzinach <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+          while (error.segments[i + 1]) {
+            i++;
+            if (error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+              message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+            }
+          }
+        }
+        message += `, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
         type = ScheduleErrorType.WND;
         title = "date";
         if (error.day) {
           day += error.day;
         }
         break;
-      case AlgorithmErrorCode.WNN:
-        message = `Za mało pracowników w nocy w dniu ${error.day}, potrzeba ${error.required}, jest ${error.actual}`;
+      case AlgorithmErrorCode.WorkerNumberDuringNight:
+        i = 0;
+        message = `Za mało pracowników w nocy w dniu <strong>${error.day}</strong>`;
+        if (error.segments && error.segments[i][0] !== 22 && error.segments[i][1] !== 6) {
+          message += ` w godzinach <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+          while (error.segments[i + 1]) {
+            i++;
+            if (error.segments[i][0] !== 22 && error.segments[i][1] !== 6) {
+              message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+            }
+          }
+        }
+        message += `, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
         type = ScheduleErrorType.WNN;
         title = "date";
         if (error.day) {
           day += error.day;
         }
         break;
-      case AlgorithmErrorCode.DSS:
-        message = `Niedozwolona sekwencja zmian dla pracownika ${error.worker} w dniu ${error.day}: ${error.succeeding} po ${error.preceding}`;
+      case AlgorithmErrorCode.DissalowedShiftSequence:
+        message = `Niedozwolona sekwencja zmian dla pracownika <strong>${error.worker}</strong> w dniu <strong>${error.day}</strong>: <strong>${error.succeeding}</strong> po <strong>${error.preceding}</strong>`;
         type = ScheduleErrorType.DSS;
         title = "date";
         if (error.day) {
           day += error.day;
         }
         break;
-      case AlgorithmErrorCode.LLB:
-        message = `Brak wymaganej długiej przerwy dla pracownika ${error.worker} w tygodniu ${error.week}`;
+      case AlgorithmErrorCode.LackingLongBreak:
+        message = `Brak wymaganej długiej przerwy dla pracownika <strong>${error.worker}</strong> w tygodniu <strong>${error.week}</strong>`;
         type = ScheduleErrorType.LLB;
         title = `${error.worker}`;
         break;
-      case AlgorithmErrorCode.WUH:
-        message = `Pracownik ${error.worker} ma ${error.hours} niedogodzin`;
+      case AlgorithmErrorCode.WorkerUnderTime:
+        message = `Pracownik <strong>${error.worker}</strong> ma <strong>${error.hours}</strong> niedogodzin`;
         type = ScheduleErrorType.WUH;
         title = `${error.worker}`;
         break;
-      case AlgorithmErrorCode.WOH:
-        message = `Pracownik ${error.worker} ma ${error.hours} nadgodzin`;
+      case AlgorithmErrorCode.WorkerOvertime:
+        message = `Pracownik <strong>${error.worker}</strong> ma <strong>${error.hours}</strong> nadgodzin`;
         type = ScheduleErrorType.WOH;
         title = `${error.worker}`;
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
-        message = `Niedozwolona wartość zmiany: ${error.actual}, w dniu ${error.day} u pracownika ${error.worker}`;
+        message = `Nieznana wartość zmiany: "${error.actual}" dla pracownika  ${error.worker} w dniu ${error.day}. Przyjęto, że zmiana to wolne.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
         title = `${error.worker}`;
         break;
       case InputFileErrorCode.EMPTY_FILE:
         message = `Błąd podczas wczytywania pliku wejściowego: Pusty plik`;
         break;
-      case InputFileErrorCode.NO_BABYSITTER_SECTION:
-        message = `Błąd podczas wczytywania pliku wejściowego: Nie znaleziono sekcji "opiekunki"`;
+      case InputFileErrorCode.UNHANDLED_FILE_EXTENSION:
+        message = `Nieobsługiwane rozszerzenie pliku: .${error.filename}`;
         break;
-      case InputFileErrorCode.NO_NURSE_SECTION:
-        message = `Błąd podczas wczytywania pliku wejściowego: Nie znaleziono sekcji "pielęgniarki"`;
-        break;
-      case InputFileErrorCode.NO_CHILDREN_SECTION:
-        message = `Błąd podczas wczytywania pliku wejściowego: Nie znaleziono sekcji "dzieci"`;
-        break;
-      case InputFileErrorCode.INVALID_METADATA:
-        message = `Błąd podczas wczytywania pliku wejściowego: Wykryto błędy w sekcji informacyjnej`;
-        break;
-      case InputFileErrorCode.NO_CHILDREN_QUANTITY:
-        message = "Błąd podczas wczytywania pliku wejściowego: Nie podano liczby dzieci";
+      case InputFileErrorCode.LOAD_FILE_ERROR:
+        message = `${error.message}`;
         break;
       case NetworkErrorCode.NETWORK_ERROR:
         message = "Błąd połączenia";

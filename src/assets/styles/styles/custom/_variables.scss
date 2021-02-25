@@ -11,12 +11,17 @@ $enable-grid-classes: true !default;
 $enable-print-styles: true !default;
 
 // Header
+$header-height: 52px !default;
 $primary-header-color: #1d3557 !default;
 $header-text-color: #ffffff !default;
 
 $babysitter-label-background: #ffd100 !default;
 $nurse-label-background: #c8dfff !default;
 $worker-table-border-color: #d5e6fe !default;
+
+// Drawer
+
+$drawer-header-height: 67px !default;
 
 // Shifts
 
@@ -31,7 +36,6 @@ $urlop: rgba(255, 138, 0, 1);
 
 // Color system
 $primary: #1d3557 !default;
-$selection-color: rgba(71, 13, 179, 0.25);
 $secondary: #000000 !default;
 $primary-text-color: $primary !default;
 $secondary-text-color: $secondary !default;
@@ -453,7 +457,7 @@ $font-size-xs: ($font-size-base * 0.714);
 $h1-font-size: $font-size-base * 2.35714285 !default; //2.1875rem
 $h2-font-size: $font-size-base * 1.9285714 !default;
 $h3-font-size: $font-size-base * 1.642857 !default;
-$h4-font-size: $font-size-base * 1.2142857 !default;
+$h4-font-size: $font-size-base * 1.2142857 !default; //1.0625rem
 $h5-font-size: $font-size-base * 0.9285714 !default;
 $h6-font-size: $font-size-base * 0.8571428 !default;
 
@@ -1038,6 +1042,7 @@ $footer-link-color: $gray-600 !default;
 $footer-link-hover-color: $gray-700 !default;
 $footer-heading-color: $gray-600 !default;
 $footer-heading-font-size: $font-size-sm !default;
+$footer-height: 72px !default;
 
 // Alert
 

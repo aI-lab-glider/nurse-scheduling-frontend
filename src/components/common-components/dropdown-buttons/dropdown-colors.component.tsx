@@ -31,7 +31,7 @@ export function DropdownColors({
 }: DropdownColorsOptions): JSX.Element {
   useEffect(() => {
     setLocalColor(selectedColor);
-  });
+  }, [selectedColor]);
 
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);

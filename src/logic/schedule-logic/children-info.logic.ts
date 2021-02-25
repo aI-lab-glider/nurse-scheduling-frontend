@@ -4,6 +4,7 @@
 import { DataRow } from "./data-row";
 import { ChildrenSectionKey } from "../section.model";
 import { ChildrenInfoProvider } from "../providers/children-info-provider.model";
+import { ScheduleError } from "../../common-models/schedule-error.model";
 
 export class ChildrenInfoLogic implements ChildrenInfoProvider {
   private childrenInfoAsDataRows: { [key: string]: DataRow } = {};
@@ -38,5 +39,9 @@ export class ChildrenInfoLogic implements ChildrenInfoProvider {
       return true;
     }
     return false;
+  }
+
+  get errors(): ScheduleError[] {
+    return [];
   }
 }

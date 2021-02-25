@@ -3,12 +3,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../../state/models/application-state.model";
-import { ScheduleErrorMessageModel } from "../../../../common-models/schedule-error-message.model";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../..";
+import { ScheduleErrorMessageModel } from "../../../../common-models/schedule-error-message.model";
+import { ErrorMessageHelper } from "../../../../helpers/error-message.helper";
+import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 import DefaultModal from "../modal.component";
 import ModalErrorList from "./error.modal.list.component";
+import { ScheduleDataActionCreator } from "../../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 
 export interface ErrorsModalComponent {
   setOpen: (open: boolean) => void;
@@ -18,15 +20,18 @@ export interface ErrorsModalComponent {
 export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Element {
   const { setOpen, open } = options;
   const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const dispach = useDispatch();
 
   const handleClose = (): void => {
     setOpen(false);
+    dispach(ScheduleDataActionCreator.cleanErrors());
   };
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
 
   useEffect(() => {
-    if (scheduleErrors?.length) {
-      setMappedErrors(scheduleErrors);
+    const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors);
+    if (errors) {
+      setMappedErrors(errors);
     }
   }, [scheduleErrors]);
 
@@ -44,7 +49,14 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
 
   return (
     <div>
-      <DefaultModal open={open} setOpen={setOpen} title={title} body={body} footer={footer} />
+      <DefaultModal
+        open={open}
+        setOpen={setOpen}
+        title={title}
+        body={body}
+        footer={footer}
+        height={1400}
+      />
     </div>
   );
 }

@@ -11,6 +11,8 @@
   margin-bottom: 8px;
   display: flex;
   align-items: stretch;
+  align-content: center;
+  justify-items: center;
   position: relative;
 
   .red-rectangle {
@@ -24,9 +26,9 @@
   .error-title {
     color: $error-date-text-color;
     size: 14px;
-    width: 20%;
+    flex: 1;
     text-align: center;
-    padding-left: 20px;
+    padding-left: 15px;
     position: relative;
 
     .error-title-content {
@@ -35,105 +37,22 @@
       top: 50%;
       transform: translate(0, -50%);
       padding-left: 10px;
-
-      @media (max-width: 1150px) {
-        display: block;
-        width: 100%;
-        transform: none;
-        bottom: auto;
-        left: auto;
-        position: unset;
-        text-align: left;
-        padding-top: 10px;
-      }
-    }
-
-    @media (max-width: 1700px) {
-      width: 25%;
-      padding-left: 10px;
-    }
-
-    @media (max-width: 1350px) {
-      width: 30%;
-    }
-
-    @media (max-width: 1150px) {
-      display: block;
-      width: 100%;
-      position: unset;
     }
   }
 
   .error-text {
     color: $primary-text-color;
     size: 13px;
-    width: 62.2%;
-    margin: 10px 0px 10px 10px;
+    flex: 2.5;
+    margin: 10px 10px;
     text-align: justify;
     font-family: "Roboto";
-
-    @media (max-width: 1700px) {
-      width: 55%;
-    }
-
-    @media (max-width: 1500px) {
-      width: 50%;
-    }
-
-    @media (max-width: 1350px) {
-      width: 43%;
-    }
-
-    @media (max-width: 1150px) {
-      display: block;
-      width: 100%;
-      position: unset;
-      padding-left: 20px;
-      padding-right: 10px;
-    }
   }
 
   .error-btn {
-    position: relative;
-    width: 17%;
-
-    Button {
-      position: absolute;
-      bottom: 50%;
-      left: 50%;
-      transform: translate(-50%, 50%);
-
-      @media (max-width: 1150px) {
-        display: block;
-        transform: none;
-        bottom: auto;
-        left: auto;
-        position: unset;
-      }
-    }
-
-    @media (max-width: 1700px) {
-      width: 20%;
-    }
-
-    @media (max-width: 1500px) {
-      width: 25%;
-    }
-
-    @media (max-width: 1350px) {
-      width: 27%;
-    }
-
-    @media (max-width: 1150px) {
-      display: block;
-      width: 100%;
-      position: unset;
-      padding-left: 10px;
-      padding-bottom: 10px;
-    }
-  }
-
-  @media (max-width: 1150px) {
-    display: block;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

@@ -1,36 +1,41 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import classNames from "classnames/bind";
 import React, { useContext, useState } from "react";
-import { DataRow } from "../../logic/schedule-logic/data-row";
+import { VerboseDate } from "../../common-models/month-info.model";
+import { ScheduleError } from "../../common-models/schedule-error.model";
+import { ShiftCode } from "../../common-models/shift-info.model";
 import { WorkerInfoModel, WorkerType } from "../../common-models/worker-info.model";
+import { ArrayHelper } from "../../helpers/array.helper";
 import { Sections } from "../../logic/providers/schedule-provider.model";
-import { ScheduleLogicContext } from "../schedule-page/table/schedule/use-schedule-state";
+import { DataRow } from "../../logic/schedule-logic/data-row";
+import { MetadataLogic } from "../../logic/schedule-logic/metadata.logic";
 import { ShiftsInfoLogic } from "../../logic/schedule-logic/shifts-info.logic";
+import { ErrorTooltipProvider } from "../schedule-page/table/schedule/schedule-parts/error-tooltip-provider.component";
+import { BaseSectionOptions } from "../schedule-page/table/schedule/sections/base-section/base-section.component";
+import { ScheduleLogicContext } from "../schedule-page/table/schedule/use-schedule-state";
+
 import WorkerDrawerComponent, {
   WorkerDrawerMode,
 } from "../workers-page/workers-tab/worker-drawer.component";
-import { MetadataLogic } from "../../logic/schedule-logic/metadata.logic";
-import { ArrayHelper } from "../../helpers/array.helper";
-import { VerboseDate } from "../../common-models/month-info.model";
-import { ShiftCode } from "../../common-models/shift-info.model";
-import classNames from "classnames/bind";
 
-export interface NameTableCellOptions {
+export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "errorSelector"> {
   dataRow: DataRow[];
   workerType?: WorkerType;
   clickable: boolean;
 }
 
-let workerInfo: WorkerInfoModel = { name: "", time: 0 };
+const initialWorkerInfo: WorkerInfoModel = { name: "", time: 0 };
 
 export function NameTableSection({
   dataRow,
   workerType,
+  errorSelector,
   clickable,
-}: NameTableCellOptions): JSX.Element {
-  const mode = WorkerDrawerMode.INFO;
+}: NameTableSectionOptions): JSX.Element {
   const [open, setIsOpen] = useState(false);
+  const [workerInfo, setWorkerInfo] = useState<WorkerInfoModel>(initialWorkerInfo);
 
   const scheduleLogic = useContext(ScheduleLogicContext);
   const sectionKey: keyof Sections =
@@ -52,14 +57,14 @@ export function NameTableSection({
           shifts?.[name]
         );
 
-        workerInfo = {
+        setWorkerInfo({
           name: name,
           time: actualHours,
           type: workerType,
           shifts: workersWithDates,
           requiredHours,
           overtime,
-        };
+        });
       }
     }
   }
@@ -74,21 +79,34 @@ export function NameTableSection({
     <React.Fragment>
       <table className="nametable">
         <tbody>
-          {data.map((cellData) => {
+          {data.map((workerName) => {
             return (
-              <tr
-                key={cellData}
-                onClick={(): void => toggleDrawer(true, cellData)}
+              <ErrorTooltipProvider
+                key={workerName}
+                errorSelector={(scheduleErrors): ScheduleError[] =>
+                  errorSelector?.(workerName, 0, scheduleErrors) ?? []
+                }
                 className={classNames(
                   "nametableRow",
                   clickable ? "pointerCursor" : "defaultCursor"
                 )}
+                tooltipClassname="nametableRow-error-tooltip"
+                showErrorTitle={false}
               >
-                <td>
-                  <span>{cellData}</span>
-                  <span className="underline" />
-                </td>
-              </tr>
+                <tr
+                  key={workerName}
+                  onClick={(): void => toggleDrawer(true, workerName)}
+                  className={classNames(
+                    "nametableRow",
+                    clickable ? "pointerCursor" : "defaultCursor"
+                  )}
+                >
+                  <td>
+                    <span>{workerName}</span>
+                    <span className="underline" />
+                  </td>
+                </tr>
+              </ErrorTooltipProvider>
             );
           })}
         </tbody>
@@ -96,7 +114,7 @@ export function NameTableSection({
       <WorkerDrawerComponent
         open={open}
         onClose={(): void => toggleDrawer(false, "")}
-        mode={mode}
+        mode={WorkerDrawerMode.INFO}
         worker={workerInfo}
         setOpen={setIsOpen}
       />

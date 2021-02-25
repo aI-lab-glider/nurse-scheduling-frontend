@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useAutocomplete } from "@material-ui/lab";
+import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
 
 interface AutocompleteOptions<T> {
@@ -9,14 +10,22 @@ interface AutocompleteOptions<T> {
   getOptionLabel: (option: T) => string;
   onValueChange: (newValue: T) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  className?: string;
+  getOptionColor: (option: T) => string;
+  className: string;
 }
+/**
+ * Creates a dropdown with value set to options.
+ * Important!
+ * Dropdown create by this function is always opened.
+ * To close the dropdown, you should destroy this component
+ */
 export function AutocompleteComponent<T>({
-  className = "",
+  className,
   options,
   getOptionLabel,
   onValueChange,
   onKeyDown,
+  getOptionColor,
 }: AutocompleteOptions<T>): JSX.Element {
   const [value, setValue] = useState<T>();
   useEffect(() => {
@@ -36,6 +45,7 @@ export function AutocompleteComponent<T>({
     getOptionLabel,
     open: true,
   });
+
   return (
     <div data-cy="shiftDropdown">
       <div {...getRootProps()}>
@@ -48,16 +58,29 @@ export function AutocompleteComponent<T>({
         />
       </div>
       {groupedOptions.length > 0 ? (
-        <ul {...getListboxProps()} className="listbox">
+        <ul
+          {...getListboxProps()}
+          className={classNames(
+            "listbox",
+            className.indexOf("moreMargin") > -1 ? "more-left-margin" : ""
+          )}
+        >
           {groupedOptions.map((option, index) => (
             <li
               {...getOptionProps({ option, index })}
               data-cy={option["data-cy"]}
-              onClick={(): void => {
+              onClick={(e: React.MouseEvent): void => {
+                e.stopPropagation();
                 setValue(option);
               }}
             >
-              {getOptionLabel(option)}
+              <div className="container">
+                <div className="optionLabel">{getOptionLabel(option)}</div>
+                <div
+                  className="colorSample"
+                  style={{ backgroundColor: `#${getOptionColor(option)}` }}
+                />
+              </div>
             </li>
           ))}
         </ul>

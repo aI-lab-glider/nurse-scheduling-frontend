@@ -55,7 +55,8 @@
 #file-dropdown-onTopButton,
 #position-onTopButton,
 #contract-time-dropdown-onTopButton,
-#colors-onTopButton {
+#colors-onTopButton,
+#extension-onTopButton {
   z-index: 200;
   position: relative;
 }
@@ -83,6 +84,11 @@
 #colors,
 #colors-onTopButton {
   width: 200px;
+}
+
+#extension,
+#extension-onTopButton {
+  width: 100px;
 }
 
 .dropdown-colors-list {

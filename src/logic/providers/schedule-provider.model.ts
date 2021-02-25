@@ -34,18 +34,20 @@ export class Schedule {
     const sections = this.provider.sections;
     return {
       schedule_info: {
-        month_number: sections.Metadata.monthNumber ?? 0,
-        year: sections.Metadata?.year ?? 0,
+        month_number: sections.Metadata !== undefined ? sections.Metadata.monthNumber : 0,
+        year: sections.Metadata !== undefined ? sections.Metadata?.year : 0,
       },
       shifts: {
         ...sections.BabysitterInfo.workerShifts,
         ...sections.NurseInfo.workerShifts,
       },
       month_info: {
-        frozen_shifts: sections.Metadata.frozenDates ?? [],
-        children_number: sections.FoundationInfo.childrenInfo,
-        dates: sections.Metadata.dates ?? [],
-        extra_workers: sections.FoundationInfo.extraWorkersInfo ?? [],
+        frozen_shifts: sections.Metadata !== undefined ? sections.Metadata.frozenDates : [],
+        children_number:
+          sections.FoundationInfo !== undefined ? sections.FoundationInfo.childrenInfo : [],
+        dates: sections.Metadata !== undefined ? sections.Metadata.dates : [],
+        extra_workers:
+          sections.FoundationInfo !== undefined ? sections.FoundationInfo.extraWorkersInfo : [],
       },
       employee_info: {
         type: this.provider.getWorkerTypes(),

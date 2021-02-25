@@ -16,183 +16,82 @@ interface Options {
 interface ErrorTypes {
   errorType: ScheduleErrorType;
   errors?: ScheduleErrorMessageModel[];
-  length: number;
+  errorDescription: string;
 }
 
 export default function ErrorList({ errors = [] }: Options): JSX.Element {
-  const oth: ErrorTypes = {
-    errorType: ScheduleErrorType.AON,
-    errors: errors.filter((e) => e.type === ScheduleErrorType.OTH),
-    length: errors.filter((e) => e.type === ScheduleErrorType.OTH).length,
+  const errorObjects: Array<ErrorTypes> = [
+    {
+      errorType: ScheduleErrorType.AON,
+      errors: errors.filter((e) => e.type === ScheduleErrorType.AON),
+      errorDescription: "Brak pielęgniarek",
+    },
+    {
+      errorType: ScheduleErrorType.AON,
+      errors: errors.filter((e) => e.type === ScheduleErrorType.WND),
+      errorDescription: "Za mało pracowników w trakcie dnia",
+    },
+    {
+      errorType: ScheduleErrorType.AON,
+      errors: errors.filter((e) => e.type === ScheduleErrorType.WNN),
+      errorDescription: "Za mało pracowników w nocy",
+    },
+    {
+      errorType: ScheduleErrorType.AON,
+      errors: errors.filter((e) => e.type === ScheduleErrorType.DSS),
+      errorDescription: "Niedozwolona sekwencja zmian",
+    },
+    {
+      errorType: ScheduleErrorType.AON,
+      errors: errors.filter((e) => e.type === ScheduleErrorType.LLB),
+      errorDescription: "Brak wymaganej długiej przerwy",
+    },
+    {
+      errorType: ScheduleErrorType.AON,
+      errors: errors.filter((e) => e.type === ScheduleErrorType.WUH),
+      errorDescription: "Niedogodziny",
+    },
+    {
+      errorType: ScheduleErrorType.AON,
+      errors: errors.filter((e) => e.type === ScheduleErrorType.WOH),
+      errorDescription: "Nadgodziny",
+    },
+    {
+      errorType: ScheduleErrorType.AON,
+      errors: errors.filter((e) => e.type === ScheduleErrorType.ILLEGAL_SHIFT_VALUE),
+      errorDescription: "Niedozwolona wartość zmiany",
+    },
+    {
+      errorType: ScheduleErrorType.AON,
+      errors: errors.filter((e) => e.type === ScheduleErrorType.OTH),
+      errorDescription: "Pozostałe błędy",
+    },
+  ];
+
+  const renderOneTypeOfErrors = (errorData: ErrorTypes): JSX.Element => {
+    return errorData.errors && errorData.errors.length > 0 ? (
+      <FoldingSection name={`${errorData.errorDescription} (${errorData.errors.length})`}>
+        {errorData.errors.map(
+          (error, index): JSX.Element => (
+            <ErrorListItem
+              key={`${error.message ? error.message.substr(2, 9) : "0"}${index}`}
+              error={error}
+            />
+          )
+        )}
+      </FoldingSection>
+    ) : (
+      <></>
+    );
   };
-  const aon: ErrorTypes = {
-    errorType: ScheduleErrorType.AON,
-    errors: errors.filter((e) => e.type === ScheduleErrorType.AON),
-    length: errors.filter((e) => e.type === ScheduleErrorType.AON).length,
-  };
-  const wnd: ErrorTypes = {
-    errorType: ScheduleErrorType.AON,
-    errors: errors.filter((e) => e.type === ScheduleErrorType.WND),
-    length: errors.filter((e) => e.type === ScheduleErrorType.WND).length,
-  };
-  const wnn: ErrorTypes = {
-    errorType: ScheduleErrorType.AON,
-    errors: errors.filter((e) => e.type === ScheduleErrorType.WNN),
-    length: errors.filter((e) => e.type === ScheduleErrorType.WNN).length,
-  };
-  const dss: ErrorTypes = {
-    errorType: ScheduleErrorType.AON,
-    errors: errors.filter((e) => e.type === ScheduleErrorType.DSS),
-    length: errors.filter((e) => e.type === ScheduleErrorType.DSS).length,
-  };
-  const llb: ErrorTypes = {
-    errorType: ScheduleErrorType.AON,
-    errors: errors.filter((e) => e.type === ScheduleErrorType.LLB),
-    length: errors.filter((e) => e.type === ScheduleErrorType.LLB).length,
-  };
-  const wuh: ErrorTypes = {
-    errorType: ScheduleErrorType.AON,
-    errors: errors.filter((e) => e.type === ScheduleErrorType.WUH),
-    length: errors.filter((e) => e.type === ScheduleErrorType.WUH).length,
-  };
-  const woh: ErrorTypes = {
-    errorType: ScheduleErrorType.AON,
-    errors: errors.filter((e) => e.type === ScheduleErrorType.WOH),
-    length: errors.filter((e) => e.type === ScheduleErrorType.WOH).length,
-  };
-  const isv: ErrorTypes = {
-    errorType: ScheduleErrorType.AON,
-    errors: errors.filter((e) => e.type === ScheduleErrorType.ILLEGAL_SHIFT_VALUE),
-    length: errors.filter((e) => e.type === ScheduleErrorType.ILLEGAL_SHIFT_VALUE).length,
-  };
+
   return (
     <>
-      {aon.length > 0 && (
-        <FoldingSection name={`Brak pielęgniarek (${aon.length})`}>
-          <div className="scrollableContainer75vh">
-            {aon.errors?.map(
-              (error, index): JSX.Element => (
-                <ErrorListItem
-                  key={(error.message ? error.message.substr(2, 9) : "0") + index}
-                  error={error}
-                />
-              )
-            )}
-          </div>
-        </FoldingSection>
-      )}
-      {wnd.length > 0 && (
-        <FoldingSection name={`Za mało pracowników w trakcie dnia (${wnd.length})`}>
-          <div className="scrollableContainer75vh">
-            {wnd.errors?.map(
-              (error, index): JSX.Element => (
-                <ErrorListItem
-                  key={(error.message ? error.message.substr(2, 9) : "0") + index}
-                  error={error}
-                />
-              )
-            )}
-          </div>
-        </FoldingSection>
-      )}
-      {wnn.length > 0 && (
-        <FoldingSection name={`Za mało pracowników w nocy (${wnn.length})`}>
-          <div className="scrollableContainer75vh">
-            {wnn.errors?.map(
-              (error, index): JSX.Element => (
-                <ErrorListItem
-                  key={(error.message ? error.message.substr(2, 9) : "0") + index}
-                  error={error}
-                />
-              )
-            )}
-          </div>
-        </FoldingSection>
-      )}
-      {dss.length > 0 && (
-        <FoldingSection name={`Niedozwolona sekwencja zmian (${dss.length})`}>
-          <div className="scrollableContainer75vh">
-            {dss.errors?.map(
-              (error, index): JSX.Element => (
-                <ErrorListItem
-                  key={(error.message ? error.message.substr(2, 9) : "0") + index}
-                  error={error}
-                />
-              )
-            )}
-          </div>
-        </FoldingSection>
-      )}
-      {llb.length > 0 && (
-        <FoldingSection name={`Brak wymaganej długiej przerwy (${llb.length})`}>
-          <div className="scrollableContainer75vh">
-            {llb.errors?.map(
-              (error, index): JSX.Element => (
-                <ErrorListItem
-                  key={(error.message ? error.message.substr(2, 9) : "0") + index}
-                  error={error}
-                />
-              )
-            )}
-          </div>
-        </FoldingSection>
-      )}
-      {wuh.length > 0 && (
-        <FoldingSection name={`Niedogodziny (${wuh.length})`}>
-          <div className="scrollableContainer75vh">
-            {wuh.errors?.map(
-              (error, index): JSX.Element => (
-                <ErrorListItem
-                  key={(error.message ? error.message.substr(2, 9) : "0") + index}
-                  error={error}
-                />
-              )
-            )}
-          </div>
-        </FoldingSection>
-      )}
-      {woh.length > 0 && (
-        <FoldingSection name={`Nadgodziny (${woh.length})`}>
-          <div className="scrollableContainer75vh">
-            {woh.errors?.map(
-              (error, index): JSX.Element => (
-                <ErrorListItem
-                  key={(error.message ? error.message.substr(2, 9) : "0") + index}
-                  error={error}
-                />
-              )
-            )}
-          </div>
-        </FoldingSection>
-      )}
-      {isv.length > 0 && (
-        <FoldingSection name={`Niedozwolona wartość zmiany (${isv.length})`}>
-          <div className="scrollableContainer75vh">
-            {isv.errors?.map(
-              (error, index): JSX.Element => (
-                <ErrorListItem
-                  key={(error.message ? error.message.substr(2, 9) : "0") + index}
-                  error={error}
-                />
-              )
-            )}
-          </div>
-        </FoldingSection>
-      )}
-      {oth.length > 0 && (
-        <FoldingSection name={`Pozostałe błędy (${oth.length})`}>
-          <div className="scrollableContainer75vh">
-            {oth.errors?.map(
-              (error, index): JSX.Element => (
-                <ErrorListItem
-                  key={(error.message ? error.message.substr(2, 9) : "0") + index}
-                  error={error}
-                />
-              )
-            )}
-          </div>
-        </FoldingSection>
-      )}
+      {errorObjects.map((errorObject) => (
+        <React.Fragment key={errorObject.errorDescription + errorObject.errors?.length}>
+          {renderOneTypeOfErrors(errorObject)}
+        </React.Fragment>
+      ))}
     </>
   );
 }

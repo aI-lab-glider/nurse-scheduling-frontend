@@ -1,17 +1,19 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import {
-  BaseCellComponent,
-  BaseCellOptions,
-  PivotCell,
-} from "../../schedule-parts/base-cell/base-cell.component";
-import { BaseRowComponent } from "../../schedule-parts/base-row.component";
-import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
-import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
-import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
+  GroupedScheduleErrors,
+  ScheduleError,
+} from "../../../../../../common-models/schedule-error.model";
 import { DataRowHelper } from "../../../../../../helpers/data-row.helper";
+import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
+import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
+import { BaseCellComponent } from "../../schedule-parts/base-cell/base-cell.component";
+import { BaseCellOptions } from "../../schedule-parts/base-cell/base-cell.models";
+import { BaseRowComponent } from "../../schedule-parts/base-row.component";
+import { PivotCell } from "../../schedule-parts/hooks/use-cell-selection";
+import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
 import { ScheduleLogicContext } from "../../use-schedule-state";
 import { useSelectionMatrix } from "./use-selection-matrix";
 
@@ -30,6 +32,11 @@ export interface BaseSectionOptions {
   rowComponent?: React.FC<ShiftRowOptions>;
   sectionKey: keyof Sections;
   onRowKeyClicked?: (rowIndex: number) => void;
+  errorSelector?: (
+    rowKey: string,
+    cellIndex: number,
+    scheduleErrors: GroupedScheduleErrors
+  ) => ScheduleError[];
 }
 
 function BaseSectionComponentF({
@@ -38,6 +45,7 @@ function BaseSectionComponentF({
   cellComponent = BaseCellComponent,
   rowComponent: RowComponent = BaseRowComponent,
   sectionKey,
+  errorSelector,
 }: BaseSectionOptions): JSX.Element {
   const scheduleLogic = useContext(ScheduleLogicContext);
   const [pointerPosition, setPointerPosition] = useState<PointerPosition>({ row: -1, cell: -1 });
@@ -73,38 +81,47 @@ function BaseSectionComponentF({
     }
   }
 
-  function resetSelection(): void {
-    setPointerPosition({ row: -1, cell: -1 });
-    resetSelectionMatrix();
-  }
-
   const { selectionMatrix, setSelectionMatrix, resetSelectionMatrix } = useSelectionMatrix(
     data.map((d) => d.rowData())
   );
 
-  function onDrag(pivot: PivotCell, rowInd: number, cellInd: number): void {
-    setSelectionMatrix(selectionMatrix, pivot.cellIndex, pivot.rowIndex, cellInd, rowInd);
-  }
+  const resetSelection = useCallback((): void => {
+    setPointerPosition({ row: -1, cell: -1 });
+    resetSelectionMatrix();
+  }, [resetSelectionMatrix, setPointerPosition]);
 
-  function handleCellClick(rowInd: number, cellInd: number): void {
-    setSelectionMatrix(selectionMatrix, cellInd, rowInd, cellInd, rowInd);
-    setPointerPosition({ row: rowInd, cell: cellInd });
-  }
+  const onDrag = useCallback(
+    (pivot: PivotCell, rowInd: number, cellInd: number): void => {
+      setSelectionMatrix(selectionMatrix, pivot.cellIndex, pivot.rowIndex, cellInd, rowInd);
+    },
+    [selectionMatrix, setSelectionMatrix]
+  );
 
-  function onSave(newValue: string): void {
-    scheduleLogic?.updateSection(sectionKey, selectionMatrix, newValue);
-    resetSelection();
-  }
+  const handleCellClick = useCallback(
+    (rowInd: number, cellInd: number): void => {
+      setSelectionMatrix(selectionMatrix, cellInd, rowInd, cellInd, rowInd);
+      setPointerPosition({ row: rowInd, cell: cellInd });
+    },
+    [selectionMatrix, setSelectionMatrix, setPointerPosition]
+  );
+
+  const onSave = useCallback(
+    (newValue: string): void => {
+      scheduleLogic?.updateSection(sectionKey, selectionMatrix, newValue);
+      resetSelection();
+    },
+    [selectionMatrix, sectionKey, scheduleLogic, resetSelection]
+  );
 
   return (
     <>
       {data.map((dataRow, rowInd) => (
         <RowComponent
-          selection={selectionMatrix[rowInd]}
+          selection={[...selectionMatrix[rowInd]]}
           uuid={uuid}
           sectionKey={sectionKey}
           key={`${dataRow.rowKey}${rowInd}_${uuid}`}
-          index={rowInd}
+          rowIndex={rowInd}
           dataRow={dataRow}
           cellComponent={cellComponent}
           pointerPosition={pointerPosition.row === rowInd ? pointerPosition.cell : -1}
@@ -114,9 +131,12 @@ function BaseSectionComponentF({
           onDragEnd={(rowIndex, cellIndex): void =>
             setPointerPosition({ row: rowIndex, cell: cellIndex })
           }
-          onSave={(newValue): void => onSave(newValue)}
+          onSave={onSave}
           onBlur={resetSelection}
           isEditable={dataRow.isEditable}
+          errorSelector={(cellIndex, scheduleErrors): ScheduleError[] =>
+            errorSelector?.(dataRow.rowKey, cellIndex, scheduleErrors) ?? []
+          }
         />
       ))}
     </>

@@ -146,11 +146,72 @@
     color: $popoludnie;
   }
 
+  .keepOnfalse_workersCalendartrueD {
+    border-radius: 2px;
+    margin-left: 5px;
+    background-color: change-color($color: $dzien, $alpha: 0.3);
+    color: $black;
+    padding-right: 5px;
+    .leftBorderColor {
+      width: 4px;
+      background-color: $dzien;
+    }
+  }
+
+  .keepOnfalse_workersCalendartrueDN {
+    border-radius: 2px;
+    margin-left: 5px;
+    background-color: change-color($color: $dzien-noc, $alpha: 0.3);
+    color: $white;
+    padding-right: 5px;
+    .leftBorderColor {
+      width: 4px;
+      background-color: $dzien-noc;
+    }
+  }
+
+  .keepOnfalse_workersCalendartrueR {
+    border-radius: 2px;
+    margin-left: 5px;
+    background-color: change-color($color: $rano, $alpha: 0.3);
+    color: $black;
+    padding-right: 5px;
+    .leftBorderColor {
+      width: 4px;
+      background-color: $rano;
+    }
+  }
+
+  .keepOnfalse_workersCalendartrueN {
+    border-radius: 2px;
+    margin-left: 5px;
+    background-color: change-color($color: $noc, $alpha: 0.3);
+    color: $white;
+    padding-right: 5px;
+    .leftBorderColor {
+      width: 4px;
+      background-color: $noc;
+    }
+  }
+
+  .keepOnfalse_workersCalendartrueP {
+    border-radius: 2px;
+    margin-left: 5px;
+    background-color: change-color($color: $popoludnie, $alpha: 0.3);
+    color: $white;
+    padding-right: 5px;
+    .leftBorderColor {
+      width: 4px;
+      background-color: $popoludnie;
+    }
+  }
+
   .keepOnfalseL4 {
     .leftBorderColor {
       background-color: $l4;
     }
 
+    margin-left: 4px;
     background-color: change-color($color: $l4, $alpha: 0.3);
     color: $white;
   }
@@ -160,6 +221,7 @@
       background-color: $kwaratanna;
     }
 
+    margin-left: 4px;
     background-color: change-color($color: $kwaratanna, $alpha: 0.3);
     color: $white;
   }
@@ -169,6 +231,7 @@
       background-color: $urlop;
     }
 
+    margin-left: 4px;
     background-color: change-color($color: $urlop, $alpha: 0.3);
   }
 }

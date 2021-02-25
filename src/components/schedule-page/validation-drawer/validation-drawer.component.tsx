@@ -1,17 +1,18 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import Drawer from "../../common-components/drawer/drawer.component";
+
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
 import ErrorLoader from "./error-loader.component";
 import { NetworkErrorCode } from "../../../common-models/schedule-error.model";
+import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
 
-export interface ValidationDrawerOptions {
-  open: boolean;
+export interface ValidationDrawerContentOptions {
   setOpen: (boolean) => void;
+  loadingErrors?: boolean;
 }
 
 export enum ErrorLoaderState {
@@ -20,18 +21,20 @@ export enum ErrorLoaderState {
   ERRORS = "ERRORS",
 }
 
-export interface ValidationDrawerState {
+export interface ValidationDrawerContentState {
   state: ErrorLoaderState;
 }
 
-export type Props = ValidationDrawerState;
+export type Props = ValidationDrawerContentState;
 
-export default function ValidationDrawerComponent(options: ValidationDrawerOptions): JSX.Element {
-  const { open, setOpen } = options;
+export default function ValidationDrawerContentComponent(
+  options: ValidationDrawerContentOptions
+): JSX.Element {
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
   const [loadingState, setLoadingState] = useState<Props>();
   const [isNetworkError, setIsNetworkError] = useState(false);
   const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const { setOpen, loadingErrors } = options;
 
   useEffect(() => {
     const spinner = {
@@ -43,41 +46,34 @@ export default function ValidationDrawerComponent(options: ValidationDrawerOptio
     const noErrors = {
       state: ErrorLoaderState.NOERRORS,
     };
-    if (scheduleErrors?.find((element) => element.kind === NetworkErrorCode.NETWORK_ERROR)) {
+    if (scheduleErrors[NetworkErrorCode.NETWORK_ERROR]) {
       setIsNetworkError(true);
     } else {
       setIsNetworkError(false);
     }
-    if (scheduleErrors) {
-      if (scheduleErrors.length > 0) {
-        setMappedErrors(scheduleErrors);
-        setLoadingState(errorsFound);
-      } else {
-        setLoadingState(spinner);
-      }
+    if (loadingErrors) {
+      setLoadingState(spinner);
     } else {
-      setLoadingState(noErrors);
+      if (scheduleErrors) {
+        const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors);
+        if (errors.length > 0) {
+          setMappedErrors(errors);
+          setLoadingState(errorsFound);
+        } else {
+          setLoadingState(spinner);
+        }
+      } else {
+        setLoadingState(noErrors);
+      }
     }
-  }, [scheduleErrors]);
-
-  function closeDrawer(): void {
-    setOpen(false);
-  }
+  }, [scheduleErrors, loadingErrors]);
 
   return (
-    <Drawer
-      title="Sprawdź plan"
+    <ErrorLoader
+      state={loadingState}
+      errors={mappedErrors}
+      isNetworkError={isNetworkError}
       setOpen={setOpen}
-      open={open}
-      onClose={(): void => closeDrawer()}
-      anchor="right"
-    >
-      <ErrorLoader
-        state={loadingState}
-        errors={mappedErrors}
-        isNetworkError={isNetworkError}
-        setOpen={setOpen}
-      />
-    </Drawer>
+    />
   );
 }

@@ -12,44 +12,66 @@ import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parse
 import { useFileReader } from "./use-file-reader";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { fromBuffer } from "file-type/browser";
+import { useNotification } from "../../../common-components/notification/notification.context";
 
 export interface UseScheduleConverterOutput {
   monthModel?: MonthDataModel;
   scheduleSheet?: Array<object>;
   setSrcFile: (srcFile: File) => void;
   scheduleErrors: ScheduleError[];
-  errorOccurred: boolean;
 }
 
 export function useScheduleConverter(): UseScheduleConverterOutput {
   const [scheduleErrors, setScheduleErrors] = useState<ScheduleError[]>([]);
-  const [scheduleSheet, setScheduleSheet] = useState<Array<object>>();
   const [fileContent, setSrcFile] = useFileReader();
   const [monthModel, setMonthModel] = useState<MonthDataModel>();
-  const [errorOccurred, setErrorOccurredFlag] = useState<boolean>(false);
   const { month_number: month, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
+  const { createNotification } = useNotification();
+  const isFileMetaCorrect = async (fileContent: ArrayBuffer): Promise<boolean> => {
+    const ext = await fromBuffer(fileContent);
+    if (
+      !ext ||
+      ext.ext !== "xlsx" ||
+      ext.mime !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ) {
+      setScheduleErrors([
+        {
+          kind: InputFileErrorCode.UNHANDLED_FILE_EXTENSION,
+          filename: ext?.ext.toString(),
+        },
+      ]);
+      setMonthModel(undefined);
+      createNotification({ type: "error", message: "Plan nie został wczytany!" });
+      return false;
+    }
+    return true;
+  };
 
   useEffect(() => {
     if (!fileContent) {
       return;
     }
 
-    const workbook = new Excel.Workbook();
-    workbook.xlsx.load(fileContent).then(() => {
-      try {
-        readFileContent(workbook);
-      } catch (e) {
-        setErrorOccurredFlag(true);
-
-        setScheduleErrors([
-          {
-            kind: InputFileErrorCode[e.message as keyof typeof InputFileErrorCode],
-          },
-        ]);
-
-        setMonthModel(undefined);
+    isFileMetaCorrect(fileContent).then((val) => {
+      if (val) {
+        const workbook = new Excel.Workbook();
+        workbook.xlsx.load(fileContent).then(() => {
+          try {
+            readFileContent(workbook);
+          } catch (e) {
+            setScheduleErrors([
+              {
+                kind: InputFileErrorCode.LOAD_FILE_ERROR,
+                message: e.toString(),
+              },
+            ]);
+            setMonthModel(undefined);
+            createNotification({ type: "error", message: "Plan nie został wczytany!" });
+          }
+        });
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,36 +79,86 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
 
   return {
     monthModel: monthModel,
-    scheduleSheet: scheduleSheet,
     setSrcFile: setSrcFile,
     scheduleErrors: scheduleErrors,
-    errorOccurred: errorOccurred,
   };
+
+  function isEmpty(rowValues: Array<string>): boolean {
+    const rowValuesSet = new Set(rowValues.map((a) => a.toString()));
+    let undefinedSeen = false;
+    rowValuesSet.forEach((a) => {
+      if (typeof a === "undefined") {
+        undefinedSeen = true;
+        return;
+      }
+    });
+
+    const cellsToAvoid = ["godziny wymagane", "godziny wypracowane", "nadgodziny", "grafik"];
+
+    return (
+      undefinedSeen ||
+      (rowValuesSet.size === 4 &&
+        Array.from(rowValuesSet).some((setItem) =>
+          cellsToAvoid.some((cellToAvoid) => setItem.trim().toLowerCase().includes(cellToAvoid))
+        )) ||
+      (rowValuesSet.size === 1 && rowValuesSet.has(""))
+    );
+  }
 
   function readFileContent(workbook): void {
     const sheet = workbook.getWorksheet(1);
+
     if (sheet.rowCount === 0) {
       throw new Error(InputFileErrorCode.EMPTY_FILE);
     }
 
-    const parsedFileContent = Array<Array<string>>();
-    sheet.eachRow((row, _) => {
-      parsedFileContent.push(row.values as Array<string>);
-    });
-    parsedFileContent.forEach((a) => a.shift());
+    const outerArray = Array<Array<Array<string>>>();
+    let innerArray = Array<Array<string>>();
 
-    while (parsedFileContent[parsedFileContent.length - 1][0] === "") {
-      parsedFileContent.pop();
+    let emptyCounter = 0;
+
+    let rowIter;
+    for (rowIter = 1; rowIter <= sheet.rowCount; rowIter++) {
+      const row = sheet.getRow(rowIter);
+
+      const rowValues = Array<string>();
+
+      let iter;
+      for (iter = 1; iter <= row.cellCount; iter++) {
+        rowValues.push(row.getCell(iter).text);
+      }
+
+      if (isEmpty(rowValues)) {
+        if (innerArray.length !== 0) {
+          outerArray.push(innerArray);
+        }
+        innerArray = Array<Array<string>>();
+        emptyCounter++;
+      } else {
+        innerArray.push(rowValues);
+        emptyCounter = 0;
+      }
+
+      if (emptyCounter > 4) {
+        break;
+      }
     }
 
-    setScheduleSheet(parsedFileContent);
-    if (Object.keys(parsedFileContent).length !== 0) {
-      const parser = new ScheduleParser(month, year, parsedFileContent);
+    if (outerArray.length === 0) {
+      throw new Error(InputFileErrorCode.EMPTY_FILE);
+    }
+
+    if (Object.keys(outerArray).length !== 0) {
+      const parser = new ScheduleParser(month, year, outerArray);
+
       setScheduleErrors([
-        ...parser.sections.NurseInfo.errors,
-        ...parser.sections.BabysitterInfo.errors,
+        ...parser._parseErrors,
+        ...parser.sections.Metadata.errors,
+        ...parser.sections.FoundationInfo.errors,
       ]);
       setMonthModel(cropScheduleDMToMonthDM(parser.schedule.getDataModel()));
+
+      createNotification({ type: "success", message: "Plan został wczytany!" });
     }
     return;
   }

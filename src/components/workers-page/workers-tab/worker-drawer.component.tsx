@@ -5,7 +5,10 @@ import React from "react";
 import Drawer, { DrawerOptions } from "../../common-components/drawer/drawer.component";
 import { WorkerInfoModel } from "../../../common-models/worker-info.model";
 import { WorkerInfoComponent } from "../../namestable/worker-info.component";
-import { WorkerEditComponent } from "../../namestable/worker-edit.component";
+import {
+  WorkerEditComponent,
+  WorkerEditComponentMode,
+} from "../../namestable/worker-edit.component";
 
 export enum WorkerDrawerMode {
   EDIT,
@@ -19,27 +22,37 @@ interface WorkerDrawerOptions extends Omit<DrawerOptions, "title"> {
 }
 
 function getTitle(mode: WorkerDrawerMode): string {
-  switch (mode) {
-    case WorkerDrawerMode.EDIT:
-      return "Edycja pracownika";
-    case WorkerDrawerMode.ADD_NEW:
-      return "Dodaj pracownika";
-    case WorkerDrawerMode.INFO:
-      return "Pracownik";
-  }
+  return {
+    [WorkerDrawerMode.EDIT]: "Edycja pracownika",
+    [WorkerDrawerMode.ADD_NEW]: "Dodaj pracownika",
+    [WorkerDrawerMode.INFO]: "Pracownik",
+  }[mode];
 }
 
 export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX.Element {
   const { mode, worker, setOpen, ...otherOptions } = options;
   const title = getTitle(mode);
-  const isInfo = mode === WorkerDrawerMode.INFO;
-  const isNew = mode === WorkerDrawerMode.ADD_NEW;
-  const isEdit = mode === WorkerDrawerMode.EDIT;
   return (
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>
-      {isEdit && worker && <WorkerEditComponent {...worker} />}
-      {isNew && <WorkerEditComponent {...{ name: "", time: 0 }} />}
-      {isInfo && WorkerInfoComponent(worker ?? { name: "", time: 0 })}
+      {
+        {
+          [WorkerDrawerMode.EDIT]: worker && (
+            <WorkerEditComponent
+              setOpen={setOpen}
+              {...worker}
+              mode={WorkerEditComponentMode.EDIT}
+            />
+          ),
+          [WorkerDrawerMode.ADD_NEW]: (
+            <WorkerEditComponent
+              setOpen={setOpen}
+              {...{ name: "", time: 0 }}
+              mode={WorkerEditComponentMode.ADD}
+            />
+          ),
+          [WorkerDrawerMode.INFO]: worker && <WorkerInfoComponent {...worker} />,
+        }[mode]
+      }
     </Drawer>
   );
 }
