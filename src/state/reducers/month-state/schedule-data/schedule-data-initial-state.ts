@@ -8,7 +8,7 @@ import { WorkersInfoModel } from "../../../../common-models/worker-info.model";
 import { daysInMonth } from "./common-reducers";
 
 /* eslint-disable @typescript-eslint/camelcase */
-const employeeInfoinitialState: WorkersInfoModel = { time: {}, type: {} };
+const employeeInfoinitialState: WorkersInfoModel = { time: {}, type: {}, contractType: {} };
 const initialDate = new Date();
 const monthDays = daysInMonth(initialDate.getMonth(), initialDate.getFullYear());
 
