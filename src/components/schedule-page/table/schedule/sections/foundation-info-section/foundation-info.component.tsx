@@ -24,7 +24,7 @@ function foundationInfoErrorSelector(
     ...(errors[AlgorithmErrorCode.WorkerNumberDuringDay] ?? []),
     ...(errors[AlgorithmErrorCode.WorkerNumberDuringNight] ?? []),
   ];
-  return foundationInfoErrors.filter((error) => error.day === cellIndex);
+  return foundationInfoErrors.filter((error) => error.day === cellIndex + 1);
 }
 
 export function FoundationInfoComponent(options: FoundationInfoOptions): JSX.Element {
