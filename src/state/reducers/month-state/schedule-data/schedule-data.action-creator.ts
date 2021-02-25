@@ -17,6 +17,7 @@ import { WorkerInfoExtendedInterface } from "../../../../components/namestable/w
 import { HistoryStateModel } from "../../../models/application-state.model";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import _ from "lodash";
+import { Shift } from "../../../../common-models/shift-info.model";
 
 export class ScheduleDataActionCreator {
   static setScheduleFromScheduleDM(
@@ -76,6 +77,36 @@ export class ScheduleDataActionCreator {
       const action = {
         type: ScheduleActionType.MODIFY_WORKER,
         payload: { ...worker },
+      };
+      dispatch(action);
+    };
+  }
+
+  static addNewShift(shift: Shift): (dispatch) => Promise<void> {
+    return async (dispatch): Promise<void> => {
+      const action = {
+        type: ScheduleActionType.ADD_NEW_SHIFT,
+        payload: { ...shift },
+      };
+      dispatch(action);
+    };
+  }
+
+  static modifyShift(shift: Shift, oldShift: Shift): (dispatch) => Promise<void> {
+    return async (dispatch): Promise<void> => {
+      const action = {
+        type: ScheduleActionType.MODIFY_SHIFT,
+        payload: Array<Shift>(shift, oldShift),
+      };
+      dispatch(action);
+    };
+  }
+
+  static deleteShift(shift: Shift): (dispatch) => Promise<void> {
+    return async (dispatch): Promise<void> => {
+      const action = {
+        type: ScheduleActionType.DELETE_SHIFT,
+        payload: shift,
       };
       dispatch(action);
     };

@@ -2,21 +2,23 @@ import TextField from "@material-ui/core/TextField";
 import React, { useState } from "react";
 import { MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { FormControl, FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
+import { FormControl, FormControlLabel, Grid, Radio, RadioGroup } from "@material-ui/core";
 import { Shift, shifts } from "../../../common-models/shift-info.model";
 import { AcronymGenerator } from "../../../helpers/acronym-generator.helper";
 import { DropdownColors } from "../../common-components/dropdown-buttons/dropdown-colors.component";
-import classNames from "classnames/bind";
 import { Button } from "../../common-components";
+import { ShiftDrawerMode } from "./shift-drawer.component";
 
 interface ShiftEditDrawerOptions {
   selectedShift: Shift;
   saveChangedShift: (Shift) => void;
+  mode: ShiftDrawerMode;
 }
 
 export default function ShiftEditDrawer({
   selectedShift,
   saveChangedShift,
+  mode,
 }: ShiftEditDrawerOptions): JSX.Element {
   const shiftNames = Object.values(shifts).map((shift) => shift.name);
   const shiftCodes = Object.values(shifts).map((shift) => shift.code);
@@ -36,6 +38,15 @@ export default function ShiftEditDrawer({
   const [shiftType, setShiftType] = useState(
     selectedShift.isWorkingShift ? "working" : "not_working"
   );
+
+  function getButtonLabel(mode: ShiftDrawerMode): string {
+    switch (mode) {
+      case ShiftDrawerMode.EDIT:
+        return "Modyfikuj zmianę";
+      case ShiftDrawerMode.ADD_NEW:
+        return "Dodaj zmianę";
+    }
+  }
 
   function changeShiftType(newShiftType: string): void {
     setShiftType(newShiftType);
@@ -73,8 +84,8 @@ export default function ShiftEditDrawer({
   const [colorPicked, setPicked] = useState(selectedShift.color);
 
   return (
-    <>
-      <div className={"edit-field"}>
+    <Grid container className="edit-field" direction="column" justify="space-between">
+      <Grid item>
         <h4>Nazwa zmiany</h4>
         <TextField
           type="text"
@@ -154,24 +165,24 @@ export default function ShiftEditDrawer({
           colorClicker={setPicked}
           selectedColor={colorPicked}
         />
-        <div className={classNames("sitBottom", "alignCenter", "margin-24left")}>
-          <Button
-            variant="primary"
-            onClick={(): void => {
-              saveChangedShift({
-                code: shiftCode,
-                name: shiftName,
-                from: valueTimeStart?.getHours() ?? 0,
-                to: valueTimeEnd?.getHours() ?? 0,
-                color: colorPicked,
-                isWorkingShift: shiftType === "working",
-              });
-            }}
-          >
-            Dodaj zmianę
-          </Button>
-        </div>
-      </div>
-    </>
+      </Grid>
+      <Grid item>
+        <Button
+          variant="primary"
+          onClick={(): void => {
+            saveChangedShift({
+              code: shiftCode,
+              name: shiftName,
+              from: valueTimeStart?.getHours() ?? 0,
+              to: valueTimeEnd?.getHours() ?? 0,
+              color: colorPicked,
+              isWorkingShift: shiftType === "working",
+            });
+          }}
+        >
+          {getButtonLabel(mode)}
+        </Button>
+      </Grid>
+    </Grid>
   );
 }

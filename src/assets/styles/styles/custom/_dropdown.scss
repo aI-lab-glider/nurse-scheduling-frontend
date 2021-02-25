@@ -104,6 +104,10 @@
   position: relative;
   width: 100%;
   justify-content: space-between;
+  //background-color: #55dcf8;
+  //&[data-popper-placement^='bottom'] > .colorSample {
+  //  background-color: #1d8cf8;
+  //}
 }
 
 .colorSample {
@@ -117,23 +121,12 @@
   }
 }
 
-.colorSampleButton {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-}
-
 .marginTop10px {
   margin-top: 10px;
 }
 
 .margin6px0 {
   margin: 6px 0;
-}
-
-.sitBottom {
-  position: absolute;
-  bottom: 24px;
 }
 
 .alignCenter {

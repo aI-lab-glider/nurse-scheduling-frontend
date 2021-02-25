@@ -31,7 +31,11 @@ export default function ShiftDrawerComponent(options: ShiftDrawerOptions): JSX.E
   const title = getTitle(mode);
   return (
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>
-      <ShiftEditDrawer selectedShift={selectedShift} saveChangedShift={saveChangedShift} />
+      <ShiftEditDrawer
+        selectedShift={selectedShift}
+        saveChangedShift={saveChangedShift}
+        mode={mode}
+      />
     </Drawer>
   );
 }
