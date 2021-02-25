@@ -1,14 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { ScheduleKey } from "../api/persistance-store.model";
 
 export interface Shift {
   code: string;
   name: string;
   from: number;
   to: number;
-  color?: string;
+  color: string;
   isWorkingShift?: boolean;
 }
 
@@ -119,9 +118,10 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
     name: "Popołudnie + Noc",
     from: 15,
     to: 7,
+    color: "FFD100",
     isWorkingShift: true,
   },
-  W: { code: "W", name: "Wolne", from: 0, to: 24, isWorkingShift: false },
+  W: { code: "W", name: "Wolne", from: 0, to: 24, color: "FF8A00", isWorkingShift: false },
   U: {
     code: "U",
     name: "Urlop wypoczynkowy",
@@ -173,9 +173,5 @@ export interface ShiftInfoModel {
 }
 
 export interface ShiftModel {
-  code: string;
-  from: string;
-  to: string;
-  color?: string;
-  validityPeriod: ScheduleKey;
+  [shiftCode: string]: Shift;
 }

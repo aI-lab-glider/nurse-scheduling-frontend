@@ -3,11 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useContext } from "react";
 import { TranslationHelper } from "../../../../../../helpers/translations.helper";
-import { SHIFTS as shifts } from "../../../../../../common-models/shift-info.model";
 import { MdClose } from "react-icons/md";
 import { ScheduleLogicContext } from "../../use-schedule-state";
 import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
 import { ShiftsInfoLogic } from "../../../../../../logic/schedule-logic/shifts-info.logic";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 
 export interface CellDetailsOptions {
   index: number;
@@ -42,6 +43,9 @@ function prepareYearAndMonth(
 export function CellDetails(props: CellDetailsOptions): JSX.Element {
   const { index, day, month, year, shiftcode, close, sectionKey, rowIndex } = props;
   const [displayedYear, monthName] = prepareYearAndMonth(index, day, month, year);
+  const shifts = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
   const foundShift = shifts[shiftcode];
 
   const scheduleLogic = useContext(ScheduleLogicContext);

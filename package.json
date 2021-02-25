@@ -39,6 +39,7 @@
     "file-saver": "^2.0.2",
     "file-type": "^16.2.0",
     "fontsource-roboto": "^3.0.3",
+    "immutable": "^4.0.0-rc.12",
     "is-electron": "^2.2.0",
     "node-sass": "^4.14.1",
     "npm": "^7.5.3",
