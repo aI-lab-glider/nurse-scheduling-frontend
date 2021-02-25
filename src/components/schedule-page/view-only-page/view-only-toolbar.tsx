@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect } from "react";
 import { ImportButtonsComponent } from "../import-buttons/import-buttons.component";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Button } from "../../common-components";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
@@ -19,6 +19,7 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
   const [isRevisionEditDisabled, setIsRevisionEditDisable] = React.useState<boolean>(false);
   const [isMonthFromFuture, setIsMonthFromFuture] = React.useState<boolean>(false);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const { year, month_number: month } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
@@ -43,6 +44,11 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
     if (isRevisionType(currentRev)) {
       dispatch(RevisionReducerActionCreator.changeRevision(currentRev));
     }
+  };
+
+  const onEditClick = () => {
+    openEdit();
+    history.push("/schedule-editing");
   };
 
   return (
@@ -73,18 +79,16 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
           </div>
           <div className="filler" />
           <ImportButtonsComponent />
-          <Link to="/schedule-editing" disabled={isRevisionEditDisabled}>
-            <Button
-              onClick={openEdit}
-              size="small"
-              className={classNames({ "disabled-submit-button": isRevisionEditDisabled })}
-              variant="primary"
-              data-cy="edit-mode-button"
-              disabled={isRevisionEditDisabled}
-            >
-              Edytuj
-            </Button>
-          </Link>
+          <Button
+            onClick={onEditClick}
+            size="small"
+            className={classNames({ "disabled-submit-button": isRevisionEditDisabled })}
+            variant="primary"
+            data-cy="edit-mode-button"
+            disabled={isRevisionEditDisabled}
+          >
+            Edytuj
+          </Button>
         </div>
       )}
     </>

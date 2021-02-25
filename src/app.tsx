@@ -63,15 +63,15 @@ function App(): JSX.Element {
       {
         label: "Plan",
         component: <SchedulePage editModeHandler={setEditMode} />,
-        onChange: () => setMode(AppMode.SCHEDULE),
+        onChange: (): void => setMode(AppMode.SCHEDULE),
       },
       {
         label: "Zarządzanie",
         component: <ManagementPage />,
-        onChange: () => setMode(AppMode.MANAGEMENT),
+        onChange: (): void => setMode(AppMode.MANAGEMENT),
       },
     ],
-    [setEditMode]
+    [setEditMode, setMode]
   );
 
   const fetchGlobalState = useCallback(() => {
