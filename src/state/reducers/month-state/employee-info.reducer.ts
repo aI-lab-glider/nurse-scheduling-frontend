@@ -7,12 +7,12 @@ import { ContractType, WorkersInfoModel } from "../../../common-models/worker-in
 import { ShiftHelper } from "../../../helpers/shifts.helper";
 import { ActionModel } from "../../models/action.model";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
-import { WorkerActionPayload } from "./schedule-data/schedule-data.action-creator";
 import {
   createActionName,
   ScheduleActionModel,
   ScheduleActionType,
 } from "./schedule-data/schedule.actions";
+import { WorkerActionPayload } from "../worker.action-creator";
 
 function fromFractionToHours(fraction: string): number {
   const result = fraction.split("/");

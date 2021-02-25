@@ -10,7 +10,7 @@ import {
   ScheduleActionType,
 } from "./schedule-data/schedule.actions";
 import { ActionModel } from "../../models/action.model";
-import { WorkerActionPayload } from "./schedule-data/schedule-data.action-creator";
+import { WorkerActionPayload } from "../worker.action-creator";
 
 export function scheduleShiftsInfoReducerF(name: string) {
   return (
