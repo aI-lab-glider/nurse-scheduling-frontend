@@ -133,7 +133,6 @@ export class ShiftHelper {
       const shift = SHIFTS[s[0]];
       return a + this.shiftCodeToWorkTime(shift!);
     }, 0);
-
     const overtime = actualHours - requiredHours;
     return [requiredHours, actualHours, overtime].map((n) => Math.round(n));
   }
