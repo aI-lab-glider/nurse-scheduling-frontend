@@ -88,11 +88,11 @@ export class ErrorMessageHelper {
       case AlgorithmErrorCode.WorkerNumberDuringNight:
         i = 0;
         message = `Za mało pracowników w nocy w dniu <strong>${error.day}</strong>`;
-        if (error.segments && error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+        if (error.segments && error.segments[i][0] !== 22 && error.segments[i][1] !== 6) {
           message += ` w godzinach <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
           while (error.segments[i + 1]) {
             i++;
-            if (error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+            if (error.segments[i][0] !== 22 && error.segments[i][1] !== 6) {
               message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
             }
           }
