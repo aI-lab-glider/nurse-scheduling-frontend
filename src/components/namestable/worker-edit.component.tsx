@@ -9,7 +9,7 @@ import {
   WorkerType,
   WorkerTypeHelper,
 } from "../../common-models/worker-info.model";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Input, TextField, Typography } from "@material-ui/core";
 import { DropdownButtons } from "../common-components/dropdown-buttons/dropdown-buttons.component";
@@ -19,7 +19,10 @@ import { TextMaskCustom } from "../common-components/text-mask-custom/text-mask-
 import { StringHelper } from "../../helpers/string.helper";
 import { WorkingTimeHelper } from "./working-time.helper";
 import { ScheduleDataActionCreator } from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../state/models/application-state.model";
+import { useMonthInfo } from "../schedule-page/validation-drawer/use-verbose-dates";
+import { ShiftHelper } from "../../helpers/shifts.helper";
 
 const useStyles = makeStyles({
   container: {
@@ -57,31 +60,67 @@ export function WorkerEditComponent(info: WorkerInfoModel): JSX.Element {
     civilTime: "0",
   });
 
+  const { monthNumber, year } = useMonthInfo();
+
+  const getEmployeeTime = useCallback(
+    (
+      workerTime: number
+    ): Pick<
+      WorkerInfoExtendedInterface,
+      "employmentTime" | "employmentTimeOther" | "civilTime"
+    > => {
+      const workerBaseNorm = ShiftHelper.calculateWorkNormForMonth(monthNumber, year);
+      const hours = workerTime * workerBaseNorm;
+      const hoursFraction = WorkingTimeHelper.fromHoursToFraction(hours, workerBaseNorm);
+      return {
+        employmentTime: hoursFraction.toString(),
+        employmentTimeOther: hoursFraction.toString(),
+        civilTime: hours.toString(),
+      };
+    },
+    [year, monthNumber]
+  );
+
+  const { time, contractType } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.employee_info
+  );
+
+  const updateWorkerInfoBatch = useCallback(
+    (newStatePart: Partial<WorkerInfoExtendedInterface>): void => {
+      setWorkerInfo((prev) => ({ ...prev, ...newStatePart }));
+    },
+    [setWorkerInfo]
+  );
+
+  useEffect(() => {
+    updateWorkerInfoBatch({
+      contractType: contractType?.[workerInfo.workerName],
+      ...getEmployeeTime(time[workerInfo.workerName]),
+    });
+  }, [time, contractType, updateWorkerInfoBatch, workerInfo.workerName, getEmployeeTime]);
+
   function handleUpdate(event): void {
     const { name, value } = event.target;
+    const workerBaseNorm = ShiftHelper.calculateWorkNormForMonth(monthNumber, year);
     if (name === "employmentTime") {
       updateWorkerInfoBatch({
-        employmentTime: value,
-        civilTime: WorkingTimeHelper.fromFractionToHours(value, 168),
+        employmentTime: value.toString(),
+        civilTime: WorkingTimeHelper.fromFractionToHours(value, workerBaseNorm).toString(),
       });
     } else if (name === "employmentTimeOther") {
       updateWorkerInfoBatch({
-        employmentTimeOther: value,
-        civilTime: WorkingTimeHelper.fromFractionToHours(value, 168),
+        employmentTimeOther: value.toString(),
+        civilTime: WorkingTimeHelper.fromFractionToHours(value, workerBaseNorm).toString(),
       });
     } else if (name === "civilTime") {
       validateTime(value);
       updateWorkerInfoBatch({
         civilTime: value,
-        employmentTimeOther: WorkingTimeHelper.fromHoursToFraction(value, 168),
+        employmentTimeOther: WorkingTimeHelper.fromHoursToFraction(value, workerBaseNorm),
       });
     } else {
       updateWorkerInfo(name, value);
     }
-  }
-
-  function updateWorkerInfoBatch(newStatePart): void {
-    setWorkerInfo({ ...workerInfo, ...newStatePart });
   }
 
   function updateWorkerInfo(key, value): void {

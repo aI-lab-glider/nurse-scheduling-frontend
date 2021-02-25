@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import _ from "lodash";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ContractType, WorkersInfoModel } from "../../../common-models/worker-info.model";
 import { WorkerInfoExtendedInterface } from "../../../components/namestable/worker-edit.component";
@@ -46,6 +47,16 @@ function getEmployeeWorkTime({
       return 0;
   }
 }
+
+function mockWorkerContractType(workerInfo: WorkersInfoModel): WorkersInfoModel {
+  if (_.isNil(workerInfo.contractType)) {
+    workerInfo.contractType = {};
+  }
+  Object.keys(workerInfo.time).forEach((key) => {
+    workerInfo.contractType![key] = ContractType.EMPLOYMENT_CONTRACT;
+  });
+  return workerInfo;
+}
 /* eslint-disable @typescript-eslint/camelcase */
 export function employeeInfoReducerF(name: string) {
   return (
@@ -56,7 +67,7 @@ export function employeeInfoReducerF(name: string) {
       | ActionModel<UpdateNewWorkerActionPayload>
       | ActionModel<AddNewWorkerActionPayload>
   ): WorkersInfoModel => {
-    let data;
+    let monthEmployeeInfo: WorkersInfoModel;
     let workerName, prevName, workerType, contractType;
     if ((action.payload as WorkerInfoExtendedInterface) !== undefined) {
       ({
@@ -67,6 +78,17 @@ export function employeeInfoReducerF(name: string) {
       } = action.payload as WorkerInfoExtendedInterface);
     }
     switch (action.type) {
+      case createActionName(name, ScheduleActionType.ADD_NEW):
+        monthEmployeeInfo = (action.payload as ScheduleDataModel)?.employee_info;
+        if (!monthEmployeeInfo) return state;
+        monthEmployeeInfo = mockWorkerContractType(monthEmployeeInfo);
+        return { ...monthEmployeeInfo };
+      case createActionName(name, ScheduleActionType.UPDATE):
+        monthEmployeeInfo = (action.payload as ScheduleDataModel)?.employee_info;
+        if (!monthEmployeeInfo) return state;
+        monthEmployeeInfo = mockWorkerContractType(monthEmployeeInfo);
+        return { ...state, ...monthEmployeeInfo };
+
       case ScheduleActionType.DELETE_WORKER:
         delete state.time[workerName];
         delete state.type[workerName];
@@ -76,15 +98,6 @@ export function employeeInfoReducerF(name: string) {
           type: { ...state.type },
           contractType: { ...state.contractType },
         };
-
-      case createActionName(name, ScheduleActionType.ADD_NEW):
-        data = (action.payload as ScheduleDataModel)?.employee_info;
-        if (!data) return state;
-        return { ...data };
-      case createActionName(name, ScheduleActionType.UPDATE):
-        data = (action.payload as ScheduleDataModel)?.employee_info;
-        if (!data) return state;
-        return { ...state, ...data };
       case ScheduleActionType.ADD_NEW_WORKER:
         return {
           time: {
