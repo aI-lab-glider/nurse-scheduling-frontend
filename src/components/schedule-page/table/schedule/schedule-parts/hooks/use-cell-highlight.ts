@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { VerboseDate, WeekDay } from "../../../../../../common-models/month-info.model";
 import { TranslationHelper } from "../../../../../../helpers/translations.helper";
+import _ from "lodash";
 
 export interface UseCellBackgroundHighlightOptions {
   verboseDate?: VerboseDate;
@@ -14,7 +15,7 @@ export function useCellBackgroundHighlight({
   verboseDate,
   monthNumber,
 }: UseCellBackgroundHighlightOptions): HighlightId {
-  if (verboseDate && monthNumber) {
+  if (verboseDate && !_.isNil(monthNumber)) {
     if (verboseDate.month !== TranslationHelper.englishMonths[monthNumber]) {
       return "otherMonth";
     }

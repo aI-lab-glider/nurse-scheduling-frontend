@@ -4,9 +4,9 @@
 import {
   calculateMissingFullWeekDays,
   daysInMonth,
+  numberOfWeeksInMonth,
 } from "../../../../../src/state/reducers/month-state/schedule-data/common-reducers";
 import { ScheduleKey } from "../../../../../src/api/persistance-store.model";
-import { numberOfWeeksInMonth } from "../../../../support/commands";
 
 interface TestCase {
   title: string;

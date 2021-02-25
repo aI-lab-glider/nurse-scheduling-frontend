@@ -5,7 +5,10 @@ import React from "react";
 import Drawer, { DrawerOptions } from "../../common-components/drawer/drawer.component";
 import { WorkerInfoModel } from "../../../common-models/worker-info.model";
 import { WorkerInfoComponent } from "../../namestable/worker-info.component";
-import { WorkerEditComponent } from "../../namestable/worker-edit.component";
+import {
+  WorkerEditComponent,
+  WorkerEditComponentMode,
+} from "../../namestable/worker-edit.component";
 
 export enum WorkerDrawerMode {
   EDIT,
@@ -33,8 +36,20 @@ export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>
       {
         {
-          [WorkerDrawerMode.EDIT]: worker && <WorkerEditComponent setOpen={setOpen} {...worker} />,
-          [WorkerDrawerMode.ADD_NEW]: <WorkerEditComponent {...{ name: "", time: 0 }} />,
+          [WorkerDrawerMode.EDIT]: worker && (
+            <WorkerEditComponent
+              setOpen={setOpen}
+              {...worker}
+              mode={WorkerEditComponentMode.EDIT}
+            />
+          ),
+          [WorkerDrawerMode.ADD_NEW]: (
+            <WorkerEditComponent
+              setOpen={setOpen}
+              {...{ name: "", time: 0 }}
+              mode={WorkerEditComponentMode.ADD}
+            />
+          ),
           [WorkerDrawerMode.INFO]: worker && <WorkerInfoComponent {...worker} />,
         }[mode]
       }

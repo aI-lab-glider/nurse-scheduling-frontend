@@ -10,7 +10,6 @@ import * as _ from "lodash";
 
 export class VerboseDateHelper {
   public static generateVerboseDatesForMonth(month: number, year: number): VerboseDate[] {
-    const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const publicHolidaysLogic = new PublicHolidaysLogic(year.toString());
     const weekDays = [
@@ -22,7 +21,7 @@ export class VerboseDateHelper {
       WeekDay.FR,
       WeekDay.SA,
     ];
-    const dates = _.range(firstDay.getDay(), lastDay.getDate() + 1).map(
+    const dates = _.range(1, lastDay.getDate() + 1).map(
       (d) =>
         ({
           date: d,
