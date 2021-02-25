@@ -56,8 +56,7 @@ export class MonthSwitchActionCreator {
         month_number: month,
         year,
       } = getState().actualState.persistentSchedule.present.schedule_info;
-
-      if (month && year) {
+      if (!_.isNil(month) && !_.isNil(year)) {
         const fromDate = getDateWithMonthOffset(month, year, offset);
         const { revision } = getState().actualState;
 
@@ -68,7 +67,6 @@ export class MonthSwitchActionCreator {
         const currentSchedule = await new LocalStorageProvider().getMonthRevision(
           new ScheduleKey(month, year).getRevisionKey(revision)
         );
-
         if (baseSchedule && currentSchedule) {
           const monthDataModel = copyMonthDM(currentSchedule, baseSchedule);
           dispatch(ScheduleDataActionCreator.setScheduleFromMonthDM(monthDataModel, true));
