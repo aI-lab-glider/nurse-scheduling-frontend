@@ -72,7 +72,7 @@ export class ShiftHelper {
 
   public static calculateWorkNormForMonth(month: number, year: number): number {
     const dates = VerboseDateHelper.generateVerboseDatesForMonth(month, year);
-    return this.calculateRequiredHoursFromVerboseDates(dates);
+    return Math.round(this.calculateRequiredHoursFromVerboseDates(dates));
   }
 
   public static calculateRequiredHoursFromVerboseDates(

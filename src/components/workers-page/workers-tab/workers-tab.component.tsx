@@ -98,7 +98,7 @@ export default function WorkersTab(): JSX.Element {
 
   const getWorkerTimeLabel = useCallback(
     (workerName: string) => {
-      const workHourNormInMonth = ShiftHelper.calculateWorkNormForMonth(year, monthNumber);
+      const workHourNormInMonth = ShiftHelper.calculateWorkNormForMonth(monthNumber, year);
       const workerContractType = contractType?.[workerName] ?? ContractType.EMPLOYMENT_CONTRACT;
       const contractTypeLabel = ContractTypeHelper.translate(workerContractType);
       const workerTimeLabel =

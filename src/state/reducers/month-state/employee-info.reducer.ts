@@ -31,6 +31,7 @@ function getEmployeeWorkTime({
   civilTime,
   monthNumber,
   year,
+  workerName,
 }: UpdateNewWorkerActionPayload): number {
   if (monthNumber === undefined || year === undefined) {
     throw Error("Month number and year are required");
@@ -110,14 +111,14 @@ export function employeeInfoReducerF(name: string) {
       case ScheduleActionType.MODIFY_WORKER:
         delete state.time[prevName];
         delete state.type[prevName];
-        delete state.contractType?.[workerName];
+        delete state.contractType?.[prevName];
         return {
           time: {
-            [workerName]: getEmployeeWorkTime(action.payload as UpdateNewWorkerActionPayload),
             ...state.time,
+            [workerName]: getEmployeeWorkTime(action.payload as UpdateNewWorkerActionPayload),
           },
-          type: { [workerName]: workerType, ...state.type },
-          contractType: { [workerName]: contractType, ...state.contractType },
+          type: { ...state.type, [workerName]: workerType },
+          contractType: { ...state.contractType, [workerName]: contractType },
         };
       default:
         return state;

@@ -72,9 +72,10 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
   const [isCivilTimeValid, setCivilTimeValid] = useState(true);
   const [workerInfo, setWorkerInfo] = useState<WorkerInfoExtendedInterface>(initialWorkerModel);
 
+  // #region setting up state
   useEffect(() => {
-    setWorkerInfo({ ...initialWorkerModel, workerName: options.name });
-  }, [setWorkerInfo, options.name]);
+    setWorkerInfo({ ...initialWorkerModel, workerName: options.name, workerType: options.type });
+  }, [setWorkerInfo, options.name, options.type]);
 
   const { monthNumber, year } = useMonthInfo();
 
@@ -128,6 +129,8 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
       ...getEmployeeTime(time[workerInfo.workerName]),
     });
   }, [time, contractType, updateWorkerInfoBatch, workerInfo.workerName, getEmployeeTime]);
+
+  //#endregion
 
   function handleUpdate(event): void {
     const { name, value } = event.target;
