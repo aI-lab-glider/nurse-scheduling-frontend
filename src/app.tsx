@@ -21,6 +21,7 @@ import { JiraLikeDrawerProvider } from "./components/common-components/drawer/ji
 import ScssVars from "./assets/styles/styles/custom/_variables.module.scss";
 import { ApplicationStateModel } from "./state/models/application-state.model";
 import { ScheduleKey } from "./api/persistance-store.model";
+import { AppMode, useAppConfig } from "./state/app-config-context";
 
 interface TabData {
   label: string;
@@ -51,6 +52,7 @@ const useStyles = makeStyles(() => ({
 function App(): JSX.Element {
   const classes = useStyles();
   const scheduleDispatcher = useDispatch();
+  const { setMode } = useAppConfig();
   const [editMode, setEditMode] = useState<boolean>(false);
   const { month_number: month, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
@@ -58,8 +60,16 @@ function App(): JSX.Element {
 
   const tabs: TabData[] = useMemo(
     () => [
-      { label: "Plan", component: <SchedulePage editModeHandler={setEditMode} /> },
-      { label: "Zarządzanie", component: <ManagementPage /> },
+      {
+        label: "Plan",
+        component: <SchedulePage editModeHandler={setEditMode} />,
+        onChange: () => setMode(AppMode.SCHEDULE),
+      },
+      {
+        label: "Zarządzanie",
+        component: <ManagementPage />,
+        onChange: () => setMode(AppMode.MANAGEMENT),
+      },
     ],
     [setEditMode]
   );

@@ -39,7 +39,7 @@ export function HeaderComponent(): JSX.Element {
     const offset = monthDiff(new Date(year, monthNumber), new Date());
     dispatch(MonthSwitchActionCreator.switchToNewMonth(offset));
   }
-  const isReadOnlyMode = mode === "readonly";
+  const isInViewMode = mode === "readonly";
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   function onReportIssueClick(): void {
@@ -58,7 +58,7 @@ export function HeaderComponent(): JSX.Element {
           Wróć do teraz
         </Button>
         <div className={"filler"} />
-        <MonthSwitchComponent enableMonthSwitching={isReadOnlyMode} />
+        <MonthSwitchComponent isInViewMode={isInViewMode} />
         <div className={"filler"} />
         <MaterialButton className={"reportIssueLink"} onClick={onReportIssueClick}>
           Zgłoś błąd

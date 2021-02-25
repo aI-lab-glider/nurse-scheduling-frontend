@@ -2,28 +2,36 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useActualMonth } from "./use-actual-month";
 import { MonthSwitchActionCreator } from "../../../state/reducers/month-state/schedule-data/month-switch.action-creator";
 import { IconButton } from "@material-ui/core";
+import { AppMode, useAppConfig } from "../../../state/app-config-context";
 
 interface MonthSwitchComponentOptions {
-  enableMonthSwitching: boolean;
+  isInViewMode: boolean;
 }
 
-export function MonthSwitchComponent({
-  enableMonthSwitching,
-}: MonthSwitchComponentOptions): JSX.Element {
+export function MonthSwitchComponent({ isInViewMode }: MonthSwitchComponentOptions): JSX.Element {
+  const [showMonthNavigation, setShowMonthNavigation] = useState(false);
+
   const actualMonth = useActualMonth();
   const dispatch = useDispatch();
+  const { mode } = useAppConfig();
+  useEffect(() => {
+    mode === AppMode.SCHEDULE
+      ? setShowMonthNavigation(isInViewMode)
+      : setShowMonthNavigation(false);
+  }, [mode, isInViewMode]);
+
   return (
     <div id="month-switch" className="month-switch-container">
       {actualMonth && (
         <div className="switch-container">
           {
             /* https://github.com/mui-org/material-ui/issues/13957 */
-            enableMonthSwitching && (
+            showMonthNavigation && (
               <IconButton
                 className="arrow-button"
                 id="month-switch"
@@ -41,7 +49,7 @@ export function MonthSwitchComponent({
 
           {
             /* https://github.com/mui-org/material-ui/issues/13957 */
-            enableMonthSwitching && (
+            showMonthNavigation && (
               <IconButton
                 className="arrow-button"
                 id="month-switch"
