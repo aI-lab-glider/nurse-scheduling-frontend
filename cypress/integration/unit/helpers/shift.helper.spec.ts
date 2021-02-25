@@ -169,6 +169,9 @@ describe("ShiftHelper", () => {
     [ShiftCode.U]: 0,
     [ShiftCode.L4]: 0,
     [ShiftCode.K]: 0,
+    [ShiftCode.OP]: 0,
+    [ShiftCode.OK]: 0,
+    [ShiftCode.NZ]: 0,
   };
 
   Object.values(SHIFTS).forEach((shift) => {

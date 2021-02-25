@@ -33,6 +33,8 @@ export enum ShiftCode {
   L4 = "L4",
   K = "K",
   NZ = "NZ",
+  OP = "OP",
+  OK = "OK",
 }
 export const SHIFTS: { [code in ShiftCode]: Shift } = {
   RP: {
@@ -143,6 +145,22 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
     from: 0,
     to: 24,
     color: "000000",
+    isWorkingShift: false,
+  },
+  OP: {
+    code: "OP",
+    name: "Urlop opiekuńczy",
+    from: 0,
+    to: 24,
+    color: "fc03e7",
+    isWorkingShift: false,
+  },
+  OK: {
+    code: "OK",
+    name: "Urlop okolicznościowy",
+    from: 0,
+    to: 24,
+    color: "56f5f5",
     isWorkingShift: false,
   },
   NZ: {
