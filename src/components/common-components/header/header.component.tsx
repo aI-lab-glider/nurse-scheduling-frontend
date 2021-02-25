@@ -58,7 +58,7 @@ export function HeaderComponent(): JSX.Element {
           Wróć do teraz
         </Button>
         <div className={"filler"} />
-        {isReadOnlyMode && <MonthSwitchComponent />}
+        <MonthSwitchComponent enableMonthSwitching={isReadOnlyMode} />
         <div className={"filler"} />
         <MaterialButton className={"reportIssueLink"} onClick={onReportIssueClick}>
           Zgłoś błąd

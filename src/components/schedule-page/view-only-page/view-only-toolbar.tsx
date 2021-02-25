@@ -73,14 +73,13 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
           </div>
           <div className="filler" />
           <ImportButtonsComponent />
-          <Link to="/schedule-editing">
+          <Link to="/schedule-editing" disabled={isRevisionEditDisabled}>
             <Button
               onClick={openEdit}
               size="small"
               className={classNames({ "disabled-submit-button": isRevisionEditDisabled })}
               variant="primary"
               data-cy="edit-mode-button"
-              disabled={isRevisionEditDisabled}
             >
               Edytuj
             </Button>
