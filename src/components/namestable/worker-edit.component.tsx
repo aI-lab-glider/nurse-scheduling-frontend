@@ -138,6 +138,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
     const { name, value } = event.target;
     const workerBaseNorm = ShiftHelper.calculateWorkNormForMonth(monthNumber, year);
     if (name === "employmentTime") {
+      setIsEmployementTimeValid(WorkingTimeHelper.isTimeFractionValid(value));
       updateWorkerInfoBatch({
         employmentTime: value.toString(),
         civilTime: WorkingTimeHelper.fromFractionToHours(value, workerBaseNorm).toString(),
@@ -149,7 +150,6 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
         civilTime: WorkingTimeHelper.fromFractionToHours(value, workerBaseNorm).toString(),
       });
     } else if (name === "civilTime") {
-      setIsEmployementTimeValid(WorkingTimeHelper.isTimeFractionValid(value));
       validateTime(value);
       updateWorkerInfoBatch({
         civilTime: value,
@@ -161,21 +161,25 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
   }
 
   function isValidInfo(worker: WorkerInfoExtendedInterface): boolean {
-    // TODO: fix condition
+    const validEmplTime =
+      (workerInfo.contractType === ContractType.EMPLOYMENT_CONTRACT && isEmployementTimeValid) ||
+      workerInfo.contractType !== ContractType.EMPLOYMENT_CONTRACT;
+
     const validCivilTime =
-      worker.contractType !== undefined &&
-      ((workerInfo.contractType === ContractType.CIVIL_CONTRACT && isEmployementTimeValid) ||
-        workerInfo.contractType !== ContractType.CIVIL_CONTRACT) &&
-      ((worker.contractType === ContractType.CIVIL_CONTRACT &&
+      (worker.contractType === ContractType.CIVIL_CONTRACT &&
         worker.civilTime !== "0" &&
         parseInt(worker.civilTime) < 700) ||
-        worker.contractType !== ContractType.CIVIL_CONTRACT);
+      worker.contractType !== ContractType.CIVIL_CONTRACT;
+
+    const validContractType = worker.contractType !== undefined;
 
     return (
       worker.workerName !== "" &&
       !_.isNil(worker.workerType) &&
       !_.isNil(contractType) &&
+      validEmplTime &&
       validCivilTime &&
+      validContractType &&
       !isWorkerExists(worker.workerName)
     );
   }
