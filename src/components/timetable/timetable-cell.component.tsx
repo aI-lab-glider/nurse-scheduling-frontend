@@ -42,10 +42,11 @@ function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.
   const [today, circle] = isToday();
 
   const errorSelector = useCallback(
-    (scheduleErros: GroupedScheduleErrors): ScheduleError[] => {
+    (scheduleErrors: GroupedScheduleErrors): ScheduleError[] => {
       const matchingErrorTypes = [
-        ...(scheduleErros[AlgorithmErrorCode.WorkerNumberDuringDay] ?? []),
-        ...(scheduleErros[AlgorithmErrorCode.WorkerNumberDuringNight] ?? []),
+        ...(scheduleErrors[AlgorithmErrorCode.WorkerNumberDuringDay] ?? []),
+        ...(scheduleErrors[AlgorithmErrorCode.WorkerNumberDuringNight] ?? []),
+        ...(scheduleErrors[AlgorithmErrorCode.AlwaysAtLeastOneNurse] ?? []),
       ];
       return matchingErrorTypes.filter((error) => error.day === value.date);
     },
