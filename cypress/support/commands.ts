@@ -74,7 +74,7 @@ Cypress.Commands.add(
     const section = `${workerType.toLowerCase()}ShiftsTable`;
     const row = baseRowDataCy(workerIdx);
     const cell = baseCellDataCy(shiftIdx, selector);
-    return cy.get(`[data-cy=${section}] [data-cy=${row}] [data-cy=${cell}]`, { timeout: 20000 });
+    return cy.get(`[data-cy=${section}] [data-cy=${row}] [data-cy=${cell}]`);
   }
 );
 
