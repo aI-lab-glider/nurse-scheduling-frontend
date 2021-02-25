@@ -98,8 +98,8 @@
     align-items: center;
     justify-content: space-around;
   }
+}
 
-  .disabled-submit-button {
-    opacity: 50%;
-  }
+.disabled-submit-button {
+  opacity: $btn-disabled-opacity;
 }
