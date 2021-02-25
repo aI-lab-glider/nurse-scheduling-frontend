@@ -95,6 +95,7 @@ export function extendMonthDMToScheduleDM(
     shifts[key] = extendSchedule("shifts", key, ShiftCode.W);
   });
 
+  debugger;
   const monthInfoModel: MonthInfoModel = {
     children_number: extendSchedule("month_info", "children_number", 0),
     extra_workers: extendSchedule("month_info", "extra_workers", 0),
