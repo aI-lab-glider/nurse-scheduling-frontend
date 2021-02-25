@@ -146,6 +146,10 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
 };
 
+export const FREE_SHIFTS = Object.values(SHIFTS)
+  .filter((shift) => !shift.isWorkingShift && shift.code !== "W")
+  .map((shift) => shift.code);
+
 export interface ShiftInfoModel {
   [nurseName: string]: ShiftCode[];
 }
