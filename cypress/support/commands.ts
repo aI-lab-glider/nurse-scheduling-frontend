@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import "cypress-file-upload";
-import { ScheduleKey } from "../../src/api/persistance-store.model";
 import { ShiftCode } from "../../src/common-models/shift-info.model";
 import { WorkerType } from "../../src/common-models/worker-info.model";
 import {
@@ -12,10 +11,7 @@ import {
 import { baseRowDataCy } from "../../src/components/schedule-page/table/schedule/schedule-parts/base-row.models";
 import { summaryCellDataCy } from "../../src/components/summarytable/summarytable-cell.models";
 import { summaryRowDataCy } from "../../src/components/summarytable/summarytable-row.models";
-import {
-  calculateMissingFullWeekDays,
-  daysInMonth,
-} from "../../src/state/reducers/month-state/schedule-data/common-reducers";
+import { numberOfWeeksInMonth } from "../../src/state/reducers/month-state/schedule-data/common-reducers";
 
 export type CypressScreenshotOptions = Partial<
   Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions
@@ -49,7 +45,7 @@ export enum HoursInfoCells {
   overtime = 2,
 }
 export type ScheduleName = "example.xlsx" | "grafik.xlsx" | "example_2.xlsx";
-const NUMBER_OF_DAYS_IN_WEEK = 7;
+export const NUMBER_OF_DAYS_IN_WEEK = 7;
 const TEST_SCHEDULE_MONTH = 10;
 const TEST_SCHEDULE_YEAR = 2020;
 
@@ -187,11 +183,3 @@ Cypress.Commands.add(
     cy.getFoundationInfoCell(getCellOptions).type(`${newValue}{enter}`);
   }
 );
-
-export function numberOfWeeksInMonth(month: number, year: number): number {
-  const [missingPrev, missingNext] = calculateMissingFullWeekDays(new ScheduleKey(month, year));
-  const monthLength = daysInMonth(month, year).length;
-  const fullScheduleDays = missingPrev + monthLength + missingNext;
-
-  return fullScheduleDays / NUMBER_OF_DAYS_IN_WEEK;
-}
