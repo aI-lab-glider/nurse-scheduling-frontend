@@ -20,7 +20,9 @@ context("Schedule errors", () => {
     cy.get("[data-cy=save-schedule-button]").click();
     cy.get("[data-cy=check-schedule-button]").click();
     cy.get("[data-cy=open-folding-section]").click({ multiple: true });
-    cy.contains("Za mało pracowników w trakcie dnia w dniu 0, potrzeba 8, jest 5");
+    cy.contains("Za mało pracowników w trakcie dnia w dniu 0, potrzeba 8, jest 5", {
+      timeout: 8000,
+    });
     cy.contains("Za mało pracowników w trakcie dnia w dniu 1, potrzeba 8, jest 0");
     cy.contains("Za mało pracowników w nocy w dniu 1, potrzeba 5, jest 0");
   });
