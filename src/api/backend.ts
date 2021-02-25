@@ -85,10 +85,10 @@ class Backend {
     );
   }
 
-  private remapUsernames(el: any): ScheduleError {
-    if (el.worker !== undefined) {
+  private remapUsernames(el: ScheduleError): ScheduleError {
+    if (el["worker"] !== undefined) {
       Object.keys(nameToUuid).forEach((workerName) => {
-        if (nameToUuid[workerName] === el.worker) el.worker = workerName;
+        if (nameToUuid[workerName] === el["worker"]) el["worker"] = workerName;
       });
     }
     return el;
