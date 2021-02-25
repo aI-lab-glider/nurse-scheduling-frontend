@@ -55,7 +55,7 @@ Cypress.Commands.add(
     cy.clock(Date.UTC(year ?? TEST_SCHEDULE_YEAR, month ?? TEST_SCHEDULE_MONTH, 15), ["Date"]);
     cy.visit(Cypress.env("baseUrl"));
     cy.get("[data-cy=file-input]").attachFile(scheduleName);
-    cy.get(`[data-cy=nurseShiftsTable]`, { timeout: 10000 }).should("exist");
+    cy.get(`[data-cy=nurseShiftsTable]`).should("exist");
     cy.window()
       .its("store")
       .invoke("getState")
@@ -74,7 +74,7 @@ Cypress.Commands.add(
     const section = `${workerType.toLowerCase()}ShiftsTable`;
     const row = baseRowDataCy(workerIdx);
     const cell = baseCellDataCy(shiftIdx, selector);
-    return cy.get(`[data-cy=${section}] [data-cy=${row}] [data-cy=${cell}]`, { timeout: 5000 });
+    return cy.get(`[data-cy=${section}] [data-cy=${row}] [data-cy=${cell}]`);
   }
 );
 
