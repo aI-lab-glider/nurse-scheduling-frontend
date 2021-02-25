@@ -130,6 +130,8 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
     });
   }, [time, contractType, updateWorkerInfoBatch, workerInfo.workerName, getEmployeeTime]);
 
+  const [isEmployementTimeValid, setIsEmployementTimeValid] = useState(true);
+
   //#endregion
 
   function handleUpdate(event): void {
@@ -141,11 +143,13 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
         civilTime: WorkingTimeHelper.fromFractionToHours(value, workerBaseNorm).toString(),
       });
     } else if (name === "employmentTimeOther") {
+      setIsEmployementTimeValid(WorkingTimeHelper.isTimeFractionValid(value));
       updateWorkerInfoBatch({
         employmentTimeOther: value.toString(),
         civilTime: WorkingTimeHelper.fromFractionToHours(value, workerBaseNorm).toString(),
       });
     } else if (name === "civilTime") {
+      setIsEmployementTimeValid(WorkingTimeHelper.isTimeFractionValid(value));
       validateTime(value);
       updateWorkerInfoBatch({
         civilTime: value,
@@ -159,6 +163,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
   function isValidInfo(worker: WorkerInfoExtendedInterface): boolean {
     const validCivilTime =
       worker.contractType !== undefined &&
+      isEmployementTimeValid &&
       ((worker.contractType === ContractType.CIVIL_CONTRACT &&
         worker.civilTime !== "0" &&
         parseInt(worker.civilTime) < 700) ||
@@ -320,6 +325,14 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
                 />
               </Grid>
             )}
+
+          {workerInfo.contractType === ContractType.EMPLOYMENT_CONTRACT && !isEmployementTimeValid && (
+            <Grid item xs={12}>
+              <Typography className={classes.label} style={{ color: "red" }}>
+                Etat powinien być mniejszy lub równy jeden
+              </Typography>
+            </Grid>
+          )}
         </Grid>
       </Grid>
       <Grid item>
