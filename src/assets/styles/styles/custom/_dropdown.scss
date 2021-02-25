@@ -10,7 +10,7 @@
   overflow: hidden;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
-  box-shadow: 0px 5px 30px 0px $gray-200;
+  box-shadow: $dropdown-box-shadow;
   position: relative;
   margin-top: -20px;
   background-color: $white;
@@ -25,7 +25,7 @@
     &:hover {
       cursor: pointer;
       box-shadow: 0 0;
-      background-color: rgba(29, 53, 87, 0.1);
+      background-color: $dropdown-hover-bg;
     }
 
     padding: 7px 16px 7px;
@@ -54,14 +54,16 @@
 #contract-onTopButton,
 #file-dropdown-onTopButton,
 #position-onTopButton,
-#contract-time-dropdown-onTopButton {
+#contract-time-dropdown-onTopButton,
+#colors-onTopButton,
+#extension-onTopButton {
   z-index: 200;
   position: relative;
 }
 
 #file-dropdown,
 #file-dropdown-onTopButton {
-  width: 108px;
+  width: 122px;
 }
 
 #position,
@@ -79,9 +81,67 @@
   width: 112px;
 }
 
+#colors,
+#colors-onTopButton {
+  width: 200px;
+}
+
 #extension,
 #extension-onTopButton {
   width: 100px;
-  z-index: 200;
+}
+
+.dropdown-colors-list {
+  overflow: hidden;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  box-shadow: $dropdown-box-shadow;
   position: relative;
+  margin-top: -20px;
+  white-space: nowrap;
+}
+
+.colorSampleHolderHolder {
+  margin-top: 20px;
+  padding: 10px 20px 20px;
+}
+.colorSampleHolder {
+  display: flex;
+  position: relative;
+  width: 100%;
+  justify-content: space-between;
+  //background-color: #55dcf8;
+  //&[data-popper-placement^='bottom'] > .colorSample {
+  //  background-color: #1d8cf8;
+  //}
+}
+
+.colorSample {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-top: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.marginTop10px {
+  margin-top: 10px;
+}
+
+.margin6px0 {
+  margin: 6px 0;
+}
+
+.alignCenter {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  width: 100%;
+}
+
+.margin-24left {
+  margin-left: -24px;
 }

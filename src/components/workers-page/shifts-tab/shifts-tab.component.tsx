@@ -7,12 +7,15 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
-import { SHIFTS as shifts } from "../../../common-models/shift-info.model";
+import { Shift } from "../../../common-models/shift-info.model";
 import { Button } from "../../common-components";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import ShiftDrawerComponent, { ShiftDrawerMode } from "./shift-drawer.component";
+import { useDispatch, useSelector } from "react-redux";
+import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -44,19 +47,42 @@ export default function ShiftTab(): JSX.Element {
   const classes = useStyles();
   const [open, setIsOpen] = useState(false);
   const [mode, setMode] = useState(ShiftDrawerMode.ADD_NEW);
+  const [selectedShift, setShift] = useState(Object);
+  const shiftData = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
 
-  function toggleDrawer(open: boolean, mode?: ShiftDrawerMode): void {
-    setIsOpen(open);
-    mode !== undefined && setMode(mode);
+  function toggleOpen(shift: Shift, mode: ShiftDrawerMode): void {
+    setShift(shift);
+    setMode(mode);
+    setIsOpen(true);
   }
+
+  function toggleClose(): void {
+    setIsOpen(false);
+  }
+  const dispatcher = useDispatch();
+  const handleChangeItem = (createdShift: Shift): void => {
+    if (mode === ShiftDrawerMode.ADD_NEW) {
+      dispatcher(ScheduleDataActionCreator.addNewShift(createdShift));
+    } else {
+      dispatcher(ScheduleDataActionCreator.modifyShift(createdShift, selectedShift));
+    }
+
+    toggleClose();
+  };
+
+  const handleRemoveItem = (shift: Shift): void => {
+    dispatcher(ScheduleDataActionCreator.deleteShift(shift));
+  };
 
   return (
     <div className="workers-table">
       <TableContainer className={classes.root}>
         <Table size="small">
-          <EnhancedTableHeaderComponent toggleDrawer={toggleDrawer} />
+          <EnhancedTableHeaderComponent toggleOpen={toggleOpen} />
           <TableBody>
-            {Object.values(shifts).map((shift) => {
+            {Object.values(shiftData).map((shift) => {
               return (
                 <TableRow key={shift.code} className={classes.row}>
                   <TableCell className={classes.tableCell}>{shift.name}</TableCell>
@@ -75,11 +101,17 @@ export default function ShiftTab(): JSX.Element {
                     <Button
                       variant="primary"
                       className="action-button"
-                      onClick={(): void => toggleDrawer(true, ShiftDrawerMode.EDIT)}
+                      onClick={(): void => toggleOpen(shift, ShiftDrawerMode.EDIT)}
+                      disabled={true}
                     >
                       Edytuj
                     </Button>
-                    <Button variant="secondary" className="action-button">
+                    <Button
+                      variant="secondary"
+                      className="action-button"
+                      onClick={(): void => handleRemoveItem(shift)}
+                      disabled={true}
+                    >
                       Usuń
                     </Button>
                   </TableCell>
@@ -91,9 +123,11 @@ export default function ShiftTab(): JSX.Element {
       </TableContainer>
       <ShiftDrawerComponent
         open={open}
-        onClose={(): void => toggleDrawer(false)}
+        onClose={(): void => toggleClose()}
         mode={mode}
         setOpen={setIsOpen}
+        selectedShift={selectedShift}
+        saveChangedShift={handleChangeItem}
       />
     </div>
   );
