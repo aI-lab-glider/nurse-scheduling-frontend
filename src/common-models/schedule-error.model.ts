@@ -52,6 +52,7 @@ export interface AlwaysAtLeastOneNurse {
   kind: AlgorithmErrorCode.AlwaysAtLeastOneNurse;
   day: number;
   day_time: number;
+  segments: [[number, number]];
 }
 
 export interface WorkerNumberDuringDay {
@@ -59,12 +60,14 @@ export interface WorkerNumberDuringDay {
   day: number;
   required: number;
   actual: number;
+  segments: [[number, number]];
 }
 export interface WorkerNumberDuringNight {
   kind: AlgorithmErrorCode.WorkerNumberDuringNight;
   day: number;
   required: number;
   actual: number;
+  segments: [[number, number]];
 }
 export interface DissalowedShiftSequence {
   kind: AlgorithmErrorCode.DissalowedShiftSequence;
