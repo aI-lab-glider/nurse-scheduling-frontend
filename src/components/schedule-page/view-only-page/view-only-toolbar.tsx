@@ -80,6 +80,7 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
               className={classNames({ "disabled-submit-button": isRevisionEditDisabled })}
               variant="primary"
               data-cy="edit-mode-button"
+              disabled={isRevisionEditDisabled}
             >
               Edytuj
             </Button>
