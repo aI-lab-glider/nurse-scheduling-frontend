@@ -13,6 +13,7 @@ import * as serviceWorker from "./serviceWorker";
 import { appStore } from "./state/app-store";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { AppConfigProvider } from "./state/app-config-context";
 
 Sentry.init({
   dsn: "https://ca7cbc8f34f344ed89f37811a3d9d974@o467102.ingest.sentry.io/5492940",
@@ -25,7 +26,9 @@ ReactDOM.render(
     <BrowserRouter>
       <React.StrictMode>
         <Provider store={appStore}>
-          <App />
+          <AppConfigProvider>
+            <App />
+          </AppConfigProvider>
         </Provider>
       </React.StrictMode>
     </BrowserRouter>
