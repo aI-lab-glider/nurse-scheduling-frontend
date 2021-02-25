@@ -50,20 +50,17 @@ class Backend {
       (shiftName): void => (nameToUuid[shiftName] = uuidv4(shiftName))
     );
 
-    // eslint-disable-next-line array-callback-return
-    Object.keys(schedule.shifts).map((shiftName) => {
+    Object.keys(schedule.shifts).forEach((shiftName) => {
       schedule.shifts[nameToUuid[shiftName]] = schedule.shifts[shiftName];
       delete schedule.shifts[shiftName];
     });
 
-    // eslint-disable-next-line array-callback-return
-    Object.keys(schedule.employee_info.time).map((shiftName) => {
+    Object.keys(schedule.employee_info.time).forEach((shiftName) => {
       schedule.employee_info.time[nameToUuid[shiftName]] = schedule.employee_info.time[shiftName];
       delete schedule.employee_info.time[shiftName];
     });
 
-    // eslint-disable-next-line array-callback-return
-    Object.keys(schedule.employee_info.type).map((shiftName) => {
+    Object.keys(schedule.employee_info.type).forEach((shiftName) => {
       schedule.employee_info.type[nameToUuid[shiftName]] = schedule.employee_info.type[shiftName];
       delete schedule.employee_info.type[shiftName];
     });
