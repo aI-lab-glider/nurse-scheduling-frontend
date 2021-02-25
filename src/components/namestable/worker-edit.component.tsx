@@ -74,7 +74,12 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
 
   // #region setting up state
   useEffect(() => {
-    setWorkerInfo({ ...initialWorkerModel, workerName: options.name, workerType: options.type });
+    setWorkerInfo({
+      ...initialWorkerModel,
+      workerName: options.name,
+      workerType: options.type,
+      prevName: options.name,
+    });
   }, [setWorkerInfo, options.name, options.type]);
 
   const { monthNumber, year } = useMonthInfo();
