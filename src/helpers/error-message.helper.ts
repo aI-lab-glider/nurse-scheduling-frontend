@@ -42,13 +42,24 @@ export class ErrorMessageHelper {
     let message: string;
     let title = "Nie rozpoznano błędu";
     let day = 0;
+    let i = 0;
     let type = ScheduleErrorType.OTH;
 
     switch (error.kind) {
       case AlgorithmErrorCode.AlwaysAtLeastOneNurse:
+        i = 0;
         message = `Brak pielęgniarek w dniu <strong>${error.day + 1} na zmianie ${
           error.day_time ? dayTimeTranslations[error.day_time] : ""
         }</strong>`;
+        if (error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+          message += ` w godzinach <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+        }
+        while (error.segments[i + 1]) {
+          i++;
+          if (error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+            message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+          }
+        }
         type = ScheduleErrorType.AON;
         title = "date";
         if (error.day) {
@@ -56,11 +67,18 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.WorkerNumberDuringDay:
-        message = `Za mało pracowników w trakcie dnia w dniu <strong>${
-          error.day + 1
-        }</strong>, potrzeba <strong>${error.required}</strong>, jest <strong>${
-          error.actual
-        }</strong>`;
+        i = 0;
+        message = `Za mało pracowników w trakcie dnia w dniu <strong>${error.day + 1}</strong>`;
+        if (error.segments && error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+          message += ` w godzinach <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+          while (error.segments[i + 1]) {
+            i++;
+            if (error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+              message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+            }
+          }
+        }
+        message += `, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
         type = ScheduleErrorType.WND;
         title = "date";
         if (error.day) {
@@ -68,11 +86,18 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.WorkerNumberDuringNight:
-        message = `Za mało pracowników w nocy w dniu <strong>${
-          error.day + 1
-        }</strong>, potrzeba <strong>${error.required}</strong>, jest <strong>${
-          error.actual
-        }</strong>`;
+        i = 0;
+        message = `Za mało pracowników w nocy w dniu <strong>${error.day + 1}</strong>`;
+        if (error.segments && error.segments[i][0] !== 22 && error.segments[i][1] !== 6) {
+          message += ` w godzinach <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+          while (error.segments[i + 1]) {
+            i++;
+            if (error.segments[i][0] !== 22 && error.segments[i][1] !== 6) {
+              message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+            }
+          }
+        }
+        message += `, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
         type = ScheduleErrorType.WNN;
         title = "date";
         if (error.day) {
