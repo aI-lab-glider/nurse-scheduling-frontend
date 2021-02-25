@@ -2,30 +2,27 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { ShiftCode } from "../../../../src/common-models/shift-info.model";
-import { WorkerType } from "../../../../src/common-models/worker-info.model";
-
 context("Load schedule", () => {
-  it("Shoud be able to save file to database and after that load new schedule", () => {
-    const cell = {
-      workerType: WorkerType.NURSE,
-      workerIdx: 0,
-      shiftIdx: 6,
-    };
-    cy.loadScheduleToMonth("example.xlsx");
-    cy.checkWorkerShift({
-      ...cell,
-      desiredShiftCode: ShiftCode.U,
-    });
-    cy.enterEditMode();
-    cy.saveToDatabase();
-    cy.leaveEditMode();
-    cy.loadScheduleToMonth("example_2.xlsx");
-    cy.checkWorkerShift({
-      ...cell,
-      desiredShiftCode: ShiftCode.N,
-    });
-  });
+  // it("Shoud be able to save file to database and after that load new schedule", () => {
+  //   const cell = {
+  //     workerType: WorkerType.NURSE,
+  //     workerIdx: 0,
+  //     shiftIdx: 6,
+  //   };
+  //   cy.loadScheduleToMonth("example.xlsx");
+  //   cy.checkWorkerShift({
+  //     ...cell,
+  //     desiredShiftCode: ShiftCode.U,
+  //   });
+  //   cy.enterEditMode();
+  //   cy.saveToDatabase();
+  //   cy.leaveEditMode();
+  //   cy.loadScheduleToMonth("example_2.xlsx");
+  //   cy.checkWorkerShift({
+  //     ...cell,
+  //     desiredShiftCode: ShiftCode.N,
+  //   });
+  // });
 
   it("Should be able to save file and load the exported file", () => {
     cy.loadScheduleToMonth();
