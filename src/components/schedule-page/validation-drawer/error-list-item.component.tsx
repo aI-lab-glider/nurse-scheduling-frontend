@@ -36,12 +36,12 @@ export default function ErrorListItem({
     }
   }
 
-  let errorDayIndex = -1;
-  let errorDay = -1;
-  if (error.day && mappedDays) {
-    errorDayIndex = error.day - 1;
-    errorDay = mappedDays[errorDayIndex];
+  if (typeof error.day === "undefined" || typeof mappedDays === "undefined") {
+    throw Error(`Error undefined or mappedDays undefined`);
   }
+
+  const errorDayIndex = error.day;
+  const errorDay = mappedDays[errorDayIndex];
 
   const monthName = errorDayIndex < monthStartIndex ? prevMonthGenetivus : currMonthGenetivus;
 
