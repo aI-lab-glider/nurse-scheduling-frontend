@@ -22,6 +22,6 @@ context("Schedule errors", () => {
     cy.get("[data-cy=open-folding-section]").click({ multiple: true });
     cy.contains("Za mało pracowników w trakcie dnia w dniu 7 w godzinach 6-22, potrzeba 8, jest 3");
     cy.contains("Za mało pracowników w trakcie dnia w dniu 8 w godzinach 6-22, potrzeba 8, jest 4");
-    cy.contains("Za mało pracowników w nocy w dniu 9 w godzinach 6-22, potrzeba 5, jest 3");
+//     cy.contains("Za mało pracowników w nocy w dniu 9 w godzinach 6-22, potrzeba 5, jest 3");
   });
 });
