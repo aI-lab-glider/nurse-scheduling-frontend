@@ -11,20 +11,10 @@ import {
 import { RevisionType, ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
-import { WorkerInfoExtendedInterface } from "../../../../components/namestable/worker-edit.component";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import _ from "lodash";
-import { WorkerInfoModel } from "../../../../common-models/worker-info.model";
 import { ActionModel } from "../../../models/action.model";
 import { Shift } from "../../../../common-models/shift-info.model";
-
-export interface UpdateNewWorkerActionPayload extends WorkerInfoExtendedInterface {
-  monthNumber: number;
-  year: number;
-}
-export interface AddNewWorkerActionPayload extends UpdateNewWorkerActionPayload {
-  shiftCountInActualSchedule: number;
-}
 
 export class ScheduleDataActionCreator {
   static setScheduleFromScheduleDM(
@@ -98,54 +88,6 @@ export class ScheduleDataActionCreator {
     return {
       type: createActionName(TEMPORARY_SCHEDULE_NAME, ScheduleActionType.UPDATE),
       payload: newScheduleModel,
-    };
-  }
-
-  static addNewWorker(
-    worker: WorkerInfoExtendedInterface
-  ): ThunkFunction<AddNewWorkerActionPayload> {
-    return async (dispatch, getState): Promise<void> => {
-      const { dates } = getState().actualState.persistentSchedule.present.month_info;
-      const {
-        month_number: monthNumber,
-        year,
-      } = getState().actualState.persistentSchedule.present.schedule_info;
-      const action = {
-        type: ScheduleActionType.ADD_NEW_WORKER,
-        payload: {
-          ...worker,
-          shiftCountInActualSchedule: dates.length,
-          monthNumber,
-          year,
-        } as AddNewWorkerActionPayload,
-      };
-      dispatch(action);
-    };
-  }
-
-  static deleteWorker(worker: WorkerInfoModel | undefined): ThunkFunction<unknown> {
-    return async (dispatch): Promise<void> => {
-      const action = {
-        type: ScheduleActionType.DELETE_WORKER,
-        payload: { workerName: worker?.name },
-      };
-      dispatch(action);
-    };
-  }
-
-  static modifyWorker(
-    worker: WorkerInfoExtendedInterface
-  ): ThunkFunction<UpdateNewWorkerActionPayload> {
-    return async (dispatch, getState): Promise<void> => {
-      const {
-        month_number: monthNumber,
-        year,
-      } = getState().actualState.persistentSchedule.present.schedule_info;
-      const action = {
-        type: ScheduleActionType.MODIFY_WORKER,
-        payload: { ...worker, monthNumber, year },
-      };
-      dispatch(action);
     };
   }
 
