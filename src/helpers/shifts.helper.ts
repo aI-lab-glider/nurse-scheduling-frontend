@@ -9,7 +9,7 @@ import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
 import { ArrayHelper } from "./array.helper";
 import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
-import { Colors } from "./colors/color.model";
+import { Color, Colors } from "./colors/color.model";
 import { TranslationHelper } from "./translations.helper";
 import { VerboseDateHelper } from "./verbose-date.helper";
 
@@ -137,6 +137,19 @@ export class ShiftHelper {
     return [requiredHours, actualHours, overtime];
   }
 
+  private static createRGBFromHex(hexCode: string): Color {
+    let hex = hexCode.replace("#", "");
+
+    if (hex.length === 3) {
+      hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+    }
+
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    return new Color(r, g, b, 1);
+  }
+
   static getShiftColor(
     shift: ShiftCode,
     day?: VerboseDate,
@@ -144,6 +157,24 @@ export class ShiftHelper {
     ignoreFrozenState = false
   ): CellColorSet {
     const colorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET;
+    const shiftFromSHIFTS = SHIFTS[shift];
+
+    if (shiftFromSHIFTS && shift !== "W") {
+      if (shiftFromSHIFTS.isWorkingShift) {
+        colorSet.textColor = this.createRGBFromHex(shiftFromSHIFTS.color!);
+        return {
+          ...colorSet,
+          ...VerboseDateHelper.getDayColor(day, colorSet, isFrozen, ignoreFrozenState),
+        };
+      } else {
+        colorSet.backgroundColor = this.createRGBFromHex(shiftFromSHIFTS.color!);
+        return {
+          ...VerboseDateHelper.getDayColor(day, colorSet, isFrozen, ignoreFrozenState),
+          ...colorSet,
+        };
+      }
+    }
+
     switch (shift) {
       case ShiftCode.D:
         colorSet.textColor = Colors.DARK_GREEN;

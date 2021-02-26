@@ -119,6 +119,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
     name: "Popołudnie + Noc",
     from: 15,
     to: 7,
+    color: "ce42f5",
     isWorkingShift: true,
   },
   W: { code: "W", name: "Wolne", from: 0, to: 24, isWorkingShift: false },
