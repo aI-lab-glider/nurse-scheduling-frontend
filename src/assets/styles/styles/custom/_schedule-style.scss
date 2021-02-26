@@ -126,6 +126,10 @@
     border-radius: 0 2px 2px 0;
   }
 
+  .keepOnfalse {
+    margin-left: 4px;
+  }
+
   .keepOnfalseD {
     color: $dzien;
   }
@@ -149,7 +153,6 @@
   .keepOnfalse_workersCalendartrueD {
     border-radius: 2px;
     margin-left: 5px;
-    background-color: change-color($color: $dzien, $alpha: 0.3);
     color: $black;
     padding-right: 5px;
     .leftBorderColor {
@@ -161,7 +164,6 @@
   .keepOnfalse_workersCalendartrueDN {
     border-radius: 2px;
     margin-left: 5px;
-    background-color: change-color($color: $dzien-noc, $alpha: 0.3);
     color: $white;
     padding-right: 5px;
     .leftBorderColor {
@@ -173,7 +175,6 @@
   .keepOnfalse_workersCalendartrueR {
     border-radius: 2px;
     margin-left: 5px;
-    background-color: change-color($color: $rano, $alpha: 0.3);
     color: $black;
     padding-right: 5px;
     .leftBorderColor {

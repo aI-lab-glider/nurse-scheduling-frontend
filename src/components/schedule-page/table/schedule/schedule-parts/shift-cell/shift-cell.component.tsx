@@ -28,6 +28,10 @@ interface ShiftCellOptions extends BaseCellOptions {
   hasNext?: boolean;
 }
 
+export function getColor(value: string): string {
+  return Object.values(SHIFTS).filter((s) => s.code === value)[0].color ?? "FFD100";
+}
+
 export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   const {
     cellIndex,
@@ -69,10 +73,6 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
 
   function _onValueChange(inputValue: string): void {
     onValueChange && onValueChange(getShiftCode(inputValue));
-  }
-
-  function getColor(value: string): string {
-    return Object.values(SHIFTS).filter((s) => s.code === value)[0].color ?? "FFD100";
   }
 
   const selectableItemRef = useCellSelection(options);
