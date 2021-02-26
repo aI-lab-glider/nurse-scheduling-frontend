@@ -31,6 +31,7 @@ export enum ShiftCode {
   U = "U",
   L4 = "L4",
   K = "K",
+  NZ = "NZ",
   OP = "OP",
   OK = "OK",
 }
@@ -160,6 +161,14 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
     from: 0,
     to: 24,
     color: "56f5f5",
+    isWorkingShift: false,
+  },
+  NZ: {
+    code: "NZ",
+    name: "Niezatrudniony",
+    from: 0,
+    to: 24,
+    color: "000000",
     isWorkingShift: false,
   },
 };

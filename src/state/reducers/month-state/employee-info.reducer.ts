@@ -4,19 +4,15 @@
 import _ from "lodash";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ContractType, WorkersInfoModel } from "../../../common-models/worker-info.model";
-import { WorkerInfoExtendedInterface } from "../../../components/namestable/worker-edit.component";
 import { ShiftHelper } from "../../../helpers/shifts.helper";
 import { ActionModel } from "../../models/action.model";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
-import {
-  AddNewWorkerActionPayload,
-  UpdateNewWorkerActionPayload,
-} from "./schedule-data/schedule-data.action-creator";
 import {
   createActionName,
   ScheduleActionModel,
   ScheduleActionType,
 } from "./schedule-data/schedule.actions";
+import { WorkerActionPayload } from "../worker.action-creator";
 
 function fromFractionToHours(fraction: string): number {
   const result = fraction.split("/");
@@ -24,15 +20,14 @@ function fromFractionToHours(fraction: string): number {
   return dividend / divisor;
 }
 
-function getEmployeeWorkTime({
+export function getEmployeeWorkTime({
   contractType,
   employmentTime,
   employmentTimeOther,
   civilTime,
   monthNumber,
   year,
-  workerName,
-}: UpdateNewWorkerActionPayload): number {
+}): number {
   if (monthNumber === undefined || year === undefined) {
     throw Error("Month number and year are required");
   }
@@ -62,21 +57,12 @@ function mockWorkerContractType(workerInfo: WorkersInfoModel): WorkersInfoModel 
 export function employeeInfoReducerF(name: string) {
   return (
     state: WorkersInfoModel = scheduleDataInitialState.employee_info,
-    action:
-      | ScheduleActionModel
-      | ActionModel<WorkerInfoExtendedInterface>
-      | ActionModel<UpdateNewWorkerActionPayload>
-      | ActionModel<AddNewWorkerActionPayload>
+    action: ScheduleActionModel | ActionModel<WorkerActionPayload>
   ): WorkersInfoModel => {
     let monthEmployeeInfo: WorkersInfoModel;
-    let workerName, prevName, workerType, contractType;
-    if ((action.payload as WorkerInfoExtendedInterface) !== undefined) {
-      ({
-        workerName,
-        prevName,
-        workerType,
-        contractType,
-      } = action.payload as WorkerInfoExtendedInterface);
+    let updatedEmployeeInfo;
+    if ((action.payload as WorkerActionPayload) !== undefined) {
+      ({ updatedEmployeeInfo } = action.payload as WorkerActionPayload);
     }
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
@@ -89,36 +75,10 @@ export function employeeInfoReducerF(name: string) {
         if (!monthEmployeeInfo) return state;
         monthEmployeeInfo = mockWorkerContractType(monthEmployeeInfo);
         return { ...state, ...monthEmployeeInfo };
-
-      case ScheduleActionType.DELETE_WORKER:
-        delete state.time[workerName];
-        delete state.type[workerName];
-        delete state.contractType?.[workerName];
+      case ScheduleActionType.UPDATE_WORKER_INFO:
         return {
-          time: { ...state.time },
-          type: { ...state.type },
-          contractType: { ...state.contractType },
-        };
-      case ScheduleActionType.ADD_NEW_WORKER:
-        return {
-          time: {
-            [workerName]: getEmployeeWorkTime(action.payload as AddNewWorkerActionPayload),
-            ...state.time,
-          },
-          type: { [workerName]: workerType, ...state.type },
-          contractType: { [workerName]: contractType, ...state.contractType },
-        };
-      case ScheduleActionType.MODIFY_WORKER:
-        delete state.time[prevName];
-        delete state.type[prevName];
-        delete state.contractType?.[prevName];
-        return {
-          time: {
-            ...state.time,
-            [workerName]: getEmployeeWorkTime(action.payload as UpdateNewWorkerActionPayload),
-          },
-          type: { ...state.type, [workerName]: workerType },
-          contractType: { ...state.contractType, [workerName]: contractType },
+          ...state,
+          ...updatedEmployeeInfo,
         };
       default:
         return state;
