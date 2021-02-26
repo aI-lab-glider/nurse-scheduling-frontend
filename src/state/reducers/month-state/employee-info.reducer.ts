@@ -77,7 +77,6 @@ export function employeeInfoReducerF(name: string) {
         return { ...state, ...monthEmployeeInfo };
       case ScheduleActionType.UPDATE_WORKER_INFO:
         return {
-          ...state,
           ...updatedEmployeeInfo,
         };
       default:

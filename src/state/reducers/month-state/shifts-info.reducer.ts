@@ -28,7 +28,6 @@ export function scheduleShiftsInfoReducerF(name: string) {
         return { ...data };
       case ScheduleActionType.UPDATE_WORKER_INFO:
         return {
-          ...state,
           ...updatedShifts,
         };
       default:
