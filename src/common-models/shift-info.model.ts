@@ -46,7 +46,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   RPN: {
     code: "RPN",
-    name: "rano, popłudnie, noc",
+    name: "rano, popołudnie, noc",
     from: 7,
     to: 7,
     color: "9025cf",
