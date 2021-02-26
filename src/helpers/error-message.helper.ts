@@ -42,13 +42,24 @@ export class ErrorMessageHelper {
     let message: string;
     let title = "Nie rozpoznano błędu";
     let day = 0;
+    let i = 0;
     let type = ScheduleErrorType.OTH;
 
     switch (error.kind) {
       case AlgorithmErrorCode.AlwaysAtLeastOneNurse:
-        message = `Brak pielęgniarek w dniu <strong>${error.day} na zmianie ${
+        i = 0;
+        message = `Brak pielęgniarek w dniu <strong>${error.day + 1} na zmianie ${
           error.day_time ? dayTimeTranslations[error.day_time] : ""
         }</strong>`;
+        if (error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+          message += ` w godzinach <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+        }
+        while (error.segments[i + 1]) {
+          i++;
+          if (error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+            message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+          }
+        }
         type = ScheduleErrorType.AON;
         title = "date";
         if (error.day) {
@@ -56,7 +67,18 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.WorkerNumberDuringDay:
-        message = `Za mało pracowników w trakcie dnia w dniu <strong>${error.day}</strong>, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
+        i = 0;
+        message = `Za mało pracowników w trakcie dnia w dniu <strong>${error.day + 1}</strong>`;
+        if (error.segments && error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+          message += ` w godzinach <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+          while (error.segments[i + 1]) {
+            i++;
+            if (error.segments[i][0] !== 1 && error.segments[i][1] !== 24) {
+              message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+            }
+          }
+        }
+        message += `, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
         type = ScheduleErrorType.WND;
         title = "date";
         if (error.day) {
@@ -64,7 +86,18 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.WorkerNumberDuringNight:
-        message = `Za mało pracowników w nocy w dniu <strong>${error.day}</strong>, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
+        i = 0;
+        message = `Za mało pracowników w nocy w dniu <strong>${error.day + 1}</strong>`;
+        if (error.segments && error.segments[i][0] !== 22 && error.segments[i][1] !== 6) {
+          message += ` w godzinach <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+          while (error.segments[i + 1]) {
+            i++;
+            if (error.segments[i][0] !== 22 && error.segments[i][1] !== 6) {
+              message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+            }
+          }
+        }
+        message += `, potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
         type = ScheduleErrorType.WNN;
         title = "date";
         if (error.day) {
@@ -72,7 +105,11 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.DissalowedShiftSequence:
-        message = `Niedozwolona sekwencja zmian dla pracownika <strong>${error.worker}</strong> w dniu <strong>${error.day}</strong>: <strong>${error.succeeding}</strong> po <strong>${error.preceding}</strong>`;
+        message = `Niedozwolona sekwencja zmian dla pracownika <strong>${
+          error.worker
+        }</strong> w dniu <strong>${error.day + 1}</strong>: <strong>${
+          error.succeeding
+        }</strong> po <strong>${error.preceding}</strong>`;
         type = ScheduleErrorType.DSS;
         title = "date";
         if (error.day) {
@@ -80,7 +117,9 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.LackingLongBreak:
-        message = `Brak wymaganej długiej przerwy dla pracownika <strong>${error.worker}</strong> w tygodniu <strong>${error.week}</strong>`;
+        message = `Brak wymaganej długiej przerwy dla pracownika <strong>${
+          error.worker
+        }</strong> w tygodniu <strong>${error.week + 1}</strong>`;
         type = ScheduleErrorType.LLB;
         title = `${error.worker}`;
         break;
@@ -95,7 +134,9 @@ export class ErrorMessageHelper {
         title = `${error.worker}`;
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
-        message = `Nieznana wartość zmiany: "${error.actual}" dla pracownika  ${error.worker} w dniu ${error.day}. Przyjęto, że zmiana to wolne.`;
+        message = `Nieznana wartość zmiany: "${error.actual}" dla pracownika  ${
+          error.worker
+        } w dniu ${error.day! + 1}. Przyjęto, że zmiana to wolne.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
         title = `${error.worker}`;
         break;

@@ -72,7 +72,7 @@ export class ShiftHelper {
 
   public static calculateWorkNormForMonth(month: number, year: number): number {
     const dates = VerboseDateHelper.generateVerboseDatesForMonth(month, year);
-    return this.calculateRequiredHoursFromVerboseDates(dates);
+    return Math.round(this.calculateRequiredHoursFromVerboseDates(dates));
   }
 
   public static calculateRequiredHoursFromVerboseDates(
@@ -134,7 +134,7 @@ export class ShiftHelper {
       return a + this.shiftCodeToWorkTime(shift!);
     }, 0);
     const overtime = actualHours - requiredHours;
-    return [requiredHours, actualHours, overtime];
+    return [requiredHours, actualHours, overtime].map((n) => Math.round(n));
   }
 
   private static createRGBFromHex(hexCode: string): Color {

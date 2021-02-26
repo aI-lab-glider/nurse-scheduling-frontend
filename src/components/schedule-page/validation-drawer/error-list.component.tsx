@@ -68,10 +68,17 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
     },
   ];
 
+  function compareErrors(a: ScheduleErrorMessageModel, b: ScheduleErrorMessageModel): number {
+    if (typeof a.day !== "undefined" && typeof b.day !== "undefined") {
+      return a.day - b.day;
+    }
+    return 0;
+  }
+
   const renderOneTypeOfErrors = (errorData: ErrorTypes): JSX.Element => {
     return errorData.errors && errorData.errors.length > 0 ? (
       <FoldingSection name={`${errorData.errorDescription} (${errorData.errors.length})`}>
-        {errorData.errors.map(
+        {errorData.errors.sort(compareErrors).map(
           (error, index): JSX.Element => (
             <ErrorListItem
               key={`${error.message ? error.message.substr(2, 9) : "0"}${index}`}

@@ -11,15 +11,11 @@ import {
 import { RevisionType, ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
-import { WorkerInfoExtendedInterface } from "../../../../components/namestable/worker-edit.component";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import _ from "lodash";
-import { WorkerInfoModel } from "../../../../common-models/worker-info.model";
 import { ActionModel } from "../../../models/action.model";
+import { Shift } from "../../../../common-models/shift-info.model";
 
-export interface AddNewWorkerActionPayload extends WorkerInfoExtendedInterface {
-  shiftCountInActualSchedule: number;
-}
 export class ScheduleDataActionCreator {
   static setScheduleFromScheduleDM(
     newSchedule: ScheduleDataModel,
@@ -95,39 +91,31 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  static addNewWorker(
-    worker: WorkerInfoExtendedInterface
-  ): ThunkFunction<AddNewWorkerActionPayload> {
-    return async (dispatch, getState): Promise<void> => {
-      const { dates } = getState().actualState.persistentSchedule.present.month_info;
+  static addNewShift(shift: Shift): (dispatch) => Promise<void> {
+    return async (dispatch): Promise<void> => {
       const action = {
-        type: ScheduleActionType.ADD_NEW_WORKER,
-        payload: {
-          ...worker,
-          shiftCountInActualSchedule: dates.length,
-        } as AddNewWorkerActionPayload,
+        type: ScheduleActionType.ADD_NEW_SHIFT,
+        payload: { ...shift },
       };
       dispatch(action);
     };
   }
 
-  static deleteWorker(worker: WorkerInfoModel | undefined): ThunkFunction<unknown> {
+  static modifyShift(shift: Shift, oldShift: Shift): (dispatch) => Promise<void> {
     return async (dispatch): Promise<void> => {
       const action = {
-        type: ScheduleActionType.DELETE_WORKER,
-        payload: { workerName: worker?.name },
+        type: ScheduleActionType.MODIFY_SHIFT,
+        payload: Array<Shift>(shift, oldShift),
       };
       dispatch(action);
     };
   }
 
-  static modifyWorker(
-    worker: WorkerInfoExtendedInterface
-  ): ThunkFunction<WorkerInfoExtendedInterface> {
+  static deleteShift(shift: Shift): (dispatch) => Promise<void> {
     return async (dispatch): Promise<void> => {
       const action = {
-        type: ScheduleActionType.MODIFY_WORKER,
-        payload: { ...worker },
+        type: ScheduleActionType.DELETE_SHIFT,
+        payload: shift,
       };
       dispatch(action);
     };
