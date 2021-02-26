@@ -54,7 +54,7 @@ export default function ValidationDrawerContentComponent(
     if (loadingErrors) {
       setLoadingState(spinner);
     } else {
-      if (scheduleErrors) {
+      if (Object.keys(scheduleErrors).length > 0) {
         const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors);
         if (errors.length > 0) {
           setMappedErrors(errors);
