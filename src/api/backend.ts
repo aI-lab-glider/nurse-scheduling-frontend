@@ -2,10 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import axios, { AxiosInstance } from "axios";
-import { ScheduleDataModel } from "../common-models/schedule-data.model";
-import { ScheduleError } from "../common-models/schedule-error.model";
-import { SHIFTS } from "../common-models/shift-info.model";
 import { v4 as uuidv4 } from "uuid";
+import { ScheduleDataModel } from "../common-models/schedule-data.model";
+import { AlgorithmErrorCode, ScheduleError } from "../common-models/schedule-error.model";
+import { SHIFTS } from "../common-models/shift-info.model";
 
 interface BackendErrorObject extends Omit<ScheduleError, "kind"> {
   code: string;
@@ -19,6 +19,13 @@ function escapeJuliaIndexes(error: ScheduleError): ScheduleError {
     }
   });
   return error;
+}
+
+function isUnderTimeAndOvertimeErrors(error: ScheduleError): boolean {
+  return (
+    error.kind === AlgorithmErrorCode.WorkerOvertime ||
+    error.kind === AlgorithmErrorCode.WorkerUnderTime
+  );
 }
 
 type NameUuidMapper = {
@@ -75,6 +82,9 @@ class Backend {
         .then((resp) => resp.data.map((el: BackendErrorObject) => ({ ...el, kind: el.code })))
         .then((errors) => errors.map(escapeJuliaIndexes))
         .then((errors) => errors.map(this.remapUsernames))
+        .then((errors: ScheduleError[]) =>
+          errors.filter((err) => !isUnderTimeAndOvertimeErrors(err))
+        )
     );
   }
 

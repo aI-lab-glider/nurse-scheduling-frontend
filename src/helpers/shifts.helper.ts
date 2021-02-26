@@ -74,7 +74,7 @@ export class ShiftHelper {
     const dates = VerboseDateHelper.generateVerboseDatesForMonth(month, year);
     return Math.round(this.calculateRequiredHoursFromVerboseDates(dates));
   }
-
+  s;
   public static calculateRequiredHoursFromVerboseDates(
     verboseDates: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek">[]
   ): number {
