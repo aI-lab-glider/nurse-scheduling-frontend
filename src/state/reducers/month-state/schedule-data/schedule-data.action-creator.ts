@@ -14,6 +14,7 @@ import { createActionName, ScheduleActionModel, ScheduleActionType } from "./sch
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import _ from "lodash";
 import { ActionModel } from "../../../models/action.model";
+import { Shift } from "../../../../common-models/shift-info.model";
 
 export class ScheduleDataActionCreator {
   static setScheduleFromScheduleDM(
@@ -87,6 +88,36 @@ export class ScheduleDataActionCreator {
     return {
       type: createActionName(TEMPORARY_SCHEDULE_NAME, ScheduleActionType.UPDATE),
       payload: newScheduleModel,
+    };
+  }
+
+  static addNewShift(shift: Shift): (dispatch) => Promise<void> {
+    return async (dispatch): Promise<void> => {
+      const action = {
+        type: ScheduleActionType.ADD_NEW_SHIFT,
+        payload: { ...shift },
+      };
+      dispatch(action);
+    };
+  }
+
+  static modifyShift(shift: Shift, oldShift: Shift): (dispatch) => Promise<void> {
+    return async (dispatch): Promise<void> => {
+      const action = {
+        type: ScheduleActionType.MODIFY_SHIFT,
+        payload: Array<Shift>(shift, oldShift),
+      };
+      dispatch(action);
+    };
+  }
+
+  static deleteShift(shift: Shift): (dispatch) => Promise<void> {
+    return async (dispatch): Promise<void> => {
+      const action = {
+        type: ScheduleActionType.DELETE_SHIFT,
+        payload: shift,
+      };
+      dispatch(action);
     };
   }
 
