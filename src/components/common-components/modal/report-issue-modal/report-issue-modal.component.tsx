@@ -9,6 +9,7 @@ import { makeStyles, createStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
 import DefaultModal from "../modal.component";
 import { send, init } from "emailjs-com";
+import { useNotification } from "../../notification/notification.context";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -135,13 +136,25 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
     </div>
   );
 
+  const { createNotification } = useNotification();
+
   function handleSend(): void {
     if (isLongEnough) {
-      send("service_74nkmaq", "template_120y7az", {
-        message: issueDescription,
-      }).then(() => {
-        setIsSent(true);
-      });
+      send(
+        "service_74nkmaq",
+        "template_120y7az",
+        {
+          message: issueDescription,
+        },
+        "user_gkDGsV6502nLQs0mPf4xk"
+      )
+        .then(() => {
+          setIsSent(true);
+        })
+        .catch(() => {
+          createNotification({ type: "error", message: "Wystąpił problem sieciowy!" });
+          handleClose();
+        });
     }
   }
 
