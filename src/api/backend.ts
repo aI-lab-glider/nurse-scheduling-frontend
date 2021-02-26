@@ -4,15 +4,11 @@
 import axios, { AxiosInstance } from "axios";
 import { ScheduleDataModel } from "../common-models/schedule-data.model";
 import { ScheduleError } from "../common-models/schedule-error.model";
-import { Shift, SHIFTS } from "../common-models/shift-info.model";
+import { SHIFTS } from "../common-models/shift-info.model";
 import { v4 as uuidv4 } from "uuid";
 
 interface BackendErrorObject extends Omit<ScheduleError, "kind"> {
   code: string;
-}
-
-interface BackendShiftModel extends Shift {
-  is_working_shift: boolean;
 }
 
 function escapeJuliaIndexes(error: ScheduleError): ScheduleError {
