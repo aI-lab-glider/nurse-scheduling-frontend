@@ -101,6 +101,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
         Array.from(rowValuesSet).some((setItem) =>
           cellsToAvoid.some((cellToAvoid) => setItem.trim().toLowerCase().includes(cellToAvoid))
         )) ||
+      Array.from(rowValuesSet).some((setItem) => setItem.trim().toLowerCase().includes("grafik")) ||
       (rowValuesSet.size === 1 && rowValuesSet.has(""))
     );
   }
