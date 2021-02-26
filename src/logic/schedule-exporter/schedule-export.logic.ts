@@ -1,7 +1,10 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { ScheduleDataModel } from "../../common-models/schedule-data.model";
+import {
+  cropScheduleDMToMonthDM,
+  ScheduleDataModel,
+} from "../../common-models/schedule-data.model";
 import xlsx, { Cell } from "exceljs";
 import { ShiftCode } from "../../common-models/shift-info.model";
 import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
@@ -195,11 +198,13 @@ export class ScheduleExportLogic {
       [WorkerType.NURSE]: [] as string[][],
       [WorkerType.OTHER]: [] as string[][],
     };
-    Object.keys(scheduleModel.shifts || {}).forEach((key: string) => {
-      const category = scheduleModel.employee_info.type[key] ?? "";
+    Object.keys(cropScheduleDMToMonthDM(scheduleModel).shifts || {}).forEach((key: string) => {
+      const category = cropScheduleDMToMonthDM(scheduleModel).employee_info.type[key] ?? "";
       const shiftsRow: string[] = [
         key,
-        ...scheduleModel.shifts[key]?.map((s) => (s === ShiftCode.W ? "" : s)),
+        ...cropScheduleDMToMonthDM(scheduleModel).shifts[key]?.map((s) =>
+          s === ShiftCode.W ? "" : s
+        ),
       ];
       if (this.overtimeExport) {
         shiftsRow.push(
@@ -238,7 +243,7 @@ export class ScheduleExportLogic {
     return [
       [
         ChildrenSectionKey.RegisteredChildrenCount,
-        ...(scheduleModel.month_info?.children_number || []),
+        ...(cropScheduleDMToMonthDM(scheduleModel).month_info?.children_number || []),
       ],
     ];
   }
@@ -258,7 +263,7 @@ export class ScheduleExportLogic {
     return [
       [
         ExtraWorkersSectionKey.ExtraWorkersCount,
-        ...(scheduleModel?.month_info?.extra_workers || []),
+        ...(cropScheduleDMToMonthDM(scheduleModel)?.month_info?.extra_workers || []),
       ],
     ];
   }
@@ -266,7 +271,12 @@ export class ScheduleExportLogic {
   private static createDatesSection(
     scheduleModel: ScheduleDataModel
   ): (number | MetaDataSectionKey)[][] {
-    return [[MetaDataSectionKey.MonthDays, ...(scheduleModel?.month_info?.dates || [])]];
+    return [
+      [
+        MetaDataSectionKey.MonthDays,
+        ...(cropScheduleDMToMonthDM(scheduleModel)?.month_info?.dates || []),
+      ],
+    ];
   }
 
   private saveToFile(workbook: xlsx.Workbook, filename: string): void {
