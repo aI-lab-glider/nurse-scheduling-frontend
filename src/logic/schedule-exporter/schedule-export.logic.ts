@@ -103,7 +103,14 @@ export class ScheduleExportLogic {
     workSheet.getCell(this.doneHoursAddress).alignment = { textRotation: -90 };
     workSheet.getCell(this.diffHoursAddress).alignment = { textRotation: -90 };
 
-    this.saveToFile(workbook, filename);
+    const finalName =
+      TranslationHelper.polishMonths[this.scheduleModel?.schedule_info?.month_number] +
+      "_" +
+      this.scheduleModel?.schedule_info?.year +
+      "_(" +
+      filename +
+      ").xlsx";
+    this.saveToFile(workbook, finalName);
   }
 
   private static createWorkArea(): [xlsx.Workbook, xlsx.Worksheet] {
