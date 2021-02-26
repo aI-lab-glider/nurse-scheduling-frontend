@@ -157,6 +157,7 @@ function copyFromPrevMonth(
 
   const [, missingFromNextMonth] = calculateMissingFullWeekDays(baseMonthKey);
 
+  const newMonthWorkersShifts: ShiftInfoModel = {};
   Object.keys(baseShifts).forEach((workerKey) => {
     const missingShifts = fillWithShiftsFromBaseMonthFullWeeks(
       baseYear,
@@ -165,11 +166,11 @@ function copyFromPrevMonth(
       getMonthLength(year, month) - missingFromNextMonth
     );
     const baseMonthShifts = currentScheduleShifts[workerKey]?.slice(0, missingFromNextMonth) ?? [];
-    currentScheduleShifts[workerKey] = baseMonthShifts
+    newMonthWorkersShifts[workerKey] = baseMonthShifts
       ? baseMonthShifts.concat(missingShifts)
       : missingShifts;
   });
-  return currentScheduleShifts;
+  return newMonthWorkersShifts;
 }
 
 function copyFromNextMonth(
