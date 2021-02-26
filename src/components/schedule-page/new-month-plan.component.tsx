@@ -74,7 +74,7 @@ export function NewMonthPlanComponent(): JSX.Element {
   return (
     <>
       <div className={"newMonthComponents"}>
-        <img src="https://imgur.com/2tTcKbj" alt="" />
+        <img src="https://i.imgur.com/2tTcKbj.jpg" alt="" />
         <p>Nie masz planu na ten miesiąc</p>
         <div className={"newPageButtonsPane"}>
           {hasValidPrevious && (
