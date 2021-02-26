@@ -8,6 +8,7 @@ import { MonthInfoModel } from "../../../../common-models/month-info.model";
 import { FREE_SHIFTS, ShiftCode, ShiftInfoModel } from "../../../../common-models/shift-info.model";
 import { ScheduleKey } from "../../../../api/persistance-store.model";
 import { MonthDataModel } from "../../../../common-models/schedule-data.model";
+import { ArrayHelper } from "../../../../helpers/array.helper";
 
 const NUMBER_OF_DAYS_IN_WEEK = 7;
 
@@ -73,8 +74,18 @@ export function cropMonthInfoToMonth(
   const { month, year } = scheduleKey;
   const days = daysInMonth(month, year);
   return {
-    children_number: monthInfo.children_number?.slice(startFromIndex, startFromIndex + days.length),
-    extra_workers: monthInfo.extra_workers?.slice(startFromIndex, startFromIndex + days.length),
+    children_number: ArrayHelper.createArrayOfLengthFromArray(
+      monthInfo.children_number ?? [],
+      days.length,
+      0,
+      startFromIndex
+    ),
+    extra_workers: ArrayHelper.createArrayOfLengthFromArray(
+      monthInfo.extra_workers ?? [],
+      days.length,
+      0,
+      startFromIndex
+    ),
     dates: days,
     frozen_shifts: [],
   };

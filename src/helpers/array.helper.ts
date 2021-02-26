@@ -81,7 +81,17 @@ export class ArrayHelper {
 
     const left = prevArrData.slice(prevArrData.length - count1);
     const right = nextArrData.slice(0, count2);
-
     return [...left, ...curr, ...right];
+  }
+
+  public static createArrayOfLengthFromArray<T>(
+    array: T[],
+    length: number,
+    defaultFillValue: T,
+    startIndex = 0
+  ): T[] {
+    const firstArray = array.slice(startIndex, startIndex + length);
+    const diff = length - firstArray.length;
+    return [...firstArray, ...Array(diff).fill(defaultFillValue)];
   }
 }
