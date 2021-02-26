@@ -58,7 +58,13 @@ export default function ErrorListItem({
       <div className="error-text" dangerouslySetInnerHTML={{ __html: error.message || "" }} />
       {interactable && (
         <div className="error-btn">
-          <Button variant="primary" id="error-buttons" style={{ width: "90px", height: "26px" }}>
+          <Button
+            disabled
+            className="disabled-submit-button"
+            variant="primary"
+            id="error-buttons"
+            style={{ width: "90px", height: "26px" }}
+          >
             Pokaż
           </Button>
         </div>
