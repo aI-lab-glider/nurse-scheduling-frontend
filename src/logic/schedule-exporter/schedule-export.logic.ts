@@ -143,24 +143,43 @@ export class ScheduleExportLogic {
     const monthLogic = new MonthInfoLogic(
       monthInfo?.month_number || 0,
       monthInfo?.year + "" || "",
-      this.scheduleModel.month_info?.dates || []
+      cropScheduleDMToMonthDM(this.scheduleModel).month_info?.dates || []
     );
     const verboseDates = monthLogic.verboseDates;
     workSheet.addRows(rows);
     workSheet.getColumn(1).width = 20;
-    workSheet.eachRow((row) => {
-      let isShiftRow = false;
+    workSheet.eachRow((row, index) => {
       row.height = 18;
+      if (index === 1) {
+        row.height = 40;
+        row.eachCell((cell) => {
+          cell.font = {
+            family: 4,
+            size: 30,
+            bold: true,
+          };
+        });
+      }
+      let isShiftRow = false;
       row.eachCell((cell, colNumber) => {
         const cellValue = cell.value?.toString() || "";
         this.getRightCornerIndexes(cell, cellValue);
         if ((cellValue && ShiftCode[cellValue]) || isShiftRow) {
+          if (!isShiftRow) {
+            row.eachCell((cell, colNumber) => {
+              const cellValue = cell.value?.toString() || "";
+              cell.style = this.getShiftStyle(
+                ShiftCode[cellValue] || ShiftCode.W,
+                verboseDates[colNumber - 2]
+              );
+            });
+          }
           isShiftRow = true;
           // colNumber - 1, because first column is key column
           workSheet.getColumn(colNumber).width = 4;
           cell.style = this.getShiftStyle(
             ShiftCode[cellValue] || ShiftCode.W,
-            verboseDates[colNumber - 1]
+            verboseDates[colNumber - 2]
           );
         }
       });
@@ -232,15 +251,16 @@ export class ScheduleExportLogic {
     headerRow[MetaDataSectionKey.RequiredavailableWorkersWorkTime] = 0;
     let infoStr = Object.keys(headerRow)
       .map((key) => `${key} ${headerRow[key]}`)
-      .join(", ")
-      .slice(9);
+      .join("  |  ")
+      .slice(9)
+      .toUpperCase();
     infoStr =
       infoStr.slice(0, infoStr.length - 1) +
       ShiftHelper.calculateWorkNormForMonth(
         scheduleModel?.schedule_info?.month_number,
         scheduleModel?.schedule_info?.year
       );
-    return ["Grafik", infoStr];
+    return ["GRAFIK", infoStr];
   }
 
   private static createChildrenInfoSection(

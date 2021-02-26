@@ -63,4 +63,7 @@ export class Colors {
   public static get PINK(): Color {
     return new Color(255, 56, 152);
   }
+  public static get GREY_BLUE(): Color {
+    return new Color(200, 223, 255);
+  }
 }
