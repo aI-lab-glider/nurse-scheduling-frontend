@@ -39,10 +39,10 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
     setOpen(false);
   };
   const date = new Date();
-  const DEFAULT_FILENAME = `${date.getDate()}_${date.getMonth() + 1}_${date.getFullYear()}.xlsx`;
+  const DEFAULT_FILENAME = `${date.getDate()}_${date.getMonth() + 1}_${date.getFullYear()}`;
 
   const [exportOptions, setExportOptions] = React.useState({
-    extraWorkers: { value: true, label: "dzienni pracownicy" },
+    // extraWorkers: { value: true, label: "dzienni pracownicy" },
     overtime: { value: true, label: "nadgodzinny" },
   });
 
@@ -50,8 +50,8 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
     xlsx: (): void => {
       new ScheduleExportLogic(
         model,
-        exportOptions.overtime.value,
-        exportOptions.extraWorkers.value
+        exportOptions.overtime.value
+        // exportOptions.extraWorkers.value
       ).formatAndSave(DEFAULT_FILENAME);
     },
   };
