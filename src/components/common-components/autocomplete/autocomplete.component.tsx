@@ -3,7 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useAutocomplete } from "@material-ui/lab";
 import classNames from "classnames/bind";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { usePopper } from "react-popper";
 
 interface AutocompleteOptions<T> {
   options: T[];
@@ -27,6 +28,12 @@ export function AutocompleteComponent<T>({
   onKeyDown,
   getOptionColor,
 }: AutocompleteOptions<T>): JSX.Element {
+  const inputRef = useRef(null);
+  const tooltipRef = useRef(null);
+  const { styles } = usePopper(inputRef.current, tooltipRef.current, {
+    placement: "right-end",
+  });
+
   const [value, setValue] = useState<T>();
   useEffect(() => {
     if (value) {
@@ -45,9 +52,8 @@ export function AutocompleteComponent<T>({
     getOptionLabel,
     open: true,
   });
-
   return (
-    <div data-cy="shiftDropdown">
+    <div ref={inputRef} data-cy="shiftDropdown">
       <div {...getRootProps()}>
         <input
           className={className}
@@ -59,11 +65,11 @@ export function AutocompleteComponent<T>({
       </div>
       {groupedOptions.length > 0 ? (
         <ul
-          {...getListboxProps()}
-          className={classNames(
-            "listbox",
-            className.indexOf("moreMargin") > -1 ? "more-left-margin" : ""
-          )}
+          ref={tooltipRef}
+          className={classNames("listbox")}
+          style={styles.popper}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onMouseDown={(getListboxProps() as any).onMouseDown}
         >
           {groupedOptions.map((option, index) => (
             <li
