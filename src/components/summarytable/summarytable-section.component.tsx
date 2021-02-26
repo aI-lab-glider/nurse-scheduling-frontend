@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useContext } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { WorkerType } from "../../common-models/worker-info.model";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { DataRow } from "../../logic/schedule-logic/data-row";
@@ -10,7 +10,6 @@ import {
   ApplicationStateModel,
   ScheduleStateModel,
 } from "../../state/models/application-state.model";
-import { ScheduleErrorActionCreator } from "../../state/schedule-error.action-creator";
 import { ScheduleLogicContext } from "../schedule-page/table/schedule/use-schedule-state";
 import { SummaryTableRow } from "./summarytable-row.component";
 
@@ -43,27 +42,6 @@ export function SummaryTableSection({
     (state: ApplicationStateModel) => state.actualState[scheduleKey].present.month_info
   );
 
-  const dispatch = useDispatch();
-
-  function calculateSummaryTableInfo(workerName: string): number[] {
-    const hoursInfo = ShiftHelper.caclulateWorkHoursInfoForDates(
-      shifts[workerName],
-      time[workerName],
-      currentMonth,
-      year,
-      dates
-    );
-    const [, , overtime] = hoursInfo;
-    if (overtime !== 0) {
-      const updateWorkerTimeInfo = ScheduleErrorActionCreator.addUndertimeOrOvertimeError(
-        overtime,
-        workerName
-      );
-      dispatch(updateWorkerTimeInfo);
-    }
-    return hoursInfo;
-  }
-
   return (
     <>
       <table
@@ -77,7 +55,13 @@ export function SummaryTableSection({
               <SummaryTableRow
                 key={`${scheduleLogic?.uuid ?? 0}_${dataRow.rowKey}`}
                 uuid={scheduleLogic?.uuid ?? "0"}
-                data={calculateSummaryTableInfo(dataRow.rowKey)}
+                data={ShiftHelper.caclulateWorkHoursInfoForDates(
+                  shifts[dataRow.rowKey],
+                  time[dataRow.rowKey],
+                  currentMonth,
+                  year,
+                  dates
+                )}
                 rowIndex={rowIndex}
               />
             );
