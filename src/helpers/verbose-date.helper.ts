@@ -74,7 +74,7 @@ export class VerboseDateHelper {
     }
     if (day.isPublicHoliday) {
       colorSet = {
-        backgroundColor: Colors.PINK,
+        backgroundColor: Colors.GREY_BLUE,
         textColor: Colors.BLACK,
       };
     }

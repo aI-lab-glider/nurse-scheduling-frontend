@@ -12,11 +12,11 @@ import {
   WorkerType,
 } from "../../common-models/worker-info.model";
 import { WorkerInfoExtendedInterface } from "../../components/namestable/worker-edit.component";
-import { ThunkFunction } from "../../api/persistance-store.model";
+import { ScheduleKey, ThunkFunction } from "../../api/persistance-store.model";
 import _ from "lodash";
 import { ScheduleActionType } from "./month-state/schedule-data/schedule.actions";
 import { LocalStorageProvider } from "../../api/local-storage-provider.model";
-import { ScheduleDataModel } from "../../common-models/schedule-data.model";
+import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
 import { getEmployeeWorkTime } from "./month-state/employee-info.reducer";
 import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 
@@ -29,9 +29,11 @@ export class WorkerActionCreator {
   static addNewWorker(worker: WorkerInfoExtendedInterface): ThunkFunction<WorkerActionPayload> {
     return async (dispatch, getState): Promise<void> => {
       const actualSchedule = getState().actualState.persistentSchedule.present;
+      const { month_number: monthNumber, year } = actualSchedule.schedule_info;
 
       const updatedSchedule = WorkerActionCreator.addWorkerInfo(actualSchedule, worker);
       await WorkerActionCreator.updateStateAndDb(dispatch, updatedSchedule);
+      await WorkerActionCreator.updateNextMonthInDB(monthNumber, year, worker);
     };
   }
 
@@ -49,7 +51,6 @@ export class WorkerActionCreator {
   static modifyWorker(worker: WorkerInfoExtendedInterface): ThunkFunction<WorkerActionPayload> {
     return async (dispatch, getState): Promise<void> => {
       const { prevName } = worker;
-      debugger;
       const actualSchedule = _.cloneDeep(getState().actualState.persistentSchedule.present);
       let updatedSchedule = WorkerActionCreator.deleteWorkerFromScheduleDM(
         actualSchedule,
@@ -77,6 +78,16 @@ export class WorkerActionCreator {
     await new LocalStorageProvider().saveSchedule("actual", schedule);
   }
 
+  private static async updateNextMonthInDB(currentMonth, currentYear, worker): Promise<void> {
+    const nextMonthDM = await new LocalStorageProvider().getMonthRevision(
+      new ScheduleKey(currentMonth, currentYear).nextMonthKey.getRevisionKey("primary")
+    );
+    if (_.isNil(nextMonthDM)) return;
+    const updatedNextMonth = WorkerActionCreator.addWorkerInfoToMonthDM(nextMonthDM, worker);
+    updatedNextMonth.scheduleKey = new ScheduleKey(currentMonth, currentYear).nextMonthKey;
+    await new LocalStorageProvider().saveBothMonthRevisionsIfNeeded("primary", updatedNextMonth);
+  }
+
   private static deleteWorkerFromScheduleDM(
     schedule: ScheduleDataModel,
     workerName
@@ -96,6 +107,44 @@ export class WorkerActionCreator {
   ): ScheduleDataModel {
     const updatedSchedule = _.cloneDeep(schedule);
     const { year, month_number: monthNumber } = schedule.schedule_info;
+    const { workerName, workerType, contractType } = worker;
+
+    const today = new Date();
+    const newWorkerShifts = new Array(schedule.month_info.dates.length).fill(ShiftCode.W);
+    if (today.getMonth() === monthNumber && today.getFullYear() === year) {
+      newWorkerShifts.splice(
+        0,
+        today.getDate() - 1,
+        ...new Array(today.getDate() - 1).fill(ShiftCode.NZ)
+      );
+    }
+
+    updatedSchedule.shifts = {
+      ...updatedSchedule.shifts,
+      [workerName]: newWorkerShifts,
+    };
+
+    updatedSchedule.employee_info = {
+      time: {
+        [workerName]: getEmployeeWorkTime({ ...worker, monthNumber, year }),
+        ...updatedSchedule.employee_info.time,
+      },
+      type: { [workerName]: workerType ?? WorkerType.NURSE, ...updatedSchedule.employee_info.type },
+      contractType: {
+        [workerName]: contractType ?? ContractType.EMPLOYMENT_CONTRACT,
+        ...updatedSchedule.employee_info.contractType,
+      },
+    };
+
+    return updatedSchedule;
+  }
+
+  private static addWorkerInfoToMonthDM(
+    schedule: MonthDataModel,
+    worker: WorkerInfoExtendedInterface
+  ): MonthDataModel {
+    const updatedSchedule = _.cloneDeep(schedule);
+    const { year, month: monthNumber } = schedule.scheduleKey;
     const { workerName, workerType, contractType } = worker;
 
     const today = new Date();

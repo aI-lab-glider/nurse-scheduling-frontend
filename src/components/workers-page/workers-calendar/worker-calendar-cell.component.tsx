@@ -4,6 +4,8 @@
 import React from "react";
 import { VerboseDate } from "../../../common-models/month-info.model";
 import { ShiftCode } from "../../../common-models/shift-info.model";
+import { getColor } from "../../schedule-page/table/schedule/schedule-parts/shift-cell/shift-cell.component";
+import { fade } from "@material-ui/core";
 
 interface CellOptions {
   keepOn: boolean;
@@ -22,13 +24,25 @@ export function WorkersCalendarCell(params: CellOptions): JSX.Element {
   const notCurrentMonth = "notCurrentMonth" + params.notCurrentMonth;
   const workersCalendar =
     params.keepOn || params.hasNext ? "" : "_workersCalendar" + params.workersCalendar;
-
+  let shiftColor, background;
+  if (shift) {
+    shiftColor = `#${getColor(shift)}`;
+    background = fade(shiftColor, 0.3);
+  } else {
+    shiftColor = fade("#FFFFFF", 0);
+    background = fade(shiftColor, 0);
+  }
   return (
     <>
       <div className={"workersCalendarCell"}>
         <div className={"TopCellPart " + notCurrentMonth}>{date!["date"]}</div>
-        <div className={"BottomCellPart " + keepOn + workersCalendar + shift + " " + hasNext}>
-          <div className={"leftBorder leftBorderColor"} />
+        <div
+          className={
+            "BottomCellPart " + keepOn + workersCalendar + shift + " " + hasNext + " " + keepOn
+          }
+          style={{ color: shiftColor, backgroundColor: background }}
+        >
+          <div className={"leftBorder leftBorderColor"} style={{ backgroundColor: shiftColor }} />
           <p>{params.keepOn ? void 0 : shift}</p>
         </div>
       </div>

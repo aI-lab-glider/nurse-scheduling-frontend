@@ -23,7 +23,6 @@ export function NewMonthPlanComponent(): JSX.Element {
   const nextDate = getDateWithMonthOffset(currentMonth, currentYear, 1);
   const prevDate = getDateWithMonthOffset(currentMonth, currentYear, -1);
 
-  const [hasValidNext, setHasValidNext] = useState<boolean>(false);
   const [hasValidPrevious, setHasValidPrevious] = useState<boolean>(false);
   const { monthModel, setSrcFile } = useScheduleConverter();
   const dispatch = useDispatch();
@@ -36,14 +35,10 @@ export function NewMonthPlanComponent(): JSX.Element {
     let mounted = true;
     const setNeighbours = async (): Promise<void> => {
       const storageProvider = new LocalStorageProvider();
-      const nextMonth = await storageProvider.getMonthRevision(
-        new ScheduleKey(nextDate.getMonth(), nextDate.getFullYear()).getRevisionKey(revision)
-      );
       const prevMonth = await storageProvider.getMonthRevision(
         new ScheduleKey(prevDate.getMonth(), prevDate.getFullYear()).getRevisionKey(revision)
       );
       if (mounted) {
-        setHasValidNext(isMonthValid(nextMonth));
         setHasValidPrevious(isMonthValid(prevMonth));
       }
     };
@@ -87,19 +82,6 @@ export function NewMonthPlanComponent(): JSX.Element {
               {`Kopiuj plan z ${
                 TranslationHelper.polishMonths[prevDate.getMonth()]
               } ${prevDate.getFullYear()}`}
-            </Button>
-          )}
-
-          {hasValidNext && !hasValidPrevious && (
-            <Button
-              onClick={(): void => {
-                dispatch(MonthSwitchActionCreator.copyActualMonthToMonthWithOffset(1));
-              }}
-              variant="secondary"
-            >
-              {`Kopiuj plan z ${
-                TranslationHelper.polishMonths[nextDate.getMonth()]
-              } ${nextDate.getFullYear()}`}
             </Button>
           )}
 
