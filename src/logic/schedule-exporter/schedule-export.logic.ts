@@ -155,7 +155,7 @@ export class ScheduleExportLogic {
         row.eachCell((cell) => {
           cell.font = {
             family: 4,
-            size: 30,
+            size: 28,
             bold: true,
           };
         });
@@ -255,7 +255,8 @@ export class ScheduleExportLogic {
       .slice(9)
       .toUpperCase();
     infoStr =
-      infoStr.slice(0, infoStr.length - 1) +
+      infoStr.slice(0, infoStr.length - 2) +
+      " " +
       ShiftHelper.calculateWorkNormForMonth(
         scheduleModel?.schedule_info?.month_number,
         scheduleModel?.schedule_info?.year
