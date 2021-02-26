@@ -64,6 +64,7 @@ export class ArrayHelper {
     } else {
       updateElements = baseArr.slice(baseArr.length - numerOfElement);
     }
+
     return ArrayHelper.replace(updatedArr, updateElements, updatePosition);
   }
 

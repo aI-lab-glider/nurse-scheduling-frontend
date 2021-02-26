@@ -53,7 +53,6 @@ export function ErrorTooltipProvider({
       placement: "right-start",
     }
   );
-  const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   const [isFixed, setIsFixed] = useState(false);
 
@@ -76,13 +75,13 @@ export function ErrorTooltipProvider({
       hideErrorTooltip(true);
     }
   }
-  // TODO refactor
+
   return (
     <>
       <Popper
         ref={tooltipRef}
         className="errorTooltip"
-        isOpen={isToolTipOpen && mode === "edit"}
+        isOpen={isToolTipOpen}
         {...attributes.popper}
         style={{
           ...(isToolTipOpen && errors.length !== 0 ? styles.popper : {}),
@@ -111,14 +110,14 @@ export function ErrorTooltipProvider({
         onMouseEnter={showErrorTooltip}
         onMouseLeave={(): void => hideErrorTooltip(false)}
       >
-        {mode === "edit" && errors.length !== 0 && triangleStyle === "single" && (
+        {errors.length !== 0 && triangleStyle === "single" && (
           <span
             ref={errorTriangle}
             className={classNames("error-triangle", tooltipClassname)}
             onClick={handleTriangleClick}
           />
         )}
-        {mode === "edit" && errors.length !== 0 && triangleStyle === "right" && (
+        {errors.length !== 0 && triangleStyle === "right" && (
           <div>
             <span
               ref={errorTriangle}
@@ -132,21 +131,21 @@ export function ErrorTooltipProvider({
             />
           </div>
         )}
-        {mode === "edit" && errors.length > 1 && (
+        {errors.length > 1 && (
           <span
             ref={errorTriangle}
             className={classNames("error-triangle", tooltipClassname)}
             onClick={handleTriangleClick}
           />
         )}
-        {mode === "edit" && errors.length !== 0 && triangleStyle === "middle" && (
+        {errors.length !== 0 && triangleStyle === "middle" && (
           <span
             ref={errorTriangle}
             className={classNames("error-triangle line", tooltipClassname)}
             onClick={handleTriangleClick}
           />
         )}
-        {mode === "edit" && errors.length !== 0 && triangleStyle === "left" && (
+        {errors.length !== 0 && triangleStyle === "left" && (
           <div>
             <span
               ref={errorTriangle}
