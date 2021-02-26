@@ -5,8 +5,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
 import App from "./app";
 import "./assets/styles/styles-all.scss";
 import * as serviceWorker from "./serviceWorker";
@@ -14,12 +12,6 @@ import { appStore } from "./state/app-store";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppConfigProvider } from "./state/app-config-context";
-
-Sentry.init({
-  dsn: "https://ca7cbc8f34f344ed89f37811a3d9d974@o467102.ingest.sentry.io/5492940",
-  integrations: [new Integrations.BrowserTracing()],
-  tracesSampleRate: 1.0,
-});
 
 ReactDOM.render(
   <DndProvider backend={HTML5Backend}>
