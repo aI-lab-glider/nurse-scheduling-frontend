@@ -38,7 +38,7 @@ export enum ShiftCode {
 export const SHIFTS: { [code in ShiftCode]: Shift } = {
   RP: {
     code: "RP",
-    name: "Rano popłudnie",
+    name: "rano, popołudnie",
     from: 7,
     to: 19,
     color: "FFD100",
@@ -46,7 +46,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   RPN: {
     code: "RPN",
-    name: "Rano, popołudni, noc",
+    name: "rano, popłudnie, noc",
     from: 7,
     to: 7,
     color: "9025cf",
@@ -54,7 +54,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   N8: {
     code: "N8",
-    name: "Noc na 8 godzin",
+    name: "noc 8h",
     from: 23,
     to: 7,
     color: "76a877",
@@ -62,7 +62,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   RN8: {
     code: "RN8",
-    name: "Noc na 8 godzin + Rano",
+    name: "noc 8h, rano",
     from: 22,
     to: 15,
     color: "805646",
@@ -70,7 +70,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   DN8: {
     code: "DN8",
-    name: "Dzień + noc 8 godzin",
+    name: "dzień, noc 8h",
     from: 22,
     to: 19,
     color: "c9592e",
@@ -78,7 +78,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   D1: {
     code: "D1",
-    name: "Dzień 1",
+    name: "dzień 1",
     from: 7,
     to: 17,
     color: "396e75",
@@ -86,7 +86,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   D2: {
     code: "D2",
-    name: "Dzień 2",
+    name: "dzień 2",
     from: 7,
     to: 16,
     color: "eda81c",
@@ -94,7 +94,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   P1: {
     code: "P1",
-    name: "Popupułudnie 1",
+    name: "popołudnie 1",
     from: 15,
     to: 21,
     color: "2003fc",
@@ -102,30 +102,30 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   R1: {
     code: "R1",
-    name: "Rano 1",
+    name: "rano 1",
     from: 7,
     to: 13,
     color: "5ce6dc",
     isWorkingShift: true,
   },
 
-  R: { code: "R", name: "Rano", from: 7, to: 15, color: "a82758", isWorkingShift: true },
-  P: { code: "P", name: "Popołudnie", from: 15, to: 19, color: "00A3FF", isWorkingShift: true },
-  D: { code: "D", name: "Dzień", from: 7, to: 19, color: "73B471", isWorkingShift: true },
-  N: { code: "N", name: "Noc", from: 19, to: 7, color: "1D3557", isWorkingShift: true },
-  DN: { code: "DN", name: "Dzień + Noc", from: 7, to: 7, color: "641EAA", isWorkingShift: true },
+  R: { code: "R", name: "rano", from: 7, to: 15, color: "a82758", isWorkingShift: true },
+  P: { code: "P", name: "popołudnie", from: 15, to: 19, color: "00A3FF", isWorkingShift: true },
+  D: { code: "D", name: "dzień", from: 7, to: 19, color: "73B471", isWorkingShift: true },
+  N: { code: "N", name: "noc", from: 19, to: 7, color: "1D3557", isWorkingShift: true },
+  DN: { code: "DN", name: "dzień, noc", from: 7, to: 7, color: "641EAA", isWorkingShift: true },
   PN: {
     code: "PN",
-    name: "Popołudnie + Noc",
+    name: "popołudnie, noc",
     from: 15,
     to: 7,
     color: "FFD100",
     isWorkingShift: true,
   },
-  W: { code: "W", name: "Wolne", from: 0, to: 24, color: "FF8A00", isWorkingShift: false },
+  W: { code: "W", name: "wolne", from: 0, to: 24, color: "FF8A00", isWorkingShift: false },
   U: {
     code: "U",
-    name: "Urlop wypoczynkowy",
+    name: "urlop wypoczynkowy",
     from: 0,
     to: 24,
     color: "FF8A00",
@@ -133,7 +133,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   L4: {
     code: "L4",
-    name: "Zwolnienie lekarskie (L4)",
+    name: "zwolnienie lekarskie (L4)",
     from: 0,
     to: 24,
     color: "C60000",
@@ -141,7 +141,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   K: {
     code: "K",
-    name: "Kwarantanna",
+    name: "kwarantanna",
     from: 0,
     to: 24,
     color: "000000",
@@ -149,7 +149,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   OP: {
     code: "OP",
-    name: "Urlop opiekuńczy",
+    name: "urlop opiekuńczy",
     from: 0,
     to: 24,
     color: "fc03e7",
@@ -157,7 +157,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   OK: {
     code: "OK",
-    name: "Urlop okolicznościowy",
+    name: "urlop okolicznościowy",
     from: 0,
     to: 24,
     color: "56f5f5",
@@ -165,7 +165,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   NZ: {
     code: "NZ",
-    name: "Niezatrudniony",
+    name: "niezatrudniony",
     from: 0,
     to: 24,
     color: "000000",

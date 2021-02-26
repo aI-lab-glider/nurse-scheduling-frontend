@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { MonthSwitchActionCreator } from "../../../state/reducers/month-state/schedule-data/month-switch.action-creator";
@@ -12,6 +12,7 @@ import classNames from "classnames/bind";
 import { Button as MaterialButton } from "@material-ui/core";
 import ReportIssueModal from "../modal/report-issue-modal/report-issue-modal.component";
 import SettingsIcon from "@material-ui/icons/Settings";
+import { AppConfigContext, AppConfigOptions, AppMode } from "../../../state/app-config-context";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -22,7 +23,9 @@ function monthDiff(d1: Date, d2: Date): number {
 }
 
 export function HeaderComponent(): JSX.Element {
-  const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const applicationStateModel = useSelector((state: ApplicationStateModel) => state.actualState)
+    .mode;
+  const appConfigContext = useAppConfig().mode;
 
   const dispatch = useDispatch();
   const { month_number: monthNumber, year } = useSelector(
@@ -39,21 +42,39 @@ export function HeaderComponent(): JSX.Element {
     const offset = monthDiff(new Date(year, monthNumber), new Date());
     dispatch(MonthSwitchActionCreator.switchToNewMonth(offset));
   }
-  const isInViewMode = mode === "readonly";
+  const isInViewMode = applicationStateModel === "readonly";
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   function onReportIssueClick(): void {
     setIsModalOpen(true);
   }
 
+  function useAppConfig(): AppConfigOptions {
+    const context = useContext(AppConfigContext);
+
+    if (!context) throw new Error("useAppConfig have to be used within AppConfigProvider");
+
+    return context;
+  }
+  const [showNowNavigation, setShowNowNavigation] = useState(false);
+
+  useEffect(() => {
+    appConfigContext === AppMode.SCHEDULE
+      ? setShowNowNavigation(isInViewMode)
+      : setShowNowNavigation(false);
+  }, [appConfigContext, isInViewMode]);
+
   return (
     <>
       <div id={"header"}>
         <AssignmentIndIcon id={"AssignmentIndIcon"} />
         <Button
-          className={classNames("submit-button", "returnToNowBtn", { hidden: !isNewMonth })}
+          className={classNames("submit-button", "returnToNowBtn", {
+            hidden: !isNewMonth || !showNowNavigation,
+          })}
           variant="secondary"
           onClick={returnToCurrentMonth}
+          disabled={!isNewMonth || !showNowNavigation}
         >
           Wróć do teraz
         </Button>
