@@ -75,6 +75,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
         data: monthDataModel,
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   }
@@ -140,6 +141,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
         data: updatedMonthDataModel,
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   }
