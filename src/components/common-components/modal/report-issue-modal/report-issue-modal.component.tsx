@@ -146,7 +146,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
         {
           message: issueDescription,
         },
-        "user_gkDGsV6502nLQs0mPf4xk"
+        process.env.REACT_APP_EMAIL_KEY
       )
         .then(() => {
           setIsSent(true);

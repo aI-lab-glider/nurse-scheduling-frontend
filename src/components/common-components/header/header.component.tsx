@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { MonthSwitchActionCreator } from "../../../state/reducers/month-state/schedule-data/month-switch.action-creator";
@@ -12,6 +12,7 @@ import classNames from "classnames/bind";
 import { Button as MaterialButton } from "@material-ui/core";
 import ReportIssueModal from "../modal/report-issue-modal/report-issue-modal.component";
 import SettingsIcon from "@material-ui/icons/Settings";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../../state/app-config-context";
 
 function monthDiff(d1: Date, d2: Date): number {
@@ -64,6 +65,10 @@ export function HeaderComponent(): JSX.Element {
       : setShowNowNavigation(false);
   }, [appConfigContext, isInViewMode]);
 
+  const redirectToDocumentation = useCallback((): void => {
+    window.open(process.env.REACT_APP_HELP_PAGE_URL);
+  }, []);
+
   return (
     <>
       <div id={"header"}>
@@ -85,7 +90,8 @@ export function HeaderComponent(): JSX.Element {
           Zgłoś błąd
         </MaterialButton>
         <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
-        <SettingsIcon />
+        <SettingsIcon className="header-icon" />
+        <HelpOutlineIcon className="header-icon" onClick={redirectToDocumentation} />
       </div>
     </>
   );

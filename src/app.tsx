@@ -22,7 +22,6 @@ import ScssVars from "./assets/styles/styles/custom/_variables.module.scss";
 import { ApplicationStateModel } from "./state/models/application-state.model";
 import { ScheduleKey } from "./api/persistance-store.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
-
 interface TabData {
   label: string;
   component: JSX.Element;
