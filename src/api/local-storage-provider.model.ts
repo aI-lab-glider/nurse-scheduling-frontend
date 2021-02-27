@@ -69,12 +69,14 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     try {
       const document = await this.storage.get(revisionKey);
       revision = document._rev;
-    } catch {}
-    this.storage.put({
-      _rev: revision,
-      _id: revisionKey,
-      data: monthDataModel,
-    });
+      this.storage.put({
+        _rev: revision,
+        _id: revisionKey,
+        data: monthDataModel,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void> {
@@ -137,26 +139,16 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
         _id: revisionKey,
         data: updatedMonthDataModel,
       });
-    } catch {
-      //TODO: Something should be done here :)
+    } catch (error) {
+      console.error(error);
     }
   }
   async getMonthRevision(
     revisionKey: RevisionKey,
     createIfNotExist = false
   ): Promise<MonthDataModel | undefined> {
-    const revisions = await this.storage.allDocs({ include_docs: true });
-    const result = revisions.rows.find((r) => {
-      if (r.doc?.data.scheduleKey) {
-        return r.id === revisionKey;
-      } else {
-        return undefined;
-      }
-    });
-    if (!result?.doc) {
-      return undefined;
-    }
-    return result.doc.data;
+    const result = await this.storage.get(revisionKey);
+    return result?.data;
   }
 
   async fetchOrCreateMonthRevision(
