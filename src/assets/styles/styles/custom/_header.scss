@@ -23,9 +23,14 @@
     flex-grow: 1;
   }
 
+  .header-icon {
+    margin: auto 5px;
+    cursor: pointer;
+  }
+
   .reportIssueLink {
     color: $header-text-color;
-    padding-right: 22.67px;
+    padding-right: 5px;
     letter-spacing: 0.75px;
     outline: none;
     text-transform: none;
