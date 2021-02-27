@@ -100,6 +100,7 @@ function App(): JSX.Element {
   useEffect(() => {
     fetchGlobalState();
   }, [fetchGlobalState]);
+  throw Error("Siema sentry");
 
   return (
     <>
