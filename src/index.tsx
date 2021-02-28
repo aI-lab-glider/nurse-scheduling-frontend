@@ -16,7 +16,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppConfigProvider } from "./state/app-config-context";
 
 Sentry.init({
-  dsn: "https://ca7cbc8f34f344ed89f37811a3d9d974@o467102.ingest.sentry.io/5492940",
+  dsn: process.env.REACT_APP_SENTRY_DSN,
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1.0,
 });
