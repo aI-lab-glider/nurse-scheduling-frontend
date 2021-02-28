@@ -86,6 +86,7 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
             variant="primary"
             data-cy="btnDodajPracownika"
             onClick={(): void => {
+              throw Error("Teraz ma asdasdasdasdsa");
               toggleDrawer(true, WorkerDrawerMode.ADD_NEW, undefined);
             }}
           >

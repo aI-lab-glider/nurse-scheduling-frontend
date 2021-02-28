@@ -100,7 +100,6 @@ function App(): JSX.Element {
     fetchGlobalState();
   }, [fetchGlobalState]);
 
-  throw Error("Teraz ma zadziłać");
   return (
     <>
       <div>

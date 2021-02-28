@@ -4,34 +4,62 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
+import { Router } from "react-router-dom";
 import App from "./app";
 import "./assets/styles/styles-all.scss";
 import * as serviceWorker from "./serviceWorker";
-import { appStore } from "./state/app-store";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppConfigProvider } from "./state/app-config-context";
+import * as Sentry from "@sentry/react";
+import { ReportingObserver as ReportingObserverIntegration } from "@sentry/integrations/dist/reportingobserver";
+import { Integrations } from "@sentry/tracing";
+import { applyMiddleware, compose, createStore } from "redux";
+import thunkMiddleware from "redux-thunk";
+import { appReducer } from "./state/app.reducer";
+import { createBrowserHistory } from "history";
+
+const history = createBrowserHistory();
 
 Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_DSN,
-  integrations: [new Integrations.BrowserTracing()],
-  tracesSampleRate: 1.0,
+  normalizeDepth: 10,
+  integrations: [
+    new ReportingObserverIntegration(),
+    new Integrations.BrowserTracing({
+      // Can also use reactRouterV4Instrumentation
+      routingInstrumentation: Sentry.reactRouterV5Instrumentation(history),
+    }),
+  ],
 });
+
+const sentryReduxEnhancer = Sentry.createReduxEnhancer({
+  // Optionally pass options listed below
+});
+
+const composedEnhancer = compose(applyMiddleware(thunkMiddleware), sentryReduxEnhancer);
+export const appStore = createStore(appReducer, composedEnhancer);
+
+function FallbackComponent() {
+  return <div>An error has occurred</div>;
+}
+
+const myFallback = <FallbackComponent />;
 
 ReactDOM.render(
   <DndProvider backend={HTML5Backend}>
-    <BrowserRouter>
+    <Router history={history}>
       <React.StrictMode>
         <Provider store={appStore}>
           <AppConfigProvider>
-            <App />
+            <Sentry.ErrorBoundary fallback={myFallback} showDialog>
+              <App />
+            </Sentry.ErrorBoundary>
+            ;
           </AppConfigProvider>
         </Provider>
       </React.StrictMode>
-    </BrowserRouter>
+    </Router>
   </DndProvider>,
   document.getElementById("root")
 );
