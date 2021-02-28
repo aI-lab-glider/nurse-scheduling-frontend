@@ -25,6 +25,7 @@ import { TextMaskCustom } from "../common-components/text-mask-custom/text-mask-
 import { useMonthInfo } from "../schedule-page/validation-drawer/use-verbose-dates";
 import { WorkingTimeHelper } from "./working-time.helper";
 import { WorkerActionCreator } from "../../state/reducers/worker.action-creator";
+import { pickBy } from "lodash";
 
 const useStyles = makeStyles({
   container: {
@@ -109,7 +110,8 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
 
   const updateWorkerInfoBatch = useCallback(
     (newStatePart: Partial<WorkerInfoExtendedInterface>): void => {
-      setWorkerInfo((prev) => ({ ...prev, ...newStatePart }));
+      const cleanedObject = pickBy(newStatePart, (v) => v !== undefined);
+      setWorkerInfo((prev) => ({ ...prev, ...cleanedObject }));
     },
     [setWorkerInfo]
   );
