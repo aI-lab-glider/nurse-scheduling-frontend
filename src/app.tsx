@@ -117,28 +117,24 @@ function App(): JSX.Element {
 
   return (
     <Sentry.ErrorBoundary fallback={fallback} onError={onError}>
-      <>
-        <div>
-          <NotificationProvider>
-            <JiraLikeDrawerProvider>
-              <Switch>
-                <Route path="/">
-                  <Box className={classes.root}>
-                    <Box className={classes.content}>
-                      <HeaderComponent />
-                      <RouteButtonsComponent tabs={tabs} disabled={disableRouteButtons} />
-                    </Box>
-                    <Box className={classes.drawer}>
-                      <JiraLikeDrawer />
-                    </Box>
-                  </Box>
-                  {isElectron() ? <></> : <NetlifyProFooter />}
-                </Route>
-              </Switch>
-            </JiraLikeDrawerProvider>
-          </NotificationProvider>
-        </div>
-      </>
+      <NotificationProvider>
+        <JiraLikeDrawerProvider>
+          <Switch>
+            <Route path="/">
+              <Box className={classes.root}>
+                <Box className={classes.content}>
+                  <HeaderComponent />
+                  <RouteButtonsComponent tabs={tabs} disabled={disableRouteButtons} />
+                </Box>
+                <Box className={classes.drawer}>
+                  <JiraLikeDrawer />
+                </Box>
+              </Box>
+              {isElectron() ? <></> : <NetlifyProFooter />}
+            </Route>
+          </Switch>
+        </JiraLikeDrawerProvider>
+      </NotificationProvider>
     </Sentry.ErrorBoundary>
   );
 }
