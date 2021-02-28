@@ -41,21 +41,13 @@ const sentryReduxEnhancer = Sentry.createReduxEnhancer({
 const composedEnhancer = compose(applyMiddleware(thunkMiddleware), sentryReduxEnhancer);
 export const appStore = createStore(appReducer, composedEnhancer);
 
-function FallbackComponent() {
-  return <div>An error has occurred</div>;
-}
-
-const myFallback = <FallbackComponent />;
-
 ReactDOM.render(
   <DndProvider backend={HTML5Backend}>
     <Router history={history}>
       <React.StrictMode>
         <Provider store={appStore}>
           <AppConfigProvider>
-            <Sentry.ErrorBoundary fallback={myFallback} showDialog>
-              <App />
-            </Sentry.ErrorBoundary>
+            <App />
           </AppConfigProvider>
         </Provider>
       </React.StrictMode>
