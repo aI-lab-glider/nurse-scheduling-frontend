@@ -4,7 +4,6 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import { appReducer } from "./app.reducer";
 import thunkMiddleware from "redux-thunk";
-import { composeWithDevTools } from "redux-devtools-extension";
 import * as Sentry from "@sentry/react";
 
 const sentryReduxEnhancer = Sentry.createReduxEnhancer({
