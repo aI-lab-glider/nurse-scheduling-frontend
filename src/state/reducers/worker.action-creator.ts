@@ -40,7 +40,12 @@ export class WorkerActionCreator {
         this.createNewWorkerShifts
       );
       await WorkerActionCreator.updateStateAndDb(dispatch, updatedSchedule);
-      await WorkerActionCreator.updateNextMonthInDB(monthNumber, year, worker);
+      await WorkerActionCreator.updateNextMonthInDB(
+        monthNumber,
+        year,
+        worker,
+        this.createNewWorkerShifts
+      );
     };
   }
 
@@ -59,7 +64,7 @@ export class WorkerActionCreator {
     return async (dispatch, getState): Promise<void> => {
       const { prevName } = worker;
       const actualSchedule = _.cloneDeep(getState().actualState.persistentSchedule.present);
-      const getUpdatedWorkerShifts = (schedule: ScheduleDataModel): ShiftCode[] =>
+      const getUpdatedWorkerShifts = (schedule: ScheduleDataModel | MonthDataModel): ShiftCode[] =>
         schedule.shifts[prevName];
       let updatedSchedule = WorkerActionCreator.addWorkerInfo(
         actualSchedule,
@@ -69,7 +74,12 @@ export class WorkerActionCreator {
       updatedSchedule = WorkerActionCreator.deleteWorkerFromScheduleDM(updatedSchedule, prevName);
       await WorkerActionCreator.updateStateAndDb(dispatch, updatedSchedule);
       const { month_number: monthNumber, year } = updatedSchedule.schedule_info;
-      await WorkerActionCreator.updateNextMonthInDB(monthNumber, year, worker);
+      await WorkerActionCreator.updateNextMonthInDB(
+        monthNumber,
+        year,
+        worker,
+        getUpdatedWorkerShifts
+      );
     };
   }
 
@@ -96,7 +106,8 @@ export class WorkerActionCreator {
   private static async updateNextMonthInDB(
     currentMonth: number,
     currentYear: number,
-    worker: WorkerInfoExtendedInterface
+    worker: WorkerInfoExtendedInterface,
+    createWorkerShifts: (schedule: MonthDataModel, year: number, monthNumber: number) => ShiftCode[]
   ): Promise<void> {
     const nextMonthDM = await new LocalStorageProvider().getMonthRevision(
       new ScheduleKey(currentMonth, currentYear).nextMonthKey.getRevisionKey("primary")
@@ -105,7 +116,7 @@ export class WorkerActionCreator {
     const updatedNextMonth = WorkerActionCreator.addWorkerInfoToMonthDM(
       nextMonthDM,
       worker,
-      this.createNewWorkerShifts
+      createWorkerShifts
     );
     updatedNextMonth.scheduleKey = new ScheduleKey(currentMonth, currentYear).nextMonthKey;
     await new LocalStorageProvider().saveBothMonthRevisionsIfNeeded("primary", updatedNextMonth);
