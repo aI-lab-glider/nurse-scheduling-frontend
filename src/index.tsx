@@ -31,6 +31,7 @@ Sentry.init({
       routingInstrumentation: Sentry.reactRouterV5Instrumentation(history),
     }),
   ],
+  tracesSampleRate: 1.0,
 });
 
 const sentryReduxEnhancer = Sentry.createReduxEnhancer({
@@ -55,7 +56,6 @@ ReactDOM.render(
             <Sentry.ErrorBoundary fallback={myFallback} showDialog>
               <App />
             </Sentry.ErrorBoundary>
-            ;
           </AppConfigProvider>
         </Provider>
       </React.StrictMode>
