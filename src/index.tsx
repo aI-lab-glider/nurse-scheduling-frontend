@@ -18,6 +18,7 @@ import { applyMiddleware, compose, createStore } from "redux";
 import thunkMiddleware from "redux-thunk";
 import { appReducer } from "./state/app.reducer";
 import { createBrowserHistory } from "history";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 const history = createBrowserHistory();
 
@@ -27,18 +28,17 @@ Sentry.init({
   integrations: [
     new ReportingObserverIntegration(),
     new Integrations.BrowserTracing({
-      // Can also use reactRouterV4Instrumentation
       routingInstrumentation: Sentry.reactRouterV5Instrumentation(history),
     }),
   ],
   tracesSampleRate: 1.0,
 });
 
-const sentryReduxEnhancer = Sentry.createReduxEnhancer({
-  // Optionally pass options listed below
-});
+const sentryReduxEnhancer = Sentry.createReduxEnhancer();
 
-const composedEnhancer = compose(applyMiddleware(thunkMiddleware), sentryReduxEnhancer);
+const composedEnhancer = composeWithDevTools(
+  compose(applyMiddleware(thunkMiddleware), sentryReduxEnhancer)
+);
 export const appStore = createStore(appReducer, composedEnhancer);
 
 ReactDOM.render(
