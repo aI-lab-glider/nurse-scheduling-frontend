@@ -1,10 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import {
-  cropScheduleDMToMonthDM,
-  ScheduleDataModel,
-} from "../../common-models/schedule-data.model";
+import { MonthDataModel } from "../../common-models/schedule-data.model";
 import xlsx, { Cell } from "exceljs";
 import { ShiftCode } from "../../common-models/shift-info.model";
 import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
@@ -22,12 +19,13 @@ import { TranslationHelper } from "../../helpers/translations.helper";
 import { VerboseDate } from "../../common-models/month-info.model";
 import { ShiftsInfoLogic } from "../schedule-logic/shifts-info.logic";
 import { MetadataLogic } from "../schedule-logic/metadata.logic";
+import { RevisionType, RevisionTypeLabels } from "../../api/persistance-store.model";
 
 const EMPTY_ROW = Array(100).fill("");
 
 export class ScheduleExportLogic {
   constructor(
-    private scheduleModel: ScheduleDataModel,
+    private scheduleModel: MonthDataModel,
     private overtimeExport: boolean = true,
     private extraWorkersExport?: boolean
   ) {}
@@ -37,7 +35,7 @@ export class ScheduleExportLogic {
   doneHoursAddress;
   diffHoursAddress;
 
-  public formatAndSave(filename: string): void {
+  public formatAndSave(revisionType: RevisionType): void {
     const [workbook, workSheet] = ScheduleExportLogic.createWorkArea();
 
     workSheet.pageSetup.showGridLines = true;
@@ -104,12 +102,10 @@ export class ScheduleExportLogic {
     workSheet.getCell(this.diffHoursAddress).alignment = { textRotation: -90 };
 
     const finalName =
-      TranslationHelper.polishMonths[this.scheduleModel?.schedule_info?.month_number] +
-      "_" +
-      this.scheduleModel?.schedule_info?.year +
-      "_(" +
-      filename +
-      ").xlsx";
+      TranslationHelper.polishMonths[this.scheduleModel?.scheduleKey.month] +
+      `_${this.scheduleModel?.scheduleKey.year}` +
+      `_${RevisionTypeLabels[revisionType]}` +
+      ".xlsx";
     this.saveToFile(workbook, finalName);
   }
 
@@ -139,11 +135,11 @@ export class ScheduleExportLogic {
   }
 
   private addStyles(workSheet: xlsx.Worksheet, rows: unknown[]): void {
-    const monthInfo = this.scheduleModel.schedule_info;
+    const monthInfo = this.scheduleModel.scheduleKey;
     const monthLogic = new MonthInfoLogic(
-      monthInfo?.month_number || 0,
+      monthInfo?.month || 0,
       monthInfo?.year + "" || "",
-      cropScheduleDMToMonthDM(this.scheduleModel).month_info?.dates || []
+      this.scheduleModel.month_info?.dates || []
     );
     const verboseDates = monthLogic.verboseDates;
     workSheet.addRows(rows);
@@ -217,20 +213,18 @@ export class ScheduleExportLogic {
     return `${toHex(c.a)}${toHex(c.r)}${toHex(c.g)}${toHex(c.b)}`;
   }
 
-  private createShiftsSections(scheduleModel: ScheduleDataModel): string[][][] {
+  private createShiftsSections(scheduleModel: MonthDataModel): string[][][] {
     const shiftInfoLogics = ScheduleExportLogic.shiftInfoLogics(scheduleModel);
 
     const grouped = {
       [WorkerType.NURSE]: [] as string[][],
       [WorkerType.OTHER]: [] as string[][],
     };
-    Object.keys(cropScheduleDMToMonthDM(scheduleModel).shifts || {}).forEach((key: string) => {
-      const category = cropScheduleDMToMonthDM(scheduleModel).employee_info.type[key] ?? "";
+    Object.keys(scheduleModel.shifts || {}).forEach((key: string) => {
+      const category = scheduleModel.employee_info.type[key] ?? "";
       const shiftsRow: string[] = [
         key,
-        ...cropScheduleDMToMonthDM(scheduleModel).shifts[key]?.map((s) =>
-          s === ShiftCode.W ? "" : s
-        ),
+        ...scheduleModel.shifts[key]?.map((s) => (s === ShiftCode.W ? "" : s)),
       ];
       if (this.overtimeExport) {
         shiftsRow.push(
@@ -242,11 +236,11 @@ export class ScheduleExportLogic {
     return [grouped[WorkerType.NURSE], grouped[WorkerType.OTHER]];
   }
 
-  private createHeader(scheduleModel: ScheduleDataModel): string[] {
+  private createHeader(scheduleModel: MonthDataModel): string[] {
     const headerRow = { [MetaDataRowLabel]: "" };
     headerRow[MetaDataSectionKey.Month] =
-      TranslationHelper.polishMonths[scheduleModel?.schedule_info?.month_number || 0];
-    headerRow[MetaDataSectionKey.Year] = scheduleModel?.schedule_info?.year || 0;
+      TranslationHelper.polishMonths[scheduleModel?.scheduleKey.month || 0];
+    headerRow[MetaDataSectionKey.Year] = scheduleModel?.scheduleKey.year || 0;
     // TODO implement work time calculation
     headerRow[MetaDataSectionKey.RequiredavailableWorkersWorkTime] = 0;
     let infoStr = Object.keys(headerRow)
@@ -258,20 +252,20 @@ export class ScheduleExportLogic {
       infoStr.slice(0, infoStr.length - 2) +
       " " +
       ShiftHelper.calculateWorkNormForMonth(
-        scheduleModel?.schedule_info?.month_number,
-        scheduleModel?.schedule_info?.year
+        scheduleModel?.scheduleKey.month,
+        scheduleModel?.scheduleKey.year
       );
     return ["GRAFIK", infoStr];
   }
 
   private static createChildrenInfoSection(
-    scheduleModel: ScheduleDataModel
+    scheduleModel: MonthDataModel
   ): (number | ChildrenSectionKey)[][] {
     // in case if it will be more complecated section
     return [
       [
         ChildrenSectionKey.RegisteredChildrenCount,
-        ...(cropScheduleDMToMonthDM(scheduleModel).month_info?.children_number || []),
+        ...(scheduleModel.month_info?.children_number || []),
       ],
     ];
   }
@@ -286,25 +280,20 @@ export class ScheduleExportLogic {
   }
 
   private static createExtraWorkersSection(
-    scheduleModel: ScheduleDataModel
+    scheduleModel: MonthDataModel
   ): (number | ExtraWorkersSectionKey)[][] {
     return [
       [
         ExtraWorkersSectionKey.ExtraWorkersCount,
-        ...(cropScheduleDMToMonthDM(scheduleModel)?.month_info?.extra_workers || []),
+        ...(scheduleModel.month_info?.extra_workers || []),
       ],
     ];
   }
 
   private static createDatesSection(
-    scheduleModel: ScheduleDataModel
+    scheduleModel: MonthDataModel
   ): (number | MetaDataSectionKey)[][] {
-    return [
-      [
-        MetaDataSectionKey.MonthDays,
-        ...(cropScheduleDMToMonthDM(scheduleModel)?.month_info?.dates || []),
-      ],
-    ];
+    return [[MetaDataSectionKey.MonthDays, ...(scheduleModel.month_info?.dates || [])]];
   }
 
   private saveToFile(workbook: xlsx.Workbook, filename: string): void {
@@ -332,11 +321,11 @@ export class ScheduleExportLogic {
   }
 
   private static shiftInfoLogics(
-    scheduleModel: ScheduleDataModel
+    scheduleModel: MonthDataModel
   ): { [WorkerType.NURSE]: ShiftsInfoLogic; [WorkerType.OTHER]: ShiftsInfoLogic } {
     const metadataLogic = new MetadataLogic(
-      scheduleModel.schedule_info.year?.toString(),
-      scheduleModel.schedule_info.month_number,
+      scheduleModel.scheduleKey.year.toString(),
+      scheduleModel.scheduleKey.month,
       scheduleModel.month_info.dates
     );
     const nurseShiftsInfoLogic = new ShiftsInfoLogic(
