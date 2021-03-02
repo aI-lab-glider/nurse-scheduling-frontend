@@ -96,6 +96,7 @@
     "lint-staged": "^10.4.2",
     "lodash": "^4.17.20",
     "prettier": "^2.1.2",
+    "semantic-release": "^17.4.0",
     "typedoc": "^0.19.2"
   },
   "eslintConfig": {
