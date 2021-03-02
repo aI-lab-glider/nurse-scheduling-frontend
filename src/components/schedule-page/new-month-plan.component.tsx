@@ -78,7 +78,7 @@ export function NewMonthPlanComponent(): JSX.Element {
           {hasValidPrevious && (
             <Button
               onClick={(): void => {
-                dispatch(MonthSwitchActionCreator.copyActualMonthToMonthWithOffset(-1));
+                dispatch(MonthSwitchActionCreator.copyFromPrevMonth());
               }}
               variant="secondary"
             >
