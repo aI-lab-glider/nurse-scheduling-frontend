@@ -20,6 +20,7 @@ import { VerboseDate } from "../../common-models/month-info.model";
 import { ShiftsInfoLogic } from "../schedule-logic/shifts-info.logic";
 import { MetadataLogic } from "../schedule-logic/metadata.logic";
 import { RevisionType, RevisionTypeLabels } from "../../api/persistance-store.model";
+import { FileHelper } from "../../helpers/file.helper";
 
 const EMPTY_ROW = Array(100).fill("");
 
@@ -36,6 +37,11 @@ export class ScheduleExportLogic {
   diffHoursAddress;
 
   public formatAndSave(revisionType: RevisionType): void {
+    const [finalName, workbook] = this.createWorkbook(revisionType);
+    FileHelper.saveToFile(workbook, finalName);
+  }
+
+  public createWorkbook(revisionType: RevisionType): [string, xlsx.Workbook] {
     const [workbook, workSheet] = ScheduleExportLogic.createWorkArea();
 
     workSheet.pageSetup.showGridLines = true;
@@ -101,12 +107,8 @@ export class ScheduleExportLogic {
     workSheet.getCell(this.doneHoursAddress).alignment = { textRotation: -90 };
     workSheet.getCell(this.diffHoursAddress).alignment = { textRotation: -90 };
 
-    const finalName =
-      TranslationHelper.polishMonths[this.scheduleModel?.scheduleKey.month] +
-      `_${this.scheduleModel?.scheduleKey.year}` +
-      `_${RevisionTypeLabels[revisionType]}` +
-      ".xlsx";
-    this.saveToFile(workbook, finalName);
+    const workbookName = this.createScheduleName(revisionType);
+    return [workbookName, workbook];
   }
 
   private static createWorkArea(): [xlsx.Workbook, xlsx.Worksheet] {
@@ -118,6 +120,15 @@ export class ScheduleExportLogic {
         properties: { defaultColWidth: 5 },
       }),
     ];
+  }
+
+  private createScheduleName(revisionType): string {
+    return (
+      TranslationHelper.polishMonths[this.scheduleModel?.scheduleKey.month] +
+      `_${this.scheduleModel?.scheduleKey.year}` +
+      `_${RevisionTypeLabels[revisionType].replace(" ", "_")}` +
+      ".xlsx"
+    );
   }
 
   private getRightCornerIndexes(cell: Cell, cellValue: string): void {
@@ -294,30 +305,6 @@ export class ScheduleExportLogic {
     scheduleModel: MonthDataModel
   ): (number | MetaDataSectionKey)[][] {
     return [[MetaDataSectionKey.MonthDays, ...(scheduleModel.month_info?.dates || [])]];
-  }
-
-  private saveToFile(workbook: xlsx.Workbook, filename: string): void {
-    workbook.xlsx.writeBuffer().then((buffer) => {
-      const blob = new Blob([buffer]);
-      ScheduleExportLogic.saveFileAs(blob, filename);
-    });
-  }
-
-  private static saveFileAs(blob, filename: string): void {
-    const anchor = document.createElement("a");
-
-    anchor.download = filename;
-    anchor.href = URL.createObjectURL(blob);
-
-    document.body.appendChild(anchor);
-
-    // eslint-disable-next-line
-    // @ts-ignore
-    if (window.Cypress) {
-      return;
-    }
-
-    anchor.click();
   }
 
   private static shiftInfoLogics(
