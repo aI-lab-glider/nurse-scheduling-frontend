@@ -22,6 +22,8 @@ import ScssVars from "./assets/styles/styles/custom/_variables.module.scss";
 import { ApplicationStateModel } from "./state/models/application-state.model";
 import { ScheduleKey } from "./api/persistance-store.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
+import * as Sentry from "@sentry/react";
+import AppErrorModal from "./components/common-components/modal/app-error-modal/app-error.modal.component";
 
 interface TabData {
   label: string;
@@ -101,29 +103,39 @@ function App(): JSX.Element {
     fetchGlobalState();
   }, [fetchGlobalState]);
 
+  const [open, setIsOpen] = useState(false);
+  const fallback = useCallback(
+    ({ resetError }): JSX.Element => (
+      <AppErrorModal onClick={resetError} open={open} setOpen={setIsOpen} />
+    ),
+    [open, setIsOpen]
+  );
+
+  const onError = useCallback((): void => {
+    setIsOpen(true);
+  }, [setIsOpen]);
+
   return (
-    <>
-      <div>
-        <NotificationProvider>
-          <JiraLikeDrawerProvider>
-            <Switch>
-              <Route path="/">
-                <Box className={classes.root}>
-                  <Box className={classes.content}>
-                    <HeaderComponent />
-                    <RouteButtonsComponent tabs={tabs} disabled={disableRouteButtons} />
-                  </Box>
-                  <Box className={classes.drawer}>
-                    <JiraLikeDrawer />
-                  </Box>
+    <Sentry.ErrorBoundary fallback={fallback} onError={onError}>
+      <NotificationProvider>
+        <JiraLikeDrawerProvider>
+          <Switch>
+            <Route path="/">
+              <Box className={classes.root}>
+                <Box className={classes.content}>
+                  <HeaderComponent />
+                  <RouteButtonsComponent tabs={tabs} disabled={disableRouteButtons} />
                 </Box>
-                {isElectron() ? <></> : <NetlifyProFooter />}
-              </Route>
-            </Switch>
-          </JiraLikeDrawerProvider>
-        </NotificationProvider>
-      </div>
-    </>
+                <Box className={classes.drawer}>
+                  <JiraLikeDrawer />
+                </Box>
+              </Box>
+              {isElectron() ? <></> : <NetlifyProFooter />}
+            </Route>
+          </Switch>
+        </JiraLikeDrawerProvider>
+      </NotificationProvider>
+    </Sentry.ErrorBoundary>
   );
 }
 

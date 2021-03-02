@@ -8,6 +8,7 @@ import { MetaDataParser } from "./metadata.parser";
 export class ChildrenInfoParser implements ChildrenInfoProvider {
   private _parseErrors: ScheduleError[] = [];
   private children: number[];
+  private DEFAULT_CHILDREN_NUMBER = 20;
 
   constructor(private metaData: MetaDataParser, data?: string[][]) {
     this.children = this.generateChildren(data);
@@ -31,14 +32,15 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
   private generateChildren(raw?: string[][]): number[] {
     if (!raw || raw.length !== 1) {
       this.logLoadFileError(
-        "Brak informacji o liczbie dzieci. Przyjęto, że w każdym dniu liczba dzieci wynosi 0"
+        "Brak informacji o liczbie dzieci. Przyjęto, że w każdym dniu liczba dzieci wynosi " +
+          this.DEFAULT_CHILDREN_NUMBER
       );
 
       const N = this.metaData.dayCount;
       const children = Array(N);
       let i = 0;
 
-      while (i < N) children[i++] = 0;
+      while (i < N) children[i++] = this.DEFAULT_CHILDREN_NUMBER;
       return children;
     }
     const childrenRow = raw[0];
@@ -55,16 +57,16 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
     }
 
     const children = Array<number>();
-
     for (let i = 0; i < this.metaData.dayCount; i++) {
       const numDay = parseInt(slicedChildrenRow[i]);
       if (isNaN(numDay) || numDay < 0) {
         this.logLoadFileError(
           "Nieoczekiwana wartość w sekcji dzieci w dniu " +
             (i + 1) +
-            ". Przyjęto, że liczba dzieci wynosi 0"
+            ". Przyjęto, że liczba dzieci wynosi " +
+            this.DEFAULT_CHILDREN_NUMBER
         );
-        children.push(0);
+        children.push(this.DEFAULT_CHILDREN_NUMBER);
       } else {
         children.push(numDay);
       }

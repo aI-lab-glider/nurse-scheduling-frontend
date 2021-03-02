@@ -42,28 +42,28 @@ export function copyShiftsToMonth(
   { scheduleKey: currentScheduleKey, shifts: currentScheduleShifts }: MonthDataModel,
   { scheduleKey: baseScheduleKey, shifts: baseShifts }: MonthDataModel
 ): ShiftInfoModel {
-  const { month } = currentScheduleKey;
-  const { month: baseMonth } = baseScheduleKey;
   const currentCopiedShifts = _.cloneDeep(currentScheduleShifts);
   const baseCopiedShifts = _.cloneDeep(baseShifts);
 
-  const isCopyingFromPrevMonth = month > baseMonth;
+  const { month, year } = currentScheduleKey;
+  const { month: baseMonth, year: baseYear } = baseScheduleKey;
 
-  if (isCopyingFromPrevMonth) {
-    return copyFromPrevMonth(
-      currentScheduleKey,
-      currentCopiedShifts,
-      baseScheduleKey,
-      baseCopiedShifts
+  const [, missingFromNextMonth] = calculateMissingFullWeekDays(baseScheduleKey);
+
+  const newMonthWorkersShifts: ShiftInfoModel = {};
+  Object.keys(baseCopiedShifts).forEach((workerKey) => {
+    const missingShifts = fillWithShiftsFromBaseMonthFullWeeks(
+      baseYear,
+      baseMonth,
+      baseCopiedShifts[workerKey],
+      getMonthLength(year, month) - missingFromNextMonth
     );
-  } else {
-    return copyFromNextMonth(
-      currentScheduleKey,
-      currentCopiedShifts,
-      baseScheduleKey,
-      baseCopiedShifts
-    );
-  }
+    const baseMonthShifts = currentCopiedShifts[workerKey]?.slice(0, missingFromNextMonth) ?? [];
+    newMonthWorkersShifts[workerKey] = baseMonthShifts
+      ? baseMonthShifts.concat(missingShifts)
+      : missingShifts;
+  });
+  return newMonthWorkersShifts;
 }
 
 export function cropMonthInfoToMonth(
@@ -144,53 +144,6 @@ function fillWithShiftsFromBaseMonthFullWeeks(
 
 function getMonthLength(year: number, month: number): number {
   return new Date(year, month + 1, 0).getDate();
-}
-
-function copyFromPrevMonth(
-  currentScheduleKey,
-  currentScheduleShifts,
-  baseMonthKey,
-  baseShifts
-): ShiftInfoModel {
-  const { month, year } = currentScheduleKey;
-  const { month: baseMonth, year: baseYear } = baseMonthKey;
-
-  const [, missingFromNextMonth] = calculateMissingFullWeekDays(baseMonthKey);
-
-  const newMonthWorkersShifts: ShiftInfoModel = {};
-  Object.keys(baseShifts).forEach((workerKey) => {
-    const missingShifts = fillWithShiftsFromBaseMonthFullWeeks(
-      baseYear,
-      baseMonth,
-      baseShifts[workerKey],
-      getMonthLength(year, month) - missingFromNextMonth
-    );
-    const baseMonthShifts = currentScheduleShifts[workerKey]?.slice(0, missingFromNextMonth) ?? [];
-    newMonthWorkersShifts[workerKey] = baseMonthShifts
-      ? baseMonthShifts.concat(missingShifts)
-      : missingShifts;
-  });
-  return newMonthWorkersShifts;
-}
-
-function copyFromNextMonth(
-  currentScheduleKey,
-  currentScheduleShifts,
-  baseMonthKey,
-  baseShifts
-): ShiftInfoModel {
-  const { month, year } = currentScheduleKey;
-  const { month: baseMonth, year: baseYear } = baseMonthKey;
-
-  Object.keys(baseShifts).forEach((workerKey) => {
-    currentScheduleShifts[workerKey] = fillWithShiftsFromBaseMonthFullWeeks(
-      baseYear,
-      baseMonth,
-      baseShifts[workerKey],
-      getMonthLength(year, month)
-    );
-  });
-  return currentScheduleShifts;
 }
 
 function getMonthFullWeeksDaysLen(year: number, month: number): number {

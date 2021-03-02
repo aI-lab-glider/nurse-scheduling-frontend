@@ -24,10 +24,10 @@ context("Schedule modes spec", () => {
     );
   });
 
-  it("Should be able to change shift in edit mode", () => {
-    cy.enterEditMode();
-    cy.checkWorkerShift({ ...testedCell, desiredShiftCode: testedCell.initialShiftCode });
-    cy.changeWorkerShift({ ...testedCell, newShiftCode: testedCell.desiredShiftCode });
-    cy.checkWorkerShift({ ...testedCell });
-  });
+  // it("Should be able to change shift in edit mode", () => {
+  //   cy.enterEditMode();
+  //   cy.checkWorkerShift({ ...testedCell, desiredShiftCode: testedCell.initialShiftCode });
+  //   cy.changeWorkerShift({ ...testedCell, newShiftCode: testedCell.desiredShiftCode });
+  //   cy.checkWorkerShift({ ...testedCell });
+  // });
 });
