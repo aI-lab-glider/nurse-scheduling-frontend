@@ -65,15 +65,25 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     monthDataModel: MonthDataModel
   ): Promise<void> {
     const revisionKey = monthDataModel.scheduleKey.getRevisionKey(revisionType);
-    let revision = "";
+    let revision;
     try {
       const document = await this.storage.get(revisionKey);
       revision = document._rev;
-      this.storage.put({
-        _rev: revision,
-        _id: revisionKey,
-        data: monthDataModel,
-      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      error.status !== 404 && console.error(error);
+    }
+    const monthRev: MonthRevision = {
+      _id: revisionKey,
+      data: monthDataModel,
+    };
+
+    if (!_.isNil(revision)) {
+      monthRev._rev = revision;
+    }
+
+    try {
+      this.storage.put(monthRev);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -105,7 +115,6 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     try {
       const document = await this.storage.get(revisionKey);
       const updatedMonthDataModel = document.data;
-      const revision = document._rev;
 
       const newShifts = _.cloneDeep(updatedMonthDataModel.shifts);
 
@@ -136,21 +145,28 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       };
 
       this.storage.put({
-        _rev: revision,
+        _rev: document._rev,
         _id: revisionKey,
         data: updatedMonthDataModel,
       });
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error(error);
+      error.status !== 404 && console.error(error);
     }
   }
+
   async getMonthRevision(
     revisionKey: RevisionKey,
     createIfNotExist = false
   ): Promise<MonthDataModel | undefined> {
-    const result = await this.storage.get(revisionKey);
-    return result?.data;
+    try {
+      const result = await this.storage.get(revisionKey);
+      return result?.data;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      error.status !== 404 && console.error(error);
+      return undefined;
+    }
   }
 
   async fetchOrCreateMonthRevision(
