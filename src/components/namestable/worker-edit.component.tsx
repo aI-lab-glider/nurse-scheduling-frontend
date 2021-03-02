@@ -309,6 +309,9 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
                 data-cy="civilTime"
                 value={workerInfo.civilTime}
                 type="number"
+                style={{
+                  width: 100,
+                }}
                 onChange={handleUpdate}
                 color="primary"
               />
@@ -331,6 +334,9 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
                   value={workerInfo.employmentTimeOther}
                   onChange={handleUpdate}
                   data-cy="employmentTimeOther"
+                  style={{
+                    width: 100,
+                  }}
                   inputComponent={
                     // eslint-disable-next-line
                     TextMaskCustom as any

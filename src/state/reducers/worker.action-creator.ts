@@ -71,7 +71,10 @@ export class WorkerActionCreator {
         worker,
         getUpdatedWorkerShifts
       );
-      updatedSchedule = WorkerActionCreator.deleteWorkerFromScheduleDM(updatedSchedule, prevName);
+
+      if (prevName !== worker.workerName) {
+        updatedSchedule = WorkerActionCreator.deleteWorkerFromScheduleDM(updatedSchedule, prevName);
+      }
       await WorkerActionCreator.updateStateAndDb(dispatch, updatedSchedule);
       const { month_number: monthNumber, year } = updatedSchedule.schedule_info;
       await WorkerActionCreator.updateNextMonthInDB(
@@ -175,13 +178,16 @@ export class WorkerActionCreator {
 
     updatedSchedule.employee_info = {
       time: {
-        [workerName]: getEmployeeWorkTime({ ...worker, monthNumber, year }),
         ...updatedSchedule.employee_info.time,
+        [workerName]: getEmployeeWorkTime({ ...worker, monthNumber, year }),
       },
-      type: { [workerName]: workerType ?? WorkerType.NURSE, ...updatedSchedule.employee_info.type },
+      type: {
+        ...updatedSchedule.employee_info.type,
+        [workerName]: workerType ?? WorkerType.NURSE,
+      },
       contractType: {
-        [workerName]: contractType ?? ContractType.EMPLOYMENT_CONTRACT,
         ...updatedSchedule.employee_info.contractType,
+        [workerName]: contractType ?? ContractType.EMPLOYMENT_CONTRACT,
       },
     };
 
