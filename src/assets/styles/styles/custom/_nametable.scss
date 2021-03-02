@@ -1,0 +1,38 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public 
+ * License, v. 2.0. If a copy of the MPL was not distributed with this 
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+.nametable {
+  align-items: center;
+  padding: 0;
+  width: 106px;
+
+  .nametableRow {
+    height: 40px;
+    width: 120%;
+    padding: 0;
+    margin: 0;
+
+    font-family: $font-family-table;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+
+    color: $primary;
+    border-bottom: 1px solid $table-border-color-grey;
+  }
+
+  .nametableRow:last-child {
+    border-bottom: 0;
+  }
+
+  .pointerCursor {
+    cursor: pointer;
+  }
+
+  .defaultCursor {
+    cursor: default;
+  }
+}

@@ -1,0 +1,58 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public 
+ * License, v. 2.0. If a copy of the MPL was not distributed with this 
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+.error-list-item {
+  border-radius: 2px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: $error-list-item-border-color;
+  margin-left: 24px;
+  margin-right: 23px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: stretch;
+  align-content: center;
+  justify-items: center;
+  position: relative;
+
+  .red-rectangle {
+    border-radius: 4px;
+    width: 0.8%;
+    position: absolute;
+    height: 100%;
+    background-color: $error-red;
+  }
+
+  .error-title {
+    color: $error-date-text-color;
+    size: 14px;
+    flex: 1;
+    text-align: center;
+    padding-left: 15px;
+    position: relative;
+
+    .error-title-content {
+      font-family: "Roboto";
+      position: absolute;
+      top: 50%;
+      transform: translate(0, -50%);
+      padding-left: 10px;
+    }
+  }
+
+  .error-text {
+    color: $primary-text-color;
+    size: 13px;
+    flex: 2.5;
+    margin: 10px 10px;
+    text-align: justify;
+    font-family: "Roboto";
+  }
+
+  .error-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

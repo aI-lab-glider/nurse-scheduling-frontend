@@ -1,0 +1,47 @@
+name: CI
+
+on: [push]
+
+jobs:
+  cypress:
+    name: Run checks on ${{ matrix.browser }}
+    runs-on: [self-hosted, '${{ matrix.browser }}']
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [google-chrome]
+        containers: [1, 2, 3, 4, 5]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+
+      - name: Read cypress config
+        id: read_config
+        run: |
+          content=`cat cypress.json`
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          echo "::set-output name=cypressConfig::$content"
+
+      - name: Run Cypress
+        uses: cypress-io/github-action@v2
+        with:
+          wait-on: ${{ env.APPLICATION_URL }}
+          group: Nurse project workers
+          record: true
+          parallel: true
+          start: npm start
+          browser: /usr/bin/${{ matrix.browser }}
+          tag: ${{ matrix.browser }}
+          headless: false
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APPLICATION_URL: ${{ fromJson(steps.read_config.outputs.cypressConfig).env.baseUrl }}
