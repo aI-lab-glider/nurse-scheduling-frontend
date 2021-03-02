@@ -16,7 +16,7 @@ import { LocalStorageProvider } from "../../../../api/local-storage-provider.mod
 import { RevisionReducerAction } from "../revision-info.reducer";
 import { VerboseDateHelper } from "../../../../helpers/verbose-date.helper";
 
-type MonthOffset = -1 | 1;
+const PREV_MONTH_OFFSET = -1;
 
 export class MonthSwitchActionCreator {
   static switchToNewMonth(offset: number): ThunkFunction<unknown> {
@@ -50,25 +50,24 @@ export class MonthSwitchActionCreator {
     };
   }
 
-  static copyActualMonthToMonthWithOffset(offset: MonthOffset): ThunkFunction<unknown> {
+  static copyFromPrevMonth(): ThunkFunction<unknown> {
     return async (dispatch, getState): Promise<void> => {
       const {
         month_number: month,
         year,
       } = getState().actualState.persistentSchedule.present.schedule_info;
-      if (!_.isNil(month) && !_.isNil(year)) {
-        const fromDate = getDateWithMonthOffset(month, year, offset);
-        const baseSchedule = await new LocalStorageProvider().getMonthRevision(
-          new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).getRevisionKey("actual")
-        );
+      const fromDate = getDateWithMonthOffset(month, year, PREV_MONTH_OFFSET);
 
-        const newSchedule = await new LocalStorageProvider().getMonthRevision(
-          new ScheduleKey(month, year).getRevisionKey("actual")
-        );
-        if (baseSchedule && newSchedule) {
-          const monthDataModel = copyMonthDM(newSchedule, baseSchedule);
-          dispatch(ScheduleDataActionCreator.setScheduleFromMonthDM(monthDataModel, true));
-        }
+      const baseSchedule = await new LocalStorageProvider().getMonthRevision(
+        new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).getRevisionKey("actual")
+      );
+      const newSchedule = await new LocalStorageProvider().getMonthRevision(
+        new ScheduleKey(month, year).getRevisionKey("actual")
+      );
+
+      if (baseSchedule && newSchedule) {
+        const monthDataModel = copyMonthDM(newSchedule, baseSchedule);
+        dispatch(ScheduleDataActionCreator.setScheduleFromMonthDM(monthDataModel, true));
       }
     };
   }
