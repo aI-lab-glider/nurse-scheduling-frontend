@@ -72,7 +72,10 @@ export function DropdownButtons({
               <div
                 className="dropdown-button"
                 key={item.label}
-                onClick={item.action}
+                onClick={(): void => {
+                  item.action();
+                  setOpen(false);
+                }}
                 data-cy={item.dataCy}
               >
                 {item.label}
