@@ -16,7 +16,6 @@ export default function ManagementPage(): JSX.Element {
     { label: "PRACOWNICY", component: <WorkersTab /> },
     { label: "ZMIANY", component: <ShiftTab /> },
   ];
-
   return (
     <div className="management-page">
       <h1>Panel zarządzania</h1>
