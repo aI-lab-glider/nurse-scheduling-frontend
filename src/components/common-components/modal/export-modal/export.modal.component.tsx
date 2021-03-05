@@ -12,10 +12,15 @@ import {
 import { blue } from "@material-ui/core/colors";
 import React from "react";
 import { Button } from "../..";
-import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
+import {
+  cropScheduleDMToMonthDM,
+  ScheduleDataModel,
+} from "../../../../common-models/schedule-data.model";
 import { ScheduleExportLogic } from "../../../../logic/schedule-exporter/schedule-export.logic";
 import { ButtonData, DropdownButtons } from "../../dropdown-buttons/dropdown-buttons.component";
 import DefaultModal from "../modal.component";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 
 export interface ExportModalComponent {
   setOpen: (open: boolean) => void;
@@ -38,21 +43,19 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   const handleClose = (): void => {
     setOpen(false);
   };
-  const date = new Date();
-  const DEFAULT_FILENAME = `${date.getDate()}_${date.getMonth() + 1}_${date.getFullYear()}`;
 
   const [exportOptions, setExportOptions] = React.useState({
-    // extraWorkers: { value: true, label: "dzienni pracownicy" },
     overtime: { value: true, label: "nadgodzinny" },
   });
+
+  const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   const exportExtensions = {
     xlsx: (): void => {
       new ScheduleExportLogic(
-        model,
+        cropScheduleDMToMonthDM(model),
         exportOptions.overtime.value
-        // exportOptions.extraWorkers.value
-      ).formatAndSave(DEFAULT_FILENAME);
+      ).formatAndSave(revision);
     },
   };
   const handleExport = (): void => {
