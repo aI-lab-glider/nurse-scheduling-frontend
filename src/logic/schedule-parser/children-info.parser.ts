@@ -30,20 +30,26 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
   }
 
   private generateChildren(raw?: string[][]): number[] {
+    let childrenRow;
+
     if (!raw || raw.length !== 1) {
-      this.logLoadFileError(
-        "Brak informacji o liczbie dzieci. Przyjęto, że w każdym dniu liczba dzieci wynosi " +
-          this.DEFAULT_CHILDREN_NUMBER
-      );
+      if (raw && raw.length === 3 && raw[2][0].toLowerCase() === "dzieci") {
+        childrenRow = raw[2];
+      } else {
+        this.logLoadFileError(
+          "Brak informacji o liczbie dzieci. Przyjęto, że w każdym dniu liczba dzieci wynosi " +
+            this.DEFAULT_CHILDREN_NUMBER
+        );
+        const N = this.metaData.dayCount;
+        const children = Array(N);
+        let i = 0;
 
-      const N = this.metaData.dayCount;
-      const children = Array(N);
-      let i = 0;
-
-      while (i < N) children[i++] = this.DEFAULT_CHILDREN_NUMBER;
-      return children;
+        while (i < N) children[i++] = this.DEFAULT_CHILDREN_NUMBER;
+        return children;
+      }
+    } else {
+      childrenRow = raw[0];
     }
-    const childrenRow = raw[0];
 
     const slicedChildrenRow = childrenRow.slice(
       this.metaData.offset,

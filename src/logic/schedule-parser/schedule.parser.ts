@@ -43,6 +43,10 @@ export class ScheduleParser implements ScheduleProvider {
       if (r && r.length !== 0 && r[0].length !== 0) {
         const rKey = r[0][0].toLowerCase().trim();
         if (rKey === "dni miesiąca") {
+          if (r.length === 3) {
+            children = new ChildrenInfoParser(metadata, r);
+          }
+        } else if (rKey === "pracownicy dzienni") {
         } else if (rKey === "dzieci") {
           children = new ChildrenInfoParser(metadata, r);
         } else if (!nurses) {

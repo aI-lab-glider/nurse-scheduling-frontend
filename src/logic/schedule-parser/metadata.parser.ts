@@ -46,7 +46,7 @@ export class MetaDataParser extends MetadataProvider {
   }
 
   private extractMetadata(raw: string[][]): number {
-    if (raw.length !== 1) {
+    if (raw.length !== 1 && raw.length !== 3) {
       this.logLoadFIleError("Nie znaleziono spdoziewanej ilości wierszy w sekcji dane");
       return 0;
     }
