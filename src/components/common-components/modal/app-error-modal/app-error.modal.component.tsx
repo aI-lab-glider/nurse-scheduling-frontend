@@ -4,10 +4,6 @@
 import React from "react";
 import { Button } from "../../button-component/button.component";
 import DefaultModal from "../modal.component";
-import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
-import { ScheduleExportLogic } from "../../../../logic/schedule-exporter/schedule-export.logic";
-import { getRevisionTypeFromKey } from "../../../../api/persistance-store.model";
-import xlsx from "exceljs";
 import { FileHelper } from "../../../../helpers/file.helper";
 
 interface AppErrorModalOptions {

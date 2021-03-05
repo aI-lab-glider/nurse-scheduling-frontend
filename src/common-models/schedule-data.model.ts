@@ -6,7 +6,7 @@ import { MonthInfoModel } from "./month-info.model";
 import { ScheduleMetadata } from "./schedule.model";
 import { ShiftCode, ShiftInfoModel, ShiftModel } from "./shift-info.model";
 import { ScheduleKey } from "../api/persistance-store.model";
-import _ from "lodash";
+import * as _ from "lodash";
 import {
   calculateMissingFullWeekDays,
   cropMonthInfoToMonth,

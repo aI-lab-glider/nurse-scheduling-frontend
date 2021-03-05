@@ -19,6 +19,6 @@ describe("FileHelper", () => {
       cropScheduleDMToMonthDM(schedule as ScheduleDataModel),
       "actual"
     );
-    expect(result).to.eql("maj_2021_wersja_aktualna.xlsx");
+    expect(result).to.eql("luty_2021_wersja_aktualna.xlsx");
   });
 });

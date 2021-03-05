@@ -19,7 +19,7 @@ import { TranslationHelper } from "../../helpers/translations.helper";
 import { VerboseDate } from "../../common-models/month-info.model";
 import { ShiftsInfoLogic } from "../schedule-logic/shifts-info.logic";
 import { MetadataLogic } from "../schedule-logic/metadata.logic";
-import { RevisionType, RevisionTypeLabels } from "../../api/persistance-store.model";
+import { RevisionType } from "../../api/persistance-store.model";
 import { FileHelper } from "../../helpers/file.helper";
 
 const EMPTY_ROW = Array(100).fill("");
