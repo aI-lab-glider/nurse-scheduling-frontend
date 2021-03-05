@@ -45,7 +45,6 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   };
 
   const [exportOptions, setExportOptions] = React.useState({
-    // extraWorkers: { value: true, label: "dzienni pracownicy" },
     overtime: { value: true, label: "nadgodzinny" },
   });
 
@@ -56,7 +55,6 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
       new ScheduleExportLogic(
         cropScheduleDMToMonthDM(model),
         exportOptions.overtime.value
-        // exportOptions.extraWorkers.value
       ).formatAndSave(revision);
     },
   };

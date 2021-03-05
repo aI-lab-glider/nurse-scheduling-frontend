@@ -139,8 +139,8 @@ export class ScheduleExportLogic {
   private addStyles(workSheet: xlsx.Worksheet, rows: unknown[]): void {
     const monthInfo = this.scheduleModel.scheduleKey;
     const monthLogic = new MonthInfoLogic(
-      monthInfo?.month || 0,
-      monthInfo?.year + "" || "",
+      monthInfo?.month ?? 0,
+      monthInfo?.year + "" ?? "",
       this.scheduleModel.month_info?.dates || []
     );
     const verboseDates = monthLogic.verboseDates;
