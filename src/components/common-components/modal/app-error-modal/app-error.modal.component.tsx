@@ -19,17 +19,17 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
     setOpen(false);
   };
 
-  const title = "Wystąpił błąd :(";
+  const title = "Coś poszło nie tak :(";
 
   const body = (
-    <div className={"span-primary workers-table"}>
-      <p>Wiadomość została wysłana do twórców.</p>
+    <div className={"span-primary"}>
+      <p>Wiadomość o błędzie została wysłana do twórców.</p>
     </div>
   );
 
   const footer = (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Button onClick={handleClose} size="small" className="submit-button" variant="secondary">
+      <Button onClick={handleClose} size="small" className="submit-button" variant="primary">
         OK
       </Button>
     </div>
