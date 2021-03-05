@@ -28,7 +28,8 @@ export class FileHelper {
       }
     }
     const zipFile = await zip.generateAsync({ type: "blob" });
-    this.saveFileAs(zipFile, "baza_danych");
+    const timestamp = new Date().toLocaleDateString("en-US").replaceAll("/", "_");
+    this.saveFileAs(zipFile, `historia_${timestamp}`);
   }
 
   private static splitWorkbooksInDirs(workbooks): { [dirName: string]: [string] } {
