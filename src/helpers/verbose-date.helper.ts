@@ -7,9 +7,13 @@ import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Colors } from "./colors/color.model";
 import * as _ from "lodash";
+import { MonthDataArray } from "./shifts.helper";
 
 export class VerboseDateHelper {
-  public static generateVerboseDatesForMonth(month: number, year: number): VerboseDate[] {
+  public static generateVerboseDatesForMonth(
+    month: number,
+    year: number
+  ): MonthDataArray<VerboseDate> {
     const lastDay = new Date(year, month + 1, 0);
     const publicHolidaysLogic = new PublicHolidaysLogic(year.toString());
     const weekDays = [
@@ -29,7 +33,7 @@ export class VerboseDateHelper {
           dayOfWeek: weekDays[new Date(year, month, d).getDay()],
         } as VerboseDate)
     );
-    return dates;
+    return dates as MonthDataArray<VerboseDate>;
   }
 
   static isWorkingDay(date?: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek">): boolean {

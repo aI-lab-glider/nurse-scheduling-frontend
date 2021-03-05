@@ -9,6 +9,7 @@ import {
   WorkerEditComponent,
   WorkerEditComponentMode,
 } from "../../namestable/worker-edit.component";
+import { useWorkerHoursInfo } from "../../schedule-page/table/schedule/use-worker-hours-info";
 
 export enum WorkerDrawerMode {
   EDIT,
@@ -16,9 +17,10 @@ export enum WorkerDrawerMode {
   INFO,
 }
 
+export type WorkerDrawerWorkerInfo = Omit<WorkerInfoModel, "time">;
 interface WorkerDrawerOptions extends Omit<DrawerOptions, "title"> {
   mode: WorkerDrawerMode;
-  worker?: WorkerInfoModel;
+  worker?: WorkerDrawerWorkerInfo;
 }
 
 function getTitle(mode: WorkerDrawerMode): string {
@@ -31,6 +33,7 @@ function getTitle(mode: WorkerDrawerMode): string {
 
 export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX.Element {
   const { mode, worker, setOpen, ...otherOptions } = options;
+  const workerRequiredHours = useWorkerHoursInfo(worker?.name);
   const title = getTitle(mode);
   return (
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>
@@ -40,6 +43,7 @@ export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX
             <WorkerEditComponent
               setOpen={setOpen}
               {...worker}
+              time={workerRequiredHours.workerTime}
               mode={WorkerEditComponentMode.EDIT}
             />
           ),
@@ -50,7 +54,9 @@ export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX
               mode={WorkerEditComponentMode.ADD}
             />
           ),
-          [WorkerDrawerMode.INFO]: worker && <WorkerInfoComponent {...worker} />,
+          [WorkerDrawerMode.INFO]: worker && (
+            <WorkerInfoComponent {...worker} time={workerRequiredHours.workerTime} />
+          ),
         }[mode]
       }
     </Drawer>

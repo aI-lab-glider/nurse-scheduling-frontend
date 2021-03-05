@@ -1,33 +1,34 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import xlsx, { Cell } from "exceljs";
+import { VerboseDate } from "../../common-models/month-info.model";
 import {
   cropScheduleDMToMonthDM,
   ScheduleDataModel,
 } from "../../common-models/schedule-data.model";
-import xlsx, { Cell } from "exceljs";
 import { ShiftCode } from "../../common-models/shift-info.model";
-import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
 import { WorkerType } from "../../common-models/worker-info.model";
+import { ColorHelper } from "../../helpers/colors/color.helper";
+import { Color } from "../../helpers/colors/color.model";
+import { ShiftHelper } from "../../helpers/shifts.helper";
+import { WorkerHourInfo } from "../../helpers/worker-hours-info.model";
+import { TranslationHelper } from "../../helpers/translations.helper";
+import { BaseMonthRevisionDataModel } from "../../state/models/application-state.model";
+import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
 import {
   ChildrenSectionKey,
   ExtraWorkersSectionKey,
   MetaDataRowLabel,
   MetaDataSectionKey,
 } from "../section.model";
-import { ShiftHelper } from "../../helpers/shifts.helper";
-import { ColorHelper } from "../../helpers/colors/color.helper";
-import { Color } from "../../helpers/colors/color.model";
-import { TranslationHelper } from "../../helpers/translations.helper";
-import { VerboseDate } from "../../common-models/month-info.model";
-import { ShiftsInfoLogic } from "../schedule-logic/shifts-info.logic";
-import { MetadataLogic } from "../schedule-logic/metadata.logic";
 
 const EMPTY_ROW = Array(100).fill("");
 
 export class ScheduleExportLogic {
   constructor(
     private scheduleModel: ScheduleDataModel,
+    private baseScheduleModel: BaseMonthRevisionDataModel,
     private overtimeExport: boolean = true,
     private extraWorkersExport?: boolean
   ) {}
@@ -218,27 +219,30 @@ export class ScheduleExportLogic {
   }
 
   private createShiftsSections(scheduleModel: ScheduleDataModel): string[][][] {
-    const shiftInfoLogics = ScheduleExportLogic.shiftInfoLogics(scheduleModel);
-
     const grouped = {
       [WorkerType.NURSE]: [] as string[][],
       [WorkerType.OTHER]: [] as string[][],
     };
-    Object.keys(cropScheduleDMToMonthDM(scheduleModel).shifts || {}).forEach((key: string) => {
-      const category = cropScheduleDMToMonthDM(scheduleModel).employee_info.type[key] ?? "";
-      const shiftsRow: string[] = [
-        key,
-        ...cropScheduleDMToMonthDM(scheduleModel).shifts[key]?.map((s) =>
-          s === ShiftCode.W ? "" : s
-        ),
-      ];
-      if (this.overtimeExport) {
-        shiftsRow.push(
-          ...shiftInfoLogics[category].calculateWorkerHourInfo(key).map((e) => e.toString())
-        );
+    Object.keys(cropScheduleDMToMonthDM(scheduleModel).shifts || {}).forEach(
+      (workerName: string) => {
+        const category =
+          cropScheduleDMToMonthDM(scheduleModel).employee_info.type[workerName] ?? "";
+        const shiftsRow: string[] = [
+          workerName,
+          ...cropScheduleDMToMonthDM(scheduleModel).shifts[workerName]?.map((s) =>
+            s === ShiftCode.W ? "" : s
+          ),
+        ];
+        if (this.overtimeExport) {
+          shiftsRow.push(
+            ...WorkerHourInfo.fromSchedules(workerName, scheduleModel, this.baseScheduleModel)
+              .asArray()
+              .map((e) => e.toString())
+          );
+        }
+        grouped[category].push(shiftsRow);
       }
-      grouped[category].push(shiftsRow);
-    });
+    );
     return [grouped[WorkerType.NURSE], grouped[WorkerType.OTHER]];
   }
 
@@ -247,8 +251,6 @@ export class ScheduleExportLogic {
     headerRow[MetaDataSectionKey.Month] =
       TranslationHelper.polishMonths[scheduleModel?.schedule_info?.month_number || 0];
     headerRow[MetaDataSectionKey.Year] = scheduleModel?.schedule_info?.year || 0;
-    // TODO implement work time calculation
-    headerRow[MetaDataSectionKey.RequiredavailableWorkersWorkTime] = 0;
     let infoStr = Object.keys(headerRow)
       .map((key) => `${key} ${headerRow[key]}`)
       .join("  |  ")
@@ -257,7 +259,7 @@ export class ScheduleExportLogic {
     infoStr =
       infoStr.slice(0, infoStr.length - 2) +
       " " +
-      ShiftHelper.calculateWorkNormForMonth(
+      WorkerHourInfo.calculateWorkNormForMonth(
         scheduleModel?.schedule_info?.month_number,
         scheduleModel?.schedule_info?.year
       );
@@ -329,30 +331,5 @@ export class ScheduleExportLogic {
     }
 
     anchor.click();
-  }
-
-  private static shiftInfoLogics(
-    scheduleModel: ScheduleDataModel
-  ): { [WorkerType.NURSE]: ShiftsInfoLogic; [WorkerType.OTHER]: ShiftsInfoLogic } {
-    const metadataLogic = new MetadataLogic(
-      scheduleModel.schedule_info.year?.toString(),
-      scheduleModel.schedule_info.month_number,
-      scheduleModel.month_info.dates
-    );
-    const nurseShiftsInfoLogic = new ShiftsInfoLogic(
-      scheduleModel.shifts,
-      WorkerType.NURSE,
-      metadataLogic
-    );
-    const otherShiftsInfoLogic = new ShiftsInfoLogic(
-      scheduleModel.shifts,
-      WorkerType.OTHER,
-      metadataLogic
-    );
-
-    return {
-      [WorkerType.NURSE]: nurseShiftsInfoLogic,
-      [WorkerType.OTHER]: otherShiftsInfoLogic,
-    };
   }
 }

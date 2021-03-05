@@ -15,25 +15,36 @@ import { LocalStorageProvider } from "../../../../api/local-storage-provider.mod
 import _ from "lodash";
 import { ActionModel } from "../../../models/action.model";
 import { Shift } from "../../../../common-models/shift-info.model";
+import { AddMonthRevisionAction, BaseRevisionAction } from "../../base-revision.reducer";
 
 export class ScheduleDataActionCreator {
   static setScheduleFromScheduleDM(
     newSchedule: ScheduleDataModel,
     saveInDatabase = true
-  ): ThunkFunction<ScheduleDataModel> {
+  ): ThunkFunction<ScheduleDataModel | MonthDataModel> {
     return async (dispatch, getState): Promise<void> => {
+      // TODO check if this function always returns
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
       if (saveInDatabase) {
         const { revision } = getState().actualState;
         await new LocalStorageProvider().saveSchedule(revision, newSchedule);
       }
       destinations.forEach((destination) => {
-        const action = {
+        const addNewSchedule = {
           type: createActionName(destination, ScheduleActionType.ADD_NEW),
           payload: newSchedule,
         };
-        dispatch(action);
+        dispatch(addNewSchedule);
       });
+      const { month_number: monthNumber, year } = newSchedule.schedule_info;
+      const baseSchedule = await new LocalStorageProvider().getMonthRevision(
+        new ScheduleKey(monthNumber, year).getRevisionKey("primary")
+      );
+      const addBaseSchedule = {
+        type: BaseRevisionAction.ADD_MONTH_BASE_REVISION,
+        payload: baseSchedule,
+      } as AddMonthRevisionAction;
+      dispatch(addBaseSchedule);
     };
   }
 

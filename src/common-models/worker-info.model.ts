@@ -53,6 +53,4 @@ export interface WorkerInfoModel {
   time: number;
   type?: WorkerType;
   shifts?: [VerboseDate, ShiftCode][];
-  requiredHours?: number;
-  overtime?: number;
 }

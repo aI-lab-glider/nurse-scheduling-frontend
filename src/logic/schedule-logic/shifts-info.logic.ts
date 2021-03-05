@@ -1,18 +1,16 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { DataRowHelper } from "../../helpers/data-row.helper";
-import { WorkerType } from "../../common-models/worker-info.model";
 import { ScheduleError } from "../../common-models/schedule-error.model";
 import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
-import { Sections } from "../providers/schedule-provider.model";
-import { DataRow } from "./data-row";
-import { BaseSectionLogic } from "./base-section-logic.model";
-import { ShiftsProvider } from "../providers/shifts-provider.model";
-import { MetadataLogic } from "./metadata.logic";
-import { TranslationHelper } from "../../helpers/translations.helper";
-import { ShiftHelper } from "../../helpers/shifts.helper";
+import { WorkerType } from "../../common-models/worker-info.model";
 import { ArrayHelper } from "../../helpers/array.helper";
+import { DataRowHelper } from "../../helpers/data-row.helper";
+import { Sections } from "../providers/schedule-provider.model";
+import { ShiftsProvider } from "../providers/shifts-provider.model";
+import { BaseSectionLogic } from "./base-section-logic.model";
+import { DataRow } from "./data-row";
+import { MetadataLogic } from "./metadata.logic";
 
 export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider {
   get sectionKey(): keyof Sections {
@@ -37,14 +35,6 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
 
   get availableWorkersWorkTime(): { [key: string]: number } {
     return this._availableWorkersWorkTime;
-  }
-
-  public calculateWorkerHourInfo(workerName: string): number[] {
-    const shifts = this.shifts[workerName].rowData(false, false) as ShiftCode[];
-    const workerNorm = this._availableWorkersWorkTime[workerName];
-    const verboseDates = this.metadata.verboseDates;
-    const currentMonth = TranslationHelper.englishMonths[this.metadata.monthNumber];
-    return ShiftHelper.caclulateWorkHoursInfo(shifts, workerNorm, verboseDates, currentMonth);
   }
 
   public get errors(): ScheduleError[] {

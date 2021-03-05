@@ -4,6 +4,7 @@
 import { ShiftHelper } from "../../../../src/helpers/shifts.helper";
 import { ShiftCode, ShiftInfoModel, SHIFTS } from "../../../../src/common-models/shift-info.model";
 import { VerboseDate, WeekDay } from "../../../../src/common-models/month-info.model";
+import { WorkerHourInfo } from "../../../../src/helpers/worker-hours-info.model";
 
 //#region getWorkersCount data
 type GetWorkersCountTestCase = { arr: ShiftInfoModel; exp: Array<number> };
@@ -183,7 +184,7 @@ describe("ShiftHelper", () => {
   });
 
   it("Should calculate correct work hours for month", () => {
-    const workNorm = ShiftHelper.calculateWorkNormForMonth(10, 2020);
+    const workNorm = WorkerHourInfo.calculateWorkNormForMonth(10, 2020);
     expect(workNorm).to.equal(160);
   });
 
@@ -191,7 +192,7 @@ describe("ShiftHelper", () => {
     describe("getWorkersCount", () => {
       const shifts = Object.values(testCase.arr);
       it(`should return ${testCase.exp} for all days and array ${shifts}`, () => {
-        const amount = ShiftHelper.getWorkersCount(testCase.arr);
+        const amount = WorkerHourInfo.getWorkersCount(testCase.arr);
         expect(amount).to.eql(testCase.exp);
       });
     });
@@ -260,7 +261,8 @@ function testForCorrectWorkHourCalculation(
   expectedRequiredHours?: number,
   dates?: DateArray
 ): void {
-  const hours = ShiftHelper.caclulateWorkHoursInfo(
+  const hours = WorkerHourInfo.caclulateWorkHoursInfo(
+    testCase.shifts,
     testCase.shifts,
     testCase.workerNorm,
     dates ? dates : testCase.dates,

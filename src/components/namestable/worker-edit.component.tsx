@@ -5,6 +5,7 @@ import { Grid, Input, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import classNames from "classnames/bind";
 import * as _ from "lodash";
+import { pickBy } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
@@ -16,16 +17,15 @@ import {
   WorkerType,
   WorkerTypeHelper,
 } from "../../common-models/worker-info.model";
-import { ShiftHelper } from "../../helpers/shifts.helper";
+import { WorkerHourInfo } from "../../helpers/worker-hours-info.model";
 import { StringHelper } from "../../helpers/string.helper";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
+import { WorkerActionCreator } from "../../state/reducers/worker.action-creator";
 import { Button } from "../common-components";
 import { DropdownButtons } from "../common-components/dropdown-buttons/dropdown-buttons.component";
 import { TextMaskCustom } from "../common-components/text-mask-custom/text-mask-custom.component";
 import { useMonthInfo } from "../schedule-page/validation-drawer/use-verbose-dates";
 import { WorkingTimeHelper } from "./working-time.helper";
-import { WorkerActionCreator } from "../../state/reducers/worker.action-creator";
-import { pickBy } from "lodash";
 
 const useStyles = makeStyles({
   container: {
@@ -92,7 +92,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
       WorkerInfoExtendedInterface,
       "employmentTime" | "employmentTimeOther" | "civilTime"
     > => {
-      const workerBaseNorm = ShiftHelper.calculateWorkNormForMonth(monthNumber, year);
+      const workerBaseNorm = WorkerHourInfo.calculateWorkNormForMonth(monthNumber, year);
       const hours = workerTime * workerBaseNorm;
       const hoursFraction = WorkingTimeHelper.fromHoursToFraction(hours, workerBaseNorm);
       return {
@@ -143,7 +143,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
 
   function handleUpdate(event): void {
     const { name, value } = event.target;
-    const workerBaseNorm = ShiftHelper.calculateWorkNormForMonth(monthNumber, year);
+    const workerBaseNorm = WorkerHourInfo.calculateWorkNormForMonth(monthNumber, year);
     if (name === "employmentTime") {
       setIsEmployementTimeValid(WorkingTimeHelper.isTimeFractionValid(value));
       updateWorkerInfoBatch({
