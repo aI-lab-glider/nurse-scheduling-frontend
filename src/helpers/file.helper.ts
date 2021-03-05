@@ -5,6 +5,9 @@
 import xlsx from "exceljs";
 import JSZip from "jszip";
 import _ from "lodash";
+import { TranslationHelper } from "./translations.helper";
+import { RevisionType, RevisionTypeLabels } from "../api/persistance-store.model";
+import { MonthDataModel } from "../common-models/schedule-data.model";
 
 export class FileHelper {
   public static saveToFile(workbook: xlsx.Workbook, filename: string): void {
@@ -35,7 +38,7 @@ export class FileHelper {
   private static splitWorkbooksInDirs(workbooks): { [dirName: string]: [string] } {
     const monthWorkbooks: { [monthYear: string]: [string] } = {};
     Object.keys(workbooks).forEach((fileName) => {
-      const dirName = this.getDirNameFromFile(fileName);
+      const dirName = this.createDirNameFromFile(fileName);
       const files = monthWorkbooks[dirName];
       if (_.isNil(files)) {
         monthWorkbooks[dirName] = [fileName];
@@ -63,8 +66,20 @@ export class FileHelper {
     anchor.click();
   }
 
-  public static getDirNameFromFile(fileName): string {
+  public static createDirNameFromFile(fileName): string {
     const splitedName = fileName.split("_");
     return `${splitedName[0]}_${splitedName[1]}`;
+  }
+
+  public static createMonthFilename(
+    monthDataModel: MonthDataModel,
+    revisionType: RevisionType
+  ): string {
+    return (
+      TranslationHelper.polishMonths[monthDataModel.scheduleKey.month] +
+      `_${monthDataModel.scheduleKey.year}` +
+      `_${RevisionTypeLabels[revisionType].replace(" ", "_")}` +
+      ".xlsx"
+    );
   }
 }

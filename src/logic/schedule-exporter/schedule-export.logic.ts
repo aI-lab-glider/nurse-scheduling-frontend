@@ -107,7 +107,7 @@ export class ScheduleExportLogic {
     workSheet.getCell(this.doneHoursAddress).alignment = { textRotation: -90 };
     workSheet.getCell(this.diffHoursAddress).alignment = { textRotation: -90 };
 
-    const workbookName = this.createScheduleName(revisionType);
+    const workbookName = FileHelper.createMonthFilename(this.scheduleModel, revisionType);
     return [workbookName, workbook];
   }
 
@@ -120,15 +120,6 @@ export class ScheduleExportLogic {
         properties: { defaultColWidth: 5 },
       }),
     ];
-  }
-
-  private createScheduleName(revisionType): string {
-    return (
-      TranslationHelper.polishMonths[this.scheduleModel?.scheduleKey.month] +
-      `_${this.scheduleModel?.scheduleKey.year}` +
-      `_${RevisionTypeLabels[revisionType].replace(" ", "_")}` +
-      ".xlsx"
-    );
   }
 
   private getRightCornerIndexes(cell: Cell, cellValue: string): void {
