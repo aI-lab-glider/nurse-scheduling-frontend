@@ -38,7 +38,7 @@ export class FileHelper {
       }
     }
     const zipFile = await zip.generateAsync({ type: "blob" });
-    const timestamp = new Date().toLocaleDateString("en-US").replaceAll("/", "_");
+    const timestamp = new Date().toLocaleDateString("pl").replaceAll(".", "_");
     this.saveFileAs(zipFile, `historia_${timestamp}`);
   }
 
