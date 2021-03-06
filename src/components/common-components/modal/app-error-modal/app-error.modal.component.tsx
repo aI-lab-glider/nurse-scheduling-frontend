@@ -35,5 +35,14 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
     </div>
   );
 
-  return <DefaultModal open={open} setOpen={setOpen} title={title} body={body} footer={footer} />;
+  return (
+    <DefaultModal
+      closeOptions={onClick}
+      open={open}
+      setOpen={setOpen}
+      title={title}
+      body={body}
+      footer={footer}
+    />
+  );
 }
