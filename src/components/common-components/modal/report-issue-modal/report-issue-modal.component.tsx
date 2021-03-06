@@ -85,6 +85,41 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   const { open, setOpen, clear } = options;
   const [issueDescription, setIssueDescription] = useState("");
   const title = "Zgłoś błąd";
+  const { createNotification } = useNotification();
+
+  useEffect(() => {
+    init(`${process.env.EMAIL_KEY}`);
+  });
+
+  function onIssueDescriptionChange(event): void {
+    const { value } = event.target;
+    setIssueDescription(value);
+  }
+
+  function handleClose(): void {
+    clear && clear();
+    setIssueDescription("");
+    setIsSent(false);
+    setOpen(false);
+  }
+
+  function handleSend(): void {
+    send(
+      "service_74nkmaq",
+      "template_120y7az",
+      {
+        message: issueDescription,
+      },
+      process.env.REACT_APP_EMAIL_KEY
+    )
+      .then(() => {
+        setIsSent(true);
+      })
+      .catch(() => {
+        createNotification({ type: "error", message: "Wystąpił problem sieciowy!" });
+        handleClose();
+      });
+  }
 
   const body = (
     <div className="report-issue-modal-body">
@@ -133,42 +168,6 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
       )}
     </div>
   );
-
-  const { createNotification } = useNotification();
-
-  useEffect(() => {
-    init(`${process.env.EMAIL_KEY}`);
-  });
-
-  function onIssueDescriptionChange(event): void {
-    const { value } = event.target;
-    setIssueDescription(value);
-  }
-
-  function handleClose(): void {
-    clear && clear();
-    setIssueDescription("");
-    setIsSent(false);
-    setOpen(false);
-  }
-
-  function handleSend(): void {
-    send(
-      "service_74nkmaq",
-      "template_120y7az",
-      {
-        message: issueDescription,
-      },
-      process.env.REACT_APP_EMAIL_KEY
-    )
-      .then(() => {
-        setIsSent(true);
-      })
-      .catch(() => {
-        createNotification({ type: "error", message: "Wystąpił problem sieciowy!" });
-        handleClose();
-      });
-  }
 
   return (
     <DefaultModal
