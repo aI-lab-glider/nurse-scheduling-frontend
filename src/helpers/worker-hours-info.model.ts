@@ -70,7 +70,7 @@ export class WorkerHourInfo {
     const { shifts, workerNorm, month, year, dates } = rest;
     const verboseDates = new MonthInfoLogic(month, year, dates).verboseDates;
     const monthName = TranslationHelper.englishMonths[month];
-    return this.caclulateWorkHoursInfo(
+    return this.calculateWorkHoursInfo(
       shifts,
       baseWorkerShifts ?? shifts,
       workerNorm,
@@ -79,7 +79,7 @@ export class WorkerHourInfo {
     );
   }
 
-  public static caclulateWorkHoursInfo(
+  public static calculateWorkHoursInfo(
     actualShifts: ShiftCode[],
     baseWorkerShifts: ShiftCode[],
     workerNorm: number,
@@ -98,13 +98,11 @@ export class WorkerHourInfo {
     const cropToMonth = <T>(array: T[]): MonthDataArray<T> =>
       array.slice(firstDayOfCurrentMonth, lastDayOfCurrentMonth + 1) as MonthDataArray<T>;
 
-    debugger;
     const requiredHours = this.calculateRequiredHoursFromVerboseDates(cropToMonth(dates));
     const monthShiftsWithHistoryShifts = _.zip(
       cropToMonth(actualShifts),
       cropToMonth(baseWorkerShifts)
     );
-    debugger;
     const freeHours = monthShiftsWithHistoryShifts.reduce((calculatedHours, shiftPair) => {
       const [actualShift, historyShift] = shiftPair;
       if (!ShiftHelper.isNotWorkingShift(actualShift!)) {
