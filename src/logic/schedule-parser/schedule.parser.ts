@@ -7,10 +7,10 @@ import { ChildrenInfoParser } from "./children-info.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { ShiftsInfoParser } from "./shifts-info.parser";
 import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
-import { ExtraWorkersParser } from "./extra-workers.parser";
 import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
 import { FoundationInfoParser } from "./foundation-info.parser";
 import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
+import { ExtraWorkersInfoParser } from "./extra-workers-info.parser";
 
 export class ScheduleParser implements ScheduleProvider {
   readonly sections: Sections;
@@ -35,6 +35,7 @@ export class ScheduleParser implements ScheduleProvider {
     let children;
     let nurses;
     let babysiter;
+    let dayWorkers;
 
     const metadataRaw = rawSchedule.find((r) => r[0][0].toLowerCase().trim() === "dni miesiąca");
     const metadata = new MetaDataParser(this.month, this.year, metadataRaw);
@@ -45,8 +46,10 @@ export class ScheduleParser implements ScheduleProvider {
         if (rKey === "dni miesiąca") {
           if (r.length === 3) {
             children = new ChildrenInfoParser(metadata, r);
+            dayWorkers = new ExtraWorkersInfoParser(metadata, r);
           }
         } else if (rKey === "pracownicy dzienni") {
+          dayWorkers = new ExtraWorkersInfoParser(metadata, r);
         } else if (rKey === "dzieci") {
           children = new ChildrenInfoParser(metadata, r);
         } else if (!nurses) {
@@ -66,12 +69,15 @@ export class ScheduleParser implements ScheduleProvider {
     if (!babysiter) {
       babysiter = new ShiftsInfoParser(WorkerType.OTHER, metadata);
     }
+    if (!dayWorkers) {
+      dayWorkers = new ExtraWorkersInfoParser(metadata);
+    }
 
     const parsers: FoundationInfoOptions = {
       ChildrenInfo: children,
       NurseInfo: nurses,
       BabysitterInfo: babysiter,
-      ExtraWorkersInfo: new ExtraWorkersParser(metadata.dates.length),
+      ExtraWorkersInfo: dayWorkers,
     };
 
     const foundationParser = new FoundationInfoParser(parsers);
