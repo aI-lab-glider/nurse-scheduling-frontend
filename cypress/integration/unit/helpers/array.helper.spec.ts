@@ -3,7 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ArrayHelper } from "../../../../src/helpers/array.helper";
 
-type TestCase = { arr1: number[]; arr2: number[]; exp: [number, number][] };
+interface TestCase {
+  arr1: number[];
+  arr2: number[];
+  exp: [number, number][];
+}
+
 const testCases: TestCase[] = [
   {
     arr1: [1, 2],
