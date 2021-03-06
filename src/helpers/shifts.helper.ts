@@ -57,7 +57,7 @@ export class ShiftHelper {
   public static nextLegalShiftStart(shift: Shift): [number, boolean] {
     const sum = shift.to + this.requiredFreeTimeAfterShift(shift);
     if (sum > 24) {
-      if ((shift.to + this.requiredFreeTimeAfterShift(shift)) % 24 == 0) return [24, true];
+      if ((shift.to + this.requiredFreeTimeAfterShift(shift)) % 24 === 0) return [24, true];
       return [(shift.to + this.requiredFreeTimeAfterShift(shift)) % 24, true];
     }
     return [sum, false];
