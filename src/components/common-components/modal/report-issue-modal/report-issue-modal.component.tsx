@@ -76,35 +76,15 @@ const useStyles = makeStyles(() =>
 export interface ReportIssueModalOptions {
   setOpen: (open: boolean) => void;
   open: boolean;
-  screenshot?;
   clear?: () => void;
 }
 
 export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.Element {
-  function onIssueDescriptionChange(event): void {
-    const { value } = event.target;
-    setIssueDescription(value);
-    setIsLongEnough(issueDescription.length > 18);
-  }
-
-  function handleClose(): void {
-    clear && clear();
-    setIssueDescription("");
-    setIsLongEnough(false);
-    setIsSent(false);
-    setOpen(false);
-  }
-
   const classes = useStyles();
-  const [isLongEnough, setIsLongEnough] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const { open, setOpen, clear } = options;
   const [issueDescription, setIssueDescription] = useState("");
   const title = "Zgłoś błąd";
-
-  useEffect(() => {
-    init(`${process.env.EMAIL_KEY}`);
-  });
 
   const body = (
     <div className="report-issue-modal-body">
@@ -120,7 +100,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
             fullWidth={true}
             multiline
             helperText={
-              isLongEnough
+              issueDescription.length > 19
                 ? " "
                 : `Treść wiadomości jest za krótka! Wprowadź jeszcze min. ${
                     19 - issueDescription.length + 1
@@ -134,7 +114,43 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
     </div>
   );
 
+  const footer = (
+    <div>
+      {!isSent && (
+        <>
+          <Button variant="primary" onClick={handleSend} disabled={issueDescription.length < 20}>
+            Wyślij
+          </Button>
+          <Button variant="secondary" color="secondary" onClick={handleClose}>
+            Anuluj
+          </Button>
+        </>
+      )}
+      {isSent && (
+        <Button variant="primary" onClick={handleClose}>
+          Zamknij
+        </Button>
+      )}
+    </div>
+  );
+
   const { createNotification } = useNotification();
+
+  useEffect(() => {
+    init(`${process.env.EMAIL_KEY}`);
+  });
+
+  function onIssueDescriptionChange(event): void {
+    const { value } = event.target;
+    setIssueDescription(value);
+  }
+
+  function handleClose(): void {
+    clear && clear();
+    setIssueDescription("");
+    setIsSent(false);
+    setOpen(false);
+  }
 
   function handleSend(): void {
     send(
@@ -153,26 +169,6 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
         handleClose();
       });
   }
-
-  const footer = (
-    <div>
-      {!isSent && (
-        <>
-          <Button variant="primary" onClick={handleSend} disabled={!isLongEnough}>
-            Wyślij
-          </Button>
-          <Button variant="secondary" color="secondary" onClick={handleClose}>
-            Anuluj
-          </Button>
-        </>
-      )}
-      {isSent && (
-        <Button variant="primary" onClick={handleClose}>
-          Zamknij
-        </Button>
-      )}
-    </div>
-  );
 
   return (
     <DefaultModal
