@@ -31,7 +31,7 @@ export class WorkerInfoComponent extends React.Component<WorkerInfoModel> {
         >
           <div
             style={{
-              height: "70vh",
+              height: "650px",
             }}
           >
             <div className={"span-primary workers-table"}>
