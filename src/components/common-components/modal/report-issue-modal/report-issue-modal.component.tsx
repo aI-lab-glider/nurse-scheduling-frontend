@@ -70,13 +70,6 @@ const useStyles = makeStyles(() =>
       color: ScssVars.primary,
       display: "flex",
     },
-
-    spinnerScaled: {
-      marginTop: "88px",
-      marginBottom: "84px",
-      height: "100px",
-      width: "100px",
-    },
   })
 );
 
@@ -91,12 +84,13 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   function onIssueDescriptionChange(event): void {
     const { value } = event.target;
     setIssueDescription(value);
-    setIsLongEnough(issueDescription.length > 20);
+    setIsLongEnough(issueDescription.length > 18);
   }
 
   function handleClose(): void {
     clear && clear();
     setIssueDescription("");
+    setIsLongEnough(false);
     setIsSent(false);
     setOpen(false);
   }
@@ -128,7 +122,11 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
             helperText={
               isLongEnough
                 ? " "
-                : "Treść wiadomości jest za krótka! Wiadomość nie zostanie wysłana."
+                : `Treść wiadomości jest za krótka! Wprowadź jeszcze min. ${
+                    19 - issueDescription.length + 1
+                  } znak${
+                    issueDescription.length < 16 ? `ów` : issueDescription.length < 19 ? `i` : ``
+                  }.`
             }
           />
         </>
@@ -139,23 +137,21 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   const { createNotification } = useNotification();
 
   function handleSend(): void {
-    if (isLongEnough) {
-      send(
-        "service_74nkmaq",
-        "template_120y7az",
-        {
-          message: issueDescription,
-        },
-        process.env.REACT_APP_EMAIL_KEY
-      )
-        .then(() => {
-          setIsSent(true);
-        })
-        .catch(() => {
-          createNotification({ type: "error", message: "Wystąpił problem sieciowy!" });
-          handleClose();
-        });
-    }
+    send(
+      "service_74nkmaq",
+      "template_120y7az",
+      {
+        message: issueDescription,
+      },
+      process.env.REACT_APP_EMAIL_KEY
+    )
+      .then(() => {
+        setIsSent(true);
+      })
+      .catch(() => {
+        createNotification({ type: "error", message: "Wystąpił problem sieciowy!" });
+        handleClose();
+      });
   }
 
   const footer = (
