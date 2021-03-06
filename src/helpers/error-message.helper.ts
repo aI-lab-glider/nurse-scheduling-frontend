@@ -14,8 +14,10 @@ import {
   ParseErrorCode,
   ScheduleError,
 } from "../common-models/schedule-error.model";
+import { SHIFTS as shifts } from "../common-models/shift-info.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Color, Colors } from "./colors/color.model";
+import { ShiftHelper } from "./shifts.helper";
 
 type Error = ScheduleErrorLevel;
 
@@ -32,12 +34,6 @@ export class ErrorMessageHelper {
   }
 
   public static getErrorMessage(error: ScheduleError): ScheduleErrorMessageModel {
-    const dayTimeTranslations = {
-      MORNING: "porannej",
-      AFTERNOON: "popołudniowej",
-      NIGHT: "nocnej",
-    };
-
     const kind = error.kind;
     let message: string;
     let title = "Nie rozpoznano błędu";
@@ -103,11 +99,41 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.DissalowedShiftSequence:
-        message = `Niedozwolona sekwencja zmian dla pracownika <strong>${
+        const timeNeeded = ShiftHelper.requiredFreeTimeAfterShift(shifts[error.preceding]);
+        const earliestPossible = ShiftHelper.nextLegalShiftStart(shifts[error.preceding])[0];
+        const nextDay = ShiftHelper.nextLegalShiftStart(shifts[error.preceding])[1];
+        let tooEarly =
+          ShiftHelper.nextLegalShiftStart(shifts[error.preceding])[0] -
+          shifts[error.succeeding].from;
+        if (tooEarly == 0) tooEarly += 24;
+        message = `Pracownik <strong>${
           error.worker
-        }</strong> w dniu <strong>${error.day + 1}</strong>: <strong>${
-          error.succeeding
-        }</strong> po <strong>${error.preceding}</strong>`;
+        }</strong> potrzebuje ${timeNeeded} godzin przerwy po zmianie <strong>${
+          error.preceding
+        }</strong>
+          (${shifts[error.preceding].from}-${shifts[error.preceding].to}).
+          Najwcześniej o ${earliestPossible}`;
+        if (nextDay) message += ` następnego dnia`;
+        message += `. Przypisana zmiana <strong>${error.succeeding}</strong> (${
+          shifts[error.succeeding].from
+        }-${shifts[error.succeeding].to}) zaczyna się
+        o ${tooEarly} godzin`;
+        switch (tooEarly) {
+          case 1:
+            message += `ę za wcześnie`;
+            break;
+          case 2:
+          case 3:
+          case 4:
+          case 22:
+          case 23:
+          case 24:
+            message += `y za wcześnie`;
+            break;
+          default:
+            message += ` za wcześnie`;
+            break;
+        }
         type = ScheduleErrorType.DSS;
         title = "date";
         if (error.day) {
