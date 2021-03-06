@@ -11,6 +11,8 @@ import { SummaryTableComponent } from "../../../summarytable/summarytable.compon
 import { OvertimeHeaderComponent } from "../../../overtime-header-table/overtime-header.component";
 import { ScheduleComponentState } from "./schedule-state.model";
 import { ScheduleFoldingSection } from "./schedule-parts/schedule-folding-section.component";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 
 interface ScheduleComponentOptions {
   schedule: ScheduleComponentState;
@@ -21,6 +23,20 @@ export function ScheduleComponent({
 }: ScheduleComponentOptions): JSX.Element {
   const areNursesPresent = scheduleLocalState.nurseShiftsSection?.length !== 0;
   const areBabysittersPresent = scheduleLocalState.babysitterShiftsSection?.length !== 0;
+
+  const { time } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.employee_info
+  );
+
+  // Only for testing purposes
+  if (
+    process.env.REACT_APP_DEV_MODE &&
+    Object.keys(time)
+      .map((worker) => worker.toLowerCase())
+      .includes(process.env.REACT_APP_ERROR_WORKER ?? "ERROR")
+  ) {
+    throw new Error("Schedule in dev mode includes error user");
+  }
 
   return (
     <table style={{ margin: 20 }}>
