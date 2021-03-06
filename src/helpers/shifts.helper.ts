@@ -49,7 +49,7 @@ export class ShiftHelper {
   }
 
   public static requiredFreeTimeAfterShift(shift: Shift): number {
-    if (this.shiftCodeToWorkTime(shift) < 9) return 8;
+    if (this.shiftCodeToWorkTime(shift) < 9) return 11;
     if (this.shiftCodeToWorkTime(shift) > 12) return 24;
     return 16;
   }

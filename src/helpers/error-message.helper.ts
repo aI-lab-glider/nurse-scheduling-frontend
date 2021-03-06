@@ -105,14 +105,14 @@ export class ErrorMessageHelper {
         let tooEarly =
           ShiftHelper.nextLegalShiftStart(shifts[error.preceding])[0] -
           shifts[error.succeeding].from;
-        if (tooEarly === 0) tooEarly += 24;
+        if (tooEarly < 1) tooEarly += 24;
         message = `Pracownik <strong>${
           error.worker
         }</strong> potrzebuje ${timeNeeded} godzin przerwy po zmianie <strong>${
           error.preceding
         }</strong>
           (${shifts[error.preceding].from}-${shifts[error.preceding].to}).
-          Najwcześniej o ${earliestPossible}`;
+          Nie może mieć zmiany wcześniej niż o ${earliestPossible}`;
         if (nextDay) message += ` następnego dnia`;
         message += `. Przypisana zmiana <strong>${error.succeeding}</strong> (${
           shifts[error.succeeding].from
