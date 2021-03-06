@@ -3,6 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 .scheduleStyle {
   width: 100%;
+  font-family: "DejaVu Sans", "Arial", sans-serif;
+  font-size: 12px;
 
   .calendarRow {
     width: 100%;
@@ -29,11 +31,20 @@
     width: 14.2%;
     height: 100%;
     background-color: white;
-    outline: 1px solid #d6d8e7;
+    border-bottom: 1px solid #d6d8e7;
+    border-right: 1px solid #d6d8e7;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     flex-direction: column;
+  }
+
+  .isToptrue {
+    border-top: 1px solid #d6d8e7;
+  }
+
+  .isLefttrue {
+    border-left: 1px solid #d6d8e7;
   }
 
   .TopCellPart {
@@ -235,4 +246,32 @@
     margin-left: 4px;
     background-color: change-color($color: $urlop, $alpha: 0.3);
   }
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src: url("https://kendo.cdn.telerik.com/2017.2.621/styles/fonts/DejaVu/DejaVuSans.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  font-weight: bold;
+  src: url("https://kendo.cdn.telerik.com/2017.2.621/styles/fonts/DejaVu/DejaVuSans-Bold.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  font-style: italic;
+  src: url("https://kendo.cdn.telerik.com/2017.2.621/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  font-weight: bold;
+  font-style: italic;
+  src: url("https://kendo.cdn.telerik.com/2017.2.621/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf")
+    format("truetype");
 }

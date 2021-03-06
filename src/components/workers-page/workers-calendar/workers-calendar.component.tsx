@@ -11,51 +11,62 @@ interface CalendarOptions {
   shiftsArr: [VerboseDate, ShiftCode][];
 }
 
-export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Element {
-  const firstDay = shiftsArr[0][0].dayOfWeek;
-  const dayOfWeekNamesEng = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
-  const dayOfWeekNames = ["PON", "WT", "ŚR", "CZW", "PT", "SB", "ND"];
-  const daysToDisplay: string[] = [];
-  let date: VerboseDate;
-  let notCurrentMonth = true;
-  for (let i = dayOfWeekNamesEng.indexOf(firstDay); i < 7; i++) {
-    daysToDisplay.push(dayOfWeekNames[i]);
-  }
-  for (let i = 0; i < dayOfWeekNamesEng.indexOf(firstDay); i++) {
-    daysToDisplay.push(dayOfWeekNames[i]);
-  }
+export class WorkersCalendar extends React.Component<CalendarOptions> {
+  render(): JSX.Element {
+    const shiftsArr = this.props.shiftsArr;
+    const firstDay = shiftsArr[0][0].dayOfWeek;
+    const dayOfWeekNamesEng = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
+    const dayOfWeekNames = ["PON", "WT", "ŚR", "CZW", "PT", "SB", "ND"];
+    const daysToDisplay: string[] = [];
+    let date: VerboseDate;
+    let notCurrentMonth = true;
+    for (let i = dayOfWeekNamesEng.indexOf(firstDay); i < 7; i++) {
+      daysToDisplay.push(dayOfWeekNames[i]);
+    }
+    for (let i = 0; i < dayOfWeekNamesEng.indexOf(firstDay); i++) {
+      daysToDisplay.push(dayOfWeekNames[i]);
+    }
 
-  const data = applyScheduleStyling(shiftsArr.map((x) => x[1]));
+    const data = applyScheduleStyling(shiftsArr.map((x) => x[1]));
 
-  return (
-    <>
-      <div className={"scheduleStyle"}>
-        <div className={"calendarRow"}>
-          {daysToDisplay.map((element) => {
-            return <div className={"dayName"}>{element}</div>;
-          })}
-          {data?.map(({ value, keepOn, hasNext }, index) => {
-            date = shiftsArr[index][0];
-            if (date.date === 1) {
-              notCurrentMonth = !notCurrentMonth;
-            }
-            if (value === "W") {
-              value = "" as ShiftCode;
-            }
+    let isTop = false;
+    let isLeft = false;
 
-            return (
-              <WorkersCalendarCell
-                shift={value}
-                date={date}
-                keepOn={keepOn}
-                workersCalendar={true}
-                hasNext={hasNext}
-                notCurrentMonth={notCurrentMonth}
-              />
-            );
-          })}
+    return (
+      <div>
+        <div className={"scheduleStyle"}>
+          <div className={"calendarRow"}>
+            {daysToDisplay.map((element) => {
+              return <div className={"dayName"}>{element}</div>;
+            })}
+            {data?.map(({ value, keepOn, hasNext }, index) => {
+              date = shiftsArr[index][0];
+              if (date.date === 1) {
+                notCurrentMonth = !notCurrentMonth;
+              }
+              if (value === "W") {
+                value = "" as ShiftCode;
+              }
+
+              isTop = index < 7;
+              isLeft = index % 7 === 0;
+
+              return (
+                <WorkersCalendarCell
+                  shift={value}
+                  date={date}
+                  keepOn={keepOn}
+                  workersCalendar={true}
+                  hasNext={hasNext}
+                  notCurrentMonth={notCurrentMonth}
+                  isTop={isTop}
+                  isLeft={isLeft}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
-    </>
-  );
+    );
+  }
 }
