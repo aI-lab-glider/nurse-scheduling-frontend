@@ -146,12 +146,28 @@ export class ErrorMessageHelper {
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WorkerUnderTime:
-        message = `Pracownik ma <strong>${error.hours}</strong> niedogodzin.`;
+        message = `Pracownik ma <strong>${error.hours}</strong> niedogodzin`;
+        if (error.hours === 1) message += `ę`;
+        if (
+          (error.hours - 2) % 10 === 0 ||
+          (error.hours - 3) % 10 === 0 ||
+          (error.hours - 4) % 10 === 0
+        )
+          message += `y`;
+        message += `.`;
         type = ScheduleErrorType.WUH;
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WorkerOvertime:
-        message = `Pracownik ma <strong>${error.hours}</strong> nadgodzin.`;
+        message = `Pracownik ma <strong>${error.hours}</strong> nadgodzin`;
+        if (error.hours === 1) message += `ę`;
+        if (
+          (error.hours - 2) % 10 === 0 ||
+          (error.hours - 3) % 10 === 0 ||
+          (error.hours - 4) % 10 === 0
+        )
+          message += `y`;
+        message += `.`;
         type = ScheduleErrorType.WOH;
         title = `${error.worker}`;
         break;
