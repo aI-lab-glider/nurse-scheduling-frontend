@@ -30,7 +30,7 @@ export function ScheduleComponent({
 
   // Only for testing purposes
   if (
-    process.env.REACT_APP_DEV_MODE &&
+    process.env.REACT_APP_TEST_MODE &&
     Object.keys(time)
       .map((worker) => worker.toLowerCase())
       .includes(process.env.REACT_APP_ERROR_WORKER ?? "ERROR")
