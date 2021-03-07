@@ -104,9 +104,7 @@ export class ErrorMessageHelper {
         const [earliestPossible, nextDay] = ShiftHelper.nextLegalShiftStart(
           shifts[error.preceding]
         );
-        let tooEarly =
-          ShiftHelper.nextLegalShiftStart(shifts[error.preceding])[0] -
-          shifts[error.succeeding].from;
+        let tooEarly = earliestPossible - shifts[error.succeeding].from;
         if (tooEarly < 1) tooEarly += 24;
         message = `Pracownik <strong>${
           error.worker
