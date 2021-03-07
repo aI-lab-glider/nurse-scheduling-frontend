@@ -3,12 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { TextField } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../../button-component/button.component";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
 import DefaultModal from "../modal.component";
-import { send, init } from "emailjs-com";
+import { send } from "emailjs-com";
 import { useNotification } from "../../notification/notification.context";
 
 const useStyles = makeStyles(() =>
@@ -86,10 +86,6 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   const [issueDescription, setIssueDescription] = useState("");
   const title = "Zgłoś błąd";
   const { createNotification } = useNotification();
-
-  useEffect(() => {
-    init(`${process.env.EMAIL_KEY}`);
-  });
 
   function onIssueDescriptionChange(event): void {
     const { value } = event.target;
