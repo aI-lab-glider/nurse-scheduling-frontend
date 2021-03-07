@@ -3,11 +3,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { ScheduleComponent } from "../table/schedule/schedule.component";
 import { ScheduleLogicContext, useScheduleState } from "../table/schedule/use-schedule-state";
 import { EditPageToolbar } from "./edit-page-toolbar.component";
 import { UndoableHotkeys } from "../../common-components";
 import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
+import { ScheduleContainerComponent } from "../schedule-container.component";
 
 interface ScheduleEditPageOptions {
   closeEdit: () => void;
@@ -25,7 +25,7 @@ export function ScheduleEditPage(options: ScheduleEditPageOptions): JSX.Element 
       <ScheduleLogicContext.Provider value={scheduleLogic}>
         <EditPageToolbar closeEdit={options.closeEdit} />
         <div className="schedule">
-          <ScheduleComponent schedule={scheduleLocalState} />
+          <ScheduleContainerComponent schedule={scheduleLocalState} />
         </div>
       </ScheduleLogicContext.Provider>
     </>
