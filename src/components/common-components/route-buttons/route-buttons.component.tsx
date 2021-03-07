@@ -10,9 +10,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_route-buttons.module.scss";
 import _ from "lodash";
 
-interface Tabs {
+export interface Tabs {
   label: string;
   component: JSX.Element;
+  dataCy: string;
   onChange?: () => void;
 }
 
@@ -92,6 +93,7 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
                   key={tab.label}
                   label={tab.label}
                   value={tab.label}
+                  data-cy={tab.dataCy}
                 />
               ))}
             </TabList>

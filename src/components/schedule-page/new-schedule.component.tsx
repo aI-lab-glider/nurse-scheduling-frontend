@@ -3,14 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { EmptyMonthButtons } from "./empty-month-buttons";
+import nurse from "../../assets/images/nurse.png";
 
 export function NewScheduleComponent(): JSX.Element {
   return (
     <div className={"newMonthComponents"}>
-      <img
-        src="https://filestore.community.support.microsoft.com/api/images/72e3f188-79a1-465f-90ca-27262d769841"
-        alt=""
-      />
+      <img src={nurse} alt="" />
       <pre>Nie masz planu na ten miesiąc</pre>
       <EmptyMonthButtons />
     </div>
