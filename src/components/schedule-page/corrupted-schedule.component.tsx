@@ -37,7 +37,7 @@ export function CorruptedScheduleComponent(): JSX.Element {
 
   return (
     <div className={"newMonthComponents"}>
-      <img src={sadEmoji} alt="" />
+      <img id="corrupted_img" src={sadEmoji} alt="" />
       <pre>{MG_UNABLE_TO_LOAD_SCHEDULE}</pre>
       {isPreviousVersionAvailable && (
         <>

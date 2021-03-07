@@ -56,6 +56,7 @@ Cypress.Commands.add(
     new LocalStorageProvider().reloadDb();
     cy.clock(Date.UTC(year ?? TEST_SCHEDULE_YEAR, month ?? TEST_SCHEDULE_MONTH, 15), ["Date"]);
     cy.visit(Cypress.env("baseUrl"));
+    cy.get("[data-cy=file-input]").should("exist");
     cy.get("[data-cy=file-input]").attachFile(scheduleName);
     cy.get(`[data-cy=nurseShiftsTable]`).should("exist");
     cy.window()
