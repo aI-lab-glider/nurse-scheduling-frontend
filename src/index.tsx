@@ -12,7 +12,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppConfigProvider } from "./state/app-config-context";
 import * as Sentry from "@sentry/react";
-import { ReportingObserver as ReportingObserverIntegration } from "@sentry/integrations/dist/reportingobserver";
+import { ReportingObserver } from "@sentry/integrations";
 import { Integrations } from "@sentry/tracing";
 import { applyMiddleware, compose, createStore } from "redux";
 import thunkMiddleware from "redux-thunk";
@@ -26,7 +26,7 @@ Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_DSN,
   normalizeDepth: 10,
   integrations: [
-    new ReportingObserverIntegration(),
+    new ReportingObserver(),
     new Integrations.BrowserTracing({
       routingInstrumentation: Sentry.reactRouterV5Instrumentation(history),
     }),
