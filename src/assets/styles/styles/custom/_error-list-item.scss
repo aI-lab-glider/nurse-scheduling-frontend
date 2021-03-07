@@ -47,6 +47,10 @@
     margin: 10px 10px;
     text-align: justify;
     font-family: "Roboto";
+    strong {
+      letter-spacing: 1.5px;
+      font-weight: bolder;
+    }
   }
 
   .error-btn {
