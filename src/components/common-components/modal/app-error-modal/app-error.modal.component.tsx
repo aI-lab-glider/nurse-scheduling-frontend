@@ -29,7 +29,13 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
 
   const footer = (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Button onClick={handleClose} size="small" className="submit-button" variant="primary">
+      <Button
+        onClick={handleClose}
+        size="small"
+        className="submit-button"
+        variant="primary"
+        data-cy="btn-ok-app-error"
+      >
         OK
       </Button>
     </div>
