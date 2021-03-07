@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ShiftCode } from "../../src/common-models/shift-info.model";
+import { MonthDataArray } from "../../src/helpers/shifts.helper";
 
 const monthWorkerData = {
   expectedRequiredWorkHours: {
@@ -13,9 +14,9 @@ const monthWorkerData = {
     "Pracownik 6": 184,
     "Pracownik 7": 138,
     "Pracownik 8": 184,
-    "Pracownik 9": 112,
+    "Pracownik 9": 120,
     "Pracownik 10": 184,
-    "Pracownik 11": 184,
+    "Pracownik 11": 198,
     "Pracownik 12": 184,
     "Pracownik 13": 184,
     "Pracownik 14": 92,
@@ -26,18 +27,44 @@ const monthWorkerData = {
     "Pracownik 19": 184,
     "Pracownik 20": 184,
     "Pracownik 21": 112,
-    "Pracownik 22": 184,
+    "Pracownik 22": 188,
     "Pracownik 23": 104,
     "Pracownik 24": 184,
+  },
+  expectedActualHours: {
+    "Pracownik 1": 120,
+    "Pracownik 2": 192,
+    "Pracownik 3": 12,
+    "Pracownik 4": 198,
+    "Pracownik 5": 144,
+    "Pracownik 6": 192,
+    "Pracownik 7": 156,
+    "Pracownik 8": 204,
+    "Pracownik 9": 132,
+    "Pracownik 10": 190,
+    "Pracownik 11": 186,
+    "Pracownik 12": 208,
+    "Pracownik 13": 184,
+    "Pracownik 14": 96,
+    "Pracownik 15": 96,
+    "Pracownik 16": 184,
+    "Pracownik 17": 184,
+    "Pracownik 18": 184,
+    "Pracownik 19": 184,
+    "Pracownik 20": 184,
+    "Pracownik 21": 116,
+    "Pracownik 22": 184,
+    "Pracownik 23": 84,
+    "Pracownik 24": 176,
   },
   time: {
     "Pracownik 1": 1,
     "Pracownik 2": 1,
     "Pracownik 3": 0.5,
     "Pracownik 4": 1,
-    "Pracownik 5": 0.5,
+    "Pracownik 5": 1,
     "Pracownik 6": 1,
-    "Pracownik 7": 1,
+    "Pracownik 7": 0.75,
     "Pracownik 8": 1,
     "Pracownik 9": 1,
     "Pracownik 10": 1,
@@ -45,7 +72,7 @@ const monthWorkerData = {
     "Pracownik 12": 1,
     "Pracownik 13": 1,
     "Pracownik 14": 0.5,
-    "Pracownik 15": 1,
+    "Pracownik 15": 0.5,
     "Pracownik 16": 1,
     "Pracownik 17": 1,
     "Pracownik 18": 1,
@@ -873,24 +900,16 @@ const monthWorkerData = {
     ],
     "Pracownik 11": [
       "D",
-      "P1",
-      "W",
-      "W",
-      "D",
       "N",
       "W",
       "W",
       "D",
       "N",
-      "W",
-      "W",
-      "D",
       "N",
       "W",
-      "W",
       "D",
+      "RP",
       "N",
-      "W",
       "W",
       "D",
       "N",
@@ -903,6 +922,14 @@ const monthWorkerData = {
       "D",
       "D",
       "N",
+      "W",
+      "W",
+      "D",
+      "N",
+      "N",
+      "W",
+      "D",
+      "RP",
       "W",
       "W",
       "W",
@@ -946,24 +973,76 @@ const monthWorkerData = {
       "W",
     ],
   },
+  dates: [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    1,
+    2,
+    3,
+    4,
+  ],
 };
 
-const createWorkerInfoObject = (workerName: string): WorkerTestDataInstance => ({
-  workerName,
-  workerTime: monthWorkerData.time[workerName],
-  workerReqiredHours: monthWorkerData.expectedRequiredWorkHours[workerName],
-  workerShifts: monthWorkerData.shifts[workerName] as ShiftCode[],
-  month: 2, // march
-  year: 2021,
-});
+const MARCH_DAY_COUNT = 31;
+const MONTH = 2; // march
+const YEAR = 2021;
+
+const createWorkerInfoObject = (workerName: string): WorkerTestDataInstance => {
+  const cropToMonth = <T>(data: T[]): MonthDataArray<T> =>
+    data.slice(0, MARCH_DAY_COUNT) as MonthDataArray<T>;
+  const currentMonthShifts = cropToMonth<ShiftCode>(monthWorkerData.shifts[workerName]);
+  return {
+    workerName,
+    workerNorm: monthWorkerData.time[workerName],
+    workerReqiuredHours: monthWorkerData.expectedRequiredWorkHours[workerName],
+    workerActualHours: monthWorkerData.expectedActualHours[workerName],
+    actualWorkerShifts: currentMonthShifts,
+    baseWorkerShifts: currentMonthShifts,
+    month: MONTH,
+    year: YEAR,
+    dates: cropToMonth(monthWorkerData.dates),
+  };
+};
 
 export interface WorkerTestDataInstance {
   workerName: string;
-  workerTime: number;
-  workerReqiredHours: number;
-  workerShifts: ShiftCode[];
+  workerNorm: number;
+  workerReqiuredHours: number;
+  workerActualHours: number;
+  actualWorkerShifts: ShiftCode[];
+  baseWorkerShifts: MonthDataArray<ShiftCode>;
   month: number;
   year: number;
+  dates: number[];
 }
 export const workerTestData: WorkerTestDataInstance[] = Object.keys(monthWorkerData.time).map(
   createWorkerInfoObject

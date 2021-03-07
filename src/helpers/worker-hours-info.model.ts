@@ -71,7 +71,7 @@ export class WorkerHourInfo {
     workerNorm: number,
     month: number,
     year: number,
-    dates?: number[]
+    dates: number[]
   ): WorkerHourInfo {
     const verboseDates = new MonthInfoLogic(month, year, dates).verboseDates;
     const monthName = TranslationHelper.englishMonths[month];
@@ -94,7 +94,7 @@ export class WorkerHourInfo {
     if (actualWorkerShifts.length !== dates.length) {
       throw Error(
         `Length of ${nameOf({ actualWorkerShifts })} should be the same as length of ${nameOf({
-          baseWorkerShifts,
+          dates,
         })}`
       );
     }
@@ -106,11 +106,9 @@ export class WorkerHourInfo {
 
     const actualShiftsFromCurrentMonth = cropToMonth(actualWorkerShifts);
     baseWorkerShifts = baseWorkerShifts ?? actualShiftsFromCurrentMonth;
-
     if (!isAllValuesDefined([baseWorkerShifts, actualWorkerShifts])) {
       return new WorkerHourInfo(0, 0);
     }
-
     if (actualShiftsFromCurrentMonth.length !== baseWorkerShifts.length) {
       throw Error(
         `Length of ${nameOf({ baseWorkerShifts })} should be the same as length of ${nameOf({
@@ -120,26 +118,37 @@ export class WorkerHourInfo {
     }
 
     const requiredHours = this.calculateRequiredHoursFromVerboseDates(cropToMonth(dates));
-    const monthShiftsWithHistoryShifts = _.zip(cropToMonth(actualWorkerShifts), baseWorkerShifts);
+    const monthShiftsWithHistoryShiftsAndDates = _.zip(
+      actualShiftsFromCurrentMonth,
+      baseWorkerShifts,
+      dates
+    );
 
-    const freeHours = monthShiftsWithHistoryShifts.reduce((calculatedHours, shiftPair) => {
-      const [actualShift, historyShift] = shiftPair;
-      if (!ShiftHelper.isNotWorkingShift(actualShift!)) {
-        return calculatedHours;
-      }
-      const subtractFromNorm =
-        actualShift === historyShift
-          ? WORK_HOURS_PER_DAY
-          : ShiftHelper.shiftCodeToWorkTime(SHIFTS[historyShift!]);
-      return calculatedHours + subtractFromNorm;
-    }, 0);
+    const freeHours = monthShiftsWithHistoryShiftsAndDates.reduce(
+      (calculateFreeHours, shiftPair) => {
+        const [actualShift, historyShift, day] = shiftPair;
+        if (!ShiftHelper.isNotWorkingShift(actualShift!)) {
+          return calculateFreeHours;
+        }
+        // ignore any free shifts in weekends
+        if (!VerboseDateHelper.isWorkingDay(day)) {
+          return calculateFreeHours;
+        }
+        const subtractFromNorm =
+          actualShift === historyShift
+            ? WORK_HOURS_PER_DAY
+            : ShiftHelper.shiftCodeToWorkTime(SHIFTS[historyShift!]);
+        return calculateFreeHours + subtractFromNorm;
+      },
+      0
+    );
 
     const workerHourNorm = requiredHours * workerNorm - freeHours;
-    const workerTime = actualWorkerShifts.reduce(
+    const workerActualWorkTime = actualShiftsFromCurrentMonth.reduce(
       (acc, shift) => acc + ShiftHelper.shiftCodeToWorkTime(SHIFTS[shift!]),
       0
     );
-    return new WorkerHourInfo(workerHourNorm, workerTime);
+    return new WorkerHourInfo(workerHourNorm, workerActualWorkTime);
   }
 
   public static calculateWorkNormForMonth(month: number, year: number): number {

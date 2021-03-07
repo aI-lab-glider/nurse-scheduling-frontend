@@ -13,17 +13,19 @@ describe("Worker hours info", () => {
     actualWorkerShifts?: ShiftCode[]
   ): WorkerHourInfo =>
     WorkerHourInfo.fromWorkerInfo(
-      actualWorkerShifts ?? workerInstance.workerShifts,
-      (baseWorkerShifts ?? workerInstance.workerShifts) as MonthDataArray<ShiftCode>,
-      workerInstance.workerTime,
+      actualWorkerShifts ?? workerInstance.actualWorkerShifts,
+      baseWorkerShifts as MonthDataArray<ShiftCode>,
+      workerInstance.workerNorm,
       workerInstance.month,
-      workerInstance.year
+      workerInstance.year,
+      workerInstance.dates
     );
 
   workerTestData.forEach((workerInstance) => {
-    it("Should calculate same worker norm as norm in example schedule when no base schedule exists", () => {
+    it(`Should calculate same worker norm as norm in example schedule when no base schedule exists for worker ${workerInstance.workerName}`, () => {
       const workerHours = calculateWorkerHoursFromWorkerInstance(workerInstance);
-      expect(workerHours.workerTime).to.equal(workerInstance.workerTime);
+      expect(workerHours.workerHourNorm).to.equal(workerInstance.workerReqiuredHours);
+      expect(workerHours.workerTime).to.equal(workerInstance.workerActualHours);
     });
   });
 
@@ -36,52 +38,54 @@ describe("Worker hours info", () => {
 
   freeShifts.forEach((freeShift) => {
     workingShifts.forEach((workingShift) => {
-      it(`Should subtract from worker norm duration of ${workingShift} when it 
+      it(`Should subtract from worker reuired hours duration of ${workingShift.code} when it 
                 is replaced with ${freeShift.code}`, () => {
         // Arrange
-        exampleWorker.workerShifts[0] = workingShift.code as ShiftCode;
-        const baseWorkerShifts = [...exampleWorker.workerShifts];
+        const testedShiftIndex = 0;
+        const baseWorkerShifts = [...exampleWorker.baseWorkerShifts];
+        baseWorkerShifts[testedShiftIndex] = workingShift.code as ShiftCode;
+        const actualWorkerShifts = [...baseWorkerShifts];
         const workerHoursInfo = calculateWorkerHoursFromWorkerInstance(
           exampleWorker,
           baseWorkerShifts,
-          baseWorkerShifts
+          actualWorkerShifts
         );
-        const shiftDuration = ShiftHelper.shiftCodeToWorkTime(workingShift);
-        const expectedWorkTime = workerHoursInfo.workerTime - shiftDuration;
+        const testedShiftDuration = ShiftHelper.shiftCodeToWorkTime(workingShift);
+        const expectedWorkHourNorm = workerHoursInfo.workerHourNorm - testedShiftDuration;
         // Act
-        exampleWorker.workerShifts[0] = freeShift.code as ShiftCode;
-        const actualShifts = [...exampleWorker.workerShifts];
-        const actualWorkHourInfo = calculateWorkerHoursFromWorkerInstance(
+        actualWorkerShifts[testedShiftIndex] = freeShift.code as ShiftCode;
+        const actualWorkerHoursInfo = calculateWorkerHoursFromWorkerInstance(
           exampleWorker,
           baseWorkerShifts,
-          actualShifts
+          actualWorkerShifts
         );
         // Assert
-        expect(actualWorkHourInfo.workerTime).to.equal(expectedWorkTime);
+        expect(actualWorkerHoursInfo.workerHourNorm).to.equal(expectedWorkHourNorm);
       });
     });
   });
 
   it("Worker norm should not be recalculated if working shift was replaced with W", () => {
     // Arrange
+    const testedShiftIndex = 0;
+    const baseWorkerShifts = [...exampleWorker.baseWorkerShifts];
     const workingShift = SHIFTS[ShiftCode.D];
-    exampleWorker.workerShifts[0] = workingShift.code as ShiftCode;
-    const baseWorkerShifts = [...exampleWorker.workerShifts];
+    baseWorkerShifts[testedShiftIndex] = workingShift.code as ShiftCode;
+    const actualWorkerShifts = [...baseWorkerShifts];
     const workerHoursInfo = calculateWorkerHoursFromWorkerInstance(
       exampleWorker,
       baseWorkerShifts,
-      baseWorkerShifts
+      actualWorkerShifts
     );
-    const expectedWorkTime = workerHoursInfo.workerTime;
+    const expectedWorkHourNorm = workerHoursInfo.workerHourNorm;
     // Act
-    exampleWorker.workerShifts[0] = ShiftCode.W;
-    const actualShifts = [...exampleWorker.workerShifts];
-    const actualWorkHourInfo = calculateWorkerHoursFromWorkerInstance(
+    actualWorkerShifts[testedShiftIndex] = ShiftCode.W as ShiftCode;
+    const actualWorkerHoursInfo = calculateWorkerHoursFromWorkerInstance(
       exampleWorker,
       baseWorkerShifts,
-      actualShifts
+      actualWorkerShifts
     );
     // Assert
-    expect(actualWorkHourInfo.workerTime).to.equal(expectedWorkTime);
+    expect(actualWorkerHoursInfo.workerHourNorm).to.equal(expectedWorkHourNorm);
   });
 });

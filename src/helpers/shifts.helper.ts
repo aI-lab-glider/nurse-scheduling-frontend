@@ -34,7 +34,7 @@ export class ShiftHelper {
 
   public static isNotWorkingShift(shiftCode: ShiftCode): boolean {
     const shift = SHIFTS[shiftCode] as Shift;
-    return (!shift.isWorkingShift && shift.code !== ShiftCode.W) ?? false;
+    return !shift.isWorkingShift && shift.code !== ShiftCode.W;
   }
 
   public static shiftCodeToWorkTime(shift: Shift): number {
