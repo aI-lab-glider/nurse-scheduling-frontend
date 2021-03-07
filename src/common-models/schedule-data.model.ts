@@ -5,7 +5,7 @@ import { WorkersInfoModel } from "./worker-info.model";
 import { MonthInfoModel } from "./month-info.model";
 import { ScheduleMetadata } from "./schedule.model";
 import { ShiftCode, ShiftInfoModel, ShiftModel } from "./shift-info.model";
-import { ScheduleKey } from "../api/persistance-store.model";
+import { RevisionType, ScheduleKey } from "../api/persistance-store.model";
 import _ from "lodash";
 import {
   calculateMissingFullWeekDays,
@@ -14,6 +14,7 @@ import {
   daysInMonth,
 } from "../state/reducers/month-state/schedule-data/common-reducers";
 import { ArrayHelper } from "../helpers/array.helper";
+import { LocalStorageProvider } from "../api/local-storage-provider.model";
 
 /* eslint-disable @typescript-eslint/camelcase */
 
@@ -76,6 +77,17 @@ export function getScheduleKey(newSchedule: ScheduleDataModel): ScheduleKey {
     newSchedule.schedule_info.month_number ?? new Date().getMonth(),
     newSchedule.schedule_info.year ?? new Date().getFullYear()
   );
+}
+
+export async function extendMonthDMRevisionToScheduleDM(
+  currentMonthData: MonthDataModel,
+  revision: RevisionType
+): Promise<ScheduleDataModel> {
+  const [prevMonth, nextMonth] = await new LocalStorageProvider().fetchOrCreateMonthNeighbours(
+    currentMonthData,
+    revision
+  );
+  return extendMonthDMToScheduleDM(prevMonth, currentMonthData, nextMonth);
 }
 
 export function extendMonthDMToScheduleDM(
