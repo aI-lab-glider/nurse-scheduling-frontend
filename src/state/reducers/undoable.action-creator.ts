@@ -13,6 +13,9 @@ export interface UndoableConfig<T> {
 export class UndoActionCreator {
   static undo({ undoType, afterUndo }: UndoableConfig<unknown>): ThunkFunction<unknown> {
     return async (dispatch, getState): Promise<void> => {
+      if (getState().actualState.temporarySchedule.past.length === 1) {
+        return;
+      }
       dispatch({
         type: undoType,
       });
