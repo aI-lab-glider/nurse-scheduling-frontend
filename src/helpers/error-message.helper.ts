@@ -54,6 +54,7 @@ export class ErrorMessageHelper {
             message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
           }
         }
+        message += `.`;
         type = ScheduleErrorType.AON;
         title = "date";
         if (error.day) {
@@ -72,7 +73,7 @@ export class ErrorMessageHelper {
             }
           }
         }
-        message += `: potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
+        message += `: potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>.`;
         type = ScheduleErrorType.WND;
         title = "date";
         if (error.day) {
@@ -91,7 +92,7 @@ export class ErrorMessageHelper {
             }
           }
         }
-        message += `: potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>`;
+        message += `: potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>.`;
         type = ScheduleErrorType.WNN;
         title = "date";
         if (error.day) {
@@ -100,8 +101,9 @@ export class ErrorMessageHelper {
         break;
       case AlgorithmErrorCode.DissalowedShiftSequence:
         const timeNeeded = ShiftHelper.requiredFreeTimeAfterShift(shifts[error.preceding]);
-        const earliestPossible = ShiftHelper.nextLegalShiftStart(shifts[error.preceding])[0];
-        const nextDay = ShiftHelper.nextLegalShiftStart(shifts[error.preceding])[1];
+        const [earliestPossible, nextDay] = ShiftHelper.nextLegalShiftStart(
+          shifts[error.preceding]
+        );
         let tooEarly =
           ShiftHelper.nextLegalShiftStart(shifts[error.preceding])[0] -
           shifts[error.succeeding].from;
@@ -120,7 +122,7 @@ export class ErrorMessageHelper {
         o ${tooEarly} godzin`;
         switch (tooEarly) {
           case 1:
-            message += `ę za wcześnie`;
+            message += `ę za wcześnie.`;
             break;
           case 2:
           case 3:
@@ -128,10 +130,10 @@ export class ErrorMessageHelper {
           case 22:
           case 23:
           case 24:
-            message += `y za wcześnie`;
+            message += `y za wcześnie.`;
             break;
           default:
-            message += ` za wcześnie`;
+            message += ` za wcześnie.`;
             break;
         }
         type = ScheduleErrorType.DSS;
@@ -141,26 +143,24 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.LackingLongBreak:
-        message = `Brak wymaganej długiej przerwy dla pracownika <strong>${
-          error.worker
-        }</strong> w tygodniu <strong>${error.week + 1}</strong>`;
+        message = `Brak wymaganej długiej przerwy w tygodniu <strong>${error.week + 1}</strong>.`;
         type = ScheduleErrorType.LLB;
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WorkerUnderTime:
-        message = `Pracownik <strong>${error.worker}</strong> ma <strong>${error.hours}</strong> niedogodzin`;
+        message = `Pracownik ma <strong>${error.hours}</strong> niedogodzin.`;
         type = ScheduleErrorType.WUH;
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WorkerOvertime:
-        message = `Pracownik <strong>${error.worker}</strong> ma <strong>${error.hours}</strong> nadgodzin`;
+        message = `Pracownik ma <strong>${error.hours}</strong> nadgodzin.`;
         type = ScheduleErrorType.WOH;
         title = `${error.worker}`;
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
-        message = `Nieznana wartość zmiany: "${error.actual}" dla pracownika  ${
-          error.worker
-        } w dniu ${error.day! + 1}. Przyjęto, że zmiana to wolne.`;
+        message = `Nieznana wartość zmiany: "${error.actual}" w dniu ${
+          error.day! + 1
+        }. Przyjęto, że zmiana to wolne.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
         title = `${error.worker}`;
         break;

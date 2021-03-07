@@ -39,7 +39,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
     {
       errorType: ScheduleErrorType.AON,
       errors: errors.filter((e) => e.type === ScheduleErrorType.DSS),
-      errorDescription: "Niedozwolona sekwencja zmian",
+      errorDescription: "Naruszenie wymaganej przerwy",
     },
     {
       errorType: ScheduleErrorType.AON,
