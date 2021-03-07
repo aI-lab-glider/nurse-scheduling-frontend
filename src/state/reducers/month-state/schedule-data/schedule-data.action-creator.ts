@@ -23,7 +23,6 @@ export class ScheduleDataActionCreator {
     saveInDatabase = true
   ): ThunkFunction<ScheduleDataModel | MonthDataModel> {
     return async (dispatch, getState): Promise<void> => {
-      // TODO check if this function always returns
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
       if (saveInDatabase) {
         const { revision } = getState().actualState;
@@ -40,6 +39,7 @@ export class ScheduleDataActionCreator {
       const baseSchedule = await new LocalStorageProvider().getMonthRevision(
         new ScheduleKey(monthNumber, year).getRevisionKey("primary")
       );
+
       const addBaseSchedule = {
         type: BaseRevisionAction.ADD_MONTH_BASE_REVISION,
         payload: baseSchedule,

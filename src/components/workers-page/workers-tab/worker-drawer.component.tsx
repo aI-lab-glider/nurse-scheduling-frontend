@@ -33,7 +33,7 @@ function getTitle(mode: WorkerDrawerMode): string {
 
 export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX.Element {
   const { mode, worker, setOpen, ...otherOptions } = options;
-  const workerRequiredHours = useWorkerHoursInfo(worker?.name);
+  const workerRequiredHours = useWorkerHoursInfo(worker?.name ?? "");
   const title = getTitle(mode);
   return (
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>

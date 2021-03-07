@@ -5,7 +5,11 @@ import * as _ from "lodash";
 
 export type Opaque<K, T> = T & { __TYPE__: K };
 
-export function isAgrumentsDefined<T extends {}>(args: T): args is Required<T> {
-  const isAnyAgrumentUndefined = _.some(Object.values(args), (argument) => _.isNil(argument));
-  return !isAnyAgrumentUndefined;
+export function isAllObjectPropsDefined<T extends {}>(args: T): args is Required<T> {
+  return isAllValuesDefined(Object.values(args));
+}
+
+export function isAllValuesDefined(values: unknown[]): boolean {
+  const isAnyValueUndefined = _.some(values, (argument) => _.isNil(argument));
+  return !isAnyValueUndefined;
 }
