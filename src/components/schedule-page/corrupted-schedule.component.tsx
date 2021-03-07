@@ -10,38 +10,39 @@ import { UndoActionCreator } from "../../state/reducers/undoable.action-creator"
 import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../state/reducers/month-state/schedule-data/schedule.actions";
 import { Button } from "../common-components";
 
-const MINIMUM_CORRUPTED_SCHEDULES_IN_PAST = 2; // schedule which caused corruption and the same schedule with isCorrupted=true
-const MG_UNABLE_TO_LOAD_SCHEDULE = "Nie można wyświetlić zapisanego grafiku";
-const MG_RESTORE_PREV = "Przywróć poprzednią wersję grafiku";
-const MG_LOAD_AGAIN = "Wczytaj ponownie grafik";
-const MG_LOAD_AGAIN_TOO = "Możesz też wczytać grafik ponownie";
+const MINIMUM_UNDO_COUNT_TO_REVERT_NORMAL_SCHEDULE = 2; // schedule which caused corruption and the same schedule with isCorrupted=true
+const MSG_UNABLE_TO_LOAD_SCHEDULE = "Nie można wyświetlić zapisanego grafiku";
+const MSG_RESTORE_PREV = "Przywróć poprzednią wersję grafiku";
+const MSG_LOAD_AGAIN = "Wczytaj ponownie grafik";
+const MSG_LOAD_AGAIN_TOO = "Możesz też wczytać grafik ponownie";
 
 export function CorruptedScheduleComponent(): JSX.Element {
   const dispatch = useDispatch();
   const { past } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule
   );
-  const isPreviousVersionAvailable = past.length > MINIMUM_CORRUPTED_SCHEDULES_IN_PAST; // ;
+  const isPreviousVersionAvailable = past.length > MINIMUM_UNDO_COUNT_TO_REVERT_NORMAL_SCHEDULE;
 
   const fetchPrevScheduleVersion = (): void => {
     // This is the schedule which caused corruption.
     const lastNotCorrupted = past.findIndex((schedule) => {
       return !schedule.isCorrupted;
     });
-    const numberOfUndo = lastNotCorrupted + MINIMUM_CORRUPTED_SCHEDULES_IN_PAST;
+    const numberOfUndo = lastNotCorrupted + MINIMUM_UNDO_COUNT_TO_REVERT_NORMAL_SCHEDULE;
+
     for (let i = 0; i < numberOfUndo; i++) {
       dispatch(UndoActionCreator.undo(PERSISTENT_SCHEDULE_UNDOABLE_CONFIG));
     }
   };
-  const mgLoadNew = isPreviousVersionAvailable ? MG_LOAD_AGAIN_TOO : MG_LOAD_AGAIN;
+  const mgLoadNew = isPreviousVersionAvailable ? MSG_LOAD_AGAIN_TOO : MSG_LOAD_AGAIN;
 
   return (
     <div className={"newMonthComponents"}>
       <img id="corrupted_img" src={sadEmoji} alt="" />
-      <pre>{MG_UNABLE_TO_LOAD_SCHEDULE}</pre>
+      <pre>{MSG_UNABLE_TO_LOAD_SCHEDULE}</pre>
       {isPreviousVersionAvailable && (
         <Button onClick={fetchPrevScheduleVersion} variant="primary" data-cy="restore-prev-version">
-          {MG_RESTORE_PREV}
+          {MSG_RESTORE_PREV}
         </Button>
       )}
       <pre>{mgLoadNew}</pre>
