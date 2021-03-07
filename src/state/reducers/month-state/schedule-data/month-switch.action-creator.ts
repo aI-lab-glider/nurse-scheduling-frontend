@@ -41,10 +41,10 @@ export class MonthSwitchActionCreator {
         });
       }
 
-      const addNewScheduleAction = ScheduleDataActionCreator.setScheduleFromKeyIfExistsInDB(
+      const addNewScheduleAction = ScheduleDataActionCreator.setScheduleStateAndCreateIfNeeded(
         newMonthKey,
-        newRevisionType,
-        actualMonthDM
+        actualMonthDM,
+        newRevisionType
       );
       dispatch(addNewScheduleAction);
     };
@@ -67,7 +67,7 @@ export class MonthSwitchActionCreator {
 
       if (baseSchedule && newSchedule) {
         const monthDataModel = copyMonthDM(newSchedule, baseSchedule);
-        dispatch(ScheduleDataActionCreator.setScheduleFromMonthDM(monthDataModel, true));
+        dispatch(ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(monthDataModel));
       }
     };
   }
