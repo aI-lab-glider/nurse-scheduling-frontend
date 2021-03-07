@@ -23,6 +23,9 @@ describe("Worker hours info", () => {
 
   workerTestData.forEach((workerInstance) => {
     it(`Should calculate same worker norm as norm in example schedule when no base schedule exists for worker ${workerInstance.workerName}`, () => {
+      if (workerInstance.workerName === "Pracownik 22") {
+        debugger;
+      }
       const workerHours = calculateWorkerHoursFromWorkerInstance(workerInstance);
       expect(workerHours.workerHourNorm).to.equal(workerInstance.workerReqiuredHours);
       expect(workerHours.workerTime).to.equal(workerInstance.workerActualHours);

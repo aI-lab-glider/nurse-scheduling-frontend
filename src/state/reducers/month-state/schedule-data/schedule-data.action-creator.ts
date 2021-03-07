@@ -85,12 +85,12 @@ export class ScheduleDataActionCreator {
   }
 
   private static async getMonthPrimaryRevisionDM(
-    monthDataModel
+    monthDataModel: MonthDataModel
   ): Promise<BaseMonthRevisionDataModel> {
     const primaryMonthDM = await new LocalStorageProvider().getMonthRevision(
       monthDataModel.scheduleKey.getRevisionKey("primary")
     );
-    return primaryMonthDM ?? monthDataModel;
+    return (primaryMonthDM ?? monthDataModel) as BaseMonthRevisionDataModel;
   }
 
   static setScheduleStateAndCreateIfNeeded(

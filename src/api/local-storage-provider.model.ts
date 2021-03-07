@@ -155,13 +155,13 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     }
   }
 
-  async getMonthRevision(
-    revisionKey: RevisionKey,
-    createIfNotExist = false
-  ): Promise<MonthDataModel | undefined> {
+  async getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined> {
     try {
-      const result = await this.storage.get(revisionKey);
-      return result?.data;
+      const monthData = (await this.storage.get(revisionKey)).data;
+      const { month, year } = monthData.scheduleKey;
+      const scheduleKey = new ScheduleKey(month, year);
+      monthData.scheduleKey = scheduleKey;
+      return monthData;
     } catch (error) {
       // eslint-disable-next-line no-console
       error.status !== 404 && console.error(error);
