@@ -5,9 +5,9 @@ import React from "react";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
 import { UndoableHotkeys } from "../../common-components";
-import { ScheduleComponent } from "../table/schedule/schedule.component";
 import { ScheduleLogicContext, useScheduleState } from "../table/schedule/use-schedule-state";
 import { ViewOnlyToolbar } from "./view-only-toolbar";
+import { ScheduleContainerComponent } from "../schedule-container.component";
 
 interface ScheduleViewOnlyPageOptions {
   openEdit: () => void;
@@ -25,7 +25,7 @@ export function ScheduleViewOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.El
       <ScheduleLogicContext.Provider value={scheduleLogic}>
         <ViewOnlyToolbar openEdit={props.openEdit} />
         <div className={"schedule"}>
-          <ScheduleComponent schedule={scheduleLocalState} />
+          <ScheduleContainerComponent schedule={scheduleLocalState} />
         </div>
       </ScheduleLogicContext.Provider>
     </>
