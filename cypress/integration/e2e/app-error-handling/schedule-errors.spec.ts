@@ -18,7 +18,7 @@ const addWorker = (workerName: string, position: WorkerType) => {
 };
 
 context("Schedule errors", () => {
-  before(() => {
+  beforeEach(() => {
     cy.loadScheduleToMonth();
   });
 
@@ -27,6 +27,20 @@ context("Schedule errors", () => {
       addWorker(Cypress.env("REACT_APP_ERROR_WORKER"), WorkerType.NURSE);
       cy.get('[data-cy="btn-schedule-tab"]').click();
       Cypress.on("uncaught:exception", () => {
+        return false;
+      });
+    });
+
+    it("Should restore previous version from corrupted page", () => {
+      addWorker("testUser", WorkerType.NURSE);
+      addWorker(Cypress.env("REACT_APP_ERROR_WORKER"), WorkerType.NURSE);
+      cy.get('[data-cy="btn-schedule-tab"]').click();
+      Cypress.on("uncaught:exception", () => {
+        cy.get('[data-cy="btn-ok-app-error"]').click();
+        cy.get('[data-cy="timetable-row"]').should("be.visible");
+        cy.get('[data-cy="btn-ok-app-error"]').click();
+        cy.get('[data-cy="restore-prev-version"]').click();
+        cy.contains("testUser");
         return false;
       });
     });

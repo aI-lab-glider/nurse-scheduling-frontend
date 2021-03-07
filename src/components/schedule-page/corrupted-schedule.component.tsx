@@ -40,11 +40,9 @@ export function CorruptedScheduleComponent(): JSX.Element {
       <img id="corrupted_img" src={sadEmoji} alt="" />
       <pre>{MG_UNABLE_TO_LOAD_SCHEDULE}</pre>
       {isPreviousVersionAvailable && (
-        <>
-          <Button onClick={fetchPrevScheduleVersion} variant="primary">
-            {MG_RESTORE_PREV}
-          </Button>
-        </>
+        <Button onClick={fetchPrevScheduleVersion} variant="primary" data-cy="restore-prev-version">
+          {MG_RESTORE_PREV}
+        </Button>
       )}
       <pre>{mgLoadNew}</pre>
       <EmptyMonthButtons />
