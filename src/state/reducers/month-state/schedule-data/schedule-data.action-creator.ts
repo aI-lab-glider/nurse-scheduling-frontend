@@ -27,8 +27,7 @@ export class ScheduleDataActionCreator {
       const { revision } = getState().actualState;
       await new LocalStorageProvider().saveSchedule(revision, newSchedule);
       const primaryMonthDM = await this.getMonthPrimaryRevisionDM(
-        cropScheduleDMToMonthDM(newSchedule),
-        revision
+        cropScheduleDMToMonthDM(newSchedule)
       );
 
       await this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM);
@@ -79,21 +78,19 @@ export class ScheduleDataActionCreator {
         revision = getState().actualState.revision;
       }
       const newSchedule = await extendMonthDMRevisionToScheduleDM(monthDataModel, revision);
-      const primaryMonthDM = await this.getMonthPrimaryRevisionDM(monthDataModel, revision);
+      const primaryMonthDM = await this.getMonthPrimaryRevisionDM(monthDataModel);
 
       await this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM)(dispatch, getState);
     };
   }
 
   private static async getMonthPrimaryRevisionDM(
-    monthDataModel,
-    revision
+    monthDataModel
   ): Promise<BaseMonthRevisionDataModel> {
-    return revision === "primary"
-      ? monthDataModel
-      : await new LocalStorageProvider().getMonthRevision(
-          monthDataModel.scheduleKey.getRevisionKey("primary")
-        );
+    const primaryMonthDM = await new LocalStorageProvider().getMonthRevision(
+      monthDataModel.scheduleKey.getRevisionKey("primary")
+    );
+    return primaryMonthDM ?? monthDataModel;
   }
 
   static setScheduleStateAndCreateIfNeeded(
