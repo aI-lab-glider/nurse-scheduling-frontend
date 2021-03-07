@@ -2,18 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import xlsx, { Cell } from "exceljs";
+import { RevisionType } from "../../api/persistance-store.model";
 import { VerboseDate } from "../../common-models/month-info.model";
-import {
-  cropScheduleDMToMonthDM,
-  ScheduleDataModel,
-} from "../../common-models/schedule-data.model";
+import { MonthDataModel } from "../../common-models/schedule-data.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
 import { WorkerType } from "../../common-models/worker-info.model";
 import { ColorHelper } from "../../helpers/colors/color.helper";
 import { Color } from "../../helpers/colors/color.model";
+import { FileHelper } from "../../helpers/file.helper";
 import { ShiftHelper } from "../../helpers/shifts.helper";
-import { WorkerHourInfo } from "../../helpers/worker-hours-info.model";
 import { TranslationHelper } from "../../helpers/translations.helper";
+import { WorkerHourInfo } from "../../helpers/worker-hours-info.model";
 import { BaseMonthRevisionDataModel } from "../../state/models/application-state.model";
 import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
 import {
@@ -24,21 +23,41 @@ import {
 } from "../section.model";
 
 const EMPTY_ROW = Array(100).fill("");
-
+export interface ScheduleExportLogicOptions {
+  scheduleModel: MonthDataModel;
+  baseScheduleModel?: BaseMonthRevisionDataModel;
+  overtimeExport?: boolean;
+  extraWorkersExport?: boolean;
+}
 export class ScheduleExportLogic {
-  constructor(
-    private scheduleModel: ScheduleDataModel,
-    private baseScheduleModel: BaseMonthRevisionDataModel,
-    private overtimeExport: boolean = true,
-    private extraWorkersExport?: boolean
-  ) {}
+  private scheduleModel: MonthDataModel;
+  private baseScheduleModel?: BaseMonthRevisionDataModel;
+  private overtimeExport: boolean;
+  private extraWorkersExport: boolean;
+
+  constructor({
+    scheduleModel,
+    baseScheduleModel,
+    overtimeExport,
+    extraWorkersExport = true,
+  }: ScheduleExportLogicOptions) {
+    this.scheduleModel = scheduleModel;
+    this.baseScheduleModel = baseScheduleModel;
+    this.overtimeExport = !!overtimeExport && !!baseScheduleModel;
+    this.extraWorkersExport = extraWorkersExport;
+  }
 
   static readonly WORKSHEET_NAME = "grafik";
   requiredHoursAddress;
   doneHoursAddress;
   diffHoursAddress;
 
-  public formatAndSave(filename: string): void {
+  public formatAndSave(revisionType: RevisionType): void {
+    const [finalName, workbook] = this.createWorkbook(revisionType);
+    FileHelper.saveToFile(workbook, finalName);
+  }
+
+  public createWorkbook(revisionType: RevisionType): [string, xlsx.Workbook] {
     const [workbook, workSheet] = ScheduleExportLogic.createWorkArea();
 
     workSheet.pageSetup.showGridLines = true;
@@ -104,14 +123,8 @@ export class ScheduleExportLogic {
     workSheet.getCell(this.doneHoursAddress).alignment = { textRotation: -90 };
     workSheet.getCell(this.diffHoursAddress).alignment = { textRotation: -90 };
 
-    const finalName =
-      TranslationHelper.polishMonths[this.scheduleModel?.schedule_info?.month_number] +
-      "_" +
-      this.scheduleModel?.schedule_info?.year +
-      "_(" +
-      filename +
-      ").xlsx";
-    this.saveToFile(workbook, finalName);
+    const workbookName = FileHelper.createMonthFilename(this.scheduleModel, revisionType);
+    return [workbookName, workbook];
   }
 
   private static createWorkArea(): [xlsx.Workbook, xlsx.Worksheet] {
@@ -140,11 +153,11 @@ export class ScheduleExportLogic {
   }
 
   private addStyles(workSheet: xlsx.Worksheet, rows: unknown[]): void {
-    const monthInfo = this.scheduleModel.schedule_info;
+    const monthInfo = this.scheduleModel.scheduleKey;
     const monthLogic = new MonthInfoLogic(
-      monthInfo?.month_number || 0,
-      monthInfo?.year + "" || "",
-      cropScheduleDMToMonthDM(this.scheduleModel).month_info?.dates || []
+      monthInfo?.month ?? 0,
+      monthInfo?.year + "" ?? "",
+      this.scheduleModel.month_info?.dates || []
     );
     const verboseDates = monthLogic.verboseDates;
     workSheet.addRows(rows);
@@ -218,39 +231,35 @@ export class ScheduleExportLogic {
     return `${toHex(c.a)}${toHex(c.r)}${toHex(c.g)}${toHex(c.b)}`;
   }
 
-  private createShiftsSections(scheduleModel: ScheduleDataModel): string[][][] {
+  private createShiftsSections(scheduleModel: MonthDataModel): string[][][] {
     const grouped = {
       [WorkerType.NURSE]: [] as string[][],
       [WorkerType.OTHER]: [] as string[][],
     };
-    Object.keys(cropScheduleDMToMonthDM(scheduleModel).shifts || {}).forEach(
-      (workerName: string) => {
-        const category =
-          cropScheduleDMToMonthDM(scheduleModel).employee_info.type[workerName] ?? "";
-        const shiftsRow: string[] = [
-          workerName,
-          ...cropScheduleDMToMonthDM(scheduleModel).shifts[workerName]?.map((s) =>
-            s === ShiftCode.W ? "" : s
-          ),
-        ];
-        if (this.overtimeExport) {
-          shiftsRow.push(
-            ...WorkerHourInfo.fromSchedules(workerName, scheduleModel, this.baseScheduleModel)
-              .asArray()
-              .map((e) => e.toString())
-          );
-        }
-        grouped[category].push(shiftsRow);
+    Object.keys(scheduleModel.shifts || {}).forEach((workerName: string) => {
+      const category = scheduleModel.employee_info.type[workerName] ?? "";
+      const shiftsRow: string[] = [
+        workerName,
+        ...scheduleModel.shifts[workerName]?.map((s) => (s === ShiftCode.W ? "" : s)),
+      ];
+      if (this.overtimeExport) {
+        shiftsRow.push(
+          ...WorkerHourInfo.fromSchedules(workerName, scheduleModel, this.baseScheduleModel)
+            .asArray()
+            .map((e) => e.toString())
+        );
       }
-    );
+      grouped[category].push(shiftsRow);
+    });
     return [grouped[WorkerType.NURSE], grouped[WorkerType.OTHER]];
   }
 
-  private createHeader(scheduleModel: ScheduleDataModel): string[] {
+  private createHeader(scheduleModel: MonthDataModel): string[] {
     const headerRow = { [MetaDataRowLabel]: "" };
     headerRow[MetaDataSectionKey.Month] =
-      TranslationHelper.polishMonths[scheduleModel?.schedule_info?.month_number || 0];
-    headerRow[MetaDataSectionKey.Year] = scheduleModel?.schedule_info?.year || 0;
+      TranslationHelper.polishMonths[scheduleModel?.scheduleKey.month || 0];
+    headerRow[MetaDataSectionKey.Year] = scheduleModel?.scheduleKey.year || 0;
+    headerRow[MetaDataSectionKey.RequiredavailableWorkersWorkTime] = 0;
     let infoStr = Object.keys(headerRow)
       .map((key) => `${key} ${headerRow[key]}`)
       .join("  |  ")
@@ -260,20 +269,20 @@ export class ScheduleExportLogic {
       infoStr.slice(0, infoStr.length - 2) +
       " " +
       WorkerHourInfo.calculateWorkNormForMonth(
-        scheduleModel?.schedule_info?.month_number,
-        scheduleModel?.schedule_info?.year
+        scheduleModel?.scheduleKey.month,
+        scheduleModel?.scheduleKey.year
       );
     return ["GRAFIK", infoStr];
   }
 
   private static createChildrenInfoSection(
-    scheduleModel: ScheduleDataModel
+    scheduleModel: MonthDataModel
   ): (number | ChildrenSectionKey)[][] {
     // in case if it will be more complecated section
     return [
       [
         ChildrenSectionKey.RegisteredChildrenCount,
-        ...(cropScheduleDMToMonthDM(scheduleModel).month_info?.children_number || []),
+        ...(scheduleModel.month_info?.children_number || []),
       ],
     ];
   }
@@ -288,48 +297,19 @@ export class ScheduleExportLogic {
   }
 
   private static createExtraWorkersSection(
-    scheduleModel: ScheduleDataModel
+    scheduleModel: MonthDataModel
   ): (number | ExtraWorkersSectionKey)[][] {
     return [
       [
         ExtraWorkersSectionKey.ExtraWorkersCount,
-        ...(cropScheduleDMToMonthDM(scheduleModel)?.month_info?.extra_workers || []),
+        ...(scheduleModel.month_info?.extra_workers || []),
       ],
     ];
   }
 
   private static createDatesSection(
-    scheduleModel: ScheduleDataModel
+    scheduleModel: MonthDataModel
   ): (number | MetaDataSectionKey)[][] {
-    return [
-      [
-        MetaDataSectionKey.MonthDays,
-        ...(cropScheduleDMToMonthDM(scheduleModel)?.month_info?.dates || []),
-      ],
-    ];
-  }
-
-  private saveToFile(workbook: xlsx.Workbook, filename: string): void {
-    workbook.xlsx.writeBuffer().then((buffer) => {
-      const blob = new Blob([buffer]);
-      ScheduleExportLogic.saveFileAs(blob, filename);
-    });
-  }
-
-  private static saveFileAs(blob, filename: string): void {
-    const anchor = document.createElement("a");
-
-    anchor.download = filename;
-    anchor.href = URL.createObjectURL(blob);
-
-    document.body.appendChild(anchor);
-
-    // eslint-disable-next-line
-    // @ts-ignore
-    if (window.Cypress) {
-      return;
-    }
-
-    anchor.click();
+    return [[MetaDataSectionKey.MonthDays, ...(scheduleModel.month_info?.dates || [])]];
   }
 }

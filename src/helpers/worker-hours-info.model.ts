@@ -4,7 +4,7 @@
 
 import * as _ from "lodash";
 import { VerboseDate } from "../common-models/month-info.model";
-import { ScheduleDataModel } from "../common-models/schedule-data.model";
+import { MonthDataModel, ScheduleDataModel } from "../common-models/schedule-data.model";
 import { ShiftCode, SHIFTS } from "../common-models/shift-info.model";
 import { isAllValuesDefined } from "../common-models/type-utils";
 import { nameOf } from "../common-models/utils";
@@ -48,16 +48,25 @@ export class WorkerHourInfo {
 
   public static fromSchedules(
     workerName: string,
-    scheduleModel: ScheduleDataModel,
-    baseSchedule: BaseMonthRevisionDataModel
+    scheduleModel: ScheduleDataModel | MonthDataModel,
+    baseSchedule?: BaseMonthRevisionDataModel
   ): WorkerHourInfo {
     const { time } = scheduleModel.employee_info;
     const { shifts } = scheduleModel;
-    const { month_number: month, year } = scheduleModel.schedule_info;
+    let month: number, year: number;
+    if (!_.isNil((scheduleModel as ScheduleDataModel).schedule_info)) {
+      const info = (scheduleModel as ScheduleDataModel).schedule_info;
+      month = info.month_number;
+      year = info.year;
+    } else {
+      const info = (scheduleModel as MonthDataModel).scheduleKey;
+      month = info.month;
+      year = info.year;
+    }
     const { dates } = scheduleModel.month_info;
     return this.fromWorkerInfo(
       shifts[workerName],
-      baseSchedule.shifts[workerName] as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
+      baseSchedule?.shifts[workerName] as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
       time[workerName],
       month,
       year,

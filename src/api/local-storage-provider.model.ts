@@ -27,6 +27,7 @@ import { ArrayHelper, ArrayPositionPointer } from "../helpers/array.helper";
 import { VerboseDateHelper } from "../helpers/verbose-date.helper";
 
 export const DATABASE_NAME = "nurse-scheduling";
+type MonthDMToRevisionKeyDict = { [revisionKey: string]: MonthDataModel };
 
 export class LocalStorageProvider extends PersistenceStoreProvider {
   private storage: PouchDB.Database<MonthRevision>;
@@ -167,6 +168,17 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       error.status !== 404 && console.error(error);
       return undefined;
     }
+  }
+
+  async getAllSchedules(): Promise<MonthDMToRevisionKeyDict> {
+    const revisions = await this.storage.allDocs({ include_docs: true });
+    const validRevisions = _.compact(revisions.rows.map((r) => r.doc));
+
+    const docs: { [revisionKey: string]: MonthDataModel } = {};
+    validRevisions.forEach((revision) => {
+      docs[revision._id] = revision.data;
+    });
+    return docs;
   }
 
   async fetchOrCreateMonthRevision(

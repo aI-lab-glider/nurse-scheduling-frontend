@@ -50,9 +50,19 @@ export type RevisionType = "primary" | "actual";
 export type RevisionKey = string;
 export type Revision = string;
 
+enum RevisionKeyIndexes {
+  MONTH = 0,
+  YEAR = 1,
+  REVISION_TYPE = 2,
+}
+
 export const RevisionTypeLabels: { [key: string]: string } = {
   primary: "wersja bazowa",
   actual: "wersja aktualna",
+};
+
+export const getRevisionTypeFromKey = (revisionKey: RevisionKey): RevisionType => {
+  return revisionKey.split("_")[RevisionKeyIndexes.REVISION_TYPE] as RevisionType;
 };
 
 export interface MonthRevision {
