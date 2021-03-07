@@ -52,9 +52,11 @@
     height: 100px;
   }
 
-  p {
+  pre {
     color: $primary;
     font-weight: $font-weight-bold;
+    font-family: $font-family-base;
+    font-size: $font-size-base;
     margin-top: 1rem;
   }
 
