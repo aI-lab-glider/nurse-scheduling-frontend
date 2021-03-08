@@ -130,7 +130,7 @@ function App(): JSX.Element {
                   <RouteButtonsComponent tabs={tabs} disabled={disableRouteButtons} />
                 </Box>
                 <Box className={classes.drawer}>
-                  <JiraLikeDrawer />
+                  <JiraLikeDrawer width={690} />
                 </Box>
               </Box>
               {isElectron() ? <></> : <NetlifyProFooter />}

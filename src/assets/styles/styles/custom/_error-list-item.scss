@@ -17,7 +17,7 @@
 
   .red-rectangle {
     border-radius: 4px;
-    width: 0.8%;
+    width: 4.5px;
     position: absolute;
     height: 100%;
     background-color: $error-red;
@@ -29,6 +29,7 @@
     flex: 1;
     text-align: center;
     padding-left: 15px;
+    padding-right: 25px;
     position: relative;
 
     .error-title-content {

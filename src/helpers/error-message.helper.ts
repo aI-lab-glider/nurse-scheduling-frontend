@@ -18,6 +18,7 @@ import { SHIFTS as shifts } from "../common-models/shift-info.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Color, Colors } from "./colors/color.model";
 import { ShiftHelper } from "./shifts.helper";
+import { TranslationHelper } from "./translations.helper";
 
 type Error = ScheduleErrorLevel;
 
@@ -46,12 +47,12 @@ export class ErrorMessageHelper {
         i = 0;
         message = `Brak pielęgniarek`;
         if (error.segments[i][0] !== 1 || error.segments[i][1] !== 24) {
-          message += ` w godzinach <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+          message += ` w godzinach <b>${error.segments[i][0]}-${error.segments[i][1]}</b>`;
         }
         while (error.segments[i + 1]) {
           i++;
           if (error.segments[i][0] !== 1 || error.segments[i][1] !== 24) {
-            message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+            message += `, <b>${error.segments[i][0]}-${error.segments[i][1]}</b>`;
           }
         }
         message += `.`;
@@ -65,15 +66,15 @@ export class ErrorMessageHelper {
         i = 0;
         message = `Za mało pracowników w trakcie dnia`;
         if (error.segments && (error.segments[i][0] !== 6 || error.segments[i][1] !== 22)) {
-          message += ` w godzinach <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+          message += ` w godzinach <b>${error.segments[i][0]}-${error.segments[i][1]}</b>`;
           while (error.segments[i + 1]) {
             i++;
             if (error.segments[i][0] !== 6 || error.segments[i][1] !== 22) {
-              message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+              message += `, <b>${error.segments[i][0]}-${error.segments[i][1]}</b>`;
             }
           }
         }
-        message += `: potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>.`;
+        message += `: potrzeba <b>${error.required}</b>, jest <b>${error.actual}</b>.`;
         type = ScheduleErrorType.WND;
         title = "date";
         if (error.day) {
@@ -84,15 +85,15 @@ export class ErrorMessageHelper {
         i = 0;
         message = `Za mało pracowników w nocy`;
         if (error.segments && (error.segments[i][0] !== 22 || error.segments[i][1] !== 6)) {
-          message += ` w godzinach <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+          message += ` w godzinach <b>${error.segments[i][0]}-${error.segments[i][1]}</b>`;
           while (error.segments[i + 1]) {
             i++;
             if (error.segments[i][0] !== 22 || error.segments[i][1] !== 6) {
-              message += `, <strong>${error.segments[i][0]}-${error.segments[i][1]}</strong>`;
+              message += `, <b>${error.segments[i][0]}-${error.segments[i][1]}</b>`;
             }
           }
         }
-        message += `: potrzeba <strong>${error.required}</strong>, jest <strong>${error.actual}</strong>.`;
+        message += `: potrzeba <b>${error.required}</b>, jest <b>${error.actual}</b>.`;
         type = ScheduleErrorType.WNN;
         title = "date";
         if (error.day) {
@@ -117,23 +118,7 @@ export class ErrorMessageHelper {
         message += `. Przypisana zmiana <strong>${error.succeeding}</strong> (${
           shifts[error.succeeding].from
         }-${shifts[error.succeeding].to}) zaczyna się
-        o ${tooEarly} godzin`;
-        switch (tooEarly) {
-          case 1:
-            message += `ę za wcześnie.`;
-            break;
-          case 2:
-          case 3:
-          case 4:
-          case 22:
-          case 23:
-          case 24:
-            message += `y za wcześnie.`;
-            break;
-          default:
-            message += ` za wcześnie.`;
-            break;
-        }
+        o ${tooEarly} ${TranslationHelper.hourAccusativus(tooEarly)} za wcześnie.`;
         type = ScheduleErrorType.DSS;
         title = "date";
         if (error.day) {
@@ -141,33 +126,21 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.LackingLongBreak:
-        message = `Brak wymaganej długiej przerwy w tygodniu <strong>${error.week + 1}</strong>.`;
+        message = `Brak wymaganej długiej przerwy w tygodniu <b>${error.week + 1}</b>.`;
         type = ScheduleErrorType.LLB;
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WorkerUnderTime:
-        message = `Pracownik ma <strong>${error.hours}</strong> niedogodzin`;
-        if (error.hours === 1) message += `ę`;
-        if (
-          (error.hours - 2) % 10 === 0 ||
-          (error.hours - 3) % 10 === 0 ||
-          (error.hours - 4) % 10 === 0
-        )
-          message += `y`;
-        message += `.`;
+        message = `Pracownik ma <b>${error.hours}</b> niedo${TranslationHelper.hourAccusativus(
+          error.hours
+        )}.`;
         type = ScheduleErrorType.WUH;
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WorkerOvertime:
-        message = `Pracownik ma <strong>${error.hours}</strong> nadgodzin`;
-        if (error.hours === 1) message += `ę`;
-        if (
-          (error.hours - 2) % 10 === 0 ||
-          (error.hours - 3) % 10 === 0 ||
-          (error.hours - 4) % 10 === 0
-        )
-          message += `y`;
-        message += `.`;
+        message = `Pracownik ma <b>${error.hours}</b> nad${TranslationHelper.hourAccusativus(
+          error.hours
+        )}.`;
         type = ScheduleErrorType.WOH;
         title = `${error.worker}`;
         break;

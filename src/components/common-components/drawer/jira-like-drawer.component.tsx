@@ -4,13 +4,17 @@
 import React from "react";
 import DrawerHeader from "./drawer-header.component";
 import { Box } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 import { useJiraLikeDrawer } from "./jira-like-drawer-context";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 
-const useStyles = makeStyles({
+export interface StyleProps {
+  width: number;
+}
+
+const useStyles = makeStyles<Theme, StyleProps>({
   drawer: {
-    width: 690,
+    width: ({ width }): number => width,
     height: `calc(100vh - ${
       parseInt(ScssVars.headerHeight.slice(0, -2)) +
       parseInt(ScssVars.drawerHeaderHeight.slice(0, -2)) +
@@ -20,8 +24,8 @@ const useStyles = makeStyles({
   },
 });
 
-export default function JiraLikeDrawer(): JSX.Element {
-  const classes = useStyles();
+export default function JiraLikeDrawer(width): JSX.Element {
+  const classes = useStyles(width);
   const { title, open, setOpen, childrenComponent } = useJiraLikeDrawer();
 
   return (
