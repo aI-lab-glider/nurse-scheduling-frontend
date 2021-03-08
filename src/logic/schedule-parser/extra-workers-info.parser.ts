@@ -10,8 +10,8 @@ export class ExtraWorkersInfoParser implements ExtraWorkersInfoProvider {
   private dayWorkers: number[];
   private DEFAULT_DAY_WORKERS_NUMBER = 0;
 
-  constructor(private metaData: MetaDataParser, data?: string[][]) {
-    this.dayWorkers = this.generateChildren(data);
+  constructor(private metaData: MetaDataParser, data?: string[]) {
+    this.dayWorkers = this.generateExtraWorkers(data);
   }
 
   public get errors(): ScheduleError[] {
@@ -25,29 +25,21 @@ export class ExtraWorkersInfoParser implements ExtraWorkersInfoProvider {
     });
   }
 
-  private generateChildren(raw?: string[][]): number[] {
-    let dayWorkersRow;
+  private generateExtraWorkers(raw?: string[]): number[] {
+    if (!raw) {
+      this.logLoadFileError(
+        "Brak informacji o liczbie pracowników dziennych. Przyjęto, że w każdym dniu liczba pracowników dziennych wynosi " +
+          this.DEFAULT_DAY_WORKERS_NUMBER
+      );
+      const N = this.metaData.dayCount;
+      const dayWorkers = Array(N);
+      let i = 0;
 
-    if (!raw || raw.length !== 1) {
-      if (raw && raw.length === 3 && raw[1][0].toLowerCase() === "pracownicy dzienni") {
-        dayWorkersRow = raw[1];
-      } else {
-        this.logLoadFileError(
-          "Brak informacji o liczbie pracowników dziennych. Przyjęto, że w każdym dniu liczba pracowników dziennych wynosi " +
-            this.DEFAULT_DAY_WORKERS_NUMBER
-        );
-        const N = this.metaData.dayCount;
-        const dayWorkers = Array(N);
-        let i = 0;
-
-        while (i < N) dayWorkers[i++] = this.DEFAULT_DAY_WORKERS_NUMBER;
-        return dayWorkers;
-      }
-    } else {
-      dayWorkersRow = raw[0];
+      while (i < N) dayWorkers[i++] = this.DEFAULT_DAY_WORKERS_NUMBER;
+      return dayWorkers;
     }
 
-    const slicedChildrenRow = dayWorkersRow.slice(
+    const slicedChildrenRow = raw.slice(
       this.metaData.offset,
       this.metaData.offset + this.metaData.dayCount
     );

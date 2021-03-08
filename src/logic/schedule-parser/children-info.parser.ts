@@ -10,7 +10,7 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
   private children: number[];
   private DEFAULT_CHILDREN_NUMBER = 20;
 
-  constructor(private metaData: MetaDataParser, data?: string[][]) {
+  constructor(private metaData: MetaDataParser, data?: string[]) {
     this.children = this.generateChildren(data);
   }
 
@@ -29,29 +29,21 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
     });
   }
 
-  private generateChildren(raw?: string[][]): number[] {
-    let childrenRow;
+  private generateChildren(raw?: string[]): number[] {
+    if (!raw) {
+      this.logLoadFileError(
+        "Brak informacji o liczbie dzieci. Przyjęto, że w każdym dniu liczba dzieci wynosi " +
+          this.DEFAULT_CHILDREN_NUMBER
+      );
+      const N = this.metaData.dayCount;
+      const children = Array(N);
+      let i = 0;
 
-    if (!raw || raw.length !== 1) {
-      if (raw && raw.length === 3 && raw[2][0].toLowerCase() === "dzieci") {
-        childrenRow = raw[2];
-      } else {
-        this.logLoadFileError(
-          "Brak informacji o liczbie dzieci. Przyjęto, że w każdym dniu liczba dzieci wynosi " +
-            this.DEFAULT_CHILDREN_NUMBER
-        );
-        const N = this.metaData.dayCount;
-        const children = Array(N);
-        let i = 0;
-
-        while (i < N) children[i++] = this.DEFAULT_CHILDREN_NUMBER;
-        return children;
-      }
-    } else {
-      childrenRow = raw[0];
+      while (i < N) children[i++] = this.DEFAULT_CHILDREN_NUMBER;
+      return children;
     }
 
-    const slicedChildrenRow = childrenRow.slice(
+    const slicedChildrenRow = raw.slice(
       this.metaData.offset,
       this.metaData.offset + this.metaData.dayCount
     );
