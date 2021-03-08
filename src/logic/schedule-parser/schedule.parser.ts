@@ -56,7 +56,7 @@ export class ScheduleParser implements ScheduleProvider {
     rawSchedule.splice(rawSchedule.indexOf(foundationInfoRaw!), 1);
 
     rawSchedule.forEach((r) => {
-      if (r && r.length !== 0 && r[0].length !== 0) {
+      if (r) {
         if (!nurses) {
           nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata, r);
         } else {
