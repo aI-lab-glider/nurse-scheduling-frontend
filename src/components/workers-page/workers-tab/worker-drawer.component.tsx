@@ -33,7 +33,7 @@ export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX
   const { mode, worker, setOpen, ...otherOptions } = options;
   const title = getTitle(mode);
   return (
-    <Drawer setOpen={setOpen} title={title} {...otherOptions}>
+    <Drawer setOpen={setOpen} title={title} {...otherOptions} data-cy="worker-drawer">
       {
         {
           [WorkerDrawerMode.EDIT]: worker && (
