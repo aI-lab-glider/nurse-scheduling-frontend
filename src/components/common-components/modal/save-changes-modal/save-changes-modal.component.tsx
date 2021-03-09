@@ -8,7 +8,6 @@ import { makeStyles, createStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
 import DefaultModal from "../modal.component";
 import { Link } from "react-router-dom";
-import { ScheduleDataActionCreator } from "../../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 import { ScheduleLogicContext } from "../../../schedule-page/table/schedule/use-schedule-state";
 import { useSelector } from "react-redux";
@@ -121,8 +120,8 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
         <Button
           variant="primary"
           onClick={onSaveClick}
-          onMouseEnter={() => setIsYExplanationVisible(true)}
-          onMouseLeave={() => setIsYExplanationVisible(false)}
+          onMouseEnter={(): void => setIsYExplanationVisible(true)}
+          onMouseLeave={(): void => setIsYExplanationVisible(false)}
         >
           Tak
         </Button>
@@ -133,8 +132,8 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
           variant="secondary"
           color="secondary"
           onClick={onNoSaveClick}
-          onMouseEnter={() => setIsNExplanationVisible(true)}
-          onMouseLeave={() => setIsNExplanationVisible(false)}
+          onMouseEnter={(): void => setIsNExplanationVisible(true)}
+          onMouseLeave={(): void => setIsNExplanationVisible(false)}
         >
           Nie
         </Button>
