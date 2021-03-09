@@ -2,8 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
 import backend from "../../../api/backend";
 import { NetworkErrorCode, ScheduleError } from "../../../common-models/schedule-error.model";
@@ -18,6 +17,7 @@ import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/mont
 import { useNotification } from "../../common-components/notification/notification.context";
 import { useJiraLikeDrawer } from "../../common-components/drawer/jira-like-drawer-context";
 import ValidationDrawerContentComponent from "../validation-drawer/validation-drawer.component";
+import SaveChangesModal from "../../common-components/modal/save-changes-modal/save-changes-modal.component";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;
@@ -27,6 +27,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
   const scheduleLogic = useContext(ScheduleLogicContext);
   const { createNotification } = useNotification();
   const dispatcher = useDispatch();
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
   async function updateScheduleErrors(): Promise<void> {
     const schedule = scheduleLogic?.schedule.getDataModel();
@@ -68,6 +69,10 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
     createNotification({ type: "success", message: "Plan został zapisany!" });
   }
 
+  function askForSavingChanges(): void {
+    setIsSaveModalOpen(true);
+  }
+
   return (
     <div className="editing-row">
       <div className="buttons">
@@ -106,11 +111,15 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
 
         <div className="filler" />
 
-        <Link to="/">
-          <Button onClick={closeEdit} variant="secondary" data-cy="leave-edit-mode">
-            Wyjdź
-          </Button>
-        </Link>
+        <Button onClick={askForSavingChanges} variant="secondary" data-cy="leave-edit-mode">
+          Wyjdź
+        </Button>
+        <SaveChangesModal
+          closeOptions={closeEdit}
+          handleSave={handleSaveClick}
+          open={isSaveModalOpen}
+          setOpen={setIsSaveModalOpen}
+        />
 
         <Button
           data-cy="save-schedule-button"
