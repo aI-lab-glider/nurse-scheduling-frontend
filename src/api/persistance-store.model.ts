@@ -97,4 +97,6 @@ export abstract class PersistenceStoreProvider {
     revision: RevisionType,
     baseMonth: MonthDataModel
   ): Promise<MonthDataModel>;
+
+  abstract reloadDb(): Promise<void>;
 }

@@ -199,7 +199,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
     return {
       label: translateAndCapitalizeWorkerType(workerType),
       action: (): void => updateWorkerInfo("workerType", workerType),
-      dataCy: "worker-button",
+      dataCy: workerTypeName.toLowerCase(),
     };
   });
 
@@ -220,7 +220,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
     return {
       label: translateAndCapitalizeContractType(contractType),
       action: (): void => updateWorkerInfo("contractType", contractType),
-      dataCy: "contract-button",
+      dataCy: contractTypeName.toLowerCase(),
     };
   });
 
@@ -229,7 +229,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
     return {
       label: timeType,
       action: (): void => updateWorkerInfo("employmentTime", timeType),
-      dataCy: "time-contract-button",
+      dataCy: timeTypeName.toLowerCase(),
     };
   });
 
@@ -306,7 +306,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
               <TextField
                 fullWidth
                 name="civilTime"
-                data-cy="civilTime"
+                data-cy="input-civil-time"
                 value={workerInfo.civilTime}
                 type="number"
                 style={{
@@ -333,7 +333,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
                   name="employmentTimeOther"
                   value={workerInfo.employmentTimeOther}
                   onChange={handleUpdate}
-                  data-cy="employmentTimeOther"
+                  data-cy="input-employ-time-other"
                   style={{
                     width: 100,
                   }}
@@ -359,7 +359,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
           disabled={!isValidInfo(workerInfo)}
           variant={"primary"}
           className={classNames({ "disabled-submit-button": !isValidInfo(workerInfo) })}
-          data-cy="saveWorkerInfoBtn"
+          data-cy="btn-save-worker"
           onClick={handleClose}
         >
           Zapisz pracownika

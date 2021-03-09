@@ -36,7 +36,7 @@ export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX
   const workerRequiredHours = useWorkerHoursInfo(worker?.name ?? "");
   const title = getTitle(mode);
   return (
-    <Drawer setOpen={setOpen} title={title} {...otherOptions}>
+    <Drawer setOpen={setOpen} title={title} {...otherOptions} data-cy="worker-drawer">
       {
         {
           [WorkerDrawerMode.EDIT]: worker && (

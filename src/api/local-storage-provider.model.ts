@@ -37,6 +37,16 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     this.storage = new PouchDB(DATABASE_NAME);
   }
 
+  async reloadDb(): Promise<void> {
+    try {
+      await this.storage.destroy();
+      this.storage = new PouchDB(DATABASE_NAME);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  }
+
   async saveBothMonthRevisionsIfNeeded(
     type: RevisionType,
     monthDataModel: MonthDataModel
