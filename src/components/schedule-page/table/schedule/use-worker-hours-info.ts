@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ShiftCode } from "../../../../common-models/shift-info.model";
 import { isAllValuesDefined } from "../../../../common-models/type-utils";
@@ -30,6 +31,9 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfo {
     (state: ApplicationStateModel) => state.actualState.primaryRevision.shifts
   )[workerName];
 
+  const { month: primaryRevisionMonth } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.primaryRevision.scheduleKey
+  );
   const { month_number: month, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState[scheduleKey].present.schedule_info
   );
@@ -37,16 +41,26 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfo {
     (state: ApplicationStateModel) => state.actualState[scheduleKey].present.month_info
   );
 
-  if (!isAllValuesDefined([workerTime, workerShifts])) {
-    return new WorkerHourInfo(0, 0);
-  }
+  const [workHoursInfo, setWorkHoursInfo] = useState(new WorkerHourInfo(0, 0));
 
-  return WorkerHourInfo.fromWorkerInfo(
-    workerShifts,
-    baseWorkerShifts as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
-    workerTime,
-    month,
-    year,
-    dates
-  );
+  useEffect(() => {
+    if (primaryRevisionMonth === month) {
+      if (!isAllValuesDefined([workerTime, workerShifts])) {
+        return setWorkHoursInfo(new WorkerHourInfo(0, 0));
+      }
+
+      setWorkHoursInfo(
+        WorkerHourInfo.fromWorkerInfo(
+          workerShifts,
+          baseWorkerShifts as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
+          workerTime,
+          month,
+          year,
+          dates
+        )
+      );
+    }
+  }, [workerShifts, baseWorkerShifts, workerTime, month, year, dates, primaryRevisionMonth]);
+
+  return workHoursInfo;
 }

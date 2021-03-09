@@ -30,7 +30,7 @@ export class ScheduleDataActionCreator {
         cropScheduleDMToMonthDM(newSchedule)
       );
 
-      await this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM);
+      dispatch(this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM));
     };
   }
 
@@ -65,7 +65,7 @@ export class ScheduleDataActionCreator {
         revision = getState().actualState.revision;
       }
       const newSchedule = await extendMonthDMRevisionToScheduleDM(newMonth, revision);
-      await this.setScheduleStateAndSaveToDb(newSchedule)(dispatch, getState);
+      dispatch(this.setScheduleStateAndSaveToDb(newSchedule));
     };
   }
 
@@ -80,7 +80,7 @@ export class ScheduleDataActionCreator {
       const newSchedule = await extendMonthDMRevisionToScheduleDM(monthDataModel, revision);
       const primaryMonthDM = await this.getMonthPrimaryRevisionDM(monthDataModel);
 
-      await this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM)(dispatch, getState);
+      dispatch(this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM));
     };
   }
 
