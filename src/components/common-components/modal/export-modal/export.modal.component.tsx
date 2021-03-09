@@ -77,7 +77,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   const footer = (
     <div>
       <Button onClick={handleExport} size="small" variant="primary" data-cy="confirm-export-button">
-        Potwierdż
+        Potwierdź
       </Button>
       <Button onClick={handleClose} size="small" variant="secondary">
         Anuluj
