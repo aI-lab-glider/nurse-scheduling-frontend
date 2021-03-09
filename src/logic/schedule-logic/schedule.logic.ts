@@ -111,6 +111,12 @@ export class ScheduleLogic implements ScheduleProvider {
     );
   }
 
+  public updateActualRevisionToGivenSchedule(schedule: ScheduleDataModel): void {
+    this.dispatchScheduleUpdate(
+      ScheduleDataActionCreator.setScheduleFromScheduleDM(schedule, true)
+    );
+  }
+
   public changeShiftFrozenState(rowind: number, shiftIndex: number): void {
     if (!this.sections.Metadata) return;
     this.sections.Metadata.changeShiftFrozenState(rowind, shiftIndex);

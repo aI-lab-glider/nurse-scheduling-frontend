@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Button } from "../../button-component/button.component";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
@@ -10,6 +10,7 @@ import DefaultModal from "../modal.component";
 import { Link } from "react-router-dom";
 import { ScheduleDataActionCreator } from "../../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { ScheduleLogicContext } from "../../../schedule-page/table/schedule/use-schedule-state";
 import { useSelector } from "react-redux";
 
 const useStyles = makeStyles(() =>
@@ -79,9 +80,16 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
   const classes = useStyles();
   const { open, setOpen, handleSave, closeOptions } = options;
   const title = "Niezapisane zmiany w grafiku";
+  const [isYExplanationVisible, setIsYExplanationVisible] = useState(false);
+  const [isNExplanationVisible, setIsNExplanationVisible] = useState(false);
   const { past } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule
   );
+  const scheduleLogic = useContext(ScheduleLogicContext);
+
+  const fetchPrevScheduleVersion = (): void => {
+    scheduleLogic?.updateActualRevisionToGivenSchedule(past[0]);
+  };
 
   function handleClose(): void {
     setOpen(false);
@@ -94,27 +102,40 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
   }
 
   function onNoSaveClick(): void {
-    ScheduleDataActionCreator.updateSchedule(past[0]);
-
+    fetchPrevScheduleVersion();
     handleClose();
   }
 
   const body = (
-    <div className="report-issue-modal-body">
+    <div className="save-changes-modal-body">
       <p>Czy chcesz zapisać wprowadzone zmiany?</p>
     </div>
   );
 
   const footer = (
-    <div>
+    <div className="save-changes-modal-footer">
+      {isYExplanationVisible && <p>Zmiany zostaną zapisane do aktualnej wersji grafiku</p>}
+      {isNExplanationVisible && <p>Wprowadzone niezapisane zmiany zostaną usunięte</p>}
+      {!isYExplanationVisible && !isNExplanationVisible && <div />}
       <Link to="/">
-        <Button variant="primary" onClick={onSaveClick}>
+        <Button
+          variant="primary"
+          onClick={onSaveClick}
+          onMouseEnter={() => setIsYExplanationVisible(true)}
+          onMouseLeave={() => setIsYExplanationVisible(false)}
+        >
           Tak
         </Button>
       </Link>
 
       <Link to="/">
-        <Button variant="secondary" color="secondary" onClick={onNoSaveClick}>
+        <Button
+          variant="secondary"
+          color="secondary"
+          onClick={onNoSaveClick}
+          onMouseEnter={() => setIsNExplanationVisible(true)}
+          onMouseLeave={() => setIsNExplanationVisible(false)}
+        >
           Nie
         </Button>
       </Link>
