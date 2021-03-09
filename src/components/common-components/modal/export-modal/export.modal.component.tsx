@@ -47,7 +47,9 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   const [exportOptions, setExportOptions] = React.useState({
     overtime: { value: true, label: "nadgodzinny" },
   });
-  const { baseRevision } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const { primaryRevision: baseRevision } = useSelector(
+    (state: ApplicationStateModel) => state.actualState
+  );
 
   const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 

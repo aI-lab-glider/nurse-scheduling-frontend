@@ -13,7 +13,7 @@ import { FileHelper } from "../../helpers/file.helper";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { TranslationHelper } from "../../helpers/translations.helper";
 import { WorkerHourInfo } from "../../helpers/worker-hours-info.model";
-import { BaseMonthRevisionDataModel } from "../../state/models/application-state.model";
+import { PrimaryMonthRevisionDataModel } from "../../state/models/application-state.model";
 import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
 import {
   ChildrenSectionKey,
@@ -25,13 +25,13 @@ import {
 const EMPTY_ROW = Array(100).fill("");
 export interface ScheduleExportLogicOptions {
   scheduleModel: MonthDataModel;
-  baseScheduleModel?: BaseMonthRevisionDataModel;
+  baseScheduleModel?: PrimaryMonthRevisionDataModel;
   overtimeExport?: boolean;
   extraWorkersExport?: boolean;
 }
 export class ScheduleExportLogic {
   private scheduleModel: MonthDataModel;
-  private baseScheduleModel?: BaseMonthRevisionDataModel;
+  private baseScheduleModel?: PrimaryMonthRevisionDataModel;
   private overtimeExport: boolean;
   private extraWorkersExport: boolean;
 

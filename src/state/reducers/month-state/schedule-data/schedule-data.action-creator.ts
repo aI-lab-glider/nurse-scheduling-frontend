@@ -17,7 +17,7 @@ import _ from "lodash";
 import { ActionModel } from "../../../models/action.model";
 import { Shift } from "../../../../common-models/shift-info.model";
 import { AddMonthRevisionAction, BaseRevisionAction } from "../../base-revision.reducer";
-import { BaseMonthRevisionDataModel } from "../../../models/application-state.model";
+import { PrimaryMonthRevisionDataModel } from "../../../models/application-state.model";
 
 export class ScheduleDataActionCreator {
   static setScheduleStateAndSaveToDb(
@@ -36,7 +36,7 @@ export class ScheduleDataActionCreator {
 
   private static setCurrentAndPrimaryScheduleState(
     currentSchedule: ScheduleDataModel,
-    baseSchedule: BaseMonthRevisionDataModel
+    baseSchedule: PrimaryMonthRevisionDataModel
   ): ThunkFunction<ScheduleDataModel | MonthDataModel> {
     return async (dispatch): Promise<void> => {
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
@@ -49,7 +49,7 @@ export class ScheduleDataActionCreator {
       });
 
       const addBaseSchedule = {
-        type: BaseRevisionAction.ADD_MONTH_BASE_REVISION,
+        type: BaseRevisionAction.ADD_MONTH_PRIMARY_REVISION,
         payload: baseSchedule,
       } as AddMonthRevisionAction;
       dispatch(addBaseSchedule);
@@ -86,11 +86,11 @@ export class ScheduleDataActionCreator {
 
   private static async getMonthPrimaryRevisionDM(
     monthDataModel: MonthDataModel
-  ): Promise<BaseMonthRevisionDataModel> {
+  ): Promise<PrimaryMonthRevisionDataModel> {
     const primaryMonthDM = await new LocalStorageProvider().getMonthRevision(
       monthDataModel.scheduleKey.getRevisionKey("primary")
     );
-    return (primaryMonthDM ?? monthDataModel) as BaseMonthRevisionDataModel;
+    return (primaryMonthDM ?? monthDataModel) as PrimaryMonthRevisionDataModel;
   }
 
   static setScheduleStateAndCreateIfNeeded(

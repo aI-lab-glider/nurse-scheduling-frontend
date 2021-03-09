@@ -8,7 +8,7 @@ import { ScheduleDataModel } from "../../../../common-models/schedule-data.model
 import { ScheduleMetadata } from "../../../../common-models/schedule.model";
 import { ShiftInfoModel, SHIFTS } from "../../../../common-models/shift-info.model";
 import { WorkersInfoModel } from "../../../../common-models/worker-info.model";
-import { BaseMonthRevisionDataModel } from "../../../models/application-state.model";
+import { PrimaryMonthRevisionDataModel } from "../../../models/application-state.model";
 import { daysInMonth } from "./common-reducers";
 
 /* eslint-disable @typescript-eslint/camelcase */
@@ -39,7 +39,7 @@ export const scheduleDataInitialState: ScheduleDataModel = {
   isCorrupted: false,
 };
 
-export const baseRevisionInitialState: BaseMonthRevisionDataModel = {
+export const primaryRevisionInitialState: PrimaryMonthRevisionDataModel = {
   scheduleKey: new ScheduleKey(initialDate.getMonth(), initialDate.getFullYear()),
   ...scheduleDataInitialState,
   __TYPE__: "BaseScheduleRevision",

@@ -11,7 +11,7 @@ import {
   WorkerUnderTime,
 } from "../common-models/schedule-error.model";
 import { WorkerHourInfo } from "../helpers/worker-hours-info.model";
-import { BaseMonthRevisionDataModel } from "../state/models/application-state.model";
+import { PrimaryMonthRevisionDataModel } from "../state/models/application-state.model";
 
 type NameUuidMapper = {
   [name: string]: string;
@@ -90,7 +90,7 @@ export class ServerMiddleware {
 
   public static replaceOvertimeAndUndertimeErrors(
     actualSchedule: ScheduleDataModel,
-    baseMonthData: BaseMonthRevisionDataModel,
+    baseMonthData: PrimaryMonthRevisionDataModel,
     scheduleErrors: ScheduleError[]
   ): ScheduleError[] {
     const calculateNormHoursDiff = (workerName: string): number =>

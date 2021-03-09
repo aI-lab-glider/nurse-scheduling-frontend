@@ -9,7 +9,7 @@ import { ShiftCode, SHIFTS } from "../common-models/shift-info.model";
 import { isAllValuesDefined } from "../common-models/type-utils";
 import { nameOf } from "../common-models/utils";
 import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
-import { BaseMonthRevisionDataModel } from "../state/models/application-state.model";
+import { PrimaryMonthRevisionDataModel } from "../state/models/application-state.model";
 import {
   MonthDataArray,
   ShiftHelper,
@@ -21,7 +21,7 @@ import { VerboseDateHelper } from "./verbose-date.helper";
 
 interface WorkerInfoForCalculateWorkerHoursInfo {
   actualWorkerShifts: ShiftCode[];
-  baseWorkerShifts: MonthDataArray<ShiftCode>;
+  primaryScheduleWorkerShifts: MonthDataArray<ShiftCode>;
   workerNorm: number;
   month: string;
   dates: DateInformationForWorkInfoCalculation[];
@@ -49,7 +49,7 @@ export class WorkerHourInfo {
   public static fromSchedules(
     workerName: string,
     scheduleModel: ScheduleDataModel | MonthDataModel,
-    baseSchedule?: BaseMonthRevisionDataModel
+    primarySchedule?: PrimaryMonthRevisionDataModel
   ): WorkerHourInfo {
     const { time } = scheduleModel.employee_info;
     const { shifts } = scheduleModel;
@@ -66,7 +66,7 @@ export class WorkerHourInfo {
     const { dates } = scheduleModel.month_info;
     return this.fromWorkerInfo(
       shifts[workerName],
-      baseSchedule?.shifts[workerName] as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
+      primarySchedule?.shifts[workerName] as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
       time[workerName],
       month,
       year,
@@ -76,7 +76,7 @@ export class WorkerHourInfo {
 
   public static fromWorkerInfo(
     shifts: ShiftCode[],
-    baseWorkerShifts: MonthDataArray<ShiftCode>,
+    primaryScheduleWorkerShifts: MonthDataArray<ShiftCode>,
     workerNorm: number,
     month: number,
     year: number,
@@ -86,7 +86,7 @@ export class WorkerHourInfo {
     const monthName = TranslationHelper.englishMonths[month];
     return this.calculateWorkHoursInfo({
       actualWorkerShifts: shifts,
-      baseWorkerShifts: baseWorkerShifts,
+      primaryScheduleWorkerShifts,
       workerNorm: workerNorm,
       dates: verboseDates,
       month: monthName,
@@ -98,7 +98,7 @@ export class WorkerHourInfo {
     workerNorm,
     dates,
     month,
-    baseWorkerShifts,
+    primaryScheduleWorkerShifts,
   }: WorkerInfoForCalculateWorkerHoursInfo): WorkerHourInfo {
     if (actualWorkerShifts.length !== dates.length) {
       throw Error(
@@ -111,26 +111,32 @@ export class WorkerHourInfo {
     const firstDayOfCurrentMonth = dates.findIndex((d) => d.month === month);
     const lastDayOfCurrentMonth = _.findLastIndex(dates, (d) => d.month === month);
     const cropToMonth = <T>(array: T[]): MonthDataArray<T> =>
-      array.slice(firstDayOfCurrentMonth, lastDayOfCurrentMonth + 1) as MonthDataArray<T>;
+      array?.slice(firstDayOfCurrentMonth, lastDayOfCurrentMonth + 1) as MonthDataArray<T>;
 
+    const currentMonthDates = cropToMonth(dates);
     const actualShiftsFromCurrentMonth = cropToMonth(actualWorkerShifts);
-    baseWorkerShifts = baseWorkerShifts ?? actualShiftsFromCurrentMonth;
-    if (!isAllValuesDefined([baseWorkerShifts, actualWorkerShifts])) {
+    primaryScheduleWorkerShifts = primaryScheduleWorkerShifts ?? actualShiftsFromCurrentMonth;
+    if (!isAllValuesDefined([primaryScheduleWorkerShifts, actualShiftsFromCurrentMonth])) {
       return new WorkerHourInfo(0, 0);
     }
-    if (actualShiftsFromCurrentMonth.length !== baseWorkerShifts.length) {
+    if (actualShiftsFromCurrentMonth.length !== primaryScheduleWorkerShifts.length) {
+      primaryScheduleWorkerShifts = cropToMonth(primaryScheduleWorkerShifts);
+    }
+
+    if (actualShiftsFromCurrentMonth.length !== primaryScheduleWorkerShifts.length) {
       throw Error(
-        `Length of ${nameOf({ baseWorkerShifts })} should be the same as length of ${nameOf({
+        `Length of ${nameOf({
+          primaryScheduleWorkerShifts,
+        })} should be the same as length of ${nameOf({
           actualWorkerShifts,
         })}`
       );
     }
-
-    const requiredHours = this.calculateRequiredHoursFromVerboseDates(cropToMonth(dates));
+    const requiredHours = this.calculateRequiredHoursFromVerboseDates(currentMonthDates);
     const monthShiftsWithHistoryShiftsAndDates = _.zip(
       actualShiftsFromCurrentMonth,
-      baseWorkerShifts,
-      dates
+      primaryScheduleWorkerShifts,
+      currentMonthDates
     );
 
     const freeHours = monthShiftsWithHistoryShiftsAndDates.reduce(

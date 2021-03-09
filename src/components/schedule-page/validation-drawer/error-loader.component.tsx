@@ -28,7 +28,9 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
   const { setOpen, isNetworkError } = options;
   const [spinnerAgain, setSpinnerAgain] = useState(false);
   const scheduleLogic = useContext(ScheduleLogicContext);
-  const { baseRevision } = useSelector((app: ApplicationStateModel) => app.actualState);
+  const { primaryRevision: baseRevision } = useSelector(
+    (app: ApplicationStateModel) => app.actualState
+  );
 
   const dispatcher = useDispatch();
 

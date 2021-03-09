@@ -27,7 +27,9 @@ interface EditPageToolbarOptions {
 export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Element {
   const scheduleLogic = useContext(ScheduleLogicContext);
 
-  const { baseRevision } = useSelector((app: ApplicationStateModel) => app.actualState);
+  const { primaryRevision: baseRevision } = useSelector(
+    (app: ApplicationStateModel) => app.actualState
+  );
   const { createNotification } = useNotification();
   const dispatcher = useDispatch();
 

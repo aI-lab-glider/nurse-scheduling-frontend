@@ -27,7 +27,7 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfo {
   )[workerName];
 
   const baseWorkerShifts = useSelector(
-    (state: ApplicationStateModel) => state.actualState.baseRevision.shifts
+    (state: ApplicationStateModel) => state.actualState.primaryRevision.shifts
   )[workerName];
 
   const { month_number: month, year } = useSelector(
