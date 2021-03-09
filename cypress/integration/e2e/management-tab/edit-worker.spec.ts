@@ -17,7 +17,7 @@ context("Tab management", () => {
 
     it("Should be able to set worker name", () => {
       cy.get('[data-cy="name"]').type(newWorker);
-      cy.get(`[value=\"${newWorker}\"]`).should("be.visible");
+      cy.get(`[value="${newWorker}"]`).should("be.visible");
     });
 
     it("Should be able to set worker position", () => {
