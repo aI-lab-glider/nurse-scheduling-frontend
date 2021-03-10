@@ -11,6 +11,7 @@ import {
   isMonthModelEmpty,
   MonthDataModel,
   ScheduleDataModel,
+  validateScheduleContainer,
 } from "../common-models/schedule-data.model";
 
 import {
@@ -75,6 +76,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     revisionType: RevisionType,
     monthDataModel: MonthDataModel
   ): Promise<void> {
+    validateScheduleContainer(monthDataModel);
     const revisionKey = monthDataModel.scheduleKey.getRevisionKey(revisionType);
     let revision;
     try {
@@ -157,6 +159,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
         ),
       };
 
+      validateScheduleContainer(updatedMonthDataModel);
       this.storage.put({
         _rev: document._rev,
         _id: revisionKey,
@@ -173,6 +176,8 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       const monthData = (await this.storage.get(revisionKey)).data;
       const { month, year } = monthData.scheduleKey;
       monthData.scheduleKey = new ScheduleKey(month, year);
+
+      validateScheduleContainer(monthData);
       return monthData;
     } catch (error) {
       // eslint-disable-next-line no-console
