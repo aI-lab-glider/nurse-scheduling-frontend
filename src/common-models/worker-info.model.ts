@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { VerboseDate } from "./month-info.model";
 import { ShiftCode } from "./shift-info.model";
+import * as _ from "lodash";
 
 export enum WorkerType {
   NURSE = "NURSE",
@@ -71,4 +72,28 @@ export interface WorkerInfoModel {
   time: number;
   type?: WorkerType;
   shifts?: [VerboseDate, ShiftCode][];
+}
+
+export function validateEmployeeInfo(employeeInfo: WorkersInfoModel): void {
+  const workersWithType = _.sortBy(Object.keys(employeeInfo.type));
+  const workersWithTime = _.sortBy(Object.keys(employeeInfo.time));
+  // TODO: make contract type required
+  if (employeeInfo.contractType) {
+    const workersWithContractType = _.sortBy(Object.keys(employeeInfo.contractType));
+    if (!_.isEqual(workersWithType, workersWithContractType)) {
+      throw new Error(
+        `Different workers have type: ${JSON.stringify(
+          workersWithType
+        )} and contract type ${JSON.stringify(workersWithContractType)}`
+      );
+    }
+  }
+
+  if (!_.isEqual(workersWithType, workersWithTime)) {
+    throw new Error(
+      `Different workers have type: ${JSON.stringify(workersWithType)} and time ${JSON.stringify(
+        workersWithTime
+      )}`
+    );
+  }
 }

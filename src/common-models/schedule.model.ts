@@ -6,3 +6,13 @@ export interface ScheduleMetadata {
   month_number: number;
   year: number;
 }
+
+export function validateScheduleInfo(scheduleInfo: ScheduleMetadata): void {
+  if (scheduleInfo.month_number < 0 || scheduleInfo.month_number > 11) {
+    throw new Error(`Month number has to be within range 0-11 not ${scheduleInfo.month_number}`);
+  }
+
+  if (scheduleInfo.year < 2000 || scheduleInfo.year > 2100) {
+    throw new Error(`Year has to be within range 2000-2100 not ${scheduleInfo.year}`);
+  }
+}

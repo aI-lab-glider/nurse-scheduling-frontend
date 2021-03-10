@@ -94,4 +94,12 @@ export class ArrayHelper {
     const diff = length - firstArray.length;
     return [...firstArray, ...Array(diff).fill(defaultFillValue)];
   }
+
+  public static circularExtendToLength<T>(array: T[], length: number): T[] {
+    let newArray: T[] = [];
+    while (newArray.length < length) {
+      newArray = newArray.concat(array);
+    }
+    return newArray.slice(0, length);
+  }
 }

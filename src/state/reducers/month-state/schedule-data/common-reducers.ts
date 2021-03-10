@@ -38,32 +38,92 @@ export function cropShiftsToMonth(
   return copiedShifts;
 }
 
-export function copyShiftsToMonth(
+export function copyShifts(
   { scheduleKey: currentScheduleKey, shifts: currentScheduleShifts }: MonthDataModel,
-  { scheduleKey: baseScheduleKey, shifts: baseShifts }: MonthDataModel
+  baseShifts: ShiftInfoModel
 ): ShiftInfoModel {
-  const currentCopiedShifts = _.cloneDeep(currentScheduleShifts);
-  const baseCopiedShifts = _.cloneDeep(baseShifts);
+  const { month: baseMonth, year: baseYear } = currentScheduleKey.prevMonthKey;
 
-  const { month, year } = currentScheduleKey;
-  const { month: baseMonth, year: baseYear } = baseScheduleKey;
-
-  const [, missingFromNextMonth] = calculateMissingFullWeekDays(baseScheduleKey);
+  const numberOfDaysToBeCopied = getNumberOfDaysToBeCopied(currentScheduleKey);
 
   const newMonthWorkersShifts: ShiftInfoModel = {};
-  Object.keys(baseCopiedShifts).forEach((workerKey) => {
-    const missingShifts = fillWithShiftsFromBaseMonthFullWeeks(
+  Object.keys(baseShifts).forEach((workerKey) => {
+    const fullBaseMonthShifts = cropMonthDataToFullWeeks(
       baseYear,
       baseMonth,
-      baseCopiedShifts[workerKey],
-      getMonthLength(year, month) - missingFromNextMonth
+      baseShifts[workerKey]
     );
-    const baseMonthShifts = currentCopiedShifts[workerKey]?.slice(0, missingFromNextMonth) ?? [];
-    newMonthWorkersShifts[workerKey] = baseMonthShifts
-      ? baseMonthShifts.concat(missingShifts)
-      : missingShifts;
+
+    let missingShifts = ArrayHelper.circularExtendToLength(
+      fullBaseMonthShifts,
+      numberOfDaysToBeCopied
+    );
+
+    missingShifts = missingShifts.map((shift) => {
+      return FREE_SHIFTS.includes(shift) ? ShiftCode.W : shift;
+    });
+
+    newMonthWorkersShifts[workerKey] = concatWithLastWeekFromPrevMonth(
+      currentScheduleKey,
+      missingShifts,
+      currentScheduleShifts[workerKey] ?? []
+    );
   });
   return newMonthWorkersShifts;
+}
+
+export function copyMonthInfo(
+  { scheduleKey: currentScheduleKey, month_info: currentMonthInfo }: MonthDataModel,
+  baseMonthInfo: MonthInfoModel
+): MonthInfoModel {
+  const dates = createDatesForMonth(currentScheduleKey.year, currentScheduleKey.month);
+  return {
+    children_number: copyMonthData(
+      currentScheduleKey,
+      currentMonthInfo.children_number ?? [],
+      baseMonthInfo.children_number ?? []
+    ),
+    extra_workers: copyMonthData(
+      currentScheduleKey,
+      currentMonthInfo.extra_workers ?? [],
+      baseMonthInfo.extra_workers ?? []
+    ),
+    dates,
+    frozen_shifts: [],
+  };
+}
+
+function copyMonthData<T>(monthKey: ScheduleKey, currentMonthData: T[], baseMonthData: T[]): T[] {
+  const { month: baseMonth, year: baseYear } = monthKey.prevMonthKey;
+  const numberOfDaysToBeCopied = getNumberOfDaysToBeCopied(monthKey);
+  const copyBase = cropMonthDataToFullWeeks(baseYear, baseMonth, baseMonthData);
+
+  const copiedData = ArrayHelper.circularExtendToLength(copyBase, numberOfDaysToBeCopied);
+  return concatWithLastWeekFromPrevMonth(monthKey, copiedData, baseMonthData);
+}
+
+function concatWithLastWeekFromPrevMonth<T>(
+  monthKey: ScheduleKey,
+  copiedData: T[],
+  baseData: T[]
+): T[] {
+  const prevMonthLastWeek = getMonthLastWeekData(monthKey, baseData, copiedData);
+  return prevMonthLastWeek ? prevMonthLastWeek.concat(copiedData) : copiedData;
+}
+
+function getNumberOfDaysToBeCopied(monthKey: ScheduleKey): number {
+  const [, daysEditedInPrevMonth] = calculateMissingFullWeekDays(monthKey.prevMonthKey);
+  const [, daysFromNextMonth] = calculateMissingFullWeekDays(monthKey);
+
+  return getMonthLength(monthKey.year, monthKey.month) - daysEditedInPrevMonth + daysFromNextMonth;
+}
+
+function cropMonthDataToFullWeeks<T>(year: number, month: number, monthData: T[]): T[] {
+  const firstMonthMonday = findFirstMonthMondayIdx(year, month);
+  return monthData.slice(
+    firstMonthMonday,
+    firstMonthMonday + getMonthFullWeeksDaysLen(year, month)
+  );
 }
 
 export function cropMonthInfoToMonth(
@@ -115,43 +175,57 @@ function findFirstMonthMondayIdx(year: number, month: number): number {
   );
 }
 
-function fillWithShiftsFromBaseMonthFullWeeks(
-  baseYear: number,
-  baseMonth: number,
-  baseCopiedShifts: ShiftCode[],
-  missingCurrentMonthDays
-): ShiftCode[] {
-  const firstMonthMonday = findFirstMonthMondayIdx(baseYear, baseMonth);
-  const fullBaseMonthShifts = baseCopiedShifts.slice(
-    firstMonthMonday,
-    firstMonthMonday + getMonthFullWeeksDaysLen(baseYear, baseMonth)
-  );
-
-  const workerShifts: ShiftCode[] = [];
-  let baseMonthShiftIter = 0;
-  while (workerShifts.length !== missingCurrentMonthDays) {
-    let shift = fullBaseMonthShifts[baseMonthShiftIter];
-    if (FREE_SHIFTS.includes(shift)) {
-      shift = ShiftCode.W;
-    }
-    workerShifts.push(shift);
-
-    baseMonthShiftIter += 1;
-    baseMonthShiftIter = baseMonthShiftIter % fullBaseMonthShifts.length;
-  }
-  return workerShifts;
-}
-
 function getMonthLength(year: number, month: number): number {
   return new Date(year, month + 1, 0).getDate();
 }
 
 function getMonthFullWeeksDaysLen(year: number, month: number): number {
   const [missingFromPrevMonth, missingFromNextMonth] = calculateMissingFullWeekDays(
-    new ScheduleKey(year, month)
+    new ScheduleKey(month, year)
   );
   let numberOfWeekInMonth = numberOfWeeksInMonth(month, year);
   missingFromPrevMonth > 0 && numberOfWeekInMonth--;
   missingFromNextMonth > 0 && numberOfWeekInMonth--;
   return NUMBER_OF_DAYS_IN_WEEK * numberOfWeekInMonth;
+}
+
+function createDatesForMonth(year: number, month: number): number[] {
+  const [missingFromPrevMonth, missingFromNextMonth] = calculateMissingFullWeekDays(
+    new ScheduleKey(month, year)
+  );
+  const prevMonthKey = new ScheduleKey(month, year).prevMonthKey;
+  const prevMonthLength = getMonthLength(prevMonthKey.year, prevMonthKey.month);
+  const prevMonthDates = _.range(prevMonthLength - missingFromPrevMonth + 1, prevMonthLength + 1);
+
+  const currentMonthDates = daysInMonth(month, year);
+  const nextMonthDates = _.range(1, missingFromNextMonth + 1);
+
+  return [...prevMonthDates, ...currentMonthDates, ...nextMonthDates];
+}
+
+function getMonthLastWeekData<T>(
+  scheduleKey: ScheduleKey,
+  monthData: T[],
+  nextMonthData: T[]
+): T[] {
+  const [, missingFromNextMonth] = calculateMissingFullWeekDays(scheduleKey);
+  const monthLen = monthData.length;
+  let lastWeek: T[] = [];
+  if (missingFromNextMonth > 0) {
+    const daysFromCurrentMonthInLastWeek = NUMBER_OF_DAYS_IN_WEEK - missingFromNextMonth;
+    const currentMonthDataPart = monthData.slice(
+      monthLen - daysFromCurrentMonthInLastWeek,
+      monthLen + 1
+    );
+    const nextMonthDataPart = nextMonthData.slice(0, missingFromNextMonth);
+    lastWeek = [...currentMonthDataPart, ...nextMonthDataPart];
+  } else {
+    lastWeek = monthData.slice(monthLen - NUMBER_OF_DAYS_IN_WEEK, monthLen + 1);
+  }
+
+  if (lastWeek.length !== NUMBER_OF_DAYS_IN_WEEK) {
+    throw new Error(`Week must have ${NUMBER_OF_DAYS_IN_WEEK} days`);
+  }
+
+  return lastWeek;
 }
