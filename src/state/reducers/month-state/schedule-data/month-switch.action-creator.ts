@@ -6,12 +6,12 @@
 
 import { ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
 import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
-import { cropScheduleDMToMonthDM } from "../../../../common-models/schedule-data.model";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
 import { RevisionReducerAction } from "../revision-info.reducer";
 import { VerboseDateHelper } from "../../../../helpers/verbose-date.helper";
 import { copyMonthDM } from "../../../../logic/month-copy/month-copy.logic";
 import { MonthHelper } from "../../../../helpers/month.helper";
+import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
 
 const PREV_MONTH_OFFSET = -1;
 

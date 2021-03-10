@@ -7,7 +7,6 @@
 import PouchDB from "pouchdb-browser";
 import {
   createEmptyMonthDataModel,
-  cropScheduleDMToMonthDM,
   getScheduleKey,
   isMonthModelEmpty,
   MonthDataModel,
@@ -25,6 +24,7 @@ import _ from "lodash";
 import { ArrayHelper, ArrayPositionPointer } from "../helpers/array.helper";
 import { VerboseDateHelper } from "../helpers/verbose-date.helper";
 import { MonthHelper } from "../helpers/month.helper";
+import { cropScheduleDMToMonthDM } from "../logic/schedule-container-convertion/schedule-container-convertion";
 
 export const DATABASE_NAME = "nurse-scheduling";
 type MonthDMToRevisionKeyDict = { [revisionKey: string]: MonthDataModel };

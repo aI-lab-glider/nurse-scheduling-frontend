@@ -4,8 +4,8 @@
 
 export interface ScheduleMetadata {
   UUID?: string;
-  month_number: number;
-  year: number;
+  month_number: number; // 0 - 11
+  year: number; // 2000 - 2100
 }
 
 export function validateScheduleInfo(scheduleInfo: ScheduleMetadata): void {
