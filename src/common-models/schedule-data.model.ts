@@ -7,16 +7,10 @@ import { ScheduleMetadata, validateScheduleInfo } from "./schedule.model";
 import { ShiftCode, ShiftInfoModel, ShiftModel, validateShiftInfoModel } from "./shift-info.model";
 import { RevisionType, ScheduleKey } from "../api/persistance-store.model";
 import * as _ from "lodash";
-import {
-  cropMonthInfoToMonth,
-  cropShiftsToMonth,
-} from "../state/reducers/month-state/schedule-data/common-reducers";
-import { ArrayHelper } from "../helpers/array.helper";
 import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../helpers/month.helper";
 import { LocalStorageProvider } from "../api/local-storage-provider.model";
 
 /* eslint-disable @typescript-eslint/camelcase */
-
 export type ScheduleContainer = ScheduleDataModel | MonthDataModel;
 
 export enum ScheduleContainerType {
@@ -45,8 +39,15 @@ export interface ScheduleDataModel {
   isCorrupted: boolean;
 }
 
+export interface MonthDataModel extends Omit<ScheduleDataModel, "schedule_info" | "revisionType"> {
+  scheduleKey: ScheduleKey;
+}
+
 function isScheduleDM(container: ScheduleContainer): container is ScheduleDataModel {
-  return (container as ScheduleDataModel).schedule_info !== undefined;
+  return (
+    (container as ScheduleDataModel).schedule_info !== undefined &&
+    SCHEDULE_CONTAINERS_LENGTH["SCHEDULE_DM"].includes(container.month_info.dates.length)
+  );
 }
 
 export function validateScheduleContainer(scheduleContainer: ScheduleContainer): void {
@@ -76,10 +77,6 @@ export function validateScheduleContainer(scheduleContainer: ScheduleContainer):
   });
 }
 
-export interface MonthDataModel extends Omit<ScheduleDataModel, "schedule_info" | "revisionType"> {
-  scheduleKey: ScheduleKey;
-}
-
 export function isMonthModelEmpty(monthDataModel: MonthDataModel): boolean {
   const requiredFields: (keyof Pick<
     MonthDataModel,
@@ -106,7 +103,8 @@ export function createEmptyMonthDataModel(
   Object.keys(shifts).forEach((key) => {
     freeShifts[key] = new Array(monthLength).fill(ShiftCode.W);
   });
-  return {
+
+  const monthDataModel = {
     scheduleKey,
     month_info: {
       children_number: new Array(monthLength).fill(0),
@@ -120,6 +118,9 @@ export function createEmptyMonthDataModel(
     shift_types: _.cloneDeep(shift_types),
     isCorrupted: false,
   };
+
+  validateScheduleContainer(monthDataModel);
+  return monthDataModel;
 }
 
 export function getScheduleKey(newSchedule: ScheduleDataModel): ScheduleKey {
@@ -138,64 +139,6 @@ export async function extendMonthDMRevisionToScheduleDM(
     revision
   );
   return extendMonthDMToScheduleDM(prevMonth, currentMonthData, nextMonth);
-}
-
-export function extendMonthDMToScheduleDM(
-  prevMonthData: MonthDataModel,
-  currentMonthData: MonthDataModel,
-  nextMonthData: MonthDataModel
-): ScheduleDataModel {
-  const { scheduleKey } = currentMonthData;
-  const {
-    daysMissingFromPrevMonth,
-    daysMissingFromNextMonth,
-  } = MonthHelper.calculateMissingFullWeekDays(scheduleKey);
-  const extendSchedule = <T>(sectionKey: string, valueKey: string, defaultValue: T): T[] =>
-    ArrayHelper.extend<T>(
-      prevMonthData[sectionKey][valueKey],
-      daysMissingFromPrevMonth,
-      currentMonthData[sectionKey][valueKey],
-      nextMonthData[sectionKey][valueKey],
-      daysMissingFromNextMonth,
-      defaultValue
-    );
-
-  const shifts: ShiftInfoModel = {};
-  Object.keys(currentMonthData.shifts).forEach((key) => {
-    shifts[key] = extendSchedule("shifts", key, ShiftCode.W);
-  });
-
-  const monthInfoModel: MonthInfoModel = {
-    children_number: extendSchedule("month_info", "children_number", 0),
-    extra_workers: extendSchedule("month_info", "extra_workers", 0),
-    dates: extendSchedule("month_info", "dates", 0),
-    frozen_shifts: [],
-  };
-
-  return {
-    ...currentMonthData,
-    schedule_info: {
-      UUID: "0",
-      month_number: scheduleKey.month,
-      year: scheduleKey.year,
-    },
-    month_info: monthInfoModel,
-    shifts,
-  };
-}
-
-export function cropScheduleDMToMonthDM(schedule: ScheduleDataModel): MonthDataModel {
-  const { dates } = schedule.month_info;
-  const monthStart = dates.findIndex((v) => v === 1);
-  const monthKey = getScheduleKey(schedule);
-  const shift = cropShiftsToMonth(monthKey, schedule.shifts, monthStart);
-  const month = cropMonthInfoToMonth(monthKey, schedule.month_info, monthStart);
-  return {
-    ...schedule,
-    scheduleKey: monthKey,
-    shifts: shift,
-    month_info: month,
-  };
 }
 
 function validateScheduleContainerDataIntegrity({

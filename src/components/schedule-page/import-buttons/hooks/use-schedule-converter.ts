@@ -3,10 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useEffect, useState } from "react";
 import Excel from "exceljs";
-import {
-  cropScheduleDMToMonthDM,
-  MonthDataModel,
-} from "../../../../common-models/schedule-data.model";
+import { MonthDataModel } from "../../../../common-models/schedule-data.model";
 import { InputFileErrorCode, ScheduleError } from "../../../../common-models/schedule-error.model";
 import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
 import { useFileReader } from "./use-file-reader";
@@ -14,6 +11,7 @@ import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 import { fromBuffer } from "file-type/browser";
 import { useNotification } from "../../../common-components/notification/notification.context";
+import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
 
 export interface UseScheduleConverterOutput {
   monthModel?: MonthDataModel;
