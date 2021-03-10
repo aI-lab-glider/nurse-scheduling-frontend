@@ -6,7 +6,11 @@ import { RevisionType } from "../../api/persistance-store.model";
 import { VerboseDate } from "../../common-models/month-info.model";
 import { MonthDataModel } from "../../common-models/schedule-data.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
-import { WorkerType } from "../../common-models/worker-info.model";
+import {
+  ContractTypeHelper,
+  WorkerType,
+  WorkerTypeHelper,
+} from "../../common-models/worker-info.model";
 import { ColorHelper } from "../../helpers/colors/color.helper";
 import { Color } from "../../helpers/colors/color.model";
 import { FileHelper } from "../../helpers/file.helper";
@@ -48,6 +52,7 @@ export class ScheduleExportLogic {
   }
 
   static readonly WORKSHEET_NAME = "grafik";
+  static readonly WORKERS_WORKSHEET_NAME = "pracownicy";
   requiredHoursAddress;
   doneHoursAddress;
   diffHoursAddress;
@@ -58,8 +63,16 @@ export class ScheduleExportLogic {
   }
 
   public createWorkbook(revisionType: RevisionType): [string, xlsx.Workbook] {
-    const [workbook, workSheet] = ScheduleExportLogic.createWorkArea();
+    const [workbook, scheduleWorkSheet, workersWorkSheet] = ScheduleExportLogic.createWorkArea();
 
+    this.setScheduleWorkSheet(scheduleWorkSheet);
+    this.setWorkersWorkSheet(workersWorkSheet);
+
+    const workbookName = FileHelper.createMonthFilename(this.scheduleModel, revisionType);
+    return [workbookName, workbook];
+  }
+
+  private setScheduleWorkSheet(workSheet: xlsx.Worksheet) {
     workSheet.pageSetup.showGridLines = true;
     workSheet.pageSetup.fitToPage = true;
     workSheet.pageSetup.fitToHeight = 1;
@@ -122,16 +135,44 @@ export class ScheduleExportLogic {
     workSheet.getCell(this.requiredHoursAddress).alignment = { textRotation: -90 };
     workSheet.getCell(this.doneHoursAddress).alignment = { textRotation: -90 };
     workSheet.getCell(this.diffHoursAddress).alignment = { textRotation: -90 };
-
-    const workbookName = FileHelper.createMonthFilename(this.scheduleModel, revisionType);
-    return [workbookName, workbook];
   }
 
-  private static createWorkArea(): [xlsx.Workbook, xlsx.Worksheet] {
+  private setWorkersWorkSheet(workSheet: xlsx.Worksheet) {
+    workSheet.pageSetup.showGridLines = true;
+    workSheet.pageSetup.fitToPage = true;
+    workSheet.pageSetup.fitToHeight = 1;
+    workSheet.pageSetup.fitToWidth = 1;
+    workSheet.pageSetup.horizontalCentered = true;
+
+    const workersInfoArray = ScheduleExportLogic.createWorkersInfoSection(this.scheduleModel);
+
+    const colLens = workersInfoArray[0].map((_, colIndex) =>
+      Math.max(...workersInfoArray.map((row) => row[colIndex].toString().length))
+    );
+
+    workSheet.addRows(workersInfoArray);
+
+    colLens.forEach((len, id) => {
+      workSheet.getColumn(id + 1).width = len + 2;
+    });
+
+    workSheet.getColumn(1).alignment = { vertical: "middle", horizontal: "left" };
+    workSheet.getColumn(2).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getColumn(3).alignment = { vertical: "middle", horizontal: "center" };
+
+    workSheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getRow(1).font = { bold: true };
+  }
+
+  private static createWorkArea(): [xlsx.Workbook, xlsx.Worksheet, xlsx.Worksheet] {
     const workbook = new xlsx.Workbook();
     return [
       workbook,
       workbook.addWorksheet(ScheduleExportLogic.WORKSHEET_NAME, {
+        pageSetup: { paperSize: 9, orientation: "landscape" },
+        properties: { defaultColWidth: 5 },
+      }),
+      workbook.addWorksheet(ScheduleExportLogic.WORKERS_WORKSHEET_NAME, {
         pageSetup: { paperSize: 9, orientation: "landscape" },
         properties: { defaultColWidth: 5 },
       }),
@@ -285,6 +326,24 @@ export class ScheduleExportLogic {
         ...(scheduleModel.month_info?.children_number || []),
       ],
     ];
+  }
+
+  private static createWorkersInfoSection(scheduleModel: MonthDataModel): (string | number)[][] {
+    const names = Object.keys(scheduleModel.employee_info?.type);
+
+    const workers: (string | number)[][] = [];
+
+    workers.push(["Imię i nazwisko", "Stanowisko/funkcja", "Rodzaj umowy", "Wymiar czasu pracy"]);
+    workers.push(EMPTY_ROW);
+    names.forEach((name) =>
+      workers.push([
+        name,
+        WorkerTypeHelper.translateToShort(scheduleModel.employee_info?.type[name]),
+        ContractTypeHelper.translateToShort(scheduleModel.employee_info?.contractType!?.[name]),
+        scheduleModel.employee_info?.time[name],
+      ])
+    );
+    return [...workers];
   }
 
   private static createWorkHoursInfoHeader(startIndex: number): string[] {

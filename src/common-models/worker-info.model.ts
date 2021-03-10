@@ -18,6 +18,15 @@ export class WorkerTypeHelper {
         return pluralize ? "opiekunki" : "opiekunka";
     }
   }
+
+  static translateToShort(type: WorkerType): string {
+    switch (type) {
+      case WorkerType.NURSE:
+        return "P";
+      case WorkerType.OTHER:
+        return "O";
+    }
+  }
 }
 
 export enum ContractType {
@@ -32,6 +41,15 @@ export class ContractTypeHelper {
         return "umowa o pracę";
       case ContractType.CIVIL_CONTRACT:
         return "umowa zlecenie";
+    }
+  }
+
+  static translateToShort(type: ContractType): string {
+    switch (type) {
+      case ContractType.EMPLOYMENT_CONTRACT:
+        return "UoP";
+      case ContractType.CIVIL_CONTRACT:
+        return "UZ";
     }
   }
 }

@@ -322,6 +322,7 @@ p {
   font-size: 13px;
   border-radius: 4px;
   z-index: 3;
+  max-width: 500px;
 }
 
 .cell-details-popper {
@@ -331,8 +332,6 @@ p {
   padding: 10px;
   font-size: 13px;
   border-radius: 4px;
-  // position: absolute;
-  // margin-left: 35px;
   z-index: 2;
   box-shadow: 0 1.4px 1.1px rgba(0, 0, 0, 0.034), 0 3.3px 2.7px rgba(0, 0, 0, 0.048),
     0 6.2px 5px rgba(0, 0, 0, 0.06), 0 11.1px 8.5px rgba(0, 0, 0, 0.072),
@@ -340,7 +339,7 @@ p {
   overflow: hidden;
 }
 
-.errorTootlip-item {
+.errorTooltip-item {
   margin: 0px !important;
   .error-title {
     flex: 0.5 !important;

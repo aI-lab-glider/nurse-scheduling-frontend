@@ -49,6 +49,21 @@ export class ShiftHelper {
     return duration === 0 ? 24 : duration;
   }
 
+  public static requiredFreeTimeAfterShift(shift: Shift): number {
+    if (this.shiftCodeToWorkTime(shift) < 9) return 11;
+    if (this.shiftCodeToWorkTime(shift) > 12) return 24;
+    return 16;
+  }
+
+  public static nextLegalShiftStart(shift: Shift): [number, boolean] {
+    const sum = shift.to + this.requiredFreeTimeAfterShift(shift);
+    if (sum > 24) {
+      if ((shift.to + this.requiredFreeTimeAfterShift(shift)) % 24 === 0) return [24, true];
+      return [(shift.to + this.requiredFreeTimeAfterShift(shift)) % 24, true];
+    }
+    return [sum, false];
+  }
+
   public static groupShiftsByWorkerType(
     shifts: ShiftInfoModel = {},
     workerTypes: { [workerName: string]: WorkerType } = {}
