@@ -35,19 +35,19 @@ export interface ScheduleExportLogicOptions {
 }
 export class ScheduleExportLogic {
   private scheduleModel: MonthDataModel;
-  private baseScheduleModel?: PrimaryMonthRevisionDataModel;
+  private primaryScheduleModel?: PrimaryMonthRevisionDataModel;
   private overtimeExport?: boolean;
   private extraWorkersExport: boolean;
 
   constructor({
     scheduleModel,
-    primaryScheduleModel: baseScheduleModel,
+    primaryScheduleModel,
     overtimeExport,
     extraWorkersExport = true,
   }: ScheduleExportLogicOptions) {
     this.scheduleModel = scheduleModel;
-    this.baseScheduleModel = baseScheduleModel;
-    this.overtimeExport = !!overtimeExport && !!baseScheduleModel;
+    this.primaryScheduleModel = primaryScheduleModel;
+    this.overtimeExport = !!overtimeExport && !!primaryScheduleModel;
     this.extraWorkersExport = extraWorkersExport;
   }
 
@@ -285,7 +285,7 @@ export class ScheduleExportLogic {
       ];
       if (this.overtimeExport) {
         shiftsRow.push(
-          ...WorkerHourInfo.fromSchedules(workerName, scheduleModel, this.baseScheduleModel)
+          ...WorkerHourInfo.fromSchedules(workerName, scheduleModel, this.primaryScheduleModel)
             .asArray()
             .map((e) => e.toString())
         );

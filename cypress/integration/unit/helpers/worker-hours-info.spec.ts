@@ -24,12 +24,8 @@ describe("Worker hours info", () => {
 
   const exampleWorker = workerTestData[0];
 
-  const workingShifts = WORKING_SHIFTS;
-  const freeShifts = FREE_SHIFTS;
-  Object.values(SHIFTS).filter((shift) => !shift.isWorkingShift && shift.code !== "W");
-
-  const exampleWorkringShift = workingShifts[0];
-  const exampleFreeShift = freeShifts[0];
+  const exampleWorkringShift = SHIFTS[WORKING_SHIFTS[0]];
+  const exampleFreeShift = SHIFTS[FREE_SHIFTS[0]];
   it(`Should subtract from worker required hours duration of ${exampleWorkringShift.code} when it 
             is replaced with ${exampleFreeShift.code}`, () => {
     const testedShiftDuration = ShiftHelper.shiftCodeToWorkTime(exampleWorkringShift);
