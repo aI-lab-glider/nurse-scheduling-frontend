@@ -42,19 +42,5 @@ context("Schedule errors", () => {
       cy.contains("testUser");
       return false;
     });
-
-    it("Should restore previous version from corrupted page", () => {
-      addWorker("testUser", WorkerType.NURSE);
-      addWorker(Cypress.env("REACT_APP_ERROR_WORKER"), WorkerType.NURSE);
-      cy.get('[data-cy="btn-schedule-tab"]').click();
-      Cypress.on("uncaught:exception", () => {
-        cy.get('[data-cy="btn-ok-app-error"]').click();
-        cy.get('[data-cy="timetable-row"]').should("be.visible");
-        cy.get('[data-cy="btn-ok-app-error"]').click();
-        cy.get('[data-cy="restore-prev-version"]').click();
-        cy.contains("testUser");
-        return false;
-      });
-    });
   });
 });
