@@ -86,10 +86,10 @@ function App(): JSX.Element {
   const fetchGlobalState = useCallback(() => {
     if (process.env.REACT_APP_DEV_MODE === "true") {
       const monthModel = cropScheduleDMToMonthDM(schedule as ScheduleDataModel);
-      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel, true);
+      const action = ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(monthModel);
       scheduleDispatcher(action);
     } else {
-      const action = ScheduleDataActionCreator.setScheduleFromKeyIfExistsInDB(
+      const action = ScheduleDataActionCreator.setScheduleIfExistsInDb(
         new ScheduleKey(month, year),
         "actual"
       );
