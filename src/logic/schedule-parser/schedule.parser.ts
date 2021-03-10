@@ -59,7 +59,7 @@ export class ScheduleParser implements ScheduleProvider {
       if (r) {
         if (!nurses) {
           nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata, r);
-        } else {
+        } else if (!babysiters) {
           babysiters = new ShiftsInfoParser(WorkerType.OTHER, metadata, r);
         }
       }
