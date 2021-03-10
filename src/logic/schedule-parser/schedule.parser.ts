@@ -8,7 +8,7 @@ import { MetaDataParser } from "./metadata.parser";
 import { ShiftsInfoParser } from "./shifts-info.parser";
 import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
 import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
-import { FoundationInfoParser } from "./foundation-info.parser";
+import { FoundationInfoHeaders, FoundationInfoParser } from "./foundation-info.parser";
 import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
 import { ExtraWorkersInfoParser } from "./extra-workers-info.parser";
 
@@ -35,21 +35,23 @@ export class ScheduleParser implements ScheduleProvider {
     let nurses;
     let babysiters;
 
-    const foundationInfoHeaders = ["dni miesiąca", "pracownicy dzienni", "dzieci"];
+    const foundationInfoHeaders = Object.values(FoundationInfoHeaders);
 
     const foundationInfoRaw = rawSchedule.find((r) =>
       foundationInfoHeaders.some((h) => r[0][0].toLowerCase().trim() === h)
     );
     const metadataRaw = foundationInfoRaw?.find(
-      (r) => r[0].toLowerCase().trim() === "dni miesiąca"
+      (r) => r[0].toLowerCase().trim() === FoundationInfoHeaders.MonthDates
     );
     const metadata = new MetaDataParser(this.month, this.year, metadataRaw);
 
-    const childrenRaw = foundationInfoRaw?.find((r) => r[0].toLowerCase().trim() === "dzieci");
+    const childrenRaw = foundationInfoRaw?.find(
+      (r) => r[0].toLowerCase().trim() === FoundationInfoHeaders.ChildrenInfo
+    );
     const children = new ChildrenInfoParser(metadata, childrenRaw);
 
     const extraWorkersRaw = foundationInfoRaw?.find(
-      (r) => r[0].toLowerCase().trim() === "pracownicy dzienni"
+      (r) => r[0].toLowerCase().trim() === FoundationInfoHeaders.ExtraWorkers
     );
     const extraWorkers = new ExtraWorkersInfoParser(metadata, extraWorkersRaw);
 

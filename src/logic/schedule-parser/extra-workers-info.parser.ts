@@ -8,7 +8,7 @@ import { ExtraWorkersInfoProvider } from "../providers/extra-workers-info-provid
 export class ExtraWorkersInfoParser implements ExtraWorkersInfoProvider {
   private _parseErrors: ScheduleError[] = [];
   private dayWorkers: number[];
-  private DEFAULT_DAY_WORKERS_NUMBER = 0;
+  private DEFAULT_EXTRA_WORKERS_NUMBER = 0;
 
   constructor(private metaData: MetaDataParser, data?: string[]) {
     this.dayWorkers = this.generateExtraWorkers(data);
@@ -29,13 +29,13 @@ export class ExtraWorkersInfoParser implements ExtraWorkersInfoProvider {
     if (!raw) {
       this.logLoadFileError(
         "Brak informacji o liczbie pracowników dziennych. Przyjęto, że w każdym dniu liczba pracowników dziennych wynosi " +
-          this.DEFAULT_DAY_WORKERS_NUMBER
+          this.DEFAULT_EXTRA_WORKERS_NUMBER
       );
       const N = this.metaData.dayCount;
       const dayWorkers = Array(N);
       let i = 0;
 
-      while (i < N) dayWorkers[i++] = this.DEFAULT_DAY_WORKERS_NUMBER;
+      while (i < N) dayWorkers[i++] = this.DEFAULT_EXTRA_WORKERS_NUMBER;
       return dayWorkers;
     }
 
@@ -58,9 +58,9 @@ export class ExtraWorkersInfoParser implements ExtraWorkersInfoProvider {
           "Nieoczekiwana wartość w sekcji pracownicy dzienni w dniu " +
             (i + 1) +
             ". Przyjęto, że liczba pracowników dziennych wynosi " +
-            this.DEFAULT_DAY_WORKERS_NUMBER
+            this.DEFAULT_EXTRA_WORKERS_NUMBER
         );
-        dayWorkers.push(this.DEFAULT_DAY_WORKERS_NUMBER);
+        dayWorkers.push(this.DEFAULT_EXTRA_WORKERS_NUMBER);
       } else {
         dayWorkers.push(numDay);
       }
