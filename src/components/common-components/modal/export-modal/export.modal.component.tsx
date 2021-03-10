@@ -47,9 +47,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   const [exportOptions, setExportOptions] = React.useState({
     overtime: { value: true, label: "nadgodzinny" },
   });
-  const { primaryRevision: baseRevision } = useSelector(
-    (state: ApplicationStateModel) => state.actualState
-  );
+  const { primaryRevision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
@@ -57,7 +55,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
     xlsx: (): void => {
       new ScheduleExportLogic({
         scheduleModel: cropScheduleDMToMonthDM(model),
-        baseScheduleModel: baseRevision,
+        primaryScheduleModel: primaryRevision,
         overtimeExport: exportOptions.overtime.value,
       }).formatAndSave(revision);
     },

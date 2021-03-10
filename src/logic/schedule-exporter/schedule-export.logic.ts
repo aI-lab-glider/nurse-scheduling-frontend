@@ -25,19 +25,19 @@ import {
 const EMPTY_ROW = Array(100).fill("");
 export interface ScheduleExportLogicOptions {
   scheduleModel: MonthDataModel;
-  baseScheduleModel?: PrimaryMonthRevisionDataModel;
+  primaryScheduleModel?: PrimaryMonthRevisionDataModel;
   overtimeExport?: boolean;
   extraWorkersExport?: boolean;
 }
 export class ScheduleExportLogic {
   private scheduleModel: MonthDataModel;
   private baseScheduleModel?: PrimaryMonthRevisionDataModel;
-  private overtimeExport: boolean;
+  private overtimeExport?: boolean;
   private extraWorkersExport: boolean;
 
   constructor({
     scheduleModel,
-    baseScheduleModel,
+    primaryScheduleModel: baseScheduleModel,
     overtimeExport,
     extraWorkersExport = true,
   }: ScheduleExportLogicOptions) {

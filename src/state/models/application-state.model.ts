@@ -8,7 +8,7 @@ import { GroupedScheduleErrors } from "../../common-models/schedule-error.model"
 import { Opaque } from "../../common-models/type-utils";
 import { ScheduleMode } from "../../components/schedule-page/table/schedule/use-schedule-state";
 
-export type PrimaryMonthRevisionDataModel = Opaque<"BaseScheduleRevision", MonthDataModel>;
+export type PrimaryMonthRevisionDataModel = Opaque<"PrimaryScheduleRevision", MonthDataModel>;
 export interface ScheduleStateModel {
   persistentSchedule: StateWithHistory<ScheduleDataModel>;
   temporarySchedule: StateWithHistory<ScheduleDataModel>;

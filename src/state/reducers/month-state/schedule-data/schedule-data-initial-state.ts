@@ -42,5 +42,5 @@ export const scheduleDataInitialState: ScheduleDataModel = {
 export const primaryRevisionInitialState: PrimaryMonthRevisionDataModel = {
   scheduleKey: new ScheduleKey(initialDate.getMonth(), initialDate.getFullYear()),
   ...scheduleDataInitialState,
-  __TYPE__: "BaseScheduleRevision",
+  __TYPE__: "PrimaryScheduleRevision",
 };

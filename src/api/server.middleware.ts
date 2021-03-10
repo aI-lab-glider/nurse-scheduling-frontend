@@ -90,11 +90,11 @@ export class ServerMiddleware {
 
   public static replaceOvertimeAndUndertimeErrors(
     actualSchedule: ScheduleDataModel,
-    baseMonthData: PrimaryMonthRevisionDataModel,
+    primaryMonthData: PrimaryMonthRevisionDataModel,
     scheduleErrors: ScheduleError[]
   ): ScheduleError[] {
     const calculateNormHoursDiff = (workerName: string): number =>
-      WorkerHourInfo.fromSchedules(workerName, actualSchedule, baseMonthData).overTime;
+      WorkerHourInfo.fromSchedules(workerName, actualSchedule, primaryMonthData).overTime;
 
     const validBackendScheduleErros = scheduleErrors.filter(
       (err) =>

@@ -27,7 +27,7 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfo {
     (state: ApplicationStateModel) => state.actualState[scheduleKey].present.shifts
   )[workerName];
 
-  const baseWorkerShifts = useSelector(
+  const primaryWorkerShifts = useSelector(
     (state: ApplicationStateModel) => state.actualState.primaryRevision.shifts
   )[workerName];
 
@@ -52,7 +52,7 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfo {
       setWorkHoursInfo(
         WorkerHourInfo.fromWorkerInfo(
           workerShifts,
-          baseWorkerShifts as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
+          primaryWorkerShifts as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
           workerTime,
           month,
           year,
@@ -60,7 +60,7 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfo {
         )
       );
     }
-  }, [workerShifts, baseWorkerShifts, workerTime, month, year, dates, primaryRevisionMonth]);
+  }, [workerShifts, primaryWorkerShifts, workerTime, month, year, dates, primaryRevisionMonth]);
 
   return workHoursInfo;
 }

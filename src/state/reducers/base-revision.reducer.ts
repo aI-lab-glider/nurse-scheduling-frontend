@@ -6,12 +6,12 @@ import { ActionModel } from "../models/action.model";
 import { PrimaryMonthRevisionDataModel } from "../models/application-state.model";
 import { primaryRevisionInitialState } from "./month-state/schedule-data/schedule-data-initial-state";
 
-export enum BaseRevisionAction {
+export enum PrimaryRevisionAction {
   ADD_MONTH_PRIMARY_REVISION = "ADD_MONTH_BASE_REVISION",
 }
 
 export interface AddMonthRevisionAction extends ActionModel<PrimaryMonthRevisionDataModel> {
-  type: BaseRevisionAction.ADD_MONTH_PRIMARY_REVISION;
+  type: PrimaryRevisionAction.ADD_MONTH_PRIMARY_REVISION;
 }
 
 export function primaryRevisionReducer(
@@ -19,7 +19,7 @@ export function primaryRevisionReducer(
   action: AddMonthRevisionAction
 ): PrimaryMonthRevisionDataModel {
   switch (action.type) {
-    case BaseRevisionAction.ADD_MONTH_PRIMARY_REVISION:
+    case PrimaryRevisionAction.ADD_MONTH_PRIMARY_REVISION:
       const monthDataModel = action.payload;
       if (!monthDataModel) {
         return state;

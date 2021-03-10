@@ -28,9 +28,7 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
   const { setOpen, isNetworkError } = options;
   const [spinnerAgain, setSpinnerAgain] = useState(false);
   const scheduleLogic = useContext(ScheduleLogicContext);
-  const { primaryRevision: baseRevision } = useSelector(
-    (app: ApplicationStateModel) => app.actualState
-  );
+  const { primaryRevision } = useSelector((app: ApplicationStateModel) => app.actualState);
 
   const dispatcher = useDispatch();
 
@@ -44,7 +42,7 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
       if (schedule) {
         let response: ScheduleError[];
         try {
-          response = await backend.getErrors(schedule, baseRevision);
+          response = await backend.getErrors(schedule, primaryRevision);
         } catch (err) {
           response = [
             {
@@ -61,7 +59,7 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
     setSpinnerAgain(true);
     updateScheduleErrors();
     setTimeout(() => setSpinnerAgain(false), 4000);
-  }, [dispatcher, scheduleLogic, baseRevision]);
+  }, [dispatcher, scheduleLogic, primaryRevision]);
 
   return (
     <>

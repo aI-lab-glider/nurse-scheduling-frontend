@@ -16,24 +16,11 @@ import { LocalStorageProvider } from "../../../../api/local-storage-provider.mod
 import _ from "lodash";
 import { ActionModel } from "../../../models/action.model";
 import { Shift } from "../../../../common-models/shift-info.model";
-import { AddMonthRevisionAction, BaseRevisionAction } from "../../base-revision.reducer";
+import { AddMonthRevisionAction, PrimaryRevisionAction } from "../../base-revision.reducer";
 import { PrimaryMonthRevisionDataModel } from "../../../models/application-state.model";
 
 export class ScheduleDataActionCreator {
-  static setScheduleStateAndSaveToDb(
-    newSchedule: ScheduleDataModel
-  ): ThunkFunction<ScheduleDataModel | MonthDataModel> {
-    return async (dispatch, getState): Promise<void> => {
-      const { revision } = getState().actualState;
-      await new LocalStorageProvider().saveSchedule(revision, newSchedule);
-      const primaryMonthDM = await this.getMonthPrimaryRevisionDM(
-        cropScheduleDMToMonthDM(newSchedule)
-      );
-
-      dispatch(this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM));
-    };
-  }
-
+  //#region Update state
   private static setCurrentAndPrimaryScheduleState(
     currentSchedule: ScheduleDataModel,
     baseSchedule: PrimaryMonthRevisionDataModel
@@ -48,24 +35,11 @@ export class ScheduleDataActionCreator {
         dispatch(addNewSchedule);
       });
 
-      const addBaseSchedule = {
-        type: BaseRevisionAction.ADD_MONTH_PRIMARY_REVISION,
+      const addPrimaryRevision = {
+        type: PrimaryRevisionAction.ADD_MONTH_PRIMARY_REVISION,
         payload: baseSchedule,
       } as AddMonthRevisionAction;
-      dispatch(addBaseSchedule);
-    };
-  }
-
-  static setScheduleFromMonthDMAndSaveInDB(
-    newMonth: MonthDataModel,
-    revision?: RevisionType
-  ): ThunkFunction<ScheduleDataModel> {
-    return async (dispatch, getState): Promise<void> => {
-      if (_.isNil(revision)) {
-        revision = getState().actualState.revision;
-      }
-      const newSchedule = await extendMonthDMRevisionToScheduleDM(newMonth, revision);
-      dispatch(this.setScheduleStateAndSaveToDb(newSchedule));
+      dispatch(addPrimaryRevision);
     };
   }
 
@@ -82,15 +56,6 @@ export class ScheduleDataActionCreator {
 
       dispatch(this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM));
     };
-  }
-
-  private static async getMonthPrimaryRevisionDM(
-    monthDataModel: MonthDataModel
-  ): Promise<PrimaryMonthRevisionDataModel> {
-    const primaryMonthDM = await new LocalStorageProvider().getMonthRevision(
-      monthDataModel.scheduleKey.getRevisionKey("primary")
-    );
-    return (primaryMonthDM ?? monthDataModel) as PrimaryMonthRevisionDataModel;
   }
 
   static setScheduleStateAndCreateIfNeeded(
@@ -125,6 +90,46 @@ export class ScheduleDataActionCreator {
         dispatch(this.setScheduleFromMonthDM(monthDataModel));
       }
     };
+  }
+  //#endregion
+
+  //#region Update state and save to DB
+  static setScheduleStateAndSaveToDb(
+    newSchedule: ScheduleDataModel
+  ): ThunkFunction<ScheduleDataModel | MonthDataModel> {
+    return async (dispatch, getState): Promise<void> => {
+      const { revision } = getState().actualState;
+      await new LocalStorageProvider().saveSchedule(revision, newSchedule);
+      const primaryMonthDM = await this.getMonthPrimaryRevisionDM(
+        cropScheduleDMToMonthDM(newSchedule)
+      );
+
+      dispatch(this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM));
+    };
+  }
+
+  static setScheduleFromMonthDMAndSaveInDB(
+    newMonth: MonthDataModel,
+    revision?: RevisionType
+  ): ThunkFunction<ScheduleDataModel> {
+    return async (dispatch, getState): Promise<void> => {
+      if (_.isNil(revision)) {
+        revision = getState().actualState.revision;
+      }
+      const newSchedule = await extendMonthDMRevisionToScheduleDM(newMonth, revision);
+      dispatch(this.setScheduleStateAndSaveToDb(newSchedule));
+    };
+  }
+
+  //#endregion
+
+  private static async getMonthPrimaryRevisionDM(
+    monthDataModel: MonthDataModel
+  ): Promise<PrimaryMonthRevisionDataModel> {
+    const primaryMonthDM = await new LocalStorageProvider().getMonthRevision(
+      monthDataModel.scheduleKey.getRevisionKey("primary")
+    );
+    return (primaryMonthDM ?? monthDataModel) as PrimaryMonthRevisionDataModel;
   }
 
   static updateSchedule(newScheduleModel: ScheduleDataModel): ScheduleActionModel {

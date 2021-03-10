@@ -2,7 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
-import { Shift, ShiftCode, SHIFTS } from "../../../../src/common-models/shift-info.model";
+import {
+  FREE_SHIFTS,
+  Shift,
+  ShiftCode,
+  SHIFTS,
+  WORKING_SHIFTS,
+} from "../../../../src/common-models/shift-info.model";
 import { MonthDataArray, ShiftHelper } from "../../../../src/helpers/shifts.helper";
 import { WorkerHourInfo } from "../../../../src/helpers/worker-hours-info.model";
 import { workerTestData, WorkerTestDataInstance } from "../../../fixtures/march-2021-worker-data";
@@ -18,14 +24,13 @@ describe("Worker hours info", () => {
 
   const exampleWorker = workerTestData[0];
 
-  const workingShifts = Object.values(SHIFTS).filter((shift) => shift.isWorkingShift);
-  const freeShifts = Object.values(SHIFTS).filter(
-    (shift) => !shift.isWorkingShift && shift.code !== "W"
-  );
+  const workingShifts = WORKING_SHIFTS;
+  const freeShifts = FREE_SHIFTS;
+  Object.values(SHIFTS).filter((shift) => !shift.isWorkingShift && shift.code !== "W");
 
   const exampleWorkringShift = workingShifts[0];
   const exampleFreeShift = freeShifts[0];
-  it(`Should subtract from worker reuired hours duration of ${exampleWorkringShift.code} when it 
+  it(`Should subtract from worker required hours duration of ${exampleWorkringShift.code} when it 
             is replaced with ${exampleFreeShift.code}`, () => {
     const testedShiftDuration = ShiftHelper.shiftCodeToWorkTime(exampleWorkringShift);
     const {

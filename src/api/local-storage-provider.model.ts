@@ -170,8 +170,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     try {
       const monthData = (await this.storage.get(revisionKey)).data;
       const { month, year } = monthData.scheduleKey;
-      const scheduleKey = new ScheduleKey(month, year);
-      monthData.scheduleKey = scheduleKey;
+      monthData.scheduleKey = new ScheduleKey(month, year);
       return monthData;
     } catch (error) {
       // eslint-disable-next-line no-console

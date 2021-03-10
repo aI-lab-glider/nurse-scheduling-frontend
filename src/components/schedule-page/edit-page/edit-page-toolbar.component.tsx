@@ -27,9 +27,7 @@ interface EditPageToolbarOptions {
 export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Element {
   const scheduleLogic = useContext(ScheduleLogicContext);
 
-  const { primaryRevision: baseRevision } = useSelector(
-    (app: ApplicationStateModel) => app.actualState
-  );
+  const { primaryRevision } = useSelector((app: ApplicationStateModel) => app.actualState);
   const { createNotification } = useNotification();
   const dispatcher = useDispatch();
 
@@ -38,7 +36,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
     if (schedule) {
       let response: ScheduleError[];
       try {
-        response = await backend.getErrors(schedule, baseRevision);
+        response = await backend.getErrors(schedule, primaryRevision);
       } catch (err) {
         response = [
           {
