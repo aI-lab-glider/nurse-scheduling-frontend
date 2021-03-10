@@ -12,12 +12,13 @@ import {
   cropShiftsToMonth,
 } from "../state/reducers/month-state/schedule-data/common-reducers";
 import { ArrayHelper } from "../helpers/array.helper";
-import { MonthHelper } from "../helpers/month.helper";
+import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../helpers/month.helper";
 import { LocalStorageProvider } from "../api/local-storage-provider.model";
 
 /* eslint-disable @typescript-eslint/camelcase */
 
 export type ScheduleContainer = ScheduleDataModel | MonthDataModel;
+
 export enum ScheduleContainerType {
   "MONTH_DM" = "MONTH_DM",
   "SCHEDULE_DM" = "SCHEDULE_DM",
@@ -27,9 +28,11 @@ export type ScheduleContainerLength = {
   [key in ScheduleContainerType]: number[];
 };
 
+const POSSIBLE_WEEK_COUNT_IN_MONTH = [4, 5, 6];
+
 export const SCHEDULE_CONTAINERS_LENGTH: ScheduleContainerLength = {
   MONTH_DM: [28, 29, 30, 31],
-  SCHEDULE_DM: [28, 35, 42],
+  SCHEDULE_DM: POSSIBLE_WEEK_COUNT_IN_MONTH.map((wc) => wc * NUMBER_OF_DAYS_IN_WEEK),
 };
 
 export interface ScheduleDataModel {
@@ -143,14 +146,17 @@ export function extendMonthDMToScheduleDM(
   nextMonthData: MonthDataModel
 ): ScheduleDataModel {
   const { scheduleKey } = currentMonthData;
-  const [missingFromPrev, missingFromNext] = MonthHelper.calculateMissingFullWeekDays(scheduleKey);
+  const {
+    daysMissingFromPrevMonth,
+    daysMissingFromNextMonth,
+  } = MonthHelper.calculateMissingFullWeekDays(scheduleKey);
   const extendSchedule = <T>(sectionKey: string, valueKey: string, defaultValue: T): T[] =>
     ArrayHelper.extend<T>(
       prevMonthData[sectionKey][valueKey],
-      missingFromPrev,
+      daysMissingFromPrevMonth,
       currentMonthData[sectionKey][valueKey],
       nextMonthData[sectionKey][valueKey],
-      missingFromNext,
+      daysMissingFromNextMonth,
       defaultValue
     );
 
@@ -221,9 +227,8 @@ function validateWorkersIntegrity(employeeInfo: WorkersInfoModel, shifts: ShiftI
   const workersWithType = _.sortBy(Object.keys(employeeInfo.type));
   if (!_.isEqual(workersWithType, workersWithShifts)) {
     throw new Error(
-      `Different workers have type: ${JSON.stringify(workersWithType)} and shifts ${JSON.stringify(
-        workersWithShifts
-      )}`
+      `Shifts cannot be defined for workers without defined type. Workers without defined shifts are
+      ${workersWithType.filter((w) => !workersWithShifts.includes(w)).join(", ")}`
     );
   }
 }
@@ -238,7 +243,7 @@ function validateShiftTypesIntegrity(shiftModel: ShiftModel, shifts: ShiftInfoMo
       throw new Error(
         `Worker shifts contain shifts codes ${JSON.stringify(
           shiftsNotIncludedInShiftTypes
-        )} which is not included in shift model`
+        )} which are not included in shift model`
       );
     }
   });

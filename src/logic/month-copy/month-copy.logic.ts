@@ -10,10 +10,9 @@ import {
 import * as _ from "lodash";
 import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
 import { ArrayHelper } from "../../helpers/array.helper";
-import { MonthInfoModel } from "../../common-models/month-info.model";
+import { createDatesForMonth, MonthInfoModel } from "../../common-models/month-info.model";
 import { ScheduleKey } from "../../api/persistance-store.model";
 import { MonthHelper } from "../../helpers/month.helper";
-import { createDatesForMonth } from "../../common-models/schedule.model";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { DEFAULT_CHILDREN_NUMBER } from "../schedule-parser/children-info.parser";
 import { DEFAULT_EXTRA_WORKERS_NUMBER } from "../schedule-parser/extra-workers.parser";
@@ -107,8 +106,12 @@ function concatWithLastWeekFromPrevMonth<T>(
 }
 
 function getNumberOfDaysToBeCopied(monthKey: ScheduleKey): number {
-  const [, daysEditedInPrevMonth] = MonthHelper.calculateMissingFullWeekDays(monthKey.prevMonthKey);
-  const [, daysFromNextMonth] = MonthHelper.calculateMissingFullWeekDays(monthKey);
+  const {
+    daysMissingFromNextMonth: daysEditedInPrevMonth,
+  } = MonthHelper.calculateMissingFullWeekDays(monthKey.prevMonthKey);
+  const { daysMissingFromNextMonth: daysFromNextMonth } = MonthHelper.calculateMissingFullWeekDays(
+    monthKey
+  );
 
   return (
     MonthHelper.getMonthLength(monthKey.year, monthKey.month) -

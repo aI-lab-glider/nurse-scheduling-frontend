@@ -82,18 +82,16 @@ export function validateEmployeeInfo(employeeInfo: WorkersInfoModel): void {
     const workersWithContractType = _.sortBy(Object.keys(employeeInfo.contractType));
     if (!_.isEqual(workersWithType, workersWithContractType)) {
       throw new Error(
-        `Different workers have type: ${JSON.stringify(
-          workersWithType
-        )} and contract type ${JSON.stringify(workersWithContractType)}`
+        `Contract type cannot be defined for workers without defined type. Workers without defined contract type are
+         ${workersWithType.filter((w) => !workersWithContractType.includes(w)).join(", ")}`
       );
     }
   }
 
   if (!_.isEqual(workersWithType, workersWithTime)) {
     throw new Error(
-      `Different workers have type: ${JSON.stringify(workersWithType)} and time ${JSON.stringify(
-        workersWithTime
-      )}`
+      `Working time cannot be defined for workers without defined type. Workers without defined time are
+         ${workersWithType.filter((w) => !workersWithTime.includes(w)).join(", ")}`
     );
   }
 }

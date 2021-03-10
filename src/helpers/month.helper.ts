@@ -7,22 +7,27 @@ import * as _ from "lodash";
 
 export const NUMBER_OF_DAYS_IN_WEEK = 7;
 
+interface DaysMissingToFullWeeks {
+  daysMissingFromPrevMonth: number;
+  daysMissingFromNextMonth: number;
+}
+
 export class MonthHelper {
   static getMonthLastWeekData<T>(
     scheduleKey: ScheduleKey,
     monthData: T[],
     nextMonthData: T[]
   ): T[] {
-    const [, missingFromNextMonth] = this.calculateMissingFullWeekDays(scheduleKey);
+    const { daysMissingFromNextMonth } = this.calculateMissingFullWeekDays(scheduleKey);
     const monthLen = monthData.length;
     let lastWeek: T[] = [];
-    if (missingFromNextMonth > 0) {
-      const daysFromCurrentMonthInLastWeek = NUMBER_OF_DAYS_IN_WEEK - missingFromNextMonth;
+    if (daysMissingFromNextMonth > 0) {
+      const daysFromCurrentMonthInLastWeek = NUMBER_OF_DAYS_IN_WEEK - daysMissingFromNextMonth;
       const currentMonthDataPart = monthData.slice(
         monthLen - daysFromCurrentMonthInLastWeek,
         monthLen + 1
       );
-      const nextMonthDataPart = nextMonthData.slice(0, missingFromNextMonth);
+      const nextMonthDataPart = nextMonthData.slice(0, daysMissingFromNextMonth);
       lastWeek = [...currentMonthDataPart, ...nextMonthDataPart];
     } else {
       lastWeek = monthData.slice(monthLen - NUMBER_OF_DAYS_IN_WEEK, monthLen + 1);
@@ -40,12 +45,13 @@ export class MonthHelper {
   }
 
   static getMonthFullWeeksDaysLen(year: number, month: number): number {
-    const [missingFromPrevMonth, missingFromNextMonth] = this.calculateMissingFullWeekDays(
-      new ScheduleKey(month, year)
-    );
+    const {
+      daysMissingFromPrevMonth,
+      daysMissingFromNextMonth,
+    } = this.calculateMissingFullWeekDays(new ScheduleKey(month, year));
     let numberOfWeekInMonth = this.numberOfWeeksInMonth(month, year);
-    missingFromPrevMonth > 0 && numberOfWeekInMonth--;
-    missingFromNextMonth > 0 && numberOfWeekInMonth--;
+    daysMissingFromPrevMonth > 0 && numberOfWeekInMonth--;
+    daysMissingFromNextMonth > 0 && numberOfWeekInMonth--;
     return NUMBER_OF_DAYS_IN_WEEK * numberOfWeekInMonth;
   }
 
@@ -71,18 +77,22 @@ export class MonthHelper {
     return curDate;
   }
 
-  static calculateMissingFullWeekDays({ month, year }: ScheduleKey): [number, number] {
+  static calculateMissingFullWeekDays({ month, year }: ScheduleKey): DaysMissingToFullWeeks {
     const firstMonthDay = new Date(year, month, 1).getDay();
     const lastMonthDay = new Date(year, month + 1, 0).getDay();
-    return [firstMonthDay === 0 ? 6 : firstMonthDay - 1, lastMonthDay === 0 ? 0 : 7 - lastMonthDay];
+    return {
+      daysMissingFromPrevMonth: firstMonthDay === 0 ? 6 : firstMonthDay - 1,
+      daysMissingFromNextMonth: lastMonthDay === 0 ? 0 : 7 - lastMonthDay,
+    };
   }
 
   static numberOfWeeksInMonth(month: number, year: number): number {
-    const [missingPrev, missingNext] = MonthHelper.calculateMissingFullWeekDays(
-      new ScheduleKey(month, year)
-    );
+    const {
+      daysMissingFromPrevMonth,
+      daysMissingFromNextMonth,
+    } = MonthHelper.calculateMissingFullWeekDays(new ScheduleKey(month, year));
     const monthLength = MonthHelper.daysInMonth(month, year).length;
-    const fullScheduleDays = missingPrev + monthLength + missingNext;
+    const fullScheduleDays = daysMissingFromPrevMonth + monthLength + daysMissingFromNextMonth;
 
     return fullScheduleDays / NUMBER_OF_DAYS_IN_WEEK;
   }
