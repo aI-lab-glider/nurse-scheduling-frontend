@@ -105,15 +105,15 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     const monthDataModel = cropScheduleDMToMonthDM(scheduleDataModel);
     await this.saveBothMonthRevisionsIfNeeded(type, monthDataModel);
 
-    const [, missingFromNext] = MonthHelper.calculateMissingFullWeekDays(
+    const { daysMissingFromNextMonth } = MonthHelper.calculateMissingFullWeekDays(
       monthDataModel.scheduleKey
     );
 
-    if (missingFromNext !== 0) {
+    if (daysMissingFromNextMonth !== 0) {
       await this.updateMonthPartBasedOnScheduleDM(
         getScheduleKey(scheduleDataModel).nextMonthKey.getRevisionKey(type),
         scheduleDataModel,
-        missingFromNext,
+        daysMissingFromNextMonth,
         "HEAD"
       );
     }

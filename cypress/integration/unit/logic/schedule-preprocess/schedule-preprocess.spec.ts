@@ -56,11 +56,12 @@ describe("Schedule preprocessor functions", () => {
     });
 
     it(`Should calculate how many days are missing from previous and next month to create full weeks for ${test.title}`, () => {
-      const [prev, next] = MonthHelper.calculateMissingFullWeekDays(
-        new ScheduleKey(test.monthNumber, test.year)
-      );
-      expect(prev).eql(test.missingDaysToFullWeek.prevMonth);
-      expect(next).eql(test.missingDaysToFullWeek.nextMonth);
+      const {
+        daysMissingFromPrevMonth,
+        daysMissingFromNextMonth,
+      } = MonthHelper.calculateMissingFullWeekDays(new ScheduleKey(test.monthNumber, test.year));
+      expect(daysMissingFromPrevMonth).eql(test.missingDaysToFullWeek.prevMonth);
+      expect(daysMissingFromNextMonth).eql(test.missingDaysToFullWeek.nextMonth);
     });
   });
 
