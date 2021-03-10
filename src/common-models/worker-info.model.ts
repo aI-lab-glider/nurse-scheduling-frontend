@@ -78,15 +78,15 @@ export function validateEmployeeInfo(employeeInfo: WorkersInfoModel): void {
   const workersWithType = _.sortBy(Object.keys(employeeInfo.type));
   const workersWithTime = _.sortBy(Object.keys(employeeInfo.time));
   // TODO: make contract type required
-  if (employeeInfo.contractType) {
-    const workersWithContractType = _.sortBy(Object.keys(employeeInfo.contractType));
-    if (!_.isEqual(workersWithType, workersWithContractType)) {
-      throw new Error(
-        `Contract type cannot be defined for workers without defined type. Workers without defined contract type are
-         ${workersWithType.filter((w) => !workersWithContractType.includes(w)).join(", ")}`
-      );
-    }
-  }
+
+  //   const workersWithContractType = _.sortBy(Object.keys(employeeInfo.contractType));
+  //   if (!_.isEqual(workersWithType, workersWithContractType)) {
+  //     throw new Error(
+  //       `Contract type cannot be defined for workers without defined type. Workers without defined contract type are
+  //        ${workersWithType.filter((w) => !workersWithContractType.includes(w)).join(", ")}`
+  //     );
+  //   }
+  // }
 
   if (!_.isEqual(workersWithType, workersWithTime)) {
     throw new Error(
