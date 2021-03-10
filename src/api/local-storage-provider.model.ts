@@ -22,9 +22,9 @@ import {
   ScheduleKey,
 } from "./persistance-store.model";
 import _ from "lodash";
-import { calculateMissingFullWeekDays } from "../state/reducers/month-state/schedule-data/common-reducers";
 import { ArrayHelper, ArrayPositionPointer } from "../helpers/array.helper";
 import { VerboseDateHelper } from "../helpers/verbose-date.helper";
+import { MonthHelper } from "../helpers/month.helper";
 
 export const DATABASE_NAME = "nurse-scheduling";
 type MonthDMToRevisionKeyDict = { [revisionKey: string]: MonthDataModel };
@@ -105,7 +105,9 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     const monthDataModel = cropScheduleDMToMonthDM(scheduleDataModel);
     await this.saveBothMonthRevisionsIfNeeded(type, monthDataModel);
 
-    const [, missingFromNext] = calculateMissingFullWeekDays(monthDataModel.scheduleKey);
+    const [, missingFromNext] = MonthHelper.calculateMissingFullWeekDays(
+      monthDataModel.scheduleKey
+    );
 
     if (missingFromNext !== 0) {
       await this.updateMonthPartBasedOnScheduleDM(
