@@ -8,12 +8,15 @@ import {
   validateScheduleContainer,
 } from "../../common-models/schedule-data.model";
 import * as _ from "lodash";
-import { FREE_SHIFTS, ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
+import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
 import { ArrayHelper } from "../../helpers/array.helper";
 import { MonthInfoModel } from "../../common-models/month-info.model";
 import { ScheduleKey } from "../../api/persistance-store.model";
 import { MonthHelper } from "../../helpers/month.helper";
 import { createDatesForMonth } from "../../common-models/schedule.model";
+import { ShiftHelper } from "../../helpers/shifts.helper";
+import { DEFAULT_CHILDREN_NUMBER } from "../schedule-parser/children-info.parser";
+import { DEFAULT_EXTRA_WORKERS_NUMBER } from "../schedule-parser/extra-workers.parser";
 
 /* eslint-disable @typescript-eslint/camelcase */
 export function copyMonthDM(
@@ -41,32 +44,15 @@ export function copyShifts(
   { scheduleKey: currentScheduleKey, shifts: currentScheduleShifts }: MonthDataModel,
   baseShifts: ShiftInfoModel
 ): ShiftInfoModel {
-  const { month: baseMonth, year: baseYear } = currentScheduleKey.prevMonthKey;
-
-  const numberOfDaysToBeCopied = getNumberOfDaysToBeCopied(currentScheduleKey);
-
   const newMonthWorkersShifts: ShiftInfoModel = {};
   Object.keys(baseShifts).forEach((workerKey) => {
-    const fullBaseMonthShifts = cropMonthDataToFullWeeks(
-      baseYear,
-      baseMonth,
-      baseShifts[workerKey]
-    );
-
-    let missingShifts = ArrayHelper.circularExtendToLength(
-      fullBaseMonthShifts,
-      numberOfDaysToBeCopied
-    );
-
-    missingShifts = missingShifts.map((shift) => {
-      return FREE_SHIFTS.includes(shift) ? ShiftCode.W : shift;
-    });
-
-    newMonthWorkersShifts[workerKey] = concatWithLastWeekFromPrevMonth(
+    const copiedShifts = copyMonthData(
       currentScheduleKey,
-      missingShifts,
-      currentScheduleShifts[workerKey] ?? []
+      baseShifts[workerKey],
+      ShiftCode.W,
+      currentScheduleShifts[workerKey]
     );
+    newMonthWorkersShifts[workerKey] = ShiftHelper.replaceFreeShiftsWithFreeDay(copiedShifts);
   });
   return newMonthWorkersShifts;
 }
@@ -79,34 +65,44 @@ export function copyMonthInfo(
   return {
     children_number: copyMonthData(
       currentScheduleKey,
-      currentMonthInfo.children_number ?? [],
-      baseMonthInfo.children_number ?? []
+      baseMonthInfo.children_number ?? [],
+      DEFAULT_CHILDREN_NUMBER,
+      currentMonthInfo.children_number ?? []
     ),
     extra_workers: copyMonthData(
       currentScheduleKey,
-      currentMonthInfo.extra_workers ?? [],
-      baseMonthInfo.extra_workers ?? []
+      baseMonthInfo.extra_workers ?? [],
+      DEFAULT_EXTRA_WORKERS_NUMBER,
+      currentMonthInfo.extra_workers ?? []
     ),
     dates,
     frozen_shifts: [],
   };
 }
 
-function copyMonthData<T>(monthKey: ScheduleKey, currentMonthData: T[], baseMonthData: T[]): T[] {
+function copyMonthData<T>(
+  monthKey: ScheduleKey,
+  baseMonthData: T[],
+  defaultCurrentValue: T,
+  currentMonthData?: T[]
+): T[] {
   const { month: baseMonth, year: baseYear } = monthKey.prevMonthKey;
   const numberOfDaysToBeCopied = getNumberOfDaysToBeCopied(monthKey);
   const copyBase = cropMonthDataToFullWeeks(baseYear, baseMonth, baseMonthData);
-
   const copiedData = ArrayHelper.circularExtendToLength(copyBase, numberOfDaysToBeCopied);
-  return concatWithLastWeekFromPrevMonth(monthKey, copiedData, baseMonthData);
+
+  const currentMonthLength = MonthHelper.getMonthLength(monthKey.year, monthKey.month);
+  currentMonthData = currentMonthData ?? Array(currentMonthLength).fill(defaultCurrentValue);
+  return concatWithLastWeekFromPrevMonth(monthKey, copiedData, baseMonthData, currentMonthData);
 }
 
 function concatWithLastWeekFromPrevMonth<T>(
   monthKey: ScheduleKey,
   copiedData: T[],
-  baseData: T[]
+  prevMonth: T[],
+  currentMonth: T[]
 ): T[] {
-  const prevMonthLastWeek = MonthHelper.getMonthLastWeekData(monthKey, baseData, copiedData);
+  const prevMonthLastWeek = MonthHelper.getMonthLastWeekData(monthKey, prevMonth, currentMonth);
   return prevMonthLastWeek ? prevMonthLastWeek.concat(copiedData) : copiedData;
 }
 
