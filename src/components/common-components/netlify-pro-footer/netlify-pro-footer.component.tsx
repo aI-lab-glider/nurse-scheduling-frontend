@@ -1,11 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import gliderLogo from "../../../assets/images/gliderLogo.png";
+import { LocalStorageProvider } from "../../../api/local-storage-provider.model";
 
 const useStyles = makeStyles({
   footer: {
@@ -23,6 +24,11 @@ const useStyles = makeStyles({
 
 export function NetlifyProFooter(): JSX.Element {
   const classes = useStyles();
+
+  useEffect(() => {
+    new LocalStorageProvider().saveApplicationVersion().then();
+  }, []);
+
   return (
     <Grid container className={classes.footer} justify="space-between" alignItems="center">
       <Grid item>{`Wersja: ${process.env.REACT_APP_VERSION}`}</Grid>

@@ -15,6 +15,7 @@ import {
 } from "../common-models/schedule-data.model";
 
 import {
+  ApplicationVersionRevision,
   MonthRevision,
   PersistenceStoreProvider,
   RevisionKey,
@@ -27,14 +28,17 @@ import { ArrayHelper, ArrayPositionPointer } from "../helpers/array.helper";
 import { VerboseDateHelper } from "../helpers/verbose-date.helper";
 
 export const DATABASE_NAME = "nurse-scheduling";
+const APPLICATION_VERSION_TAG_DATABASE_KEY = "application_version_tag";
 type MonthDMToRevisionKeyDict = { [revisionKey: string]: MonthDataModel };
 
 export class LocalStorageProvider extends PersistenceStoreProvider {
   private storage: PouchDB.Database<MonthRevision>;
+  private applicationVersionStorage: PouchDB.Database<ApplicationVersionRevision>;
 
   constructor() {
     super();
     this.storage = new PouchDB(DATABASE_NAME);
+    this.applicationVersionStorage = new PouchDB(`${DATABASE_NAME}-application-version`);
   }
 
   async reloadDb(): Promise<void> {
@@ -114,6 +118,25 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
         missingFromNext,
         "HEAD"
       );
+    }
+  }
+
+  async saveApplicationVersion(): Promise<void> {
+    const db = this.applicationVersionStorage;
+    const version = process.env.REACT_APP_VERSION;
+
+    try {
+      const doc = await db.get(APPLICATION_VERSION_TAG_DATABASE_KEY);
+      db.put({
+        _id: APPLICATION_VERSION_TAG_DATABASE_KEY,
+        _rev: doc._rev,
+        version: version ? version : "",
+      });
+    } catch (error) {
+      db.put({
+        _id: APPLICATION_VERSION_TAG_DATABASE_KEY,
+        version: version ? version : "",
+      });
     }
   }
 

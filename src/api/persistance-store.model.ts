@@ -65,6 +65,12 @@ export const getRevisionTypeFromKey = (revisionKey: RevisionKey): RevisionType =
   return revisionKey.split("_")[RevisionKeyIndexes.REVISION_TYPE] as RevisionType;
 };
 
+export interface ApplicationVersionRevision {
+  _id: RevisionKey;
+  version: string;
+  _rev?: Revision;
+}
+
 export interface MonthRevision {
   _id: RevisionKey;
   data: MonthDataModel;
