@@ -11,8 +11,8 @@ import {
 import { baseRowDataCy } from "../../src/components/schedule-page/table/schedule/schedule-parts/base-row.models";
 import { summaryCellDataCy } from "../../src/components/summarytable/summarytable-cell.models";
 import { summaryRowDataCy } from "../../src/components/summarytable/summarytable-row.models";
-import { numberOfWeeksInMonth } from "../../src/state/reducers/month-state/schedule-data/common-reducers";
 import { LocalStorageProvider } from "../../src/api/local-storage-provider.model";
+import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../../src/helpers/month.helper";
 
 export type CypressScreenshotOptions = Partial<
   Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions
@@ -46,7 +46,6 @@ export enum HoursInfoCells {
   overtime = 2,
 }
 export type ScheduleName = "example.xlsx" | "grafik.xlsx" | "example_2.xlsx";
-export const NUMBER_OF_DAYS_IN_WEEK = 7;
 const TEST_SCHEDULE_MONTH = 10;
 const TEST_SCHEDULE_YEAR = 2020;
 
@@ -65,7 +64,7 @@ Cypress.Commands.add(
       .its("actualState.temporarySchedule.present.month_info.children_number")
       .should(
         "have.length",
-        numberOfWeeksInMonth(month ?? TEST_SCHEDULE_MONTH, year ?? TEST_SCHEDULE_YEAR) *
+        MonthHelper.numberOfWeeksInMonth(month ?? TEST_SCHEDULE_MONTH, year ?? TEST_SCHEDULE_YEAR) *
           NUMBER_OF_DAYS_IN_WEEK
       );
   }

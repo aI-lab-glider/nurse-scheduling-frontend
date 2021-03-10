@@ -8,12 +8,11 @@ import { ShiftCode, ShiftInfoModel, ShiftModel, validateShiftInfoModel } from ".
 import { RevisionType, ScheduleKey } from "../api/persistance-store.model";
 import * as _ from "lodash";
 import {
-  calculateMissingFullWeekDays,
   cropMonthInfoToMonth,
   cropShiftsToMonth,
-  daysInMonth,
 } from "../state/reducers/month-state/schedule-data/common-reducers";
 import { ArrayHelper } from "../helpers/array.helper";
+import { MonthHelper } from "../helpers/month.helper";
 import { LocalStorageProvider } from "../api/local-storage-provider.model";
 
 /* eslint-disable @typescript-eslint/camelcase */
@@ -97,7 +96,7 @@ export function createEmptyMonthDataModel(
     shift_types,
   }: Pick<MonthDataModel, "employee_info" | "shifts" | "shift_types">
 ): MonthDataModel {
-  const dates = daysInMonth(scheduleKey.month, scheduleKey.year);
+  const dates = MonthHelper.daysInMonth(scheduleKey.month, scheduleKey.year);
   const monthLength = dates.length;
 
   const freeShifts: ShiftInfoModel = {};
@@ -144,7 +143,7 @@ export function extendMonthDMToScheduleDM(
   nextMonthData: MonthDataModel
 ): ScheduleDataModel {
   const { scheduleKey } = currentMonthData;
-  const [missingFromPrev, missingFromNext] = calculateMissingFullWeekDays(scheduleKey);
+  const [missingFromPrev, missingFromNext] = MonthHelper.calculateMissingFullWeekDays(scheduleKey);
   const extendSchedule = <T>(sectionKey: string, valueKey: string, defaultValue: T): T[] =>
     ArrayHelper.extend<T>(
       prevMonthData[sectionKey][valueKey],
