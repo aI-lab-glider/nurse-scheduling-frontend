@@ -8,7 +8,7 @@ import { MetaDataParser } from "./metadata.parser";
 import { ShiftsInfoParser } from "./shifts-info.parser";
 import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
 import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
-import { FoundationInfoParser } from "./foundation-info.parser";
+import { FoundationInfoHeaders, FoundationInfoParser } from "./foundation-info.parser";
 import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
 import { ExtraWorkersInfoParser } from "./extra-workers-info.parser";
 
@@ -32,58 +32,59 @@ export class ScheduleParser implements ScheduleProvider {
   }
 
   private parseSections(rawSchedule: string[][][]): Sections {
-    let children;
     let nurses;
-    let babysiter;
-    let dayWorkers;
+    let babysiters;
 
-    const metadataRaw = rawSchedule.find((r) => r[0][0].toLowerCase().trim() === "dni miesiąca");
+    const foundationInfoHeaders = Object.values(FoundationInfoHeaders);
+
+    const foundationInfoRaw = rawSchedule.find((r) =>
+      foundationInfoHeaders.some((h) => r[0][0].toLowerCase().trim() === h)
+    );
+    const metadataRaw = foundationInfoRaw?.find(
+      (r) => r[0].toLowerCase().trim() === FoundationInfoHeaders.MonthDates
+    );
     const metadata = new MetaDataParser(this.month, this.year, metadataRaw);
 
+    const childrenRaw = foundationInfoRaw?.find(
+      (r) => r[0].toLowerCase().trim() === FoundationInfoHeaders.ChildrenInfo
+    );
+    const children = new ChildrenInfoParser(metadata, childrenRaw);
+
+    const extraWorkersRaw = foundationInfoRaw?.find(
+      (r) => r[0].toLowerCase().trim() === FoundationInfoHeaders.ExtraWorkers
+    );
+    const extraWorkers = new ExtraWorkersInfoParser(metadata, extraWorkersRaw);
+
+    rawSchedule.splice(rawSchedule.indexOf(foundationInfoRaw!), 1);
+
     rawSchedule.forEach((r) => {
-      if (r && r.length !== 0 && r[0].length !== 0) {
-        const rKey = r[0][0].toLowerCase().trim();
-        if (rKey === "dni miesiąca") {
-          if (r.length === 3) {
-            children = new ChildrenInfoParser(metadata, r);
-            dayWorkers = new ExtraWorkersInfoParser(metadata, r);
-          }
-        } else if (rKey === "pracownicy dzienni") {
-          dayWorkers = new ExtraWorkersInfoParser(metadata, r);
-        } else if (rKey === "dzieci") {
-          children = new ChildrenInfoParser(metadata, r);
-        } else if (!nurses) {
+      if (r) {
+        if (!nurses) {
           nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata, r);
-        } else {
-          babysiter = new ShiftsInfoParser(WorkerType.OTHER, metadata, r);
+        } else if (!babysiters) {
+          babysiters = new ShiftsInfoParser(WorkerType.OTHER, metadata, r);
         }
       }
     });
 
-    if (!children) {
-      children = new ChildrenInfoParser(metadata);
-    }
     if (!nurses) {
       nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata);
     }
-    if (!babysiter) {
-      babysiter = new ShiftsInfoParser(WorkerType.OTHER, metadata);
-    }
-    if (!dayWorkers) {
-      dayWorkers = new ExtraWorkersInfoParser(metadata);
+    if (!babysiters) {
+      babysiters = new ShiftsInfoParser(WorkerType.OTHER, metadata);
     }
 
     const parsers: FoundationInfoOptions = {
       ChildrenInfo: children,
       NurseInfo: nurses,
-      BabysitterInfo: babysiter,
-      ExtraWorkersInfo: dayWorkers,
+      BabysitterInfo: babysiters,
+      ExtraWorkersInfo: extraWorkers,
     };
 
     const foundationParser = new FoundationInfoParser(parsers);
     return {
       NurseInfo: nurses,
-      BabysitterInfo: babysiter,
+      BabysitterInfo: babysiters,
       FoundationInfo: foundationParser,
       Metadata: metadata,
     };

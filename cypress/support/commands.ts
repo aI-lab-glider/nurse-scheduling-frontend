@@ -44,7 +44,12 @@ export enum HoursInfoCells {
   actual = 1,
   overtime = 2,
 }
-export type ScheduleName = "example.xlsx" | "grafik.xlsx" | "example_2.xlsx";
+export type ScheduleName =
+  | "example.xlsx"
+  | "grafik.xlsx"
+  | "example_2.xlsx"
+  | "childrens_extraworkers.xlsx"
+  | "extraworkers_childrens.xlsx";
 export const NUMBER_OF_DAYS_IN_WEEK = 7;
 const TEST_SCHEDULE_MONTH = 10;
 const TEST_SCHEDULE_YEAR = 2020;
