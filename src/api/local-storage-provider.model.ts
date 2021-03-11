@@ -7,11 +7,11 @@
 import PouchDB from "pouchdb-browser";
 import {
   createEmptyMonthDataModel,
-  cropScheduleDMToMonthDM,
   getScheduleKey,
   isMonthModelEmpty,
   MonthDataModel,
   ScheduleDataModel,
+  validateMonthDM,
 } from "../common-models/schedule-data.model";
 
 import {
@@ -22,9 +22,10 @@ import {
   ScheduleKey,
 } from "./persistance-store.model";
 import _ from "lodash";
-import { calculateMissingFullWeekDays } from "../state/reducers/month-state/schedule-data/common-reducers";
 import { ArrayHelper, ArrayPositionPointer } from "../helpers/array.helper";
 import { VerboseDateHelper } from "../helpers/verbose-date.helper";
+import { MonthHelper } from "../helpers/month.helper";
+import { cropScheduleDMToMonthDM } from "../logic/schedule-container-convertion/schedule-container-convertion";
 
 export const DATABASE_NAME = "nurse-scheduling";
 type MonthDMToRevisionKeyDict = { [revisionKey: string]: MonthDataModel };
@@ -75,6 +76,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     revisionType: RevisionType,
     monthDataModel: MonthDataModel
   ): Promise<void> {
+    validateMonthDM(monthDataModel);
     const revisionKey = monthDataModel.scheduleKey.getRevisionKey(revisionType);
     let revision;
     try {
@@ -105,13 +107,15 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     const monthDataModel = cropScheduleDMToMonthDM(scheduleDataModel);
     await this.saveBothMonthRevisionsIfNeeded(type, monthDataModel);
 
-    const [, missingFromNext] = calculateMissingFullWeekDays(monthDataModel.scheduleKey);
+    const { daysMissingFromNextMonth } = MonthHelper.calculateMissingFullWeekDays(
+      monthDataModel.scheduleKey
+    );
 
-    if (missingFromNext !== 0) {
+    if (daysMissingFromNextMonth !== 0) {
       await this.updateMonthPartBasedOnScheduleDM(
         getScheduleKey(scheduleDataModel).nextMonthKey.getRevisionKey(type),
         scheduleDataModel,
-        missingFromNext,
+        daysMissingFromNextMonth,
         "HEAD"
       );
     }
@@ -155,6 +159,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
         ),
       };
 
+      validateMonthDM(updatedMonthDataModel);
       this.storage.put({
         _rev: document._rev,
         _id: revisionKey,
@@ -171,6 +176,8 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       const monthData = (await this.storage.get(revisionKey)).data;
       const { month, year } = monthData.scheduleKey;
       monthData.scheduleKey = new ScheduleKey(month, year);
+
+      validateMonthDM(monthData);
       return monthData;
     } catch (error) {
       // eslint-disable-next-line no-console

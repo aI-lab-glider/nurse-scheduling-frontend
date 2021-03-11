@@ -2,11 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { FileHelper } from "../../../../src/helpers/file.helper";
-import {
-  cropScheduleDMToMonthDM,
-  ScheduleDataModel,
-} from "../../../../src/common-models/schedule-data.model";
+import { ScheduleDataModel } from "../../../../src/common-models/schedule-data.model";
 import schedule from "../../../fixtures/schedule";
+import { cropScheduleDMToMonthDM } from "../../../../src/logic/schedule-container-convertion/schedule-container-convertion";
 
 describe("FileHelper", () => {
   it(`Should properly create directory name based on filename`, () => {
