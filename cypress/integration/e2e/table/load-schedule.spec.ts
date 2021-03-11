@@ -18,6 +18,7 @@ context("Load schedule", () => {
       desiredShiftCode: ShiftCode.U,
     });
     cy.enterEditMode();
+    cy.changeWorkerShift({ newShiftCode: ShiftCode.D, ...cell });
     cy.saveToDatabase();
     cy.leaveEditMode();
     cy.loadScheduleToMonth("example_2.xlsx");
