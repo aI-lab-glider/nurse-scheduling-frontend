@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Button } from "../../button-component/button.component";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
@@ -79,8 +79,6 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
   const classes = useStyles();
   const { open, setOpen, handleSave, closeOptions } = options;
   const title = "Niezapisane zmiany w grafiku";
-  const [isYExplanationVisible, setIsYExplanationVisible] = useState(false);
-  const [isNExplanationVisible, setIsNExplanationVisible] = useState(false);
   const { persistentSchedule } = useSelector((state: ApplicationStateModel) => state.actualState);
   const persistent = persistentSchedule.present;
   const scheduleLogic = useContext(ScheduleLogicContext);
@@ -112,28 +110,14 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
 
   const footer = (
     <div className="save-changes-modal-footer">
-      {isYExplanationVisible && <p>Zmiany zostaną zapisane do aktualnej wersji grafiku</p>}
-      {isNExplanationVisible && <p>Wprowadzone niezapisane zmiany zostaną usunięte</p>}
-      {!isYExplanationVisible && !isNExplanationVisible && <div />}
       <Link to="/">
-        <Button
-          variant="primary"
-          onClick={onSaveClick}
-          onMouseEnter={(): void => setIsYExplanationVisible(true)}
-          onMouseLeave={(): void => setIsYExplanationVisible(false)}
-        >
+        <Button variant="primary" onClick={onSaveClick}>
           Tak
         </Button>
       </Link>
 
       <Link to="/">
-        <Button
-          variant="secondary"
-          color="secondary"
-          onClick={onNoSaveClick}
-          onMouseEnter={(): void => setIsNExplanationVisible(true)}
-          onMouseLeave={(): void => setIsNExplanationVisible(false)}
-        >
+        <Button variant="secondary" color="secondary" onClick={onNoSaveClick}>
           Nie
         </Button>
       </Link>
