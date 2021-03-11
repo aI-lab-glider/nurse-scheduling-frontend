@@ -10,8 +10,6 @@ import * as _ from "lodash";
 import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../helpers/month.helper";
 
 /* eslint-disable @typescript-eslint/camelcase */
-export type ScheduleContainer = ScheduleDataModel | MonthDataModel;
-
 export enum ScheduleContainerType {
   "MONTH_DM" = "MONTH_DM",
   "SCHEDULE_DM" = "SCHEDULE_DM",
@@ -42,31 +40,33 @@ export interface MonthDataModel extends Omit<ScheduleDataModel, "schedule_info" 
   scheduleKey: ScheduleKey;
 }
 
-function isScheduleDM(container: ScheduleContainer): container is ScheduleDataModel {
-  return (
-    (container as ScheduleDataModel).schedule_info !== undefined &&
-    SCHEDULE_CONTAINERS_LENGTH["SCHEDULE_DM"].includes(container.month_info.dates.length)
-  );
-}
-
-export function validateScheduleContainer(scheduleContainer: ScheduleContainer): void {
-  const {
+export function validateScheduleDM({
+  shifts,
+  month_info: monthInfo,
+  employee_info: employeeInfo,
+  shift_types: shiftTypes,
+  schedule_info: scheduleInfo,
+}: ScheduleDataModel): void {
+  validateScheduleInfo(scheduleInfo);
+  validateShiftInfoModel(shifts, ScheduleContainerType.SCHEDULE_DM);
+  validateMonthInfo(monthInfo, ScheduleContainerType.SCHEDULE_DM);
+  validateEmployeeInfo(employeeInfo);
+  validateScheduleContainerDataIntegrity({
     shifts,
     month_info: monthInfo,
     employee_info: employeeInfo,
     shift_types: shiftTypes,
-  } = scheduleContainer;
-  if (isScheduleDM(scheduleContainer)) {
-    const { schedule_info: scheduleInfo } = scheduleContainer;
-    validateScheduleInfo(scheduleInfo);
-  }
+  });
+}
 
-  const scheduleLength = isScheduleDM(scheduleContainer)
-    ? ScheduleContainerType.SCHEDULE_DM
-    : ScheduleContainerType.MONTH_DM;
-
-  validateShiftInfoModel(shifts, scheduleLength);
-  validateMonthInfo(monthInfo, scheduleLength);
+export function validateMonthDM({
+  shifts,
+  month_info: monthInfo,
+  employee_info: employeeInfo,
+  shift_types: shiftTypes,
+}: MonthDataModel): void {
+  validateShiftInfoModel(shifts, ScheduleContainerType.MONTH_DM);
+  validateMonthInfo(monthInfo, ScheduleContainerType.MONTH_DM);
   validateEmployeeInfo(employeeInfo);
   validateScheduleContainerDataIntegrity({
     shifts,
@@ -118,7 +118,7 @@ export function createEmptyMonthDataModel(
     isCorrupted: false,
   };
 
-  validateScheduleContainer(monthDataModel);
+  validateMonthDM(monthDataModel);
   return monthDataModel;
 }
 

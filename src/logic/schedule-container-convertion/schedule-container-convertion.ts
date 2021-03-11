@@ -15,7 +15,8 @@ import {
   MonthDataModel,
   ScheduleContainerType,
   ScheduleDataModel,
-  validateScheduleContainer,
+  validateMonthDM,
+  validateScheduleDM,
 } from "../../common-models/schedule-data.model";
 import { RevisionType, ScheduleKey } from "../../api/persistance-store.model";
 import * as _ from "lodash";
@@ -65,7 +66,7 @@ export function extendMonthDMToScheduleDM(
     shifts,
   };
 
-  validateScheduleContainer(scheduleDataModel);
+  validateScheduleDM(scheduleDataModel);
   return scheduleDataModel;
 }
 
@@ -83,7 +84,7 @@ export function cropScheduleDMToMonthDM(schedule: ScheduleDataModel): MonthDataM
     month_info: month,
   };
 
-  validateScheduleContainer(monthDataModel);
+  validateMonthDM(monthDataModel);
   return monthDataModel;
 }
 
