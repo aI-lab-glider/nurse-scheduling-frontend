@@ -41,18 +41,14 @@ export function validateMonthInfo(
       `Schedule dates have wrong length: ${scheduleLen}. It should be equal to one of: ${SCHEDULE_CONTAINERS_LENGTH[containerType]}`
     );
   }
-  if (scheduleLen !== monthInfo.children_number!.length) {
+  if (monthInfo.children_number !== undefined && scheduleLen !== monthInfo.children_number.length) {
     throw new Error(
-      `Children number should have the same length as schedule equal to ${scheduleLen} not: ${
-        monthInfo.children_number!.length
-      }`
+      `Children number should have the same length as schedule equal to ${scheduleLen} not: ${monthInfo.children_number.length}`
     );
   }
-  if (scheduleLen !== monthInfo.extra_workers!.length) {
+  if (monthInfo.extra_workers !== undefined && scheduleLen !== monthInfo.extra_workers.length) {
     throw new Error(
-      `Extra workers should have the same length as schedule equal to ${scheduleLen} not ${
-        monthInfo.extra_workers!.length
-      }`
+      `Extra workers should have the same length as schedule equal to ${scheduleLen} not ${monthInfo.extra_workers.length}`
     );
   }
 }
