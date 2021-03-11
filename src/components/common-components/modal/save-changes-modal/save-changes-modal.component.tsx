@@ -86,7 +86,7 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
   const scheduleLogic = useContext(ScheduleLogicContext);
 
   const fetchPrevScheduleVersion = (): void => {
-    scheduleLogic?.updateActualRevisionToGivenSchedule(persistent[0]);
+    scheduleLogic?.updateActualRevisionToGivenSchedule(persistent);
   };
 
   function handleClose(): void {

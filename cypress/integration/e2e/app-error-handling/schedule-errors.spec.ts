@@ -4,8 +4,7 @@
 
 import { WorkerType } from "../../../../src/common-models/worker-info.model";
 
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-const addWorker = (workerName: string, position: WorkerType) => {
+const addWorker = (workerName: string, position: WorkerType): Cypress.Chainable => {
   cy.get('[data-cy="btn-management-tab"]').click();
   cy.get('[data-cy="management-page-title"]').should("be.visible");
   cy.get('[data-cy="btn-add-worker"]').click();

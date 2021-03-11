@@ -17,10 +17,10 @@ export class RevisionReducerActionCreator {
       const actualSchedule = getState().actualState.persistentSchedule.present;
       const actualMonthDM = cropScheduleDMToMonthDM(actualSchedule);
 
-      const setRevisionAction = ScheduleDataActionCreator.setScheduleFromKeyIfExistsInDB(
+      const setRevisionAction = ScheduleDataActionCreator.setScheduleStateAndCreateIfNeeded(
         actualMonthDM.scheduleKey,
-        newRevisionType,
-        actualMonthDM
+        actualMonthDM,
+        newRevisionType
       );
 
       dispatch({

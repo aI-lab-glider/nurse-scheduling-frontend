@@ -8,11 +8,11 @@ import { Link } from "react-router-dom";
 export interface ConditionalLinkOptions {
   children: JSX.Element[];
   to: string;
-  condition: boolean;
+  shouldNavigate: boolean;
 }
 
 export default function ConditionalLink(options: ConditionalLinkOptions): JSX.Element {
-  const { children, to, condition } = options;
+  const { children, to, shouldNavigate: condition } = options;
 
   return (
     <>

@@ -58,7 +58,7 @@ export function EmptyMonthButtons(): JSX.Element {
 
   useEffect(() => {
     if (monthModel) {
-      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel, true);
+      const action = ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(monthModel);
       dispatch(action);
     }
   }, [monthModel, dispatch]);

@@ -61,7 +61,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
             personel.push("W");
           } else {
             if (typeof b !== "string" || !(b in ShiftCode)) {
-              this.logUnknownValue(i + 1, name, b);
+              this.logUnknownValue(i, name, b);
               personel.push("W");
             } else {
               personel.push(b);
