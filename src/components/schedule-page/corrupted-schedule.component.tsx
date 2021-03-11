@@ -21,12 +21,24 @@ export function CorruptedScheduleComponent(): JSX.Element {
   const { past } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule
   );
-  const isPreviousVersionAvailable = past.length > MINIMUM_UNDO_COUNT_TO_REVERT_NORMAL_SCHEDULE;
+  const { month_number: month, year } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
+  );
+  const currentMonthPastRevisions = past.filter(
+    (schedule) =>
+      schedule.schedule_info.month_number === month && schedule.schedule_info.year === year
+  );
+  const isPreviousVersionAvailable =
+    currentMonthPastRevisions.length >= MINIMUM_UNDO_COUNT_TO_REVERT_NORMAL_SCHEDULE;
 
   const fetchPrevScheduleVersion = (): void => {
     // This is the schedule which caused corruption.
     const lastNotCorrupted = past.findIndex((schedule) => {
-      return !schedule.isCorrupted;
+      return (
+        !schedule.isCorrupted &&
+        schedule.schedule_info.month_number === month &&
+        schedule.schedule_info.year === year
+      );
     });
     const numberOfUndo = lastNotCorrupted + MINIMUM_UNDO_COUNT_TO_REVERT_NORMAL_SCHEDULE;
 
