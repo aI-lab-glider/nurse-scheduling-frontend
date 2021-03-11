@@ -12,7 +12,7 @@ export class MetaDataParser extends MetadataProvider {
   public offset: number;
   private _parseErrors: ScheduleError[] = [];
 
-  constructor(month: number, year: number, raw: string[][] | undefined) {
+  constructor(month: number, year: number, raw: string[] | undefined) {
     super();
 
     if (raw) {
@@ -45,15 +45,8 @@ export class MetaDataParser extends MetadataProvider {
     });
   }
 
-  private extractMetadata(raw: string[][]): number {
-    if (raw.length !== 1) {
-      this.logLoadFIleError("Nie znaleziono spdoziewanej ilości wierszy w sekcji dane");
-      return 0;
-    }
-
-    const monthDays = raw[0];
-
-    const startOfMonth = monthDays.findIndex((a) => a.toString() === `1`);
+  private extractMetadata(raw: string[]): number {
+    const startOfMonth = raw.findIndex((a) => a.toString() === `1`);
 
     if (startOfMonth === -1) {
       this.logLoadFIleError(
