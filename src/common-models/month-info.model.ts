@@ -27,7 +27,7 @@ export interface VerboseDate {
 export interface MonthInfoModel {
   children_number?: number[];
   extra_workers?: number[];
-  frozen_shifts: [number | string, number][];
+  frozen_shifts?: [number | string, number][];
   dates: number[];
 }
 
