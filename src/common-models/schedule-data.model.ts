@@ -154,7 +154,7 @@ function validateScheduleContainerDataIntegrity({
 }
 
 function validateShiftLengthIntegrity(scheduleLen: number, shifts: ShiftInfoModel): void {
-  if (shifts) {
+  if (shifts !== undefined && !_.isEmpty(shifts)) {
     const [worker, workerShifts] = Object.entries(shifts)[0];
     const shiftLen = workerShifts.length;
     if (shiftLen !== scheduleLen) {

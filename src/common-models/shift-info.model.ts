@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { SCHEDULE_CONTAINERS_LENGTH, ScheduleContainerType } from "./schedule-data.model";
+import * as _ from "lodash";
 
 export interface Shift {
   code: string;
@@ -195,7 +196,7 @@ export function validateShiftInfoModel(
   shifts: ShiftInfoModel,
   containerType: ScheduleContainerType
 ): void {
-  if (shifts) {
+  if (shifts !== undefined && !_.isEmpty(shifts)) {
     const [worker, workerShifts] = Object.entries(shifts)[0];
     const shiftLen = workerShifts.length;
     if (!SCHEDULE_CONTAINERS_LENGTH[containerType].includes(shiftLen)) {
