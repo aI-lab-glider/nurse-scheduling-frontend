@@ -5,10 +5,9 @@ import { validateEmployeeInfo, WorkersInfoModel } from "./worker-info.model";
 import { MonthInfoModel, validateMonthInfo } from "./month-info.model";
 import { ScheduleMetadata, validateScheduleInfo } from "./schedule.model";
 import { ShiftCode, ShiftInfoModel, ShiftModel, validateShiftInfoModel } from "./shift-info.model";
-import { RevisionType, ScheduleKey } from "../api/persistance-store.model";
+import { ScheduleKey } from "../api/persistance-store.model";
 import * as _ from "lodash";
 import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../helpers/month.helper";
-import { LocalStorageProvider } from "../api/local-storage-provider.model";
 
 /* eslint-disable @typescript-eslint/camelcase */
 export type ScheduleContainer = ScheduleDataModel | MonthDataModel;
@@ -128,17 +127,6 @@ export function getScheduleKey(newSchedule: ScheduleDataModel): ScheduleKey {
     newSchedule.schedule_info.month_number ?? new Date().getMonth(),
     newSchedule.schedule_info.year ?? new Date().getFullYear()
   );
-}
-
-export async function extendMonthDMRevisionToScheduleDM(
-  currentMonthData: MonthDataModel,
-  revision: RevisionType
-): Promise<ScheduleDataModel> {
-  const [prevMonth, nextMonth] = await new LocalStorageProvider().fetchOrCreateMonthNeighbours(
-    currentMonthData,
-    revision
-  );
-  return extendMonthDMToScheduleDM(prevMonth, currentMonthData, nextMonth);
 }
 
 function validateScheduleContainerDataIntegrity({

@@ -64,7 +64,7 @@ export class MonthSwitchActionCreator {
 
       if (baseSchedule && newSchedule) {
         const scheduleDataModel = copyMonthDM(newSchedule, baseSchedule);
-        dispatch(ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(scheduleDataModel));
+        dispatch(ScheduleDataActionCreator.setScheduleStateAndSaveToDb(scheduleDataModel));
       }
     };
   }
