@@ -44,6 +44,7 @@ export function copyShifts(
   baseShifts: ShiftInfoModel
 ): ShiftInfoModel {
   const newMonthWorkersShifts: ShiftInfoModel = {};
+  const { daysMissingFromPrevMonth } = MonthHelper.calculateMissingFullWeekDays(currentScheduleKey);
   Object.keys(baseShifts).forEach((workerKey) => {
     const copiedShifts = copyMonthData(
       currentScheduleKey,
@@ -51,7 +52,10 @@ export function copyShifts(
       ShiftCode.W,
       currentScheduleShifts[workerKey]
     );
-    newMonthWorkersShifts[workerKey] = ShiftHelper.replaceFreeShiftsWithFreeDay(copiedShifts);
+    newMonthWorkersShifts[workerKey] = ShiftHelper.replaceFreeShiftsWithFreeDay(
+      copiedShifts,
+      daysMissingFromPrevMonth
+    );
   });
   return newMonthWorkersShifts;
 }
@@ -101,7 +105,11 @@ function concatWithLastWeekFromPrevMonth<T>(
   prevMonth: T[],
   currentMonth: T[]
 ): T[] {
-  const prevMonthLastWeek = MonthHelper.getMonthLastWeekData(monthKey, prevMonth, currentMonth);
+  const prevMonthLastWeek = MonthHelper.getMonthLastWeekData(
+    monthKey.prevMonthKey,
+    prevMonth,
+    currentMonth
+  );
   return prevMonthLastWeek ? prevMonthLastWeek.concat(copiedData) : copiedData;
 }
 
