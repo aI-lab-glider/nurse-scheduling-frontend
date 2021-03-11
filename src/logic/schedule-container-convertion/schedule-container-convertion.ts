@@ -17,8 +17,9 @@ import {
   ScheduleDataModel,
   validateScheduleContainer,
 } from "../../common-models/schedule-data.model";
-import { ScheduleKey } from "../../api/persistance-store.model";
+import { RevisionType, ScheduleKey } from "../../api/persistance-store.model";
 import * as _ from "lodash";
+import { LocalStorageProvider } from "../../api/local-storage-provider.model";
 
 /* eslint-disable @typescript-eslint/camelcase */
 export function extendMonthDMToScheduleDM(
@@ -130,4 +131,15 @@ export function cropMonthInfoToMonth(
 
   validateMonthInfo(monthInfoModel, ScheduleContainerType.MONTH_DM);
   return monthInfoModel;
+}
+
+export async function extendMonthDMRevisionToScheduleDM(
+  currentMonthData: MonthDataModel,
+  revision: RevisionType
+): Promise<ScheduleDataModel> {
+  const [prevMonth, nextMonth] = await new LocalStorageProvider().fetchOrCreateMonthNeighbours(
+    currentMonthData,
+    revision
+  );
+  return extendMonthDMToScheduleDM(prevMonth, currentMonthData, nextMonth);
 }
