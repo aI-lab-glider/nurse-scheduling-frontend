@@ -155,37 +155,6 @@ context("Work hours info (summary table)", () => {
     testWorkHoursInfoUpdate(data);
   });
 
-  it("When U for current month weekday is added, should subtract 8 from required hours, add 8 to overtime and not change actual", () => {
-    const data = {
-      workerType: WorkerType.NURSE,
-      workerIdx: 2,
-      shiftIndex: prevMonthDays + 8,
-      initialShiftCode: ShiftCode.W,
-      desiredShiftCode: ShiftCode.U,
-      expectedWorkHoursInfo: {
-        [HoursInfoCells.required]: nurseInitialWorkHours[2][HoursInfoCells.required] - 8,
-        [HoursInfoCells.actual]: nurseInitialWorkHours[2][HoursInfoCells.actual],
-        [HoursInfoCells.overtime]: nurseInitialWorkHours[2][HoursInfoCells.overtime] + 8,
-      },
-    };
-    testWorkHoursInfoUpdate(data);
-  });
-  it("When U for current month weekday is removed, should add 8 to required hours, subtract 8 from overtime and not change actual", () => {
-    const data = {
-      workerType: WorkerType.NURSE,
-      workerIdx: 3,
-      shiftIndex: prevMonthDays + 25,
-      initialShiftCode: ShiftCode.U,
-      desiredShiftCode: ShiftCode.W,
-      expectedWorkHoursInfo: {
-        [HoursInfoCells.required]: nurseInitialWorkHours[3][HoursInfoCells.required] + 8,
-        [HoursInfoCells.actual]: nurseInitialWorkHours[3][HoursInfoCells.actual],
-        [HoursInfoCells.overtime]: nurseInitialWorkHours[3][HoursInfoCells.overtime] - 8,
-      },
-    };
-    testWorkHoursInfoUpdate(data);
-  });
-
   it("Cannot change previous month shifts", () => {
     const data = {
       workerType: WorkerType.NURSE,
@@ -196,22 +165,6 @@ context("Work hours info (summary table)", () => {
     cy.getWorkerShift(data).click();
     const exampleShiftCode = ShiftCode.D;
     cy.get(`[data-cy=autocomplete-${exampleShiftCode}]`).should("not.exist");
-  });
-
-  it("When L4 for current month weekday is added, should subtract 8 from required hours, add 8 to overtime and not change actual", () => {
-    const data = {
-      workerType: WorkerType.NURSE,
-      workerIdx: 5,
-      shiftIndex: prevMonthDays + 22,
-      initialShiftCode: ShiftCode.W,
-      desiredShiftCode: ShiftCode.L4,
-      expectedWorkHoursInfo: {
-        [HoursInfoCells.required]: nurseInitialWorkHours[5][HoursInfoCells.required] - 8,
-        [HoursInfoCells.actual]: nurseInitialWorkHours[5][HoursInfoCells.actual],
-        [HoursInfoCells.overtime]: nurseInitialWorkHours[5][HoursInfoCells.overtime] + 8,
-      },
-    };
-    testWorkHoursInfoUpdate(data);
   });
 
   it("When N for current month weekday is added, should add 12 to actual and overtime hours and not change required", () => {
@@ -229,6 +182,7 @@ context("Work hours info (summary table)", () => {
     };
     testWorkHoursInfoUpdate(data);
   });
+
   it("Is removed, should subtract 12 from actual and overtime hours and not change required", () => {
     const data = {
       workerType: WorkerType.OTHER,
@@ -240,53 +194,6 @@ context("Work hours info (summary table)", () => {
         [HoursInfoCells.required]: babysitterInitialWorkHours[1][HoursInfoCells.required],
         [HoursInfoCells.actual]: babysitterInitialWorkHours[1][HoursInfoCells.actual] - 12,
         [HoursInfoCells.overtime]: babysitterInitialWorkHours[1][HoursInfoCells.overtime] - 12,
-      },
-    };
-    testWorkHoursInfoUpdate(data);
-  });
-
-  it("When U for current month weekday is added, should subtract 8 from required hours, add 8 to overtime and not change actual", () => {
-    const data = {
-      workerType: WorkerType.OTHER,
-      workerIdx: 2,
-      shiftIndex: prevMonthDays + 3,
-      initialShiftCode: ShiftCode.W,
-      desiredShiftCode: ShiftCode.U,
-      expectedWorkHoursInfo: {
-        [HoursInfoCells.required]: babysitterInitialWorkHours[2][HoursInfoCells.required] - 8,
-        [HoursInfoCells.actual]: babysitterInitialWorkHours[2][HoursInfoCells.actual],
-        [HoursInfoCells.overtime]: babysitterInitialWorkHours[2][HoursInfoCells.overtime] + 8,
-      },
-    };
-    testWorkHoursInfoUpdate(data);
-  });
-  it("When U for current month weekday is removed, should add 8 to required hours, subtract 8 from overtime and not change actual", () => {
-    const data = {
-      workerType: WorkerType.OTHER,
-      workerIdx: 3,
-      shiftIndex: prevMonthDays + 4,
-      initialShiftCode: ShiftCode.U,
-      desiredShiftCode: ShiftCode.W,
-      expectedWorkHoursInfo: {
-        [HoursInfoCells.required]: babysitterInitialWorkHours[3][HoursInfoCells.required] + 8,
-        [HoursInfoCells.actual]: babysitterInitialWorkHours[3][HoursInfoCells.actual],
-        [HoursInfoCells.overtime]: babysitterInitialWorkHours[3][HoursInfoCells.overtime] - 8,
-      },
-    };
-    testWorkHoursInfoUpdate(data);
-  });
-
-  it("When L4 for current month weekday is added, should subtract 8 from required hours, add 8 to overtime and not change actual", () => {
-    const data = {
-      workerType: WorkerType.OTHER,
-      workerIdx: 5,
-      shiftIndex: prevMonthDays + 1,
-      initialShiftCode: ShiftCode.W,
-      desiredShiftCode: ShiftCode.L4,
-      expectedWorkHoursInfo: {
-        [HoursInfoCells.required]: babysitterInitialWorkHours[5][HoursInfoCells.required] - 8,
-        [HoursInfoCells.actual]: babysitterInitialWorkHours[5][HoursInfoCells.actual],
-        [HoursInfoCells.overtime]: babysitterInitialWorkHours[5][HoursInfoCells.overtime] + 8,
       },
     };
     testWorkHoursInfoUpdate(data);

@@ -29,7 +29,7 @@ export class MonthInfoLogic {
   }
 
   public readonly year: string;
-  constructor(monthId: string | number, year: string | number, monthDates: number[]) {
+  constructor(monthId: string | number, year: string | number, monthDates?: number[]) {
     this.year = year.toString();
     if (typeof monthId == "string") {
       monthId = TranslationHelper.polishMonths.findIndex(

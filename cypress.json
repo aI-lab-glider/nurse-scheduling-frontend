@@ -1,6 +1,7 @@
 {
   "env": {
-    "baseUrl": "http://localhost:3000"
+    "baseUrl": "http://localhost:3000",
+    "REACT_APP_ERROR_WORKER": "maciej"
   },
   "viewportWidth": 1920,
   "viewportHeight": 1080,

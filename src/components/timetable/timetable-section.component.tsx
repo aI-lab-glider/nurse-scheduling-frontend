@@ -30,7 +30,7 @@ export function TimeTableSection({ scheduleLocalState }: TimeTableSectionOptions
     <>
       <table className="table">
         <tbody>
-          <TimeTableRow uuid={scheduleLocalState.uuid} dataRow={data} />
+          <TimeTableRow uuid={scheduleLocalState.uuid} dataRow={data} data-cy="timetable-row" />
         </tbody>
       </table>
     </>

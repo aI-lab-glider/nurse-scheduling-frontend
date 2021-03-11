@@ -4,15 +4,15 @@
 import _ from "lodash";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ContractType, WorkersInfoModel } from "../../../common-models/worker-info.model";
-import { ShiftHelper } from "../../../helpers/shifts.helper";
+import { WorkerHourInfo } from "../../../helpers/worker-hours-info.model";
 import { ActionModel } from "../../models/action.model";
+import { WorkerActionPayload } from "../worker.action-creator";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import {
   createActionName,
   ScheduleActionModel,
   ScheduleActionType,
 } from "./schedule-data/schedule.actions";
-import { WorkerActionPayload } from "../worker.action-creator";
 
 function fromFractionToHours(fraction: string): number {
   const result = fraction.split("/");
@@ -37,7 +37,7 @@ export function getEmployeeWorkTime({
         (employmentTime === "inne" ? employmentTimeOther : employmentTime) ?? "0/1";
       return fromFractionToHours(timeAsFraction);
     case ContractType.CIVIL_CONTRACT:
-      const requiredHoursForMonth = ShiftHelper.calculateWorkNormForMonth(monthNumber, year);
+      const requiredHoursForMonth = WorkerHourInfo.calculateWorkNormForMonth(monthNumber, year);
       return parseInt(civilTime) / requiredHoursForMonth;
     default:
       return 0;

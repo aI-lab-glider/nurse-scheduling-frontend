@@ -37,6 +37,16 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     this.storage = new PouchDB(DATABASE_NAME);
   }
 
+  async reloadDb(): Promise<void> {
+    try {
+      await this.storage.destroy();
+      this.storage = new PouchDB(DATABASE_NAME);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  }
+
   async saveBothMonthRevisionsIfNeeded(
     type: RevisionType,
     monthDataModel: MonthDataModel
@@ -156,13 +166,12 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     }
   }
 
-  async getMonthRevision(
-    revisionKey: RevisionKey,
-    createIfNotExist = false
-  ): Promise<MonthDataModel | undefined> {
+  async getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined> {
     try {
-      const result = await this.storage.get(revisionKey);
-      return result?.data;
+      const monthData = (await this.storage.get(revisionKey)).data;
+      const { month, year } = monthData.scheduleKey;
+      monthData.scheduleKey = new ScheduleKey(month, year);
+      return monthData;
     } catch (error) {
       // eslint-disable-next-line no-console
       error.status !== 404 && console.error(error);
