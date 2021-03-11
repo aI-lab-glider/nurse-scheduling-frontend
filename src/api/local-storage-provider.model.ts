@@ -32,17 +32,10 @@ export const DATABASE_NAME = "nurse-scheduling";
 type MonthDMToRevisionKeyDict = { [revisionKey: string]: MonthDataModel };
 
 export class LocalStorageProvider extends PersistenceStoreProvider {
-  private storage: PouchDB.Database<MonthRevision>;
-
-  constructor() {
-    super();
-    this.storage = new PouchDB(DATABASE_NAME);
-  }
-
   async reloadDb(): Promise<void> {
     try {
-      await this.storage.destroy();
-      this.storage = new PouchDB(DATABASE_NAME);
+      const storage: PouchDB.Database<MonthRevision> = new PouchDB(DATABASE_NAME);
+      await storage.destroy();
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);
@@ -85,14 +78,16 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
   ): Promise<void> {
     validateMonthDM(monthDataModel);
     const revisionKey = monthDataModel.scheduleKey.getRevisionKey(revisionType);
+    const storage: PouchDB.Database<MonthRevision> = new PouchDB(DATABASE_NAME);
     let revision;
     try {
-      const document = await this.storage.get(revisionKey);
+      const document = await storage.get(revisionKey);
       revision = document._rev;
     } catch (error) {
       // eslint-disable-next-line no-console
       error.status !== 404 && console.error(error);
     }
+
     const monthRev: MonthRevision = {
       _id: revisionKey,
       data: monthDataModel,
@@ -103,7 +98,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     }
 
     try {
-      this.storage.put(monthRev);
+      storage.put(monthRev);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -182,7 +177,8 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
 
   async getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined> {
     try {
-      const monthData = (await this.storage.get(revisionKey)).data;
+      const storage: PouchDB.Database<MonthRevision> = new PouchDB(DATABASE_NAME);
+      const monthData = (await storage.get(revisionKey)).data;
       const { month, year } = monthData.scheduleKey;
       monthData.scheduleKey = new ScheduleKey(month, year);
 
@@ -196,7 +192,8 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
   }
 
   async getAllSchedules(): Promise<MonthDMToRevisionKeyDict> {
-    const revisions = await this.storage.allDocs({ include_docs: true });
+    const storage: PouchDB.Database<MonthRevision> = new PouchDB(DATABASE_NAME);
+    const revisions = await storage.allDocs({ include_docs: true });
     const validRevisions = _.compact(revisions.rows.map((r) => r.doc));
 
     const docs: { [revisionKey: string]: MonthDataModel } = {};
