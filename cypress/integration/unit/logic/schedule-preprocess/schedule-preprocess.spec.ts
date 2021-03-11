@@ -1,12 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import {
-  calculateMissingFullWeekDays,
-  daysInMonth,
-  numberOfWeeksInMonth,
-} from "../../../../../src/state/reducers/month-state/schedule-data/common-reducers";
 import { ScheduleKey } from "../../../../../src/api/persistance-store.model";
+import { MonthHelper } from "../../../../../src/helpers/month.helper";
 
 interface TestCase {
   title: string;
@@ -55,29 +51,30 @@ const testCases: TestCase[] = [
 describe("Schedule preprocessor functions", () => {
   testCases.forEach((test) => {
     it(`Should calculate proper month length for ${test.title}`, () => {
-      const days = daysInMonth(test.monthNumber, test.year);
+      const days = MonthHelper.daysInMonth(test.monthNumber, test.year);
       expect(days.length).eql(test.dayInMonth);
     });
 
     it(`Should calculate how many days are missing from previous and next month to create full weeks for ${test.title}`, () => {
-      const [prev, next] = calculateMissingFullWeekDays(
-        new ScheduleKey(test.monthNumber, test.year)
-      );
-      expect(prev).eql(test.missingDaysToFullWeek.prevMonth);
-      expect(next).eql(test.missingDaysToFullWeek.nextMonth);
+      const {
+        daysMissingFromPrevMonth,
+        daysMissingFromNextMonth,
+      } = MonthHelper.calculateMissingFullWeekDays(new ScheduleKey(test.monthNumber, test.year));
+      expect(daysMissingFromPrevMonth).eql(test.missingDaysToFullWeek.prevMonth);
+      expect(daysMissingFromNextMonth).eql(test.missingDaysToFullWeek.nextMonth);
     });
   });
 
   it(`Should calculate proper weeks number for different months`, () => {
-    expect(numberOfWeeksInMonth(0, 2021)).eql(5);
-    expect(numberOfWeeksInMonth(1, 2021)).eql(4);
-    expect(numberOfWeeksInMonth(2, 2021)).eql(5);
-    expect(numberOfWeeksInMonth(3, 2021)).eql(5);
-    expect(numberOfWeeksInMonth(4, 2021)).eql(6);
-    expect(numberOfWeeksInMonth(5, 2021)).eql(5);
-    expect(numberOfWeeksInMonth(6, 2021)).eql(5);
-    expect(numberOfWeeksInMonth(7, 2021)).eql(6);
+    expect(MonthHelper.numberOfWeeksInMonth(0, 2021)).eql(5);
+    expect(MonthHelper.numberOfWeeksInMonth(1, 2021)).eql(4);
+    expect(MonthHelper.numberOfWeeksInMonth(2, 2021)).eql(5);
+    expect(MonthHelper.numberOfWeeksInMonth(3, 2021)).eql(5);
+    expect(MonthHelper.numberOfWeeksInMonth(4, 2021)).eql(6);
+    expect(MonthHelper.numberOfWeeksInMonth(5, 2021)).eql(5);
+    expect(MonthHelper.numberOfWeeksInMonth(6, 2021)).eql(5);
+    expect(MonthHelper.numberOfWeeksInMonth(7, 2021)).eql(6);
 
-    expect(numberOfWeeksInMonth(11, 2019)).eql(6);
+    expect(MonthHelper.numberOfWeeksInMonth(11, 2019)).eql(6);
   });
 });

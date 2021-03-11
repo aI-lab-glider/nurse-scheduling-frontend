@@ -4,17 +4,17 @@
 import * as _ from "lodash";
 import { ScheduleKey } from "../../../../api/persistance-store.model";
 import { MonthInfoModel } from "../../../../common-models/month-info.model";
-import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 import { ScheduleMetadata } from "../../../../common-models/schedule.model";
 import { ShiftInfoModel, SHIFTS } from "../../../../common-models/shift-info.model";
 import { WorkersInfoModel } from "../../../../common-models/worker-info.model";
+import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
+import { MonthHelper } from "../../../../helpers/month.helper";
 import { PrimaryMonthRevisionDataModel } from "../../../models/application-state.model";
-import { daysInMonth } from "./common-reducers";
 
 /* eslint-disable @typescript-eslint/camelcase */
 const employeeInfoinitialState: WorkersInfoModel = { time: {}, type: {}, contractType: {} };
 const initialDate = new Date();
-const monthDays = daysInMonth(initialDate.getMonth(), initialDate.getFullYear());
+const monthDays = MonthHelper.daysInMonth(initialDate.getMonth(), initialDate.getFullYear());
 
 const monthInfoinitialState: MonthInfoModel = {
   children_number: new Array(monthDays.length).fill(0),
