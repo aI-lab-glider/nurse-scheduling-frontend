@@ -81,13 +81,12 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
   const title = "Niezapisane zmiany w grafiku";
   const [isYExplanationVisible, setIsYExplanationVisible] = useState(false);
   const [isNExplanationVisible, setIsNExplanationVisible] = useState(false);
-  const { past } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule
-  );
+  const { persistentSchedule } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const persistent = persistentSchedule.present;
   const scheduleLogic = useContext(ScheduleLogicContext);
 
   const fetchPrevScheduleVersion = (): void => {
-    scheduleLogic?.updateActualRevisionToGivenSchedule(past[0]);
+    scheduleLogic?.updateActualRevisionToGivenSchedule(persistent[0]);
   };
 
   function handleClose(): void {

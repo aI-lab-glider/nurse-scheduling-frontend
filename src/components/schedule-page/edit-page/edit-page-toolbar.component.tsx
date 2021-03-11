@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import React, { useContext, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import backend from "../../../api/backend";
 import { NetworkErrorCode, ScheduleError } from "../../../common-models/schedule-error.model";
 import { ActionModel } from "../../../state/models/action.model";
@@ -18,6 +18,8 @@ import { useNotification } from "../../common-components/notification/notificati
 import { useJiraLikeDrawer } from "../../common-components/drawer/jira-like-drawer-context";
 import ValidationDrawerContentComponent from "../validation-drawer/validation-drawer.component";
 import SaveChangesModal from "../../common-components/modal/save-changes-modal/save-changes-modal.component";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import ConditionalLink from "../../common-components/conditional-link/conditional-link.component";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;
@@ -28,6 +30,10 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
   const { createNotification } = useNotification();
   const dispatcher = useDispatch();
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const { persistentSchedule } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const { temporarySchedule } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const persistent = persistentSchedule.past;
+  const temporary = temporarySchedule.past;
 
   async function updateScheduleErrors(): Promise<void> {
     const schedule = scheduleLogic?.schedule.getDataModel();
@@ -70,7 +76,13 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
   }
 
   function askForSavingChanges(): void {
-    setIsSaveModalOpen(true);
+    if (anyChanges()) setIsSaveModalOpen(true);
+  }
+
+  function anyChanges(): boolean {
+    if (persistent[0].schedule_info && temporary[temporary.length - 1].schedule_info)
+      return persistent[0].schedule_info !== temporary[temporary.length - 1].schedule_info;
+    else return false;
   }
 
   return (
@@ -111,15 +123,17 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
 
         <div className="filler" />
 
-        <Button onClick={askForSavingChanges} variant="secondary" data-cy="leave-edit-mode">
-          Wyjdź
-        </Button>
-        <SaveChangesModal
-          closeOptions={closeEdit}
-          handleSave={handleSaveClick}
-          open={isSaveModalOpen}
-          setOpen={setIsSaveModalOpen}
-        />
+        <ConditionalLink to="/" condition={!anyChanges()}>
+          <Button onClick={askForSavingChanges} variant="secondary" data-cy="leave-edit-mode">
+            Wyjdź
+          </Button>
+          <SaveChangesModal
+            closeOptions={closeEdit}
+            handleSave={handleSaveClick}
+            open={isSaveModalOpen}
+            setOpen={setIsSaveModalOpen}
+          />
+        </ConditionalLink>
 
         <Button
           data-cy="save-schedule-button"
