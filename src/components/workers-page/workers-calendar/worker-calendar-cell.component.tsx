@@ -14,6 +14,8 @@ interface CellOptions {
   hasNext: boolean;
   notCurrentMonth: boolean;
   workersCalendar: boolean;
+  isTop?: boolean;
+  isLeft?: boolean;
 }
 
 export function WorkersCalendarCell(params: CellOptions): JSX.Element {
@@ -32,9 +34,11 @@ export function WorkersCalendarCell(params: CellOptions): JSX.Element {
     shiftColor = fade("#FFFFFF", 0);
     background = fade(shiftColor, 0);
   }
+  const isTop = params.isTop !== undefined ? " isTop" + params.isTop : "";
+  const isLeft = params.isLeft !== undefined ? " isLeft" + params.isLeft : "";
   return (
     <>
-      <div className={"workersCalendarCell"}>
+      <div className={"workersCalendarCell" + isLeft + isTop}>
         <div className={"TopCellPart " + notCurrentMonth}>{date!["date"]}</div>
         <div
           className={
