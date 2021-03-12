@@ -161,6 +161,7 @@ export class ScheduleExportLogic {
     workSheet.getColumn(1).alignment = { vertical: "middle", horizontal: "left" };
     workSheet.getColumn(2).alignment = { vertical: "middle", horizontal: "center" };
     workSheet.getColumn(3).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getColumn(4).alignment = { vertical: "middle", horizontal: "center" };
 
     workSheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
     workSheet.getRow(1).font = { bold: true };
