@@ -3,12 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 /* eslint-disable @typescript-eslint/camelcase */
-import {
-  cropScheduleDMToMonthDM,
-  extendMonthDMRevisionToScheduleDM,
-  MonthDataModel,
-  ScheduleDataModel,
-} from "../../../../common-models/schedule-data.model";
+import { MonthDataModel, ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 import { RevisionType, ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
@@ -18,6 +13,10 @@ import { ActionModel } from "../../../models/action.model";
 import { Shift } from "../../../../common-models/shift-info.model";
 import { AddMonthRevisionAction, PrimaryRevisionAction } from "../../base-revision.reducer";
 import { PrimaryMonthRevisionDataModel } from "../../../models/application-state.model";
+import {
+  cropScheduleDMToMonthDM,
+  extendMonthDMRevisionToScheduleDM,
+} from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
 
 export class ScheduleDataActionCreator {
   //#region Update state

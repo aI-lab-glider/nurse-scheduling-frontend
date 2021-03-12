@@ -13,14 +13,12 @@ import { blue } from "@material-ui/core/colors";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Button } from "../..";
-import {
-  cropScheduleDMToMonthDM,
-  ScheduleDataModel,
-} from "../../../../common-models/schedule-data.model";
+import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 import { ScheduleExportLogic } from "../../../../logic/schedule-exporter/schedule-export.logic";
-import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 import { ButtonData, DropdownButtons } from "../../dropdown-buttons/dropdown-buttons.component";
 import DefaultModal from "../modal.component";
+import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
 
 export interface ExportModalComponent {
   setOpen: (open: boolean) => void;
@@ -45,6 +43,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   };
 
   const [exportOptions, setExportOptions] = React.useState({
+    extraWorkers: { value: true, label: "dzienni pracownicy" },
     overtime: { value: true, label: "nadgodzinny" },
   });
   const { primaryRevision } = useSelector((state: ApplicationStateModel) => state.actualState);
@@ -57,6 +56,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
         scheduleModel: cropScheduleDMToMonthDM(model),
         primaryScheduleModel: primaryRevision,
         overtimeExport: exportOptions.overtime.value,
+        extraWorkersExport: exportOptions.extraWorkers.value,
       }).formatAndSave(revision);
     },
   };

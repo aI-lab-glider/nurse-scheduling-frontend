@@ -17,7 +17,7 @@ export function SummaryTableRowF({
       {workerHours.map((cellData, cellIndex) => {
         return (
           <SummaryTableCell
-            key={`${cellData}_${cellIndex}${uuid}}`}
+            key={`${cellData}_${cellIndex}_${uuid}}`}
             value={cellData}
             cellIndex={cellIndex}
           />

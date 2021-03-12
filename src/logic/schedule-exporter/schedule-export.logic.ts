@@ -92,8 +92,6 @@ export class ScheduleExportLogic {
     )[] = [headerRow, ...datesSection];
     if (this.extraWorkersExport) {
       schedule.push(...extraWorkersSection);
-    } else {
-      schedule.push(EMPTY_ROW);
     }
     schedule.push(...childrenInfoSection);
     if (this.overtimeExport) {
