@@ -6,11 +6,13 @@ import React, { useState } from "react";
 import { MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { FormControl, FormControlLabel, Grid, Radio, RadioGroup } from "@material-ui/core";
-import { Shift, SHIFTS } from "../../../common-models/shift-info.model";
+import { Shift } from "../../../common-models/shift-info.model";
 import { AcronymGenerator } from "../../../helpers/acronym-generator.helper";
 import { DropdownColors } from "../../common-components/dropdown-buttons/dropdown-colors.component";
 import { Button } from "../../common-components";
 import { ShiftDrawerMode } from "./shift-drawer.component";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
 
 interface ShiftEditDrawerOptions {
   selectedShift: Shift;
@@ -23,8 +25,11 @@ export default function ShiftEditDrawer({
   saveChangedShift,
   mode,
 }: ShiftEditDrawerOptions): JSX.Element {
-  const shiftNames = Object.values(SHIFTS).map((shift) => shift.name);
-  const shiftCodes = Object.values(SHIFTS).map((shift) => shift.code);
+  const shifts = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
+  const shiftNames = Object.values(shifts).map((shift) => shift.name);
+  const shiftCodes = Object.values(shifts).map((shift) => shift.code);
   const [shiftName, setShiftName] = useState(selectedShift.name);
   const [shiftCode, setShiftCode] = useState(selectedShift.code);
 

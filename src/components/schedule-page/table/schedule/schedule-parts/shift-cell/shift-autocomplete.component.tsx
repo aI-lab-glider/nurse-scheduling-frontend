@@ -2,25 +2,30 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { SHIFTS as shifts } from "../../../../../../common-models/shift-info.model";
 import { AutocompleteComponent } from "../../../../../common-components";
 import { BaseCellInputOptions } from "../base-cell/base-cell-input.component";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 
-const ShiftCodeSelectItems = Object.values(shifts).map((shift) => {
-  return {
-    name: `${shift.name} ${shift.isWorkingShift ? `(${shift.from}-${shift.to})` : ""}`,
-    symbol: shift.code,
-    code: shift.code,
-    color: shift.color ? shift.color : "$white",
-    "data-cy": `autocomplete-${shift.code}`,
-  };
-});
+const ShiftCodeSelectItems = (shifts: any) =>
+  Object.values(shifts).map((shift: any) => {
+    return {
+      name: `${shift.name} ${shift.isWorkingShift ? `(${shift.from}-${shift.to})` : ""}`,
+      symbol: shift.code,
+      code: shift.code,
+      color: shift.color ? shift.color : "$white",
+      "data-cy": `autocomplete-${shift.code}`,
+    };
+  });
 
 export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): JSX.Element {
+  const shifts = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
   return (
     <AutocompleteComponent
       className={inputOptions.className}
-      options={ShiftCodeSelectItems}
+      options={ShiftCodeSelectItems(shifts)}
       getOptionLabel={(option): string => option.name}
       getOptionColor={(option): string => option.color}
       onValueChange={(option): void => inputOptions.onValueChange(option.code)}
