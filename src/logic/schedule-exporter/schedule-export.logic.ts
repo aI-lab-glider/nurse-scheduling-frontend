@@ -209,18 +209,19 @@ export class ScheduleExportLogic {
       this.scheduleModel.month_info?.dates || []
     );
     const verboseDates = monthLogic.verboseDates;
+    const calendarDataMargin = -2;
     workSheet.addRows(rows);
     workSheet.getColumn(1).width = 20;
     workSheet.eachRow((row, index) => {
-      if (
-        (index > headerLen && index <= nurseLastIndex) ||
-        (index > nurseLastIndex + 1 && index <= babysitterLastIndex)
-      ) {
+      const isNurseRow = index > headerLen && index <= nurseLastIndex;
+      const isBabysitterRow = index > nurseLastIndex + 1 && index <= babysitterLastIndex;
+
+      if (isNurseRow || isBabysitterRow) {
         row.eachCell((cell, colNumber) => {
           const cellValue = cell.value?.toString() || "";
           cell.style = this.getShiftStyle(
             ShiftCode[cellValue] || ShiftCode.W,
-            verboseDates[colNumber - 2]
+            verboseDates[colNumber + calendarDataMargin]
           );
         });
       }
