@@ -3,4 +3,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { FoundationInfoProvider } from "../providers/foundation-info-provider.model";
 
+export enum FoundationInfoHeaders {
+  ChildrenInfo = "dzieci",
+  ExtraWorkers = "pracownicy dzienni",
+  MonthDates = "dni miesiąca",
+}
 export class FoundationInfoParser extends FoundationInfoProvider {}

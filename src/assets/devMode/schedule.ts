@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable @typescript-eslint/camelcase */
+import { ContractType } from "../../common-models/worker-info.model";
+import { ScheduleDataModel } from "../../common-models/schedule-data.model";
+
 export default {
   schedule_info: { UUID: "0", month_number: 1, year: 2021 },
   month_info: {
@@ -99,60 +102,86 @@ export default {
   },
   employee_info: {
     type: {
-      "Sęk Małgorzata": "OTHER",
-      "Grzegrzółka Ilona": "OTHER",
-      "Sapryk Mariola": "OTHER",
-      "Gawrońska Anna": "OTHER",
-      "Cacko Bożena": "OTHER",
-      "Rafał Alicja": "OTHER",
-      "Paczuska Agata": "OTHER",
-      "Rosik Maria": "OTHER",
-      "Rosik Agnieszka": "OTHER",
-      "Mazek Kamila": "OTHER",
-      "Wilk Anna": "OTHER",
-      "Przybysz Aneta": "OTHER",
-      "Masna Anna": "OTHER",
-      "Olszowy Barbara": "NURSE",
-      "Orłowska Tataiana": "NURSE",
-      "Modlińska Monika": "NURSE",
-      "Szczepłek Inez": "NURSE",
-      "Gołąb Małgosia": "NURSE",
-      "Trzoniec Justyna": "NURSE",
-      "Rudnicka Urszula": "NURSE",
-      "Drewicz Anna": "NURSE",
-      "Woiecka Alicja": "NURSE",
-      "Strzeżysz Gata": "NURSE",
-      "Kazmierowicz Iwona": "NURSE",
+      "Opiekunka 1": "OTHER",
+      "Opiekunka 2": "OTHER",
+      "Opiekunka 3": "OTHER",
+      "Opiekunka 4": "OTHER",
+      "Opiekunka 5": "OTHER",
+      "Opiekunka 6": "OTHER",
+      "Opiekunka 7": "OTHER",
+      "Opiekunka 8": "OTHER",
+      "Opiekunka 9": "OTHER",
+      "Opiekunka 10": "OTHER",
+      "Opiekunka 11": "OTHER",
+      "Opiekunka 12": "OTHER",
+      "Opiekunka 13": "OTHER",
+      "Pielęgniarka 1": "NURSE",
+      "Pielęgniarka 2": "NURSE",
+      "Pielęgniarka 3": "NURSE",
+      "Pielęgniarka 4": "NURSE",
+      "Pielęgniarka 5": "NURSE",
+      "Pielęgniarka 6": "NURSE",
+      "Pielęgniarka 7": "NURSE",
+      "Pielęgniarka 8": "NURSE",
+      "Pielęgniarka 9": "NURSE",
+      "Pielęgniarka 10": "NURSE",
+      "Pielęgniarka 11": "NURSE",
     },
     time: {
-      "Olszowy Barbara": 1,
-      "Orłowska Tataiana": 1,
-      "Modlińska Monika": 1,
-      "Szczepłek Inez": 1,
-      "Gołąb Małgosia": 1,
-      "Trzoniec Justyna": 1,
-      "Rudnicka Urszula": 1,
-      "Drewicz Anna": 1,
-      "Woiecka Alicja": 1,
-      "Strzeżysz Gata": 1,
-      "Kazmierowicz Iwona": 1,
-      "Sęk Małgorzata": 1,
-      "Grzegrzółka Ilona": 1,
-      "Sapryk Mariola": 1,
-      "Gawrońska Anna": 1,
-      "Cacko Bożena": 1,
-      "Rafał Alicja": 1,
-      "Paczuska Agata": 1,
-      "Rosik Maria": 1,
-      "Rosik Agnieszka": 1,
-      "Mazek Kamila": 1,
-      "Wilk Anna": 1,
-      "Przybysz Aneta": 1,
-      "Masna Anna": 1,
+      "Pielęgniarka 1": 1,
+      "Pielęgniarka 2": 1,
+      "Pielęgniarka 3": 1,
+      "Pielęgniarka 4": 1,
+      "Pielęgniarka 5": 1,
+      "Pielęgniarka 6": 1,
+      "Pielęgniarka 7": 1,
+      "Pielęgniarka 8": 1,
+      "Pielęgniarka 9": 1,
+      "Pielęgniarka 10": 1,
+      "Pielęgniarka 11": 1,
+      "Opiekunka 1": 1,
+      "Opiekunka 2": 1,
+      "Opiekunka 3": 1,
+      "Opiekunka 4": 1,
+      "Opiekunka 5": 1,
+      "Opiekunka 6": 1,
+      "Opiekunka 7": 1,
+      "Opiekunka 8": 1,
+      "Opiekunka 9": 1,
+      "Opiekunka 10": 1,
+      "Opiekunka 11": 1,
+      "Opiekunka 12": 1,
+      "Opiekunka 13": 1,
+    },
+    contractType: {
+      "Pielęgniarka 1": ContractType.EMPLOYMENT_CONTRACT,
+      "Pielęgniarka 2": ContractType.EMPLOYMENT_CONTRACT,
+      "Pielęgniarka 3": ContractType.EMPLOYMENT_CONTRACT,
+      "Pielęgniarka 4": ContractType.EMPLOYMENT_CONTRACT,
+      "Pielęgniarka 5": ContractType.EMPLOYMENT_CONTRACT,
+      "Pielęgniarka 6": ContractType.EMPLOYMENT_CONTRACT,
+      "Pielęgniarka 7": ContractType.EMPLOYMENT_CONTRACT,
+      "Pielęgniarka 8": ContractType.EMPLOYMENT_CONTRACT,
+      "Pielęgniarka 9": ContractType.EMPLOYMENT_CONTRACT,
+      "Pielęgniarka 10": ContractType.EMPLOYMENT_CONTRACT,
+      "Pielęgniarka 11": ContractType.EMPLOYMENT_CONTRACT,
+      "Opiekunka 1": ContractType.EMPLOYMENT_CONTRACT,
+      "Opiekunka 2": ContractType.EMPLOYMENT_CONTRACT,
+      "Opiekunka 3": ContractType.EMPLOYMENT_CONTRACT,
+      "Opiekunka 4": ContractType.EMPLOYMENT_CONTRACT,
+      "Opiekunka 5": ContractType.EMPLOYMENT_CONTRACT,
+      "Opiekunka 6": ContractType.EMPLOYMENT_CONTRACT,
+      "Opiekunka 7": ContractType.EMPLOYMENT_CONTRACT,
+      "Opiekunka 8": ContractType.EMPLOYMENT_CONTRACT,
+      "Opiekunka 9": ContractType.EMPLOYMENT_CONTRACT,
+      "Opiekunka 10": ContractType.EMPLOYMENT_CONTRACT,
+      "Opiekunka 11": ContractType.EMPLOYMENT_CONTRACT,
+      "Opiekunka 12": ContractType.EMPLOYMENT_CONTRACT,
+      "Opiekunka 13": ContractType.EMPLOYMENT_CONTRACT,
     },
   },
   shifts: {
-    "Sęk Małgorzata": [
+    "Opiekunka 1": [
       "W",
       "W",
       "D",
@@ -182,7 +211,7 @@ export default {
       "D",
       "N",
     ],
-    "Grzegrzółka Ilona": [
+    "Opiekunka 2": [
       "W",
       "W",
       "U",
@@ -212,7 +241,7 @@ export default {
       "D",
       "D",
     ],
-    "Sapryk Mariola": [
+    "Opiekunka 3": [
       "W",
       "W",
       "D",
@@ -242,7 +271,7 @@ export default {
       "W",
       "DN",
     ],
-    "Gawrońska Anna": [
+    "Opiekunka 4": [
       "W",
       "W",
       "D",
@@ -272,7 +301,7 @@ export default {
       "U",
       "U",
     ],
-    "Cacko Bożena": [
+    "Opiekunka 5": [
       "W",
       "W",
       "D",
@@ -302,7 +331,7 @@ export default {
       "W",
       "D",
     ],
-    "Rafał Alicja": [
+    "Opiekunka 6": [
       "W",
       "W",
       "W",
@@ -332,7 +361,7 @@ export default {
       "W",
       "W",
     ],
-    "Paczuska Agata": [
+    "Opiekunka 7": [
       "N",
       "W",
       "W",
@@ -362,7 +391,7 @@ export default {
       "W",
       "DN",
     ],
-    "Rosik Maria": [
+    "Opiekunka 8": [
       "N",
       "W",
       "W",
@@ -392,7 +421,7 @@ export default {
       "D",
       "W",
     ],
-    "Rosik Agnieszka": [
+    "Opiekunka 9": [
       "N",
       "W",
       "W",
@@ -422,7 +451,7 @@ export default {
       "D",
       "N",
     ],
-    "Mazek Kamila": [
+    "Opiekunka 10": [
       "N",
       "W",
       "D",
@@ -452,7 +481,7 @@ export default {
       "D",
       "D",
     ],
-    "Wilk Anna": [
+    "Opiekunka 11": [
       "W",
       "W",
       "W",
@@ -482,7 +511,7 @@ export default {
       "W",
       "W",
     ],
-    "Przybysz Aneta": [
+    "Opiekunka 12": [
       "R",
       "R",
       "R",
@@ -512,7 +541,7 @@ export default {
       "W",
       "W",
     ],
-    "Masna Anna": [
+    "Opiekunka 13": [
       "W",
       "W",
       "W",
@@ -542,7 +571,7 @@ export default {
       "W",
       "W",
     ],
-    "Olszowy Barbara": [
+    "Pielęgniarka 1": [
       "D",
       "D",
       "W",
@@ -572,7 +601,7 @@ export default {
       "W",
       "W",
     ],
-    "Orłowska Tataiana": [
+    "Pielęgniarka 2": [
       "W",
       "D",
       "N",
@@ -602,7 +631,7 @@ export default {
       "W",
       "W",
     ],
-    "Modlińska Monika": [
+    "Pielęgniarka 3": [
       "D",
       "N",
       "W",
@@ -632,7 +661,7 @@ export default {
       "N",
       "W",
     ],
-    "Szczepłek Inez": [
+    "Pielęgniarka 4": [
       "R",
       "R",
       "W",
@@ -662,7 +691,7 @@ export default {
       "W",
       "W",
     ],
-    "Gołąb Małgosia": [
+    "Pielęgniarka 5": [
       "W",
       "N",
       "N",
@@ -692,7 +721,7 @@ export default {
       "N",
       "W",
     ],
-    "Trzoniec Justyna": [
+    "Pielęgniarka 6": [
       "W",
       "W",
       "W",
@@ -722,7 +751,7 @@ export default {
       "N",
       "W",
     ],
-    "Rudnicka Urszula": [
+    "Pielęgniarka 7": [
       "U",
       "U",
       "U",
@@ -752,7 +781,7 @@ export default {
       "W",
       "W",
     ],
-    "Drewicz Anna": [
+    "Pielęgniarka 8": [
       "D",
       "N",
       "W",
@@ -782,7 +811,7 @@ export default {
       "W",
       "W",
     ],
-    "Woiecka Alicja": [
+    "Pielęgniarka 9": [
       "W",
       "D",
       "N",
@@ -812,7 +841,7 @@ export default {
       "W",
       "W",
     ],
-    "Strzeżysz Gata": [
+    "Pielęgniarka 10": [
       "D",
       "D",
       "W",
@@ -842,7 +871,7 @@ export default {
       "N",
       "W",
     ],
-    "Kazmierowicz Iwona": [
+    "Pielęgniarka 11": [
       "P1",
       "DN",
       "W",
@@ -874,6 +903,7 @@ export default {
     ],
   },
   isAutoGenerated: false,
+  isCorrupted: false,
   shift_types: {
     R: { code: "R", name: "Rano", from: 7, to: 15, color: "FFD100", isWorkingShift: true },
     P: { code: "P", name: "Popołudnie", from: 15, to: 19, color: "00A3FF", isWorkingShift: true },
@@ -913,5 +943,77 @@ export default {
       color: "000000",
       isWorkingShift: false,
     },
+    RP: {
+      code: "RP",
+      name: "rano, popołudnie",
+      from: 7,
+      to: 19,
+      color: "FFD100",
+      isWorkingShift: true,
+    },
+    RPN: {
+      code: "RPN",
+      name: "rano, popołudnie, noc",
+      from: 7,
+      to: 7,
+      color: "9025cf",
+      isWorkingShift: true,
+    },
+    N8: {
+      code: "N8",
+      name: "noc 8h",
+      from: 23,
+      to: 7,
+      color: "76a877",
+      isWorkingShift: true,
+    },
+    RN8: {
+      code: "RN8",
+      name: "noc 8h, rano",
+      from: 22,
+      to: 15,
+      color: "805646",
+      isWorkingShift: true,
+    },
+    DN8: {
+      code: "DN8",
+      name: "dzień, noc 8h",
+      from: 22,
+      to: 19,
+      color: "c9592e",
+      isWorkingShift: true,
+    },
+    D1: {
+      code: "D1",
+      name: "dzień 1",
+      from: 7,
+      to: 17,
+      color: "396e75",
+      isWorkingShift: true,
+    },
+    D2: {
+      code: "D2",
+      name: "dzień 2",
+      from: 7,
+      to: 16,
+      color: "eda81c",
+      isWorkingShift: true,
+    },
+    P1: {
+      code: "P1",
+      name: "popołudnie 1",
+      from: 15,
+      to: 21,
+      color: "2003fc",
+      isWorkingShift: true,
+    },
+    R1: {
+      code: "R1",
+      name: "rano 1",
+      from: 7,
+      to: 13,
+      color: "5ce6dc",
+      isWorkingShift: true,
+    },
   },
-};
+} as ScheduleDataModel;

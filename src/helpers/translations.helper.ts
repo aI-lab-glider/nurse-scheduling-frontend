@@ -66,4 +66,11 @@ export class TranslationHelper {
       SU: "nd",
     };
   }
+
+  public static hourAccusativus(key: number): string {
+    if (key === 1) return "godzinę";
+    if (key === 12 || key === 13 || key === 14) return "godzin";
+    if ((key - 2) % 10 === 0 || (key - 3) % 10 === 0 || (key - 4) % 10 === 0) return "godziny";
+    return "godzin";
+  }
 }

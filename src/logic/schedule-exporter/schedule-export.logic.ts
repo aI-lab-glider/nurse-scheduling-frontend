@@ -1,37 +1,58 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { MonthDataModel } from "../../common-models/schedule-data.model";
 import xlsx, { Cell } from "exceljs";
+import { RevisionType } from "../../api/persistance-store.model";
+import { VerboseDate } from "../../common-models/month-info.model";
+import { MonthDataModel } from "../../common-models/schedule-data.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
+import {
+  ContractTypeHelper,
+  WorkerType,
+  WorkerTypeHelper,
+} from "../../common-models/worker-info.model";
+import { ColorHelper } from "../../helpers/colors/color.helper";
+import { Color } from "../../helpers/colors/color.model";
+import { FileHelper } from "../../helpers/file.helper";
+import { ShiftHelper } from "../../helpers/shifts.helper";
+import { TranslationHelper } from "../../helpers/translations.helper";
+import { WorkerHourInfo } from "../../helpers/worker-hours-info.model";
+import { PrimaryMonthRevisionDataModel } from "../../state/models/application-state.model";
 import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
-import { WorkerType } from "../../common-models/worker-info.model";
 import {
   ChildrenSectionKey,
   ExtraWorkersSectionKey,
   MetaDataRowLabel,
   MetaDataSectionKey,
 } from "../section.model";
-import { ShiftHelper } from "../../helpers/shifts.helper";
-import { ColorHelper } from "../../helpers/colors/color.helper";
-import { Color } from "../../helpers/colors/color.model";
-import { TranslationHelper } from "../../helpers/translations.helper";
-import { VerboseDate } from "../../common-models/month-info.model";
-import { ShiftsInfoLogic } from "../schedule-logic/shifts-info.logic";
-import { MetadataLogic } from "../schedule-logic/metadata.logic";
-import { RevisionType } from "../../api/persistance-store.model";
-import { FileHelper } from "../../helpers/file.helper";
 
 const EMPTY_ROW = Array(100).fill("");
-
+export interface ScheduleExportLogicOptions {
+  scheduleModel: MonthDataModel;
+  primaryScheduleModel?: PrimaryMonthRevisionDataModel;
+  overtimeExport?: boolean;
+  extraWorkersExport?: boolean;
+}
 export class ScheduleExportLogic {
-  constructor(
-    private scheduleModel: MonthDataModel,
-    private overtimeExport: boolean = true,
-    private extraWorkersExport?: boolean
-  ) {}
+  private scheduleModel: MonthDataModel;
+  private primaryScheduleModel?: PrimaryMonthRevisionDataModel;
+  private overtimeExport?: boolean;
+  private extraWorkersExport: boolean;
+
+  constructor({
+    scheduleModel,
+    primaryScheduleModel,
+    overtimeExport,
+    extraWorkersExport = true,
+  }: ScheduleExportLogicOptions) {
+    this.scheduleModel = scheduleModel;
+    this.primaryScheduleModel = primaryScheduleModel;
+    this.overtimeExport = !!overtimeExport && !!primaryScheduleModel;
+    this.extraWorkersExport = extraWorkersExport;
+  }
 
   static readonly WORKSHEET_NAME = "grafik";
+  static readonly WORKERS_WORKSHEET_NAME = "pracownicy";
   requiredHoursAddress;
   doneHoursAddress;
   diffHoursAddress;
@@ -42,8 +63,16 @@ export class ScheduleExportLogic {
   }
 
   public createWorkbook(revisionType: RevisionType): [string, xlsx.Workbook] {
-    const [workbook, workSheet] = ScheduleExportLogic.createWorkArea();
+    const [workbook, scheduleWorkSheet, workersWorkSheet] = ScheduleExportLogic.createWorkArea();
 
+    this.setScheduleWorkSheet(scheduleWorkSheet);
+    this.setWorkersWorkSheet(workersWorkSheet);
+
+    const workbookName = FileHelper.createMonthFilename(this.scheduleModel, revisionType);
+    return [workbookName, workbook];
+  }
+
+  private setScheduleWorkSheet(workSheet: xlsx.Worksheet): void {
     workSheet.pageSetup.showGridLines = true;
     workSheet.pageSetup.fitToPage = true;
     workSheet.pageSetup.fitToHeight = 1;
@@ -63,8 +92,6 @@ export class ScheduleExportLogic {
     )[] = [headerRow, ...datesSection];
     if (this.extraWorkersExport) {
       schedule.push(...extraWorkersSection);
-    } else {
-      schedule.push(EMPTY_ROW);
     }
     schedule.push(...childrenInfoSection);
     if (this.overtimeExport) {
@@ -110,16 +137,44 @@ export class ScheduleExportLogic {
     workSheet.getCell(this.requiredHoursAddress).alignment = { textRotation: -90 };
     workSheet.getCell(this.doneHoursAddress).alignment = { textRotation: -90 };
     workSheet.getCell(this.diffHoursAddress).alignment = { textRotation: -90 };
-
-    const workbookName = FileHelper.createMonthFilename(this.scheduleModel, revisionType);
-    return [workbookName, workbook];
   }
 
-  private static createWorkArea(): [xlsx.Workbook, xlsx.Worksheet] {
+  private setWorkersWorkSheet(workSheet: xlsx.Worksheet): void {
+    workSheet.pageSetup.showGridLines = true;
+    workSheet.pageSetup.fitToPage = true;
+    workSheet.pageSetup.fitToHeight = 1;
+    workSheet.pageSetup.fitToWidth = 1;
+    workSheet.pageSetup.horizontalCentered = true;
+
+    const workersInfoArray = ScheduleExportLogic.createWorkersInfoSection(this.scheduleModel);
+
+    const colLens = workersInfoArray[0].map((_, colIndex) =>
+      Math.max(...workersInfoArray.map((row) => row[colIndex].toString().length))
+    );
+
+    workSheet.addRows(workersInfoArray);
+
+    colLens.forEach((len, id) => {
+      workSheet.getColumn(id + 1).width = len + 2;
+    });
+
+    workSheet.getColumn(1).alignment = { vertical: "middle", horizontal: "left" };
+    workSheet.getColumn(2).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getColumn(3).alignment = { vertical: "middle", horizontal: "center" };
+
+    workSheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getRow(1).font = { bold: true };
+  }
+
+  private static createWorkArea(): [xlsx.Workbook, xlsx.Worksheet, xlsx.Worksheet] {
     const workbook = new xlsx.Workbook();
     return [
       workbook,
       workbook.addWorksheet(ScheduleExportLogic.WORKSHEET_NAME, {
+        pageSetup: { paperSize: 9, orientation: "landscape" },
+        properties: { defaultColWidth: 5 },
+      }),
+      workbook.addWorksheet(ScheduleExportLogic.WORKERS_WORKSHEET_NAME, {
         pageSetup: { paperSize: 9, orientation: "landscape" },
         properties: { defaultColWidth: 5 },
       }),
@@ -224,21 +279,21 @@ export class ScheduleExportLogic {
   }
 
   private createShiftsSections(scheduleModel: MonthDataModel): string[][][] {
-    const shiftInfoLogics = ScheduleExportLogic.shiftInfoLogics(scheduleModel);
-
     const grouped = {
       [WorkerType.NURSE]: [] as string[][],
       [WorkerType.OTHER]: [] as string[][],
     };
-    Object.keys(scheduleModel.shifts || {}).forEach((key: string) => {
-      const category = scheduleModel.employee_info.type[key] ?? "";
+    Object.keys(scheduleModel.shifts || {}).forEach((workerName: string) => {
+      const category = scheduleModel.employee_info.type[workerName] ?? "";
       const shiftsRow: string[] = [
-        key,
-        ...scheduleModel.shifts[key]?.map((s) => (s === ShiftCode.W ? "" : s)),
+        workerName,
+        ...scheduleModel.shifts[workerName]?.map((s) => (s === ShiftCode.W ? "" : s)),
       ];
       if (this.overtimeExport) {
         shiftsRow.push(
-          ...shiftInfoLogics[category].calculateWorkerHourInfo(key).map((e) => e.toString())
+          ...WorkerHourInfo.fromSchedules(workerName, scheduleModel, this.primaryScheduleModel)
+            .asArray()
+            .map((e) => e.toString())
         );
       }
       grouped[category].push(shiftsRow);
@@ -251,7 +306,6 @@ export class ScheduleExportLogic {
     headerRow[MetaDataSectionKey.Month] =
       TranslationHelper.polishMonths[scheduleModel?.scheduleKey.month || 0];
     headerRow[MetaDataSectionKey.Year] = scheduleModel?.scheduleKey.year || 0;
-    // TODO implement work time calculation
     headerRow[MetaDataSectionKey.RequiredavailableWorkersWorkTime] = 0;
     let infoStr = Object.keys(headerRow)
       .map((key) => `${key} ${headerRow[key]}`)
@@ -261,7 +315,7 @@ export class ScheduleExportLogic {
     infoStr =
       infoStr.slice(0, infoStr.length - 2) +
       " " +
-      ShiftHelper.calculateWorkNormForMonth(
+      WorkerHourInfo.calculateWorkNormForMonth(
         scheduleModel?.scheduleKey.month,
         scheduleModel?.scheduleKey.year
       );
@@ -278,6 +332,24 @@ export class ScheduleExportLogic {
         ...(scheduleModel.month_info?.children_number || []),
       ],
     ];
+  }
+
+  private static createWorkersInfoSection(scheduleModel: MonthDataModel): (string | number)[][] {
+    const names = Object.keys(scheduleModel.employee_info?.type);
+
+    const workers: (string | number)[][] = [];
+
+    workers.push(["Imię i nazwisko", "Stanowisko/funkcja", "Rodzaj umowy", "Wymiar czasu pracy"]);
+    workers.push(EMPTY_ROW);
+    names.forEach((name) =>
+      workers.push([
+        name,
+        WorkerTypeHelper.translateToShort(scheduleModel.employee_info?.type[name]),
+        ContractTypeHelper.translateToShort(scheduleModel.employee_info?.contractType!?.[name]),
+        scheduleModel.employee_info?.time[name],
+      ])
+    );
+    return [...workers];
   }
 
   private static createWorkHoursInfoHeader(startIndex: number): string[] {
@@ -304,30 +376,5 @@ export class ScheduleExportLogic {
     scheduleModel: MonthDataModel
   ): (number | MetaDataSectionKey)[][] {
     return [[MetaDataSectionKey.MonthDays, ...(scheduleModel.month_info?.dates || [])]];
-  }
-
-  private static shiftInfoLogics(
-    scheduleModel: MonthDataModel
-  ): { [WorkerType.NURSE]: ShiftsInfoLogic; [WorkerType.OTHER]: ShiftsInfoLogic } {
-    const metadataLogic = new MetadataLogic(
-      scheduleModel.scheduleKey.year.toString(),
-      scheduleModel.scheduleKey.month,
-      scheduleModel.month_info.dates
-    );
-    const nurseShiftsInfoLogic = new ShiftsInfoLogic(
-      scheduleModel.shifts,
-      WorkerType.NURSE,
-      metadataLogic
-    );
-    const otherShiftsInfoLogic = new ShiftsInfoLogic(
-      scheduleModel.shifts,
-      WorkerType.OTHER,
-      metadataLogic
-    );
-
-    return {
-      [WorkerType.NURSE]: nurseShiftsInfoLogic,
-      [WorkerType.OTHER]: otherShiftsInfoLogic,
-    };
   }
 }

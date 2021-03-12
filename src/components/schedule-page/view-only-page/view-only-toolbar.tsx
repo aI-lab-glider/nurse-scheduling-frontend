@@ -16,7 +16,7 @@ interface ViewOnlyToolbarOptions {
   openEdit: () => void;
 }
 export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Element {
-  const [isRevisionEditDisabled, setIsRevisionEditDisable] = React.useState<boolean>(false);
+  const [isEditDisable, setEditDisable] = React.useState<boolean>(false);
   const [isMonthFromFuture, setIsMonthFromFuture] = React.useState<boolean>(false);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -29,6 +29,10 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
   );
 
+  const { isCorrupted } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
+  );
+
   const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   useEffect(() => {
@@ -36,8 +40,8 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
     setIsMonthFromFuture(isFuture);
 
     const isRevisionEditDisable = revision === "actual" ? false : !isFuture;
-    setIsRevisionEditDisable(isRevisionEditDisable);
-  }, [year, month, revision]);
+    setEditDisable(isRevisionEditDisable || isCorrupted);
+  }, [year, month, revision, isCorrupted]);
 
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>): void => {
     const currentRev = event.target.value;
@@ -82,10 +86,10 @@ export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
           <Button
             onClick={onEditClick}
             size="small"
-            className={classNames({ "disabled-submit-button": isRevisionEditDisabled })}
+            className={classNames({ "disabled-submit-button": isEditDisable })}
             variant="primary"
             data-cy="edit-mode-button"
-            disabled={isRevisionEditDisabled}
+            disabled={isEditDisable}
           >
             Edytuj
           </Button>

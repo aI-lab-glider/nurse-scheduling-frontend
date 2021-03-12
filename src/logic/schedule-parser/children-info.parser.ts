@@ -5,12 +5,13 @@ import { ChildrenInfoProvider } from "../providers/children-info-provider.model"
 import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
 import { MetaDataParser } from "./metadata.parser";
 
+export const DEFAULT_CHILDREN_NUMBER = 20;
+
 export class ChildrenInfoParser implements ChildrenInfoProvider {
   private _parseErrors: ScheduleError[] = [];
   private children: number[];
-  private DEFAULT_CHILDREN_NUMBER = 20;
 
-  constructor(private metaData: MetaDataParser, data?: string[][]) {
+  constructor(private metaData: MetaDataParser, data?: string[]) {
     this.children = this.generateChildren(data);
   }
 
@@ -29,23 +30,21 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
     });
   }
 
-  private generateChildren(raw?: string[][]): number[] {
-    if (!raw || raw.length !== 1) {
+  private generateChildren(raw?: string[]): number[] {
+    if (!raw) {
       this.logLoadFileError(
         "Brak informacji o liczbie dzieci. Przyjęto, że w każdym dniu liczba dzieci wynosi " +
-          this.DEFAULT_CHILDREN_NUMBER
+          DEFAULT_CHILDREN_NUMBER
       );
-
       const N = this.metaData.dayCount;
       const children = Array(N);
       let i = 0;
 
-      while (i < N) children[i++] = this.DEFAULT_CHILDREN_NUMBER;
+      while (i < N) children[i++] = DEFAULT_CHILDREN_NUMBER;
       return children;
     }
-    const childrenRow = raw[0];
 
-    const slicedChildrenRow = childrenRow.slice(
+    const slicedChildrenRow = raw.slice(
       this.metaData.offset,
       this.metaData.offset + this.metaData.dayCount
     );
@@ -64,9 +63,9 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
           "Nieoczekiwana wartość w sekcji dzieci w dniu " +
             (i + 1) +
             ". Przyjęto, że liczba dzieci wynosi " +
-            this.DEFAULT_CHILDREN_NUMBER
+            DEFAULT_CHILDREN_NUMBER
         );
-        children.push(this.DEFAULT_CHILDREN_NUMBER);
+        children.push(DEFAULT_CHILDREN_NUMBER);
       } else {
         children.push(numDay);
       }
