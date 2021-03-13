@@ -28,14 +28,23 @@ export const FRACTIONS_NUMBERS = POSSIBLE_FRACTIONS.map(
 
 export class WorkingTimeHelper {
   static fromHoursToFraction(hours: number, fullTimeBase: number): string {
-    const searchForFraction = hours / fullTimeBase;
-    return FRACTIONS_LABELS[this.findIdOfClosestFrom(searchForFraction, FRACTIONS_NUMBERS)];
+    const workerNormAsDecimal = hours / fullTimeBase;
+    return this.fromWorkNormDecimalToWorkNormFraction(workerNormAsDecimal);
+  }
+
+  static fromWorkNormDecimalToWorkNormFraction(workNorm: number): string {
+    return FRACTIONS_LABELS[this.findIdOfClosestFrom(workNorm, FRACTIONS_NUMBERS)];
   }
 
   static fromFractionToHours(fraction: string, fullTimeBase: number): number {
+    const workNorm = this.fromFractionToDecimalWorkNorm(fraction);
+    return Math.round(fullTimeBase * workNorm);
+  }
+
+  static fromFractionToDecimalWorkNorm(fraction: string): number {
     const result = fraction.split("/");
     const [dividend, divisor] = result.map((string) => Number.parseInt(string));
-    return Math.round((fullTimeBase * dividend) / divisor);
+    return dividend / divisor;
   }
 
   static findIdOfClosestFrom(search: number, from: Array<number>): number {
