@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { VerboseDate } from "../common-models/month-info.model";
-import { Shift, ShiftCode, ShiftInfoModel, SHIFTS } from "../common-models/shift-info.model";
+import { Shift,FREE_SHIFTS, ShiftCode, ShiftInfoModel, SHIFTS } from "../common-models/shift-info.model";
 import { Opaque } from "../common-models/type-utils";
 import { WorkerType } from "../common-models/worker-info.model";
 import { ArrayHelper } from "./array.helper";
@@ -147,5 +147,13 @@ export class ShiftHelper {
       ...colorSet,
       ...VerboseDateHelper.getDayColor(day, colorSet, isFrozen, ignoreFrozenState),
     };
+  }
+
+  static replaceFreeShiftsWithFreeDay(shifts: ShiftCode[], startIndex = 0): ShiftCode[] {
+    return shifts.map((shift, idx) => {
+      const isIndexValid = idx >= startIndex;
+      const shouldReplace = FREE_SHIFTS.includes(shift);
+      return isIndexValid && shouldReplace ? ShiftCode.W : shift;
+    });
   }
 }

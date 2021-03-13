@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import schedule from "./assets/devMode/schedule";
-import { cropScheduleDMToMonthDM, ScheduleDataModel } from "./common-models/schedule-data.model";
+import { ScheduleDataModel } from "./common-models/schedule-data.model";
 import { HeaderComponent } from "./components/common-components";
 import RouteButtonsComponent, {
   Tabs,
@@ -26,6 +26,7 @@ import { ScheduleKey } from "./api/persistance-store.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
 import * as Sentry from "@sentry/react";
 import AppErrorModal from "./components/common-components/modal/app-error-modal/app-error.modal.component";
+import { cropScheduleDMToMonthDM } from "./logic/schedule-container-convertion/schedule-container-convertion";
 
 const useStyles = makeStyles(() => ({
   root: {
