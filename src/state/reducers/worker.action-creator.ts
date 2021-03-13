@@ -11,17 +11,16 @@ import {
   WorkersInfoModel,
   WorkerType,
 } from "../../common-models/worker-info.model";
-import { WorkerInfoExtendedInterface } from "../../components/namestable/worker-edit.component";
 import { ScheduleKey, ThunkFunction } from "../../api/persistance-store.model";
 import _ from "lodash";
 import { ScheduleActionType } from "./month-state/schedule-data/schedule.actions";
 import { LocalStorageProvider } from "../../api/local-storage-provider.model";
 import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
-import { getEmployeeWorkTime } from "./month-state/employee-info.reducer";
 import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 import { ThunkDispatch } from "redux-thunk";
 import { ActionModel } from "../models/action.model";
 import { ApplicationStateModel } from "../models/application-state.model";
+import { WorkerInfoExtendedInterface } from "../../components/namestable/worker-edit";
 
 export interface WorkerActionPayload {
   updatedShifts: ShiftInfoModel;
@@ -179,7 +178,7 @@ export class WorkerActionCreator {
     updatedSchedule.employee_info = {
       time: {
         ...updatedSchedule.employee_info.time,
-        [workerName]: getEmployeeWorkTime({ ...worker, monthNumber, year }),
+        [workerName]: worker.time,
       },
       type: {
         ...updatedSchedule.employee_info.type,

@@ -72,7 +72,7 @@ export class ScheduleExportLogic {
     return [workbookName, workbook];
   }
 
-  private setScheduleWorkSheet(workSheet: xlsx.Worksheet) {
+  private setScheduleWorkSheet(workSheet: xlsx.Worksheet): void {
     workSheet.pageSetup.showGridLines = true;
     workSheet.pageSetup.fitToPage = true;
     workSheet.pageSetup.fitToHeight = 1;
@@ -135,7 +135,7 @@ export class ScheduleExportLogic {
     workSheet.getCell(this.diffHoursAddress).alignment = { textRotation: -90 };
   }
 
-  private setWorkersWorkSheet(workSheet: xlsx.Worksheet) {
+  private setWorkersWorkSheet(workSheet: xlsx.Worksheet): void {
     workSheet.pageSetup.showGridLines = true;
     workSheet.pageSetup.fitToPage = true;
     workSheet.pageSetup.fitToHeight = 1;
