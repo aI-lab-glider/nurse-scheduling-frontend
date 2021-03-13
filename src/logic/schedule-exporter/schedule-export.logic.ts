@@ -98,6 +98,10 @@ export class ScheduleExportLogic {
       schedule.push(overtimeInfoHeader);
     }
 
+    const headerLen = schedule.length;
+    const nurseLastIndex = headerLen + nurseShifts.length;
+    const babysitterLastIndex = nurseLastIndex + babysitterShifts.length + 1;
+
     schedule.push(
       ...nurseShifts,
       EMPTY_ROW,
@@ -109,7 +113,7 @@ export class ScheduleExportLogic {
       EMPTY_ROW
     );
 
-    this.addStyles(workSheet, schedule);
+    this.addStyles(workSheet, schedule, headerLen, nurseLastIndex, babysitterLastIndex);
 
     workSheet.mergeCells("B1:AF1");
     workSheet.mergeCells(
@@ -191,7 +195,13 @@ export class ScheduleExportLogic {
     }
   }
 
-  private addStyles(workSheet: xlsx.Worksheet, rows: unknown[]): void {
+  private addStyles(
+    workSheet: xlsx.Worksheet,
+    rows: unknown[],
+    headerLen: number,
+    nurseLastIndex: number,
+    babysitterLastIndex: number
+  ): void {
     const monthInfo = this.scheduleModel.scheduleKey;
     const monthLogic = new MonthInfoLogic(
       monthInfo?.month ?? 0,
@@ -199,9 +209,22 @@ export class ScheduleExportLogic {
       this.scheduleModel.month_info?.dates || []
     );
     const verboseDates = monthLogic.verboseDates;
+    const calendarDataMargin = -2;
     workSheet.addRows(rows);
     workSheet.getColumn(1).width = 20;
     workSheet.eachRow((row, index) => {
+      const isNurseRow = index > headerLen && index <= nurseLastIndex;
+      const isBabysitterRow = index > nurseLastIndex + 1 && index <= babysitterLastIndex;
+
+      if (isNurseRow || isBabysitterRow) {
+        row.eachCell((cell, colNumber) => {
+          const cellValue = cell.value?.toString() || "";
+          cell.style = this.getShiftStyle(
+            ShiftCode[cellValue] || ShiftCode.W,
+            verboseDates[colNumber + calendarDataMargin]
+          );
+        });
+      }
       row.height = 18;
       if (index === 1) {
         row.height = 40;
@@ -218,22 +241,8 @@ export class ScheduleExportLogic {
         const cellValue = cell.value?.toString() || "";
         this.getRightCornerIndexes(cell, cellValue);
         if ((cellValue && ShiftCode[cellValue]) || isShiftRow) {
-          if (!isShiftRow) {
-            row.eachCell((cell, colNumber) => {
-              const cellValue = cell.value?.toString() || "";
-              cell.style = this.getShiftStyle(
-                ShiftCode[cellValue] || ShiftCode.W,
-                verboseDates[colNumber - 2]
-              );
-            });
-          }
           isShiftRow = true;
-          // colNumber - 1, because first column is key column
           workSheet.getColumn(colNumber).width = 4;
-          cell.style = this.getShiftStyle(
-            ShiftCode[cellValue] || ShiftCode.W,
-            verboseDates[colNumber - 2]
-          );
         }
       });
     });
