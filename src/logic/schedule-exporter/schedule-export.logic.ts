@@ -112,27 +112,29 @@ export class ScheduleExportLogic {
     this.addStyles(workSheet, schedule);
 
     workSheet.mergeCells("B1:AF1");
-    workSheet.mergeCells(
-      this.requiredHoursAddress.slice(0, this.requiredHoursAddress.length - 1) +
-        "2:" +
-        this.requiredHoursAddress
-    );
-    workSheet.mergeCells(
-      this.doneHoursAddress.slice(0, this.doneHoursAddress.length - 1) +
-        "2:" +
-        this.doneHoursAddress
-    );
-    workSheet.mergeCells(
-      this.diffHoursAddress.slice(0, this.diffHoursAddress.length - 1) +
-        "2:" +
-        this.diffHoursAddress
-    );
-    workSheet.getCell(this.requiredHoursAddress).value = "Wymagane";
-    workSheet.getCell(this.doneHoursAddress).value = "Wypracowane";
-    workSheet.getCell(this.diffHoursAddress).value = "Nadgodziny";
-    workSheet.getCell(this.requiredHoursAddress).alignment = { textRotation: -90 };
-    workSheet.getCell(this.doneHoursAddress).alignment = { textRotation: -90 };
-    workSheet.getCell(this.diffHoursAddress).alignment = { textRotation: -90 };
+    if (this.overtimeExport) {
+      workSheet.mergeCells(
+        this.requiredHoursAddress.slice(0, this.requiredHoursAddress.length - 1) +
+          "2:" +
+          this.requiredHoursAddress
+      );
+      workSheet.mergeCells(
+        this.doneHoursAddress.slice(0, this.doneHoursAddress.length - 1) +
+          "2:" +
+          this.doneHoursAddress
+      );
+      workSheet.mergeCells(
+        this.diffHoursAddress.slice(0, this.diffHoursAddress.length - 1) +
+          "2:" +
+          this.diffHoursAddress
+      );
+      workSheet.getCell(this.requiredHoursAddress).value = "Wymagane";
+      workSheet.getCell(this.doneHoursAddress).value = "Wypracowane";
+      workSheet.getCell(this.diffHoursAddress).value = "Nadgodziny";
+      workSheet.getCell(this.requiredHoursAddress).alignment = { textRotation: -90 };
+      workSheet.getCell(this.doneHoursAddress).alignment = { textRotation: -90 };
+      workSheet.getCell(this.diffHoursAddress).alignment = { textRotation: -90 };
+    }
   }
 
   private setWorkersWorkSheet(workSheet: xlsx.Worksheet): void {
@@ -229,7 +231,7 @@ export class ScheduleExportLogic {
           }
           isShiftRow = true;
           // colNumber - 1, because first column is key column
-          workSheet.getColumn(colNumber).width = 4;
+          workSheet.getColumn(colNumber).width = 5;
           cell.style = this.getShiftStyle(
             ShiftCode[cellValue] || ShiftCode.W,
             verboseDates[colNumber - 2]
@@ -261,6 +263,9 @@ export class ScheduleExportLogic {
         left: borderColor,
         right: borderColor,
       },
+      font: {
+        color: { argb: ["K"].includes(code) ? "#FFFFFF" : "#000000" },
+      },
     };
   }
 
@@ -275,21 +280,23 @@ export class ScheduleExportLogic {
       [WorkerType.NURSE]: [] as string[][],
       [WorkerType.OTHER]: [] as string[][],
     };
-    Object.keys(scheduleModel.shifts || {}).forEach((workerName: string) => {
-      const category = scheduleModel.employee_info.type[workerName] ?? "";
-      const shiftsRow: string[] = [
-        workerName,
-        ...scheduleModel.shifts[workerName]?.map((s) => (s === ShiftCode.W ? "" : s)),
-      ];
-      if (this.overtimeExport) {
-        shiftsRow.push(
-          ...WorkerHourInfo.fromSchedules(workerName, scheduleModel, this.primaryScheduleModel)
-            .asArray()
-            .map((e) => e.toString())
-        );
-      }
-      grouped[category].push(shiftsRow);
-    });
+    Object.keys(scheduleModel.shifts || {})
+      .sort()
+      .forEach((workerName: string) => {
+        const category = scheduleModel.employee_info.type[workerName] ?? "";
+        const shiftsRow: string[] = [
+          workerName,
+          ...scheduleModel.shifts[workerName]?.map((s) => (s === ShiftCode.W ? "" : s)),
+        ];
+        if (this.overtimeExport) {
+          shiftsRow.push(
+            ...WorkerHourInfo.fromSchedules(workerName, scheduleModel, this.primaryScheduleModel)
+              .asArray()
+              .map((e) => e.toString())
+          );
+        }
+        grouped[category].push(shiftsRow);
+      });
     return [grouped[WorkerType.NURSE], grouped[WorkerType.OTHER]];
   }
 
