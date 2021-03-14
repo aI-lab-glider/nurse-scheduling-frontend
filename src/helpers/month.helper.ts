@@ -45,12 +45,14 @@ export class MonthHelper {
   }
 
   static getMonthFullWeeksDaysLen(year: number, month: number): number {
-    return (
-      Math.floor(
-        (this.getMonthLength(year, month) - this.findFirstMonthMondayIdx(year, month)) /
-          NUMBER_OF_DAYS_IN_WEEK
-      ) * NUMBER_OF_DAYS_IN_WEEK
-    );
+    const {
+      daysMissingFromPrevMonth,
+      daysMissingFromNextMonth,
+    } = this.calculateMissingFullWeekDays(new ScheduleKey(month, year));
+    let numberOfWeekInMonth = this.numberOfWeeksInMonth(month, year);
+    daysMissingFromPrevMonth > 0 && numberOfWeekInMonth--;
+    daysMissingFromNextMonth > 0 && numberOfWeekInMonth--;
+    return NUMBER_OF_DAYS_IN_WEEK * numberOfWeekInMonth;
   }
 
   static findFirstMonthMondayIdx(year: number, month: number): number {

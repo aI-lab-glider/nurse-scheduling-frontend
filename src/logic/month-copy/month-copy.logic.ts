@@ -91,10 +91,13 @@ function copyMonthData<T>(
   const copiedData = ArrayHelper.circularExtendToLength(copyBase, numberOfDaysToBeCopied);
   const currentMonthLength = MonthHelper.getMonthLength(monthKey.year, monthKey.month);
   currentMonthData = currentMonthData ?? Array(currentMonthLength).fill(defaultCurrentValue);
-  if (new Date(monthKey.year, monthKey.month).getDay() === 1) {
+
+  const isMonthStartInMonday = new Date(monthKey.year, monthKey.month).getDay() === 1;
+  if (isMonthStartInMonday) {
     return copiedData;
+  } else {
+    return concatWithLastWeekFromPrevMonth(monthKey, copiedData, baseMonthData, currentMonthData);
   }
-  return concatWithLastWeekFromPrevMonth(monthKey, copiedData, baseMonthData, currentMonthData);
 }
 
 function concatWithLastWeekFromPrevMonth<T>(
@@ -105,7 +108,7 @@ function concatWithLastWeekFromPrevMonth<T>(
 ): T[] {
   return MonthHelper.getMonthLastWeekData(monthKey, prevMonth, currentMonth).concat(copiedData);
 }
-//zawsze 28 lub 35 dni
+//returns always 28 or 35 days
 function getNumberOfDaysToBeCopied(monthKey: ScheduleKey): number {
   return MonthHelper.findFirstMonthMondayIdx(monthKey.year, monthKey.month) + 28 >=
     MonthHelper.getMonthLength(monthKey.year, monthKey.month)
