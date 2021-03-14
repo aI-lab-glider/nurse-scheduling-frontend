@@ -11,6 +11,7 @@ import { ScheduleLogic } from "../../../../logic/schedule-logic/schedule.logic";
 import { ShiftsInfoLogic } from "../../../../logic/schedule-logic/shifts-info.logic";
 import { ScheduleComponentState, scheduleInitialState } from "./schedule-state.model";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { ShiftModel } from "../../../../common-models/shift-info.model";
 
 // eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface useScheduleStateReturn {
@@ -24,13 +25,14 @@ export type ScheduleMode = "readonly" | "edit";
 
 export function useScheduleState(
   scheduleSelector: (applicationStateModel: ApplicationStateModel) => ScheduleDataModel,
-  mode: ScheduleMode
+  mode: ScheduleMode,
+  shifts: ShiftModel
 ): useScheduleStateReturn {
   const dispatchGlobalState = useDispatch();
   const scheduleState = useSelector(scheduleSelector);
 
   const [scheduleLogic] = useState<ScheduleLogic>(
-    new ScheduleLogic(dispatchGlobalState, new LocalStorageProvider(), scheduleState, mode)
+    new ScheduleLogic(dispatchGlobalState, new LocalStorageProvider(), scheduleState, mode, shifts)
   );
 
   const [scheduleLocalState, setScheduleLocalState] = useState<ScheduleComponentState>(
@@ -38,9 +40,9 @@ export function useScheduleState(
   );
 
   useEffect(() => {
-    scheduleLogic.update(scheduleState, mode);
+    scheduleLogic.update(scheduleState, mode, shifts);
     setScheduleLocalState(extractScheduleLocalState(scheduleLogic));
-  }, [scheduleLogic, scheduleState, mode]);
+  }, [scheduleLogic, scheduleState, mode, shifts]);
 
   return { scheduleLogic, scheduleLocalState };
 }

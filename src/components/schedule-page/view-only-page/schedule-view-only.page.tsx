@@ -8,15 +8,20 @@ import { UndoableHotkeys } from "../../common-components";
 import { ScheduleComponent } from "../table/schedule/schedule.component";
 import { ScheduleLogicContext, useScheduleState } from "../table/schedule/use-schedule-state";
 import { ViewOnlyToolbar } from "./view-only-toolbar";
+import { useSelector } from "react-redux";
 
 interface ScheduleViewOnlyPageOptions {
   openEdit: () => void;
 }
 
 export function ScheduleViewOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.Element {
+  const shifts = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
   const { scheduleLogic, scheduleLocalState } = useScheduleState(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present,
-    "readonly"
+    "readonly",
+    shifts
   );
 
   return (

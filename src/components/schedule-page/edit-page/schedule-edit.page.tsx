@@ -8,15 +8,20 @@ import { ScheduleLogicContext, useScheduleState } from "../table/schedule/use-sc
 import { EditPageToolbar } from "./edit-page-toolbar.component";
 import { UndoableHotkeys } from "../../common-components";
 import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
+import { useSelector } from "react-redux";
 
 interface ScheduleEditPageOptions {
   closeEdit: () => void;
 }
 
 export function ScheduleEditPage(options: ScheduleEditPageOptions): JSX.Element {
+  const shifts = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
   const { scheduleLogic, scheduleLocalState } = useScheduleState(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present,
-    "edit"
+    "edit",
+    shifts
   );
 
   return (
