@@ -10,7 +10,7 @@ import { ContractType, WorkerType } from "../../../common-models/worker-info.mod
 import { WorkerActionCreator } from "../../../state/reducers/worker.action-creator";
 import { Button } from "../../common-components";
 import { useWorkerInfo, WorkerInfo } from "../use-worker-info";
-import { WorkerContractTypeDependentWorkTimeSelectror } from "./worker-contract-type-dependent-worktime-selector.component";
+import { WorkerContractTypeDependentWorkNormSelectror } from "./worker-contract-type-dependent-worknorm-selector.component";
 import { WorkerContractTypeSelector } from "./worker-contract-type-selector.component";
 import { WorkerEditComponentOptions, WorkerEditComponentMode } from "./worker-edit.models";
 import { WorkerNameEditField } from "./worker-name-edit-field.components";
@@ -98,7 +98,7 @@ export function WorkerEditComponent({
           setIsFieldValid={setIsContractTypeValid}
         />
 
-        <WorkerContractTypeDependentWorkTimeSelectror
+        <WorkerContractTypeDependentWorkNormSelectror
           employementTime={workerInfo.workerTime}
           setWorkerTime={handleWorkerTimeUpdate}
           setIsFieldValid={setIsWorkerTimeValid}

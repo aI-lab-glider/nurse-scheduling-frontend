@@ -55,7 +55,7 @@ export function WorkerWorkerTypeSelector({
       />
       <FormFieldErrorLabel
         condition={!isWorkerPositionValid()}
-        message="Stanowisko pracownika musi być zdefiniowane"
+        message="Wybierz stanowisko pracownika"
       />
     </Grid>
   );

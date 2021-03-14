@@ -60,10 +60,7 @@ export function WorkerContractTypeSelector({
           variant="contract"
         />
 
-        <FormFieldErrorLabel
-          condition={!isContractTypeValid()}
-          message="Typ umowy musi być zdefiniowany dla pracownika"
-        />
+        <FormFieldErrorLabel condition={!isContractTypeValid()} message="Wybierz typ umowy" />
       </Grid>
     </>
   );

@@ -8,7 +8,7 @@ import { WorkerHourInfo } from "../../../helpers/worker-hours-info.model";
 import { useMonthInfo } from "../../schedule-page/validation-drawer/use-verbose-dates";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
 import { useFormFieldStyles } from "./worker-edit.models";
-import { WorkerContractTypeDependentWorkTimeSelectorOptions } from "./worker-contract-type-dependent-worktime-selector.component";
+import { WorkerContractTypeDependentWorkTimeSelectorOptions } from "./worker-contract-type-dependent-worknorm-selector.component";
 
 export function WorkerCivilContractWorkNormSelector({
   employementTime,
@@ -53,12 +53,12 @@ export function WorkerCivilContractWorkNormSelector({
             width: 100,
           }}
           className={classes.formInput}
-          onChange={(event): void => setWorkerTime(toWorkerNorm(event.target.value))}
+          onBlur={(event): void => setWorkerTime(toWorkerNorm(event.target.value))}
           color="primary"
         />
         <FormFieldErrorLabel
           condition={!isTimeValid()}
-          message={`Ilość godzin powinna być mniejsza od ${maximumWorkHoursForMonth}`}
+          message={`Liczba godzin musi być mniejsza od ${maximumWorkHoursForMonth}`}
         />
       </Grid>
     </>
