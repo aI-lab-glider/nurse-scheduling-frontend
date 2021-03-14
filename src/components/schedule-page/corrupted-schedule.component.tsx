@@ -37,16 +37,14 @@ export function CorruptedScheduleComponent(): JSX.Element {
     [month, year]
   );
 
-  const currentMonthPastRevisions = past.filter((schedule) =>
-    isCurrentNotCorruptedSchedule(schedule)
-  );
+  const currentMonthPastRevisions = past.filter(isCurrentNotCorruptedSchedule);
 
   const isPreviousVersionAvailable =
     currentMonthPastRevisions.length >= MINIMUM_UNDO_COUNT_TO_REVERT_NORMAL_SCHEDULE;
 
   const fetchPrevScheduleVersion = (): void => {
     // This is the schedule which caused corruption.
-    const lastNotCorrupted = past.findIndex((schedule) => isCurrentNotCorruptedSchedule(schedule));
+    const lastNotCorrupted = past.findIndex(isCurrentNotCorruptedSchedule);
     const numberOfUndo = lastNotCorrupted + MINIMUM_UNDO_COUNT_TO_REVERT_NORMAL_SCHEDULE;
 
     for (let i = 0; i < numberOfUndo; i++) {
