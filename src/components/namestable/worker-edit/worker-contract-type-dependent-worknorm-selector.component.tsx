@@ -13,7 +13,7 @@ export interface WorkerContractTypeDependentWorkTimeSelectorOptions extends Form
   setWorkerTime: (newWorkerTime: number) => void;
 }
 
-export function WorkerContractTypeDependentWorkTimeSelectror(
+export function WorkerContractTypeDependentWorkNormSelectror(
   options: WorkerContractTypeDependentWorkTimeSelectorOptions
 ): JSX.Element {
   const { workerContractType } = options;

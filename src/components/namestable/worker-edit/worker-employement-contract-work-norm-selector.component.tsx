@@ -10,7 +10,7 @@ import { TextMaskCustom } from "../../common-components/text-mask-custom/text-ma
 import { WorkingTimeHelper } from "../working-time.helper";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
 import { useFormFieldStyles } from "./worker-edit.models";
-import { WorkerContractTypeDependentWorkTimeSelectorOptions } from "./worker-contract-type-dependent-worktime-selector.component";
+import { WorkerContractTypeDependentWorkTimeSelectorOptions } from "./worker-contract-type-dependent-worknorm-selector.component";
 
 export function WorkerEmployementContractWorkNormSelector({
   employementTime,
@@ -79,7 +79,7 @@ export function WorkerEmployementContractWorkNormSelector({
             fullWidth
             name="employmentTimeOther"
             value={employementTimeAsFraction}
-            onChange={(event): void => setWorkerTime(toWorkNorm(event.target.value))}
+            onBlur={(event): void => setWorkerTime(toWorkNorm(event.target.value))}
             data-cy="input-employ-time-other"
             style={{
               width: 100,
@@ -92,9 +92,8 @@ export function WorkerEmployementContractWorkNormSelector({
           />
           <FormFieldErrorLabel
             condition={!isEmployementTimeValid(employementTime)}
-            message="Etat powinien być mniejszy lub równy jeden"
+            message="Pracownik nie może być zatrudniony na więcej niż jeden etat"
           />
-          @
         </Grid>
       )}
     </>

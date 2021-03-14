@@ -48,11 +48,11 @@ export function WorkerNameEditField({
   const nameFieldErrorLabels = [
     {
       condition: isWorkerWithSameNameExists(),
-      message: `Pracownik o imieniu ${workerName} już istnieje`,
+      message: `Pracownik o imieniu i nazwisku: ${workerName} już istnieje`,
     },
     {
       condition: isWorkerNameEmpty(),
-      message: `Imię dla pracownika powinno być zdefiniowane`,
+      message: "Wpisz imię i nazwisko pracownika",
     },
   ];
 
@@ -64,6 +64,9 @@ export function WorkerNameEditField({
           fullWidth
           name="workerName"
           className={classes.formInput}
+          style={{
+            marginBottom: 5,
+          }}
           data-cy="name"
           value={workerName}
           onChange={(event): void => setWorkerName(event.target.value)}
