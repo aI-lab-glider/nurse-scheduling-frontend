@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ThunkFunction } from "../../api/persistance-store.model";
+import { ActionModel } from "../models/action.model";
 
 export interface UndoableConfig<T> {
   undoType: string;
@@ -33,7 +34,7 @@ export class UndoActionCreator {
     };
   }
 
-  static clearHistory({ clearHistoryType }: UndoableConfig<unknown>) {
+  static clearHistory({ clearHistoryType }: UndoableConfig<unknown>): ActionModel<unknown> {
     return {
       type: clearHistoryType,
     };
