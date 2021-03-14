@@ -4,17 +4,26 @@
 
 import { WorkerType } from "../../common-models/worker-info.model";
 import { DataRowHelper } from "../../helpers/data-row.helper";
-import { FoundationInfoProvider } from "../providers/foundation-info-provider.model";
+import {
+  FoundationInfoOptions,
+  FoundationInfoProvider,
+} from "../providers/foundation-info-provider.model";
 import { Sections } from "../providers/schedule-provider.model";
 import { ChildrenSectionKey, ExtraWorkersSectionKey, FoundationSectionKey } from "../section.model";
 import { BaseSectionLogic } from "./base-section-logic.model";
 import { DataRow } from "./data-row";
-import { ShiftModel, SHIFTS } from "../../common-models/shift-info.model";
+import { ShiftModel } from "../../common-models/shift-info.model";
 
 export class FoundationInfoLogic
   extends FoundationInfoProvider
   implements Omit<BaseSectionLogic, "addDataRow"> {
-  private shifts: ShiftModel = SHIFTS;
+  private shifts: ShiftModel;
+
+  constructor(shifts: ShiftModel, sections: FoundationInfoOptions) {
+    super(sections);
+    this.shifts = shifts;
+  }
+
   get sectionKey(): keyof Sections {
     return "FoundationInfo";
   }

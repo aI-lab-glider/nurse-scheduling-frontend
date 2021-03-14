@@ -191,7 +191,7 @@ describe("ShiftHelper", () => {
     describe("getWorkersCount", () => {
       const shifts = Object.values(testCase.arr);
       it(`should return ${testCase.exp} for all days and array ${shifts}`, () => {
-        const amount = ShiftHelper.getWorkersCount(testCase.arr);
+        const amount = ShiftHelper.getWorkersCount(testCase.arr, SHIFTS);
         expect(amount).to.eql(testCase.exp);
       });
     });
@@ -264,7 +264,8 @@ function testForCorrectWorkHourCalculation(
     testCase.shifts,
     testCase.workerNorm,
     dates ? dates : testCase.dates,
-    month
+    month,
+    SHIFTS
   );
   expect(hours).to.eql([
     expectedRequiredHours ? expectedRequiredHours : testCase.expectedRequiredHours,
