@@ -250,7 +250,10 @@ export class ScheduleExportLogic {
     });
   }
 
-  // the values are based on w3c recommendations
+  // the values are based on w3c recommendations.
+  // We need to determine the color with the hirghest contrast.
+  // https://www.w3.org/TR/WCAG20/#relativeluminancedef
+  // https://www.w3.org/TR/WCAG20/#contrast-ratiodef
   public decideBlackOrWhite(color: Color): string {
     const black = "#000000";
     const white = "#FFFFFF";
