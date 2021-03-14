@@ -72,3 +72,20 @@ context("Undo/Redo test", () => {
     });
   });
 });
+
+context("Edit mode test", () => {
+  it("Save button should be disabled when there are no changes", () => {
+    const cell = {
+      workerType: WorkerType.NURSE,
+      workerIdx: 0,
+      shiftIdx: 6,
+    };
+    cy.loadScheduleToMonth("example.xlsx");
+    cy.checkWorkerShift({
+      ...cell,
+      desiredShiftCode: ShiftCode.U,
+    });
+    cy.enterEditMode();
+    cy.get("[data-cy=save-schedule-button]").should("be.disabled");
+  });
+});
