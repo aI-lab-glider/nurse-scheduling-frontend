@@ -39,7 +39,7 @@ export default function ShiftEditDrawer({
 
   const shiftNameTextFieldOnChange = (shiftNameActual: string): void => {
     setShiftName(shiftNameActual);
-    !isCodeManuallyChanged && setShiftCode(AcronymGenerator.generate(shiftNameActual));
+    !isCodeManuallyChanged && setShiftCode(AcronymGenerator.generate(shiftNameActual, shifts));
     checkShiftName(shiftNames.includes(shiftNameActual));
   };
 

@@ -9,10 +9,12 @@ import { Sections } from "../providers/schedule-provider.model";
 import { ChildrenSectionKey, ExtraWorkersSectionKey, FoundationSectionKey } from "../section.model";
 import { BaseSectionLogic } from "./base-section-logic.model";
 import { DataRow } from "./data-row";
+import { ShiftModel, SHIFTS } from "../../common-models/shift-info.model";
 
 export class FoundationInfoLogic
   extends FoundationInfoProvider
   implements Omit<BaseSectionLogic, "addDataRow"> {
+  private shifts: ShiftModel = SHIFTS;
   get sectionKey(): keyof Sections {
     return "FoundationInfo";
   }
@@ -44,10 +46,14 @@ export class FoundationInfoLogic
     ),
     new DataRow(
       FoundationSectionKey.BabysittersCount,
-      this.getWorkersCount(WorkerType.OTHER),
+      this.getWorkersCount(WorkerType.OTHER, this.shifts),
       false
     ),
-    new DataRow(FoundationSectionKey.NurseCount, this.getWorkersCount(WorkerType.NURSE), false),
+    new DataRow(
+      FoundationSectionKey.NurseCount,
+      this.getWorkersCount(WorkerType.NURSE, this.shifts),
+      false
+    ),
   ];
 
   public disableEdit(): void {

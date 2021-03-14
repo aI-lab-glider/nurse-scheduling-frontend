@@ -4,7 +4,7 @@
 import { DataRowHelper } from "../../helpers/data-row.helper";
 import { WorkerType } from "../../common-models/worker-info.model";
 import { ScheduleError } from "../../common-models/schedule-error.model";
-import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
+import { ShiftCode, ShiftInfoModel, ShiftModel } from "../../common-models/shift-info.model";
 import { Sections } from "../providers/schedule-provider.model";
 import { DataRow } from "./data-row";
 import { BaseSectionLogic } from "./base-section-logic.model";
@@ -39,12 +39,18 @@ export class ShiftsInfoLogic extends BaseSectionLogic implements ShiftsProvider 
     return this._availableWorkersWorkTime;
   }
 
-  public calculateWorkerHourInfo(workerName: string): number[] {
+  public calculateWorkerHourInfo(workerName: string, shiftType: ShiftModel): number[] {
     const shifts = this.shifts[workerName].rowData(false, false) as ShiftCode[];
     const workerNorm = this._availableWorkersWorkTime[workerName];
     const verboseDates = this.metadata.verboseDates;
     const currentMonth = TranslationHelper.englishMonths[this.metadata.monthNumber];
-    return ShiftHelper.caclulateWorkHoursInfo(shifts, workerNorm, verboseDates, currentMonth);
+    return ShiftHelper.caclulateWorkHoursInfo(
+      shifts,
+      workerNorm,
+      verboseDates,
+      currentMonth,
+      shiftType
+    );
   }
 
   public get errors(): ScheduleError[] {

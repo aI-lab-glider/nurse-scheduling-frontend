@@ -14,7 +14,8 @@ import backend from "../../../api/backend";
 import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
 import { ActionModel } from "../../../state/models/action.model";
 import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
 
 interface ErrorLoaderOptions {
   state?: Props;
@@ -27,6 +28,9 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
   const { setOpen, isNetworkError } = options;
   const [spinnerAgain, setSpinnerAgain] = useState(false);
   const scheduleLogic = useContext(ScheduleLogicContext);
+  const shifts = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
   const dispatcher = useDispatch();
 
   function closeDrawer(): void {
@@ -39,7 +43,7 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
       if (schedule) {
         let response: ScheduleError[];
         try {
-          response = await backend.getErrors(schedule);
+          response = await backend.getErrors(schedule, shifts);
         } catch (err) {
           response = [
             {
@@ -56,7 +60,7 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
     setSpinnerAgain(true);
     updateScheduleErrors();
     setTimeout(() => setSpinnerAgain(false), 4000);
-  }, [dispatcher, scheduleLogic]);
+  }, [dispatcher, scheduleLogic, shifts]);
 
   return (
     <>

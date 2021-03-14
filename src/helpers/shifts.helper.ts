@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
 import { VerboseDate } from "../common-models/month-info.model";
-import { Shift, ShiftCode, ShiftInfoModel, SHIFTS } from "../common-models/shift-info.model";
+import { Shift, ShiftCode, ShiftInfoModel, ShiftModel } from "../common-models/shift-info.model";
 import { WorkerType } from "../common-models/worker-info.model";
 import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
 import { ArrayHelper } from "./array.helper";
@@ -16,14 +16,14 @@ import { VerboseDateHelper } from "./verbose-date.helper";
 const WORK_HOURS_PER_DAY = 8;
 
 export class ShiftHelper {
-  public static getWorkersCount(shifts: ShiftInfoModel): Array<number> {
+  public static getWorkersCount(shifts: ShiftInfoModel, shiftsType: ShiftModel): Array<number> {
     const shiftsArray = Object.values(shifts);
     const workersPerDays: Array<number> = [];
     if (shiftsArray.length === 0) return [];
     for (let i = 0; i < shiftsArray[0].length; i++) {
       workersPerDays.push(
         shiftsArray.reduce((a, b) => {
-          const shift = SHIFTS[b[i]];
+          const shift = shiftsType[b[i]];
           return a + (this.shiftCodeToWorkTime(shift) ? 1 : 0);
         }, 0)
       );
@@ -31,8 +31,8 @@ export class ShiftHelper {
     return workersPerDays;
   }
 
-  public static isNotWorkingShift(shiftCode: ShiftCode): boolean {
-    const shift = SHIFTS[shiftCode] as Shift;
+  public static isNotWorkingShift(shiftCode: ShiftCode, shifts: ShiftModel): boolean {
+    const shift = shifts[shiftCode] as Shift;
     return (!shift.isWorkingShift && shift.code !== ShiftCode.W) ?? false;
   }
 
@@ -90,18 +90,20 @@ export class ShiftHelper {
     workerNorm: number,
     month: number,
     year: number,
-    dates: number[]
+    dates: number[],
+    shiftsType: ShiftModel
   ): number[] {
     const verboseDates = new MonthInfoLogic(month, year, dates).verboseDates;
     const monthName = TranslationHelper.englishMonths[month];
-    return this.caclulateWorkHoursInfo(shifts, workerNorm, verboseDates, monthName);
+    return this.caclulateWorkHoursInfo(shifts, workerNorm, verboseDates, monthName, shiftsType);
   }
 
   public static caclulateWorkHoursInfo(
     shifts: ShiftCode[],
     workerNorm: number,
     dates: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek" | "month">[],
-    currentMonth: string
+    currentMonth: string,
+    shiftsType: ShiftModel
   ): number[] {
     if (shifts === undefined) {
       return [];
@@ -119,7 +121,7 @@ export class ShiftHelper {
     );
 
     const workingDaysCount = monthData.filter(
-      (d) => VerboseDateHelper.isWorkingDay(d[1]!) && !this.isNotWorkingShift(d[0]!)
+      (d) => VerboseDateHelper.isWorkingDay(d[1]!) && !this.isNotWorkingShift(d[0]!, shiftsType)
     ).length;
 
     const holidaySaturdaysCount = monthData.filter((d) =>
@@ -130,7 +132,7 @@ export class ShiftHelper {
       workerNorm * WORK_HOURS_PER_DAY * (workingDaysCount - holidaySaturdaysCount);
 
     const actualHours = monthData.reduce((a, s) => {
-      const shift = SHIFTS[s[0]];
+      const shift = shiftsType[s[0]];
       return a + this.shiftCodeToWorkTime(shift!);
     }, 0);
     const overtime = actualHours - requiredHours;
@@ -152,12 +154,13 @@ export class ShiftHelper {
 
   static getShiftColor(
     shift: ShiftCode,
+    shiftsType: ShiftModel,
     day?: VerboseDate,
     isFrozen?: boolean,
     ignoreFrozenState = false
   ): CellColorSet {
     const colorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET;
-    const shiftFromSHIFTS = SHIFTS[shift];
+    const shiftFromSHIFTS = shiftsType[shift];
 
     if (shiftFromSHIFTS && shift !== "W") {
       if (shiftFromSHIFTS.isWorkingShift) {

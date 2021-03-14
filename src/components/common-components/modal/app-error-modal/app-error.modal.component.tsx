@@ -5,6 +5,8 @@ import React from "react";
 import { Button } from "../../button-component/button.component";
 import DefaultModal from "../modal.component";
 import { FileHelper } from "../../../../helpers/file.helper";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 
 interface AppErrorModalOptions {
   onClick: () => void;
@@ -19,9 +21,11 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
     onClick();
     setOpen(false);
   };
-
+  const shifts = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
   const onSaveButtonClick = async (): Promise<void> => {
-    await FileHelper.handleDbDump();
+    await FileHelper.handleDbDump(shifts);
   };
 
   const title = "Wystąpił błąd :(";

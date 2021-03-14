@@ -19,6 +19,8 @@ import { ScheduleLogicContext } from "../schedule-page/table/schedule/use-schedu
 import WorkerDrawerComponent, {
   WorkerDrawerMode,
 } from "../workers-page/workers-tab/worker-drawer.component";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../state/models/application-state.model";
 
 export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "errorSelector"> {
   dataRow: DataRow[];
@@ -45,12 +47,16 @@ export function NameTableSection({
   const shifts = scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey)?.workerShifts;
   const verboseDates = scheduleLogic?.getSection<MetadataLogic>("Metadata")?.verboseDates;
 
+  const shiftsType = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
+
   function toggleDrawer(open: boolean, name: string): void {
     if (workerType) {
       setIsOpen(open);
       if (open) {
         const [requiredHours, actualHours, overtime] =
-          shiftLogic?.calculateWorkerHourInfo(name) ?? [];
+          shiftLogic?.calculateWorkerHourInfo(name, shiftsType) ?? [];
 
         const workersWithDates = ArrayHelper.zip<NonNullable<VerboseDate>, NonNullable<ShiftCode>>(
           verboseDates,

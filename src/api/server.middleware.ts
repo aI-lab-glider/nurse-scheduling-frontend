@@ -11,6 +11,7 @@ import {
   WorkerUnderTime,
 } from "../common-models/schedule-error.model";
 import { ShiftHelper } from "../helpers/shifts.helper";
+import { ShiftModel } from "../common-models/shift-info.model";
 
 type NameUuidMapper = {
   [name: string]: string;
@@ -89,7 +90,8 @@ export class ServerMiddleware {
 
   public static replaceOvertimeAndUndertimeErrors(
     actualSchedule: ScheduleDataModel,
-    scheduleErrors: ScheduleError[]
+    scheduleErrors: ScheduleError[],
+    shiftsType: ShiftModel
   ): ScheduleError[] {
     const { month_number: monthNumber, year } = actualSchedule.schedule_info;
     const { dates } = actualSchedule.month_info;
@@ -99,7 +101,8 @@ export class ServerMiddleware {
         actualSchedule.employee_info.time[workerName],
         monthNumber,
         year,
-        dates
+        dates,
+        shiftsType
       )[2];
     const validBackendScheduleErros = scheduleErrors.filter(
       (err) =>

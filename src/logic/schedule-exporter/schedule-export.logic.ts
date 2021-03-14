@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { MonthDataModel } from "../../common-models/schedule-data.model";
 import xlsx, { Cell } from "exceljs";
-import { ShiftCode } from "../../common-models/shift-info.model";
+import { ShiftCode, ShiftModel } from "../../common-models/shift-info.model";
 import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
 import { WorkerType } from "../../common-models/worker-info.model";
 import {
@@ -36,12 +36,12 @@ export class ScheduleExportLogic {
   doneHoursAddress;
   diffHoursAddress;
 
-  public formatAndSave(revisionType: RevisionType): void {
-    const [finalName, workbook] = this.createWorkbook(revisionType);
+  public formatAndSave(revisionType: RevisionType, shift: ShiftModel): void {
+    const [finalName, workbook] = this.createWorkbook(revisionType, shift);
     FileHelper.saveToFile(workbook, finalName);
   }
 
-  public createWorkbook(revisionType: RevisionType): [string, xlsx.Workbook] {
+  public createWorkbook(revisionType: RevisionType, shift: ShiftModel): [string, xlsx.Workbook] {
     const [workbook, workSheet] = ScheduleExportLogic.createWorkArea();
 
     workSheet.pageSetup.showGridLines = true;
@@ -56,7 +56,7 @@ export class ScheduleExportLogic {
     const overtimeInfoHeader = ScheduleExportLogic.createWorkHoursInfoHeader(
       childrenInfoSection[0].length
     );
-    const [nurseShifts, babysitterShifts] = this.createShiftsSections(this.scheduleModel);
+    const [nurseShifts, babysitterShifts] = this.createShiftsSections(this.scheduleModel, shift);
     const schedule: (
       | string[]
       | (number | ExtraWorkersSectionKey | MetaDataSectionKey | ChildrenSectionKey)[]
@@ -82,7 +82,7 @@ export class ScheduleExportLogic {
       EMPTY_ROW
     );
 
-    this.addStyles(workSheet, schedule);
+    this.addStyles(workSheet, schedule, shift);
 
     workSheet.mergeCells("B1:AF1");
     workSheet.mergeCells(
@@ -136,7 +136,7 @@ export class ScheduleExportLogic {
     }
   }
 
-  private addStyles(workSheet: xlsx.Worksheet, rows: unknown[]): void {
+  private addStyles(workSheet: xlsx.Worksheet, rows: unknown[], shifts: ShiftModel): void {
     const monthInfo = this.scheduleModel.scheduleKey;
     const monthLogic = new MonthInfoLogic(
       monthInfo?.month ?? 0,
@@ -168,6 +168,7 @@ export class ScheduleExportLogic {
               const cellValue = cell.value?.toString() || "";
               cell.style = this.getShiftStyle(
                 ShiftCode[cellValue] || ShiftCode.W,
+                shifts,
                 verboseDates[colNumber - 2]
               );
             });
@@ -177,6 +178,7 @@ export class ScheduleExportLogic {
           workSheet.getColumn(colNumber).width = 4;
           cell.style = this.getShiftStyle(
             ShiftCode[cellValue] || ShiftCode.W,
+            shifts,
             verboseDates[colNumber - 2]
           );
         }
@@ -184,8 +186,12 @@ export class ScheduleExportLogic {
     });
   }
 
-  private getShiftStyle(code: ShiftCode, verboseDate?: VerboseDate): Partial<xlsx.Style> {
-    const shiftFillColor = ShiftHelper.getShiftColor(code, verboseDate).backgroundColor;
+  private getShiftStyle(
+    code: ShiftCode,
+    shiftsType: ShiftModel,
+    verboseDate?: VerboseDate
+  ): Partial<xlsx.Style> {
+    const shiftFillColor = ShiftHelper.getShiftColor(code, shiftsType, verboseDate).backgroundColor;
     const borderColor: Partial<xlsx.Border> = {
       color: { argb: this.rgbaToArgbHex(ColorHelper.getBorderColor()) },
       style: "thin",
@@ -215,7 +221,7 @@ export class ScheduleExportLogic {
     return `${toHex(c.a)}${toHex(c.r)}${toHex(c.g)}${toHex(c.b)}`;
   }
 
-  private createShiftsSections(scheduleModel: MonthDataModel): string[][][] {
+  private createShiftsSections(scheduleModel: MonthDataModel, shift: ShiftModel): string[][][] {
     const shiftInfoLogics = ScheduleExportLogic.shiftInfoLogics(scheduleModel);
 
     const grouped = {
@@ -230,7 +236,7 @@ export class ScheduleExportLogic {
       ];
       if (this.overtimeExport) {
         shiftsRow.push(
-          ...shiftInfoLogics[category].calculateWorkerHourInfo(key).map((e) => e.toString())
+          ...shiftInfoLogics[category].calculateWorkerHourInfo(key, shift).map((e) => e.toString())
         );
       }
       grouped[category].push(shiftsRow);

@@ -4,7 +4,7 @@
 
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import backend from "../../../api/backend";
 import { NetworkErrorCode, ScheduleError } from "../../../common-models/schedule-error.model";
 import { ActionModel } from "../../../state/models/action.model";
@@ -18,6 +18,7 @@ import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/mont
 import { useNotification } from "../../common-components/notification/notification.context";
 import { useJiraLikeDrawer } from "../../common-components/drawer/jira-like-drawer-context";
 import ValidationDrawerContentComponent from "../validation-drawer/validation-drawer.component";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;
@@ -26,6 +27,9 @@ interface EditPageToolbarOptions {
 export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Element {
   const scheduleLogic = useContext(ScheduleLogicContext);
   const { createNotification } = useNotification();
+  const shifts = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
   const dispatcher = useDispatch();
 
   async function updateScheduleErrors(): Promise<void> {
@@ -33,7 +37,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
     if (schedule) {
       let response: ScheduleError[];
       try {
-        response = await backend.getErrors(schedule);
+        response = await backend.getErrors(schedule, shifts);
       } catch (err) {
         response = [
           {

@@ -41,6 +41,9 @@ export function SummaryTableSection({
   const { dates } = useSelector(
     (state: ApplicationStateModel) => state.actualState[scheduleKey].present.month_info
   );
+  const shiftsType = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
 
   return (
     <>
@@ -60,7 +63,8 @@ export function SummaryTableSection({
                   time[dataRow.rowKey],
                   currentMonth,
                   year,
-                  dates
+                  dates,
+                  shiftsType
                 )}
                 rowIndex={rowIndex}
               />

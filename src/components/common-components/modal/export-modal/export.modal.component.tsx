@@ -50,12 +50,16 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
 
   const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
+  const shifts = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
+
   const exportExtensions = {
     xlsx: (): void => {
       new ScheduleExportLogic(
         cropScheduleDMToMonthDM(model),
         exportOptions.overtime.value
-      ).formatAndSave(revision);
+      ).formatAndSave(revision, shifts);
     },
   };
   const handleExport = (): void => {
