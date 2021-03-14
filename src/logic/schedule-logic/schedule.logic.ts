@@ -91,7 +91,7 @@ export class ScheduleLogic implements ScheduleProvider {
       ExtraWorkersInfo: new ExtraWorkersLogic(extraWorkerSectionData),
     };
 
-    const foundationLogic = new FoundationInfoLogic(shifts, logics);
+    const foundationLogic = new FoundationInfoLogic(logics);
     return {
       BabysitterInfo: logics.BabysitterInfo,
       NurseInfo: logics.NurseInfo,
