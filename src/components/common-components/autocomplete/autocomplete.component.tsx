@@ -15,9 +15,8 @@ interface AutocompleteOptions<T> {
   className: string;
 }
 /**
- * Creates a dropdown with value set to options.
- * Important!
- * Dropdown create by this function is always opened.
+ * @description Creates a dropdown with value set to options.
+ * @important Dropdown create by this function is always opened.
  * To close the dropdown, you should destroy this component
  */
 export function AutocompleteComponent<T>({
@@ -30,8 +29,9 @@ export function AutocompleteComponent<T>({
 }: AutocompleteOptions<T>): JSX.Element {
   const inputRef = useRef(null);
   const tooltipRef = useRef(null);
-  const { styles } = usePopper(inputRef.current, tooltipRef.current, {
-    placement: "right-end",
+  const { styles, forceUpdate } = usePopper(inputRef.current, tooltipRef.current, {
+    placement: "auto",
+    strategy: "absolute",
   });
 
   const [value, setValue] = useState<T>();
@@ -60,7 +60,10 @@ export function AutocompleteComponent<T>({
           autoFocus={true}
           value={value && getOptionLabel(value)}
           {...getInputProps()}
-          onKeyDown={onKeyDown}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
+            forceUpdate && forceUpdate();
+            onKeyDown && onKeyDown(e);
+          }}
         />
       </div>
       {groupedOptions.length > 0 ? (

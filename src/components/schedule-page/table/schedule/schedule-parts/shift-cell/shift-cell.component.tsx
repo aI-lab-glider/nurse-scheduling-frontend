@@ -31,7 +31,11 @@ interface ShiftCellOptions extends BaseCellOptions {
 export function getColor(value: string): string {
   return Object.values(SHIFTS).filter((s) => s.code === value)[0].color ?? "FFD100";
 }
-
+/**
+ * @description Function component that creates cell containing Details or Autocomplete when in edit mode
+ * @param option : ShiftCellOption
+ * @returns JSX.Element
+ */
 export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   const {
     cellIndex,
@@ -109,7 +113,14 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
         selection: isSelected || (isComponentVisible && isBlocked),
         blocked: isBlocked,
       })}
-      onClick={(): void => toggleComponentVisibility()}
+      onClick={(): void => {
+        toggleComponentVisibility();
+      }}
+      onMouseLeave={(): void => {
+        setTimeout(() => {
+          setIsComponentVisible(false);
+        }, 1500);
+      }}
       id={id}
       onBlur={(): void => {
         onBlur?.();
