@@ -89,9 +89,11 @@ function copyMonthData<T>(
   const numberOfDaysToBeCopied = getNumberOfDaysToBeCopied(monthKey);
   const copyBase = cropMonthDataToFullWeeks(baseYear, baseMonth, baseMonthData);
   const copiedData = ArrayHelper.circularExtendToLength(copyBase, numberOfDaysToBeCopied);
-
   const currentMonthLength = MonthHelper.getMonthLength(monthKey.year, monthKey.month);
   currentMonthData = currentMonthData ?? Array(currentMonthLength).fill(defaultCurrentValue);
+  if (new Date(monthKey.year, monthKey.month).getDay() === 1) {
+    return copiedData;
+  }
   return concatWithLastWeekFromPrevMonth(monthKey, copiedData, baseMonthData, currentMonthData);
 }
 
@@ -101,23 +103,14 @@ function concatWithLastWeekFromPrevMonth<T>(
   prevMonth: T[],
   currentMonth: T[]
 ): T[] {
-  const prevMonthLastWeek = MonthHelper.getMonthLastWeekData(monthKey, prevMonth, currentMonth);
-  return prevMonthLastWeek ? prevMonthLastWeek.concat(copiedData) : copiedData;
+  return MonthHelper.getMonthLastWeekData(monthKey, prevMonth, currentMonth).concat(copiedData);
 }
-
+//zawsze 28 lub 35 dni
 function getNumberOfDaysToBeCopied(monthKey: ScheduleKey): number {
-  const {
-    daysMissingFromNextMonth: daysEditedInPrevMonth,
-  } = MonthHelper.calculateMissingFullWeekDays(monthKey.prevMonthKey);
-  const { daysMissingFromNextMonth: daysFromNextMonth } = MonthHelper.calculateMissingFullWeekDays(
-    monthKey
-  );
-
-  return (
-    MonthHelper.getMonthLength(monthKey.year, monthKey.month) -
-    daysEditedInPrevMonth +
-    daysFromNextMonth
-  );
+  return MonthHelper.findFirstMonthMondayIdx(monthKey.year, monthKey.month) + 28 >=
+    MonthHelper.getMonthLength(monthKey.year, monthKey.month)
+    ? 28
+    : 35;
 }
 
 function cropMonthDataToFullWeeks<T>(year: number, month: number, monthData: T[]): T[] {
