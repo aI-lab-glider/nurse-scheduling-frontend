@@ -41,6 +41,7 @@ function updatePersistentSchedule(
 export const PERSISTENT_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {
   undoType: "PERSISTENT_REVISION_UNDO",
   redoType: "PERSISTENT_REVISION_REDO",
+  clearHistoryType: "PERSISTENT_CLEAR_HISTORY",
   afterUndo: (dispatch, getState) => {
     const state = getState().actualState.persistentSchedule.present;
     updatePersistentSchedule(dispatch, state);
@@ -54,4 +55,5 @@ export const PERSISTENT_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataMod
 export const TEMPORARY_SCHEDULE_UNDOABLE_CONFIG: UndoableConfig<ScheduleDataModel> = {
   undoType: "TEMPORARY_REVISION_UNDO",
   redoType: "TEMPORARY_REVISION_REDO",
+  clearHistoryType: "TEMPORARY_CLEAR_HISTORY",
 };
