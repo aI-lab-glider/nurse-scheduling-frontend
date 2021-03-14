@@ -241,6 +241,19 @@ export class ScheduleExportLogic {
     });
   }
 
+  // the values are based on w3c recommendations
+  public decideBlackOrWhite(color: Color): string {
+    const black = "#000000";
+    const white = "#FFFFFF";
+    const rgb = [color.r, color.b, color.g];
+    const linearRgb = rgb.map((c) => {
+      c = c / 255.0;
+      return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+    });
+    const luminance = 0.2126 * linearRgb[0] + 0.7152 * linearRgb[1] + 0.0722 * linearRgb[2];
+    return luminance > 0.179 ? black : white;
+  }
+
   private getShiftStyle(code: ShiftCode, verboseDate?: VerboseDate): Partial<xlsx.Style> {
     const shiftFillColor = ShiftHelper.getShiftColor(code, verboseDate).backgroundColor;
     const borderColor: Partial<xlsx.Border> = {
@@ -264,7 +277,11 @@ export class ScheduleExportLogic {
         right: borderColor,
       },
       font: {
-        color: { argb: ["K"].includes(code) ? "#FFFFFF" : "#000000" },
+        color: {
+          argb: this.decideBlackOrWhite(
+            ShiftHelper.getShiftColor(code, verboseDate).backgroundColor
+          ),
+        },
       },
     };
   }
