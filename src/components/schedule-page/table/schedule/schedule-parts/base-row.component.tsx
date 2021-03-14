@@ -57,7 +57,7 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
               ...dataItem,
             }}
             cellIndex={cellIndex}
-            key={`${dataItem.value}${cellIndex}_${uuid}}`}
+            key={`${dataItem.value}_${cellIndex}_${uuid}`}
             isSelected={selection[cellIndex]}
             isPointerOn={cellIndex === pointerPosition}
             isBlocked={!isEditable || isCellFromPrevMonth(cellIndex, firstMonthDayIndex)}
