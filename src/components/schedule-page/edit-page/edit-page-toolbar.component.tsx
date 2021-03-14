@@ -21,6 +21,7 @@ import { useNotification } from "../../common-components/notification/notificati
 import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
 import ValidationDrawerContentComponent from "../validation-drawer/validation-drawer.component";
 import _ from "lodash";
+import classNames from "classnames/bind";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;
@@ -109,7 +110,9 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
           data-cy="undo-button"
           disabled={!anyChanges()}
         >
-          <ArrowBackIcon className="edit-icons" />
+          <ArrowBackIcon
+            className={classNames("edit-icons", { "disabled-edit-icon": !anyChanges() })}
+          />
         </Button>
 
         <Button
@@ -118,7 +121,9 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
           variant="circle"
           disabled={undoCounter === 0}
         >
-          <ArrowForwardIcon className="edit-icons" />
+          <ArrowForwardIcon
+            className={classNames("edit-icons", { "disabled-edit-icon": undoCounter === 0 })}
+          />
         </Button>
 
         <div id="edit-panel-text-container">
