@@ -47,7 +47,6 @@ export enum HoursInfoCells {
 }
 export type ScheduleName =
   | "example.xlsx"
-  | "grafik.xlsx"
   | "example_2.xlsx"
   | "childrens_extraworkers.xlsx"
   | "extraworkers_childrens.xlsx";

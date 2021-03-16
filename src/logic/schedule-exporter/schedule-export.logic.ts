@@ -27,6 +27,10 @@ import {
 } from "../section.model";
 
 const EMPTY_ROW = Array(100).fill("");
+
+export const WORKSHEET_NAME = "grafik";
+export const WORKERS_WORKSHEET_NAME = "pracownicy";
+
 export interface ScheduleExportLogicOptions {
   scheduleModel: MonthDataModel;
   primaryScheduleModel?: PrimaryMonthRevisionDataModel;
@@ -51,8 +55,6 @@ export class ScheduleExportLogic {
     this.extraWorkersExport = extraWorkersExport;
   }
 
-  static readonly WORKSHEET_NAME = "grafik";
-  static readonly WORKERS_WORKSHEET_NAME = "pracownicy";
   requiredHoursAddress;
   doneHoursAddress;
   diffHoursAddress;
@@ -98,6 +100,10 @@ export class ScheduleExportLogic {
       schedule.push(overtimeInfoHeader);
     }
 
+    const headerLen = schedule.length;
+    const nurseLastIndex = headerLen + nurseShifts.length;
+    const babysitterLastIndex = nurseLastIndex + babysitterShifts.length + 1;
+
     schedule.push(
       ...nurseShifts,
       EMPTY_ROW,
@@ -109,7 +115,7 @@ export class ScheduleExportLogic {
       EMPTY_ROW
     );
 
-    this.addStyles(workSheet, schedule);
+    this.addStyles(workSheet, schedule, headerLen, nurseLastIndex, babysitterLastIndex);
 
     workSheet.mergeCells("B1:AF1");
     workSheet.mergeCells(
@@ -151,12 +157,13 @@ export class ScheduleExportLogic {
     workSheet.addRows(workersInfoArray);
 
     colLens.forEach((len, id) => {
-      workSheet.getColumn(id + 1).width = len + 2;
+      workSheet.getColumn(id + 1).width = len + 4;
     });
 
     workSheet.getColumn(1).alignment = { vertical: "middle", horizontal: "left" };
     workSheet.getColumn(2).alignment = { vertical: "middle", horizontal: "center" };
     workSheet.getColumn(3).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getColumn(4).alignment = { vertical: "middle", horizontal: "center" };
 
     workSheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
     workSheet.getRow(1).font = { bold: true };
@@ -166,11 +173,11 @@ export class ScheduleExportLogic {
     const workbook = new xlsx.Workbook();
     return [
       workbook,
-      workbook.addWorksheet(ScheduleExportLogic.WORKSHEET_NAME, {
+      workbook.addWorksheet(WORKSHEET_NAME, {
         pageSetup: { paperSize: 9, orientation: "landscape" },
         properties: { defaultColWidth: 5 },
       }),
-      workbook.addWorksheet(ScheduleExportLogic.WORKERS_WORKSHEET_NAME, {
+      workbook.addWorksheet(WORKERS_WORKSHEET_NAME, {
         pageSetup: { paperSize: 9, orientation: "landscape" },
         properties: { defaultColWidth: 5 },
       }),
@@ -191,7 +198,13 @@ export class ScheduleExportLogic {
     }
   }
 
-  private addStyles(workSheet: xlsx.Worksheet, rows: unknown[]): void {
+  private addStyles(
+    workSheet: xlsx.Worksheet,
+    rows: unknown[],
+    headerLen: number,
+    nurseLastIndex: number,
+    babysitterLastIndex: number
+  ): void {
     const monthInfo = this.scheduleModel.scheduleKey;
     const monthLogic = new MonthInfoLogic(
       monthInfo?.month ?? 0,
@@ -199,9 +212,22 @@ export class ScheduleExportLogic {
       this.scheduleModel.month_info?.dates || []
     );
     const verboseDates = monthLogic.verboseDates;
+    const calendarDataMargin = -2;
     workSheet.addRows(rows);
     workSheet.getColumn(1).width = 20;
     workSheet.eachRow((row, index) => {
+      const isNurseRow = index > headerLen && index <= nurseLastIndex;
+      const isBabysitterRow = index > nurseLastIndex + 1 && index <= babysitterLastIndex;
+
+      if (isNurseRow || isBabysitterRow) {
+        row.eachCell((cell, colNumber) => {
+          const cellValue = cell.value?.toString() || "";
+          cell.style = this.getShiftStyle(
+            ShiftCode[cellValue] || ShiftCode.W,
+            verboseDates[colNumber + calendarDataMargin]
+          );
+        });
+      }
       row.height = 18;
       if (index === 1) {
         row.height = 40;
@@ -218,22 +244,8 @@ export class ScheduleExportLogic {
         const cellValue = cell.value?.toString() || "";
         this.getRightCornerIndexes(cell, cellValue);
         if ((cellValue && ShiftCode[cellValue]) || isShiftRow) {
-          if (!isShiftRow) {
-            row.eachCell((cell, colNumber) => {
-              const cellValue = cell.value?.toString() || "";
-              cell.style = this.getShiftStyle(
-                ShiftCode[cellValue] || ShiftCode.W,
-                verboseDates[colNumber - 2]
-              );
-            });
-          }
           isShiftRow = true;
-          // colNumber - 1, because first column is key column
           workSheet.getColumn(colNumber).width = 4;
-          cell.style = this.getShiftStyle(
-            ShiftCode[cellValue] || ShiftCode.W,
-            verboseDates[colNumber - 2]
-          );
         }
       });
     });
