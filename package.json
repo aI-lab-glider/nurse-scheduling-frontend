@@ -71,7 +71,6 @@
   "scripts": {
     "b-start": "react-scripts start",
     "b-build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron-build": "electron-builder",
     "release": "npm build && electron-builder --publish=always",

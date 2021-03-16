@@ -12,6 +12,11 @@ import { VerboseDateHelper } from "../../../../helpers/verbose-date.helper";
 import { copyMonthDM } from "../../../../logic/month-copy/month-copy.logic";
 import { MonthHelper } from "../../../../helpers/month.helper";
 import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
+import { UndoActionCreator } from "../../undoable.action-creator";
+import {
+  PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
+  TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
+} from "./schedule.actions";
 
 const PREV_MONTH_OFFSET = -1;
 
@@ -44,6 +49,8 @@ export class MonthSwitchActionCreator {
         newRevisionType
       );
       dispatch(addNewScheduleAction);
+      dispatch(UndoActionCreator.clearHistory(PERSISTENT_SCHEDULE_UNDOABLE_CONFIG));
+      dispatch(UndoActionCreator.clearHistory(TEMPORARY_SCHEDULE_UNDOABLE_CONFIG));
     };
   }
 

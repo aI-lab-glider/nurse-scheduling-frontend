@@ -84,6 +84,11 @@
     margin: auto 10px auto 10px;
   }
 
+  .disabled-edit-icon {
+    opacity: $btn-disabled-opacity;
+    color: $gray-400;
+  }
+
   .editing-row {
     display: flex;
     justify-content: flex-start;

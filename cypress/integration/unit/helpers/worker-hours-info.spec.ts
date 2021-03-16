@@ -67,7 +67,7 @@ describe("Worker hours info", () => {
     const dates = _.range(1, testedMonthParams.dayCount + 5);
     const shifts = dates.map((_) => ShiftCode.W);
     const primaryShifts = shifts;
-    const calculateWorkerDataAction = () =>
+    const calculateWorkerDataAction = (): WorkerHourInfo =>
       WorkerHourInfo.fromWorkerInfo(
         shifts,
         primaryShifts as MonthDataArray<ShiftCode>,
