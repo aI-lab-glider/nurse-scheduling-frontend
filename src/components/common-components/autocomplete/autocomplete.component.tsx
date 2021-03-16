@@ -6,7 +6,13 @@ import classNames from "classnames/bind";
 import React, { useEffect, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 
-interface AutocompleteOptions<T> {
+interface AutocompleteOptions<
+  T extends {
+    name: string;
+    from: number;
+    to: number;
+  }
+> {
   options: T[];
   getOptionLabel: (option: T) => string;
   onValueChange: (newValue: T) => void;
@@ -20,7 +26,13 @@ interface AutocompleteOptions<T> {
  * Dropdown create by this function is always opened.
  * To close the dropdown, you should destroy this component
  */
-export function AutocompleteComponent<T>({
+export function AutocompleteComponent<
+  T extends {
+    name: string;
+    from: number;
+    to: number;
+  }
+>({
   className,
   options,
   getOptionLabel,
@@ -52,6 +64,21 @@ export function AutocompleteComponent<T>({
     getOptionLabel,
     open: true,
   });
+  const LabelComponent = ({ option, index }): JSX.Element => {
+    return (
+      <div
+        {...getOptionProps({ option, index })}
+        data-cy={option["data-cy"]}
+        onClick={(e: React.MouseEvent): void => {
+          e.stopPropagation();
+          setValue(option);
+        }}
+      >
+        <div className="optionLabel">{getOptionLabel(option)}</div>
+        <div className="colorSamplee" style={{ backgroundColor: `#${getOptionColor(option)}` }} />
+      </div>
+    );
+  };
   return (
     <div ref={inputRef} data-cy="shiftDropdown">
       <div {...getRootProps()}>
@@ -64,32 +91,35 @@ export function AutocompleteComponent<T>({
         />
       </div>
       {groupedOptions.length > 0 ? (
-        <ul
+        <div
           ref={tooltipRef}
           className={classNames("listbox")}
           style={styles.popper}
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onMouseDown={(getListboxProps() as any).onMouseDown}
         >
-          {groupedOptions.map((option, index) => (
-            <li
-              {...getOptionProps({ option, index })}
-              data-cy={option["data-cy"]}
-              onClick={(e: React.MouseEvent): void => {
-                e.stopPropagation();
-                setValue(option);
-              }}
-            >
-              <div className="container">
-                <div className="optionLabel">{getOptionLabel(option)}</div>
-                <div
-                  className="colorSample"
-                  style={{ backgroundColor: `#${getOptionColor(option)}` }}
-                />
-              </div>
-            </li>
-          ))}
-        </ul>
+          {groupedOptions.map((option, index) => {
+            if (option.name.trim() === "wolne") {
+              return <LabelComponent option={option} index={index} />;
+            }
+            return null;
+          })}
+          {groupedOptions.map((option, index) => {
+            if (option.name.trim() !== "wolne") {
+              if (option.from !== 0 && option.to !== 24)
+                return <LabelComponent option={option} index={index} />;
+            }
+            return null;
+          })}
+          <div className="autoSeparator" />
+          {groupedOptions.map((option, index) => {
+            if (option.name.trim() !== "wolne") {
+              if (option.from === 0 && option.to === 24)
+                return <LabelComponent option={option} index={index} />;
+            }
+            return null;
+          })}
+        </div>
       ) : null}
     </div>
   );
