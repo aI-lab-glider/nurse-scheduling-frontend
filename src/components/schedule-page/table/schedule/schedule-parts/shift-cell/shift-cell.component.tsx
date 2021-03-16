@@ -76,7 +76,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   const hasNextClass = "hasNext" + hasNext;
 
   function _onValueChange(inputValue: string): void {
-    onValueChange && onValueChange(getShiftCode(inputValue));
+    onValueChange?.(getShiftCode(inputValue));
   }
 
   const selectableItemRef = useCellSelection(options);
@@ -104,10 +104,12 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     ),
     [isBlocked, onClick]
   );
+  const pageOffset: number = document.getElementById("root")?.children[0].children[0].scrollTop!;
+  let clearModal;
 
   //  #region view
   return (
-    <td
+    <div
       ref={mergeRefs([selectableItemRef, componentContainer])}
       className={classNames("mainCell", {
         selection: isSelected || (isComponentVisible && isBlocked),
@@ -116,10 +118,17 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
       onClick={(): void => {
         toggleComponentVisibility();
       }}
+      onMouseEnter={(): void => {
+        clearTimeout(clearModal);
+      }}
       onMouseLeave={(): void => {
-        setTimeout(() => {
+        clearModal = setTimeout(() => {
           setIsComponentVisible(false);
-        }, 1500);
+        }, 900);
+      }}
+      onWheel={(e: React.WheelEvent<HTMLTableCellElement>): void => {
+        pageOffset !== document.getElementById("root")?.children[0].children[0].scrollTop &&
+          setIsComponentVisible(false);
       }}
       id={id}
       onBlur={(): void => {
@@ -128,12 +137,14 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     >
       {showInput && (
         <WrapContentDiv>
-          <CellInput
-            input={ShiftAutocompleteComponent}
-            onKeyDown={onKeyDown}
-            onValueChange={_onValueChange}
-            {...options}
-          />
+          {isComponentVisible && (
+            <CellInput
+              input={ShiftAutocompleteComponent}
+              onKeyDown={onKeyDown}
+              onValueChange={_onValueChange}
+              {...options}
+            />
+          )}
         </WrapContentDiv>
       )}
       <ErrorTooltipProvider
@@ -177,7 +188,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
         </Popper>
       )}
       )
-    </td>
+    </div>
   );
 }
 

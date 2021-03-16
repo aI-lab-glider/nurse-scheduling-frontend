@@ -19,6 +19,7 @@ interface AutocompleteOptions<T> {
  * @important Dropdown create by this function is always opened.
  * To close the dropdown, you should destroy this component
  */
+
 export function AutocompleteComponent<T>({
   className,
   options,
@@ -40,7 +41,6 @@ export function AutocompleteComponent<T>({
       onValueChange(value);
     }
   }, [value, onValueChange]);
-
   const {
     getRootProps,
     getInputProps,
@@ -61,12 +61,12 @@ export function AutocompleteComponent<T>({
           value={value && getOptionLabel(value)}
           {...getInputProps()}
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
-            forceUpdate && forceUpdate();
-            onKeyDown && onKeyDown(e);
+            forceUpdate?.();
+            onKeyDown?.(e);
           }}
         />
       </div>
-      {groupedOptions.length > 0 ? (
+      {groupedOptions.length > 0 && (
         <ul
           ref={tooltipRef}
           className={classNames("listbox")}
@@ -93,7 +93,7 @@ export function AutocompleteComponent<T>({
             </li>
           ))}
         </ul>
-      ) : null}
+      )}
     </div>
   );
 }
