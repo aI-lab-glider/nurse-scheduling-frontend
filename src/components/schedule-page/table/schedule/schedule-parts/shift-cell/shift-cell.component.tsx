@@ -116,7 +116,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
         blocked: isBlocked,
       })}
       onClick={(): void => {
-        toggleComponentVisibility();
+        (!isComponentVisible || !isEditMode) && toggleComponentVisibility();
       }}
       onMouseEnter={(): void => {
         clearTimeout(clearModal);
