@@ -5,7 +5,7 @@ import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-
 import {
   ContractType,
   ContractTypeHelper,
-  WorkerAllInfoModel,
+  WorkerDescription,
   WorkerType,
   WorkerTypeHelper,
 } from "../../common-models/worker-info.model";
@@ -16,17 +16,24 @@ export const DEFAULT_CONTRACT_TYPE = ContractType.CIVIL_CONTRACT;
 export const DEFAULT_TIME = 1;
 
 export class WorkersInfoParser {
-  private _workerInfoRows: { [key: string]: WorkerAllInfoModel } = {};
+  private _workerInfoRows: { [key: string]: WorkerDescription } = {};
+  private _workerDescriptions: WorkerDescription[] = [];
   private _parseErrors: ScheduleError[] = [];
 
   constructor(data: string[][]) {
-    this.myWorker(data).forEach((worker) => {
+    this._workerDescriptions = this.mapWorkers(data);
+
+    this._workerDescriptions.forEach((worker) => {
       this._workerInfoRows[worker.name] = worker;
     });
   }
 
   public get errors(): ScheduleError[] {
     return [...this._parseErrors];
+  }
+
+  public get workerDescriptions(): WorkerDescription[] {
+    return this._workerDescriptions;
   }
 
   private logLoadFileError(msg: string): void {
@@ -36,8 +43,8 @@ export class WorkersInfoParser {
     });
   }
 
-  private myWorker(raw: string[][]): WorkerAllInfoModel[] {
-    const sectionData: WorkerAllInfoModel[] = [];
+  private mapWorkers(raw: string[][]): WorkerDescription[] {
+    const sectionData: WorkerDescription[] = [];
 
     raw.forEach((personelRow) => {
       if (personelRow.length > 0) {
@@ -47,17 +54,17 @@ export class WorkersInfoParser {
 
         if (personelRow[1]) {
           switch (personelRow[1].trim().toLowerCase()) {
-            case "o":
+            case WorkerTypeHelper.translateToShort(WorkerType.OTHER).toLowerCase():
             case "0":
               type = WorkerType.OTHER;
               break;
-            case "p":
+            case WorkerTypeHelper.translateToShort(WorkerType.NURSE).toLowerCase():
               type = WorkerType.NURSE;
               break;
           }
         } else {
           this.logLoadFileError(
-            "Nie ustawiono typu stanowiska dla pracownika : " +
+            "Nie ustawiono typu stanowiska dla pracownika: " +
               name +
               ". Przyjęto stanowisko: " +
               WorkerTypeHelper.translate(DEFAULT_WORKER_TYPE)
@@ -68,18 +75,20 @@ export class WorkersInfoParser {
 
         if (personelRow[2]) {
           switch (personelRow[2].trim().toLowerCase()) {
-            case "uop":
+            case ContractTypeHelper.translateToShort(
+              ContractType.EMPLOYMENT_CONTRACT
+            ).toLowerCase():
               contract = ContractType.EMPLOYMENT_CONTRACT;
               break;
-            case "uz":
+            case ContractTypeHelper.translateToShort(ContractType.CIVIL_CONTRACT).toLowerCase():
               contract = ContractType.CIVIL_CONTRACT;
               break;
           }
         } else {
           this.logLoadFileError(
-            "Nie ustawiono typu kontraktu dla pracownika : " +
+            "Nie ustawiono typu kontraktu dla pracownika: " +
               name +
-              ". Przyjęto kontakt: " +
+              ". Przyjęto kontrakt: " +
               ContractTypeHelper.translate(DEFAULT_CONTRACT_TYPE)
           );
         }
@@ -87,10 +96,10 @@ export class WorkersInfoParser {
         let time = DEFAULT_TIME;
 
         if (personelRow[3]) {
-          const number = parseInt(personelRow[3].trim());
+          const number = parseFloat(personelRow[3].trim());
           if (isNaN(number) || number < 0) {
             this.logLoadFileError(
-              "Nieoczekiwana wartość dla wymiaru czasu dla pracownika : " +
+              "Nieoczekiwana wartość dla wymiaru czasu dla pracownika: " +
                 name +
                 ". Przyjęto wymiar czasu: " +
                 DEFAULT_TIME
@@ -100,7 +109,7 @@ export class WorkersInfoParser {
           }
         } else {
           this.logLoadFileError(
-            "Nie ustawiono wymiaru czasu dla pracownika : " +
+            "Nie ustawiono wymiaru czasu dla pracownika: " +
               name +
               ". Przyjęto wymiar czasu: " +
               DEFAULT_TIME

@@ -12,6 +12,10 @@ import { ApplicationStateModel } from "../../../../state/models/application-stat
 import { fromBuffer } from "file-type/browser";
 import { useNotification } from "../../../common-components/notification/notification.context";
 import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
+import {
+  WORKERS_WORKSHEET_NAME,
+  WORKSHEET_NAME,
+} from "../../../../logic/schedule-exporter/schedule-export.logic";
 
 export interface UseScheduleConverterOutput {
   monthModel?: MonthDataModel;
@@ -101,6 +105,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
 
     return (
       undefinedSeen ||
+      rowValuesSet.size === 0 ||
       (rowValuesSet.size === 4 &&
         Array.from(rowValuesSet).some((setItem) =>
           cellsToAvoid.some((cellToAvoid) => setItem.trim().toLowerCase().includes(cellToAvoid))
@@ -112,7 +117,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
 
   function extractWorkers(workbook): Array<Array<string>> {
     const workers = Array<Array<string>>();
-    const workersWorkSheet = workbook.getWorksheet("pracownicy");
+    const workersWorkSheet = workbook.getWorksheet(WORKERS_WORKSHEET_NAME);
 
     if (workersWorkSheet) {
       workersWorkSheet.eachRow(false, (row) => {
@@ -132,7 +137,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
   }
 
   function extractSchedule(workbook): Array<Array<Array<string>>> {
-    const scheduleWorkSheet = workbook.getWorksheet(1);
+    const scheduleWorkSheet = workbook.getWorksheet(WORKSHEET_NAME);
     if (scheduleWorkSheet.rowCount === 0) {
       throw new Error(InputFileErrorCode.EMPTY_FILE);
     }

@@ -27,6 +27,10 @@ import {
 } from "../section.model";
 
 const EMPTY_ROW = Array(100).fill("");
+
+export const WORKSHEET_NAME = "grafik";
+export const WORKERS_WORKSHEET_NAME = "pracownicy";
+
 export interface ScheduleExportLogicOptions {
   scheduleModel: MonthDataModel;
   primaryScheduleModel?: PrimaryMonthRevisionDataModel;
@@ -51,8 +55,6 @@ export class ScheduleExportLogic {
     this.extraWorkersExport = extraWorkersExport;
   }
 
-  static readonly WORKSHEET_NAME = "grafik";
-  static readonly WORKERS_WORKSHEET_NAME = "pracownicy";
   requiredHoursAddress;
   doneHoursAddress;
   diffHoursAddress;
@@ -171,11 +173,11 @@ export class ScheduleExportLogic {
     const workbook = new xlsx.Workbook();
     return [
       workbook,
-      workbook.addWorksheet(ScheduleExportLogic.WORKSHEET_NAME, {
+      workbook.addWorksheet(WORKSHEET_NAME, {
         pageSetup: { paperSize: 9, orientation: "landscape" },
         properties: { defaultColWidth: 5 },
       }),
-      workbook.addWorksheet(ScheduleExportLogic.WORKERS_WORKSHEET_NAME, {
+      workbook.addWorksheet(WORKERS_WORKSHEET_NAME, {
         pageSetup: { paperSize: 9, orientation: "landscape" },
         properties: { defaultColWidth: 5 },
       }),

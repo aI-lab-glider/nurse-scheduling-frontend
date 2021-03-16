@@ -67,7 +67,7 @@ export interface WorkersInfoModel {
   contractType?: { [workerName: string]: ContractType };
 }
 
-export interface WorkerAllInfoModel {
+export interface WorkerDescription {
   name: string;
   time: number;
   type: WorkerType;
