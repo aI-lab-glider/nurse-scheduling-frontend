@@ -124,7 +124,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
       onMouseLeave={(): void => {
         clearModal = setTimeout(() => {
           setIsComponentVisible(false);
-        }, 900);
+        }, 444);
       }}
       onWheel={(e: React.WheelEvent<HTMLTableCellElement>): void => {
         pageOffset !== document.getElementById("root")?.children[0].children[0].scrollTop &&
