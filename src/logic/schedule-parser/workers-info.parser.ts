@@ -17,13 +17,11 @@ export const DEFAULT_TIME = 1;
 
 export class WorkersInfoParser {
   private _workerInfoRows: { [key: string]: WorkerDescription } = {};
-  private _workerDescriptions: WorkerDescription[] = [];
   private _parseErrors: ScheduleError[] = [];
 
   constructor(data: string[][]) {
-    this._workerDescriptions = this.mapWorkers(data);
-
-    this._workerDescriptions.forEach((worker) => {
+    data.forEach((a) => {
+      const worker = this.mapWorker(a);
       this._workerInfoRows[worker.name] = worker;
     });
   }
@@ -33,7 +31,7 @@ export class WorkersInfoParser {
   }
 
   public get workerDescriptions(): WorkerDescription[] {
-    return this._workerDescriptions;
+    return Object.values(this._workerInfoRows);
   }
 
   private logLoadFileError(msg: string): void {
@@ -43,82 +41,82 @@ export class WorkersInfoParser {
     });
   }
 
-  private mapWorkers(raw: string[][]): WorkerDescription[] {
-    const sectionData: WorkerDescription[] = [];
+  private parseWorkerName(personelRow: string[]): string {
+    if (personelRow[0]) {
+      return StringHelper.capitalizeEach(personelRow[0].toLowerCase(), " ");
+    }
+    return "";
+  }
 
-    raw.forEach((personelRow) => {
-      if (personelRow.length > 0) {
-        const name = StringHelper.capitalizeEach(personelRow[0].toLowerCase(), " ");
-
-        let type = DEFAULT_WORKER_TYPE;
-
-        if (personelRow[1]) {
-          switch (personelRow[1].trim().toLowerCase()) {
-            case WorkerTypeHelper.translateToShort(WorkerType.OTHER).toLowerCase():
-            case "0":
-              type = WorkerType.OTHER;
-              break;
-            case WorkerTypeHelper.translateToShort(WorkerType.NURSE).toLowerCase():
-              type = WorkerType.NURSE;
-              break;
-          }
-        } else {
-          this.logLoadFileError(
-            "Nie ustawiono typu stanowiska dla pracownika: " +
-              name +
-              ". Przyjęto stanowisko: " +
-              WorkerTypeHelper.translate(DEFAULT_WORKER_TYPE)
-          );
-        }
-
-        let contract = DEFAULT_CONTRACT_TYPE;
-
-        if (personelRow[2]) {
-          switch (personelRow[2].trim().toLowerCase()) {
-            case ContractTypeHelper.translateToShort(
-              ContractType.EMPLOYMENT_CONTRACT
-            ).toLowerCase():
-              contract = ContractType.EMPLOYMENT_CONTRACT;
-              break;
-            case ContractTypeHelper.translateToShort(ContractType.CIVIL_CONTRACT).toLowerCase():
-              contract = ContractType.CIVIL_CONTRACT;
-              break;
-          }
-        } else {
-          this.logLoadFileError(
-            "Nie ustawiono typu kontraktu dla pracownika: " +
-              name +
-              ". Przyjęto kontrakt: " +
-              ContractTypeHelper.translate(DEFAULT_CONTRACT_TYPE)
-          );
-        }
-
-        let time = DEFAULT_TIME;
-
-        if (personelRow[3]) {
-          const number = parseFloat(personelRow[3].trim());
-          if (isNaN(number) || number < 0) {
-            this.logLoadFileError(
-              "Nieoczekiwana wartość dla wymiaru czasu dla pracownika: " +
-                name +
-                ". Przyjęto wymiar czasu: " +
-                DEFAULT_TIME
-            );
-          } else {
-            time = number;
-          }
-        } else {
-          this.logLoadFileError(
-            "Nie ustawiono wymiaru czasu dla pracownika: " +
-              name +
-              ". Przyjęto wymiar czasu: " +
-              DEFAULT_TIME
-          );
-        }
-
-        sectionData.push({ name: name, type: type, time: time, contractType: contract });
+  private parseWorkerType(personelRow: string[], name: string): WorkerType {
+    if (personelRow[1]) {
+      switch (personelRow[1].trim().toLowerCase()) {
+        case WorkerTypeHelper.translateToShort(WorkerType.OTHER).toLowerCase():
+        case "0":
+          return WorkerType.OTHER;
+        case WorkerTypeHelper.translateToShort(WorkerType.NURSE).toLowerCase():
+          return WorkerType.NURSE;
       }
-    });
-    return sectionData;
+    } else {
+      this.logLoadFileError(
+        "Nie ustawiono typu stanowiska dla pracownika: " +
+          name +
+          ". Przyjęto stanowisko: " +
+          WorkerTypeHelper.translate(DEFAULT_WORKER_TYPE)
+      );
+    }
+    return DEFAULT_WORKER_TYPE;
+  }
+
+  private parseContractType(personelRow: string[], name: string): ContractType {
+    if (personelRow[2]) {
+      switch (personelRow[2].trim().toLowerCase()) {
+        case ContractTypeHelper.translateToShort(ContractType.EMPLOYMENT_CONTRACT).toLowerCase():
+          return ContractType.EMPLOYMENT_CONTRACT;
+        case ContractTypeHelper.translateToShort(ContractType.CIVIL_CONTRACT).toLowerCase():
+          return ContractType.CIVIL_CONTRACT;
+      }
+    } else {
+      this.logLoadFileError(
+        "Nie ustawiono typu kontraktu dla pracownika: " +
+          name +
+          ". Przyjęto kontrakt: " +
+          ContractTypeHelper.translate(DEFAULT_CONTRACT_TYPE)
+      );
+    }
+    return DEFAULT_CONTRACT_TYPE;
+  }
+
+  private parseWOrkerTime(personelRow: string[], name: string): number {
+    if (personelRow[3]) {
+      const number = parseFloat(personelRow[3].trim());
+      if (isNaN(number) || number < 0 || number > 1) {
+        this.logLoadFileError(
+          "Nieoczekiwana wartość dla wymiaru czasu dla pracownika: " +
+            name +
+            ". Przyjęto wymiar czasu: " +
+            DEFAULT_TIME
+        );
+      } else {
+        return number;
+      }
+    } else {
+      this.logLoadFileError(
+        "Nie ustawiono wymiaru czasu dla pracownika: " +
+          name +
+          ". Przyjęto wymiar czasu: " +
+          DEFAULT_TIME
+      );
+    }
+    return DEFAULT_TIME;
+  }
+
+  private mapWorker(row: string[]): WorkerDescription {
+    const name = this.parseWorkerName(row);
+    const type = this.parseWorkerType(row, name);
+    const contract = this.parseContractType(row, name);
+    const time = this.parseWOrkerTime(row, name);
+
+    return { name: name, type: type, time: time, contractType: contract };
   }
 }
