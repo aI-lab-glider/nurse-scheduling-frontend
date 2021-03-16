@@ -157,7 +157,7 @@ export class ScheduleExportLogic {
     workSheet.addRows(workersInfoArray);
 
     colLens.forEach((len, id) => {
-      workSheet.getColumn(id + 1).width = len + 2;
+      workSheet.getColumn(id + 1).width = len + 4;
     });
 
     workSheet.getColumn(1).alignment = { vertical: "middle", horizontal: "left" };
