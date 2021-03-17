@@ -95,7 +95,7 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
           onKeyDown={onKeyDown}
         />
       </div>
-      {shiftTypes && groupedOptions.length > 0 ? (
+      {shiftTypes && groupedOptions.length > 0 && (
         <div
           ref={tooltipRef}
           className={classNames("listbox")}
@@ -123,7 +123,7 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
             return null;
           })}
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
