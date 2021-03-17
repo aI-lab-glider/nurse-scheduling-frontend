@@ -117,6 +117,14 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
       });
   }
 
+  // Only for testing purposes
+  if (
+    process.env.REACT_APP_TEST_MODE &&
+    issueDescription.toLowerCase() === process.env.REACT_APP_ERROR_WORKER
+  ) {
+    throw new Error("[TEST MODE] Error message was entered");
+  }
+
   const body = (
     <div className="report-issue-modal-body">
       {isSent && <p>Wysłano powiadomienie o błędzie.</p>}
