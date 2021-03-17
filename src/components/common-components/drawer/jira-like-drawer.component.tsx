@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
+import React, { useEffect } from "react";
 import DrawerHeader from "./drawer-header.component";
 import { Box } from "@material-ui/core";
 import { makeStyles, Theme } from "@material-ui/core/styles";
@@ -32,6 +32,10 @@ export default function JiraLikeDrawer(width): JSX.Element {
   );
   const classes = useStyles(width);
   const { title, open, setOpen, childrenComponent } = useJiraLikeDrawer();
+
+  useEffect(() => {
+    if (!isEditMode) setOpen(false);
+  }, [isEditMode, setOpen]);
 
   return (
     <Box>
