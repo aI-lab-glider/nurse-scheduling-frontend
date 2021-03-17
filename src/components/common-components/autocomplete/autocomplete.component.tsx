@@ -14,6 +14,7 @@ interface AutocompleteOptions<
     name: string;
     from: number;
     to: number;
+    isWorkingShift: boolean | undefined;
   }
 > {
   options: T[];
@@ -34,6 +35,7 @@ export function AutocompleteComponent<
     name: string;
     from: number;
     to: number;
+    isWorkingShift: boolean | undefined;
   }
 >({
   className,
@@ -67,7 +69,7 @@ export function AutocompleteComponent<
     getOptionLabel,
     open: true,
   });
-  const ShiftTypes = useSelector(
+  const shiftTypes = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
   );
   const LabelComponent = ({ option, index }): JSX.Element => {
@@ -96,7 +98,7 @@ export function AutocompleteComponent<
           onKeyDown={onKeyDown}
         />
       </div>
-      {ShiftTypes && groupedOptions.length > 0 ? (
+      {shiftTypes && groupedOptions.length > 0 ? (
         <div
           ref={tooltipRef}
           className={classNames("listbox")}
@@ -105,23 +107,21 @@ export function AutocompleteComponent<
           onMouseDown={(getListboxProps() as any).onMouseDown}
         >
           {groupedOptions.map((option, index) => {
-            if (option.name.trim() === ShiftTypes[ShiftCode.W].name) {
+            if (option.name.trim() === shiftTypes[ShiftCode.W].name) {
               return <LabelComponent option={option} index={index} />;
             }
             return null;
           })}
           {groupedOptions.map((option, index) => {
-            if (option.name.trim() !== ShiftTypes[ShiftCode.W].name) {
-              if (option.from !== 0 && option.to !== 24)
-                return <LabelComponent option={option} index={index} />;
+            if (option.isWorkingShift) {
+              return <LabelComponent option={option} index={index} />;
             }
             return null;
           })}
           <div className="autoSeparator" />
           {groupedOptions.map((option, index) => {
-            if (option.name.trim() !== ShiftTypes[ShiftCode.W].name) {
-              if (option.from === 0 && option.to === 24)
-                return <LabelComponent option={option} index={index} />;
+            if (option.name.trim() !== shiftTypes[ShiftCode.W].name) {
+              if (!option.isWorkingShift) return <LabelComponent option={option} index={index} />;
             }
             return null;
           })}
