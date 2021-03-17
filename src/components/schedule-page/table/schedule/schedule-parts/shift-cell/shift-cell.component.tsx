@@ -104,91 +104,97 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     ),
     [isBlocked, onClick]
   );
-  const pageOffset: number = document.getElementById("root")?.children[0].children[0].scrollTop!;
   let clearModal;
 
-  //  #region view
+  //  #region view?
   return (
-    <div
-      ref={mergeRefs([selectableItemRef, componentContainer])}
-      className={classNames("mainCell", {
-        selection: isSelected || (isComponentVisible && isBlocked),
-        blocked: isBlocked,
-      })}
-      onClick={(): void => {
-        (!isComponentVisible || !isEditMode) && toggleComponentVisibility();
-      }}
-      onMouseEnter={(): void => {
-        clearTimeout(clearModal);
-      }}
-      onMouseLeave={(): void => {
-        clearModal = setTimeout(() => {
-          setIsComponentVisible(false);
-        }, 444);
-      }}
-      onWheel={(e: React.WheelEvent<HTMLTableCellElement>): void => {
-        pageOffset !== document.getElementById("root")?.children[0].children[0].scrollTop &&
-          setIsComponentVisible(false);
-      }}
-      id={id}
-      onBlur={(): void => {
-        onBlur?.();
-      }}
-    >
-      {showInput && (
-        <WrapContentDiv>
-          {isComponentVisible && (
+    <>
+      {showInput && isComponentVisible && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            zIndex: 100,
+          }}
+          onClick={(): void => setIsComponentVisible(false)}
+        />
+      )}
+      <div
+        ref={mergeRefs([selectableItemRef, componentContainer])}
+        className={classNames("mainCell", {
+          selection: isSelected || (isComponentVisible && isBlocked),
+          blocked: isBlocked,
+        })}
+        onClick={(): void => toggleComponentVisibility()}
+        onMouseEnter={(): void => {
+          clearTimeout(clearModal);
+        }}
+        onMouseLeave={(): void => {
+          clearModal = setTimeout(() => {
+            setIsComponentVisible(false);
+          }, 444);
+        }}
+        id={id}
+        onBlur={(): void => {
+          onBlur?.();
+        }}
+      >
+        {showInput && (
+          <WrapContentDiv>
             <CellInput
               input={ShiftAutocompleteComponent}
               onKeyDown={onKeyDown}
               onValueChange={_onValueChange}
               {...options}
             />
-          )}
-        </WrapContentDiv>
-      )}
-      <ErrorTooltipProvider
-        className="wrapContent"
-        errorSelector={errorSelector}
-        showTooltip={!showInput}
-      >
-        <WrapContentDiv>
-          <div
-            ref={cellRef}
-            className={`content ${hasNextClass} ${keepOnClass}`}
-            data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
-          >
-            <div className={"leftBorder leftBorderColor"} />
-            <p
-              data-cy={baseCellDataCy(cellIndex, "cell")}
-              className={"relative "}
-              style={{ color: `#${getColor(shiftCode)}` }}
-            >
-              {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
-            </p>
-          </div>
-        </WrapContentDiv>
-      </ErrorTooltipProvider>
-      {!isEditMode && (
-        <Popper
-          ref={cellDetailsPopperRef}
-          className="cell-details-popper"
-          style={styles}
-          isOpen={isComponentVisible && isBlocked && value !== ""}
+          </WrapContentDiv>
+        )}
+        <ErrorTooltipProvider
+          className="wrapContent"
+          errorSelector={errorSelector}
+          showTooltip={!showInput}
         >
-          <CellDetails
-            index={cellIndex}
-            day={verboseDate?.date ?? 0}
-            month={monthNumber ?? new Date().getMonth()}
-            year={year}
-            shiftcode={value}
-            {...options}
-            close={(): void => setIsComponentVisible(false)}
-          />
-        </Popper>
-      )}
-      )
-    </div>
+          <WrapContentDiv>
+            <div
+              ref={cellRef}
+              className={`content ${hasNextClass} ${keepOnClass}`}
+              data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
+            >
+              <div className={"leftBorder leftBorderColor"} />
+              <p
+                data-cy={baseCellDataCy(cellIndex, "cell")}
+                className={"relative "}
+                style={{ color: `#${getColor(shiftCode)}` }}
+              >
+                {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
+              </p>
+            </div>
+          </WrapContentDiv>
+        </ErrorTooltipProvider>
+        {!isEditMode && (
+          <Popper
+            ref={cellDetailsPopperRef}
+            className="cell-details-popper"
+            style={styles}
+            isOpen={isComponentVisible && isBlocked && value !== ""}
+          >
+            <CellDetails
+              index={cellIndex}
+              day={verboseDate?.date ?? 0}
+              month={monthNumber ?? new Date().getMonth()}
+              year={year}
+              shiftcode={value}
+              {...options}
+              close={(): void => setIsComponentVisible(false)}
+            />
+          </Popper>
+        )}
+        )
+      </div>
+    </>
   );
 }
 

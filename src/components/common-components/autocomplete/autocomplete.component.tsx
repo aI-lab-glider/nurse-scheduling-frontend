@@ -52,8 +52,27 @@ export function AutocompleteComponent<T>({
     getOptionLabel,
     open: true,
   });
+  const [IsComponentVisible, setIsComponentVisible] = useState(true);
+  const pageOffset: number = document.getElementById("root")?.children[0].children[0].scrollTop!;
+  let clearModal;
   return (
-    <div ref={inputRef} data-cy="shiftDropdown">
+    <div
+      ref={inputRef}
+      data-cy="shiftDropdown"
+      style={{ display: IsComponentVisible ? "initial" : "none" }}
+      onWheel={(e: React.WheelEvent<HTMLTableCellElement>): void => {
+        pageOffset !== document.getElementById("root")?.children[0].children[0].scrollTop &&
+          setIsComponentVisible(false);
+      }}
+      onMouseEnter={(): void => {
+        clearTimeout(clearModal);
+      }}
+      onMouseLeave={(): void => {
+        clearModal = setTimeout(() => {
+          setIsComponentVisible(false);
+        }, 444);
+      }}
+    >
       <div {...getRootProps()}>
         <input
           className={className}
