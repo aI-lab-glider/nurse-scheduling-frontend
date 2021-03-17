@@ -254,12 +254,12 @@ export class ScheduleExportLogic {
   }
 
   // the values are based on w3c recommendations.
-  // We need to determine the color with the hirghest contrast.
+  // We need to determine the color with the highest contrast.
   // https://www.w3.org/TR/WCAG20/#relativeluminancedef
   // https://www.w3.org/TR/WCAG20/#contrast-ratiodef
   public decideBlackOrWhite(color: Color): string {
-    const black = "#000000";
-    const white = "#FFFFFF";
+    const black = "000000";
+    const white = "FFFFFF";
     const rgb = [color.r, color.b, color.g];
     const linearRgb = rgb.map((c) => {
       c = c / 255.0;
@@ -356,7 +356,7 @@ export class ScheduleExportLogic {
   private static createChildrenInfoSection(
     scheduleModel: MonthDataModel
   ): (number | ChildrenSectionKey)[][] {
-    // in case if it will be more complecated section
+    // in case if it will be more complicated section
     return [
       [
         ChildrenSectionKey.RegisteredChildrenCount,
