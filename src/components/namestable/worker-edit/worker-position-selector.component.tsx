@@ -2,9 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid, Typography } from "@material-ui/core";
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { WorkerType } from "../../../common-models/worker-info.model";
-import { DropdownButtons } from "../../common-components/dropdown-buttons/dropdown-buttons.component";
+import {
+  ButtonData,
+  DropdownButtons,
+} from "../../common-components/dropdown-buttons/dropdown-buttons.component";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
 import {
   FormFieldOptions,
@@ -23,24 +26,27 @@ export function WorkerWorkerTypeSelector({
   setIsFieldValid,
 }: WorkerPositionSelectorOptions): JSX.Element {
   const classes = useFormFieldStyles();
-  const positionOptions = useMemo(
-    () =>
-      Object.keys(WorkerType).map((workerTypeName) => {
-        const workerType = WorkerType[workerTypeName];
-        return {
-          label: translateAndCapitalizeWorkerType(workerType),
-          action: (): void => setActualWorkerType(workerType),
-          dataCy: workerTypeName.toLowerCase(),
-        };
-      }),
-    [setActualWorkerType]
-  );
+  const [firstEditMade, setFirstEditMade] = useState(false);
+
+  function handleWorkerTypeUpdate(workerType: WorkerType): void {
+    setActualWorkerType(workerType);
+    setFirstEditMade(true);
+  }
+
+  const positionOptions: ButtonData[] = Object.keys(WorkerType).map((workerTypeName) => {
+    const workerType = WorkerType[workerTypeName];
+    return {
+      label: translateAndCapitalizeWorkerType(workerType),
+      action: (): void => handleWorkerTypeUpdate(workerType),
+      dataCy: workerTypeName.toLowerCase(),
+    };
+  });
 
   const isWorkerPositionValid = useCallback((): boolean => {
     return !!workerType;
   }, [workerType]);
 
-  useEffect(() => {
+  useEffect((): void => {
     setIsFieldValid?.(isWorkerPositionValid());
   }, [workerType, setIsFieldValid, isWorkerPositionValid]);
   return (
@@ -54,7 +60,7 @@ export function WorkerWorkerTypeSelector({
         variant="position"
       />
       <FormFieldErrorLabel
-        condition={!isWorkerPositionValid()}
+        shouldBeVisible={!isWorkerPositionValid() && firstEditMade}
         message="Wybierz stanowisko pracownika"
       />
     </Grid>

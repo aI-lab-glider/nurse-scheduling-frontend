@@ -5,13 +5,13 @@ import { Grid, Typography } from "@material-ui/core";
 import React, { useMemo } from "react";
 import { useFormFieldStyles } from "./worker-edit.models";
 
-interface FormFieldErrorLabelOptions {
-  condition: boolean;
+export interface FormFieldErrorLabelOptions {
+  shouldBeVisible: boolean;
   message: string;
 }
 
 export function FormFieldErrorLabel({
-  condition,
+  shouldBeVisible: condition,
   message,
 }: FormFieldErrorLabelOptions): JSX.Element {
   const classes = useFormFieldStyles();
@@ -32,13 +32,16 @@ interface FormFieldErrorLabelStackOptions {
 export function FormFieldErrorLabelStack({
   errorLabels,
 }: FormFieldErrorLabelStackOptions): JSX.Element {
-  const emptyErrorField = useMemo(() => <FormFieldErrorLabel condition={false} message="" />, []);
+  const emptyErrorField = useMemo(
+    () => <FormFieldErrorLabel shouldBeVisible={false} message="" />,
+    []
+  );
   return (
     <>
-      {!errorLabels.some((e) => e.condition)
+      {!errorLabels.some((e) => e.shouldBeVisible)
         ? emptyErrorField
         : errorLabels
-            .filter((e) => e.condition)
+            .filter((e) => e.shouldBeVisible)
             .map((e, index) => <FormFieldErrorLabel key={`${e.message}_${index}`} {...e} />)}
     </>
   );

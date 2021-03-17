@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { ShiftCode } from "../../common-models/shift-info.model";
 import { ContractType, WorkersInfoModel, WorkerType } from "../../common-models/worker-info.model";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
-import { WorkerInfoExtendedInterface } from "./worker-edit/worker-edit.models";
+import { WorkerInfoExtendedInterface } from "./worker-edit";
 
 interface UseWorkerInfoReturn {
   workerInfo: WorkerInfo;

@@ -4,18 +4,16 @@
 import React from "react";
 import { ContractType } from "../../../common-models/worker-info.model";
 import { FormFieldOptions } from "./worker-edit.models";
-import { WorkerEmployementContractWorkNormSelector } from "./worker-employement-contract-work-norm-selector.component";
+import { WorkerEmploymentContractWorkNormSelector } from "./worker-employment-contract-work-norm-selector.component";
 import { WorkerCivilContractWorkNormSelector } from "./worker-civil-contract-work-norm-selector.component";
 
-export interface WorkerContractTypeDependentWorkTimeSelectorOptions extends FormFieldOptions {
+export interface WorkNormSelectorOptions extends FormFieldOptions {
   workerContractType?: ContractType;
-  employementTime: number;
+  employmentTime: number;
   setWorkerTime: (newWorkerTime: number) => void;
 }
 
-export function WorkerContractTypeDependentWorkNormSelectror(
-  options: WorkerContractTypeDependentWorkTimeSelectorOptions
-): JSX.Element {
+export function CombinedWorkNormSelector(options: WorkNormSelectorOptions): JSX.Element {
   const { workerContractType } = options;
 
   return (
@@ -24,7 +22,7 @@ export function WorkerContractTypeDependentWorkNormSelectror(
         {
           [ContractType.CIVIL_CONTRACT]: <WorkerCivilContractWorkNormSelector {...options} />,
           [ContractType.EMPLOYMENT_CONTRACT]: (
-            <WorkerEmployementContractWorkNormSelector {...options} />
+            <WorkerEmploymentContractWorkNormSelector {...options} />
           ),
         }[workerContractType]}
     </>

@@ -29,19 +29,19 @@ export const FRACTIONS_NUMBERS = POSSIBLE_FRACTIONS.map(
 export class WorkingTimeHelper {
   static fromHoursToFraction(hours: number, fullTimeBase: number): string {
     const workerNormAsDecimal = hours / fullTimeBase;
-    return this.fromWorkNormDecimalToWorkNormFraction(workerNormAsDecimal);
+    return this.fromDecimalToFraction(workerNormAsDecimal);
   }
 
-  static fromWorkNormDecimalToWorkNormFraction(workNorm: number): string {
+  static fromDecimalToFraction(workNorm: number): string {
     return FRACTIONS_LABELS[this.findIdOfClosestFrom(workNorm, FRACTIONS_NUMBERS)];
   }
 
   static fromFractionToHours(fraction: string, fullTimeBase: number): number {
-    const workNorm = this.fromFractionToDecimalWorkNorm(fraction);
+    const workNorm = this.fromFractionToDecimal(fraction);
     return Math.round(fullTimeBase * workNorm);
   }
 
-  static fromFractionToDecimalWorkNorm(fraction: string): number {
+  static fromFractionToDecimal(fraction: string): number {
     const result = fraction.split("/");
     const [dividend, divisor] = result.map((string) => Number.parseInt(string));
     return dividend / divisor;
