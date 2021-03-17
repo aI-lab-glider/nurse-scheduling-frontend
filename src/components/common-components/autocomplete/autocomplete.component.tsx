@@ -67,7 +67,7 @@ export function AutocompleteComponent<
     getOptionLabel,
     open: true,
   });
-  const { ShiftTypes } = useSelector(
+  const ShiftTypes = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
   );
   const LabelComponent = ({ option, index }): JSX.Element => {
@@ -96,7 +96,7 @@ export function AutocompleteComponent<
           onKeyDown={onKeyDown}
         />
       </div>
-      {groupedOptions.length > 0 ? (
+      {ShiftTypes && groupedOptions.length > 0 ? (
         <div
           ref={tooltipRef}
           className={classNames("listbox")}
