@@ -102,24 +102,14 @@ function copyMonthData<T>(
   if (isMonthStartInMonday) {
     return copiedData;
   } else {
-    return concatWithLastWeekFromPrevMonth(monthKey, copiedData, baseMonthData, currentMonthData);
+    const prevMonthLastWeekData = MonthHelper.getMonthLastWeekData(
+      monthKey.prevMonthKey,
+      baseMonthData,
+      currentMonthData
+    );
+    return prevMonthLastWeekData.concat(copiedData);
   }
 }
-
-function concatWithLastWeekFromPrevMonth<T>(
-  monthKey: ScheduleKey,
-  copiedData: T[],
-  prevMonth: T[],
-  currentMonth: T[]
-): T[] {
-  const prevMonthLastWeek = MonthHelper.getMonthLastWeekData(
-    monthKey.prevMonthKey,
-    prevMonth,
-    currentMonth
-  );
-  return prevMonthLastWeek ? prevMonthLastWeek.concat(copiedData) : copiedData;
-}
-
 //returns always 4 or 5 weeks due by the algorithm which operates on whole weeks instead of months
 function getNumberOfDaysToBeCopied(monthKey: ScheduleKey): number {
   return MonthHelper.findFirstMonthMondayIdx(monthKey.year, monthKey.month) +
