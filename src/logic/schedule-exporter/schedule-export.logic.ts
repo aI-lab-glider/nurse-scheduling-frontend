@@ -27,6 +27,10 @@ import {
 } from "../section.model";
 
 const EMPTY_ROW = Array(100).fill("");
+
+export const WORKSHEET_NAME = "grafik";
+export const WORKERS_WORKSHEET_NAME = "pracownicy";
+
 export interface ScheduleExportLogicOptions {
   scheduleModel: MonthDataModel;
   primaryScheduleModel?: PrimaryMonthRevisionDataModel;
@@ -51,8 +55,6 @@ export class ScheduleExportLogic {
     this.extraWorkersExport = extraWorkersExport;
   }
 
-  static readonly WORKSHEET_NAME = "grafik";
-  static readonly WORKERS_WORKSHEET_NAME = "pracownicy";
   requiredHoursAddress;
   doneHoursAddress;
   diffHoursAddress;
@@ -116,27 +118,29 @@ export class ScheduleExportLogic {
     this.addStyles(workSheet, schedule, headerLen, nurseLastIndex, babysitterLastIndex);
 
     workSheet.mergeCells("B1:AF1");
-    workSheet.mergeCells(
-      this.requiredHoursAddress.slice(0, this.requiredHoursAddress.length - 1) +
-        "2:" +
-        this.requiredHoursAddress
-    );
-    workSheet.mergeCells(
-      this.doneHoursAddress.slice(0, this.doneHoursAddress.length - 1) +
-        "2:" +
-        this.doneHoursAddress
-    );
-    workSheet.mergeCells(
-      this.diffHoursAddress.slice(0, this.diffHoursAddress.length - 1) +
-        "2:" +
-        this.diffHoursAddress
-    );
-    workSheet.getCell(this.requiredHoursAddress).value = "Wymagane";
-    workSheet.getCell(this.doneHoursAddress).value = "Wypracowane";
-    workSheet.getCell(this.diffHoursAddress).value = "Nadgodziny";
-    workSheet.getCell(this.requiredHoursAddress).alignment = { textRotation: -90 };
-    workSheet.getCell(this.doneHoursAddress).alignment = { textRotation: -90 };
-    workSheet.getCell(this.diffHoursAddress).alignment = { textRotation: -90 };
+    if (this.overtimeExport) {
+      workSheet.mergeCells(
+        this.requiredHoursAddress.slice(0, this.requiredHoursAddress.length - 1) +
+          "2:" +
+          this.requiredHoursAddress
+      );
+      workSheet.mergeCells(
+        this.doneHoursAddress.slice(0, this.doneHoursAddress.length - 1) +
+          "2:" +
+          this.doneHoursAddress
+      );
+      workSheet.mergeCells(
+        this.diffHoursAddress.slice(0, this.diffHoursAddress.length - 1) +
+          "2:" +
+          this.diffHoursAddress
+      );
+      workSheet.getCell(this.requiredHoursAddress).value = "Wymagane";
+      workSheet.getCell(this.doneHoursAddress).value = "Wypracowane";
+      workSheet.getCell(this.diffHoursAddress).value = "Nadgodziny";
+      workSheet.getCell(this.requiredHoursAddress).alignment = { textRotation: -90 };
+      workSheet.getCell(this.doneHoursAddress).alignment = { textRotation: -90 };
+      workSheet.getCell(this.diffHoursAddress).alignment = { textRotation: -90 };
+    }
   }
 
   private setWorkersWorkSheet(workSheet: xlsx.Worksheet): void {
@@ -155,12 +159,13 @@ export class ScheduleExportLogic {
     workSheet.addRows(workersInfoArray);
 
     colLens.forEach((len, id) => {
-      workSheet.getColumn(id + 1).width = len + 2;
+      workSheet.getColumn(id + 1).width = len + 4;
     });
 
     workSheet.getColumn(1).alignment = { vertical: "middle", horizontal: "left" };
     workSheet.getColumn(2).alignment = { vertical: "middle", horizontal: "center" };
     workSheet.getColumn(3).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getColumn(4).alignment = { vertical: "middle", horizontal: "center" };
 
     workSheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
     workSheet.getRow(1).font = { bold: true };
@@ -170,11 +175,11 @@ export class ScheduleExportLogic {
     const workbook = new xlsx.Workbook();
     return [
       workbook,
-      workbook.addWorksheet(ScheduleExportLogic.WORKSHEET_NAME, {
+      workbook.addWorksheet(WORKSHEET_NAME, {
         pageSetup: { paperSize: 9, orientation: "landscape" },
         properties: { defaultColWidth: 5 },
       }),
-      workbook.addWorksheet(ScheduleExportLogic.WORKERS_WORKSHEET_NAME, {
+      workbook.addWorksheet(WORKERS_WORKSHEET_NAME, {
         pageSetup: { paperSize: 9, orientation: "landscape" },
         properties: { defaultColWidth: 5 },
       }),
@@ -242,10 +247,26 @@ export class ScheduleExportLogic {
         this.getRightCornerIndexes(cell, cellValue);
         if ((cellValue && ShiftCode[cellValue]) || isShiftRow) {
           isShiftRow = true;
-          workSheet.getColumn(colNumber).width = 4;
+          workSheet.getColumn(colNumber).width = 5;
         }
       });
     });
+  }
+
+  // the values are based on w3c recommendations.
+  // We need to determine the color with the highest contrast.
+  // https://www.w3.org/TR/WCAG20/#relativeluminancedef
+  // https://www.w3.org/TR/WCAG20/#contrast-ratiodef
+  public decideBlackOrWhite(color: Color): string {
+    const black = "000000";
+    const white = "FFFFFF";
+    const rgb = [color.r, color.b, color.g];
+    const linearRgb = rgb.map((c) => {
+      c = c / 255.0;
+      return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+    });
+    const luminance = 0.2126 * linearRgb[0] + 0.7152 * linearRgb[1] + 0.0722 * linearRgb[2];
+    return luminance > 0.179 ? black : white;
   }
 
   private getShiftStyle(code: ShiftCode, verboseDate?: VerboseDate): Partial<xlsx.Style> {
@@ -270,6 +291,13 @@ export class ScheduleExportLogic {
         left: borderColor,
         right: borderColor,
       },
+      font: {
+        color: {
+          argb: this.decideBlackOrWhite(
+            ShiftHelper.getShiftColor(code, verboseDate).backgroundColor
+          ),
+        },
+      },
     };
   }
 
@@ -284,21 +312,23 @@ export class ScheduleExportLogic {
       [WorkerType.NURSE]: [] as string[][],
       [WorkerType.OTHER]: [] as string[][],
     };
-    Object.keys(scheduleModel.shifts || {}).forEach((workerName: string) => {
-      const category = scheduleModel.employee_info.type[workerName] ?? "";
-      const shiftsRow: string[] = [
-        workerName,
-        ...scheduleModel.shifts[workerName]?.map((s) => (s === ShiftCode.W ? "" : s)),
-      ];
-      if (this.overtimeExport) {
-        shiftsRow.push(
-          ...WorkerHourInfo.fromSchedules(workerName, scheduleModel, this.primaryScheduleModel)
-            .asArray()
-            .map((e) => e.toString())
-        );
-      }
-      grouped[category].push(shiftsRow);
-    });
+    Object.keys(scheduleModel.shifts || {})
+      .sort()
+      .forEach((workerName: string) => {
+        const category = scheduleModel.employee_info.type[workerName] ?? "";
+        const shiftsRow: string[] = [
+          workerName,
+          ...scheduleModel.shifts[workerName]?.map((s) => (s === ShiftCode.W ? "" : s)),
+        ];
+        if (this.overtimeExport) {
+          shiftsRow.push(
+            ...WorkerHourInfo.fromSchedules(workerName, scheduleModel, this.primaryScheduleModel)
+              .asArray()
+              .map((e) => e.toString())
+          );
+        }
+        grouped[category].push(shiftsRow);
+      });
     return [grouped[WorkerType.NURSE], grouped[WorkerType.OTHER]];
   }
 
@@ -326,7 +356,7 @@ export class ScheduleExportLogic {
   private static createChildrenInfoSection(
     scheduleModel: MonthDataModel
   ): (number | ChildrenSectionKey)[][] {
-    // in case if it will be more complecated section
+    // in case if it will be more complicated section
     return [
       [
         ChildrenSectionKey.RegisteredChildrenCount,
