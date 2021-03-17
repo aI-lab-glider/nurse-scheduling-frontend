@@ -5,6 +5,9 @@ import { useAutocomplete } from "@material-ui/lab";
 import classNames from "classnames/bind";
 import React, { useEffect, useRef, useState } from "react";
 import { usePopper } from "react-popper";
+import { useSelector } from "react-redux";
+import { ShiftCode } from "../../../common-models/shift-info.model";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
 
 interface AutocompleteOptions<
   T extends {
@@ -64,6 +67,9 @@ export function AutocompleteComponent<
     getOptionLabel,
     open: true,
   });
+  const { ShiftTypes } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
   const LabelComponent = ({ option, index }): JSX.Element => {
     return (
       <div
@@ -99,13 +105,13 @@ export function AutocompleteComponent<
           onMouseDown={(getListboxProps() as any).onMouseDown}
         >
           {groupedOptions.map((option, index) => {
-            if (option.name.trim() === "wolne") {
+            if (option.name.trim() === ShiftTypes[ShiftCode.W].name) {
               return <LabelComponent option={option} index={index} />;
             }
             return null;
           })}
           {groupedOptions.map((option, index) => {
-            if (option.name.trim() !== "wolne") {
+            if (option.name.trim() !== ShiftTypes[ShiftCode.W].name) {
               if (option.from !== 0 && option.to !== 24)
                 return <LabelComponent option={option} index={index} />;
             }
@@ -113,7 +119,7 @@ export function AutocompleteComponent<
           })}
           <div className="autoSeparator" />
           {groupedOptions.map((option, index) => {
-            if (option.name.trim() !== "wolne") {
+            if (option.name.trim() !== ShiftTypes[ShiftCode.W].name) {
               if (option.from === 0 && option.to === 24)
                 return <LabelComponent option={option} index={index} />;
             }
