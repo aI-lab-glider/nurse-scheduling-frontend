@@ -21,16 +21,6 @@ const ShiftCodeSelectItems = _.sortBy(
   }),
   ["from", "to", "name"]
 );
-// const ErgoSort = (): typeof ShiftCodeSelectItems => {
-//   let ar = ShiftCodeSelectItems, wolne;
-//   let special = ar.reduce((e, ex) => {
-//     if(ex.name.trim() === "wolne"){
-//       wolne = ex
-//     }else if (ex.from === 0 && ex.to === 24) return ex;
-
-//   });
-//   return ar;
-// };
 export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): JSX.Element {
   return (
     <AutocompleteComponent
