@@ -3,40 +3,63 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid, TextField, Typography } from "@material-ui/core";
 import * as _ from "lodash";
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { WorkerHourInfo } from "../../../helpers/worker-hours-info.model";
 import { useMonthInfo } from "../../schedule-page/validation-drawer/use-verbose-dates";
+import { WorkNormSelectorOptions } from "./combined-worknorm-selector.component";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
 import { useFormFieldStyles } from "./worker-edit.models";
-import { WorkerContractTypeDependentWorkTimeSelectorOptions } from "./worker-contract-type-dependent-worknorm-selector.component";
 
 export function WorkerCivilContractWorkNormSelector({
-  employementTime,
+  employmentTime,
   setWorkerTime,
   setIsFieldValid: setIsFormValid,
-}: WorkerContractTypeDependentWorkTimeSelectorOptions): JSX.Element {
-  const classes = useFormFieldStyles();
+}: WorkNormSelectorOptions): JSX.Element {
+  const [firstEditMade, setFirstEditMade] = useState(false);
+
   const { year, monthNumber } = useMonthInfo();
   const requiredHours = WorkerHourInfo.calculateWorkNormForMonth(monthNumber, year);
 
-  function convertToNormalHours(workNorm: number): number {
-    return workNorm * requiredHours;
-  }
+  const convertToNormalHours = useCallback(
+    (workNorm: number): number => {
+      return Math.floor(workNorm * requiredHours);
+    },
+    [requiredHours]
+  );
+
+  const [workerCivilTime, setWorkerCivilTime] = useState(
+    convertToNormalHours(employmentTime).toString()
+  );
+
+  useEffect(() => {
+    setWorkerCivilTime(convertToNormalHours(employmentTime).toString());
+  }, [employmentTime, setWorkerCivilTime, convertToNormalHours]);
+
+  const classes = useFormFieldStyles();
 
   const maximumWorkHoursForMonth = requiredHours * 2;
   function isTimeValid(): boolean {
-    const hours = convertToNormalHours(employementTime);
-    const isTimeValid = hours < maximumWorkHoursForMonth;
+    const workerTimeCivilTimeAsNumber = parseInt(workerCivilTime);
+    const isTimeValid =
+      !_.isNaN(workerTimeCivilTimeAsNumber) &&
+      workerTimeCivilTimeAsNumber < maximumWorkHoursForMonth;
     setIsFormValid?.(isTimeValid);
     return isTimeValid;
   }
 
-  function toWorkerNorm(workerHoursAsString: string): number {
-    const workerHours = parseInt(workerHoursAsString);
-    if (_.isNaN(workerHoursAsString)) {
-      return 0;
+  function toWorkerNorm(workerHours: string | number): number {
+    const workerHoursAsNumber = parseInt(workerHours.toString());
+    if (_.isNaN(workerHoursAsNumber)) {
+      return 1;
     }
-    return workerHours / requiredHours;
+    return workerHoursAsNumber / requiredHours;
+  }
+
+  function handleCivilTimeChange(
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ): void {
+    setWorkerCivilTime(event.target.value);
+    setFirstEditMade(true);
   }
 
   return (
@@ -47,18 +70,19 @@ export function WorkerCivilContractWorkNormSelector({
           fullWidth
           name="civilTime"
           data-cy="input-civil-time"
-          value={convertToNormalHours(employementTime)}
+          value={workerCivilTime}
           type="number"
           style={{
             width: 100,
           }}
           className={classes.formInput}
-          onBlur={(event): void => setWorkerTime(toWorkerNorm(event.target.value))}
+          onChange={handleCivilTimeChange}
+          onBlur={(): void => setWorkerTime(toWorkerNorm(workerCivilTime))}
           color="primary"
         />
         <FormFieldErrorLabel
-          condition={!isTimeValid()}
-          message={`Liczba godzin musi być mniejsza od ${maximumWorkHoursForMonth}`}
+          shouldBeVisible={!isTimeValid() && firstEditMade}
+          message={`Liczba godzin musi być w przedziałe od 0 do ${maximumWorkHoursForMonth}`}
         />
       </Grid>
     </>

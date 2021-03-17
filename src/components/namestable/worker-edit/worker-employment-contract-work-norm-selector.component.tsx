@@ -3,71 +3,78 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid, Input, Typography } from "@material-ui/core";
 import * as _ from "lodash";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useState } from "react";
 import { TimeDrawerType } from "../../../common-models/worker-info.model";
-import { DropdownButtons } from "../../common-components/dropdown-buttons/dropdown-buttons.component";
+import {
+  ButtonData,
+  DropdownButtons,
+} from "../../common-components/dropdown-buttons/dropdown-buttons.component";
 import { TextMaskCustom } from "../../common-components/text-mask-custom/text-mask-custom.component";
 import { WorkingTimeHelper } from "../working-time.helper";
+import { WorkNormSelectorOptions } from "./combined-worknorm-selector.component";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
 import { useFormFieldStyles } from "./worker-edit.models";
-import { WorkerContractTypeDependentWorkTimeSelectorOptions } from "./worker-contract-type-dependent-worknorm-selector.component";
 
-export function WorkerEmployementContractWorkNormSelector({
-  employementTime,
+export function WorkerEmploymentContractWorkNormSelector({
+  employmentTime,
   setWorkerTime,
   setIsFieldValid: setIsFormValid,
-}: WorkerContractTypeDependentWorkTimeSelectorOptions): JSX.Element {
+}: WorkNormSelectorOptions): JSX.Element {
   const classes = useFormFieldStyles();
   const [selectedTimeType, setSelectedTimeType] = useState<TimeDrawerType>(TimeDrawerType.FULL);
+  const [firstEditMade, setFirstEditMade] = useState(false);
 
-  const handleContractTimeSelect = useCallback(
-    (timeType: TimeDrawerType) => {
-      setSelectedTimeType(timeType);
-      if (timeType !== TimeDrawerType.OTHER) {
-        setWorkerTime(toWorkNorm(timeType));
-      }
-    },
-    [setSelectedTimeType, setWorkerTime]
+  function handleContractTimeSelect(timeType: TimeDrawerType): void {
+    setSelectedTimeType(timeType);
+    if (timeType !== TimeDrawerType.OTHER) {
+      setWorkerTime(toWorkNorm(timeType));
+    }
+  }
+
+  const contractTimeDropdownOptions: ButtonData[] = Object.keys(TimeDrawerType).map(
+    (timeTypeName) => {
+      const timeType = TimeDrawerType[timeTypeName];
+      return {
+        label: timeType,
+        action: (): void => handleContractTimeSelect(timeType),
+        dataCy: timeTypeName.toLowerCase(),
+      };
+    }
   );
 
-  const contractTimeDropdownOptions = useMemo(
-    () =>
-      Object.keys(TimeDrawerType).map((timeTypeName) => {
-        const timeType = TimeDrawerType[timeTypeName];
-        return {
-          label: timeType,
-          action: (): void => handleContractTimeSelect(timeType),
-          dataCy: timeTypeName.toLowerCase(),
-        };
-      }),
-    [handleContractTimeSelect]
-  );
-
-  function isEmployementTimeValid(employementTime?: number): boolean {
-    const isValid = !_.isNil(employementTime) && employementTime <= 1;
+  function isEmploymentTimeValid(employmentTime?: number): boolean {
+    const isValid = !_.isNil(employmentTime) && employmentTime <= 1;
     setIsFormValid?.(isValid);
     return isValid;
   }
 
-  function toFraction(employementTime?: number): string | undefined {
-    if (_.isNil(employementTime)) {
+  function toFraction(employmentTime?: number): string | undefined {
+    if (_.isNil(employmentTime)) {
       return undefined;
     }
-    return WorkingTimeHelper.fromWorkNormDecimalToWorkNormFraction(employementTime);
+    return WorkingTimeHelper.fromDecimalToFraction(employmentTime);
   }
 
   function toWorkNorm(fraction: string): number {
-    return WorkingTimeHelper.fromFractionToDecimalWorkNorm(fraction);
+    return WorkingTimeHelper.fromFractionToDecimal(fraction);
   }
 
-  const employementTimeAsFraction = toFraction(employementTime);
+  function handleWorkerTimeUpdate(
+    event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void {
+    const workerNorm = toWorkNorm(event.target.value);
+    setWorkerTime(workerNorm);
+    setFirstEditMade(true);
+  }
+
+  const employmentTimeAsFraction = toFraction(employmentTime);
   return (
     <>
       <Grid item xs={6} style={{ zIndex: 2 }}>
         <DropdownButtons
           dataCy="contract-time-dropdown"
           buttons={contractTimeDropdownOptions}
-          mainLabel={employementTimeAsFraction ?? "Wybierz etat pracownika"}
+          mainLabel={employmentTimeAsFraction ?? "Wybierz etat pracownika"}
           buttonVariant="secondary"
           variant="contract-time-dropdown"
         />
@@ -78,8 +85,8 @@ export function WorkerEmployementContractWorkNormSelector({
           <Input
             fullWidth
             name="employmentTimeOther"
-            value={employementTimeAsFraction}
-            onBlur={(event): void => setWorkerTime(toWorkNorm(event.target.value))}
+            value={employmentTimeAsFraction}
+            onBlur={handleWorkerTimeUpdate}
             data-cy="input-employ-time-other"
             style={{
               width: 100,
@@ -91,7 +98,7 @@ export function WorkerEmployementContractWorkNormSelector({
             }
           />
           <FormFieldErrorLabel
-            condition={!isEmployementTimeValid(employementTime)}
+            shouldBeVisible={!isEmploymentTimeValid(employmentTime) && firstEditMade}
             message="Pracownik nie może być zatrudniony na więcej niż jeden etat"
           />
         </Grid>

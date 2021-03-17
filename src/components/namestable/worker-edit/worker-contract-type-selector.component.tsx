@@ -2,9 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid, Typography } from "@material-ui/core";
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ContractType } from "../../../common-models/worker-info.model";
-import { DropdownButtons } from "../../common-components/dropdown-buttons/dropdown-buttons.component";
+import {
+  ButtonData,
+  DropdownButtons,
+} from "../../common-components/dropdown-buttons/dropdown-buttons.component";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
 import {
   FormFieldOptions,
@@ -24,18 +27,21 @@ export function WorkerContractTypeSelector({
 }: WorkerContractTypeSelectorOptions): JSX.Element {
   const classes = useFormFieldStyles();
 
-  const contractOptions = useMemo(
-    () =>
-      Object.keys(ContractType).map((contractTypeName) => {
-        const contractType = ContractType[contractTypeName];
-        return {
-          label: translateAndCapitalizeContractType(contractType),
-          action: (): void => setWorkerContractType(contractType),
-          dataCy: contractTypeName.toLowerCase(),
-        };
-      }),
-    [setWorkerContractType]
-  );
+  const [firstEditMade, setFirstEditMade] = useState(false);
+
+  function handleWorkerTypeUpdate(contractType: ContractType): void {
+    setWorkerContractType(contractType);
+    setFirstEditMade(true);
+  }
+
+  const contractOptions: ButtonData[] = Object.keys(ContractType).map((contractTypeName) => {
+    const contractType = ContractType[contractTypeName];
+    return {
+      label: translateAndCapitalizeContractType(contractType),
+      action: (): void => handleWorkerTypeUpdate(contractType),
+      dataCy: contractTypeName.toLowerCase(),
+    };
+  });
 
   const isContractTypeValid = useCallback((): boolean => {
     return !!workerContractType;
@@ -60,7 +66,10 @@ export function WorkerContractTypeSelector({
           variant="contract"
         />
 
-        <FormFieldErrorLabel condition={!isContractTypeValid()} message="Wybierz typ umowy" />
+        <FormFieldErrorLabel
+          shouldBeVisible={!isContractTypeValid() && firstEditMade}
+          message="Wybierz typ umowy"
+        />
       </Grid>
     </>
   );

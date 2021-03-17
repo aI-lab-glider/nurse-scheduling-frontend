@@ -3,9 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid, TextField, Typography } from "@material-ui/core";
 import React, { useCallback, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { FormFieldErrorLabelStack } from "./form-field-error-label.component";
+import {
+  FormFieldErrorLabelOptions,
+  FormFieldErrorLabelStack,
+} from "./form-field-error-label.component";
 import {
   FormFieldOptions,
   useFormFieldStyles,
@@ -25,6 +29,7 @@ export function WorkerNameEditField({
   mode,
 }: WorkerNameEditFieldOptions): JSX.Element {
   const classes = useFormFieldStyles();
+  const [firstEditMade, setFirstEditMade] = useState(false);
 
   const workerNames = useSelector((state: ApplicationStateModel) =>
     Object.keys(state.actualState.persistentSchedule.present.employee_info.type)
@@ -45,17 +50,24 @@ export function WorkerNameEditField({
     setIsFieldValid?.(isNameValid);
   }, [workerName, setIsFieldValid, isWorkerWithSameNameExists, isWorkerNameEmpty]);
 
-  const nameFieldErrorLabels = [
+  const nameFieldErrorLabels: FormFieldErrorLabelOptions[] = [
     {
-      condition: isWorkerWithSameNameExists(),
+      shouldBeVisible: isWorkerWithSameNameExists() && firstEditMade,
       message: `Pracownik o imieniu i nazwisku: ${workerName} już istnieje`,
     },
     {
-      condition: isWorkerNameEmpty(),
+      shouldBeVisible: isWorkerNameEmpty() && firstEditMade,
       message: "Wpisz imię i nazwisko pracownika",
     },
   ];
 
+  const handleWorkerNameChange = useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      setWorkerName(event.target.value);
+      setFirstEditMade(true);
+    },
+    [setWorkerName]
+  );
   return (
     <>
       <Grid item xs={6}>
@@ -69,7 +81,7 @@ export function WorkerNameEditField({
           }}
           data-cy="name"
           value={workerName}
-          onChange={(event): void => setWorkerName(event.target.value)}
+          onChange={handleWorkerNameChange}
           color="primary"
         />
         <FormFieldErrorLabelStack errorLabels={nameFieldErrorLabels} />
