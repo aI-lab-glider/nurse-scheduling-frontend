@@ -44,9 +44,9 @@ export function copyShifts(
   baseShifts: ShiftInfoModel
 ): ShiftInfoModel {
   const newMonthWorkersShifts: ShiftInfoModel = {};
-  const {
-    daysMissingFromPrevMonth: startMonthReplacement,
-  } = MonthHelper.calculateMissingFullWeekDays(currentScheduleKey);
+  const { daysMissingFromPrevMonth } = MonthHelper.calculateMissingFullWeekDays(currentScheduleKey);
+  const replacementStart = daysMissingFromPrevMonth > 0 ? NUMBER_OF_DAYS_IN_WEEK : 0;
+
   Object.keys(baseShifts).forEach((workerKey) => {
     const copiedShifts = copyMonthData(
       currentScheduleKey,
@@ -56,7 +56,7 @@ export function copyShifts(
     );
     newMonthWorkersShifts[workerKey] = ShiftHelper.replaceFreeShiftsWithFreeDay(
       copiedShifts,
-      startMonthReplacement
+      replacementStart
     );
   });
   return newMonthWorkersShifts;
