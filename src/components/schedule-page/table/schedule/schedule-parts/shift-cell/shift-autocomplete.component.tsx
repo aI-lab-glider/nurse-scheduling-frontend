@@ -28,6 +28,7 @@ const ShiftCodeSelectItems = _.sortBy(
   }),
   ["from", "to", "name"]
 );
+type ShiftCodeSelectItem = typeof ShiftCodeSelectItems[0];
 /**
  * @description Input & MaterialAutocomplete component for rendering employees shifts
  * @param inputOptions : BaseCellInputOptions
@@ -75,6 +76,12 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
   const [isComponentVisible, setIsComponentVisible] = useState(true);
   const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
 
+  const getNonWorkingShifts = (shift: ShiftCodeSelectItem): ShiftCodeSelectItem | undefined => {
+    if (shift.name.trim() !== shiftTypes[ShiftCode.W].name) {
+      if (!shift.isWorkingShift) return shift;
+    }
+  };
+  const nonWorkingShifts = groupedOptions.filter(getNonWorkingShifts);
   const LabelComponent = ({ option, index }): JSX.Element => {
     return (
       <div
@@ -140,13 +147,10 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
             }
             return null;
           })}
-          <div className="autoSeparator" />
-          {groupedOptions.map((option, index) => {
-            if (option.name.trim() !== shiftTypes[ShiftCode.W].name) {
-              if (!option.isWorkingShift) return <LabelComponent option={option} index={index} />;
-            }
-            return null;
-          })}
+          {nonWorkingShifts.length > 0 && <div className="autoSeparator" />}
+          {nonWorkingShifts.map((option, index) => (
+            <LabelComponent option={option} index={index} />
+          ))}
         </div>
       )}
     </div>
