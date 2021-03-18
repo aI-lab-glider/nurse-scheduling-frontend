@@ -20,7 +20,7 @@ export class MonthHelper {
   ): T[] {
     const { daysMissingFromNextMonth } = this.calculateMissingFullWeekDays(scheduleKey);
     const monthLen = monthData.length;
-    let lastWeek: T[] = [];
+    let lastWeek: T[];
     if (daysMissingFromNextMonth > 0) {
       const daysFromCurrentMonthInLastWeek = NUMBER_OF_DAYS_IN_WEEK - daysMissingFromNextMonth;
       const currentMonthDataPart = monthData.slice(
@@ -34,7 +34,7 @@ export class MonthHelper {
     }
 
     if (lastWeek.length !== NUMBER_OF_DAYS_IN_WEEK) {
-      throw new Error(`Week must have ${NUMBER_OF_DAYS_IN_WEEK} days`);
+      throw new Error(`Week must have ${NUMBER_OF_DAYS_IN_WEEK} days not ${lastWeek.length}`);
     }
 
     return lastWeek;
@@ -56,15 +56,7 @@ export class MonthHelper {
   }
 
   static findFirstMonthMondayIdx(year: number, month: number): number {
-    return _.findIndex(
-      _.range(1, 1 + NUMBER_OF_DAYS_IN_WEEK).map((day, idx) => {
-        return {
-          weekDay: new Date(year, month, day).getDay(),
-          idx,
-        };
-      }),
-      (day) => day.weekDay === 1
-    );
+    return (NUMBER_OF_DAYS_IN_WEEK - new Date(year, month).getDay() + 1) % NUMBER_OF_DAYS_IN_WEEK;
   }
 
   static daysInMonth(month = 0, year = 0): number[] {
@@ -81,8 +73,9 @@ export class MonthHelper {
     const firstMonthDay = new Date(year, month, 1).getDay();
     const lastMonthDay = new Date(year, month + 1, 0).getDay();
     return {
-      daysMissingFromPrevMonth: firstMonthDay === 0 ? 6 : firstMonthDay - 1,
-      daysMissingFromNextMonth: lastMonthDay === 0 ? 0 : 7 - lastMonthDay,
+      daysMissingFromPrevMonth:
+        (firstMonthDay + NUMBER_OF_DAYS_IN_WEEK - 1) % NUMBER_OF_DAYS_IN_WEEK,
+      daysMissingFromNextMonth: (NUMBER_OF_DAYS_IN_WEEK - lastMonthDay) % NUMBER_OF_DAYS_IN_WEEK,
     };
   }
 
