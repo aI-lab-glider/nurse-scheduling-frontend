@@ -10,7 +10,9 @@ import { ShiftCode, SHIFTS as shifts } from "../../../../../../common-models/shi
 import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 import { BaseCellInputOptions } from "../base-cell/base-cell-input.component";
 import classNames from "classnames/bind";
+import useTimeout from "../base-cell/use-timeout";
 
+const MODAL_CLOSE_MS = 444;
 const ShiftCodeSelectItems = _.sortBy(
   Object.values(shifts).map((shift) => {
     return {
@@ -34,8 +36,9 @@ const ShiftCodeSelectItems = _.sortBy(
 export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): JSX.Element {
   const inputRef = useRef(null);
   const tooltipRef = useRef(null);
-  const { styles } = usePopper(inputRef.current, tooltipRef.current, {
-    placement: "right-end",
+  const { styles, forceUpdate } = usePopper(inputRef.current, tooltipRef.current, {
+    placement: "auto",
+    strategy: "absolute",
   });
   const onValueChange = useCallback((option): void => inputOptions.onValueChange(option.code), [
     inputOptions,
@@ -69,6 +72,9 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
    * @description Small element for rendering shift info & shift color circle
    * @returns JSX.Element
    */
+  const [isComponentVisible, setIsComponentVisible] = useState(true);
+  const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
+
   const LabelComponent = ({ option, index }): JSX.Element => {
     return (
       <div
@@ -84,15 +90,34 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
       </div>
     );
   };
+  const pageOffset: number | undefined = document.getElementById("root")?.children[0].children[0]
+    .scrollTop!;
   return (
-    <div ref={inputRef} data-cy="shiftDropdown">
+    <div
+      ref={inputRef}
+      data-cy="shiftDropdown"
+      style={{ display: isComponentVisible ? "initial" : "none" }}
+      onWheel={(e: React.WheelEvent<HTMLTableCellElement>): void => {
+        pageOffset !== document.getElementById("root")?.children[0].children[0].scrollTop &&
+          setIsComponentVisible(false);
+      }}
+      onMouseEnter={(): void => {
+        setIsCounting(false);
+      }}
+      onMouseLeave={(): void => {
+        setIsCounting(true);
+      }}
+    >
       <div {...getRootProps()}>
         <input
           className={inputOptions.className}
           autoFocus={true}
           value={value && getOptionLabel(value)}
           {...getInputProps()}
-          onKeyDown={onKeyDown}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
+            forceUpdate?.();
+            onKeyDown?.(e);
+          }}
         />
       </div>
       {shiftTypes && groupedOptions.length > 0 && (

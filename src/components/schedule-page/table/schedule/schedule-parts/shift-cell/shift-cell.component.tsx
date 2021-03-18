@@ -13,12 +13,15 @@ import { baseCellDataCy, BaseCellOptions } from "../base-cell/base-cell.models";
 import { CellDetails } from "../base-cell/cell-details-content.component";
 import { Popper } from "../base-cell/popper";
 import useComponentVisible from "../base-cell/use-component-visible";
+import useTimeout from "../base-cell/use-timeout";
+// import useTimeout from "../base-cell/use-timeout";
 import { CellInput } from "../cell-blockable-input.component";
 import { ErrorTooltipProvider } from "../error-tooltip-provider.component";
 import { useCellBackgroundHighlight } from "../hooks/use-cell-highlight";
 import { useCellSelection } from "../hooks/use-cell-selection";
 import { ShiftAutocompleteComponent } from "./shift-autocomplete.component";
 
+const MODAL_CLOSE_MS = 444;
 function getShiftCode(value: string | number): ShiftCode {
   return typeof value === "number" ? value.toString() : ShiftCode[value] || ShiftCode.W;
 }
@@ -104,12 +107,11 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     ),
     [isBlocked, onClick]
   );
-  let clearModal;
 
-  //  #region view?
+  const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
   return (
     <>
-      {showInput && isComponentVisible && (
+      {showInput && (
         <div
           style={{
             position: "absolute",
@@ -130,12 +132,10 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
         })}
         onClick={(): void => toggleComponentVisibility()}
         onMouseEnter={(): void => {
-          clearTimeout(clearModal);
+          setIsCounting(false);
         }}
         onMouseLeave={(): void => {
-          clearModal = setTimeout(() => {
-            setIsComponentVisible(false);
-          }, 444);
+          setIsCounting(true);
         }}
         id={id}
         onBlur={(): void => {
