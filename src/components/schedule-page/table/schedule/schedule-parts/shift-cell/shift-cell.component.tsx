@@ -122,6 +122,9 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
             zIndex: 100,
           }}
           onClick={(): void => setIsComponentVisible(false)}
+          onWheel={(e: React.WheelEvent<HTMLTableCellElement>): void => {
+            setShowInput(false);
+          }}
         />
       )}
       <div
