@@ -20,7 +20,7 @@ export class MonthHelper {
   ): T[] {
     const { daysMissingFromNextMonth } = this.calculateMissingFullWeekDays(scheduleKey);
     const monthLen = monthData.length;
-    let lastWeek: T[] = [];
+    let lastWeek: T[];
     if (daysMissingFromNextMonth > 0) {
       const daysFromCurrentMonthInLastWeek = NUMBER_OF_DAYS_IN_WEEK - daysMissingFromNextMonth;
       const currentMonthDataPart = monthData.slice(
@@ -34,7 +34,7 @@ export class MonthHelper {
     }
 
     if (lastWeek.length !== NUMBER_OF_DAYS_IN_WEEK) {
-      throw new Error(`Week must have ${NUMBER_OF_DAYS_IN_WEEK} days`);
+      throw new Error(`Week must have ${NUMBER_OF_DAYS_IN_WEEK} days not ${lastWeek.length}`);
     }
 
     return lastWeek;
