@@ -77,8 +77,8 @@ export function WorkerEditComponent({
 
   // #region view
   return (
-    <Grid container className={classes.container} direction="column" justify="space-between">
-      <Grid container direction="column" spacing={5}>
+    <Grid container direction="column" justify="space-between">
+      <Grid container className={classes.container} direction="column" spacing={5}>
         <WorkerNameEditField
           workerName={workerInfo.workerName}
           setWorkerName={handleWorkerNameUpdate}
