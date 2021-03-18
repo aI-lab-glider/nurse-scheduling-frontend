@@ -56,21 +56,24 @@ const TEST_SCHEDULE_YEAR = 2020;
 Cypress.Commands.add(
   "loadScheduleToMonth",
   (scheduleName: ScheduleName = "example.xlsx", month: number, year: number) => {
-    new LocalStorageProvider().reloadDb();
-    cy.clock(Date.UTC(year ?? TEST_SCHEDULE_YEAR, month ?? TEST_SCHEDULE_MONTH, 15), ["Date"]);
-    cy.visit(Cypress.env("baseUrl"));
-    cy.get("[data-cy=file-input]").should("exist");
-    cy.get("[data-cy=file-input]").attachFile(scheduleName);
-    cy.get(`[data-cy=nurseShiftsTable]`).should("exist");
-    cy.window()
-      .its("store")
-      .invoke("getState")
-      .its("actualState.temporarySchedule.present.month_info.children_number")
-      .should(
-        "have.length",
-        MonthHelper.numberOfWeeksInMonth(month ?? TEST_SCHEDULE_MONTH, year ?? TEST_SCHEDULE_YEAR) *
-          NUMBER_OF_DAYS_IN_WEEK
-      );
+    new LocalStorageProvider().reloadDb().then(() => {
+      cy.clock(Date.UTC(year ?? TEST_SCHEDULE_YEAR, month ?? TEST_SCHEDULE_MONTH, 15), ["Date"]);
+      cy.visit(Cypress.env("baseUrl"));
+      cy.get("[data-cy=file-input]").should("exist");
+      cy.get("[data-cy=file-input]").attachFile(scheduleName);
+      cy.get(`[data-cy=nurseShiftsTable]`).should("exist");
+      cy.window()
+        .its("store")
+        .invoke("getState")
+        .its("actualState.temporarySchedule.present.month_info.children_number")
+        .should(
+          "have.length",
+          MonthHelper.numberOfWeeksInMonth(
+            month ?? TEST_SCHEDULE_MONTH,
+            year ?? TEST_SCHEDULE_YEAR
+          ) * NUMBER_OF_DAYS_IN_WEEK
+        );
+    });
   }
 );
 
