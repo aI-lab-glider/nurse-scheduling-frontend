@@ -19,6 +19,7 @@ import thunkMiddleware from "redux-thunk";
 import { appReducer } from "./state/app.reducer";
 import { createBrowserHistory } from "history";
 import { composeWithDevTools } from "redux-devtools-extension";
+import { AppErrorBoundary } from "./components/app-error-boundary/app-error-boundary.component";
 
 const history = createBrowserHistory();
 
@@ -42,17 +43,19 @@ const composedEnhancer = composeWithDevTools(
 export const appStore = createStore(appReducer, composedEnhancer);
 
 ReactDOM.render(
-  <DndProvider backend={HTML5Backend}>
-    <Router history={history}>
-      <React.StrictMode>
-        <Provider store={appStore}>
-          <AppConfigProvider>
-            <App />
-          </AppConfigProvider>
-        </Provider>
-      </React.StrictMode>
-    </Router>
-  </DndProvider>,
+  <AppErrorBoundary>
+    <DndProvider backend={HTML5Backend}>
+      <Router history={history}>
+        <React.StrictMode>
+          <Provider store={appStore}>
+            <AppConfigProvider>
+              <App />
+            </AppConfigProvider>
+          </Provider>
+        </React.StrictMode>
+      </Router>
+    </DndProvider>
+  </AppErrorBoundary>,
   document.getElementById("root")
 );
 /* eslint-disable @typescript-eslint/no-explicit-any */
