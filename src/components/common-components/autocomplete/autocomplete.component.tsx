@@ -5,8 +5,18 @@ import { useAutocomplete } from "@material-ui/lab";
 import classNames from "classnames/bind";
 import React, { useEffect, useRef, useState } from "react";
 import { usePopper } from "react-popper";
+import { useSelector } from "react-redux";
+import { ShiftCode } from "../../../common-models/shift-info.model";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
 
-interface AutocompleteOptions<T> {
+interface AutocompleteOptions<
+  T extends {
+    name: string;
+    from: number;
+    to: number;
+    isWorkingShift: boolean | undefined;
+  }
+> {
   options: T[];
   getOptionLabel: (option: T) => string;
   onValueChange: (newValue: T) => void;
@@ -19,8 +29,14 @@ interface AutocompleteOptions<T> {
  * @important Dropdown create by this function is always opened.
  * To close the dropdown, you should destroy this component
  */
-
-export function AutocompleteComponent<T>({
+export function AutocompleteComponent<
+  T extends {
+    name: string;
+    from: number;
+    to: number;
+    isWorkingShift: boolean | undefined;
+  }
+>({
   className,
   options,
   getOptionLabel,
@@ -52,14 +68,33 @@ export function AutocompleteComponent<T>({
     getOptionLabel,
     open: true,
   });
-  const [IsComponentVisible, setIsComponentVisible] = useState(true);
-  const pageOffset: number = document.getElementById("root")?.children[0].children[0].scrollTop!;
+  const [isComponentVisible, setIsComponentVisible] = useState(true);
+  const shiftTypes = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
+  );
+  const LabelComponent = ({ option, index }): JSX.Element => {
+    return (
+      <div
+        {...getOptionProps({ option, index })}
+        data-cy={option["data-cy"]}
+        onClick={(e: React.MouseEvent): void => {
+          e.stopPropagation();
+          setValue(option);
+        }}
+      >
+        <div className="optionLabel">{getOptionLabel(option)}</div>
+        <div className="colorSamplee" style={{ backgroundColor: `#${getOptionColor(option)}` }} />
+      </div>
+    );
+  };
+  const pageOffset: number | undefined = document.getElementById("root")?.children[0].children[0]
+    .scrollTop!;
   let clearModal;
   return (
     <div
       ref={inputRef}
       data-cy="shiftDropdown"
-      style={{ display: IsComponentVisible ? "initial" : "none" }}
+      style={{ display: isComponentVisible ? "initial" : "none" }}
       onWheel={(e: React.WheelEvent<HTMLTableCellElement>): void => {
         pageOffset !== document.getElementById("root")?.children[0].children[0].scrollTop &&
           setIsComponentVisible(false);
@@ -85,34 +120,35 @@ export function AutocompleteComponent<T>({
           }}
         />
       </div>
-      {groupedOptions.length > 0 && (
-        <ul
+      {shiftTypes && groupedOptions.length > 0 ? (
+        <div
           ref={tooltipRef}
           className={classNames("listbox")}
           style={styles.popper}
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onMouseDown={(getListboxProps() as any).onMouseDown}
         >
-          {groupedOptions.map((option, index) => (
-            <li
-              {...getOptionProps({ option, index })}
-              data-cy={option["data-cy"]}
-              onClick={(e: React.MouseEvent): void => {
-                e.stopPropagation();
-                setValue(option);
-              }}
-            >
-              <div className="container">
-                <div className="optionLabel">{getOptionLabel(option)}</div>
-                <div
-                  className="colorSample"
-                  style={{ backgroundColor: `#${getOptionColor(option)}` }}
-                />
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+          {groupedOptions.map((option, index) => {
+            if (option.name.trim() === shiftTypes[ShiftCode.W].name) {
+              return <LabelComponent option={option} index={index} />;
+            }
+            return null;
+          })}
+          {groupedOptions.map((option, index) => {
+            if (option.isWorkingShift) {
+              return <LabelComponent option={option} index={index} />;
+            }
+            return null;
+          })}
+          <div className="autoSeparator" />
+          {groupedOptions.map((option, index) => {
+            if (option.name.trim() !== shiftTypes[ShiftCode.W].name) {
+              if (!option.isWorkingShift) return <LabelComponent option={option} index={index} />;
+            }
+            return null;
+          })}
+        </div>
+      ) : null}
     </div>
   );
 }
