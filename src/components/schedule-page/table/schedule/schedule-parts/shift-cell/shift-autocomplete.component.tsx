@@ -105,7 +105,7 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
       data-cy="shiftDropdown"
       style={{ display: isComponentVisible ? "initial" : "none" }}
       onWheel={(e: React.WheelEvent<HTMLTableCellElement>): void => {
-        pageOffset !== document.getElementById("root")?.children[0].children[0].scrollTop &&
+        pageOffset !== document.getElementById("root")?.children[0]?.children[0]?.scrollTop &&
           setIsComponentVisible(false);
       }}
       onMouseEnter={(): void => {
