@@ -5,21 +5,14 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
 import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
-import {
-  ContractType,
-  WorkerInfoModel,
-  WorkersInfoModel,
-  WorkerType,
-} from "../../common-models/worker-info.model";
-import { ScheduleKey, ThunkFunction } from "../../api/persistance-store.model";
+import { ContractType, WorkerInfoModel, WorkersInfoModel, WorkerType } from "../../common-models/worker-info.model";
+import { RevisionType, ThunkFunction } from "../../api/persistance-store.model";
 import _ from "lodash";
-import { ScheduleActionType } from "./month-state/schedule-data/schedule.actions";
-import { LocalStorageProvider } from "../../api/local-storage-provider.model";
-import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
+import { MonthDataModel } from "../../common-models/schedule-data.model";
+import { cropScheduleDMToMonthDM } from "../../logic/schedule-container-convertion/schedule-container-convertion";
+import { MonthHelper } from "../../helpers/month.helper";
+import { ScheduleDataActionCreator } from "./month-state/schedule-data/schedule-data.action-creator";
 import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
-import { ThunkDispatch } from "redux-thunk";
-import { ActionModel } from "../models/action.model";
-import { ApplicationStateModel } from "../models/application-state.model";
 import { WorkerInfoExtendedInterface } from "../../components/namestable/worker-edit";
 
 export interface WorkerActionPayload {
@@ -31,20 +24,18 @@ export class WorkerActionCreator {
   static addNewWorker(worker: WorkerInfoExtendedInterface): ThunkFunction<WorkerActionPayload> {
     return async (dispatch, getState): Promise<void> => {
       const actualSchedule = getState().actualState.persistentSchedule.present;
-      const { month_number: monthNumber, year } = actualSchedule.schedule_info;
+      const actualMonth = cropScheduleDMToMonthDM(actualSchedule);
+      const { year, month } = actualMonth.scheduleKey;
 
-      const updatedSchedule = WorkerActionCreator.addWorkerInfo(
-        actualSchedule,
+      const updatedMonth = WorkerActionCreator.addWorkerInfoToMonthDM(
+        actualMonth,
         worker,
         this.createNewWorkerShifts
       );
-      await WorkerActionCreator.updateStateAndDb(dispatch, updatedSchedule);
-      await WorkerActionCreator.updateNextMonthInDB(
-        monthNumber,
-        year,
-        worker,
-        this.createNewWorkerShifts
-      );
+      const revision: RevisionType = VerboseDateHelper.isCurrentOrFutureMonth(month, year)
+        ? "actual"
+        : "primary";
+      dispatch(ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(updatedMonth, revision));
     };
   }
 
@@ -54,8 +45,15 @@ export class WorkerActionCreator {
 
       const { name } = worker;
       const actualSchedule = _.cloneDeep(getState().actualState.persistentSchedule.present);
-      const updatedSchedule = WorkerActionCreator.deleteWorkerFromScheduleDM(actualSchedule, name);
-      await WorkerActionCreator.updateStateAndDb(dispatch, updatedSchedule);
+      const actualMonth = cropScheduleDMToMonthDM(actualSchedule);
+      const { year, month } = actualMonth.scheduleKey;
+
+      const updatedMonth = WorkerActionCreator.deleteWorkerFromMonthDM(actualMonth, name);
+
+      const revision: RevisionType = VerboseDateHelper.isCurrentOrFutureMonth(month, year)
+        ? "actual"
+        : "primary";
+      dispatch(ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(updatedMonth, revision));
     };
   }
 
@@ -63,112 +61,48 @@ export class WorkerActionCreator {
     return async (dispatch, getState): Promise<void> => {
       const { prevName } = worker;
       const actualSchedule = _.cloneDeep(getState().actualState.persistentSchedule.present);
-      const getUpdatedWorkerShifts = (schedule: ScheduleDataModel | MonthDataModel): ShiftCode[] =>
-        schedule.shifts[prevName];
-      let updatedSchedule = WorkerActionCreator.addWorkerInfo(
-        actualSchedule,
+      const actualMonth = cropScheduleDMToMonthDM(actualSchedule);
+      const { year, month } = actualMonth.scheduleKey;
+      const getUpdatedWorkerShifts = (monthDataModel: MonthDataModel): ShiftCode[] =>
+        monthDataModel.shifts[prevName];
+      let updatedMonth = WorkerActionCreator.addWorkerInfoToMonthDM(
+        actualMonth,
         worker,
         getUpdatedWorkerShifts
       );
 
       if (prevName !== worker.workerName) {
-        updatedSchedule = WorkerActionCreator.deleteWorkerFromScheduleDM(updatedSchedule, prevName);
+        updatedMonth = WorkerActionCreator.deleteWorkerFromMonthDM(updatedMonth, prevName);
       }
-      await WorkerActionCreator.updateStateAndDb(dispatch, updatedSchedule);
-      const { month_number: monthNumber, year } = updatedSchedule.schedule_info;
-      await WorkerActionCreator.updateNextMonthInDB(
-        monthNumber,
-        year,
-        worker,
-        getUpdatedWorkerShifts
-      );
+      const revision: RevisionType = VerboseDateHelper.isCurrentOrFutureMonth(month, year)
+        ? "actual"
+        : "primary";
+      dispatch(ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(updatedMonth, revision));
     };
   }
 
-  private static async updateStateAndDb(
-    dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<WorkerActionPayload, string>>,
-    schedule: ScheduleDataModel
-  ): Promise<void> {
-    const { month_number: monthNumber, year } = schedule.schedule_info;
-    const action = {
-      type: ScheduleActionType.UPDATE_WORKER_INFO,
-      payload: {
-        updatedShifts: schedule.shifts,
-        updatedEmployeeInfo: schedule.employee_info,
-      },
-    };
-    dispatch(action);
-
-    if (VerboseDateHelper.isMonthInFuture(monthNumber, year)) {
-      await new LocalStorageProvider().saveSchedule("primary", schedule);
-    }
-    await new LocalStorageProvider().saveSchedule("actual", schedule);
-  }
-
-  private static async updateNextMonthInDB(
-    currentMonth: number,
-    currentYear: number,
-    worker: WorkerInfoExtendedInterface,
-    createWorkerShifts: (schedule: MonthDataModel, year: number, monthNumber: number) => ShiftCode[]
-  ): Promise<void> {
-    const nextMonthDM = await new LocalStorageProvider().getMonthRevision(
-      new ScheduleKey(currentMonth, currentYear).nextMonthKey.getRevisionKey("primary")
-    );
-    if (_.isNil(nextMonthDM)) return;
-    const updatedNextMonth = WorkerActionCreator.addWorkerInfoToMonthDM(
-      nextMonthDM,
-      worker,
-      createWorkerShifts
-    );
-    updatedNextMonth.scheduleKey = new ScheduleKey(currentMonth, currentYear).nextMonthKey;
-    await new LocalStorageProvider().saveBothMonthRevisionsIfNeeded("primary", updatedNextMonth);
-  }
-
-  private static deleteWorkerFromScheduleDM(
-    schedule: ScheduleDataModel,
+  private static deleteWorkerFromMonthDM(
+    monthDataModel: MonthDataModel,
     workerName: string
-  ): ScheduleDataModel {
-    const scheduleCopy = _.cloneDeep(schedule);
-    delete scheduleCopy.employee_info.time[workerName];
-    delete scheduleCopy.employee_info.type[workerName];
-    delete scheduleCopy.employee_info.contractType?.[workerName];
-    delete scheduleCopy.shifts[workerName];
+  ): MonthDataModel {
+    const monthDataModelCopy = _.cloneDeep(monthDataModel);
+    delete monthDataModelCopy.employee_info.time[workerName];
+    delete monthDataModelCopy.employee_info.type[workerName];
+    delete monthDataModelCopy.employee_info.contractType?.[workerName];
+    delete monthDataModelCopy.shifts[workerName];
 
-    return scheduleCopy;
-  }
-
-  private static addWorkerInfo(
-    schedule: ScheduleDataModel,
-    worker: WorkerInfoExtendedInterface,
-    createWorkerShifts: (
-      schedule: ScheduleDataModel,
-      year: number,
-      monthNumber: number
-    ) => ShiftCode[]
-  ): ScheduleDataModel {
-    const { year, month_number: monthNumber } = schedule.schedule_info;
-    return this.addWorkerInfoToSchedule(schedule, worker, year, monthNumber, createWorkerShifts);
+    return monthDataModelCopy;
   }
 
   private static addWorkerInfoToMonthDM(
-    schedule: MonthDataModel,
+    monthDataModel: MonthDataModel,
     worker: WorkerInfoExtendedInterface,
-    createWorkerShifts: (schedule: MonthDataModel, year: number, monthNumber: number) => ShiftCode[]
+    createWorkerShifts: (schedule: MonthDataModel) => ShiftCode[]
   ): MonthDataModel {
-    const { year, month: monthNumber } = schedule.scheduleKey;
-    return this.addWorkerInfoToSchedule(schedule, worker, year, monthNumber, createWorkerShifts);
-  }
-
-  private static addWorkerInfoToSchedule<T extends MonthDataModel | ScheduleDataModel>(
-    schedule: T,
-    worker: WorkerInfoExtendedInterface,
-    year: number,
-    monthNumber: number,
-    createWorkerShifts: (schedule: T, year: number, monthNumber: number) => ShiftCode[]
-  ): T {
-    const updatedSchedule = _.cloneDeep(schedule);
+    const updatedSchedule = _.cloneDeep(monthDataModel);
     const { workerName, workerType, contractType } = worker;
-    const newWorkerShifts = createWorkerShifts(schedule, year, monthNumber);
+    const newWorkerShifts = createWorkerShifts(monthDataModel);
+    const { year, month } = monthDataModel.scheduleKey;
 
     updatedSchedule.shifts = {
       ...updatedSchedule.shifts,
@@ -193,14 +127,11 @@ export class WorkerActionCreator {
     return updatedSchedule;
   }
 
-  private static createNewWorkerShifts(
-    schedule: ScheduleDataModel | MonthDataModel,
-    year: number,
-    monthNumber: number
-  ): ShiftCode[] {
+  private static createNewWorkerShifts(monthDataModel: MonthDataModel): ShiftCode[] {
     const today = new Date();
-    const newWorkerShifts = new Array(schedule.month_info.dates.length).fill(ShiftCode.W);
-    if (today.getMonth() === monthNumber && today.getFullYear() === year) {
+    const { year, month } = monthDataModel.scheduleKey;
+    const newWorkerShifts = new Array(MonthHelper.getMonthLength(year, month)).fill(ShiftCode.W);
+    if (today.getMonth() === month && today.getFullYear() === year) {
       newWorkerShifts.splice(
         0,
         today.getDate() - 1,

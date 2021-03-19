@@ -92,4 +92,14 @@ export class VerboseDateHelper {
     const currentMonth = new Date().getMonth();
     return year > currentYear || (year === currentYear && month > currentMonth);
   }
+
+  static isCurrentMonth(month: number, year: number): boolean {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+    return year === currentYear && month === currentMonth;
+  }
+
+  static isCurrentOrFutureMonth(month: number, year: number): boolean {
+    return this.isCurrentMonth(month, year) || this.isMonthInFuture(month, year);
+  }
 }
