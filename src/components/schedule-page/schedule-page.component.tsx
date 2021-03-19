@@ -75,7 +75,6 @@ export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Elem
           )}
         </Sentry.ErrorBoundary>
       </div>
-      )
     </>
   );
 }

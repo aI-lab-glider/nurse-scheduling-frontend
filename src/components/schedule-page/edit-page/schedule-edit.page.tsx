@@ -10,7 +10,7 @@ import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/mont
 import { ScheduleContainerComponent } from "../schedule-container.component";
 
 interface ScheduleEditPageOptions {
-  closeEdit: () => void;
+  closeEdit: (editMode: boolean) => void;
 }
 
 export function ScheduleEditPage(options: ScheduleEditPageOptions): JSX.Element {
