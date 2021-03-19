@@ -69,10 +69,6 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
   );
 
-  /**
-   * @description Small element for rendering shift info & shift color circle
-   * @returns JSX.Element
-   */
   const [isComponentVisible, setIsComponentVisible] = useState(true);
   const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
 
@@ -82,6 +78,10 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
     }
   };
   const nonWorkingShifts = groupedOptions.filter(getNonWorkingShifts);
+  /**
+   * @description Small element for rendering shift info & shift color circle
+   * @returns JSX.Element
+   */
   const LabelComponent = ({ option, index }): JSX.Element => {
     return (
       <div
@@ -97,8 +97,8 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
       </div>
     );
   };
-  const pageOffset: number | undefined = document.getElementById("root")?.children[0].children[0]
-    .scrollTop!;
+  const pageOffset: number | undefined = document.getElementById("root")?.children[0]?.children[0]
+    ?.scrollTop;
   return (
     <div
       ref={inputRef}
