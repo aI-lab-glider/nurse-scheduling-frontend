@@ -78,11 +78,7 @@ export function ScheduleComponent({
               </div>
             </div>
             <div className="summaryContainer">
-              <SummaryTableComponent
-                uuid={scheduleLocalState.uuid}
-                data={scheduleLocalState.nurseShiftsSection}
-                workerType={type}
-              />
+              <SummaryTableComponent uuid={scheduleLocalState.uuid} data={data} workerType={type} />
             </div>
           </div>
         )}
@@ -122,7 +118,6 @@ export function ScheduleComponent({
                 </div>
               </div>
             </div>
-            <div />
           </div>
         </ScheduleFoldingSection>
       </div>
