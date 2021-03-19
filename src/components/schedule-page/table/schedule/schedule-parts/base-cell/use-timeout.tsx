@@ -2,18 +2,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useState } from "react";
-
+interface TimeoutReturn {
+  isCounting: boolean;
+  setIsCounting: React.Dispatch<React.SetStateAction<boolean>>;
+}
 /**
  * @description useTimeout hook for handling timeouts
  * @param duration - number in miliseconds
  * @param onTimeout - callback
  * @returns clear
  */
-interface TimeoutReturn {
-  //   clear: () => void;
-  isCounting: boolean;
-  setIsCounting: React.Dispatch<React.SetStateAction<boolean>>;
-}
 const useTimeout = (duration: number, onTimeout: () => void): TimeoutReturn => {
   const [isCounting, setIsCounting] = useState<boolean>(false);
   const clr = (timeout: NodeJS.Timeout | undefined): void => {

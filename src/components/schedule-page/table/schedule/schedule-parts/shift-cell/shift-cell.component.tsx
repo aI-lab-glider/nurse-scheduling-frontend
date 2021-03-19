@@ -14,7 +14,6 @@ import { CellDetails } from "../base-cell/cell-details-content.component";
 import { Popper } from "../base-cell/popper";
 import useComponentVisible from "../base-cell/use-component-visible";
 import useTimeout from "../base-cell/use-timeout";
-// import useTimeout from "../base-cell/use-timeout";
 import { CellInput } from "../cell-blockable-input.component";
 import { ErrorTooltipProvider } from "../error-tooltip-provider.component";
 import { useCellBackgroundHighlight } from "../hooks/use-cell-highlight";
