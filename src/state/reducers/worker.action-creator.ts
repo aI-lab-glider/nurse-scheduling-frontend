@@ -8,7 +8,12 @@ import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model"
 import { ContractType, WorkerInfoModel, WorkersInfoModel, WorkerType } from "../../common-models/worker-info.model";
 import { RevisionType, ThunkFunction } from "../../api/persistance-store.model";
 import _ from "lodash";
+<<<<<<< HEAD
 import { MonthDataModel } from "../../common-models/schedule-data.model";
+=======
+import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
+import { getEmployeeWorkTime } from "./month-state/employee-info.reducer";
+>>>>>>> Refactor update action
 import { cropScheduleDMToMonthDM } from "../../logic/schedule-container-convertion/schedule-container-convertion";
 import { MonthHelper } from "../../helpers/month.helper";
 import { ScheduleDataActionCreator } from "./month-state/schedule-data/schedule-data.action-creator";
@@ -25,17 +30,13 @@ export class WorkerActionCreator {
     return async (dispatch, getState): Promise<void> => {
       const actualSchedule = getState().actualState.persistentSchedule.present;
       const actualMonth = cropScheduleDMToMonthDM(actualSchedule);
-      const { year, month } = actualMonth.scheduleKey;
 
       const updatedMonth = WorkerActionCreator.addWorkerInfoToMonthDM(
         actualMonth,
         worker,
         this.createNewWorkerShifts
       );
-      const revision: RevisionType = VerboseDateHelper.isCurrentOrFutureMonth(month, year)
-        ? "actual"
-        : "primary";
-      dispatch(ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(updatedMonth, revision));
+      dispatch(this.createUpdateAction(updatedMonth));
     };
   }
 
@@ -46,14 +47,10 @@ export class WorkerActionCreator {
       const { name } = worker;
       const actualSchedule = _.cloneDeep(getState().actualState.persistentSchedule.present);
       const actualMonth = cropScheduleDMToMonthDM(actualSchedule);
-      const { year, month } = actualMonth.scheduleKey;
 
       const updatedMonth = WorkerActionCreator.deleteWorkerFromMonthDM(actualMonth, name);
 
-      const revision: RevisionType = VerboseDateHelper.isCurrentOrFutureMonth(month, year)
-        ? "actual"
-        : "primary";
-      dispatch(ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(updatedMonth, revision));
+      dispatch(this.createUpdateAction(updatedMonth));
     };
   }
 
@@ -62,7 +59,6 @@ export class WorkerActionCreator {
       const { prevName } = worker;
       const actualSchedule = _.cloneDeep(getState().actualState.persistentSchedule.present);
       const actualMonth = cropScheduleDMToMonthDM(actualSchedule);
-      const { year, month } = actualMonth.scheduleKey;
       const getUpdatedWorkerShifts = (monthDataModel: MonthDataModel): ShiftCode[] =>
         monthDataModel.shifts[prevName];
       let updatedMonth = WorkerActionCreator.addWorkerInfoToMonthDM(
@@ -74,11 +70,19 @@ export class WorkerActionCreator {
       if (prevName !== worker.workerName) {
         updatedMonth = WorkerActionCreator.deleteWorkerFromMonthDM(updatedMonth, prevName);
       }
-      const revision: RevisionType = VerboseDateHelper.isCurrentOrFutureMonth(month, year)
-        ? "actual"
-        : "primary";
-      dispatch(ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(updatedMonth, revision));
+
+      dispatch(this.createUpdateAction(updatedMonth));
     };
+  }
+
+  private static createUpdateAction(
+    updatedMonth: MonthDataModel
+  ): ThunkFunction<ScheduleDataModel> {
+    const { year, month } = updatedMonth.scheduleKey;
+    const revision: RevisionType = VerboseDateHelper.isCurrentOrFutureMonth(month, year)
+      ? "actual"
+      : "primary";
+    return ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(updatedMonth, revision);
   }
 
   private static deleteWorkerFromMonthDM(
