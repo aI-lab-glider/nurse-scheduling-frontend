@@ -10,7 +10,7 @@ import { ViewOnlyToolbar } from "./view-only-toolbar";
 import { ScheduleContainerComponent } from "../schedule-container.component";
 
 interface ScheduleViewOnlyPageOptions {
-  close: () => void;
+  openEdit: () => void;
 }
 
 export function ScheduleViewOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.Element {
@@ -23,7 +23,7 @@ export function ScheduleViewOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.El
     <>
       <UndoableHotkeys config={PERSISTENT_SCHEDULE_UNDOABLE_CONFIG} />
       <ScheduleLogicContext.Provider value={scheduleLogic}>
-        <ViewOnlyToolbar openEdit={props.close} />
+        <ViewOnlyToolbar openEdit={props.openEdit} />
         <div className={"schedule"}>
           <ScheduleContainerComponent schedule={scheduleLocalState} />
         </div>

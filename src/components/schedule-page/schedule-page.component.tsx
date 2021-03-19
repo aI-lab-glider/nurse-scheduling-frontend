@@ -56,7 +56,7 @@ export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Elem
     }
     return (
       <>
-        <ScheduleEditPage closeEdit={handleEditButton} />
+        <ScheduleEditPage close={handleEditButton} />
       </>
     );
   }, [editModeHandler, setDrawerOpen]);
