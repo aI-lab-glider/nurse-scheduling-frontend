@@ -93,8 +93,7 @@ export function ScheduleComponent({
     <div style={{ margin: 20 }}>
       <div>
         <div className="sectionContainer">
-          <div />
-          <div>
+          <div className="timeTableContainer">
             <TimeTableComponent scheduleLocalState={scheduleLocalState} />
           </div>
           <div className="summaryContainer">

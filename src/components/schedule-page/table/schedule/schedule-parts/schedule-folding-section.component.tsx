@@ -26,7 +26,7 @@ export function ScheduleFoldingSection({
             <span>{name}</span>
           </div>
         </div>
-        <div>
+        <div className="scheduleFoldingSection">
           <hr className="middle" />
         </div>
       </div>

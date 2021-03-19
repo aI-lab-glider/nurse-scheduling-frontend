@@ -13,7 +13,7 @@ export function SummaryTableRowF({
 }: SummaryTableRowOptions): JSX.Element {
   const workerHours = useWorkerHoursInfo(workerName).asArray();
   return (
-    <tr className="row" id="summaryRow" data-cy={summaryRowDataCy(rowIndex)}>
+    <div className="row" id="summaryRow" data-cy={summaryRowDataCy(rowIndex)}>
       {workerHours.map((cellData, cellIndex) => {
         return (
           <SummaryTableCell
@@ -23,7 +23,7 @@ export function SummaryTableRowF({
           />
         );
       })}
-    </tr>
+    </div>
   );
 }
 

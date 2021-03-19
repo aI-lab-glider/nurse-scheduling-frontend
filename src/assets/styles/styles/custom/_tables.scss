@@ -227,7 +227,9 @@
   height: 74px;
   cursor: default;
 }
-
+.timeTableContainer {
+  margin-left: 126px;
+}
 .summaryContainer {
   width: 134px;
   padding-left: 2%;
@@ -236,7 +238,6 @@
 .sectionContainer {
   display: flex;
   flex-direction: row;
-  margin-bottom: 100px;
 }
 
 span {

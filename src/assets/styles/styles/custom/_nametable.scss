@@ -4,7 +4,8 @@
 .nametable {
   align-items: center;
   padding: 0;
-  width: 106px;
+  width: 126px;
+  margin-top: 1px;
 
   .nametableRow {
     height: 40px;
@@ -15,7 +16,6 @@
     font-size: 12px;
     display: flex;
     align-items: center;
-    box-sizing: content-box;
     color: $primary;
     border-bottom: 1px solid $table-border-color-grey;
   }
