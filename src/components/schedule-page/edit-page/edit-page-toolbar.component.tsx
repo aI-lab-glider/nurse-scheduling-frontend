@@ -24,7 +24,7 @@ import _ from "lodash";
 import classNames from "classnames/bind";
 
 interface EditPageToolbarOptions {
-  closeEdit: (editMode: boolean) => void;
+  closeEdit: () => void;
 }
 
 export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Element {
@@ -84,7 +84,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
 
   function askForSavingChanges(): void {
     if (anyChanges()) setIsSaveModalOpen(true);
-    else closeEdit(false);
+    else closeEdit();
   }
 
   function anyChanges(): boolean {
