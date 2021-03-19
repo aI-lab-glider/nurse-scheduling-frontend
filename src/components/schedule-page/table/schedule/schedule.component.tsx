@@ -35,7 +35,7 @@ export function ScheduleComponent({
       .map((worker) => worker.toLowerCase())
       .includes(process.env.REACT_APP_ERROR_WORKER ?? "ERROR")
   ) {
-    throw new Error("Schedule in dev mode includes error user");
+    throw new Error("[TEST MODE] Error user was added");
   }
 
   return (
