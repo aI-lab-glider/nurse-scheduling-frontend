@@ -46,18 +46,16 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
     workerType === WorkerType.NURSE ? "NurseInfo" : "BabysitterInfo";
 
   return (
-    <>
-      <table>
-        <BaseSectionComponent
-          {...options}
-          key={uuid}
-          data={data}
-          sectionKey={sectionKey}
-          cellComponent={ShiftCellComponent}
-          rowComponent={ShiftRowComponent}
-          errorSelector={shiftSectionErrorSelector}
-        />
-      </table>
-    </>
+    <div>
+      <BaseSectionComponent
+        {...options}
+        key={uuid}
+        data={data}
+        sectionKey={sectionKey}
+        cellComponent={ShiftCellComponent}
+        rowComponent={ShiftRowComponent}
+        errorSelector={shiftSectionErrorSelector}
+      />
+    </div>
   );
 }
