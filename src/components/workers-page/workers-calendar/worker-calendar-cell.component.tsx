@@ -6,6 +6,11 @@ import { VerboseDate } from "../../../common-models/month-info.model";
 import { ShiftCode } from "../../../common-models/shift-info.model";
 import { getColor } from "../../schedule-page/table/schedule/schedule-parts/shift-cell/shift-cell.component";
 import { fade } from "@material-ui/core";
+import {
+  bottomCellPartClassName,
+  hasNextShiftClassName,
+  keepOnShiftClassName,
+} from "../../schedule-page/table/schedule/schedule-parts/base-cell/base-cell.models";
 
 interface CellOptions {
   keepOn: boolean;
@@ -21,8 +26,8 @@ interface CellOptions {
 export function WorkersCalendarCell(params: CellOptions): JSX.Element {
   const date = params.date;
   const shift = params.shift;
-  const keepOn = "keepOn" + params.keepOn;
-  const hasNext = "hasNext" + params.hasNext;
+  const keepOn = keepOnShiftClassName(params.keepOn);
+  const hasNext = hasNextShiftClassName(params.hasNext);
   const notCurrentMonth = "notCurrentMonth" + params.notCurrentMonth;
   const workersCalendar =
     params.keepOn || params.hasNext ? "" : "_workersCalendar" + params.workersCalendar;
@@ -41,9 +46,7 @@ export function WorkersCalendarCell(params: CellOptions): JSX.Element {
       <div className={"workersCalendarCell" + isLeft + isTop}>
         <div className={"TopCellPart " + notCurrentMonth}>{date!["date"]}</div>
         <div
-          className={
-            "BottomCellPart " + keepOn + workersCalendar + shift + " " + hasNext + " " + keepOn
-          }
+          className={`${bottomCellPartClassName()} ${keepOn}${workersCalendar}${shift} ${hasNext} ${keepOn}`}
           style={{ color: shiftColor, backgroundColor: background }}
         >
           <div className={"leftBorder leftBorderColor"} style={{ backgroundColor: shiftColor }} />
