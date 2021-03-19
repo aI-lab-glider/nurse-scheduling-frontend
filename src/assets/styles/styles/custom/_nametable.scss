@@ -8,18 +8,14 @@
 
   .nametableRow {
     height: 40px;
-    width: 120%;
-    padding: 0;
-    margin: 0;
-
+    width: 100%;
     font-family: $font-family-table;
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
-    line-height: 20px;
     display: flex;
     align-items: center;
-
+    box-sizing: content-box;
     color: $primary;
     border-bottom: 1px solid $table-border-color-grey;
   }

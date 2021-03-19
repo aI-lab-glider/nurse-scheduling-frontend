@@ -27,12 +27,8 @@ export function TimeTableSection({ scheduleLocalState }: TimeTableSectionOptions
   const data = getDataRow();
 
   return (
-    <>
-      <table className="table">
-        <tbody>
-          <TimeTableRow uuid={scheduleLocalState.uuid} dataRow={data} data-cy="timetable-row" />
-        </tbody>
-      </table>
-    </>
+    <div className="table">
+      <TimeTableRow uuid={scheduleLocalState.uuid} dataRow={data} data-cy="timetable-row" />
+    </div>
   );
 }

@@ -54,7 +54,7 @@ function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.
   );
 
   return (
-    <td className="timetableCell" id={getId()}>
+    <div className="timetableCell" id={getId()}>
       <ErrorTooltipProvider
         className="timetableCell timetable-error-tooltip"
         errorSelector={errorSelector}
@@ -64,7 +64,7 @@ function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.
           <span className={today}>{value.date}</span>
         </span>
       </ErrorTooltipProvider>
-    </td>
+    </div>
   );
 }
 

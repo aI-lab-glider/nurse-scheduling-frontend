@@ -103,7 +103,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
 
   //  #region view
   return (
-    <td
+    <div
       ref={mergeRefs([selectableItemRef, componentContainer])}
       className={classNames("mainCell", {
         selection: isSelected || (isComponentVisible && isBlocked),
@@ -166,7 +166,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
         </Popper>
       )}
       )
-    </td>
+    </div>
   );
 }
 

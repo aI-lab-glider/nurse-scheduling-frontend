@@ -71,40 +71,35 @@ export function NameTableSection({
 
   return (
     <React.Fragment>
-      <table className="nametable">
-        <tbody>
-          {data.map((workerName) => {
-            return (
-              <ErrorTooltipProvider
+      <div className="nametable">
+        {data.map((workerName) => {
+          return (
+            <ErrorTooltipProvider
+              key={workerName}
+              errorSelector={(scheduleErrors): ScheduleError[] =>
+                errorSelector?.(workerName, 0, scheduleErrors) ?? []
+              }
+              className={classNames("nametableRow", clickable ? "pointerCursor" : "defaultCursor")}
+              tooltipClassname="nametableRow-error-tooltip"
+              showErrorTitle={false}
+            >
+              <div
                 key={workerName}
-                errorSelector={(scheduleErrors): ScheduleError[] =>
-                  errorSelector?.(workerName, 0, scheduleErrors) ?? []
-                }
+                onClick={(): void => toggleDrawer(true, workerName)}
                 className={classNames(
                   "nametableRow",
                   clickable ? "pointerCursor" : "defaultCursor"
                 )}
-                tooltipClassname="nametableRow-error-tooltip"
-                showErrorTitle={false}
               >
-                <tr
-                  key={workerName}
-                  onClick={(): void => toggleDrawer(true, workerName)}
-                  className={classNames(
-                    "nametableRow",
-                    clickable ? "pointerCursor" : "defaultCursor"
-                  )}
-                >
-                  <td>
-                    <span>{workerName}</span>
-                    <span className="underline" />
-                  </td>
-                </tr>
-              </ErrorTooltipProvider>
-            );
-          })}
-        </tbody>
-      </table>
+                <div>
+                  <span>{workerName}</span>
+                  <span className="underline" />
+                </div>
+              </div>
+            </ErrorTooltipProvider>
+          );
+        })}
+      </div>
       <WorkerDrawerComponent
         open={open}
         onClose={(): void => toggleDrawer(false, "")}

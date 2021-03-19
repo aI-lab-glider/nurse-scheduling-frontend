@@ -18,19 +18,19 @@ export function ScheduleFoldingSection({
 }: ScheduleFoldingSectionOptions): JSX.Element {
   const [opened, setOpened] = useState(true);
   return (
-    <>
-      <tr className="scheduleFoldingSection">
-        <td>
+    <div>
+      <div className="scheduleFoldingSection">
+        <div>
           <div onClick={(): void => setOpened((prev) => !prev)} className="text">
             <span>{opened ? <ExpandMoreIcon /> : <ChevronRightIcon />}</span>
             <span>{name}</span>
           </div>
-        </td>
-        <td colSpan={2}>
+        </div>
+        <div>
           <hr className="middle" />
-        </td>
-      </tr>
-      {opened && children}
-    </>
+        </div>
+      </div>
+      <div style={{ display: opened ? "initial" : "none" }}>{children}</div>
+    </div>
   );
 }
