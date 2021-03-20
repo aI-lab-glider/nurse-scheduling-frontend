@@ -2,13 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import Drawer, { DrawerOptions } from "../../common-components/drawer/drawer.component";
 import { WorkerInfoModel } from "../../../common-models/worker-info.model";
+import Drawer, { DrawerOptions } from "../../common-components/drawer/drawer.component";
+import { WorkerEditComponentMode, WorkerEditComponent } from "../../namestable/worker-edit";
 import { WorkerInfoComponent } from "../../namestable/worker-info.component";
-import {
-  WorkerEditComponent,
-  WorkerEditComponentMode,
-} from "../../namestable/worker-edit.component";
 import { useWorkerHoursInfo } from "../../schedule-page/table/schedule/use-worker-hours-info";
 
 export enum WorkerDrawerMode {
