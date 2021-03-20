@@ -1,20 +1,21 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { Button } from "../../common-components";
 import React, { useContext, useState } from "react";
-import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
-import ErrorList from "./error-list.component";
-import { ErrorLoaderState, Props } from "./validation-drawer.component";
-import { SpanErrors } from "./span-errors.component";
-import warning from "../../../assets/images/warning.svg";
-import ok from "../../../assets/images/ok.svg";
-import { NetworkErrorCode, ScheduleError } from "../../../common-models/schedule-error.model";
+import { useDispatch, useSelector } from "react-redux";
 import backend from "../../../api/backend";
-import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
+import ok from "../../../assets/images/ok.svg";
+import warning from "../../../assets/images/warning.svg";
+import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
+import { NetworkErrorCode, ScheduleError } from "../../../common-models/schedule-error.model";
 import { ActionModel } from "../../../state/models/action.model";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
+import { Button } from "../../common-components";
 import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
-import { useDispatch } from "react-redux";
+import ErrorList from "./error-list.component";
+import { SpanErrors } from "./span-errors.component";
+import { ErrorLoaderState, Props } from "./validation-drawer.component";
 
 interface ErrorLoaderOptions {
   state?: Props;
@@ -27,6 +28,8 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
   const { setOpen, isNetworkError } = options;
   const [spinnerAgain, setSpinnerAgain] = useState(false);
   const scheduleLogic = useContext(ScheduleLogicContext);
+  const { primaryRevision } = useSelector((app: ApplicationStateModel) => app.actualState);
+
   const dispatcher = useDispatch();
 
   function closeDrawer(): void {
@@ -39,7 +42,7 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
       if (schedule) {
         let response: ScheduleError[];
         try {
-          response = await backend.getErrors(schedule);
+          response = await backend.getErrors(schedule, primaryRevision);
         } catch (err) {
           response = [
             {
@@ -56,7 +59,7 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
     setSpinnerAgain(true);
     updateScheduleErrors();
     setTimeout(() => setSpinnerAgain(false), 4000);
-  }, [dispatcher, scheduleLogic]);
+  }, [dispatcher, scheduleLogic, primaryRevision]);
 
   return (
     <>

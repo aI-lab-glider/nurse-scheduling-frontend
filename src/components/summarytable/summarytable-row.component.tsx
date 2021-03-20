@@ -2,17 +2,22 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { ArrayHelper } from "../../helpers/array.helper";
+import { useWorkerHoursInfo } from "../schedule-page/table/schedule/use-worker-hours-info";
 import { SummaryTableCell } from "./summarytable-cell.component";
 import { summaryRowDataCy, SummaryTableRowOptions } from "./summarytable-row.models";
 
-export function SummaryTableRowF({ uuid, data, rowIndex }: SummaryTableRowOptions): JSX.Element {
+export function SummaryTableRowF({
+  uuid,
+  workerName,
+  rowIndex,
+}: SummaryTableRowOptions): JSX.Element {
+  const workerHours = useWorkerHoursInfo(workerName).asArray();
   return (
     <tr className="row" id="summaryRow" data-cy={summaryRowDataCy(rowIndex)}>
-      {data.map((cellData, cellIndex) => {
+      {workerHours.map((cellData, cellIndex) => {
         return (
           <SummaryTableCell
-            key={`${cellData}_${cellIndex}${uuid}}`}
+            key={`${cellData}_${cellIndex}_${uuid}}`}
             value={cellData}
             cellIndex={cellIndex}
           />
@@ -23,5 +28,5 @@ export function SummaryTableRowF({ uuid, data, rowIndex }: SummaryTableRowOption
 }
 
 export const SummaryTableRow = React.memo(SummaryTableRowF, (prev, next) => {
-  return ArrayHelper.arePrimitiveArraysEqual(prev.data, next.data);
+  return prev.workerName === next.workerName;
 });

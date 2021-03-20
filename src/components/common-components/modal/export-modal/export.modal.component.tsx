@@ -11,16 +11,14 @@ import {
 } from "@material-ui/core";
 import { blue } from "@material-ui/core/colors";
 import React from "react";
+import { useSelector } from "react-redux";
 import { Button } from "../..";
-import {
-  cropScheduleDMToMonthDM,
-  ScheduleDataModel,
-} from "../../../../common-models/schedule-data.model";
+import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 import { ScheduleExportLogic } from "../../../../logic/schedule-exporter/schedule-export.logic";
 import { ButtonData, DropdownButtons } from "../../dropdown-buttons/dropdown-buttons.component";
 import DefaultModal from "../modal.component";
-import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
 
 export interface ExportModalComponent {
   setOpen: (open: boolean) => void;
@@ -45,17 +43,21 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   };
 
   const [exportOptions, setExportOptions] = React.useState({
+    extraWorkers: { value: true, label: "dzienni pracownicy" },
     overtime: { value: true, label: "nadgodzinny" },
   });
+  const { primaryRevision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   const exportExtensions = {
     xlsx: (): void => {
-      new ScheduleExportLogic(
-        cropScheduleDMToMonthDM(model),
-        exportOptions.overtime.value
-      ).formatAndSave(revision);
+      new ScheduleExportLogic({
+        scheduleModel: cropScheduleDMToMonthDM(model),
+        primaryScheduleModel: primaryRevision,
+        overtimeExport: exportOptions.overtime.value,
+        extraWorkersExport: exportOptions.extraWorkers.value,
+      }).formatAndSave(revision);
     },
   };
   const handleExport = (): void => {
@@ -77,7 +79,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   const footer = (
     <div>
       <Button onClick={handleExport} size="small" variant="primary" data-cy="confirm-export-button">
-        Potwierdż
+        Potwierdź
       </Button>
       <Button onClick={handleClose} size="small" variant="secondary">
         Anuluj

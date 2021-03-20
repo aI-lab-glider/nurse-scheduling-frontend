@@ -101,14 +101,18 @@ export class ScheduleLogic implements ScheduleProvider {
   public tryGetCurrentMonthSchedule(): void {
     const [month, year] = this.sections.Metadata.monthLogic.currentDate;
     this.dispatchScheduleUpdate(
-      ScheduleDataActionCreator.setScheduleFromKeyIfExistsInDB(new ScheduleKey(month, year))
+      ScheduleDataActionCreator.setScheduleIfExistsInDb(new ScheduleKey(month, year))
     );
   }
 
   public updateActualRevision(): void {
     this.dispatchScheduleUpdate(
-      ScheduleDataActionCreator.setScheduleFromScheduleDM(this.schedule.getDataModel(), true)
+      ScheduleDataActionCreator.setScheduleStateAndSaveToDb(this.schedule.getDataModel())
     );
+  }
+
+  public updateActualRevisionToGivenSchedule(schedule: ScheduleDataModel): void {
+    this.dispatchScheduleUpdate(ScheduleDataActionCreator.setScheduleStateAndSaveToDb(schedule));
   }
 
   public changeShiftFrozenState(rowind: number, shiftIndex: number): void {

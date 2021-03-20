@@ -1,12 +1,16 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useCallback, useEffect, useState } from "react";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
+import classNames from "classnames/bind";
+import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import {
   ContractType,
   ContractTypeHelper,
@@ -14,20 +18,16 @@ import {
   WorkerType,
   WorkerTypeHelper,
 } from "../../../common-models/worker-info.model";
-import { useSelector } from "react-redux";
+import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
+import { WorkerHourInfo } from "../../../helpers/worker-hours-info.model";
+import { StringHelper } from "../../../helpers/string.helper";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { Button } from "../../common-components";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
-import { StringHelper } from "../../../helpers/string.helper";
-import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
-import classNames from "classnames/bind";
-import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
-import WorkerDrawerComponent, { WorkerDrawerMode } from "./worker-drawer.component";
 import DeleteWorkerModalComponent from "../../common-components/modal/delete-worker-modal/delete-worker.modal.component";
 import { WorkingTimeHelper } from "../../namestable/working-time.helper";
-import { ShiftHelper } from "../../../helpers/shifts.helper";
 import { useMonthInfo } from "../../schedule-page/validation-drawer/use-verbose-dates";
+import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
+import WorkerDrawerComponent, { WorkerDrawerMode } from "./worker-drawer.component";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -98,7 +98,7 @@ export default function WorkersTab(): JSX.Element {
 
   const getWorkerTimeLabel = useCallback(
     (workerName: string) => {
-      const workHourNormInMonth = ShiftHelper.calculateWorkNormForMonth(monthNumber, year);
+      const workHourNormInMonth = WorkerHourInfo.calculateWorkNormForMonth(monthNumber, year);
       const workerContractType = contractType?.[workerName] ?? ContractType.EMPLOYMENT_CONTRACT;
       const contractTypeLabel = ContractTypeHelper.translate(workerContractType);
       const workerTimeLabel =

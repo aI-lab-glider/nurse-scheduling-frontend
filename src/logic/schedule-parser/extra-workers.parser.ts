@@ -6,12 +6,14 @@ import { DataRow } from "../schedule-logic/data-row";
 import { ExtraWorkersSectionKey } from "../section.model";
 import { ScheduleError } from "../../common-models/schedule-error.model";
 
+export const DEFAULT_EXTRA_WORKERS_NUMBER = 0;
+
 export class ExtraWorkersParser implements ExtraWorkersInfoProvider {
   private _parseErrors: ScheduleError[] = [];
   private extraWorkersInfoAsDataRows: { [key: string]: DataRow } = {};
 
   constructor(numberOfDays: number) {
-    const extraWorkers = new Array(numberOfDays).fill(0);
+    const extraWorkers = new Array(numberOfDays).fill(DEFAULT_EXTRA_WORKERS_NUMBER);
     this.extraWorkersInfoAsDataRows = {
       [ExtraWorkersSectionKey.ExtraWorkersCount]: new DataRow(
         ExtraWorkersSectionKey.ExtraWorkersCount,

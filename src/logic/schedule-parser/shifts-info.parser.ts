@@ -26,7 +26,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
       });
     } else {
       this.logLoadFileError(
-        "Nie znaleziono sekcji : " + WorkerTypeHelper.translate(typeOfPersonel, true)
+        "Nie znaleziono sekcji: " + WorkerTypeHelper.translate(typeOfPersonel, true)
       );
     }
   }
@@ -46,9 +46,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
         );
 
         if (slicedPersonelRow.length !== this.metaData.dayCount) {
-          this.logLoadFileError(
-            "Sekcja nie ma oczekiwanych wymiarów. Przyjęto, że w brakujących dniach liczba dzieci wynosi 0"
-          );
+          this.logLoadFileError("Sekcja nie ma oczekiwanych wymiarów.");
         }
 
         const personel = Array<string>();
@@ -61,7 +59,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
             personel.push("W");
           } else {
             if (typeof b !== "string" || !(b in ShiftCode)) {
-              this.logUnknownValue(i + 1, name, b);
+              this.logUnknownValue(i, name, b);
               personel.push("W");
             } else {
               personel.push(b);

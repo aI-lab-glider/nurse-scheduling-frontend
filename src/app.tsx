@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import schedule from "./assets/devMode/schedule";
-import { cropScheduleDMToMonthDM, ScheduleDataModel } from "./common-models/schedule-data.model";
+import { ScheduleDataModel } from "./common-models/schedule-data.model";
 import { HeaderComponent } from "./components/common-components";
 import RouteButtonsComponent, {
   Tabs,
@@ -24,8 +24,7 @@ import ScssVars from "./assets/styles/styles/custom/_variables.module.scss";
 import { ApplicationStateModel } from "./state/models/application-state.model";
 import { ScheduleKey } from "./api/persistance-store.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
-import * as Sentry from "@sentry/react";
-import AppErrorModal from "./components/common-components/modal/app-error-modal/app-error.modal.component";
+import { cropScheduleDMToMonthDM } from "./logic/schedule-container-convertion/schedule-container-convertion";
 import { LocalStorageProvider } from "./api/local-storage-provider.model";
 
 const useStyles = makeStyles(() => ({
@@ -87,10 +86,10 @@ function App(): JSX.Element {
   const fetchGlobalState = useCallback(() => {
     if (process.env.REACT_APP_DEV_MODE === "true") {
       const monthModel = cropScheduleDMToMonthDM(schedule as ScheduleDataModel);
-      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel, true);
+      const action = ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(monthModel);
       scheduleDispatcher(action);
     } else {
-      const action = ScheduleDataActionCreator.setScheduleFromKeyIfExistsInDB(
+      const action = ScheduleDataActionCreator.setScheduleIfExistsInDb(
         new ScheduleKey(month, year),
         "actual"
       );
@@ -108,39 +107,25 @@ function App(): JSX.Element {
     new LocalStorageProvider().saveApplicationVersion().then();
   }, []);
 
-  const [open, setIsOpen] = useState(false);
-  const fallback = useCallback(
-    ({ resetError }): JSX.Element => (
-      <AppErrorModal onClick={resetError} open={open} setOpen={setIsOpen} />
-    ),
-    [open, setIsOpen]
-  );
-
-  const onError = useCallback((): void => {
-    setIsOpen(true);
-  }, [setIsOpen]);
-
   return (
-    <Sentry.ErrorBoundary fallback={fallback} onError={onError}>
-      <NotificationProvider>
-        <JiraLikeDrawerProvider>
-          <Switch>
-            <Route path="/">
-              <Box className={classes.root}>
-                <Box className={classes.content}>
-                  <HeaderComponent />
-                  <RouteButtonsComponent tabs={tabs} disabled={disableRouteButtons} />
-                </Box>
-                <Box className={classes.drawer}>
-                  <JiraLikeDrawer />
-                </Box>
+    <NotificationProvider>
+      <JiraLikeDrawerProvider>
+        <Switch>
+          <Route path="/">
+            <Box className={classes.root}>
+              <Box className={classes.content}>
+                <HeaderComponent />
+                <RouteButtonsComponent tabs={tabs} disabled={disableRouteButtons} />
               </Box>
-              {isElectron() ? <></> : <NetlifyProFooter />}
-            </Route>
-          </Switch>
-        </JiraLikeDrawerProvider>
-      </NotificationProvider>
-    </Sentry.ErrorBoundary>
+              <Box className={classes.drawer}>
+                <JiraLikeDrawer width={690} />
+              </Box>
+            </Box>
+            {isElectron() ? <></> : <NetlifyProFooter />}
+          </Route>
+        </Switch>
+      </JiraLikeDrawerProvider>
+    </NotificationProvider>
   );
 }
 

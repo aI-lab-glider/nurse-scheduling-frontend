@@ -6,9 +6,11 @@ import classNames from "classnames/bind";
 import React from "react";
 import { WorkerInfoModel, WorkerTypeHelper } from "../../common-models/worker-info.model";
 import { StringHelper } from "../../helpers/string.helper";
+import { useWorkerHoursInfo } from "../schedule-page/table/schedule/use-worker-hours-info";
 import WorkersCalendar from "../workers-page/workers-calendar/workers-calendar.component";
 
 export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
+  const workerHoursInfo = useWorkerHoursInfo(info.name);
   return (
     <>
       <div className={"span-primary workers-table"}>
@@ -26,8 +28,8 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
         <br />
         <div className="worker-info">
           <p>Typ umowy:</p>
-          <p>Ilość godzin: {info.requiredHours}</p>
-          <p>Ilość nadgodzin: {info.overtime}</p>
+          <p>Ilość godzin: {workerHoursInfo.workerHourNorm}</p>
+          <p>Ilość nadgodzin: {workerHoursInfo.overTime}</p>
           <p>Suma godzin: {info.time}</p>
           <Divider />
           <div id={"zmiany"}>

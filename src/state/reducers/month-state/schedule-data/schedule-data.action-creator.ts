@@ -3,11 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 /* eslint-disable @typescript-eslint/camelcase */
-import {
-  extendMonthDMToScheduleDM,
-  MonthDataModel,
-  ScheduleDataModel,
-} from "../../../../common-models/schedule-data.model";
+import { MonthDataModel, ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 import { RevisionType, ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
@@ -15,73 +11,124 @@ import { LocalStorageProvider } from "../../../../api/local-storage-provider.mod
 import _ from "lodash";
 import { ActionModel } from "../../../models/action.model";
 import { Shift } from "../../../../common-models/shift-info.model";
+import { AddMonthRevisionAction, PrimaryRevisionAction } from "../../base-revision.reducer";
+import { PrimaryMonthRevisionDataModel } from "../../../models/application-state.model";
+import {
+  cropScheduleDMToMonthDM,
+  extendMonthDMRevisionToScheduleDM,
+} from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
 
 export class ScheduleDataActionCreator {
-  static setScheduleFromScheduleDM(
-    newSchedule: ScheduleDataModel,
-    saveInDatabase = true
-  ): ThunkFunction<ScheduleDataModel> {
-    return async (dispatch, getState): Promise<void> => {
+  //#region Update state
+  private static setCurrentAndPrimaryScheduleState(
+    currentSchedule: ScheduleDataModel,
+    baseSchedule: PrimaryMonthRevisionDataModel
+  ): ThunkFunction<ScheduleDataModel | MonthDataModel> {
+    return async (dispatch): Promise<void> => {
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
-      if (saveInDatabase) {
-        const { revision } = getState().actualState;
-        await new LocalStorageProvider().saveSchedule(revision, newSchedule);
-      }
       destinations.forEach((destination) => {
-        const action = {
+        const addNewSchedule = {
           type: createActionName(destination, ScheduleActionType.ADD_NEW),
-          payload: newSchedule,
+          payload: currentSchedule,
         };
-        dispatch(action);
+        dispatch(addNewSchedule);
       });
+
+      const addPrimaryRevision = {
+        type: PrimaryRevisionAction.ADD_MONTH_PRIMARY_REVISION,
+        payload: baseSchedule,
+      } as AddMonthRevisionAction;
+      dispatch(addPrimaryRevision);
     };
   }
 
-  static setScheduleFromMonthDM(
-    newMonth: MonthDataModel,
-    saveInDatabase = true,
+  private static setScheduleFromMonthDM(
+    monthDataModel: MonthDataModel,
     revision?: RevisionType
   ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
       if (_.isNil(revision)) {
         revision = getState().actualState.revision;
       }
-      const [prevMonth, nextMonth] = await new LocalStorageProvider().fetchOrCreateMonthNeighbours(
-        newMonth,
-        revision
-      );
-      const newSchedule = extendMonthDMToScheduleDM(prevMonth, newMonth, nextMonth);
-      await this.setScheduleFromScheduleDM(newSchedule, saveInDatabase)(dispatch, getState);
+      const newSchedule = await extendMonthDMRevisionToScheduleDM(monthDataModel, revision);
+      const primaryMonthDM = await this.getMonthPrimaryRevisionDM(monthDataModel);
+
+      dispatch(this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM));
     };
   }
 
-  static setScheduleFromKeyIfExistsInDB(
+  static setScheduleStateAndCreateIfNeeded(
     monthKey: ScheduleKey,
-    revision?: RevisionType,
-    baseMonthModel?: MonthDataModel
+    baseMonthModel: MonthDataModel,
+    revision: RevisionType
+  ): ThunkFunction<ScheduleDataModel> {
+    return async (dispatch): Promise<void> => {
+      const monthDataModel = await new LocalStorageProvider().fetchOrCreateMonthRevision(
+        monthKey,
+        revision,
+        baseMonthModel
+      );
+      dispatch(this.setScheduleFromMonthDM(monthDataModel));
+    };
+  }
+
+  static setScheduleIfExistsInDb(
+    monthKey: ScheduleKey,
+    revision?: RevisionType
   ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch, getState): Promise<void> => {
-      let monthDataModel;
       if (_.isNil(revision)) {
         revision = getState().actualState.revision;
       }
 
-      if (baseMonthModel) {
-        monthDataModel = await new LocalStorageProvider().fetchOrCreateMonthRevision(
-          monthKey,
-          revision,
-          baseMonthModel
-        );
-      } else {
-        monthDataModel = await new LocalStorageProvider().getMonthRevision(
-          monthKey.getRevisionKey(revision)
-        );
-      }
+      const monthDataModel = await new LocalStorageProvider().getMonthRevision(
+        monthKey.getRevisionKey(revision)
+      );
 
       if (!_.isNil(monthDataModel)) {
-        dispatch(this.setScheduleFromMonthDM(monthDataModel, false, revision));
+        dispatch(this.setScheduleFromMonthDM(monthDataModel));
       }
     };
+  }
+  //#endregion
+
+  //#region Update state and save to DB
+  static setScheduleStateAndSaveToDb(
+    newSchedule: ScheduleDataModel
+  ): ThunkFunction<ScheduleDataModel | MonthDataModel> {
+    return async (dispatch, getState): Promise<void> => {
+      const { revision } = getState().actualState;
+      await new LocalStorageProvider().saveSchedule(revision, newSchedule);
+      const primaryMonthDM = await this.getMonthPrimaryRevisionDM(
+        cropScheduleDMToMonthDM(newSchedule)
+      );
+
+      dispatch(this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM));
+    };
+  }
+
+  static setScheduleFromMonthDMAndSaveInDB(
+    newMonth: MonthDataModel,
+    revision?: RevisionType
+  ): ThunkFunction<ScheduleDataModel> {
+    return async (dispatch, getState): Promise<void> => {
+      if (_.isNil(revision)) {
+        revision = getState().actualState.revision;
+      }
+      const newSchedule = await extendMonthDMRevisionToScheduleDM(newMonth, revision);
+      dispatch(this.setScheduleStateAndSaveToDb(newSchedule));
+    };
+  }
+
+  //#endregion
+
+  private static async getMonthPrimaryRevisionDM(
+    monthDataModel: MonthDataModel
+  ): Promise<PrimaryMonthRevisionDataModel> {
+    const primaryMonthDM = await new LocalStorageProvider().getMonthRevision(
+      monthDataModel.scheduleKey.getRevisionKey("primary")
+    );
+    return (primaryMonthDM ?? monthDataModel) as PrimaryMonthRevisionDataModel;
   }
 
   static updateSchedule(newScheduleModel: ScheduleDataModel): ScheduleActionModel {

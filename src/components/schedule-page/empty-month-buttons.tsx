@@ -5,7 +5,6 @@ import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TranslationHelper } from "../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
-import { getDateWithMonthOffset } from "../../state/reducers/month-state/schedule-data/common-reducers";
 import { ScheduleDataActionCreator } from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { Button } from "../common-components";
 import { useScheduleConverter } from "./import-buttons/hooks/use-schedule-converter";
@@ -13,6 +12,7 @@ import { ScheduleKey } from "../../api/persistance-store.model";
 import { MonthSwitchActionCreator } from "../../state/reducers/month-state/schedule-data/month-switch.action-creator";
 import { LocalStorageProvider } from "../../api/local-storage-provider.model";
 import { MonthDataModel } from "../../common-models/schedule-data.model";
+import { MonthHelper } from "../../helpers/month.helper";
 
 export function EmptyMonthButtons(): JSX.Element {
   const { month_number: currentMonth, year: currentYear } = useSelector(
@@ -20,7 +20,7 @@ export function EmptyMonthButtons(): JSX.Element {
   );
   const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
-  const prevDate = getDateWithMonthOffset(currentMonth, currentYear, -1);
+  const prevDate = MonthHelper.getDateWithMonthOffset(currentMonth, currentYear, -1);
 
   const [hasValidPrevious, setHasValidPrevious] = useState<boolean>(false);
   const { monthModel, setSrcFile } = useScheduleConverter();
@@ -58,7 +58,7 @@ export function EmptyMonthButtons(): JSX.Element {
 
   useEffect(() => {
     if (monthModel) {
-      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel, true);
+      const action = ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(monthModel);
       dispatch(action);
     }
   }, [monthModel, dispatch]);
