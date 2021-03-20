@@ -6,18 +6,14 @@ import { useWorkerHoursInfo } from "../schedule-page/table/schedule/use-worker-h
 import { SummaryTableCell } from "./summarytable-cell.component";
 import { summaryRowDataCy, SummaryTableRowOptions } from "./summarytable-row.models";
 
-export function SummaryTableRowF({
-  uuid,
-  workerName,
-  rowIndex,
-}: SummaryTableRowOptions): JSX.Element {
+export function SummaryTableRowF({ workerName, rowIndex }: SummaryTableRowOptions): JSX.Element {
   const workerHours = useWorkerHoursInfo(workerName).asArray();
   return (
     <tr className="row" id="summaryRow" data-cy={summaryRowDataCy(rowIndex)}>
       {workerHours.map((cellData, cellIndex) => {
         return (
           <SummaryTableCell
-            key={`${cellData}_${cellIndex}_${uuid}}`}
+            key={`${cellData}_${cellIndex}`}
             value={cellData}
             cellIndex={cellIndex}
           />

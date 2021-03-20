@@ -9,6 +9,7 @@ import { useJiraLikeDrawer } from "./jira-like-drawer-context";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ScheduleMode } from "../../schedule-page/table/schedule/schedule-state.model";
 
 export interface StyleProps {
   width: number;
@@ -28,7 +29,7 @@ const useStyles = makeStyles<Theme, StyleProps>({
 
 export default function JiraLikeDrawer(width): JSX.Element {
   const isEditMode = useSelector(
-    (state: ApplicationStateModel) => state.actualState.mode === "edit"
+    (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
   );
   const classes = useStyles(width);
   const { title, open, setOpen, childrenComponent } = useJiraLikeDrawer();

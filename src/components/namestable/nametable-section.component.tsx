@@ -2,27 +2,25 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import classNames from "classnames/bind";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { VerboseDate } from "../../common-models/month-info.model";
 import { ScheduleError } from "../../common-models/schedule-error.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
 import { WorkerInfoModel, WorkerType } from "../../common-models/worker-info.model";
 import { ArrayHelper } from "../../helpers/array.helper";
-import { Sections } from "../../logic/providers/schedule-provider.model";
 import { DataRow } from "../../logic/schedule-logic/data-row";
-import { MetadataLogic } from "../../logic/schedule-logic/metadata.logic";
-import { ShiftsInfoLogic } from "../../logic/schedule-logic/shifts-info.logic";
+import { ApplicationStateModel } from "../../state/models/application-state.model";
 import { ErrorTooltipProvider } from "../schedule-page/table/schedule/schedule-parts/error-tooltip-provider.component";
 import { BaseSectionOptions } from "../schedule-page/table/schedule/sections/base-section/base-section.component";
-import { ScheduleLogicContext } from "../schedule-page/table/schedule/use-schedule-state";
-
+import { useMonthInfo } from "../schedule-page/validation-drawer/use-verbose-dates";
 import WorkerDrawerComponent, {
   WorkerDrawerMode,
   WorkerDrawerWorkerInfo,
 } from "../workers-page/workers-tab/worker-drawer.component";
 
 export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "errorSelector"> {
-  dataRow: DataRow[];
+  data: DataRow[];
   workerType?: WorkerType;
   clickable: boolean;
 }
@@ -30,20 +28,18 @@ export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "error
 const initialWorkerInfo: WorkerInfoModel = { name: "", time: 0 };
 
 export function NameTableSection({
-  dataRow,
+  data: dataRow,
   workerType,
   errorSelector,
   clickable,
 }: NameTableSectionOptions): JSX.Element {
   const [open, setIsOpen] = useState(false);
   const [workerInfo, setWorkerInfo] = useState<WorkerDrawerWorkerInfo>(initialWorkerInfo);
+  const { verboseDates } = useMonthInfo();
 
-  const scheduleLogic = useContext(ScheduleLogicContext);
-  const sectionKey: keyof Sections =
-    workerType === WorkerType.NURSE ? "NurseInfo" : "BabysitterInfo";
-
-  const shifts = scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey)?.workerShifts;
-  const verboseDates = scheduleLogic?.getSection<MetadataLogic>("Metadata")?.verboseDates;
+  const { shifts } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
+  );
 
   function toggleDrawer(open: boolean, name: string): void {
     if (workerType) {

@@ -26,6 +26,7 @@ export class ScheduleDataActionCreator {
   ): ThunkFunction<ScheduleDataModel | MonthDataModel> {
     return async (dispatch): Promise<void> => {
       const destinations = [PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME];
+      debugger;
       destinations.forEach((destination) => {
         const addNewSchedule = {
           type: createActionName(destination, ScheduleActionType.ADD_NEW),
@@ -102,7 +103,6 @@ export class ScheduleDataActionCreator {
       const primaryMonthDM = await this.getMonthPrimaryRevisionDM(
         cropScheduleDMToMonthDM(newSchedule)
       );
-
       dispatch(this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM));
     };
   }
@@ -132,6 +132,7 @@ export class ScheduleDataActionCreator {
   }
 
   static updateSchedule(newScheduleModel: ScheduleDataModel): ScheduleActionModel {
+    // TODO: make separate action creator for Tmp
     return {
       type: createActionName(TEMPORARY_SCHEDULE_NAME, ScheduleActionType.UPDATE),
       payload: newScheduleModel,

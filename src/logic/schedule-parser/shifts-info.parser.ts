@@ -10,14 +10,27 @@ import { ShiftCode } from "../../common-models/shift-info.model";
 import { ShiftsProvider } from "../providers/shifts-provider.model";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
-import { WorkerType, WorkerTypeHelper } from "../../common-models/worker-info.model";
+import { WorkerGroup, WorkerType, WorkerTypeHelper } from "../../common-models/worker-info.model";
 import { StringHelper } from "../../helpers/string.helper";
 
 export class ShiftsInfoParser extends ShiftsProvider {
+  get availableWorkersGroup(): { [workerName: string]: WorkerGroup } {
+    const result = {};
+    Object.keys(this.workerShifts).forEach((workerName) => {
+      result[workerName] = `Zespół ${this.groupNumber}`;
+    });
+    return result;
+  }
+
   private _sectionRows: { [key: string]: DataRowParser } = {};
   private _parseErrors: ScheduleError[] = [];
 
-  constructor(typeOfPersonel: WorkerType, private metaData: MetaDataParser, data?: string[][]) {
+  constructor(
+    typeOfPersonel: WorkerType,
+    private metaData: MetaDataParser,
+    private groupNumber: number,
+    data?: string[][]
+  ) {
     super();
 
     if (data) {

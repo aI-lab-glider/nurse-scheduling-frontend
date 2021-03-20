@@ -2,27 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { WorkerType } from "../../../../common-models/worker-info.model";
-import { ShiftsSectionComponent } from "./sections/shifts-section/shifts-section.component";
-import { FoundationInfoComponent } from "./sections/foundation-info-section/foundation-info.component";
-import { TimeTableComponent } from "../../../timetable/timetable.component";
-import { NameTableComponent } from "../../../namestable/nametable.component";
-import { SummaryTableComponent } from "../../../summarytable/summarytable.component";
-import { OvertimeHeaderComponent } from "../../../overtime-header-table/overtime-header.component";
-import { ScheduleComponentState } from "./schedule-state.model";
-import { ScheduleFoldingSection } from "./schedule-parts/schedule-folding-section.component";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { OvertimeHeaderComponent } from "../../../overtime-header-table/overtime-header.component";
+import { TimeTableComponent } from "../../../timetable/timetable.component";
+import { ScheduleFoldingSection } from "./schedule-parts/schedule-folding-section.component";
+import { FoundationInfoComponent } from "./sections/foundation-info-section/foundation-info.component";
+import { WorkerInfoSection } from "./sections/worker-info-section/worker-info-section.component";
+import { useWorkerGroups } from "./use-worker-groups";
 
-interface ScheduleComponentOptions {
-  schedule: ScheduleComponentState;
-}
-
-export function ScheduleComponent({
-  schedule: scheduleLocalState,
-}: ScheduleComponentOptions): JSX.Element {
-  const areNursesPresent = scheduleLocalState.nurseShiftsSection?.length !== 0;
-  const areBabysittersPresent = scheduleLocalState.babysitterShiftsSection?.length !== 0;
+export function ScheduleComponent(): JSX.Element {
+  const workerGroups = useWorkerGroups();
 
   const { time } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.employee_info
@@ -44,99 +34,21 @@ export function ScheduleComponent({
         <tr className="sectionContainer">
           <td />
           <td>
-            <TimeTableComponent scheduleLocalState={scheduleLocalState} />
+            <TimeTableComponent />
           </td>
           <td className="summaryContainer">
             <OvertimeHeaderComponent data={["norma", "aktualne", "różnica"]} />
           </td>
         </tr>
-        <ScheduleFoldingSection name="Pielęgniarki">
-          {areNursesPresent && (
-            <tr className="sectionContainer">
-              <td>
-                <NameTableComponent
-                  uuid={scheduleLocalState.uuid}
-                  workerType={WorkerType.NURSE}
-                  data={scheduleLocalState.nurseShiftsSection}
-                  clickable={true}
-                />
-              </td>
-              <td>
-                <table>
-                  <tbody className="table" data-cy="nurseShiftsTable">
-                    <ShiftsSectionComponent
-                      uuid={scheduleLocalState.uuid}
-                      workerType={WorkerType.NURSE}
-                      data={scheduleLocalState.nurseShiftsSection}
-                    />
-                  </tbody>
-                </table>
-              </td>
-              <td className="summaryContainer">
-                <SummaryTableComponent
-                  uuid={scheduleLocalState.uuid}
-                  data={scheduleLocalState.nurseShiftsSection}
-                  workerType={WorkerType.NURSE}
-                />
-              </td>
-            </tr>
-          )}
-        </ScheduleFoldingSection>
 
-        <ScheduleFoldingSection name="Opiekunowie">
-          {areBabysittersPresent && (
-            <tr className="sectionContainer">
-              <td>
-                <NameTableComponent
-                  uuid={scheduleLocalState.uuid}
-                  workerType={WorkerType.OTHER}
-                  data={scheduleLocalState.babysitterShiftsSection}
-                  clickable={true}
-                />
-              </td>
-              <td>
-                <table>
-                  <tbody className="table" data-cy="otherShiftsTable">
-                    <ShiftsSectionComponent
-                      uuid={scheduleLocalState.uuid}
-                      workerType={WorkerType.OTHER}
-                      data={scheduleLocalState.babysitterShiftsSection}
-                    />
-                  </tbody>
-                </table>
-              </td>
-              <td className="summaryContainer">
-                <SummaryTableComponent
-                  uuid={scheduleLocalState.uuid}
-                  data={scheduleLocalState.babysitterShiftsSection}
-                  workerType={WorkerType.OTHER}
-                />
-              </td>
-            </tr>
-          )}
-        </ScheduleFoldingSection>
+        {Object.entries(workerGroups).map(([groupName, workers]) => (
+          <ScheduleFoldingSection name={groupName}>
+            <WorkerInfoSection data={workers} sectionName={groupName} />
+          </ScheduleFoldingSection>
+        ))}
 
         <ScheduleFoldingSection name="Informacje">
-          <tr className="sectionContainer">
-            <td>
-              <NameTableComponent
-                uuid={scheduleLocalState.uuid}
-                data={scheduleLocalState.foundationInfoSection}
-                clickable={false}
-              />
-            </td>
-            <td>
-              <table>
-                <tbody className="table" data-cy="foundationInfoSection">
-                  <FoundationInfoComponent
-                    uuid={scheduleLocalState.uuid}
-                    data={scheduleLocalState.foundationInfoSection}
-                  />
-                </tbody>
-              </table>
-            </td>
-            <td />
-          </tr>
+          <FoundationInfoComponent />
         </ScheduleFoldingSection>
       </tbody>
     </table>

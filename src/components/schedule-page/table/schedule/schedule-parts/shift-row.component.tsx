@@ -19,9 +19,12 @@ export interface ShiftRowOptions extends BaseRowOptions {
 export function ShiftRowComponent(options: ShiftRowOptions): JSX.Element {
   const { dataRow } = options;
   const styledDataRow = useMemo(() => {
-    let data = dataRow.rowData(false);
-    data = applyScheduleStyling(data);
-    return new DataRow(dataRow.rowKey, data);
+    const data = dataRow.rowData(false) as ShiftCode[];
+    const styles = applyScheduleStyling(data).map((styledItem) => ({
+      ...styledItem,
+      workerName: dataRow.rowKey,
+    }));
+    return new DataRow(dataRow.rowKey, styles);
   }, [dataRow]);
   return (
     <BaseRowComponent

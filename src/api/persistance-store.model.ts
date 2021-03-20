@@ -7,8 +7,8 @@ import { ActionModel } from "../state/models/action.model";
 import { ApplicationStateModel } from "../state/models/application-state.model";
 import { ArrayPositionPointer } from "../helpers/array.helper";
 
-export type ThunkFunction<T> = (
-  dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<T>>,
+export type ThunkFunction<TDispatchedActionPayload> = (
+  dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<TDispatchedActionPayload>>,
   getState: () => ApplicationStateModel
 ) => Promise<unknown> | unknown;
 

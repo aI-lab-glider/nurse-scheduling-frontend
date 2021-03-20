@@ -4,6 +4,11 @@
 
 /* eslint-disable @typescript-eslint/camelcase */
 
+import _ from "lodash";
+import { ThunkDispatch } from "redux-thunk";
+import { LocalStorageProvider } from "../../api/local-storage-provider.model";
+import { ScheduleKey, ThunkFunction } from "../../api/persistance-store.model";
+import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
 import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
 import {
   ContractType,
@@ -11,16 +16,12 @@ import {
   WorkersInfoModel,
   WorkerType,
 } from "../../common-models/worker-info.model";
-import { ScheduleKey, ThunkFunction } from "../../api/persistance-store.model";
-import _ from "lodash";
-import { ScheduleActionType } from "./month-state/schedule-data/schedule.actions";
-import { LocalStorageProvider } from "../../api/local-storage-provider.model";
-import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
+import { WorkerInfoExtendedInterface } from "../../components/namestable/worker-edit";
 import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
-import { ThunkDispatch } from "redux-thunk";
 import { ActionModel } from "../models/action.model";
 import { ApplicationStateModel } from "../models/application-state.model";
-import { WorkerInfoExtendedInterface } from "../../components/namestable/worker-edit";
+import { ScheduleDataActionCreator } from "./month-state/schedule-data/schedule-data.action-creator";
+import { ScheduleActionType } from "./month-state/schedule-data/schedule.actions";
 
 export interface WorkerActionPayload {
   updatedShifts: ShiftInfoModel;
@@ -28,6 +29,16 @@ export interface WorkerActionPayload {
 }
 
 export class WorkerActionCreator {
+  static replaceWorkerShiftsInTmpSchedule(newWorkerShifts: ShiftInfoModel): ThunkFunction<unknown> {
+    newWorkerShifts = _.cloneDeep(newWorkerShifts);
+    return async (dispatch, getState): Promise<void> => {
+      const temporarySchedule = getState().actualState.temporarySchedule.present;
+      temporarySchedule.shifts = { ...temporarySchedule.shifts, ...newWorkerShifts };
+      const action = ScheduleDataActionCreator.updateSchedule(temporarySchedule);
+      dispatch(action);
+    };
+  }
+
   static addNewWorker(worker: WorkerInfoExtendedInterface): ThunkFunction<WorkerActionPayload> {
     return async (dispatch, getState): Promise<void> => {
       const actualSchedule = getState().actualState.persistentSchedule.present;
@@ -174,7 +185,6 @@ export class WorkerActionCreator {
       ...updatedSchedule.shifts,
       [workerName]: newWorkerShifts,
     };
-
     updatedSchedule.employee_info = {
       time: {
         ...updatedSchedule.employee_info.time,
@@ -187,6 +197,9 @@ export class WorkerActionCreator {
       contractType: {
         ...updatedSchedule.employee_info.contractType,
         [workerName]: contractType ?? ContractType.EMPLOYMENT_CONTRACT,
+      },
+      workerGroup: {
+        ...updatedSchedule.employee_info.workerGroup,
       },
     };
 

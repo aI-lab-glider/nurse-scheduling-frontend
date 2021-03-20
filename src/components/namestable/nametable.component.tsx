@@ -34,7 +34,7 @@ export function NameTableComponent(options: NameSectionOptions): JSX.Element {
   return (
     <div>
       <NameTableSection
-        dataRow={data}
+        data={data}
         workerType={workerType}
         errorSelector={nametableErrorSelector}
         clickable={clickable}

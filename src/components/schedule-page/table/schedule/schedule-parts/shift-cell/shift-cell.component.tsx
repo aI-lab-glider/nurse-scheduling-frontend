@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
 import { ShiftCode, SHIFTS } from "../../../../../../common-models/shift-info.model";
 import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
+import { ScheduleMode } from "../../schedule-state.model";
 import { baseCellDataCy, BaseCellOptions } from "../base-cell/base-cell.models";
 import { CellDetails } from "../base-cell/cell-details-content.component";
 import { Popper } from "../base-cell/popper";
@@ -28,6 +29,7 @@ function getShiftCode(value: string | number): ShiftCode {
 interface ShiftCellOptions extends BaseCellOptions {
   keepOn?: boolean;
   hasNext?: boolean;
+  workerName?: string;
 }
 
 export function getColor(value: string): string {
@@ -71,7 +73,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   }
 
   const isEditMode = useSelector(
-    (state: ApplicationStateModel) => state.actualState.mode === "edit"
+    (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
   );
   const shiftCode = getShiftCode(value);
   const keepOnClass = "keepOn" + keepOn + shiftCode;

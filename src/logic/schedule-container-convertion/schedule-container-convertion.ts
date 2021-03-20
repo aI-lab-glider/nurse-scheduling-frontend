@@ -97,6 +97,7 @@ export function cropShiftsToMonth(
   const { month, year } = scheduleKey;
   const days = MonthHelper.daysInMonth(month, year).length;
   const copiedShifts = _.cloneDeep(shifts);
+  debugger;
   Object.keys(copiedShifts).forEach((key) => {
     copiedShifts[key] = copiedShifts[key].slice(startFromIndex, startFromIndex + days);
   });

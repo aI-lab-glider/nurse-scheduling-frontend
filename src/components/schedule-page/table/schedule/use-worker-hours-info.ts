@@ -11,10 +11,11 @@ import {
   ApplicationStateModel,
   ScheduleStateModel,
 } from "../../../../state/models/application-state.model";
+import { ScheduleMode } from "./schedule-state.model";
 
 export function useWorkerHoursInfo(workerName: string): WorkerHourInfo {
   const isEditMode = useSelector(
-    (state: ApplicationStateModel) => state.actualState.mode === "edit"
+    (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
   );
   const scheduleKey: keyof ScheduleStateModel = isEditMode
     ? "temporarySchedule"

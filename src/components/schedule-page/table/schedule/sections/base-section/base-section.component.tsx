@@ -1,21 +1,19 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   GroupedScheduleErrors,
   ScheduleError,
 } from "../../../../../../common-models/schedule-error.model";
 import { DataRowHelper } from "../../../../../../helpers/data-row.helper";
-import { Sections } from "../../../../../../logic/providers/schedule-provider.model";
 import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
 import { BaseCellComponent } from "../../schedule-parts/base-cell/base-cell.component";
 import { BaseCellOptions } from "../../schedule-parts/base-cell/base-cell.models";
 import { BaseRowComponent } from "../../schedule-parts/base-row.component";
 import { PivotCell } from "../../schedule-parts/hooks/use-cell-selection";
 import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
-import { ScheduleLogicContext } from "../../use-schedule-state";
-import { useSelectionMatrix } from "./use-selection-matrix";
+import { SelectionMatrix, useSelectionMatrix } from "./use-selection-matrix";
 
 export enum DirectionKey {
   ArrowRight = "ArrowRight",
@@ -26,12 +24,12 @@ export enum DirectionKey {
 
 type PointerPosition = { row: number; cell: number };
 export interface BaseSectionOptions {
-  uuid: string;
   data?: DataRow[];
   cellComponent?: React.FC<BaseCellOptions>;
+  sectionKey: string;
   rowComponent?: React.FC<ShiftRowOptions>;
-  sectionKey: keyof Sections;
   onRowKeyClicked?: (rowIndex: number) => void;
+  updateData: (selectionMatrix: SelectionMatrix, oldData: DataRow[], newValue: string) => void;
   errorSelector?: (
     rowKey: string,
     cellIndex: number,
@@ -40,14 +38,13 @@ export interface BaseSectionOptions {
 }
 
 function BaseSectionComponentF({
-  uuid,
   data = [],
   cellComponent = BaseCellComponent,
   rowComponent: RowComponent = BaseRowComponent,
-  sectionKey,
+  updateData,
   errorSelector,
+  sectionKey,
 }: BaseSectionOptions): JSX.Element {
-  const scheduleLogic = useContext(ScheduleLogicContext);
   const [pointerPosition, setPointerPosition] = useState<PointerPosition>({ row: -1, cell: -1 });
 
   function isInRange(position: PointerPosition): boolean {
@@ -105,22 +102,22 @@ function BaseSectionComponentF({
     [selectionMatrix, setSelectionMatrix, setPointerPosition]
   );
 
+  // to remove
   const onSave = useCallback(
     (newValue: string): void => {
-      scheduleLogic?.updateSection(sectionKey, selectionMatrix, newValue);
+      updateData?.(selectionMatrix, data, newValue);
       resetSelection();
     },
-    [selectionMatrix, sectionKey, scheduleLogic, resetSelection]
+    [selectionMatrix, updateData, resetSelection, data]
   );
+  //
 
   return (
     <>
       {data.map((dataRow, rowInd) => (
         <RowComponent
           selection={[...selectionMatrix[rowInd]]}
-          uuid={uuid}
-          sectionKey={sectionKey}
-          key={`${dataRow.rowKey}${rowInd}_${uuid}`}
+          key={`${dataRow.rowKey}${rowInd}`}
           rowIndex={rowInd}
           dataRow={dataRow}
           cellComponent={cellComponent}
@@ -131,6 +128,7 @@ function BaseSectionComponentF({
           onDragEnd={(rowIndex, cellIndex): void =>
             setPointerPosition({ row: rowIndex, cell: cellIndex })
           }
+          sectionKey={sectionKey}
           onSave={onSave}
           onBlur={resetSelection}
           isEditable={dataRow.isEditable}
@@ -144,7 +142,6 @@ function BaseSectionComponentF({
 }
 
 export const BaseSectionComponent = React.memo(BaseSectionComponentF, (prev, next) => {
-  const areEqual =
-    prev.uuid === next.uuid && DataRowHelper.areDataRowArraysEqual(prev.data, next.data);
+  const areEqual = DataRowHelper.areDataRowArraysEqual(prev.data, next.data);
   return areEqual;
 });

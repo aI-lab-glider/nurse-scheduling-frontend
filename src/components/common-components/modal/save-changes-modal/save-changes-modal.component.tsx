@@ -2,15 +2,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import React, { useContext } from "react";
-import { Button } from "../../button-component/button.component";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
-import DefaultModal from "../modal.component";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
-import { ScheduleLogicContext } from "../../../schedule-page/table/schedule/use-schedule-state";
-import { useSelector } from "react-redux";
+import { ScheduleDataActionCreator } from "../../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { Button } from "../../button-component/button.component";
+import DefaultModal from "../modal.component";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -81,10 +81,10 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
   const title = "Niezapisane zmiany w grafiku";
   const { persistentSchedule } = useSelector((state: ApplicationStateModel) => state.actualState);
   const persistent = persistentSchedule.present;
-  const scheduleLogic = useContext(ScheduleLogicContext);
 
+  const dispatch = useDispatch();
   const fetchPrevScheduleVersion = (): void => {
-    scheduleLogic?.updateActualRevisionToGivenSchedule(persistent);
+    dispatch(ScheduleDataActionCreator.setScheduleStateAndSaveToDb(persistent));
   };
 
   function handleClose(): void {

@@ -4,7 +4,9 @@
 
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import React, { useContext, useState } from "react";
+import classNames from "classnames/bind";
+import _ from "lodash";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import backend from "../../../api/backend";
 import { NetworkErrorCode, ScheduleError } from "../../../common-models/schedule-error.model";
@@ -18,17 +20,17 @@ import ConditionalLink from "../../common-components/conditional-link/conditiona
 import { useJiraLikeDrawer } from "../../common-components/drawer/jira-like-drawer-context";
 import SaveChangesModal from "../../common-components/modal/save-changes-modal/save-changes-modal.component";
 import { useNotification } from "../../common-components/notification/notification.context";
-import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
 import ValidationDrawerContentComponent from "../validation-drawer/validation-drawer.component";
-import _ from "lodash";
-import classNames from "classnames/bind";
+import { useTemporarySchedule } from "./use-temporary-schedule";
 
 interface EditPageToolbarOptions {
   closeEdit: () => void;
 }
 
 export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Element {
-  const scheduleLogic = useContext(ScheduleLogicContext);
+  const schedule = useSelector(
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present
+  );
 
   const { primaryRevision } = useSelector((app: ApplicationStateModel) => app.actualState);
   const { createNotification } = useNotification();
@@ -43,7 +45,6 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
   const [undoCounter, setUndoCounter] = useState(0);
 
   async function updateScheduleErrors(): Promise<void> {
-    const schedule = scheduleLogic?.schedule.getDataModel();
     if (schedule) {
       let response: ScheduleError[];
       try {
@@ -77,8 +78,9 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
     );
   }
 
+  const { setAsPersistent } = useTemporarySchedule();
   function handleSaveClick(): void {
-    scheduleLogic?.updateActualRevision();
+    setAsPersistent();
     createNotification({ type: "success", message: "Plan został zapisany!" });
   }
 

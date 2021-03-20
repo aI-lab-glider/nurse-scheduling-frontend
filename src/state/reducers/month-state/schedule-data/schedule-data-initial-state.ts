@@ -12,7 +12,12 @@ import { MonthHelper } from "../../../../helpers/month.helper";
 import { PrimaryMonthRevisionDataModel } from "../../../models/application-state.model";
 
 /* eslint-disable @typescript-eslint/camelcase */
-const employeeInfoinitialState: WorkersInfoModel = { time: {}, type: {}, contractType: {} };
+const employeeInfoinitialState: WorkersInfoModel = {
+  time: {},
+  type: {},
+  contractType: {},
+  workerGroup: {},
+};
 const initialDate = new Date();
 const monthDays = MonthHelper.daysInMonth(initialDate.getMonth(), initialDate.getFullYear());
 

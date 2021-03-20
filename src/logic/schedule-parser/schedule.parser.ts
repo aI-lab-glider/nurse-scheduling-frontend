@@ -2,15 +2,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
 import { WorkerType } from "../../common-models/worker-info.model";
+import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
+import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
 import { ChildrenInfoParser } from "./children-info.parser";
+import { ExtraWorkersInfoParser } from "./extra-workers-info.parser";
+import { FoundationInfoHeaders, FoundationInfoParser } from "./foundation-info.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { ShiftsInfoParser } from "./shifts-info.parser";
-import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
-import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
-import { FoundationInfoHeaders, FoundationInfoParser } from "./foundation-info.parser";
-import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
-import { ExtraWorkersInfoParser } from "./extra-workers-info.parser";
 import { WorkersInfoParser } from "./workers-info.parser";
 
 export class ScheduleParser implements ScheduleProvider {
@@ -36,7 +36,7 @@ export class ScheduleParser implements ScheduleProvider {
 
   private parseSections(rawSchedule: string[][][]): Sections {
     let nurses;
-    let babysiters;
+    let babysitters;
 
     const foundationInfoHeaders = Object.values(FoundationInfoHeaders);
 
@@ -60,48 +60,45 @@ export class ScheduleParser implements ScheduleProvider {
 
     rawSchedule.splice(rawSchedule.indexOf(foundationInfoRaw!), 1);
 
+    const nurseGroupNumber = 1;
+    const babysittersGroupNumber = 2;
     rawSchedule.forEach((r) => {
       if (r) {
         if (!nurses) {
-          nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata, r);
-        } else if (!babysiters) {
-          babysiters = new ShiftsInfoParser(WorkerType.OTHER, metadata, r);
+          nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata, nurseGroupNumber, r);
+        } else if (!babysitters) {
+          babysitters = new ShiftsInfoParser(WorkerType.OTHER, metadata, babysittersGroupNumber, r);
         }
       }
     });
 
     if (!nurses) {
-      nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata);
+      nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata, nurseGroupNumber);
     }
-    if (!babysiters) {
-      babysiters = new ShiftsInfoParser(WorkerType.OTHER, metadata);
+    if (!babysitters) {
+      babysitters = new ShiftsInfoParser(WorkerType.OTHER, metadata, babysittersGroupNumber);
     }
 
     const parsers: FoundationInfoOptions = {
       ChildrenInfo: children,
-      NurseInfo: nurses,
-      BabysitterInfo: babysiters,
+      WorkerGroups: [nurses, babysitters],
       ExtraWorkersInfo: extraWorkers,
     };
 
     const foundationParser = new FoundationInfoParser(parsers);
     return {
-      NurseInfo: nurses,
-      BabysitterInfo: babysiters,
+      WorkerGroups: [nurses, babysitters],
       FoundationInfo: foundationParser,
       Metadata: metadata,
     };
   }
 
   getWorkerTypes(): { [key: string]: WorkerType } {
+    const workers = this.workersInfo.workerDescriptions;
     const result = {};
-    Object.keys(this.sections.BabysitterInfo.workerShifts).forEach((babysitter) => {
-      result[babysitter] = WorkerType.OTHER;
+    workers.forEach((worker) => {
+      result[worker.name] = worker.type;
     });
-    Object.keys(this.sections.NurseInfo.workerShifts).forEach((nurse) => {
-      result[nurse] = WorkerType.NURSE;
-    });
-
     return result;
   }
 }

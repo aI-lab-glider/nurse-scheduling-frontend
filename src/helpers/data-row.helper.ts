@@ -8,7 +8,7 @@ import { ArrayHelper } from "./array.helper";
 export class DataRowHelper {
   public static dataRowsAsValueDict<T>(
     dataRows: DataRowModel[],
-    includeNulls: boolean
+    includeNulls = false
   ): { [key: string]: T[] } {
     return ArrayHelper.arrayToObject<DataRowModel, T[]>(
       dataRows,
@@ -36,11 +36,11 @@ export class DataRowHelper {
     });
   }
 
-  public static copyWithReplaced(
+  public static copyWithReplaced<TData>(
     booleanMatrix: boolean[][],
-    source: DataRow[],
-    newValue: string
-  ): DataRow[] {
+    source: DataRow<TData>[],
+    newValue: TData
+  ): DataRow<TData>[] {
     const copy = source.map(DataRowHelper.deepCopy);
     copy.forEach((row, rowInd) => {
       row.updateData((data) =>
@@ -55,7 +55,7 @@ export class DataRowHelper {
     return copy;
   }
 
-  public static deepCopy(dataRow: DataRow): DataRow {
+  public static deepCopy<TData = string>(dataRow: DataRow<TData>): DataRow<TData> {
     return new DataRow(dataRow.rowKey, [...dataRow.rowData(true)]);
   }
 

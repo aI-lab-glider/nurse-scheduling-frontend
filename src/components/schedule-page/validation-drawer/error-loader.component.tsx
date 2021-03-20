@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import backend from "../../../api/backend";
 import ok from "../../../assets/images/ok.svg";
@@ -12,7 +12,6 @@ import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
 import { Button } from "../../common-components";
-import { ScheduleLogicContext } from "../table/schedule/use-schedule-state";
 import ErrorList from "./error-list.component";
 import { SpanErrors } from "./span-errors.component";
 import { ErrorLoaderState, Props } from "./validation-drawer.component";
@@ -27,7 +26,7 @@ interface ErrorLoaderOptions {
 export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.Element {
   const { setOpen, isNetworkError } = options;
   const [spinnerAgain, setSpinnerAgain] = useState(false);
-  const scheduleLogic = useContext(ScheduleLogicContext);
+  // const scheduleLogic = useContext(ScheduleLogicContext);
   const { primaryRevision } = useSelector((app: ApplicationStateModel) => app.actualState);
 
   const dispatcher = useDispatch();
@@ -36,9 +35,12 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
     setOpen(false);
   }
 
+  const schedule = useSelector(
+    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present
+  );
   const reload = React.useCallback(() => {
     async function updateScheduleErrors(): Promise<void> {
-      const schedule = scheduleLogic?.schedule.getDataModel();
+      // const schedule = scheduleLogic?.schedule.getDataModel();
       if (schedule) {
         let response: ScheduleError[];
         try {
@@ -59,7 +61,7 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
     setSpinnerAgain(true);
     updateScheduleErrors();
     setTimeout(() => setSpinnerAgain(false), 4000);
-  }, [dispatcher, scheduleLogic, primaryRevision]);
+  }, [dispatcher, primaryRevision, schedule]);
 
   return (
     <>

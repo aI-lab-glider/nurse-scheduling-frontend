@@ -1,54 +1,50 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useContext, useMemo } from "react";
+import React from "react";
 import { VerboseDate } from "../../common-models/month-info.model";
-import { DataRowHelper } from "../../helpers/data-row.helper";
 import { DataRow } from "../../logic/schedule-logic/data-row";
 import { MonthInfoLogic } from "../../logic/schedule-logic/month-info.logic";
-import { ScheduleLogicContext } from "../schedule-page/table/schedule/use-schedule-state";
+import { useMonthInfo } from "../schedule-page/validation-drawer/use-verbose-dates";
 import { TimeTableCell } from "./timetable-cell.component";
 
 export interface TimeTableRowOptions {
-  uuid: string;
   dataRow: DataRow;
 }
 
-export function TimeTableRowF({ dataRow, uuid }: TimeTableRowOptions): JSX.Element {
-  const scheduleLogic = useContext(ScheduleLogicContext);
+export function TimeTableRow(): JSX.Element {
+  let { verboseDates, monthNumber: currMont } = useMonthInfo();
+
+  function createActualMonthData(): number[] {
+    const today = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+    return Array.from({ length: today.getDate() }, (_, i) => i + 1);
+  }
 
   function getVerboseDates(): [VerboseDate[], number] {
-    if (
-      scheduleLogic?.sections.Metadata?.verboseDates &&
-      scheduleLogic.sections.Metadata.verboseDates.length > 0
-    ) {
-      return [
-        scheduleLogic?.sections.Metadata?.verboseDates,
-        scheduleLogic.sections.Metadata.monthNumber,
-      ];
+    if (verboseDates && verboseDates.length > 0) {
+      return [verboseDates, currMont];
     } else {
       const today = new Date();
 
       const monthLogic = new MonthInfoLogic(
         today.getMonth(),
         today.getFullYear().toString(),
-        dataRow.rowData()
+        createActualMonthData()
       );
 
       return [monthLogic.verboseDates, monthLogic.monthNumber];
     }
   }
 
-  const [verboseDates, currMont] = getVerboseDates();
+  [verboseDates, currMont] = getVerboseDates();
 
-  const data = useMemo(() => dataRow.rowData(false), [dataRow]);
   return (
     <tr className="row" id="timetableRow">
-      {data.map((cellData, cellIndex) => {
+      {verboseDates.map((verboseDate, cellIndex) => {
         return (
           <TimeTableCell
-            key={`${dataRow.rowKey}_${cellData}_${cellIndex}${uuid}}`}
-            value={verboseDates[cellIndex]}
+            key={`${verboseDate.date}_${cellIndex}`}
+            value={verboseDate}
             currMonth={currMont}
             index={cellIndex}
           />
@@ -57,7 +53,3 @@ export function TimeTableRowF({ dataRow, uuid }: TimeTableRowOptions): JSX.Eleme
     </tr>
   );
 }
-
-export const TimeTableRow = React.memo(TimeTableRowF, (prev, next) => {
-  return DataRowHelper.areDataRowsEqual(prev.dataRow, next.dataRow) && prev.uuid === next.uuid;
-});
