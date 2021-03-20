@@ -10,7 +10,7 @@ import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/mont
 import { ScheduleContainerComponent } from "../schedule-container.component";
 
 interface ScheduleEditPageOptions {
-  closeEdit: () => void;
+  close: () => void;
 }
 
 export function ScheduleEditPage(options: ScheduleEditPageOptions): JSX.Element {
@@ -23,7 +23,7 @@ export function ScheduleEditPage(options: ScheduleEditPageOptions): JSX.Element 
     <>
       <UndoableHotkeys config={TEMPORARY_SCHEDULE_UNDOABLE_CONFIG} />
       <ScheduleLogicContext.Provider value={scheduleLogic}>
-        <EditPageToolbar closeEdit={options.closeEdit} />
+        <EditPageToolbar close={options.close} />
         <div className="schedule">
           <ScheduleContainerComponent schedule={scheduleLocalState} />
         </div>
