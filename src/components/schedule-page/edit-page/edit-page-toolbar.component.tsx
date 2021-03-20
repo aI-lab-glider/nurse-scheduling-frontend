@@ -24,10 +24,10 @@ import _ from "lodash";
 import classNames from "classnames/bind";
 
 interface EditPageToolbarOptions {
-  closeEdit: () => void;
+  close: () => void;
 }
 
-export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Element {
+export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element {
   const scheduleLogic = useContext(ScheduleLogicContext);
 
   const { primaryRevision } = useSelector((app: ApplicationStateModel) => app.actualState);
@@ -84,6 +84,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
 
   function askForSavingChanges(): void {
     if (anyChanges()) setIsSaveModalOpen(true);
+    else close();
   }
 
   function anyChanges(): boolean {
@@ -146,7 +147,7 @@ export function EditPageToolbar({ closeEdit }: EditPageToolbarOptions): JSX.Elem
             Wyjdź
           </Button>
           <SaveChangesModal
-            closeOptions={closeEdit}
+            closeOptions={close}
             handleSave={handleSaveClick}
             open={isSaveModalOpen}
             setOpen={setIsSaveModalOpen}

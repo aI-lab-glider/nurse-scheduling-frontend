@@ -72,7 +72,7 @@ export interface SaveChangesModalOptions {
   setOpen: (open: boolean) => void;
   open: boolean;
   handleSave: () => void;
-  closeOptions: () => void;
+  closeOptions: (editMode: boolean) => void;
 }
 
 export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.Element {
@@ -89,7 +89,7 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
 
   function handleClose(): void {
     setOpen(false);
-    closeOptions();
+    closeOptions(false);
   }
 
   function onSaveClick(): void {
