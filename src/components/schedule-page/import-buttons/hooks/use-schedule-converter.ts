@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useEffect, useState } from "react";
-import Excel from "exceljs";
+import Excel, { FillPattern } from "exceljs";
 import { MonthDataModel } from "../../../../common-models/schedule-data.model";
 import { InputFileErrorCode, ScheduleError } from "../../../../common-models/schedule-error.model";
 import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
@@ -13,6 +13,7 @@ import { fromBuffer } from "file-type/browser";
 import { useNotification } from "../../../common-components/notification/notification.context";
 import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
 import {
+  SHIFTS_WORKSHEET_NAME,
   WORKERS_WORKSHEET_NAME,
   WORKSHEET_NAME,
 } from "../../../../logic/schedule-exporter/schedule-export.logic";
@@ -111,6 +112,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
           cellsToAvoid.some((cellToAvoid) => setItem.trim().toLowerCase().includes(cellToAvoid))
         )) ||
       Array.from(rowValuesSet).some((setItem) => setItem.trim().toLowerCase().includes("grafik")) ||
+      Array.from(rowValuesSet).some((setItem) => setItem.trim().toLowerCase().includes("nazwa")) ||
       (rowValuesSet.size === 1 && rowValuesSet.has(""))
     );
   }
@@ -134,6 +136,31 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       });
     }
     return workers;
+  }
+
+  function extractShifts(workbook): Array<Array<string>> {
+    const shifts = Array<Array<string>>();
+    const shiftsWorkSheet = workbook.getWorksheet(SHIFTS_WORKSHEET_NAME);
+
+    if (shiftsWorkSheet) {
+      shiftsWorkSheet.eachRow(false, (row) => {
+        const rowValues = Array<string>();
+
+        let iter;
+        for (iter = 1; iter <= 5; iter++) {
+          rowValues.push(row.getCell(iter).text.trim().toLowerCase());
+        }
+
+        rowValues.push(
+          (row.getCell(iter).style.fill as FillPattern).fgColor?.argb?.toString() ?? ""
+        );
+
+        if (!isEmpty(rowValues)) {
+          shifts.push(rowValues);
+        }
+      });
+    }
+    return shifts;
   }
 
   function extractSchedule(workbook): Array<Array<Array<string>>> {
@@ -183,15 +210,17 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
   function readFileContent(workbook): void {
     const scheduleArray = extractSchedule(workbook);
     const workersArray = extractWorkers(workbook);
+    const shiftsArray = extractShifts(workbook);
 
     if (Object.keys(scheduleArray).length !== 0) {
-      const parser = new ScheduleParser(month, year, scheduleArray, workersArray);
+      const parser = new ScheduleParser(month, year, scheduleArray, workersArray, shiftsArray);
 
       setScheduleErrors([
         ...parser._parseErrors,
         ...parser.sections.Metadata.errors,
         ...parser.sections.FoundationInfo.errors,
         ...parser.workersInfo.errors,
+        ...parser.shiftsInfo.errors,
       ]);
       setMonthModel(cropScheduleDMToMonthDM(parser.schedule.getDataModel()));
 

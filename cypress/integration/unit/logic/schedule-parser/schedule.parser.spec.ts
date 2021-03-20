@@ -70,7 +70,7 @@ const expectedSchedule: ScheduleDataModel = {
 //#endregion
 
 describe("Schedule parser", () => {
-  const scheduleParser = new ScheduleParser(10, 2020, exampleData, []);
+  const scheduleParser = new ScheduleParser(10, 2020, exampleData, [], []);
   const result = scheduleParser.schedule.getDataModel();
   //todo update test
   // it("check if workerType was parsed correctly ", () => {

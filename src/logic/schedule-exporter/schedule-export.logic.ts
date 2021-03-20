@@ -30,6 +30,7 @@ const EMPTY_ROW = Array(100).fill("");
 
 export const WORKSHEET_NAME = "grafik";
 export const WORKERS_WORKSHEET_NAME = "pracownicy";
+export const SHIFTS_WORKSHEET_NAME = "zmiany";
 
 export interface ScheduleExportLogicOptions {
   scheduleModel: MonthDataModel;
@@ -37,6 +38,7 @@ export interface ScheduleExportLogicOptions {
   overtimeExport?: boolean;
   extraWorkersExport?: boolean;
 }
+
 export class ScheduleExportLogic {
   private scheduleModel: MonthDataModel;
   private primaryScheduleModel?: PrimaryMonthRevisionDataModel;
@@ -65,10 +67,16 @@ export class ScheduleExportLogic {
   }
 
   public createWorkbook(revisionType: RevisionType): [string, xlsx.Workbook] {
-    const [workbook, scheduleWorkSheet, workersWorkSheet] = ScheduleExportLogic.createWorkArea();
+    const [
+      workbook,
+      scheduleWorkSheet,
+      workersWorkSheet,
+      shiftsWorkSheet,
+    ] = ScheduleExportLogic.createWorkArea();
 
     this.setScheduleWorkSheet(scheduleWorkSheet);
     this.setWorkersWorkSheet(workersWorkSheet);
+    this.setShiftsWorkSheet(shiftsWorkSheet);
 
     const workbookName = FileHelper.createMonthFilename(this.scheduleModel, revisionType);
     return [workbookName, workbook];
@@ -171,7 +179,48 @@ export class ScheduleExportLogic {
     workSheet.getRow(1).font = { bold: true };
   }
 
-  private static createWorkArea(): [xlsx.Workbook, xlsx.Worksheet, xlsx.Worksheet] {
+  private setShiftsWorkSheet(workSheet: xlsx.Worksheet): void {
+    workSheet.pageSetup.showGridLines = true;
+    workSheet.pageSetup.fitToPage = true;
+    workSheet.pageSetup.fitToHeight = 1;
+    workSheet.pageSetup.fitToWidth = 1;
+    workSheet.pageSetup.horizontalCentered = true;
+
+    const shiftsInfoArray = ScheduleExportLogic.createShiftsInfoSection(this.scheduleModel);
+
+    const colLens = shiftsInfoArray[0].map((_, colIndex) =>
+      Math.max(...shiftsInfoArray.map((row) => row[colIndex].toString().length))
+    );
+
+    workSheet.addRows(shiftsInfoArray);
+
+    colLens.forEach((len, id) => {
+      workSheet.getColumn(id + 1).width = len + 4;
+    });
+
+    let iter;
+    for (iter = 3; iter <= workSheet.rowCount; iter++) {
+      const cell = workSheet.getCell(iter, 6);
+      cell.style.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: cell.text },
+      };
+      cell.value = "";
+    }
+
+    workSheet.getColumn(1).alignment = { vertical: "middle", horizontal: "left" };
+    workSheet.getColumn(2).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getColumn(3).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getColumn(4).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getColumn(5).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getColumn(6).alignment = { vertical: "middle", horizontal: "center" };
+
+    workSheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getRow(1).font = { bold: true };
+  }
+
+  private static createWorkArea(): [xlsx.Workbook, xlsx.Worksheet, xlsx.Worksheet, xlsx.Worksheet] {
     const workbook = new xlsx.Workbook();
     return [
       workbook,
@@ -180,6 +229,10 @@ export class ScheduleExportLogic {
         properties: { defaultColWidth: 5 },
       }),
       workbook.addWorksheet(WORKERS_WORKSHEET_NAME, {
+        pageSetup: { paperSize: 9, orientation: "landscape" },
+        properties: { defaultColWidth: 5 },
+      }),
+      workbook.addWorksheet(SHIFTS_WORKSHEET_NAME, {
         pageSetup: { paperSize: 9, orientation: "landscape" },
         properties: { defaultColWidth: 5 },
       }),
@@ -378,6 +431,26 @@ export class ScheduleExportLogic {
         WorkerTypeHelper.translateToShort(scheduleModel.employee_info?.type[name]),
         ContractTypeHelper.translateToShort(scheduleModel.employee_info?.contractType!?.[name]),
         scheduleModel.employee_info?.time[name],
+      ])
+    );
+    return [...workers];
+  }
+
+  private static createShiftsInfoSection(scheduleModel: MonthDataModel): (string | number)[][] {
+    const names = Object.values(scheduleModel.shift_types);
+
+    const workers: (string | number)[][] = [];
+
+    workers.push(["Nazwa", "Skrót", "Od", "Do", "Zmiana pracująca", "Kolor"]);
+    workers.push(EMPTY_ROW);
+    names.forEach((name) =>
+      workers.push([
+        name.name,
+        name.code,
+        name.from,
+        name.to,
+        name.isWorkingShift === true ? "TAK" : "NIE",
+        name.color,
       ])
     );
     return [...workers];
