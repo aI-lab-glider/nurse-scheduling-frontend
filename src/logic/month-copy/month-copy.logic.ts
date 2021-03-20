@@ -12,7 +12,7 @@ import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model"
 import { ArrayHelper } from "../../helpers/array.helper";
 import { createDatesForMonth, MonthInfoModel } from "../../common-models/month-info.model";
 import { ScheduleKey } from "../../api/persistance-store.model";
-import { MonthHelper } from "../../helpers/month.helper";
+import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../../helpers/month.helper";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { DEFAULT_CHILDREN_NUMBER } from "../schedule-parser/children-info.parser";
 import { DEFAULT_EXTRA_WORKERS_NUMBER } from "../schedule-parser/extra-workers.parser";
@@ -44,6 +44,9 @@ export function copyShifts(
   baseShifts: ShiftInfoModel
 ): ShiftInfoModel {
   const newMonthWorkersShifts: ShiftInfoModel = {};
+  const { daysMissingFromPrevMonth } = MonthHelper.calculateMissingFullWeekDays(currentScheduleKey);
+  const replacementStart = daysMissingFromPrevMonth > 0 ? NUMBER_OF_DAYS_IN_WEEK : 0;
+
   Object.keys(baseShifts).forEach((workerKey) => {
     const copiedShifts = copyMonthData(
       currentScheduleKey,
@@ -51,7 +54,10 @@ export function copyShifts(
       ShiftCode.W,
       currentScheduleShifts[workerKey]
     );
-    newMonthWorkersShifts[workerKey] = ShiftHelper.replaceFreeShiftsWithFreeDay(copiedShifts);
+    newMonthWorkersShifts[workerKey] = ShiftHelper.replaceFreeShiftsWithFreeDay(
+      copiedShifts,
+      replacementStart
+    );
   });
   return newMonthWorkersShifts;
 }
@@ -89,35 +95,28 @@ function copyMonthData<T>(
   const numberOfDaysToBeCopied = getNumberOfDaysToBeCopied(monthKey);
   const copyBase = cropMonthDataToFullWeeks(baseYear, baseMonth, baseMonthData);
   const copiedData = ArrayHelper.circularExtendToLength(copyBase, numberOfDaysToBeCopied);
-
   const currentMonthLength = MonthHelper.getMonthLength(monthKey.year, monthKey.month);
   currentMonthData = currentMonthData ?? Array(currentMonthLength).fill(defaultCurrentValue);
-  return concatWithLastWeekFromPrevMonth(monthKey, copiedData, baseMonthData, currentMonthData);
-}
 
-function concatWithLastWeekFromPrevMonth<T>(
-  monthKey: ScheduleKey,
-  copiedData: T[],
-  prevMonth: T[],
-  currentMonth: T[]
-): T[] {
-  const prevMonthLastWeek = MonthHelper.getMonthLastWeekData(monthKey, prevMonth, currentMonth);
-  return prevMonthLastWeek ? prevMonthLastWeek.concat(copiedData) : copiedData;
+  const isMonthStartInMonday = new Date(monthKey.year, monthKey.month).getDay() === 1;
+  if (isMonthStartInMonday) {
+    return copiedData;
+  } else {
+    const prevMonthLastWeekData = MonthHelper.getMonthLastWeekData(
+      monthKey.prevMonthKey,
+      baseMonthData,
+      currentMonthData
+    );
+    return prevMonthLastWeekData.concat(copiedData);
+  }
 }
-
+//returns always 4 or 5 weeks due by the algorithm which operates on whole weeks instead of months
 function getNumberOfDaysToBeCopied(monthKey: ScheduleKey): number {
-  const {
-    daysMissingFromNextMonth: daysEditedInPrevMonth,
-  } = MonthHelper.calculateMissingFullWeekDays(monthKey.prevMonthKey);
-  const { daysMissingFromNextMonth: daysFromNextMonth } = MonthHelper.calculateMissingFullWeekDays(
-    monthKey
-  );
-
-  return (
-    MonthHelper.getMonthLength(monthKey.year, monthKey.month) -
-    daysEditedInPrevMonth +
-    daysFromNextMonth
-  );
+  return MonthHelper.findFirstMonthMondayIdx(monthKey.year, monthKey.month) +
+    4 * NUMBER_OF_DAYS_IN_WEEK >=
+    MonthHelper.getMonthLength(monthKey.year, monthKey.month)
+    ? 4 * NUMBER_OF_DAYS_IN_WEEK
+    : 5 * NUMBER_OF_DAYS_IN_WEEK;
 }
 
 function cropMonthDataToFullWeeks<T>(year: number, month: number, monthData: T[]): T[] {

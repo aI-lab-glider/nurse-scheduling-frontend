@@ -4,7 +4,7 @@
 
 import { ShiftCode } from "../../../../src/common-models/shift-info.model";
 import { WorkerType } from "../../../../src/common-models/worker-info.model";
-import { FoundationInfoRowType, ScheduleName } from "../../../support/commands";
+import { FoundationInfoRowType } from "../../../support/commands";
 //#region Test data
 interface CheckFoundationInfoReadCorrectly {
   scheduleName: "childrens_extraworkers.xlsx" | "extraworkers_childrens.xlsx";

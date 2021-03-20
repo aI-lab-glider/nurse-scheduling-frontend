@@ -9,7 +9,12 @@ interface FoldingSectionOptions {
   name: string;
   children: ReactNode;
 }
-
+/**
+ * @description Function component which provides collapsing functionaliny for underlying children elements
+ * @param name - section name
+ * @param children - children elements
+ * @returns JSX.Element
+ */
 export function FoldingSection({ name, children }: FoldingSectionOptions): JSX.Element {
   const [opened, setOpened] = useState(false);
   return (
@@ -25,7 +30,7 @@ export function FoldingSection({ name, children }: FoldingSectionOptions): JSX.E
         </div>
         <hr className="middle" />
       </div>
-      {opened && children}
+      <div style={{ height: opened ? "initial" : "none" }}>{children}</div>
     </div>
   );
 }
