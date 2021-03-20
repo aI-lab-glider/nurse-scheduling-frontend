@@ -115,7 +115,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
           {Object.keys(exportOptions).map((key, index) => (
             <FormControlLabel
               style={{ color: "black" }}
-              key={index}
+              key={key + index}
               control={
                 <BlueCheckBox
                   checked={exportOptions[key].value}

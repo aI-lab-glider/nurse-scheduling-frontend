@@ -97,7 +97,7 @@ export function ScheduleComponent({
           </div>
         </div>
         {arraum.map((item, index) => {
-          return <ScheduleFoldingComponent {...item} key={index} />;
+          return <ScheduleFoldingComponent {...item} key={item.name} />;
         })}
         <ScheduleFoldingSection name="Informacje">
           <div className="sectionContainer">
