@@ -6,6 +6,7 @@ import { WorkerType } from "../../../../src/common-models/worker-info.model";
 import { ShiftCode } from "../../../../src/common-models/shift-info.model";
 import * as _ from "lodash";
 import { Simulate } from "react-dom/test-utils";
+import { keepOnShiftClassName } from "../../../../src/components/schedule-page/table/schedule/schedule-parts/base-cell/base-cell.models";
 import error = Simulate.error;
 
 const prevMonthDays = 6;
@@ -144,7 +145,7 @@ function validateHorizontalShifts(
       workerIdx,
       shiftIdx,
       selector: "highlighted-cell",
-    }).should("have.class", `keepOntrue${desiredShiftCode}`);
+    }).should("have.class", `${keepOnShiftClassName(true)}${desiredShiftCode}`);
   }
 }
 

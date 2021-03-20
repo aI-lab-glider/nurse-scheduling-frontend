@@ -13,6 +13,14 @@
     justify-content: space-between;
   }
 
+  .isToptrue {
+    border-top: 1px solid #d6d8e7;
+  }
+
+  .isLefttrue {
+    border-left: 1px solid #d6d8e7;
+  }
+
   .dayName {
     size: 14px;
     letter-spacing: 0.75px;
@@ -29,11 +37,12 @@
     width: 14.2%;
     height: 100%;
     background-color: white;
-    outline: 1px solid #d6d8e7;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     flex-direction: column;
+    border-bottom: 1px solid #d6d8e7;
+    border-right: 1px solid #d6d8e7;
   }
 
   .TopCellPart {
