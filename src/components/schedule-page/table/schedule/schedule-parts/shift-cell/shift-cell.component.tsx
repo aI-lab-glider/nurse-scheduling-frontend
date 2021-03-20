@@ -9,7 +9,12 @@ import { useSelector } from "react-redux";
 import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
 import { ShiftCode, SHIFTS } from "../../../../../../common-models/shift-info.model";
 import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
-import { baseCellDataCy, BaseCellOptions } from "../base-cell/base-cell.models";
+import {
+  baseCellDataCy,
+  BaseCellOptions,
+  hasNextShiftClassName,
+  keepOnShiftClassName,
+} from "../base-cell/base-cell.models";
 import { CellDetails } from "../base-cell/cell-details-content.component";
 import { Popper } from "../base-cell/popper";
 import useComponentVisible from "../base-cell/use-component-visible";
@@ -74,8 +79,8 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     (state: ApplicationStateModel) => state.actualState.mode === "edit"
   );
   const shiftCode = getShiftCode(value);
-  const keepOnClass = "keepOn" + keepOn + shiftCode;
-  const hasNextClass = "hasNext" + hasNext;
+  const keepOnClass = keepOnShiftClassName(keepOn) + shiftCode;
+  const hasNextClass = hasNextShiftClassName(hasNext);
 
   function _onValueChange(inputValue: string): void {
     onValueChange?.(getShiftCode(inputValue));
