@@ -26,6 +26,7 @@ import { ScheduleKey } from "./api/persistance-store.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
 import * as Sentry from "@sentry/react";
 import AppErrorModal from "./components/common-components/modal/app-error-modal/app-error.modal.component";
+import { LocalStorageProvider } from "./api/local-storage-provider.model";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -102,6 +103,10 @@ function App(): JSX.Element {
   useEffect(() => {
     fetchGlobalState();
   }, [fetchGlobalState]);
+
+  useEffect(() => {
+    new LocalStorageProvider().saveApplicationVersion().then();
+  }, []);
 
   const [open, setIsOpen] = useState(false);
   const fallback = useCallback(

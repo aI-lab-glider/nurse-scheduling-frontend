@@ -29,6 +29,7 @@ import { VerboseDateHelper } from "../helpers/verbose-date.helper";
 
 export const DATABASE_NAME = "nurse-scheduling";
 const APPLICATION_VERSION_TAG_DATABASE_KEY = "application_version_tag";
+const APPLICATION_VERSION_DEFAULT_TAG = "1.0.0";
 type MonthDMToRevisionKeyDict = { [revisionKey: string]: MonthDataModel };
 
 export class LocalStorageProvider extends PersistenceStoreProvider {
@@ -130,12 +131,12 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       db.put({
         _id: APPLICATION_VERSION_TAG_DATABASE_KEY,
         _rev: doc._rev,
-        version: version ? version : "",
+        version: version ? version : APPLICATION_VERSION_DEFAULT_TAG,
       });
     } catch (error) {
       db.put({
         _id: APPLICATION_VERSION_TAG_DATABASE_KEY,
-        version: version ? version : "",
+        version: version ? version : APPLICATION_VERSION_DEFAULT_TAG,
       });
     }
   }
