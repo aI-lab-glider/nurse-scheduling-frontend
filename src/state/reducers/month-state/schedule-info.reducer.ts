@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ScheduleMetadata } from "../../../common-models/schedule.model";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 import {
@@ -8,8 +9,6 @@ import {
   ScheduleActionModel,
   ScheduleActionType,
 } from "./schedule-data/schedule.actions";
-import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
-
 let uuid = 0;
 
 /* eslint-disable @typescript-eslint/camelcase */

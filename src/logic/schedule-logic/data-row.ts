@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { DataRowModel } from "../../common-models/data-row.model";
 
-export class DataRow implements DataRowModel {
+export class DataRow<TData = string> implements DataRowModel {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(private key: string, private data: any[] = [], public isEditable = true) {}
 
@@ -19,14 +19,14 @@ export class DataRow implements DataRowModel {
     this.isEditable = false;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public rowData(includeNulls = false, includeKey = false): any[] {
+  public rowData(includeNulls = false, includeKey = false): TData[] {
     const filteredRow = this.data.filter((c) => includeNulls || c != null);
     return includeKey ? [this.key, ...filteredRow] : filteredRow;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public updateData(updateCallback: (row: string[]) => any[]): DataRow {
+  public updateData<TReturn = unknown>(
+    updateCallback: (row: TData[]) => TReturn[]
+  ): DataRow<TData> {
     if (!this.isEditable) {
       return this;
     }
@@ -35,7 +35,7 @@ export class DataRow implements DataRowModel {
     return this;
   }
 
-  public setValue(indexes: number[], value: string): void {
+  public setValue(indexes: number[], value: TData): void {
     if (!this.isEditable) {
       return;
     }

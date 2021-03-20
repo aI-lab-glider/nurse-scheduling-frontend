@@ -14,6 +14,7 @@ import ReportIssueModal from "../modal/report-issue-modal/report-issue-modal.com
 import SettingsIcon from "@material-ui/icons/Settings";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../../state/app-config-context";
+import { ScheduleMode } from "../../schedule-page/table/schedule/schedule-state.model";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -43,7 +44,7 @@ export function HeaderComponent(): JSX.Element {
     const offset = monthDiff(new Date(year, monthNumber), new Date());
     dispatch(MonthSwitchActionCreator.switchToNewMonth(offset));
   }
-  const isInViewMode = applicationStateModel === "readonly";
+  const isInViewMode = applicationStateModel === ScheduleMode.Readonly;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   function onReportIssueClick(): void {

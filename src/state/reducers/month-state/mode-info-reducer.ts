@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { ActionModel } from "../../models/action.model";
-import { ScheduleMode } from "../../../components/schedule-page/table/schedule/use-schedule-state";
+import { ScheduleMode } from "../../../components/schedule-page/table/schedule/schedule-state.model";
 
 export enum ModeInfoReducer {
   SET_MODE = "SET_MODE",
@@ -21,7 +21,7 @@ export class ModeInfoActionCreator {
 }
 
 export function modeInfoReducer(
-  state: ScheduleMode = "readonly",
+  state: ScheduleMode = ScheduleMode.Readonly,
   action: ModeInfoActionModel
 ): ScheduleMode {
   switch (action.type) {

@@ -4,12 +4,17 @@
 import { Divider } from "@material-ui/core";
 import classNames from "classnames/bind";
 import React from "react";
-import { WorkerInfoModel, WorkerTypeHelper } from "../../common-models/worker-info.model";
+import {
+  ContractTypeHelper,
+  WorkerInfoModel,
+  WorkerTypeHelper,
+} from "../../common-models/worker-info.model";
 import { StringHelper } from "../../helpers/string.helper";
 import { useWorkerHoursInfo } from "../schedule-page/table/schedule/use-worker-hours-info";
 import WorkersCalendar from "../workers-page/workers-calendar/workers-calendar.component";
 import { Button } from "../common-components";
 import { exportToPdf } from "./export-to-pdf";
+import { useWorkerInfo } from "./use-worker-info";
 
 export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
   const workerHoursInfo = useWorkerHoursInfo(info.name);
@@ -19,9 +24,9 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
   const handleExport = (): void => {
     exportToPdf(info.name, { calendarExport, workerInfoExport });
   };
+  const { workerInfo } = useWorkerInfo(info.name);
 
-  return (
-    <>
+  return <>
       <div
         className={"span-primary workers-table"}
         style={{
@@ -32,20 +37,19 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
           <div className={"workers-table"}>
             <p>{StringHelper.capitalizeEach(info.name)}</p>
 
-            {info.type && (
-              <span
-                className={classNames(
-                  "worker-label",
-                  `${info.type?.toString().toLowerCase()}-label`
-                )}
-              >
-                {StringHelper.capitalize(WorkerTypeHelper.translate(info.type))}
-              </span>
-            )}
-          </div>
-          <br />
-          <div className="worker-info">
-            <p>Typ umowy:</p>
+          {info.type && (
+            <span
+              className={classNames("worker-label", `${info.type?.toString().toLowerCase()}-label`)}
+            >
+              {StringHelper.capitalize(WorkerTypeHelper.translate(info.type))}
+            </span>
+          )}
+        </div>
+        <br />
+        <div className="worker-info">
+            {workerInfo.contractType && (
+            <p>Typ umowy: {ContractTypeHelper.translate(workerInfo.contractType)}</p>
+          )}
             <p>Ilość godzin: {workerHoursInfo.workerHourNorm}</p>
             <p>Ilość nadgodzin: {workerHoursInfo.overTime}</p>
             <p>Suma godzin: {info.time}</p>
@@ -55,7 +59,6 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
             <div id={"shiftsWord"}>
               <b>ZMIANY</b>
             </div>
-          </div>
         </div>
         <div
           id={calendarExport}
@@ -69,6 +72,7 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
       <Button variant={"primary"} onClick={handleExport}>
         Pobierz
       </Button>
+      </div>
     </>
-  );
+  ;
 }

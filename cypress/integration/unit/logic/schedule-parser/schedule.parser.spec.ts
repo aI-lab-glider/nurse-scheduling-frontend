@@ -90,7 +90,7 @@ describe("Schedule parser", () => {
   //     expect(value).to.eql(expectedSchedule.shifts[key]);
   //   }
   // });
-  it("all babysitter and nurses are in  employee_info ", () => {
-    expect(result.employee_info).to.have.keys(Object.keys(expectedSchedule.employee_info));
-  });
+  // it("all babysitter and nurses are in  employee_info ", () => {
+  //   expect(result.employee_info).to.have.keys(Object.keys(expectedSchedule.employee_info));
+  // });
 });

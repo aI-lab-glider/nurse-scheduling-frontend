@@ -6,7 +6,6 @@ import { baseRowDataCy } from "../schedule-page/table/schedule/schedule-parts/ba
 
 export const summaryRowDataCy = (cellIndex: number): string => baseRowDataCy(cellIndex);
 export interface SummaryTableRowOptions {
-  uuid: string;
   rowIndex: number;
   workerName: string;
 }
