@@ -5,35 +5,21 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
 import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
-<<<<<<< HEAD
-import { ContractType, WorkerInfoModel, WorkersInfoModel, WorkerType } from "../../common-models/worker-info.model";
-import { RevisionType, ThunkFunction } from "../../api/persistance-store.model";
-=======
 import {
   ContractType,
   WorkerInfoModel,
   WorkersInfoModel,
   WorkerType,
 } from "../../common-models/worker-info.model";
-import { WorkerInfoExtendedInterface } from "../../components/namestable/worker-edit.component";
-import { RevisionType, ScheduleKey, ThunkFunction } from "../../api/persistance-store.model";
->>>>>>> Update next month revision if it is auto generated
-import _ from "lodash";
-<<<<<<< HEAD
-import { MonthDataModel } from "../../common-models/schedule-data.model";
-=======
-import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
-import { getEmployeeWorkTime } from "./month-state/employee-info.reducer";
->>>>>>> Refactor update action
-import { cropScheduleDMToMonthDM } from "../../logic/schedule-container-convertion/schedule-container-convertion";
-import { MonthHelper } from "../../helpers/month.helper";
-import { ScheduleDataActionCreator } from "./month-state/schedule-data/schedule-data.action-creator";
-import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
-<<<<<<< HEAD
 import { WorkerInfoExtendedInterface } from "../../components/namestable/worker-edit";
-=======
+import { RevisionType, ScheduleKey, ThunkFunction } from "../../api/persistance-store.model";
+import { cropScheduleDMToMonthDM } from "../../logic/schedule-container-convertion/schedule-container-convertion";
 import { LocalStorageProvider } from "../../api/local-storage-provider.model";
->>>>>>> Update next month revision if it is auto generated
+import _ from "lodash";
+import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
+import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
+import { ScheduleDataActionCreator } from "./month-state/schedule-data/schedule-data.action-creator";
+import { MonthHelper } from "../../helpers/month.helper";
 
 export interface WorkerActionPayload {
   updatedShifts: ShiftInfoModel;
@@ -159,7 +145,6 @@ export class WorkerActionCreator {
   ): MonthDataModel {
     const updatedSchedule = _.cloneDeep(monthDataModel);
     const { workerName, workerType, contractType } = worker;
-    const { year, month } = monthDataModel.scheduleKey;
 
     updatedSchedule.shifts = {
       ...updatedSchedule.shifts,
