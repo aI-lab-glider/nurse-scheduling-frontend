@@ -21,7 +21,6 @@ const useStyles = makeStyles<Theme, StyleProps>({
     height: `calc(100vh - ${
       parseInt(ScssVars.headerHeight.slice(0, -2)) +
       parseInt(ScssVars.drawerHeaderHeight.slice(0, -2)) +
-      parseInt(ScssVars.footerHeight.slice(0, -2)) +
       1
     }px)`,
   },
