@@ -6,15 +6,15 @@ import * as _ from "lodash";
 import { VerboseDate } from "../common-models/month-info.model";
 import { MonthDataModel, ScheduleDataModel } from "../common-models/schedule-data.model";
 import { ShiftCode, SHIFTS } from "../common-models/shift-info.model";
-import { isAllValuesDefined } from "../common-models/type-utils";
+import { isAllValuesDefined, Opaque } from "../common-models/type-utils";
 import { nameOf } from "../common-models/utils";
 import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
 import { PrimaryMonthRevisionDataModel } from "../state/models/application-state.model";
 import {
   MonthDataArray,
   ShiftHelper,
-  WorkHourInfoArray,
   WORK_HOURS_PER_DAY,
+  WorkHourInfoArray,
 } from "./shifts.helper";
 import { TranslationHelper } from "./translations.helper";
 import { VerboseDateHelper } from "./verbose-date.helper";
@@ -26,20 +26,23 @@ interface WorkerInfoForCalculateWorkerHoursInfo {
   month: string;
   dates: DateInformationForWorkInfoCalculation[];
 }
+
 type DateInformationForWorkInfoCalculation = Pick<
   VerboseDate,
   "isPublicHoliday" | "dayOfWeek" | "month"
 >;
+
+const MAXIMUM_NOT_OVERTIME_HOURS = 12;
 
 export class WorkerHourInfo {
   public readonly overTime: number;
   public readonly workerHourNorm: number;
   public readonly workerTime: number;
 
-  constructor(workerHourNorm: number, workerTime: number) {
+  constructor(workerHourNorm: number, workerTime: number, overTime: number) {
     this.workerHourNorm = Math.round(workerHourNorm);
     this.workerTime = Math.round(workerTime);
-    this.overTime = this.workerTime - this.workerHourNorm;
+    this.overTime = Math.round(overTime);
   }
 
   public asArray(): WorkHourInfoArray {
@@ -100,6 +103,42 @@ export class WorkerHourInfo {
     month,
     primaryScheduleWorkerShifts,
   }: WorkerInfoForCalculateWorkerHoursInfo): WorkerHourInfo {
+    this.validateActualWorkersShifts(actualWorkerShifts, dates);
+
+    const cropToMonth = this.createCropToMonthFunc(dates, month);
+    const currentMonthDates = cropToMonth(dates);
+    const actualShiftsFromCurrentMonth = cropToMonth(actualWorkerShifts);
+    primaryScheduleWorkerShifts = primaryScheduleWorkerShifts ?? actualShiftsFromCurrentMonth;
+    if (!isAllValuesDefined([primaryScheduleWorkerShifts, actualShiftsFromCurrentMonth])) {
+      return new WorkerHourInfo(0, 0, 0);
+    }
+    if (actualShiftsFromCurrentMonth.length !== primaryScheduleWorkerShifts.length) {
+      primaryScheduleWorkerShifts = cropToMonth(primaryScheduleWorkerShifts);
+    }
+
+    this.validatePrimaryWorkersShifts(actualShiftsFromCurrentMonth, primaryScheduleWorkerShifts);
+
+    const workerHourNorm = this.calculateWorkerHourNorm(
+      actualShiftsFromCurrentMonth,
+      primaryScheduleWorkerShifts,
+      currentMonthDates,
+      workerNorm
+    );
+    const workerActualWorkTime = this.calculateWorkerActualWorkTime(actualShiftsFromCurrentMonth);
+    const workerOvertime = this.calculateWorkerOvertime(
+      actualShiftsFromCurrentMonth,
+      primaryScheduleWorkerShifts,
+      currentMonthDates,
+      workerNorm
+    );
+
+    return new WorkerHourInfo(workerHourNorm, workerActualWorkTime, workerOvertime);
+  }
+
+  private static validateActualWorkersShifts(
+    actualWorkerShifts: ShiftCode[],
+    dates: DateInformationForWorkInfoCalculation[]
+  ): void {
     if (actualWorkerShifts.length !== dates.length) {
       throw Error(
         `Length of ${nameOf({ actualWorkerShifts })} should be the same as length of ${nameOf({
@@ -107,77 +146,168 @@ export class WorkerHourInfo {
         })}`
       );
     }
+  }
 
+  private static createCropToMonthFunc(
+    dates: DateInformationForWorkInfoCalculation[],
+    month: string
+  ): <T>(array: T[]) => Opaque<"MonthData", T[]> {
     const firstDayOfCurrentMonth = dates.findIndex((d) => d.month === month);
     const lastDayOfCurrentMonth = _.findLastIndex(dates, (d) => d.month === month);
-    const cropToMonth = <T>(array: T[]): MonthDataArray<T> =>
+    return <T>(array: T[]): MonthDataArray<T> =>
       array?.slice(firstDayOfCurrentMonth, lastDayOfCurrentMonth + 1) as MonthDataArray<T>;
+  }
 
-    const currentMonthDates = cropToMonth(dates);
-    const actualShiftsFromCurrentMonth = cropToMonth(actualWorkerShifts);
-    primaryScheduleWorkerShifts = primaryScheduleWorkerShifts ?? actualShiftsFromCurrentMonth;
-    if (!isAllValuesDefined([primaryScheduleWorkerShifts, actualShiftsFromCurrentMonth])) {
-      return new WorkerHourInfo(0, 0);
-    }
-    if (actualShiftsFromCurrentMonth.length !== primaryScheduleWorkerShifts.length) {
-      primaryScheduleWorkerShifts = cropToMonth(primaryScheduleWorkerShifts);
-    }
-
+  private static validatePrimaryWorkersShifts(
+    actualShiftsFromCurrentMonth: MonthDataArray<ShiftCode>,
+    primaryScheduleWorkerShifts: MonthDataArray<ShiftCode>
+  ): void {
     if (actualShiftsFromCurrentMonth.length !== primaryScheduleWorkerShifts.length) {
       throw Error(
         `Length of ${nameOf({
           primaryScheduleWorkerShifts,
         })} should be the same as length of ${nameOf({
-          actualWorkerShifts,
+          actualShiftsFromCurrentMonth,
         })}`
       );
     }
+  }
+
+  private static calculateWorkerHourNorm(
+    actualShiftsFromCurrentMonth: ShiftCode[],
+    primaryScheduleWorkerShifts: ShiftCode[],
+    currentMonthDates: DateInformationForWorkInfoCalculation[],
+    workerNorm: number
+  ): number {
     const requiredHours = this.calculateRequiredHoursFromVerboseDates(currentMonthDates);
+    const freeHours = this.calculateFreeHours(
+      actualShiftsFromCurrentMonth,
+      primaryScheduleWorkerShifts,
+      currentMonthDates
+    );
+    return (requiredHours - freeHours) * workerNorm;
+  }
+
+  public static calculateRequiredHoursFromVerboseDates(
+    verboseDates: DateInformationForWorkInfoCalculation[]
+  ): number {
+    const workingDaysCount = verboseDates.filter((d) => VerboseDateHelper.isWorkingDay(d)).length;
+    const holidaySaturdaysCount = verboseDates.filter((d) => VerboseDateHelper.isHolidaySaturday(d))
+      .length;
+
+    return WORK_HOURS_PER_DAY * (workingDaysCount - holidaySaturdaysCount);
+  }
+
+  private static calculateFreeHours(
+    actualShiftsFromCurrentMonth: ShiftCode[],
+    primaryScheduleWorkerShifts: ShiftCode[],
+    currentMonthDates: DateInformationForWorkInfoCalculation[]
+  ): number {
     const monthShiftsWithHistoryShiftsAndDates = _.zip(
       actualShiftsFromCurrentMonth,
       primaryScheduleWorkerShifts,
       currentMonthDates
     );
+    return monthShiftsWithHistoryShiftsAndDates.reduce((calculateFreeHours, shiftPair) => {
+      const [actualShift, historyShift, day] = shiftPair;
+      if (!ShiftHelper.isNotWorkingShift(actualShift!)) {
+        return calculateFreeHours;
+      }
+      // ignore any free shifts in weekends
+      if (!VerboseDateHelper.isWorkingDay(day)) {
+        return calculateFreeHours;
+      }
+      const subtractFromNorm =
+        actualShift === historyShift
+          ? WORK_HOURS_PER_DAY
+          : ShiftHelper.shiftCodeToWorkTime(SHIFTS[historyShift!]);
+      return calculateFreeHours + subtractFromNorm;
+    }, 0);
+  }
 
-    const freeHours = monthShiftsWithHistoryShiftsAndDates.reduce(
-      (calculateFreeHours, shiftPair) => {
-        const [actualShift, historyShift, day] = shiftPair;
-        if (!ShiftHelper.isNotWorkingShift(actualShift!)) {
-          return calculateFreeHours;
-        }
-        // ignore any free shifts in weekends
-        if (!VerboseDateHelper.isWorkingDay(day)) {
-          return calculateFreeHours;
-        }
-        const subtractFromNorm =
-          actualShift === historyShift
-            ? WORK_HOURS_PER_DAY
-            : ShiftHelper.shiftCodeToWorkTime(SHIFTS[historyShift!]);
-        return calculateFreeHours + subtractFromNorm;
-      },
-      0
-    );
-    const workerHourNorm = (requiredHours - freeHours) * workerNorm;
-    const workerActualWorkTime = actualShiftsFromCurrentMonth.reduce(
+  private static calculateWorkerActualWorkTime(actualShiftsFromCurrentMonth: ShiftCode[]): number {
+    return actualShiftsFromCurrentMonth.reduce(
       (acc, shift) => acc + ShiftHelper.shiftCodeToWorkTime(SHIFTS[shift!]),
       0
     );
-    return new WorkerHourInfo(workerHourNorm, workerActualWorkTime);
+  }
+
+  private static calculateWorkerOvertime(
+    actualShiftsFromCurrentMonth: ShiftCode[],
+    primaryScheduleWorkerShifts: ShiftCode[],
+    currentMonthDates: DateInformationForWorkInfoCalculation[],
+    workerNorm: number
+  ): number {
+    const workerHourNorm = this.calculateWorkerHourNorm(
+      actualShiftsFromCurrentMonth,
+      primaryScheduleWorkerShifts,
+      currentMonthDates,
+      workerNorm
+    );
+    const workerActualWorkTime = this.calculateWorkerActualWorkTime(actualShiftsFromCurrentMonth);
+
+    const diffBetweenRevisionsOvertime = this.calculateOvertimeForRevisionDifference(
+      actualShiftsFromCurrentMonth,
+      primaryScheduleWorkerShifts
+    );
+    const exceedMaximumDayWorkTimeOvertime = this.calculateOvertimeForExceeding(
+      actualShiftsFromCurrentMonth,
+      primaryScheduleWorkerShifts
+    );
+
+    const normAndActualDiff = workerActualWorkTime - workerHourNorm;
+    const algorithmOvertime = diffBetweenRevisionsOvertime + exceedMaximumDayWorkTimeOvertime;
+
+    return Math.max(normAndActualDiff, algorithmOvertime);
+  }
+
+  private static calculateOvertimeForRevisionDifference(
+    actualShiftsFromCurrentMonth: ShiftCode[],
+    primaryScheduleWorkerShifts: ShiftCode[]
+  ): number {
+    const monthShiftsWithHistoryShifts = _.zip(
+      actualShiftsFromCurrentMonth,
+      primaryScheduleWorkerShifts
+    ) as [ShiftCode, ShiftCode][];
+
+    let diffBetweenRevisionsOvertime = 0;
+    monthShiftsWithHistoryShifts.forEach(([actualShift, historyShift]) => {
+      if (actualShift !== historyShift) {
+        const workHoursDiffBetweenRevisions =
+          ShiftHelper.shiftCodeToWorkTime(SHIFTS[actualShift]) -
+          ShiftHelper.shiftCodeToWorkTime(SHIFTS[historyShift]);
+        diffBetweenRevisionsOvertime +=
+          workHoursDiffBetweenRevisions > 0 ? workHoursDiffBetweenRevisions : 0;
+      }
+    });
+    return diffBetweenRevisionsOvertime;
+  }
+
+  private static calculateOvertimeForExceeding(
+    actualShiftsFromCurrentMonth: ShiftCode[],
+    primaryScheduleWorkerShifts: ShiftCode[]
+  ): number {
+    const monthShiftsWithHistoryShifts = _.zip(
+      actualShiftsFromCurrentMonth,
+      primaryScheduleWorkerShifts
+    ) as [ShiftCode, ShiftCode][];
+
+    let exceedMaximumDayWorkTimeOvertime = 0;
+    monthShiftsWithHistoryShifts
+      .filter(([actualShift, historyShift]) => actualShift === historyShift)
+      .map(([actualShift]) => actualShift)
+      .forEach((shift) => {
+        const shiftWorkTime = ShiftHelper.shiftCodeToWorkTime(SHIFTS[shift]);
+        if (shiftWorkTime > MAXIMUM_NOT_OVERTIME_HOURS) {
+          const overTime = shiftWorkTime - MAXIMUM_NOT_OVERTIME_HOURS;
+          exceedMaximumDayWorkTimeOvertime += overTime > 0 ? overTime : 0;
+        }
+      });
+    return exceedMaximumDayWorkTimeOvertime;
   }
 
   public static calculateWorkNormForMonth(month: number, year: number): number {
     const dates = VerboseDateHelper.generateVerboseDatesForMonth(month, year);
     return Math.round(this.calculateRequiredHoursFromVerboseDates(dates));
-  }
-
-  public static calculateRequiredHoursFromVerboseDates(
-    verboseDates: MonthDataArray<Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek">>
-  ): number {
-    const workingDaysCount = verboseDates.filter((d) => VerboseDateHelper.isWorkingDay(d)).length;
-    const holidaySaturdaysCount = verboseDates.filter((d) => VerboseDateHelper.isHolidaySaturday(d))
-      .length;
-    const requiredHours = WORK_HOURS_PER_DAY * (workingDaysCount - holidaySaturdaysCount);
-
-    return requiredHours;
   }
 }
