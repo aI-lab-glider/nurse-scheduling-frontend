@@ -157,7 +157,7 @@ export class WorkerHourInfo {
       },
       0
     );
-    const workerHourNorm = requiredHours * workerNorm - freeHours;
+    const workerHourNorm = (requiredHours - freeHours) * workerNorm;
     const workerActualWorkTime = actualShiftsFromCurrentMonth.reduce(
       (acc, shift) => acc + ShiftHelper.shiftCodeToWorkTime(SHIFTS[shift!]),
       0
