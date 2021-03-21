@@ -19,25 +19,19 @@ export function SummaryTableSection({
   const scheduleLogic = useContext(ScheduleLogicContext);
 
   return (
-    <>
-      <table
-        className="table"
-        id="summaryTable"
-        data-cy={`${workerType.toLowerCase()}SummaryTable`}
-      >
-        <tbody>
-          {dataRows.map((dataRow, rowIndex) => {
-            return (
-              <SummaryTableRow
-                key={`${scheduleLogic?.uuid ?? 0}_${dataRow.rowKey}`}
-                uuid={scheduleLogic?.uuid ?? "0"}
-                workerName={dataRow.rowKey}
-                rowIndex={rowIndex}
-              />
-            );
-          })}
-        </tbody>
-      </table>
-    </>
+    <div className="table" id="summaryTable" data-cy={`${workerType.toLowerCase()}SummaryTable`}>
+      <div>
+        {dataRows.map((dataRow, rowIndex) => {
+          return (
+            <SummaryTableRow
+              key={`${scheduleLogic?.uuid ?? 0}_${dataRow.rowKey}`}
+              uuid={scheduleLogic?.uuid ?? "0"}
+              workerName={dataRow.rowKey}
+              rowIndex={rowIndex}
+            />
+          );
+        })}
+      </div>
+    </div>
   );
 }

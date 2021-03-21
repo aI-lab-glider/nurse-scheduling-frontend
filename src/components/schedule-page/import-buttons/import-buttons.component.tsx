@@ -87,15 +87,8 @@ export function ImportButtonsComponent(): JSX.Element {
         type="file"
         accept=".xlsx"
       />
-
       {scheduleErrors.length !== 0 && <ParseErrorModal open={open} setOpen={setOpen} />}
-      {
-        <ExportModal
-          open={exportModalOpen}
-          setOpen={setExportModalOpen}
-          model={stateScheduleModel}
-        />
-      }
+      <ExportModal open={exportModalOpen} setOpen={setExportModalOpen} model={stateScheduleModel} />
     </div>
   );
 }

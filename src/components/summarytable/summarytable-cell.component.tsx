@@ -6,9 +6,9 @@ import { summaryCellDataCy, SummaryTableCellOptions } from "./summarytable-cell.
 
 function SummaryTableCellF({ value, cellIndex }: SummaryTableCellOptions): JSX.Element {
   return (
-    <td className="summaryCell" data-cy={summaryCellDataCy(cellIndex)}>
+    <div className="summaryCell" data-cy={summaryCellDataCy(cellIndex)}>
       <span>{value}</span>
-    </td>
+    </div>
   );
 }
 

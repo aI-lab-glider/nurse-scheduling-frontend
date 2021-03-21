@@ -9,9 +9,5 @@ export interface TimeTableComponentOptions {
 }
 
 export function TimeTableComponent(options: TimeTableComponentOptions): JSX.Element {
-  return (
-    <div>
-      <TimeTableSection scheduleLocalState={options.scheduleLocalState} />
-    </div>
-  );
+  return <TimeTableSection scheduleLocalState={options.scheduleLocalState} />;
 }
