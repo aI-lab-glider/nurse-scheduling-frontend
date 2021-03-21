@@ -42,12 +42,12 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfo {
     (state: ApplicationStateModel) => state.actualState[scheduleKey].present.month_info
   );
 
-  const [workHoursInfo, setWorkHoursInfo] = useState(new WorkerHourInfo(0, 0));
+  const [workHoursInfo, setWorkHoursInfo] = useState(new WorkerHourInfo(0, 0, 0));
 
   useEffect(() => {
     if (primaryRevisionMonth === month) {
       if (!isAllValuesDefined([workerTime, workerShifts])) {
-        return setWorkHoursInfo(new WorkerHourInfo(0, 0));
+        return setWorkHoursInfo(new WorkerHourInfo(0, 0, 0));
       }
 
       setWorkHoursInfo(

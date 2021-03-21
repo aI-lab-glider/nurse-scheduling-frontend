@@ -36,7 +36,7 @@ export function ScheduleComponent(): JSX.Element {
             <TimeTableComponent />
           </div>
           <div className="summaryContainer">
-            <OvertimeHeaderComponent data={["norma", "aktualne", "różnica"]} />
+            <OvertimeHeaderComponent data={["norma", "aktualne", "nadgodziny"]} />
           </div>
         </div>
 
