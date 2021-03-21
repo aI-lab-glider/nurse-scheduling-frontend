@@ -92,6 +92,12 @@ export class WorkerInfo {
     return copy;
   }
 
+  public withNewWorkerGroup(newWorkerGroup: WorkerGroup): WorkerInfo {
+    const copy = _.cloneDeep(this);
+    copy.workerGroup = newWorkerGroup;
+    return copy;
+  }
+
   asWorkerInfoExtendedInterface(): WorkerInfoExtendedInterface {
     return {
       prevName: this.previousWorkerName,
@@ -99,6 +105,7 @@ export class WorkerInfo {
       workerType: this.workerType,
       contractType: this.contractType,
       time: this.workerTime,
+      workerGroup: this.workerGroup,
     };
   }
 }

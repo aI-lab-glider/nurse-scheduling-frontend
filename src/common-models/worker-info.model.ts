@@ -83,6 +83,7 @@ export interface WorkerInfoModel {
   contractType?: ContractType;
   type?: WorkerType;
   shifts?: [VerboseDate, ShiftCode][];
+  workerGroup?: WorkerGroup;
 }
 
 export function validateEmployeeInfo(employeeInfo: WorkersInfoModel): void {
