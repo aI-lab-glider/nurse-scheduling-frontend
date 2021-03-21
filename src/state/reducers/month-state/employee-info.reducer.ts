@@ -4,14 +4,8 @@
 import _ from "lodash";
 import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
 import { ContractType, WorkersInfoModel } from "../../../common-models/worker-info.model";
-import { ActionModel } from "../../models/action.model";
-import { WorkerActionPayload } from "../worker.action-creator";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
-import {
-  createActionName,
-  ScheduleActionModel,
-  ScheduleActionType,
-} from "./schedule-data/schedule.actions";
+import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule-data/schedule.actions";
 
 function mockWorkerContractType(workerInfo: WorkersInfoModel): WorkersInfoModel {
   if (_.isNil(workerInfo.contractType)) {
@@ -22,17 +16,15 @@ function mockWorkerContractType(workerInfo: WorkersInfoModel): WorkersInfoModel 
   });
   return workerInfo;
 }
+
+
 /* eslint-disable @typescript-eslint/camelcase */
 export function employeeInfoReducerF(name: string) {
   return (
     state: WorkersInfoModel = scheduleDataInitialState.employee_info,
-    action: ScheduleActionModel | ActionModel<WorkerActionPayload>
+    action: ScheduleActionModel
   ): WorkersInfoModel => {
     let monthEmployeeInfo: WorkersInfoModel;
-    let updatedEmployeeInfo;
-    if ((action.payload as WorkerActionPayload) !== undefined) {
-      ({ updatedEmployeeInfo } = action.payload as WorkerActionPayload);
-    }
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
         monthEmployeeInfo = (action.payload as ScheduleDataModel)?.employee_info;
@@ -44,10 +36,6 @@ export function employeeInfoReducerF(name: string) {
         if (!monthEmployeeInfo) return state;
         monthEmployeeInfo = mockWorkerContractType(monthEmployeeInfo);
         return { ...state, ...monthEmployeeInfo };
-      case ScheduleActionType.UPDATE_WORKER_INFO:
-        return {
-          ...updatedEmployeeInfo,
-        };
       default:
         return state;
     }
