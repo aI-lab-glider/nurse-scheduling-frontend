@@ -1,12 +1,11 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { GetWorkerShiftOptions } from "../../../support/commands";
-import { WorkerType } from "../../../../src/common-models/worker-info.model";
-import { ShiftCode } from "../../../../src/common-models/shift-info.model";
 import * as _ from "lodash";
 import { Simulate } from "react-dom/test-utils";
 import { keepOnShiftClassName } from "../../../../src/components/schedule-page/table/schedule/schedule-parts/base-cell/base-cell.models";
+import { ShiftCode } from "../../../../src/common-models/shift-info.model";
+import { GetWorkerShiftOptions } from "../../../support/commands";
 import error = Simulate.error;
 
 const prevMonthDays = 6;
@@ -22,12 +21,12 @@ const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple days of single nurse (drag left to right)",
     startShiftCell: {
-      workerType: WorkerType.NURSE,
+      workerGroupIdx: 0,
       workerIdx: 3,
       shiftIdx: 3,
     },
     endShiftCell: {
-      workerType: WorkerType.NURSE,
+      workerGroupIdx: 0,
       workerIdx: 3,
       shiftIdx: 7,
     },
@@ -36,12 +35,12 @@ const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple days of single nurse (drag right to left)",
     startShiftCell: {
-      workerType: WorkerType.NURSE,
+      workerGroupIdx: 0,
       workerIdx: 3,
       shiftIdx: prevMonthDays + 3,
     },
     endShiftCell: {
-      workerType: WorkerType.NURSE,
+      workerGroupIdx: 0,
       workerIdx: 3,
       shiftIdx: prevMonthDays,
     },
@@ -50,12 +49,12 @@ const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple single day of multiple nurses",
     startShiftCell: {
-      workerType: WorkerType.NURSE,
+      workerGroupIdx: 0,
       workerIdx: 0,
       shiftIdx: prevMonthDays + 5,
     },
     endShiftCell: {
-      workerType: WorkerType.NURSE,
+      workerGroupIdx: 0,
       workerIdx: 2,
       shiftIdx: prevMonthDays + 5,
     },
@@ -64,12 +63,12 @@ const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple days of single babysitter",
     startShiftCell: {
-      workerType: WorkerType.OTHER,
+      workerGroupIdx: 1,
       workerIdx: 0,
       shiftIdx: 0,
     },
     endShiftCell: {
-      workerType: WorkerType.OTHER,
+      workerGroupIdx: 1,
       workerIdx: 0,
       shiftIdx: prevMonthDays + 8,
     },
@@ -78,12 +77,12 @@ const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple single day of multiple babysitters",
     startShiftCell: {
-      workerType: WorkerType.OTHER,
+      workerGroupIdx: 1,
       workerIdx: 3,
       shiftIdx: prevMonthDays + 3,
     },
     endShiftCell: {
-      workerType: WorkerType.OTHER,
+      workerGroupIdx: 1,
       workerIdx: 3,
       shiftIdx: prevMonthDays + 6,
     },
@@ -123,14 +122,14 @@ const foundationTestCases: FoundationTestCase[] = [
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function validateHorizontalShifts(
-  workerType: WorkerType,
+  workerGroupIdx: number,
   workerIdx: number,
   startShiftIdx: number,
   endShiftIdx: number,
   desiredShiftCode: ShiftCode
 ) {
   cy.checkWorkerShift({
-    workerType,
+    workerGroupIdx,
     workerIdx,
     shiftIdx: Math.min(startShiftIdx, endShiftIdx),
     desiredShiftCode,
@@ -141,7 +140,7 @@ function validateHorizontalShifts(
   ];
   for (const shiftIdx of _.range(start, end)) {
     cy.getWorkerShift({
-      workerType,
+      workerGroupIdx,
       workerIdx,
       shiftIdx,
       selector: "highlighted-cell",
@@ -151,7 +150,7 @@ function validateHorizontalShifts(
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function validateVerticalShifts(
-  workerType: WorkerType,
+  workerGroupIdx: number,
   shiftIdx: number,
   startWorkerIdx: number,
   endWorkerIdx: number,
@@ -159,7 +158,7 @@ function validateVerticalShifts(
 ) {
   for (const workerIdx of _.range(startWorkerIdx, endWorkerIdx + 1)) {
     cy.checkWorkerShift({
-      workerType,
+      workerGroupIdx,
       workerIdx,
       shiftIdx,
       desiredShiftCode,
@@ -170,13 +169,13 @@ function validateVerticalShifts(
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function validateChange({ startShiftCell, endShiftCell, desiredShiftCode }: WorkerTestCase) {
   const {
-    workerType: startWorkerType,
+    workerGroupIdx: startWorkerType,
     workerIdx: startWorkerIdx,
     shiftIdx: startShiftIdx,
   } = startShiftCell;
 
   const {
-    workerType: endWorkerType,
+    workerGroupIdx: endWorkerType,
     workerIdx: endWorkerIdx,
     shiftIdx: endShiftIdx,
   } = endShiftCell;
