@@ -49,6 +49,10 @@ export class WorkerHourInfo {
     return [this.workerHourNorm, this.workerTime, this.overTime] as WorkHourInfoArray;
   }
 
+  public get workHoursDiff(): number {
+    return this.workerTime - this.workerHourNorm;
+  }
+
   public static fromSchedules(
     workerName: string,
     scheduleModel: ScheduleDataModel | MonthDataModel,

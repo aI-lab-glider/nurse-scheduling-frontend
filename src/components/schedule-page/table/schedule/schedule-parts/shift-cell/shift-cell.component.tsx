@@ -11,7 +11,7 @@ import {
   baseCellDataCy,
   BaseCellOptions,
   hasNextShiftClassName,
-  keepOnShiftClassName,
+  keepOnShiftClassName
 } from "../base-cell/base-cell.models";
 import useComponentVisible from "../base-cell/use-component-visible";
 import useTimeout from "../base-cell/use-timeout";
@@ -22,6 +22,7 @@ import { useCellSelection } from "../hooks/use-cell-selection";
 import { ShiftAutocompleteComponent } from "./shift-autocomplete.component";
 
 const MODAL_CLOSE_MS = 444;
+
 function getShiftCode(value: string | number): ShiftCode {
   return typeof value === "number" ? value.toString() : ShiftCode[value] || ShiftCode.W;
 }
