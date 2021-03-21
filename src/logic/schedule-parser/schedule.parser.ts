@@ -2,17 +2,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { ScheduleError } from "../../common-models/schedule-error.model";
 import { WorkerType } from "../../common-models/worker-info.model";
+import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
+import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
 import { ChildrenInfoParser } from "./children-info.parser";
+import { ExtraWorkersInfoParser } from "./extra-workers-info.parser";
+import { FoundationInfoHeaders, FoundationInfoParser } from "./foundation-info.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { ShiftsInfoParser } from "./shifts-info.parser";
-import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
-import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
-import { FoundationInfoHeaders, FoundationInfoParser } from "./foundation-info.parser";
-import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
-import { ExtraWorkersInfoParser } from "./extra-workers-info.parser";
-import { WorkersInfoParser } from "./workers-info.parser";
+import { DEFAULT_WORKER_TYPE, WorkersInfoParser } from "./workers-info.parser";
 
+type WorkerTypesDict = { [key: string]: WorkerType };
 export class ScheduleParser implements ScheduleProvider {
   readonly sections: Sections;
   readonly workersInfo: WorkersInfoParser;
@@ -27,17 +28,7 @@ export class ScheduleParser implements ScheduleProvider {
     this.schedule = new Schedule(this);
   }
 
-  private logLoadFileError(msg: string): void {
-    this._parseErrors.push({
-      kind: InputFileErrorCode.LOAD_FILE_ERROR,
-      message: msg,
-    });
-  }
-
   private parseSections(rawSchedule: string[][][]): Sections {
-    let nurses;
-    let babysiters;
-
     const foundationInfoHeaders = Object.values(FoundationInfoHeaders);
 
     const foundationInfoRaw = rawSchedule.find((r) =>
@@ -60,48 +51,48 @@ export class ScheduleParser implements ScheduleProvider {
 
     rawSchedule.splice(rawSchedule.indexOf(foundationInfoRaw!), 1);
 
-    rawSchedule.forEach((r) => {
-      if (r) {
-        if (!nurses) {
-          nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata, r);
-        } else if (!babysiters) {
-          babysiters = new ShiftsInfoParser(WorkerType.OTHER, metadata, r);
-        }
-      }
-    });
-
-    if (!nurses) {
-      nurses = new ShiftsInfoParser(WorkerType.NURSE, metadata);
-    }
-    if (!babysiters) {
-      babysiters = new ShiftsInfoParser(WorkerType.OTHER, metadata);
-    }
+    const groups = rawSchedule.map(
+      (section, index) => new ShiftsInfoParser(metadata, index + 1, section)
+    );
 
     const parsers: FoundationInfoOptions = {
       ChildrenInfo: children,
-      NurseInfo: nurses,
-      BabysitterInfo: babysiters,
+      WorkerGroups: groups,
       ExtraWorkersInfo: extraWorkers,
     };
 
     const foundationParser = new FoundationInfoParser(parsers);
     return {
-      NurseInfo: nurses,
-      BabysitterInfo: babysiters,
+      WorkerGroups: groups,
       FoundationInfo: foundationParser,
       Metadata: metadata,
     };
   }
 
-  getWorkerTypes(): { [key: string]: WorkerType } {
-    const result = {};
-    Object.keys(this.sections.BabysitterInfo.workerShifts).forEach((babysitter) => {
-      result[babysitter] = WorkerType.OTHER;
-    });
-    Object.keys(this.sections.NurseInfo.workerShifts).forEach((nurse) => {
-      result[nurse] = WorkerType.NURSE;
-    });
+  getWorkerTypes(): WorkerTypesDict {
+    if (!this.workersInfo.isExists) {
+      return this.mockWorkerTypes();
+    }
+    return this.getTypesFromWorkerDescription();
+  }
 
+  private getTypesFromWorkerDescription(): WorkerTypesDict {
+    const workers = this.workersInfo.workerDescriptions;
+    const result = {};
+    workers.forEach((worker) => {
+      result[worker.name] = worker.type;
+    });
+    return result;
+  }
+
+  private mockWorkerTypes(): WorkerTypesDict {
+    const result = {};
+    const shiftProviders = this.sections.WorkerGroups;
+    shiftProviders.forEach((shifts) => {
+      Object.keys(shifts.workerShifts).forEach((workerName) => {
+        result[workerName] = DEFAULT_WORKER_TYPE;
+      });
+    });
     return result;
   }
 }

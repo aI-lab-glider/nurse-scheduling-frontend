@@ -10,7 +10,7 @@ context("Menu 'plik'", () => {
   describe("File button", () => {
     it("Should open options menu", () => {
       cy.loadScheduleToMonth();
-      cy.contains("Pielęgniarki");
+      cy.contains("Zespół 1");
       cy.get("[data-cy=file-dropdown]").click();
       cy.get("[data-cy=load-schedule-button]");
       cy.get("[data-cy=export-schedule-button]");

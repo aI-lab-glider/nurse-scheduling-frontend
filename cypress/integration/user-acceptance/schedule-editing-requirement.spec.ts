@@ -3,18 +3,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ShiftCode } from "../../../src/common-models/shift-info.model";
 import { WorkerType } from "../../../src/common-models/worker-info.model";
-import { ChangeFoundationInfoCellOptions, FoundationInfoRowType } from "../../support/commands";
+import {
+  ChangeFoundationInfoCellOptions,
+  FoundationInfoRowType,
+  GetWorkerShiftOptions,
+} from "../../support/commands";
 
-interface WorkerCellDescription {
-  workerType: WorkerType;
-  workerIdx: number;
-  shiftIdx: number;
+interface WorkerCellDescription extends GetWorkerShiftOptions {
   actualShiftCode: ShiftCode;
   newShiftCode: ShiftCode;
 }
 const workerCells: WorkerCellDescription[] = [
   {
-    workerType: WorkerType.NURSE,
+    workerGroupIdx: 0,
     workerIdx: 0,
     shiftIdx: 6,
     actualShiftCode: ShiftCode.U,
@@ -42,25 +43,25 @@ describe("schedule editing requirement", () => {
   });
 
   it("shows how to change worker shift", () => {
-    cy.getWorkerShift(workerCells[0]).click().screenshotSync();
-    cy.useAutocomplete(workerCells[0].newShiftCode).screenshotSync();
-    cy.getWorkerShift(workerCells[0]).contains(workerCells[0].newShiftCode).screenshotSync();
+    cy.getWorkerShift(workerCells[0]).click();
+    cy.useAutocomplete(workerCells[0].newShiftCode);
+    cy.getWorkerShift(workerCells[0]).contains(workerCells[0].newShiftCode);
   });
 
   it("shows how to change children number", () => {
-    cy.getFoundationInfoCell(childrenInfoCell).screenshotSync();
-    cy.changeFoundationInfoCell(childrenInfoCell).screenshotSync();
+    cy.getFoundationInfoCell(childrenInfoCell);
+    cy.changeFoundationInfoCell(childrenInfoCell);
   });
 
   it("shows how to change extra workers info", () => {
-    cy.getFoundationInfoCell(extraWorkerInfoCell).screenshotSync();
-    cy.changeFoundationInfoCell(extraWorkerInfoCell).screenshotSync();
+    cy.getFoundationInfoCell(extraWorkerInfoCell);
+    cy.changeFoundationInfoCell(extraWorkerInfoCell);
   });
 
   it("shows how to make undo in schedule", () => {
-    cy.getWorkerShift(workerCells[0]).click().screenshotSync();
-    cy.useAutocomplete(workerCells[0].newShiftCode).screenshotSync();
+    cy.getWorkerShift(workerCells[0]).click();
+    cy.useAutocomplete(workerCells[0].newShiftCode);
     cy.get("[data-cy=undo-button]").click({ force: true });
-    cy.getWorkerShift(workerCells[0]).contains(workerCells[0].actualShiftCode).screenshotSync();
+    cy.getWorkerShift(workerCells[0]).contains(workerCells[0].actualShiftCode);
   });
 });

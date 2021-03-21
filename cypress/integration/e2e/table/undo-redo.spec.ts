@@ -17,7 +17,7 @@ const daysFromPrevMonths = 6;
 const testCases: TestCase[] = [
   {
     testedShiftCell: {
-      workerType: WorkerType.NURSE,
+      workerGroupIdx: 0,
       workerIdx: 0,
       shiftIdx: daysFromPrevMonths + 9,
     },
@@ -26,7 +26,7 @@ const testCases: TestCase[] = [
   },
   {
     testedShiftCell: {
-      workerType: WorkerType.OTHER,
+      workerGroupIdx: 1,
       workerIdx: 3,
       shiftIdx: daysFromPrevMonths + 2,
     },
@@ -47,7 +47,7 @@ context("Undo/Redo test", () => {
   });
 
   testCases.forEach((testCase) => {
-    it(`Should change worker (type: ${testCase.testedShiftCell.workerType.toLowerCase()}) shift and
+    it(`Should change worker (worker group: ${testCase.testedShiftCell.workerGroupIdx}) shift and
        use undo and redo buttons to set proper cell state`, () => {
       performShiftChanges(testCase);
 
@@ -60,7 +60,7 @@ context("Undo/Redo test", () => {
   });
 
   testCases.forEach((testCase) => {
-    it(`Should change worker (type: ${testCase.testedShiftCell.workerType.toLowerCase()}shift and
+    it(`Should change worker (worker group: ${testCase.testedShiftCell.workerGroupIdx}shift and
        use undo and redo shortcuts to set proper cell state`, () => {
       performShiftChanges(testCase);
 
@@ -76,7 +76,7 @@ context("Undo/Redo test", () => {
 context("Edit mode test", () => {
   it("Save button should be disabled when there are no changes", () => {
     const cell = {
-      workerType: WorkerType.NURSE,
+      workerGroupIdx: 0,
       workerIdx: 0,
       shiftIdx: 6,
     };

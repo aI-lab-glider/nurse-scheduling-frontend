@@ -6,7 +6,7 @@ import { RevisionType } from "../../api/persistance-store.model";
 import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
 import { GroupedScheduleErrors } from "../../common-models/schedule-error.model";
 import { Opaque } from "../../common-models/type-utils";
-import { ScheduleMode } from "../../components/schedule-page/table/schedule/use-schedule-state";
+import { ScheduleMode } from "../../components/schedule-page/table/schedule/schedule-state.model";
 
 export type PrimaryMonthRevisionDataModel = Opaque<"PrimaryScheduleRevision", MonthDataModel>;
 export interface ScheduleStateModel {

@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import classNames from "classnames/bind";
+import * as _ from "lodash";
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import mergeRefs from "react-merge-refs";
 import { usePopper } from "react-popper";
@@ -9,6 +10,7 @@ import { useSelector } from "react-redux";
 import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
 import { ShiftCode, SHIFTS } from "../../../../../../common-models/shift-info.model";
 import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
+import { ScheduleMode } from "../../schedule-state.model";
 import {
   baseCellDataCy,
   BaseCellOptions,
@@ -33,6 +35,7 @@ function getShiftCode(value: string | number): ShiftCode {
 interface ShiftCellOptions extends BaseCellOptions {
   keepOn?: boolean;
   hasNext?: boolean;
+  workerName?: string;
 }
 
 export function getColor(value: string): string {
@@ -60,12 +63,12 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     keepOn,
     hasNext,
   } = options;
-  const { year } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
-  );
+  // const { year } = useSelector(
+  //   (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
+  // );
   const cellRef = useRef<HTMLDivElement>(null);
 
-  const cellDetailsPopperRef = useRef<HTMLDivElement>(null);
+  // const cellDetailsPopperRef = useRef<HTMLDivElement>(null);
 
   const { componentContainer, isComponentVisible, setIsComponentVisible } = useComponentVisible(
     false
@@ -75,9 +78,10 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     setIsComponentVisible(!isComponentVisible);
   }
 
-  const isEditMode = useSelector(
-    (state: ApplicationStateModel) => state.actualState.mode === "edit"
-  );
+  // const isEditMode = useSelector(
+  //   (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
+  // );
+
   const shiftCode = getShiftCode(value);
   const keepOnClass = keepOnShiftClassName(keepOn) + shiftCode;
   const hasNextClass = hasNextShiftClassName(hasNext);
@@ -94,9 +98,10 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     setShowInput(isPointerOn && !isBlocked);
   }, [isPointerOn, isBlocked]);
 
-  const styles = usePopper(cellRef.current, cellDetailsPopperRef?.current, {
-    placement: "right-start",
-  }).styles.popper;
+  // TODO revert cell details
+  // const styles = usePopper(cellRef.current, cellDetailsPopperRef?.current, {
+  //   placement: "right-start",
+  // }).styles.popper;
 
   const WrapContentDiv = useCallback(
     ({ children }: { children: ReactNode }) => (
@@ -181,6 +186,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
             </div>
           </WrapContentDiv>
         </ErrorTooltipProvider>
+        {/* TODO revert cell details
         {!isEditMode && (
           <Popper
             ref={cellDetailsPopperRef}
@@ -198,7 +204,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
               close={(): void => setIsComponentVisible(false)}
             />
           </Popper>
-        )}
+        )} */}
         )
       </div>
     </>
@@ -212,6 +218,7 @@ export const ShiftCellComponent = React.memo(ShiftCellComponentF, (prev, next) =
     prev.isSelected === next.isSelected &&
     prev.isBlocked === next.isBlocked &&
     prev.keepOn === next.keepOn &&
-    prev.hasNext === next.hasNext
+    prev.hasNext === next.hasNext &&
+    _.isEqual(prev.verboseDate, next.verboseDate)
   );
 });

@@ -45,6 +45,5 @@ export interface BaseCellOptions
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   onValueChange?: (value: string) => void;
   onBlur?: () => void;
-  sectionKey: string;
   errorSelector?: (scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
 }
