@@ -94,7 +94,7 @@ export class ServerMiddleware {
     scheduleErrors: ScheduleError[]
   ): ScheduleError[] {
     const calculateNormHoursDiff = (workerName: string): number =>
-      WorkerHourInfo.fromSchedules(workerName, actualSchedule, primaryMonthData).overTime;
+      WorkerHourInfo.fromSchedules(workerName, actualSchedule, primaryMonthData).workHoursDiff;
 
     const validBackendScheduleErros = scheduleErrors.filter(
       (err) =>
@@ -104,12 +104,9 @@ export class ServerMiddleware {
     const overtimeAndUndetimeErrors: (WorkerOvertime | WorkerUnderTime)[] = [];
     Object.keys(actualSchedule.shifts).forEach((workerName) => {
       const workHoursDiff = calculateNormHoursDiff(workerName);
-      if (workHoursDiff !== 0) {
+      if (workHoursDiff < 0) {
         overtimeAndUndetimeErrors.push({
-          kind:
-            workHoursDiff > 0
-              ? AlgorithmErrorCode.WorkerOvertime
-              : AlgorithmErrorCode.WorkerUnderTime,
+          kind: AlgorithmErrorCode.WorkerUnderTime,
           hours: Math.abs(workHoursDiff),
           worker: workerName,
         });

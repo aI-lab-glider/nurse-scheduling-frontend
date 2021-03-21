@@ -5,20 +5,14 @@ import classNames from "classnames/bind";
 import * as _ from "lodash";
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import mergeRefs from "react-merge-refs";
-import { usePopper } from "react-popper";
-import { useSelector } from "react-redux";
 import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
 import { ShiftCode, SHIFTS } from "../../../../../../common-models/shift-info.model";
-import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
-import { ScheduleMode } from "../../schedule-state.model";
 import {
   baseCellDataCy,
   BaseCellOptions,
   hasNextShiftClassName,
   keepOnShiftClassName,
 } from "../base-cell/base-cell.models";
-import { CellDetails } from "../base-cell/cell-details-content.component";
-import { Popper } from "../base-cell/popper";
 import useComponentVisible from "../base-cell/use-component-visible";
 import useTimeout from "../base-cell/use-timeout";
 import { CellInput } from "../cell-blockable-input.component";
@@ -28,6 +22,7 @@ import { useCellSelection } from "../hooks/use-cell-selection";
 import { ShiftAutocompleteComponent } from "./shift-autocomplete.component";
 
 const MODAL_CLOSE_MS = 444;
+
 function getShiftCode(value: string | number): ShiftCode {
   return typeof value === "number" ? value.toString() : ShiftCode[value] || ShiftCode.W;
 }
@@ -41,6 +36,7 @@ interface ShiftCellOptions extends BaseCellOptions {
 export function getColor(value: string): string {
   return Object.values(SHIFTS).filter((s) => s.code === value)[0].color ?? "FFD100";
 }
+
 /**
  * @description Function component that creates cell containing Details or Autocomplete when in edit mode
  * @param option : ShiftCellOption
@@ -57,8 +53,8 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     onValueChange,
     onClick,
     onBlur,
-    verboseDate,
-    monthNumber,
+    //verboseDate,
+    //monthNumber,
     errorSelector = (_): ScheduleError[] => [],
     keepOn,
     hasNext,
