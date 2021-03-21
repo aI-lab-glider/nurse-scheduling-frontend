@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     height: ScssVars.drawerHeaderHeight,
   },
   fullHeight: {
-    height: "80%",
+    height: "97%",
     overflowY: "auto",
   },
   exitButton: {
