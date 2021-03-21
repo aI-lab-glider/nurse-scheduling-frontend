@@ -3,12 +3,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 .scheduleFoldingSection {
   height: 50px;
+  display: flex;
+  align-items: center;
 
-  hr.middle {
-    width: 102%;
-    //   Fix, required to handle hr color correctly in electron
-    border: 0px;
-    border-top: 2px solid $table-border-color-grey;
+  .scheduleFoldingSectionSeparator {
+    width: 100%;
+
+    hr.middle {
+      width: 102%;
+      //   Fix, required to handle hr color correctly in electron
+      border: 0px;
+      border-top: 2px solid $table-border-color-grey;
+    }
   }
 
   .header {
@@ -18,6 +24,7 @@
   }
 
   .text {
+    width: 126px;
     cursor: pointer;
     align-items: center;
     display: flex;

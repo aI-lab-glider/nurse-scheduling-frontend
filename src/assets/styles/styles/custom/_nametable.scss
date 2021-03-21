@@ -4,22 +4,18 @@
 .nametable {
   align-items: center;
   padding: 0;
-  width: 106px;
+  width: 126px;
+  margin-top: 1px;
 
   .nametableRow {
     height: 40px;
-    width: 120%;
-    padding: 0;
-    margin: 0;
-
+    width: 100%;
     font-family: $font-family-table;
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
-    line-height: 20px;
     display: flex;
     align-items: center;
-
     color: $primary;
     border-bottom: 1px solid $table-border-color-grey;
   }

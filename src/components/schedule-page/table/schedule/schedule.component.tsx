@@ -37,108 +37,90 @@ export function ScheduleComponent({
   ) {
     throw new Error("[TEST MODE] Error user was added");
   }
-
+  const arraum = [
+    {
+      name: "Pielęgniarki",
+      type: WorkerType.NURSE,
+      data: scheduleLocalState.nurseShiftsSection,
+      dataCy: "nurseShiftsTable",
+      arePresent: areNursesPresent,
+    },
+    {
+      name: "Opiekunowie",
+      type: WorkerType.OTHER,
+      data: scheduleLocalState.babysitterShiftsSection,
+      dataCy: "otherShiftsTable",
+      arePresent: areBabysittersPresent,
+    },
+  ];
+  const ScheduleFoldingComponent = ({ name, type, data, dataCy, arePresent }): JSX.Element => {
+    return (
+      <ScheduleFoldingSection name={name}>
+        {arePresent && (
+          <div className="sectionContainer">
+            <div>
+              <NameTableComponent
+                uuid={scheduleLocalState.uuid}
+                workerType={type}
+                data={data}
+                clickable={true}
+              />
+            </div>
+            <div>
+              <div>
+                <div className="table" data-cy={dataCy}>
+                  <ShiftsSectionComponent
+                    uuid={scheduleLocalState.uuid}
+                    workerType={type}
+                    data={data}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="summaryContainer">
+              <SummaryTableComponent uuid={scheduleLocalState.uuid} data={data} workerType={type} />
+            </div>
+          </div>
+        )}
+      </ScheduleFoldingSection>
+    );
+  };
   return (
-    <table style={{ margin: 20 }}>
-      <tbody>
-        <tr className="sectionContainer">
-          <td />
-          <td>
+    <div style={{ margin: 20 }}>
+      <div>
+        <div className="sectionContainer">
+          <div className="timeTableContainer">
             <TimeTableComponent scheduleLocalState={scheduleLocalState} />
-          </td>
-          <td className="summaryContainer">
+          </div>
+          <div className="summaryContainer">
             <OvertimeHeaderComponent data={["norma", "aktualne", "różnica"]} />
-          </td>
-        </tr>
-        <ScheduleFoldingSection name="Pielęgniarki">
-          {areNursesPresent && (
-            <tr className="sectionContainer">
-              <td>
-                <NameTableComponent
-                  uuid={scheduleLocalState.uuid}
-                  workerType={WorkerType.NURSE}
-                  data={scheduleLocalState.nurseShiftsSection}
-                  clickable={true}
-                />
-              </td>
-              <td>
-                <table>
-                  <tbody className="table" data-cy="nurseShiftsTable">
-                    <ShiftsSectionComponent
-                      uuid={scheduleLocalState.uuid}
-                      workerType={WorkerType.NURSE}
-                      data={scheduleLocalState.nurseShiftsSection}
-                    />
-                  </tbody>
-                </table>
-              </td>
-              <td className="summaryContainer">
-                <SummaryTableComponent
-                  uuid={scheduleLocalState.uuid}
-                  data={scheduleLocalState.nurseShiftsSection}
-                  workerType={WorkerType.NURSE}
-                />
-              </td>
-            </tr>
-          )}
-        </ScheduleFoldingSection>
-
-        <ScheduleFoldingSection name="Opiekunowie">
-          {areBabysittersPresent && (
-            <tr className="sectionContainer">
-              <td>
-                <NameTableComponent
-                  uuid={scheduleLocalState.uuid}
-                  workerType={WorkerType.OTHER}
-                  data={scheduleLocalState.babysitterShiftsSection}
-                  clickable={true}
-                />
-              </td>
-              <td>
-                <table>
-                  <tbody className="table" data-cy="otherShiftsTable">
-                    <ShiftsSectionComponent
-                      uuid={scheduleLocalState.uuid}
-                      workerType={WorkerType.OTHER}
-                      data={scheduleLocalState.babysitterShiftsSection}
-                    />
-                  </tbody>
-                </table>
-              </td>
-              <td className="summaryContainer">
-                <SummaryTableComponent
-                  uuid={scheduleLocalState.uuid}
-                  data={scheduleLocalState.babysitterShiftsSection}
-                  workerType={WorkerType.OTHER}
-                />
-              </td>
-            </tr>
-          )}
-        </ScheduleFoldingSection>
-
+          </div>
+        </div>
+        {arraum.map((item, index) => {
+          return <ScheduleFoldingComponent {...item} key={item.name} />;
+        })}
         <ScheduleFoldingSection name="Informacje">
-          <tr className="sectionContainer">
-            <td>
+          <div className="sectionContainer">
+            <div>
               <NameTableComponent
                 uuid={scheduleLocalState.uuid}
                 data={scheduleLocalState.foundationInfoSection}
                 clickable={false}
               />
-            </td>
-            <td>
-              <table>
-                <tbody className="table" data-cy="foundationInfoSection">
+            </div>
+            <div>
+              <div>
+                <div className="table" data-cy="foundationInfoSection">
                   <FoundationInfoComponent
                     uuid={scheduleLocalState.uuid}
                     data={scheduleLocalState.foundationInfoSection}
                   />
-                </tbody>
-              </table>
-            </td>
-            <td />
-          </tr>
+                </div>
+              </div>
+            </div>
+          </div>
         </ScheduleFoldingSection>
-      </tbody>
-    </table>
+      </div>
+    </div>
   );
 }

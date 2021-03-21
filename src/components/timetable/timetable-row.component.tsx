@@ -43,7 +43,7 @@ export function TimeTableRowF({ dataRow, uuid }: TimeTableRowOptions): JSX.Eleme
 
   const data = useMemo(() => dataRow.rowData(false), [dataRow]);
   return (
-    <tr className="row" id="timetableRow">
+    <div className="row" id="timetableRow">
       {data.map((cellData, cellIndex) => {
         return (
           <TimeTableCell
@@ -54,7 +54,7 @@ export function TimeTableRowF({ dataRow, uuid }: TimeTableRowOptions): JSX.Eleme
           />
         );
       })}
-    </tr>
+    </div>
   );
 }
 
