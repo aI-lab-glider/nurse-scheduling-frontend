@@ -6,7 +6,7 @@ import { ArrayHelper } from "../../helpers/array.helper";
 import { OvertimeHeaderCell } from "./overtime-header-cell.component";
 
 export interface OvertimeHeaderRowOptions {
-  data: [string, string, string];
+  data: string[];
 }
 
 export function OvertimeHeaderRowF({ data }: OvertimeHeaderRowOptions): JSX.Element {

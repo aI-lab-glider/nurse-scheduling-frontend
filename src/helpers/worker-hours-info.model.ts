@@ -10,12 +10,7 @@ import { isAllValuesDefined, Opaque } from "../common-models/type-utils";
 import { nameOf } from "../common-models/utils";
 import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
 import { PrimaryMonthRevisionDataModel } from "../state/models/application-state.model";
-import {
-  MonthDataArray,
-  ShiftHelper,
-  WORK_HOURS_PER_DAY,
-  WorkHourInfoArray,
-} from "./shifts.helper";
+import { MonthDataArray, ShiftHelper, WORK_HOURS_PER_DAY } from "./shifts.helper";
 import { TranslationHelper } from "./translations.helper";
 import { VerboseDateHelper } from "./verbose-date.helper";
 
@@ -34,6 +29,15 @@ type DateInformationForWorkInfoCalculation = Pick<
 
 const MAXIMUM_NOT_OVERTIME_HOURS = 12;
 
+export interface WorkerHourInfoSummary {
+  overTime: number;
+  workerHourNorm: number;
+  workerTime: number;
+  workHoursDiff: number;
+}
+
+export type WorkerHourInfoSummaryTranslation = { [key in keyof WorkerHourInfoSummary]: string };
+
 export class WorkerHourInfo {
   public readonly overTime: number;
   public readonly workerHourNorm: number;
@@ -45,12 +49,26 @@ export class WorkerHourInfo {
     this.overTime = Math.round(overTime);
   }
 
-  public asArray(): WorkHourInfoArray {
-    return [this.workerHourNorm, this.workerTime, this.overTime] as WorkHourInfoArray;
-  }
-
   public get workHoursDiff(): number {
     return this.workerTime - this.workerHourNorm;
+  }
+
+  public get summary(): WorkerHourInfoSummary {
+    return {
+      workerHourNorm: this.workerHourNorm,
+      workerTime: this.workerTime,
+      workHoursDiff: this.workHoursDiff,
+      overTime: this.overTime,
+    };
+  }
+
+  public get summaryTranslations(): WorkerHourInfoSummaryTranslation {
+    return {
+      overTime: "nagodziny",
+      workerHourNorm: "norma",
+      workerTime: "aktualne",
+      workHoursDiff: "różnica",
+    };
   }
 
   public static fromSchedules(

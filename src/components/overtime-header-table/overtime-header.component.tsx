@@ -5,7 +5,7 @@ import React from "react";
 import { OvertimeHeaderRow } from "./overtime-header-row.component";
 
 interface OvertimeHeaderTableOptions {
-  data: [string, string, string];
+  data: string[];
 }
 
 export function OvertimeHeaderComponent(options: OvertimeHeaderTableOptions): JSX.Element {

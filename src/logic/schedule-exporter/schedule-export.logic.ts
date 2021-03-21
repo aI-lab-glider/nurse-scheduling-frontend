@@ -37,6 +37,7 @@ export interface ScheduleExportLogicOptions {
   overtimeExport?: boolean;
   extraWorkersExport?: boolean;
 }
+
 export class ScheduleExportLogic {
   private scheduleModel: MonthDataModel;
   private primaryScheduleModel?: PrimaryMonthRevisionDataModel;
@@ -322,9 +323,10 @@ export class ScheduleExportLogic {
         ];
         if (this.overtimeExport) {
           shiftsRow.push(
-            ...WorkerHourInfo.fromSchedules(workerName, scheduleModel, this.primaryScheduleModel)
-              .asArray()
-              .map((e) => e.toString())
+            ...Object.keys(
+              WorkerHourInfo.fromSchedules(workerName, scheduleModel, this.primaryScheduleModel)
+                .summary
+            )
           );
         }
         grouped[category].push(shiftsRow);
