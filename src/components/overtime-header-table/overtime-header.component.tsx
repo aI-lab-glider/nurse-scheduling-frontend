@@ -12,12 +12,8 @@ export function OvertimeHeaderComponent(options: OvertimeHeaderTableOptions): JS
   const { data } = options;
 
   return (
-    <div>
-      <table className="table" id="overtimeHeaderTable">
-        <tbody>
-          <OvertimeHeaderRow data={data} />
-        </tbody>
-      </table>
+    <div className="table" id="overtimeHeaderTable">
+      <OvertimeHeaderRow data={data} />
     </div>
   );
 }

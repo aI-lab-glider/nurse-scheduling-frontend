@@ -41,7 +41,7 @@ export function ScheduleComponent(): JSX.Element {
         </div>
 
         {Object.entries(workerGroups).map(([groupName, workers], index) => (
-          <ScheduleFoldingSection name={groupName}>
+          <ScheduleFoldingSection name={groupName} key={groupName}>
             <WorkerInfoSection sectionIndex={index} data={workers} sectionName={groupName} />
           </ScheduleFoldingSection>
         ))}
