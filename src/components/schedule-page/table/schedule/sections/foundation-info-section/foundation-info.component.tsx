@@ -40,22 +40,22 @@ export function FoundationInfoComponent(options: FoundationInfoOptions): JSX.Ele
     [dispatch]
   );
   return (
-    <tr className="sectionContainer">
-      <td>
+    <div className="sectionContainer">
+      <div>
         <NameTableComponent data={sectionData} clickable={false} />
-      </td>
-      <td>
-        <table>
-          <tbody className="table" data-cy="foundationInfoSection">
+      </div>
+      <div>
+        <div>
+          <div className="table" data-cy="foundationInfoSection">
             <BaseSectionComponent
               sectionKey="foundationInfo"
               data={sectionData}
               updateData={updateFoundationInfoData}
             />
-          </tbody>
-        </table>
-      </td>
-      <td />
-    </tr>
+          </div>
+        </div>
+      </div>
+      <div />
+    </div>
   );
 }

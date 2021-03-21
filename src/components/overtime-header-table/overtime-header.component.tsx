@@ -13,11 +13,11 @@ export function OvertimeHeaderComponent(options: OvertimeHeaderTableOptions): JS
 
   return (
     <div>
-      <table className="table" id="overtimeHeaderTable">
-        <tbody>
+      <div className="table" id="overtimeHeaderTable">
+        <div>
           <OvertimeHeaderRow data={data} />
-        </tbody>
-      </table>
+        </div>
+      </div>
     </div>
   );
 }

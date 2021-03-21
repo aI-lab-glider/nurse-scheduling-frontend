@@ -11,11 +11,11 @@ export interface OvertimeHeaderRowOptions {
 
 export function OvertimeHeaderRowF({ data }: OvertimeHeaderRowOptions): JSX.Element {
   return (
-    <tr className="row" id="summaryRow">
+    <div className="row" id="summaryRow">
       {data.map((cellData) => {
         return <OvertimeHeaderCell value={cellData} key={cellData} />;
       })}
-    </tr>
+    </div>
   );
 }
 
