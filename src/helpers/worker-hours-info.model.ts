@@ -71,6 +71,10 @@ export class WorkerHourInfo {
     };
   }
 
+  public get workHoursDiff(): number {
+    return this.workerTime - this.workerHourNorm;
+  }
+
   public static fromSchedules(
     workerName: string,
     scheduleModel: ScheduleDataModel | MonthDataModel,

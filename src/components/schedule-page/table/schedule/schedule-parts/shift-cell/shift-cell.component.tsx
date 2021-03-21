@@ -11,7 +11,7 @@ import {
   baseCellDataCy,
   BaseCellOptions,
   hasNextShiftClassName,
-  keepOnShiftClassName,
+  keepOnShiftClassName
 } from "../base-cell/base-cell.models";
 import useComponentVisible from "../base-cell/use-component-visible";
 import useTimeout from "../base-cell/use-timeout";
