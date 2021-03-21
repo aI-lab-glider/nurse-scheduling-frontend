@@ -145,14 +145,15 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       const newShifts = _.cloneDeep(updatedMonthDataModel.shifts);
 
       Object.keys(updatedMonthDataModel.shifts).forEach((key) => {
-        newShifts[key] = scheduleDataModel.shifts[key]
-          ? ArrayHelper.update(
-              updatedMonthDataModel.shifts[key],
-              updatePosition,
-              scheduleDataModel.shifts[key],
-              missingDays
-            )
-          : updatedMonthDataModel.shifts[key];
+        newShifts[key] =
+          _.isNil(scheduleDataModel.shifts[key]) || scheduleDataModel.shifts[key]?.length === 0
+            ? updatedMonthDataModel.shifts[key]
+            : ArrayHelper.update(
+                updatedMonthDataModel.shifts[key],
+                updatePosition,
+                scheduleDataModel.shifts[key],
+                missingDays
+              );
       });
 
       updatedMonthDataModel.shifts = newShifts;

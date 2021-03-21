@@ -94,10 +94,13 @@ export class ScheduleDataActionCreator {
 
   //#region Update state and save to DB
   static setScheduleStateAndSaveToDb(
-    newSchedule: ScheduleDataModel
+    newSchedule: ScheduleDataModel,
+    revision?: RevisionType
   ): ThunkFunction<ScheduleDataModel | MonthDataModel> {
     return async (dispatch, getState): Promise<void> => {
-      const { revision } = getState().actualState;
+      if (_.isNil(revision)) {
+        revision = getState().actualState.revision;
+      }
       await new LocalStorageProvider().saveSchedule(revision, newSchedule);
       const primaryMonthDM = await this.getMonthPrimaryRevisionDM(
         cropScheduleDMToMonthDM(newSchedule)
@@ -116,7 +119,7 @@ export class ScheduleDataActionCreator {
         revision = getState().actualState.revision;
       }
       const newSchedule = await extendMonthDMRevisionToScheduleDM(newMonth, revision);
-      dispatch(this.setScheduleStateAndSaveToDb(newSchedule));
+      dispatch(this.setScheduleStateAndSaveToDb(newSchedule, revision));
     };
   }
 
