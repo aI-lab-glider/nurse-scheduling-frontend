@@ -83,7 +83,7 @@ export default function ShiftTab(): JSX.Element {
           <EnhancedTableHeaderComponent toggleOpen={toggleOpen} />
           <TableBody>
             {Object.values(shiftData)
-              .filter((shift) => shift.code !== ShiftCode.W)
+              .filter((shift) => shift.code !== ShiftCode.W && shift.code !== ShiftCode.NZ)
               .map((shift) => {
                 return (
                   <TableRow key={shift.code} className={classes.row}>
