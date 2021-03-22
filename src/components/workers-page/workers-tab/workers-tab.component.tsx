@@ -28,6 +28,7 @@ import { WorkingTimeHelper } from "../../namestable/working-time.helper";
 import { useMonthInfo } from "../../schedule-page/validation-drawer/use-verbose-dates";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
 import WorkerDrawerComponent, { WorkerDrawerMode } from "./worker-drawer.component";
+import { DEFAULT_CONTRACT_TYPE } from "../../../logic/schedule-parser/workers-info.parser";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -52,7 +53,7 @@ export default function WorkersTab(): JSX.Element {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof WorkerInfoModel>("name");
-  const { type, time, contractType } = useSelector(
+  const { type, time, contractType, workerGroup } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.employee_info
   );
   const { year, monthNumber } = useMonthInfo();
@@ -66,11 +67,11 @@ export default function WorkersTab(): JSX.Element {
   useEffect(() => {
     const newWorkerData = Object.keys(type).map(
       (key): WorkerInfoModel => {
-        return { name: key, type: type[key], time: time[key] };
+        return { name: key, type: type[key], time: time[key], workerGroup: workerGroup[key] };
       }
     );
     setWorkerData(newWorkerData);
-  }, [type, time, setWorkerData]);
+  }, [type, time, setWorkerData, workerGroup]);
 
   function handleRequestSort(
     event: React.MouseEvent<unknown>,
@@ -99,7 +100,7 @@ export default function WorkersTab(): JSX.Element {
   const getWorkerTimeLabel = useCallback(
     (workerName: string) => {
       const workHourNormInMonth = WorkerHourInfo.calculateWorkNormForMonth(monthNumber, year);
-      const workerContractType = contractType?.[workerName] ?? ContractType.EMPLOYMENT_CONTRACT;
+      const workerContractType = contractType?.[workerName] ?? DEFAULT_CONTRACT_TYPE;
       const contractTypeLabel = ContractTypeHelper.translate(workerContractType);
       const workerTimeLabel =
         workerContractType === ContractType.CIVIL_CONTRACT
@@ -145,6 +146,9 @@ export default function WorkersTab(): JSX.Element {
                   </TableCell>
                   <TableCell className={classes.tableCell} align="left">
                     {getWorkerTimeLabel(worker.name)}
+                  </TableCell>
+                  <TableCell className={classes.tableCell} align="left">
+                    {worker.workerGroup}
                   </TableCell>
                   <TableCell align="right">
                     <Button

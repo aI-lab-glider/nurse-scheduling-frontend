@@ -46,5 +46,7 @@ export function useWorkerGroups(): GroupedWorkers {
   const aggregatedData = Object.keys(workerShifts).map((workerName) =>
     aggregateWorkerInfo(workerName, workerShifts, workerInfo)
   );
-  return _.groupBy(aggregatedData, (item) => item.workerGroup);
+
+  const sortedData = _.sortBy(aggregatedData, (item) => item.workerGroup);
+  return _.groupBy(sortedData, (item) => item.workerGroup);
 }

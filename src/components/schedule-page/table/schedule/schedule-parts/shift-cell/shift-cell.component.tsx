@@ -56,16 +56,19 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     onValueChange,
     onClick,
     onBlur,
+    // verboseDate,
+    // monthNumber,
     errorSelector = (_): ScheduleError[] => [],
     keepOn,
     hasNext,
   } = options;
+  // TODO revert cell details
   // const { year } = useSelector(
   //   (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   // );
-  const cellRef = useRef<HTMLDivElement>(null);
-
   // const cellDetailsPopperRef = useRef<HTMLDivElement>(null);
+
+  const cellRef = useRef<HTMLDivElement>(null);
 
   const { componentContainer, isComponentVisible, setIsComponentVisible } = useComponentVisible(
     false
@@ -74,7 +77,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   function toggleComponentVisibility(): void {
     setIsComponentVisible(!isComponentVisible);
   }
-
+  // TODO revert cell details
   // const isEditMode = useSelector(
   //   (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
   // );
