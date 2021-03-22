@@ -40,8 +40,9 @@
     "file-saver": "^2.0.2",
     "file-type": "^16.2.0",
     "fontsource-roboto": "^3.0.3",
+    "html2canvas": "^1.0.0-rc.7",
     "immutable": "^4.0.0-rc.12",
-    "is-electron": "^2.2.0",
+    "jspdf": "^2.3.1",
     "jszip": "^3.6.0",
     "node-sass": "^4.14.1",
     "npm": "^7.5.3",
@@ -69,7 +70,6 @@
   "scripts": {
     "b-start": "react-scripts start",
     "b-build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron-build": "electron-builder",
     "release": "npm build && electron-builder --publish=always",

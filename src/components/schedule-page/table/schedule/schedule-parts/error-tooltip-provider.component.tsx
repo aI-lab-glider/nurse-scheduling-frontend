@@ -75,7 +75,9 @@ export function ErrorTooltipProvider({
       hideErrorTooltip(true);
     }
   }
-
+  const { shift_types: shiftTypes } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
+  );
   return (
     <>
       <Popper
@@ -92,9 +94,9 @@ export function ErrorTooltipProvider({
         {errors.map((error, index) => (
           <ErrorListItem
             key={`${error.kind}_${index}`}
-            error={ErrorMessageHelper.getErrorMessage(error)}
+            error={ErrorMessageHelper.getErrorMessage(error, shiftTypes)}
             interactable={false}
-            className="errorTootlip-item"
+            className="errorTooltip-item"
             showTitle={showErrorTitle}
           />
         ))}

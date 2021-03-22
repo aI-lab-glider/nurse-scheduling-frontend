@@ -8,6 +8,7 @@
   flex-direction: column;
   width: 100%;
   align-items: center;
+  min-height: 100vh;
 
   .schedule {
     margin: auto;
@@ -82,6 +83,11 @@
     color: $primary;
     font-size: $icon-font-size-lg;
     margin: auto 10px auto 10px;
+  }
+
+  .disabled-edit-icon {
+    opacity: $btn-disabled-opacity;
+    color: $gray-400;
   }
 
   .editing-row {

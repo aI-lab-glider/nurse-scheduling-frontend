@@ -1,12 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { ShiftModel } from "../common-models/shift-info.model";
+import { ShiftsTypesDict } from "../common-models/shift-info.model";
 
 export class AcronymGenerator {
-  static generate(word: string, shifts: ShiftModel): string {
+  static generate(word: string, shiftsTypes: ShiftsTypesDict): string {
     const re = /\s*(?:[;:\-+\s]|$)\s*/;
-    const shiftAcrs = Object.values(shifts).map((shift) => shift.code);
+    const shiftAcrs = Object.values(shiftsTypes).map((shift) => shift.code);
     shiftAcrs.push("");
     let acronym = "";
     const wordSpliting = word.split(re);

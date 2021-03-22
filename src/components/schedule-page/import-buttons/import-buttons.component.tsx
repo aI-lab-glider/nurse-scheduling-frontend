@@ -40,7 +40,7 @@ export function ImportButtonsComponent(): JSX.Element {
   const btnData = [btnData1, btnData2];
   useEffect(() => {
     if (monthModel) {
-      const action = ScheduleDataActionCreator.setScheduleFromMonthDM(monthModel, true);
+      const action = ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(monthModel);
       scheduleDipatcher(action);
     }
     if (scheduleErrors) {
@@ -87,15 +87,8 @@ export function ImportButtonsComponent(): JSX.Element {
         type="file"
         accept=".xlsx"
       />
-
       {scheduleErrors.length !== 0 && <ParseErrorModal open={open} setOpen={setOpen} />}
-      {
-        <ExportModal
-          open={exportModalOpen}
-          setOpen={setExportModalOpen}
-          model={stateScheduleModel}
-        />
-      }
+      <ExportModal open={exportModalOpen} setOpen={setExportModalOpen} model={stateScheduleModel} />
     </div>
   );
 }

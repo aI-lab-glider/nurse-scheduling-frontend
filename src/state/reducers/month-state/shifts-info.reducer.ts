@@ -11,25 +11,18 @@ import {
 } from "./schedule-data/schedule.actions";
 import { ActionModel } from "../../models/action.model";
 import { WorkerActionPayload } from "../worker.action-creator";
+import * as _ from "lodash";
 
 export function scheduleShiftsInfoReducerF(name: string) {
   return (
     state: ShiftInfoModel = scheduleDataInitialState.shifts,
     action: ScheduleActionModel | ActionModel<WorkerActionPayload>
   ): ShiftInfoModel => {
-    let updatedShifts;
-    if (action.payload as WorkerActionPayload) {
-      ({ updatedShifts } = action.payload as WorkerActionPayload);
-    }
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
       case createActionName(name, ScheduleActionType.UPDATE):
         const data = (action.payload as ScheduleDataModel)?.shifts;
-        return { ...data };
-      case ScheduleActionType.UPDATE_WORKER_INFO:
-        return {
-          ...updatedShifts,
-        };
+        return _.cloneDeep(data);
       default:
         return state;
     }

@@ -33,7 +33,7 @@ declare namespace Cypress {
     saveToDatabase(): Chainable<Element>;
     leaveEditMode(): Chainable<Element>;
     /**
-     * Behaves in the same way as built screenshot command, but also awaits for some amount of time,
+     * Behaves in the same way as built in screenshot command, but also awaits for some amount of time,
      * to ensure that screenshot will capture actual state of application.
      * For more details @see https://docs.cypress.io/api/commands/screenshot.html#Asynchronous
      * @param awaitTime estimated time, required for cypress engine to make

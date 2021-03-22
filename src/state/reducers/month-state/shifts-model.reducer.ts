@@ -3,14 +3,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { ScheduleActionType } from "./schedule-data/schedule.actions";
-import { Shift, ShiftModel } from "../../../common-models/shift-info.model";
+import { Shift, ShiftsTypesDict } from "../../../common-models/shift-info.model";
 import { ActionModel } from "../../models/action.model";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 
 export function shiftsModelReducer(
-  state: ShiftModel = scheduleDataInitialState.shift_types,
+  state: ShiftsTypesDict = scheduleDataInitialState.shift_types,
   action: ActionModel<Shift> | ActionModel<Array<Shift>>
-): ShiftModel {
+): ShiftsTypesDict {
   if (!action.payload) {
     return state;
   }

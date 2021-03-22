@@ -3,11 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { WorkerType } from "../../../src/common-models/worker-info.model";
 import { ShiftCode } from "../../../src/common-models/shift-info.model";
+import { shiftSectionDataCy } from "../../../src/components/schedule-page/table/schedule/sections/worker-info-section/worker-info-section.models";
 
 context("Display schedule", () => {
   it("Should be able to load and display schedule", () => {
     cy.loadScheduleToMonth("example_2.xlsx");
-    cy.get("[data-cy=nurseShiftsTable]", { timeout: 10000 }).should("exist");
+    cy.get(`[data-cy=${shiftSectionDataCy(0)}]`, { timeout: 10000 }).should("exist");
   });
 
   it("Should be able to read month and year", () => {
@@ -17,48 +18,6 @@ context("Display schedule", () => {
 
   it("Should be able to read holidays", () => {
     cy.get("#timetableRow > #weekendHeader").should("have.length", 10);
-  });
-
-  it("Should be able to read number of workers in 2nd, 15th and 28th November 2020", () => {
-    cy.get("[data-cy=foundationInfoSection]")
-      .children()
-      .eq(0)
-      .children()
-      .eq(5 + 2)
-      .contains(0);
-    cy.get("[data-cy=foundationInfoSection]")
-      .children()
-      .eq(0)
-      .children()
-      .eq(5 + 15)
-      .contains(0);
-    cy.get("[data-cy=foundationInfoSection]")
-      .children()
-      .eq(0)
-      .children()
-      .eq(5 + 28)
-      .contains(0);
-  });
-
-  it("Should be able to read number of children in 2nd, 15th and 28th November 2020", () => {
-    cy.get("[data-cy=foundationInfoSection]")
-      .children()
-      .eq(1)
-      .children()
-      .eq(5 + 2)
-      .contains(24);
-    cy.get("[data-cy=foundationInfoSection]")
-      .children()
-      .eq(1)
-      .children()
-      .eq(5 + 15)
-      .contains(24);
-    cy.get("[data-cy=foundationInfoSection]")
-      .children()
-      .eq(1)
-      .children()
-      .eq(5 + 28)
-      .contains(24);
   });
 
   // TODO: make more generic test
@@ -118,7 +77,7 @@ context("Display schedule", () => {
   ];
 
   const WORKER = {
-    workerType: WorkerType.NURSE,
+    workerGroupIdx: 0,
     workerIdx: 1,
   };
 

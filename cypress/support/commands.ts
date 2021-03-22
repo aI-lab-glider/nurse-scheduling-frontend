@@ -2,23 +2,25 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import "cypress-file-upload";
+import { LocalStorageProvider } from "../../src/api/local-storage-provider.model";
 import { ShiftCode } from "../../src/common-models/shift-info.model";
-import { WorkerType } from "../../src/common-models/worker-info.model";
 import {
   baseCellDataCy,
   CellType,
 } from "../../src/components/schedule-page/table/schedule/schedule-parts/base-cell/base-cell.models";
 import { baseRowDataCy } from "../../src/components/schedule-page/table/schedule/schedule-parts/base-row.models";
+import { shiftSectionDataCy } from "../../src/components/schedule-page/table/schedule/sections/worker-info-section/worker-info-section.models";
 import { summaryCellDataCy } from "../../src/components/summarytable/summarytable-cell.models";
 import { summaryRowDataCy } from "../../src/components/summarytable/summarytable-row.models";
-import { numberOfWeeksInMonth } from "../../src/state/reducers/month-state/schedule-data/common-reducers";
+import { summaryTableSectionDataCy } from "../../src/components/summarytable/summarytable-section.models";
+import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../../src/helpers/month.helper";
 
 export type CypressScreenshotOptions = Partial<
   Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions
 >;
 
 export interface GetWorkerShiftOptions {
-  workerType: WorkerType;
+  workerGroupIdx: number;
   workerIdx: number;
   shiftIdx: number;
   selector?: CellType;
@@ -30,7 +32,7 @@ export interface ChangeWorkerShiftOptions extends GetWorkerShiftOptions {
   newShiftCode: ShiftCode;
 }
 export interface CheckHoursInfoOptions {
-  workerType: WorkerType;
+  workerGroupIdx: number;
   workerIdx: number;
   hoursInfo: HoursInfo;
 }
@@ -44,25 +46,31 @@ export enum HoursInfoCells {
   actual = 1,
   overtime = 2,
 }
-export type ScheduleName = "example.xlsx" | "grafik.xlsx" | "example_2.xlsx";
-export const NUMBER_OF_DAYS_IN_WEEK = 7;
+export type ScheduleName =
+  | "example.xlsx"
+  | "example_2.xlsx"
+  | "childrens_extraworkers.xlsx"
+  | "extraworkers_childrens.xlsx";
 const TEST_SCHEDULE_MONTH = 10;
 const TEST_SCHEDULE_YEAR = 2020;
 
 Cypress.Commands.add(
   "loadScheduleToMonth",
   (scheduleName: ScheduleName = "example.xlsx", month: number, year: number) => {
+    new LocalStorageProvider().reloadDb();
+    const shiftSection = shiftSectionDataCy(0);
     cy.clock(Date.UTC(year ?? TEST_SCHEDULE_YEAR, month ?? TEST_SCHEDULE_MONTH, 15), ["Date"]);
     cy.visit(Cypress.env("baseUrl"));
+    cy.get("[data-cy=file-input]").should("exist");
     cy.get("[data-cy=file-input]").attachFile(scheduleName);
-    cy.get(`[data-cy=nurseShiftsTable]`).should("exist");
+    cy.get(`[data-cy=${shiftSection}]`).should("exist");
     cy.window()
       .its("store")
       .invoke("getState")
       .its("actualState.temporarySchedule.present.month_info.children_number")
       .should(
         "have.length",
-        numberOfWeeksInMonth(month ?? TEST_SCHEDULE_MONTH, year ?? TEST_SCHEDULE_YEAR) *
+        MonthHelper.numberOfWeeksInMonth(month ?? TEST_SCHEDULE_MONTH, year ?? TEST_SCHEDULE_YEAR) *
           NUMBER_OF_DAYS_IN_WEEK
       );
   }
@@ -70,8 +78,8 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   "getWorkerShift",
-  ({ workerType, workerIdx, shiftIdx, selector = "cell" }: GetWorkerShiftOptions) => {
-    const section = `${workerType.toLowerCase()}ShiftsTable`;
+  ({ workerGroupIdx, workerIdx, shiftIdx, selector = "cell" }: GetWorkerShiftOptions) => {
+    const section = shiftSectionDataCy(workerGroupIdx);
     const row = baseRowDataCy(workerIdx);
     const cell = baseCellDataCy(shiftIdx, selector);
     return cy.get(`[data-cy=${section}] [data-cy=${row}] [data-cy=${cell}]`);
@@ -103,8 +111,8 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   "checkHoursInfo",
-  ({ workerType, workerIdx, hoursInfo }: CheckHoursInfoOptions) => {
-    const section = `${workerType.toLowerCase()}SummaryTable`;
+  ({ workerGroupIdx, workerIdx, hoursInfo }: CheckHoursInfoOptions) => {
+    const section = summaryTableSectionDataCy(workerGroupIdx);
     const row = summaryRowDataCy(workerIdx);
     Object.keys(HoursInfoCells)
       .filter((key) => isNaN(Number(HoursInfoCells[key])))
@@ -123,19 +131,21 @@ Cypress.Commands.add("saveToDatabase", () => {
 });
 
 Cypress.Commands.add("enterEditMode", () => {
-  // TODO: uncomment and check if everything would work after TASK-180 would be merged
+  // TODO: uncomment and test on refactoring
   const actualRevisionValue = "actual";
   cy.get("[data-cy=revision-select]")
     //   .select(RevisionTypeLabels[actualRevisionValue])
     .should("have.value", actualRevisionValue);
   // cy.get("[data-cy=revision-select]").blur();
   cy.get("[data-cy=edit-mode-button]").click();
-  return cy.get("[data-cy=nurseShiftsTable]").should("exist");
+  const dataCy = shiftSectionDataCy(0);
+  return cy.get(`[data-cy=${dataCy}]`).should("exist");
 });
 
 Cypress.Commands.add("leaveEditMode", () => {
   cy.get("[data-cy=leave-edit-mode]").click();
-  return cy.get("[data-cy=nurseShiftsTable]").should("exist");
+  const dataCy = shiftSectionDataCy(0);
+  return cy.get(`[data-cy=${dataCy}]`).should("exist");
 });
 
 Cypress.Commands.add(
@@ -153,10 +163,8 @@ Cypress.Commands.add(
 );
 
 export enum FoundationInfoRowType {
-  ExtraWorkersRow = 0,
-  ChildrenInfoRow = 1,
-  NurseCountRow = 2,
-  BabysitterCountRow = 3,
+  ExtraWorkersRow = 1,
+  ChildrenInfoRow = 0,
 }
 export interface GetFoundationInfoCellOptions {
   rowType: FoundationInfoRowType;

@@ -14,6 +14,7 @@ import { scheduleReducerF } from "./reducers/month-state/schedule-data/schedule.
 import { scheduleErrorsReducer } from "./reducers/month-state/schedule-errors.reducer";
 import { revisionInfoReducer } from "./reducers/month-state/revision-info.reducer";
 import { modeInfoReducer } from "./reducers/month-state/mode-info-reducer";
+import { primaryRevisionReducer } from "./reducers/base-revision.reducer";
 
 export type CombinedReducers<StateModel> = {
   [key in keyof StateModel]: <T, U>(state: T, action: ActionModel<U>) => T;
@@ -35,6 +36,7 @@ const monthStateReducer = combineReducers({
     limit: 50,
     ...TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
   }),
+  primaryRevision: primaryRevisionReducer,
   scheduleErrors: scheduleErrorsReducer,
 } as CombinedReducers<ScheduleStateModel>);
 

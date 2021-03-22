@@ -7,27 +7,32 @@ import {
   ScheduleError,
 } from "../../common-models/schedule-error.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
+import { WorkerGroup } from "../../common-models/worker-info.model";
+import { StringHelper } from "../../helpers/string.helper";
 import { ShiftsProvider } from "../providers/shifts-provider.model";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
-import { WorkerType, WorkerTypeHelper } from "../../common-models/worker-info.model";
-import { StringHelper } from "../../helpers/string.helper";
+import { DEFAULT_WORKER_GROUP } from "./workers-info.parser";
 
 export class ShiftsInfoParser extends ShiftsProvider {
+  get availableWorkersGroup(): { [workerName: string]: WorkerGroup } {
+    const result = {};
+    Object.keys(this.workerShifts).forEach((workerName) => {
+      result[workerName] = `${DEFAULT_WORKER_GROUP} ${this.groupNumber}`;
+    });
+    return result;
+  }
+
   private _sectionRows: { [key: string]: DataRowParser } = {};
   private _parseErrors: ScheduleError[] = [];
 
-  constructor(typeOfPersonel: WorkerType, private metaData: MetaDataParser, data?: string[][]) {
+  constructor(private metaData: MetaDataParser, private groupNumber: number, data?: string[][]) {
     super();
 
     if (data) {
       this.myPersonel(data).forEach((row) => {
         this._sectionRows[row.rowKey] = row;
       });
-    } else {
-      this.logLoadFileError(
-        "Nie znaleziono sekcji : " + WorkerTypeHelper.translate(typeOfPersonel, true)
-      );
     }
   }
 
@@ -46,9 +51,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
         );
 
         if (slicedPersonelRow.length !== this.metaData.dayCount) {
-          this.logLoadFileError(
-            "Sekcja nie ma oczekiwanych wymiarów. Przyjęto, że w brakujących dniach liczba dzieci wynosi 0"
-          );
+          this.logLoadFileError("Sekcja nie ma oczekiwanych wymiarów.");
         }
 
         const personel = Array<string>();
@@ -61,7 +64,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
             personel.push("W");
           } else {
             if (typeof b !== "string" || !(b in ShiftCode)) {
-              this.logUnknownValue(i + 1, name, b);
+              this.logUnknownValue(i, name, b);
               personel.push("W");
             } else {
               personel.push(b);

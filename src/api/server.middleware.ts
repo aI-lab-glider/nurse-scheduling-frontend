@@ -10,8 +10,8 @@ import {
   WorkerOvertime,
   WorkerUnderTime,
 } from "../common-models/schedule-error.model";
-import { ShiftHelper } from "../helpers/shifts.helper";
-import { ShiftModel } from "../common-models/shift-info.model";
+import { WorkerHourInfo } from "../helpers/worker-hours-info.model";
+import { PrimaryMonthRevisionDataModel } from "../state/models/application-state.model";
 
 type NameUuidMapper = {
   [name: string]: string;
@@ -90,20 +90,12 @@ export class ServerMiddleware {
 
   public static replaceOvertimeAndUndertimeErrors(
     actualSchedule: ScheduleDataModel,
-    scheduleErrors: ScheduleError[],
-    shiftsType: ShiftModel
+    primaryMonthData: PrimaryMonthRevisionDataModel,
+    scheduleErrors: ScheduleError[]
   ): ScheduleError[] {
-    const { month_number: monthNumber, year } = actualSchedule.schedule_info;
-    const { dates } = actualSchedule.month_info;
     const calculateNormHoursDiff = (workerName: string): number =>
-      ShiftHelper.caclulateWorkHoursInfoForDates(
-        actualSchedule.shifts[workerName],
-        actualSchedule.employee_info.time[workerName],
-        monthNumber,
-        year,
-        dates,
-        shiftsType
-      )[2];
+      WorkerHourInfo.fromSchedules(workerName, actualSchedule, primaryMonthData).overTime;
+
     const validBackendScheduleErros = scheduleErrors.filter(
       (err) =>
         err.kind !== AlgorithmErrorCode.WorkerOvertime &&

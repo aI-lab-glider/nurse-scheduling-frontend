@@ -2,10 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ShiftCode } from "../../../../src/common-models/shift-info.model";
-import { WorkerType } from "../../../../src/common-models/worker-info.model";
 
 const testedCell = {
-  workerType: WorkerType.NURSE,
+  workerGroupIdx: 0,
   workerIdx: 0,
   shiftIdx: 6,
   initialShiftCode: ShiftCode.U,

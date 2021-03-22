@@ -3,12 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { TextField } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../../button-component/button.component";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
 import DefaultModal from "../modal.component";
-import { send, init } from "emailjs-com";
+import { send } from "emailjs-com";
 import { useNotification } from "../../notification/notification.context";
 
 const useStyles = makeStyles(() =>
@@ -70,28 +70,26 @@ const useStyles = makeStyles(() =>
       color: ScssVars.primary,
       display: "flex",
     },
-
-    spinnerScaled: {
-      marginTop: "88px",
-      marginBottom: "84px",
-      height: "100px",
-      width: "100px",
-    },
   })
 );
 
 export interface ReportIssueModalOptions {
   setOpen: (open: boolean) => void;
   open: boolean;
-  screenshot?;
   clear?: () => void;
 }
 
 export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.Element {
+  const classes = useStyles();
+  const [isSent, setIsSent] = useState(false);
+  const { open, setOpen, clear } = options;
+  const [issueDescription, setIssueDescription] = useState("");
+  const title = "Zgłoś błąd";
+  const { createNotification } = useNotification();
+
   function onIssueDescriptionChange(event): void {
     const { value } = event.target;
     setIssueDescription(value);
-    setIsLongEnough(issueDescription.length > 20);
   }
 
   function handleClose(): void {
@@ -101,16 +99,31 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
     setOpen(false);
   }
 
-  const classes = useStyles();
-  const [isLongEnough, setIsLongEnough] = useState(false);
-  const [isSent, setIsSent] = useState(false);
-  const { open, setOpen, clear } = options;
-  const [issueDescription, setIssueDescription] = useState("");
-  const title = "Zgłoś błąd";
+  function handleSend(): void {
+    send(
+      "service_74nkmaq",
+      "template_120y7az",
+      {
+        message: issueDescription,
+      },
+      process.env.REACT_APP_EMAIL_KEY
+    )
+      .then(() => {
+        setIsSent(true);
+      })
+      .catch(() => {
+        createNotification({ type: "error", message: "Wystąpił problem sieciowy!" });
+        handleClose();
+      });
+  }
 
-  useEffect(() => {
-    init(`${process.env.EMAIL_KEY}`);
-  });
+  // Only for testing purposes
+  if (
+    process.env.REACT_APP_TEST_MODE &&
+    issueDescription.toLowerCase() === process.env.REACT_APP_ERROR_WORKER
+  ) {
+    throw new Error("[TEST MODE] Error message was entered");
+  }
 
   const body = (
     <div className="report-issue-modal-body">
@@ -126,9 +139,13 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
             fullWidth={true}
             multiline
             helperText={
-              isLongEnough
+              issueDescription.length > 19
                 ? " "
-                : "Treść wiadomości jest za krótka! Wiadomość nie zostanie wysłana."
+                : `Treść wiadomości jest za krótka! Wprowadź jeszcze min. ${
+                    19 - issueDescription.length + 1
+                  } znak${
+                    issueDescription.length < 16 ? `ów` : issueDescription.length < 19 ? `i` : ``
+                  }.`
             }
           />
         </>
@@ -136,33 +153,11 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
     </div>
   );
 
-  const { createNotification } = useNotification();
-
-  function handleSend(): void {
-    if (isLongEnough) {
-      send(
-        "service_74nkmaq",
-        "template_120y7az",
-        {
-          message: issueDescription,
-        },
-        process.env.REACT_APP_EMAIL_KEY
-      )
-        .then(() => {
-          setIsSent(true);
-        })
-        .catch(() => {
-          createNotification({ type: "error", message: "Wystąpił problem sieciowy!" });
-          handleClose();
-        });
-    }
-  }
-
   const footer = (
     <div>
       {!isSent && (
         <>
-          <Button variant="primary" onClick={handleSend} disabled={!isLongEnough}>
+          <Button variant="primary" onClick={handleSend} disabled={issueDescription.length < 20}>
             Wyślij
           </Button>
           <Button variant="secondary" color="secondary" onClick={handleClose}>

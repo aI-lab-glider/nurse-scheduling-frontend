@@ -71,13 +71,14 @@ export class ArrayHelper {
   public static extend<T>(
     arr1: T[],
     count1: number,
+    arr1Default: T,
     curr: T[],
     arr2: T[],
     count2: number,
-    defaultValue: T
+    arr2Default: T
   ): T[] {
-    const prevArrData = arr1 ?? Array(count1).fill(defaultValue);
-    const nextArrData = arr2 ?? Array(count2).fill(defaultValue);
+    const prevArrData = arr1 ?? Array(count1).fill(arr1Default);
+    const nextArrData = arr2 ?? Array(count2).fill(arr2Default);
 
     const left = prevArrData.slice(prevArrData.length - count1);
     const right = nextArrData.slice(0, count2);
@@ -93,5 +94,13 @@ export class ArrayHelper {
     const firstArray = array.slice(startIndex, startIndex + length);
     const diff = length - firstArray.length;
     return [...firstArray, ...Array(diff).fill(defaultFillValue)];
+  }
+
+  public static circularExtendToLength<T>(array: T[], length: number): T[] {
+    let newArray: T[] = [];
+    while (newArray.length < length) {
+      newArray = newArray.concat(array);
+    }
+    return newArray.slice(0, length);
   }
 }

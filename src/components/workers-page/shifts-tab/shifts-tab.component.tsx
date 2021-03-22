@@ -102,7 +102,6 @@ export default function ShiftTab(): JSX.Element {
                       variant="primary"
                       className="action-button"
                       onClick={(): void => toggleOpen(shift, ShiftDrawerMode.EDIT)}
-                      disabled={true}
                     >
                       Edytuj
                     </Button>
@@ -110,7 +109,6 @@ export default function ShiftTab(): JSX.Element {
                       variant="secondary"
                       className="action-button"
                       onClick={(): void => handleRemoveItem(shift)}
-                      disabled={true}
                     >
                       Usuń
                     </Button>

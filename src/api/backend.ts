@@ -4,8 +4,8 @@
 import axios, { AxiosInstance } from "axios";
 import { ScheduleDataModel } from "../common-models/schedule-data.model";
 import { ScheduleError } from "../common-models/schedule-error.model";
+import { PrimaryMonthRevisionDataModel } from "../state/models/application-state.model";
 import { ServerMiddleware } from "./server.middleware";
-import { ShiftModel } from "../common-models/shift-info.model";
 
 interface BackendErrorObject extends Omit<ScheduleError, "kind"> {
   code: string;
@@ -24,7 +24,10 @@ class Backend {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  public getErrors(schedule: ScheduleDataModel, shifts: ShiftModel): Promise<ScheduleError[]> {
+  public getErrors(
+    schedule: ScheduleDataModel,
+    baseScheduleRevision: PrimaryMonthRevisionDataModel
+  ): Promise<ScheduleError[]> {
     const { anonynimizedSchedule, anonymizationMap } = ServerMiddleware.anonymizeSchedule(schedule);
     const validRequestSchedule = ServerMiddleware.mapIsWorkingTypeSnakeCase(anonynimizedSchedule);
 
@@ -34,7 +37,11 @@ class Backend {
         .then((resp) => resp.data.map((el: BackendErrorObject) => ({ ...el, kind: el.code })))
         .then((errors) => errors.map(ServerMiddleware.escapeJuliaIndexes))
         .then((errors) =>
-          ServerMiddleware.replaceOvertimeAndUndertimeErrors(validRequestSchedule, errors, shifts)
+          ServerMiddleware.replaceOvertimeAndUndertimeErrors(
+            validRequestSchedule,
+            baseScheduleRevision,
+            errors
+          )
         )
         .then((errors) =>
           errors.map((error: ScheduleError) =>

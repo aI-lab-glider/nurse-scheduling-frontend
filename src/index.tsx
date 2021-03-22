@@ -12,13 +12,14 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppConfigProvider } from "./state/app-config-context";
 import * as Sentry from "@sentry/react";
-import { ReportingObserver as ReportingObserverIntegration } from "@sentry/integrations/dist/reportingobserver";
+import { ReportingObserver } from "@sentry/integrations";
 import { Integrations } from "@sentry/tracing";
 import { applyMiddleware, compose, createStore } from "redux";
 import thunkMiddleware from "redux-thunk";
 import { appReducer } from "./state/app.reducer";
 import { createBrowserHistory } from "history";
 import { composeWithDevTools } from "redux-devtools-extension";
+import { AppErrorBoundary } from "./components/app-error-boundary/app-error-boundary.component";
 
 const history = createBrowserHistory();
 
@@ -26,7 +27,7 @@ Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_DSN,
   normalizeDepth: 10,
   integrations: [
-    new ReportingObserverIntegration(),
+    new ReportingObserver(),
     new Integrations.BrowserTracing({
       routingInstrumentation: Sentry.reactRouterV5Instrumentation(history),
     }),
@@ -42,17 +43,19 @@ const composedEnhancer = composeWithDevTools(
 export const appStore = createStore(appReducer, composedEnhancer);
 
 ReactDOM.render(
-  <DndProvider backend={HTML5Backend}>
-    <Router history={history}>
-      <React.StrictMode>
-        <Provider store={appStore}>
-          <AppConfigProvider>
-            <App />
-          </AppConfigProvider>
-        </Provider>
-      </React.StrictMode>
-    </Router>
-  </DndProvider>,
+  <AppErrorBoundary>
+    <DndProvider backend={HTML5Backend}>
+      <Router history={history}>
+        <React.StrictMode>
+          <Provider store={appStore}>
+            <AppConfigProvider>
+              <App />
+            </AppConfigProvider>
+          </Provider>
+        </React.StrictMode>
+      </Router>
+    </DndProvider>
+  </AppErrorBoundary>,
   document.getElementById("root")
 );
 /* eslint-disable @typescript-eslint/no-explicit-any */
