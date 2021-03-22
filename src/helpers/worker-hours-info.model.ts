@@ -46,7 +46,7 @@ export class WorkerHourInfo {
   constructor(workerHourNorm: number, workerTime: number, overTime: number) {
     this.workerHourNorm = Math.round(workerHourNorm);
     this.workerTime = Math.round(workerTime);
-    this.overTime = Math.round(overTime);
+    this.overTime = overTime;
   }
 
   public get workHoursDiff(): number {
@@ -214,6 +214,7 @@ export class WorkerHourInfo {
     verboseDates: DateInformationForWorkInfoCalculation[]
   ): number {
     const workingDaysCount = verboseDates.filter((d) => VerboseDateHelper.isWorkingDay(d)).length;
+    // if holiday on saturday, monday is free day
     const holidaySaturdaysCount = verboseDates.filter((d) => VerboseDateHelper.isHolidaySaturday(d))
       .length;
 
@@ -298,8 +299,13 @@ export class WorkerHourInfo {
         const workHoursDiffBetweenRevisions =
           ShiftHelper.shiftCodeToWorkTime(SHIFTS[actualShift]) -
           ShiftHelper.shiftCodeToWorkTime(SHIFTS[historyShift]);
-        diffBetweenRevisionsOvertime +=
-          workHoursDiffBetweenRevisions > 0 ? workHoursDiffBetweenRevisions : 0;
+        const exceedMaxNormalTime =
+          ShiftHelper.shiftCodeToWorkTime(SHIFTS[actualShift]) - MAXIMUM_NOT_OVERTIME_HOURS;
+        diffBetweenRevisionsOvertime += Math.max(
+          workHoursDiffBetweenRevisions,
+          exceedMaxNormalTime,
+          0
+        );
       }
     });
     return diffBetweenRevisionsOvertime;
@@ -321,8 +327,10 @@ export class WorkerHourInfo {
       .forEach((shift) => {
         const shiftWorkTime = ShiftHelper.shiftCodeToWorkTime(SHIFTS[shift]);
         if (shiftWorkTime > MAXIMUM_NOT_OVERTIME_HOURS) {
-          const overTime = shiftWorkTime - MAXIMUM_NOT_OVERTIME_HOURS;
-          exceedMaximumDayWorkTimeOvertime += overTime > 0 ? overTime : 0;
+          exceedMaximumDayWorkTimeOvertime = +Math.max(
+            shiftWorkTime - MAXIMUM_NOT_OVERTIME_HOURS,
+            0
+          );
         }
       });
     return exceedMaximumDayWorkTimeOvertime;
