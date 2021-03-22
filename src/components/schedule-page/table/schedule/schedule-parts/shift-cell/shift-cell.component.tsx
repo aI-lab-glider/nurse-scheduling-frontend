@@ -5,20 +5,14 @@ import classNames from "classnames/bind";
 import * as _ from "lodash";
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import mergeRefs from "react-merge-refs";
-import { usePopper } from "react-popper";
-import { useSelector } from "react-redux";
 import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
 import { ShiftCode, SHIFTS } from "../../../../../../common-models/shift-info.model";
-import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
-import { ScheduleMode } from "../../schedule-state.model";
 import {
   baseCellDataCy,
   BaseCellOptions,
   hasNextShiftClassName,
   keepOnShiftClassName,
 } from "../base-cell/base-cell.models";
-import { CellDetails } from "../base-cell/cell-details-content.component";
-import { Popper } from "../base-cell/popper";
 import useComponentVisible from "../base-cell/use-component-visible";
 import useTimeout from "../base-cell/use-timeout";
 import { CellInput } from "../cell-blockable-input.component";
@@ -57,8 +51,6 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     onValueChange,
     onClick,
     onBlur,
-    verboseDate,
-    monthNumber,
     errorSelector = (_): ScheduleError[] => [],
     keepOn,
     hasNext,
