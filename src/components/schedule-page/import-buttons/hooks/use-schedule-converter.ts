@@ -3,10 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useEffect, useState } from "react";
 import Excel from "exceljs";
-import {
-  cropScheduleDMToMonthDM,
-  MonthDataModel,
-} from "../../../../common-models/schedule-data.model";
+import { MonthDataModel } from "../../../../common-models/schedule-data.model";
 import { InputFileErrorCode, ScheduleError } from "../../../../common-models/schedule-error.model";
 import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
 import { useFileReader } from "./use-file-reader";
@@ -14,6 +11,11 @@ import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 import { fromBuffer } from "file-type/browser";
 import { useNotification } from "../../../common-components/notification/notification.context";
+import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
+import {
+  WORKERS_WORKSHEET_NAME,
+  WORKSHEET_NAME,
+} from "../../../../logic/schedule-exporter/schedule-export.logic";
 
 export interface UseScheduleConverterOutput {
   monthModel?: MonthDataModel;
@@ -93,10 +95,17 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       }
     });
 
-    const cellsToAvoid = ["godziny wymagane", "godziny wypracowane", "nadgodziny", "grafik"];
+    const cellsToAvoid = [
+      "godziny wymagane",
+      "godziny wypracowane",
+      "nadgodziny",
+      "grafik",
+      "imię i nazwisko",
+    ];
 
     return (
       undefinedSeen ||
+      rowValuesSet.size === 0 ||
       (rowValuesSet.size === 4 &&
         Array.from(rowValuesSet).some((setItem) =>
           cellsToAvoid.some((cellToAvoid) => setItem.trim().toLowerCase().includes(cellToAvoid))
@@ -106,10 +115,30 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
     );
   }
 
-  function readFileContent(workbook): void {
-    const sheet = workbook.getWorksheet(1);
+  function extractWorkers(workbook): Array<Array<string>> {
+    const workers = Array<Array<string>>();
+    const workersWorkSheet = workbook.getWorksheet(WORKERS_WORKSHEET_NAME);
 
-    if (sheet.rowCount === 0) {
+    if (workersWorkSheet) {
+      workersWorkSheet.eachRow(false, (row) => {
+        const rowValues = Array<string>();
+
+        let iter;
+        for (iter = 1; iter <= row.cellCount; iter++) {
+          rowValues.push(row.getCell(iter).text);
+        }
+
+        if (!isEmpty(rowValues)) {
+          workers.push(rowValues);
+        }
+      });
+    }
+    return workers;
+  }
+
+  function extractSchedule(workbook): Array<Array<Array<string>>> {
+    const scheduleWorkSheet = workbook.getWorksheet(WORKSHEET_NAME);
+    if (scheduleWorkSheet.rowCount === 0) {
       throw new Error(InputFileErrorCode.EMPTY_FILE);
     }
 
@@ -119,8 +148,8 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
     let emptyCounter = 0;
 
     let rowIter;
-    for (rowIter = 1; rowIter <= sheet.rowCount; rowIter++) {
-      const row = sheet.getRow(rowIter);
+    for (rowIter = 1; rowIter <= scheduleWorkSheet.rowCount; rowIter++) {
+      const row = scheduleWorkSheet.getRow(rowIter);
 
       const rowValues = Array<string>();
 
@@ -148,14 +177,21 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
     if (outerArray.length === 0) {
       throw new Error(InputFileErrorCode.EMPTY_FILE);
     }
+    return outerArray;
+  }
 
-    if (Object.keys(outerArray).length !== 0) {
-      const parser = new ScheduleParser(month, year, outerArray);
+  function readFileContent(workbook): void {
+    const scheduleArray = extractSchedule(workbook);
+    const workersArray = extractWorkers(workbook);
+
+    if (Object.keys(scheduleArray).length !== 0) {
+      const parser = new ScheduleParser(month, year, scheduleArray, workersArray);
 
       setScheduleErrors([
         ...parser._parseErrors,
         ...parser.sections.Metadata.errors,
         ...parser.sections.FoundationInfo.errors,
+        ...parser.workersInfo.errors,
       ]);
       setMonthModel(cropScheduleDMToMonthDM(parser.schedule.getDataModel()));
 

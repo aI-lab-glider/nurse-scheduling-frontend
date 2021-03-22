@@ -29,7 +29,7 @@ export function BaseCellComponent(options: BaseCellOptions): JSX.Element {
   const showInput = isPointerOn && !isBlocked;
   //  #region view
   return (
-    <td
+    <div
       ref={selectableItemRef}
       className={classNames("mainCell", { selection: isSelected, blocked: isBlocked })}
       id={id}
@@ -57,7 +57,7 @@ export function BaseCellComponent(options: BaseCellOptions): JSX.Element {
           )}
         </div>
       </ErrorTooltipProvider>
-    </td>
+    </div>
   );
   //#endregion
 }

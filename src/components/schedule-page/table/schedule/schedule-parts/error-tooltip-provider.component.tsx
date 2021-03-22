@@ -94,7 +94,7 @@ export function ErrorTooltipProvider({
             key={`${error.kind}_${index}`}
             error={ErrorMessageHelper.getErrorMessage(error)}
             interactable={false}
-            className="errorTootlip-item"
+            className="errorTooltip-item"
             showTitle={showErrorTitle}
           />
         ))}

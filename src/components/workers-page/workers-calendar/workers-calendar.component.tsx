@@ -27,6 +27,9 @@ export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Ele
 
   const data = applyScheduleStyling(shiftsArr.map((x) => x[1]));
 
+  let isTop = false;
+  let isLeft = false;
+
   return (
     <>
       <div className={"scheduleStyle"}>
@@ -43,6 +46,9 @@ export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Ele
               value = "" as ShiftCode;
             }
 
+            isTop = index < 7;
+            isLeft = index % 7 === 0;
+
             return (
               <WorkersCalendarCell
                 shift={value}
@@ -51,6 +57,8 @@ export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Ele
                 workersCalendar={true}
                 hasNext={hasNext}
                 notCurrentMonth={notCurrentMonth}
+                isTop={isTop}
+                isLeft={isLeft}
               />
             );
           })}

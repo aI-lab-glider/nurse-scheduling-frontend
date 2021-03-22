@@ -1,19 +1,26 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import * as _ from "lodash";
 import { VerboseDate } from "../common-models/month-info.model";
-import { Shift, ShiftCode, ShiftInfoModel, SHIFTS } from "../common-models/shift-info.model";
+import {
+  Shift,
+  FREE_SHIFTS,
+  ShiftCode,
+  ShiftInfoModel,
+  SHIFTS,
+} from "../common-models/shift-info.model";
+import { Opaque } from "../common-models/type-utils";
 import { WorkerType } from "../common-models/worker-info.model";
-import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
 import { ArrayHelper } from "./array.helper";
 import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Color, Colors } from "./colors/color.model";
-import { TranslationHelper } from "./translations.helper";
 import { VerboseDateHelper } from "./verbose-date.helper";
 
-const WORK_HOURS_PER_DAY = 8;
+export const WORK_HOURS_PER_DAY = 8;
+export type MonthDataArray<T> = Opaque<"MonthData", T[]>;
+
+export type WorkHourInfoArray = Opaque<"WorkHourInfoArray", [number, number, number]>;
 
 export class ShiftHelper {
   public static getWorkersCount(shifts: ShiftInfoModel): Array<number> {
@@ -33,7 +40,7 @@ export class ShiftHelper {
 
   public static isNotWorkingShift(shiftCode: ShiftCode): boolean {
     const shift = SHIFTS[shiftCode] as Shift;
-    return (!shift.isWorkingShift && shift.code !== ShiftCode.W) ?? false;
+    return !shift.isWorkingShift && shift.code !== ShiftCode.W;
   }
 
   public static shiftCodeToWorkTime(shift: Shift): number {
@@ -46,6 +53,21 @@ export class ShiftHelper {
       duration = dayLenght - shift.from + shift.to;
     }
     return duration === 0 ? 24 : duration;
+  }
+
+  public static requiredFreeTimeAfterShift(shift: Shift): number {
+    if (this.shiftCodeToWorkTime(shift) < 9) return 11;
+    if (this.shiftCodeToWorkTime(shift) > 12) return 24;
+    return 16;
+  }
+
+  public static nextLegalShiftStart(shift: Shift): [number, boolean] {
+    const sum = shift.to + this.requiredFreeTimeAfterShift(shift);
+    if (sum > 24) {
+      if ((shift.to + this.requiredFreeTimeAfterShift(shift)) % 24 === 0) return [24, true];
+      return [(shift.to + this.requiredFreeTimeAfterShift(shift)) % 24, true];
+    }
+    return [sum, false];
   }
 
   public static groupShiftsByWorkerType(
@@ -68,73 +90,6 @@ export class ShiftHelper {
       grouped[category][workerName] = shifts;
     });
     return grouped;
-  }
-
-  public static calculateWorkNormForMonth(month: number, year: number): number {
-    const dates = VerboseDateHelper.generateVerboseDatesForMonth(month, year);
-    return Math.round(this.calculateRequiredHoursFromVerboseDates(dates));
-  }
-
-  public static calculateRequiredHoursFromVerboseDates(
-    verboseDates: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek">[]
-  ): number {
-    const workingDaysCount = verboseDates.filter((d) => VerboseDateHelper.isWorkingDay(d)).length;
-    const holidaySaturdaysCount = verboseDates.filter((d) => VerboseDateHelper.isHolidaySaturday(d))
-      .length;
-    const requiredHours = WORK_HOURS_PER_DAY * (workingDaysCount - holidaySaturdaysCount);
-
-    return requiredHours;
-  }
-  public static caclulateWorkHoursInfoForDates(
-    shifts: ShiftCode[],
-    workerNorm: number,
-    month: number,
-    year: number,
-    dates: number[]
-  ): number[] {
-    const verboseDates = new MonthInfoLogic(month, year, dates).verboseDates;
-    const monthName = TranslationHelper.englishMonths[month];
-    return this.caclulateWorkHoursInfo(shifts, workerNorm, verboseDates, monthName);
-  }
-
-  public static caclulateWorkHoursInfo(
-    shifts: ShiftCode[],
-    workerNorm: number,
-    dates: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek" | "month">[],
-    currentMonth: string
-  ): number[] {
-    if (shifts === undefined) {
-      return [];
-    }
-    if (shifts.length !== dates.length) {
-      throw Error("Shifts should be defined for each day");
-    }
-    // TODO integrate with calculateRequiredHoursFromVerboseDates
-    const firstDayOfCurrentMonth = dates.findIndex((d) => d.month === currentMonth);
-    const lastDayOfCurrentMonth = _.findLastIndex(dates, (d) => d.month === currentMonth);
-
-    const monthData = ArrayHelper.zip(shifts, dates).slice(
-      firstDayOfCurrentMonth,
-      lastDayOfCurrentMonth + 1
-    );
-
-    const workingDaysCount = monthData.filter(
-      (d) => VerboseDateHelper.isWorkingDay(d[1]!) && !this.isNotWorkingShift(d[0]!)
-    ).length;
-
-    const holidaySaturdaysCount = monthData.filter((d) =>
-      VerboseDateHelper.isHolidaySaturday(d[1]!)
-    ).length;
-
-    const requiredHours =
-      workerNorm * WORK_HOURS_PER_DAY * (workingDaysCount - holidaySaturdaysCount);
-
-    const actualHours = monthData.reduce((a, s) => {
-      const shift = SHIFTS[s[0]];
-      return a + this.shiftCodeToWorkTime(shift!);
-    }, 0);
-    const overtime = actualHours - requiredHours;
-    return [requiredHours, actualHours, overtime].map((n) => Math.round(n));
   }
 
   private static createRGBFromHex(hexCode: string): Color {
@@ -198,5 +153,13 @@ export class ShiftHelper {
       ...colorSet,
       ...VerboseDateHelper.getDayColor(day, colorSet, isFrozen, ignoreFrozenState),
     };
+  }
+
+  static replaceFreeShiftsWithFreeDay(shifts: ShiftCode[], startIndex = 0): ShiftCode[] {
+    return shifts.map((shift, idx) => {
+      const isIndexValid = idx >= startIndex;
+      const shouldReplace = FREE_SHIFTS.includes(shift);
+      return isIndexValid && shouldReplace ? ShiftCode.W : shift;
+    });
   }
 }

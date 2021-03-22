@@ -1,9 +1,10 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { ShiftHelper } from "../../../../src/helpers/shifts.helper";
+import { VerboseDate } from "../../../../src/common-models/month-info.model";
 import { ShiftCode, ShiftInfoModel, SHIFTS } from "../../../../src/common-models/shift-info.model";
-import { VerboseDate, WeekDay } from "../../../../src/common-models/month-info.model";
+import { ShiftHelper } from "../../../../src/helpers/shifts.helper";
+import { WorkerHourInfo } from "../../../../src/helpers/worker-hours-info.model";
 
 //#region getWorkersCount data
 type GetWorkersCountTestCase = { arr: ShiftInfoModel; exp: Array<number> };
@@ -65,89 +66,6 @@ const GetWorkersCountTestCases: GetWorkersCountTestCase[] = [
 
 type DateArray = Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek" | "month">[];
 
-//#region caclulateWorkHoursInfo
-type CaclulateWorkHoursInfoTestData = {
-  dates: DateArray;
-  shifts: ShiftCode[];
-  workerNorm: number;
-  expectedActualWorkHours: number;
-  expectedRequiredHours: number;
-};
-
-const month = "February";
-const dayCount = 28;
-const holidayCount = 0;
-const weekendCount = 8;
-const workdayCount = dayCount - holidayCount - weekendCount;
-
-const weekendTemplate = {
-  month: month,
-  dayOfWeek: WeekDay.SU,
-  isPublicHoliday: false,
-};
-
-const saturdayHolidayTemplate = {
-  month: month,
-  dayOfWeek: WeekDay.SA,
-  isPublicHoliday: true,
-};
-
-const holidayTemplate = {
-  month: month,
-  dayOfWeek: WeekDay.SU,
-  isPublicHoliday: true,
-};
-const workDayTemplate = {
-  month: month,
-  dayOfWeek: WeekDay.MO,
-  isPublicHoliday: false,
-};
-
-const weekends = [...Array.from(Array(weekendCount))].map((_) => weekendTemplate);
-const holidays = [...Array.from(Array(holidayCount))].map((_) => holidayTemplate);
-const workDays = [...Array.from(Array(workdayCount))].map((_) => workDayTemplate);
-const dates = [...weekends, ...holidays, ...workDays];
-const CaclulateWorkHoursInfoTestCases: CaclulateWorkHoursInfoTestData[] = [
-  {
-    dates: dates,
-    shifts: [
-      ShiftCode.D,
-      ShiftCode.N,
-      ShiftCode.W,
-      ShiftCode.W,
-      ShiftCode.D,
-      ShiftCode.N,
-      ShiftCode.N,
-      ShiftCode.W,
-      ShiftCode.D,
-      ShiftCode.RP,
-      ShiftCode.N,
-      ShiftCode.W,
-      ShiftCode.D,
-      ShiftCode.N,
-      ShiftCode.W,
-      ShiftCode.W,
-      ShiftCode.D,
-      ShiftCode.N,
-      ShiftCode.W,
-      ShiftCode.W,
-      ShiftCode.D,
-      ShiftCode.N,
-      ShiftCode.W,
-      ShiftCode.W,
-      ShiftCode.D,
-      ShiftCode.W,
-      ShiftCode.W,
-      ShiftCode.W,
-    ],
-    workerNorm: 1,
-    expectedActualWorkHours: 180,
-    expectedRequiredHours: 160,
-  },
-];
-
-//#endregion
-
 describe("ShiftHelper", () => {
   const expectedHours = {
     [ShiftCode.RP]: 12,
@@ -183,7 +101,7 @@ describe("ShiftHelper", () => {
   });
 
   it("Should calculate correct work hours for month", () => {
-    const workNorm = ShiftHelper.calculateWorkNormForMonth(10, 2020);
+    const workNorm = WorkerHourInfo.calculateWorkNormForMonth(10, 2020);
     expect(workNorm).to.equal(160);
   });
 
@@ -196,79 +114,4 @@ describe("ShiftHelper", () => {
       });
     });
   });
-
-  describe("caclulateWorkHoursInfo", () => {
-    describe("for standard holidays", () => {
-      CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
-        const message = `${testCase.dates.length} ${testCase.shifts.length}  should calculate correct work hours for ${testCase.shifts}`;
-        it(message, () => {
-          const expectedOvertime =
-            testCase.expectedActualWorkHours - testCase.expectedRequiredHours;
-          testForCorrectWorkHourCalculation(testCase, expectedOvertime);
-        });
-      });
-    });
-
-    describe("for cases with additional holiday on Saturday", () => {
-      describe("for case with 1 such holiday", () => {
-        const saturdayHolidayCaseWeekends = [...weekends.slice(0, -1), saturdayHolidayTemplate];
-        const datesWithSaturdayHoliday = [...saturdayHolidayCaseWeekends, ...holidays, ...workDays];
-
-        CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
-          it(`should subtract 8 from required hours and add 8 to overtime for ${testCase.shifts}`, () => {
-            const expectedOvertime =
-              testCase.expectedActualWorkHours - testCase.expectedRequiredHours;
-            testForCorrectWorkHourCalculation(
-              testCase,
-              expectedOvertime + 8,
-              testCase.expectedRequiredHours - 8,
-              datesWithSaturdayHoliday
-            );
-          });
-        });
-      });
-
-      describe("for case with 3 such holidays", () => {
-        const saturdayHolidayCaseWeekends = [
-          ...weekends.slice(0, -3),
-          saturdayHolidayTemplate,
-          saturdayHolidayTemplate,
-          saturdayHolidayTemplate,
-        ];
-        const datesWithSaturdayHoliday = [...saturdayHolidayCaseWeekends, ...holidays, ...workDays];
-
-        CaclulateWorkHoursInfoTestCases.forEach((testCase) => {
-          it(`should subtract 24 from required hours and add 24 to overtime for ${testCase.shifts}`, () => {
-            const expectedOvertime =
-              testCase.expectedActualWorkHours - testCase.expectedRequiredHours;
-            testForCorrectWorkHourCalculation(
-              testCase,
-              expectedOvertime + 24,
-              testCase.expectedRequiredHours - 24,
-              datesWithSaturdayHoliday
-            );
-          });
-        });
-      });
-    });
-  });
 });
-
-function testForCorrectWorkHourCalculation(
-  testCase: CaclulateWorkHoursInfoTestData,
-  expectedOvertimeHours: number,
-  expectedRequiredHours?: number,
-  dates?: DateArray
-): void {
-  const hours = ShiftHelper.caclulateWorkHoursInfo(
-    testCase.shifts,
-    testCase.workerNorm,
-    dates ? dates : testCase.dates,
-    month
-  );
-  expect(hours).to.eql([
-    expectedRequiredHours ? expectedRequiredHours : testCase.expectedRequiredHours,
-    testCase.expectedActualWorkHours,
-    expectedOvertimeHours,
-  ]);
-}

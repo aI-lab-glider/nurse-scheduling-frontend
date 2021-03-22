@@ -17,19 +17,11 @@ export function scheduleShiftsInfoReducerF(name: string) {
     state: ShiftInfoModel = scheduleDataInitialState.shifts,
     action: ScheduleActionModel | ActionModel<WorkerActionPayload>
   ): ShiftInfoModel => {
-    let updatedShifts;
-    if (action.payload as WorkerActionPayload) {
-      ({ updatedShifts } = action.payload as WorkerActionPayload);
-    }
     switch (action.type) {
       case createActionName(name, ScheduleActionType.ADD_NEW):
       case createActionName(name, ScheduleActionType.UPDATE):
         const data = (action.payload as ScheduleDataModel)?.shifts;
         return { ...data };
-      case ScheduleActionType.UPDATE_WORKER_INFO:
-        return {
-          ...updatedShifts,
-        };
       default:
         return state;
     }

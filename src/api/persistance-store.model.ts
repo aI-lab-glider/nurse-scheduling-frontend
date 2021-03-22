@@ -17,7 +17,15 @@ type BorderMonthOfYear = 0 | 11;
 type YearOffset = -1 | 1;
 
 export class ScheduleKey {
-  constructor(public month: number, public year: number) {}
+  constructor(public month: number, public year: number) {
+    if (month < 0 || month > 11) {
+      throw new Error(`Month number has to be within range 0-11 not ${month}`);
+    }
+
+    if (year < 2000 || year > 2100) {
+      throw new Error(`Year has to be within range 2000-2100 not ${year}`);
+    }
+  }
 
   getRevisionKey(revision: RevisionType): RevisionKey {
     return `${this.month}_${this.year}_${revision}`;
@@ -50,9 +58,19 @@ export type RevisionType = "primary" | "actual";
 export type RevisionKey = string;
 export type Revision = string;
 
+enum RevisionKeyIndexes {
+  MONTH = 0,
+  YEAR = 1,
+  REVISION_TYPE = 2,
+}
+
 export const RevisionTypeLabels: { [key: string]: string } = {
   primary: "wersja bazowa",
   actual: "wersja aktualna",
+};
+
+export const getRevisionTypeFromKey = (revisionKey: RevisionKey): RevisionType => {
+  return revisionKey.split("_")[RevisionKeyIndexes.REVISION_TYPE] as RevisionType;
 };
 
 export interface MonthRevision {
@@ -87,4 +105,6 @@ export abstract class PersistenceStoreProvider {
     revision: RevisionType,
     baseMonth: MonthDataModel
   ): Promise<MonthDataModel>;
+
+  abstract reloadDb(): Promise<void>;
 }

@@ -39,7 +39,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
     {
       errorType: ScheduleErrorType.AON,
       errors: errors.filter((e) => e.type === ScheduleErrorType.DSS),
-      errorDescription: "Niedozwolona sekwencja zmian",
+      errorDescription: "Naruszenie wymaganej przerwy",
     },
     {
       errorType: ScheduleErrorType.AON,
@@ -80,10 +80,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
       <FoldingSection name={`${errorData.errorDescription} (${errorData.errors.length})`}>
         {errorData.errors.sort(compareErrors).map(
           (error, index): JSX.Element => (
-            <ErrorListItem
-              key={`${error.message ? error.message.substr(2, 9) : "0"}${index}`}
-              error={error}
-            />
+            <ErrorListItem key={`${error.kind ? error.kind : "0"}_${index}`} error={error} />
           )
         )}
       </FoldingSection>

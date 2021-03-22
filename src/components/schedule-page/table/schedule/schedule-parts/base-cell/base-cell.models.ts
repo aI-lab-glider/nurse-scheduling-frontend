@@ -12,6 +12,12 @@ import { UseCellSelectionOptions } from "../hooks/use-cell-selection";
 
 export type CellType = "cell" | "highlighted-cell";
 export const baseCellDataCy = (index: number, cellType: CellType): string => `${index}-${cellType}`;
+export const keepOnShiftClassName = (keepOn: boolean | undefined): string =>
+  keepOn === undefined ? "keepOn" : `keepOn${keepOn}`;
+export const hasNextShiftClassName = (hasNext: boolean | undefined): string =>
+  hasNext === undefined ? "hasNext" : `hasNext${hasNext}`;
+export const bottomCellPartClassName = (): string => "BottomCellPart";
+export const leftBorderClassName = (): string => "leftBorder";
 
 export enum CellManagementKeys {
   Enter = "Enter",
@@ -19,6 +25,7 @@ export enum CellManagementKeys {
 }
 
 export const PivotCellTypePrefix = "Cell";
+
 export interface PivotCell {
   type: string;
   rowIndex: number;

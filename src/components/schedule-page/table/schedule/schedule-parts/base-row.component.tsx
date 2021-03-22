@@ -48,32 +48,30 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
   }
 
   return (
-    <tr className="row scheduleStyle" id="mainRow" data-cy={baseRowDataCy(rowIndex)}>
-      {data.map((dataItem = { value: defaultEmpty }, cellIndex) => {
-        return (
-          <CellComponent
-            {...{
-              ...options,
-              ...dataItem,
-            }}
-            cellIndex={cellIndex}
-            key={`${dataItem.value}${cellIndex}_${uuid}}`}
-            isSelected={selection[cellIndex]}
-            isPointerOn={cellIndex === pointerPosition}
-            isBlocked={!isEditable || isCellFromPrevMonth(cellIndex, firstMonthDayIndex)}
-            onKeyDown={(event): void => onKeyDown?.(cellIndex, event)}
-            onValueChange={saveValue}
-            onClick={(): void => onClick?.(cellIndex)}
-            verboseDate={verboseDates?.[cellIndex]}
-            errorSelector={(scheduleErrors): ScheduleError[] =>
-              errorSelector?.(cellIndex, scheduleErrors) ?? []
-            }
-            onDrag={(pivot): void => onDrag?.(pivot, cellIndex)}
-            onDragEnd={(): void => onDragEnd?.(rowIndex, cellIndex)}
-            monthNumber={currMonthNumber}
-          />
-        );
-      })}
-    </tr>
+    <div className="row scheduleStyle" id="mainRow" data-cy={baseRowDataCy(rowIndex)}>
+      {data.map((dataItem = { value: defaultEmpty }, cellIndex) => (
+        <CellComponent
+          {...{
+            ...options,
+            ...dataItem,
+          }}
+          cellIndex={cellIndex}
+          key={`${dataItem.value}_${cellIndex}_${uuid}`}
+          isSelected={selection[cellIndex]}
+          isPointerOn={cellIndex === pointerPosition}
+          isBlocked={!isEditable || isCellFromPrevMonth(cellIndex, firstMonthDayIndex)}
+          onKeyDown={(event): void => onKeyDown?.(cellIndex, event)}
+          onValueChange={saveValue}
+          onClick={(): void => onClick?.(cellIndex)}
+          verboseDate={verboseDates?.[cellIndex]}
+          errorSelector={(scheduleErrors): ScheduleError[] =>
+            errorSelector?.(cellIndex, scheduleErrors) ?? []
+          }
+          onDrag={(pivot): void => onDrag?.(pivot, cellIndex)}
+          onDragEnd={(): void => onDragEnd?.(rowIndex, cellIndex)}
+          monthNumber={currMonthNumber}
+        />
+      ))}
+    </div>
   );
 }

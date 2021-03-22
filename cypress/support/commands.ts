@@ -11,7 +11,8 @@ import {
 import { baseRowDataCy } from "../../src/components/schedule-page/table/schedule/schedule-parts/base-row.models";
 import { summaryCellDataCy } from "../../src/components/summarytable/summarytable-cell.models";
 import { summaryRowDataCy } from "../../src/components/summarytable/summarytable-row.models";
-import { numberOfWeeksInMonth } from "../../src/state/reducers/month-state/schedule-data/common-reducers";
+import { LocalStorageProvider } from "../../src/api/local-storage-provider.model";
+import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../../src/helpers/month.helper";
 
 export type CypressScreenshotOptions = Partial<
   Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions
@@ -44,16 +45,21 @@ export enum HoursInfoCells {
   actual = 1,
   overtime = 2,
 }
-export type ScheduleName = "example.xlsx" | "grafik.xlsx" | "example_2.xlsx";
-export const NUMBER_OF_DAYS_IN_WEEK = 7;
+export type ScheduleName =
+  | "example.xlsx"
+  | "example_2.xlsx"
+  | "childrens_extraworkers.xlsx"
+  | "extraworkers_childrens.xlsx";
 const TEST_SCHEDULE_MONTH = 10;
 const TEST_SCHEDULE_YEAR = 2020;
 
 Cypress.Commands.add(
   "loadScheduleToMonth",
   (scheduleName: ScheduleName = "example.xlsx", month: number, year: number) => {
+    new LocalStorageProvider().reloadDb();
     cy.clock(Date.UTC(year ?? TEST_SCHEDULE_YEAR, month ?? TEST_SCHEDULE_MONTH, 15), ["Date"]);
     cy.visit(Cypress.env("baseUrl"));
+    cy.get("[data-cy=file-input]").should("exist");
     cy.get("[data-cy=file-input]").attachFile(scheduleName);
     cy.get(`[data-cy=nurseShiftsTable]`).should("exist");
     cy.window()
@@ -62,7 +68,7 @@ Cypress.Commands.add(
       .its("actualState.temporarySchedule.present.month_info.children_number")
       .should(
         "have.length",
-        numberOfWeeksInMonth(month ?? TEST_SCHEDULE_MONTH, year ?? TEST_SCHEDULE_YEAR) *
+        MonthHelper.numberOfWeeksInMonth(month ?? TEST_SCHEDULE_MONTH, year ?? TEST_SCHEDULE_YEAR) *
           NUMBER_OF_DAYS_IN_WEEK
       );
   }

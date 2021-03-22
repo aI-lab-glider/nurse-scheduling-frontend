@@ -18,6 +18,7 @@ import { ScheduleLogicContext } from "../schedule-page/table/schedule/use-schedu
 
 import WorkerDrawerComponent, {
   WorkerDrawerMode,
+  WorkerDrawerWorkerInfo,
 } from "../workers-page/workers-tab/worker-drawer.component";
 
 export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "errorSelector"> {
@@ -35,12 +36,11 @@ export function NameTableSection({
   clickable,
 }: NameTableSectionOptions): JSX.Element {
   const [open, setIsOpen] = useState(false);
-  const [workerInfo, setWorkerInfo] = useState<WorkerInfoModel>(initialWorkerInfo);
+  const [workerInfo, setWorkerInfo] = useState<WorkerDrawerWorkerInfo>(initialWorkerInfo);
 
   const scheduleLogic = useContext(ScheduleLogicContext);
   const sectionKey: keyof Sections =
     workerType === WorkerType.NURSE ? "NurseInfo" : "BabysitterInfo";
-  const shiftLogic = scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey);
 
   const shifts = scheduleLogic?.getSection<ShiftsInfoLogic>(sectionKey)?.workerShifts;
   const verboseDates = scheduleLogic?.getSection<MetadataLogic>("Metadata")?.verboseDates;
@@ -49,9 +49,6 @@ export function NameTableSection({
     if (workerType) {
       setIsOpen(open);
       if (open) {
-        const [requiredHours, actualHours, overtime] =
-          shiftLogic?.calculateWorkerHourInfo(name) ?? [];
-
         const workersWithDates = ArrayHelper.zip<NonNullable<VerboseDate>, NonNullable<ShiftCode>>(
           verboseDates,
           shifts?.[name]
@@ -59,11 +56,8 @@ export function NameTableSection({
 
         setWorkerInfo({
           name: name,
-          time: actualHours,
           type: workerType,
           shifts: workersWithDates,
-          requiredHours,
-          overtime,
         });
       }
     }
@@ -77,40 +71,35 @@ export function NameTableSection({
 
   return (
     <React.Fragment>
-      <table className="nametable">
-        <tbody>
-          {data.map((workerName) => {
-            return (
-              <ErrorTooltipProvider
+      <div className="nametable">
+        {data.map((workerName) => {
+          return (
+            <ErrorTooltipProvider
+              key={workerName}
+              errorSelector={(scheduleErrors): ScheduleError[] =>
+                errorSelector?.(workerName, 0, scheduleErrors) ?? []
+              }
+              className={classNames("nametableRow", clickable ? "pointerCursor" : "defaultCursor")}
+              tooltipClassname="nametableRow-error-tooltip"
+              showErrorTitle={false}
+            >
+              <div
                 key={workerName}
-                errorSelector={(scheduleErrors): ScheduleError[] =>
-                  errorSelector?.(workerName, 0, scheduleErrors) ?? []
-                }
+                onClick={(): void => toggleDrawer(true, workerName)}
                 className={classNames(
                   "nametableRow",
                   clickable ? "pointerCursor" : "defaultCursor"
                 )}
-                tooltipClassname="nametableRow-error-tooltip"
-                showErrorTitle={false}
               >
-                <tr
-                  key={workerName}
-                  onClick={(): void => toggleDrawer(true, workerName)}
-                  className={classNames(
-                    "nametableRow",
-                    clickable ? "pointerCursor" : "defaultCursor"
-                  )}
-                >
-                  <td>
-                    <span>{workerName}</span>
-                    <span className="underline" />
-                  </td>
-                </tr>
-              </ErrorTooltipProvider>
-            );
-          })}
-        </tbody>
-      </table>
+                <div>
+                  <span>{workerName}</span>
+                  <span className="underline" />
+                </div>
+              </div>
+            </ErrorTooltipProvider>
+          );
+        })}
+      </div>
       <WorkerDrawerComponent
         open={open}
         onClose={(): void => toggleDrawer(false, "")}

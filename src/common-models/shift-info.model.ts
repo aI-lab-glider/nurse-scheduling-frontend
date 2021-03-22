@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { SCHEDULE_CONTAINERS_LENGTH, ScheduleContainerType } from "./schedule-data.model";
+import * as _ from "lodash";
+
 export interface Shift {
   code: string;
   name: string;
@@ -177,10 +180,34 @@ export const FREE_SHIFTS = Object.values(SHIFTS)
   .filter((shift) => !shift.isWorkingShift && shift.code !== "W")
   .map((shift) => shift.code);
 
+export const WORKING_SHIFTS = Object.values(SHIFTS)
+  .filter((shift) => shift.isWorkingShift)
+  .map((shift) => shift.code);
+
 export interface ShiftInfoModel {
   [nurseName: string]: ShiftCode[];
 }
 
 export interface ShiftModel {
   [shiftCode: string]: Shift;
+}
+
+export function validateShiftInfoModel(
+  shifts: ShiftInfoModel,
+  containerType: ScheduleContainerType
+): void {
+  if (shifts !== undefined && !_.isEmpty(shifts)) {
+    const [worker, workerShifts] = Object.entries(shifts)[0];
+    const shiftLen = workerShifts.length;
+    if (!SCHEDULE_CONTAINERS_LENGTH[containerType].includes(shiftLen)) {
+      throw new Error(
+        `Schedule shift for worker ${worker} have wrong length: ${shiftLen} it should be on of ${SCHEDULE_CONTAINERS_LENGTH[containerType]}`
+      );
+    }
+    Object.entries(shifts).forEach(([workerName, shift]) => {
+      if (shift.length !== shiftLen) {
+        throw new Error(`Shifts for worker: ${workerName} have wrong length: ${shift.length}`);
+      }
+    });
+  }
 }
