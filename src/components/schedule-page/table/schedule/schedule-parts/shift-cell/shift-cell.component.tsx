@@ -51,8 +51,6 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     onValueChange,
     onClick,
     onBlur,
-    //verboseDate,
-    //monthNumber,
     errorSelector = (_): ScheduleError[] => [],
     keepOn,
     hasNext,

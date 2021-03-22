@@ -25,11 +25,15 @@ import {
   MetaDataRowLabel,
   MetaDataSectionKey,
 } from "../section.model";
-
-const EMPTY_ROW = Array(100).fill("");
-
-export const WORKSHEET_NAME = "grafik";
-export const WORKERS_WORKSHEET_NAME = "pracownicy";
+import {
+  EMPTY_ROW,
+  ParserHelper,
+  SHIFT_HEADERS,
+  SHIFTS_WORKSHEET_NAME,
+  WORKER_HEADERS,
+  WORKERS_WORKSHEET_NAME,
+  WORKSHEET_NAME,
+} from "../../helpers/parser.helper";
 
 export interface ScheduleExportLogicOptions {
   scheduleModel: MonthDataModel;
@@ -37,6 +41,7 @@ export interface ScheduleExportLogicOptions {
   overtimeExport?: boolean;
   extraWorkersExport?: boolean;
 }
+
 export class ScheduleExportLogic {
   private scheduleModel: MonthDataModel;
   private primaryScheduleModel?: PrimaryMonthRevisionDataModel;
@@ -65,10 +70,16 @@ export class ScheduleExportLogic {
   }
 
   public createWorkbook(revisionType: RevisionType): [string, xlsx.Workbook] {
-    const [workbook, scheduleWorkSheet, workersWorkSheet] = ScheduleExportLogic.createWorkArea();
+    const [
+      workbook,
+      scheduleWorkSheet,
+      workersWorkSheet,
+      shiftsWorkSheet,
+    ] = ScheduleExportLogic.createWorkArea();
 
     this.setScheduleWorkSheet(scheduleWorkSheet);
     this.setWorkersWorkSheet(workersWorkSheet);
+    this.setShiftsWorkSheet(shiftsWorkSheet);
 
     const workbookName = FileHelper.createMonthFilename(this.scheduleModel, revisionType);
     return [workbookName, workbook];
@@ -152,6 +163,8 @@ export class ScheduleExportLogic {
 
     const workersInfoArray = ScheduleExportLogic.createWorkersInfoSection(this.scheduleModel);
 
+    const cellMargin = 4;
+
     const colLens = workersInfoArray[0].map((_, colIndex) =>
       Math.max(...workersInfoArray.map((row) => row[colIndex].toString().length))
     );
@@ -159,7 +172,7 @@ export class ScheduleExportLogic {
     workSheet.addRows(workersInfoArray);
 
     colLens.forEach((len, id) => {
-      workSheet.getColumn(id + 1).width = len + 4;
+      workSheet.getColumn(id + 1).width = len + cellMargin;
     });
 
     workSheet.getColumn(1).alignment = { vertical: "middle", horizontal: "left" };
@@ -171,7 +184,51 @@ export class ScheduleExportLogic {
     workSheet.getRow(1).font = { bold: true };
   }
 
-  private static createWorkArea(): [xlsx.Workbook, xlsx.Worksheet, xlsx.Worksheet] {
+  private setShiftsWorkSheet(workSheet: xlsx.Worksheet): void {
+    workSheet.pageSetup.showGridLines = true;
+    workSheet.pageSetup.fitToPage = true;
+    workSheet.pageSetup.fitToHeight = 1;
+    workSheet.pageSetup.fitToWidth = 1;
+    workSheet.pageSetup.horizontalCentered = true;
+
+    const shiftsInfoArray = ScheduleExportLogic.createShiftsInfoSection(this.scheduleModel);
+
+    const cellMargin = 4;
+
+    const colLens = shiftsInfoArray[0].map((_, colIndex) =>
+      Math.max(...shiftsInfoArray.map((row) => row[colIndex].toString().length))
+    );
+
+    workSheet.addRows(shiftsInfoArray);
+
+    colLens.forEach((len, id) => {
+      workSheet.getColumn(id + 1).width = len + cellMargin;
+    });
+
+    const firstShiftRow = 3;
+    for (let iter = firstShiftRow; iter <= workSheet.rowCount; iter++) {
+      const cell = workSheet.getCell(iter, ParserHelper.getShiftColorHeaderIndex() + 1);
+      cell.style.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: cell.text },
+      };
+      cell.value = "";
+    }
+
+    for (let iter = 1; iter <= SHIFT_HEADERS.length; iter++) {
+      if (iter - 1 === ParserHelper.getShiftNameHeaderIndex()) {
+        workSheet.getColumn(iter).alignment = { vertical: "middle", horizontal: "left" };
+      } else {
+        workSheet.getColumn(iter).alignment = { vertical: "middle", horizontal: "center" };
+      }
+    }
+
+    workSheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getRow(1).font = { bold: true };
+  }
+
+  private static createWorkArea(): [xlsx.Workbook, xlsx.Worksheet, xlsx.Worksheet, xlsx.Worksheet] {
     const workbook = new xlsx.Workbook();
     return [
       workbook,
@@ -180,6 +237,10 @@ export class ScheduleExportLogic {
         properties: { defaultColWidth: 5 },
       }),
       workbook.addWorksheet(WORKERS_WORKSHEET_NAME, {
+        pageSetup: { paperSize: 9, orientation: "landscape" },
+        properties: { defaultColWidth: 5 },
+      }),
+      workbook.addWorksheet(SHIFTS_WORKSHEET_NAME, {
         pageSetup: { paperSize: 9, orientation: "landscape" },
         properties: { defaultColWidth: 5 },
       }),
@@ -370,7 +431,7 @@ export class ScheduleExportLogic {
 
     const workers: (string | number)[][] = [];
 
-    workers.push(["Imię i nazwisko", "Stanowisko/funkcja", "Rodzaj umowy", "Wymiar czasu pracy"]);
+    workers.push(WORKER_HEADERS);
     workers.push(EMPTY_ROW);
     names.forEach((name) =>
       workers.push([
@@ -381,6 +442,26 @@ export class ScheduleExportLogic {
       ])
     );
     return [...workers];
+  }
+
+  private static createShiftsInfoSection(scheduleModel: MonthDataModel): (string | number)[][] {
+    const names = Object.values(scheduleModel.shift_types);
+
+    const shifts: (string | number)[][] = [];
+
+    shifts.push(SHIFT_HEADERS);
+    shifts.push(EMPTY_ROW);
+    names.forEach((name) =>
+      shifts.push([
+        name.name,
+        name.code,
+        name.from,
+        name.to,
+        ParserHelper.translateBooleanToString(name.isWorkingShift).toUpperCase(),
+        name.color,
+      ])
+    );
+    return [...shifts];
   }
 
   private static createWorkHoursInfoHeader(startIndex: number): string[] {
