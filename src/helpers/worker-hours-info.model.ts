@@ -278,7 +278,7 @@ export class WorkerHourInfo {
       primaryScheduleWorkerShifts
     );
 
-    const normAndActualDiff = workerActualWorkTime - workerHourNorm;
+    const normAndActualDiff = Math.round(workerActualWorkTime) - Math.round(workerHourNorm);
     const algorithmOvertime = diffBetweenRevisionsOvertime + exceedMaximumDayWorkTimeOvertime;
 
     return Math.max(normAndActualDiff, algorithmOvertime);
