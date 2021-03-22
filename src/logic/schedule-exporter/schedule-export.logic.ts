@@ -1,16 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import xlsx, { Cell } from "exceljs";
+import xlsx from "exceljs";
 import { RevisionType } from "../../api/persistance-store.model";
 import { VerboseDate } from "../../common-models/month-info.model";
 import { MonthDataModel } from "../../common-models/schedule-data.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
-import {
-  ContractTypeHelper,
-  WorkerType,
-  WorkerTypeHelper,
-} from "../../common-models/worker-info.model";
+import { ContractTypeHelper, WorkerTypeHelper } from "../../common-models/worker-info.model";
 import { ColorHelper } from "../../helpers/colors/color.helper";
 import { Color } from "../../helpers/colors/color.model";
 import { FileHelper } from "../../helpers/file.helper";
@@ -34,6 +30,10 @@ import {
   WORKERS_WORKSHEET_NAME,
   WORKSHEET_NAME,
 } from "../../helpers/parser.helper";
+import { groupWorkers } from "../../components/schedule-page/table/schedule/use-worker-groups";
+import { WorkerInfo } from "../../components/namestable/use-worker-info";
+import { MonthHelper } from "../../helpers/month.helper";
+import * as _ from "lodash";
 
 export interface ScheduleExportLogicOptions {
   scheduleModel: MonthDataModel;
@@ -60,10 +60,6 @@ export class ScheduleExportLogic {
     this.extraWorkersExport = extraWorkersExport;
   }
 
-  requiredHoursAddress;
-  doneHoursAddress;
-  diffHoursAddress;
-
   public formatAndSave(revisionType: RevisionType): void {
     const [finalName, workbook] = this.createWorkbook(revisionType);
     FileHelper.saveToFile(workbook, finalName);
@@ -79,7 +75,6 @@ export class ScheduleExportLogic {
 
     this.setScheduleWorkSheet(scheduleWorkSheet);
     this.setWorkersWorkSheet(workersWorkSheet);
-    this.setShiftsWorkSheet(shiftsWorkSheet);
 
     const workbookName = FileHelper.createMonthFilename(this.scheduleModel, revisionType);
     return [workbookName, workbook];
@@ -95,63 +90,71 @@ export class ScheduleExportLogic {
     const datesSection = ScheduleExportLogic.createDatesSection(this.scheduleModel);
     const extraWorkersSection = ScheduleExportLogic.createExtraWorkersSection(this.scheduleModel);
     const childrenInfoSection = ScheduleExportLogic.createChildrenInfoSection(this.scheduleModel);
-    const overtimeInfoHeader = ScheduleExportLogic.createWorkHoursInfoHeader(
-      childrenInfoSection[0].length
-    );
-    const [nurseShifts, babysitterShifts] = this.createShiftsSections(this.scheduleModel);
+
     const schedule: (
       | string[]
       | (number | ExtraWorkersSectionKey | MetaDataSectionKey | ChildrenSectionKey)[]
     )[] = [headerRow, ...datesSection];
+    let foundationInfoLen = 0;
+
     if (this.extraWorkersExport) {
       schedule.push(...extraWorkersSection);
+      foundationInfoLen++;
+    }
+    if (this.overtimeExport) {
+      foundationInfoLen++;
     }
     schedule.push(...childrenInfoSection);
-    if (this.overtimeExport) {
-      schedule.push(overtimeInfoHeader);
-    }
+    foundationInfoLen++;
 
-    const headerLen = schedule.length;
-    const nurseLastIndex = headerLen + nurseShifts.length;
-    const babysitterLastIndex = nurseLastIndex + babysitterShifts.length + 1;
+    schedule.push(EMPTY_ROW);
 
-    schedule.push(
-      ...nurseShifts,
-      EMPTY_ROW,
-      ...babysitterShifts,
-      EMPTY_ROW,
-      EMPTY_ROW,
-      EMPTY_ROW,
-      EMPTY_ROW,
-      EMPTY_ROW
-    );
+    const groupedWorkers = groupWorkers(this.scheduleModel);
+    Object.keys(groupedWorkers).forEach((group) => {
+      let groupRows = this.createGroupWorkersRows(groupedWorkers[group]);
+      if (this.overtimeExport) {
+        groupRows = this.extendWithOvertimeInfo(groupRows);
+      }
+      schedule.push(...groupRows);
+      schedule.push(EMPTY_ROW);
+    });
 
-    this.addStyles(workSheet, schedule, headerLen, nurseLastIndex, babysitterLastIndex);
+    workSheet.addRows(schedule);
+
+    const headerLen = 1;
+    const emptySpace = 1;
+    const shiftSectionStartIndex = 1 + foundationInfoLen + headerLen + emptySpace; // +2 because of header
+    this.styleWorksheet(workSheet, shiftSectionStartIndex);
 
     workSheet.mergeCells("B1:AF1");
     if (this.overtimeExport) {
-      workSheet.mergeCells(
-        this.requiredHoursAddress.slice(0, this.requiredHoursAddress.length - 1) +
-          "2:" +
-          this.requiredHoursAddress
-      );
-      workSheet.mergeCells(
-        this.doneHoursAddress.slice(0, this.doneHoursAddress.length - 1) +
-          "2:" +
-          this.doneHoursAddress
-      );
-      workSheet.mergeCells(
-        this.diffHoursAddress.slice(0, this.diffHoursAddress.length - 1) +
-          "2:" +
-          this.diffHoursAddress
-      );
-      workSheet.getCell(this.requiredHoursAddress).value = "Wymagane";
-      workSheet.getCell(this.doneHoursAddress).value = "Wypracowane";
-      workSheet.getCell(this.diffHoursAddress).value = "Nadgodziny";
-      workSheet.getCell(this.requiredHoursAddress).alignment = { textRotation: -90 };
-      workSheet.getCell(this.doneHoursAddress).alignment = { textRotation: -90 };
-      workSheet.getCell(this.diffHoursAddress).alignment = { textRotation: -90 };
+      this.addOvertimeHoursLabels(workSheet);
     }
+  }
+
+  private createGroupWorkersRows(workersInfo: WorkerInfo[]): string[][] {
+    const workerRows: string[][] = [];
+    workersInfo.forEach((worker) => {
+      const printableSifts = worker.workerShifts.map((shift) =>
+        shift === ShiftCode.W ? "" : shift
+      );
+      workerRows.push([worker.workerName, ...printableSifts]);
+    });
+    return workerRows;
+  }
+
+  private extendWithOvertimeInfo(workerRows: string[][]): string[][] {
+    const extendedRows: string[][] = [];
+    workerRows.forEach((row) => {
+      extendedRows.push([
+        ...row,
+        ...Object.values(
+          WorkerHourInfo.fromSchedules(row[0], this.scheduleModel, this.primaryScheduleModel)
+            .summary
+        ),
+      ]);
+    });
+    return extendedRows;
   }
 
   private setWorkersWorkSheet(workSheet: xlsx.Worksheet): void {
@@ -247,70 +250,66 @@ export class ScheduleExportLogic {
     ];
   }
 
-  private getRightCornerIndexes(cell: Cell, cellValue: string): void {
-    if (cellValue === "Godziny wymagane") {
-      const alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      this.requiredHoursAddress = cell.address;
-      const letter = this.requiredHoursAddress[1];
-      const secondLetter = alpha[alpha.indexOf(letter) + 1];
-      const thirdLetter = alpha[alpha.indexOf(letter) + 2];
-      this.doneHoursAddress =
-        this.requiredHoursAddress.slice(0, 1) + secondLetter + this.requiredHoursAddress.slice(2);
-      this.diffHoursAddress =
-        this.requiredHoursAddress.slice(0, 1) + thirdLetter + this.requiredHoursAddress.slice(2);
-    }
+  private styleWorksheet(workSheet: xlsx.Worksheet, shiftStartIndex: number): void {
+    workSheet.getColumn(1).width = 20;
+
+    workSheet.eachRow((row, index) => {
+      if (index === 1) {
+        ScheduleExportLogic.styleHeaderRow(row);
+        return;
+      }
+
+      row.height = 18;
+      if (index > shiftStartIndex && !ParserHelper.isEmptyRow(row)) {
+        this.styleShiftRow(row);
+      }
+    });
   }
 
-  private addStyles(
-    workSheet: xlsx.Worksheet,
-    rows: unknown[],
-    headerLen: number,
-    nurseLastIndex: number,
-    babysitterLastIndex: number
-  ): void {
-    const monthInfo = this.scheduleModel.scheduleKey;
-    const monthLogic = new MonthInfoLogic(
-      monthInfo?.month ?? 0,
-      monthInfo?.year + "" ?? "",
-      this.scheduleModel.month_info?.dates || []
-    );
-    const verboseDates = monthLogic.verboseDates;
-    const calendarDataMargin = -2;
-    workSheet.addRows(rows);
-    workSheet.getColumn(1).width = 20;
-    workSheet.eachRow((row, index) => {
-      const isNurseRow = index > headerLen && index <= nurseLastIndex;
-      const isBabysitterRow = index > nurseLastIndex + 1 && index <= babysitterLastIndex;
+  private addOvertimeHoursLabels(workSheet: xlsx.Worksheet) {
+    const { month, year } = this.scheduleModel.scheduleKey;
+    const scheduleLen = MonthHelper.getMonthLength(year, month);
+    let labelColumn = 1 + scheduleLen + 1;
+    const labelLen = 3;
+    Object.values(WorkerHourInfo.summaryTranslations).forEach((translation) => {
+      const cell = workSheet.getCell(2, labelColumn);
 
-      if (isNurseRow || isBabysitterRow) {
-        row.eachCell((cell, colNumber) => {
-          const cellValue = cell.value?.toString() || "";
-          cell.style = this.getShiftStyle(
-            ShiftCode[cellValue] || ShiftCode.W,
-            verboseDates[colNumber + calendarDataMargin]
-          );
-        });
-      }
-      row.height = 18;
-      if (index === 1) {
-        row.height = 40;
-        row.eachCell((cell) => {
-          cell.font = {
-            family: 4,
-            size: 28,
-            bold: true,
-          };
-        });
-      }
-      let isShiftRow = false;
-      row.eachCell((cell, colNumber) => {
-        const cellValue = cell.value?.toString() || "";
-        this.getRightCornerIndexes(cell, cellValue);
-        if ((cellValue && ShiftCode[cellValue]) || isShiftRow) {
-          isShiftRow = true;
-          workSheet.getColumn(colNumber).width = 5;
-        }
-      });
+      const cellAddress = cell.address;
+      workSheet.mergeCells(2, labelColumn, 2 + labelLen - 1, labelColumn);
+      cell.value = _.startCase(translation);
+      workSheet.getCell(cellAddress).alignment = {
+        textRotation: -90,
+        vertical: "top",
+        horizontal: "center",
+      };
+      labelColumn++;
+    });
+  }
+
+  private styleShiftRow(row: xlsx.Row) {
+    const { month, year } = this.scheduleModel.scheduleKey;
+    const monthLogic = new MonthInfoLogic(month, year, this.scheduleModel.month_info?.dates || []);
+    const verboseDates = monthLogic.verboseDates;
+
+    const calendarDataMargin = -2;
+
+    row.eachCell((cell, colNumber) => {
+      const cellValue = cell.value?.toString() || "";
+      cell.style = this.getShiftStyle(
+        ShiftCode[cellValue] || ShiftCode.W,
+        verboseDates[colNumber + calendarDataMargin]
+      );
+    });
+  }
+
+  private static styleHeaderRow(row: xlsx.Row) {
+    row.height = 40;
+    row.eachCell((cell) => {
+      cell.font = {
+        family: 4,
+        size: 28,
+        bold: true,
+      };
     });
   }
 
@@ -366,32 +365,6 @@ export class ScheduleExportLogic {
     const toHex = (num: number): string => ("0" + num.toString(16)).slice(-2);
     const c = color;
     return `${toHex(c.a)}${toHex(c.r)}${toHex(c.g)}${toHex(c.b)}`;
-  }
-
-  private createShiftsSections(scheduleModel: MonthDataModel): string[][][] {
-    const grouped = {
-      [WorkerType.NURSE]: [] as string[][],
-      [WorkerType.OTHER]: [] as string[][],
-    };
-    Object.keys(scheduleModel.shifts || {})
-      .sort()
-      .forEach((workerName: string) => {
-        const category = scheduleModel.employee_info.type[workerName] ?? "";
-        const shiftsRow: string[] = [
-          workerName,
-          ...scheduleModel.shifts[workerName]?.map((s) => (s === ShiftCode.W ? "" : s)),
-        ];
-        if (this.overtimeExport) {
-          shiftsRow.push(
-            ...Object.keys(
-              WorkerHourInfo.fromSchedules(workerName, scheduleModel, this.primaryScheduleModel)
-                .summary
-            )
-          );
-        }
-        grouped[category].push(shiftsRow);
-      });
-    return [grouped[WorkerType.NURSE], grouped[WorkerType.OTHER]];
   }
 
   private createHeader(scheduleModel: MonthDataModel): string[] {
@@ -463,15 +436,6 @@ export class ScheduleExportLogic {
       ])
     );
     return [...shifts];
-  }
-
-  private static createWorkHoursInfoHeader(startIndex: number): string[] {
-    const header = Array(startIndex + 3).fill("");
-
-    header[startIndex] = TranslationHelper.workHoursInfoHeader.requiredHours;
-    header[startIndex + 1] = TranslationHelper.workHoursInfoHeader.actualHours;
-    header[startIndex + 2] = TranslationHelper.workHoursInfoHeader.overtime;
-    return header;
   }
 
   private static createExtraWorkersSection(

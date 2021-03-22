@@ -62,7 +62,7 @@ export class WorkerHourInfo {
     };
   }
 
-  public get summaryTranslations(): WorkerHourInfoSummaryTranslation {
+  public static get summaryTranslations(): WorkerHourInfoSummaryTranslation {
     return {
       overTime: "nagodziny",
       workerHourNorm: "norma",
