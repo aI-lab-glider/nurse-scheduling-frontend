@@ -38,9 +38,9 @@ export class WorkerExportLogic {
     });
 
     workSheet.getColumn(1).alignment = { vertical: "middle", horizontal: "left" };
-    workSheet.getColumn(2).alignment = { vertical: "middle", horizontal: "center" };
-    workSheet.getColumn(3).alignment = { vertical: "middle", horizontal: "center" };
-    workSheet.getColumn(4).alignment = { vertical: "middle", horizontal: "center" };
+    for (let i = 1; i <= WORKER_HEADERS.length; i++) {
+      workSheet.getColumn(i).alignment = { vertical: "middle", horizontal: "center" };
+    }
 
     workSheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
     workSheet.getRow(1).font = { bold: true };
@@ -59,6 +59,7 @@ export class WorkerExportLogic {
         WorkerTypeHelper.translateToShort(scheduleModel.employee_info?.type[name]),
         ContractTypeHelper.translateToShort(scheduleModel.employee_info?.contractType!?.[name]),
         scheduleModel.employee_info?.time[name],
+        scheduleModel.employee_info?.workerGroup[name],
       ])
     );
     return [...workers];

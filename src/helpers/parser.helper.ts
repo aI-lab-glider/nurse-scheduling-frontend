@@ -22,6 +22,7 @@ export const WORKER_HEADERS = [
   "Stanowisko/funkcja",
   "Rodzaj umowy",
   "Wymiar czasu pracy",
+  "Zespół",
 ];
 const CELLS_TO_AVOID = [WORKSHEET_NAME, NAZWA_ZMIANY];
 
