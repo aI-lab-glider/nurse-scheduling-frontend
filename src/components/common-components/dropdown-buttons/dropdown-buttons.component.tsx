@@ -6,6 +6,7 @@ import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Popper from "@material-ui/core/Popper";
 import { Button, ButtonVariant } from "..";
+import classNames from "classnames/bind";
 
 export interface ButtonData {
   label: string;
@@ -41,6 +42,7 @@ export function DropdownButtons({
     setOpen(false);
   }
 
+  const dropdownZIndex = 100;
   return (
     <div className="dropdown-container">
       <Button
@@ -50,6 +52,9 @@ export function DropdownButtons({
         ref={anchorRef}
         data-cy={dataCy}
         disabled={disabled}
+        style={{
+          zIndex: open ? dropdownZIndex + 1 : "initial",
+        }}
       >
         <div className="centeredButtonWithArrow">
           <div>{mainLabel}</div>
@@ -64,7 +69,9 @@ export function DropdownButtons({
         placement="bottom"
         anchorEl={anchorRef.current}
         disablePortal
-        className={"z-index100"}
+        style={{
+          zIndex: dropdownZIndex,
+        }}
       >
         <ClickAwayListener onClickAway={handleClickAway}>
           <div className="dropdown-buttons-list" id={variant}>

@@ -83,7 +83,7 @@ export function WorkerEditComponent({
   // #region view
   return (
     <Grid container direction="column" justify="space-between">
-      <Grid container className={classes.container} direction="column" spacing={5}>
+      <Grid container className={classes.container} direction="column">
         <WorkerNameEditField
           workerName={workerInfo.workerName}
           setWorkerName={handleWorkerNameUpdate}
