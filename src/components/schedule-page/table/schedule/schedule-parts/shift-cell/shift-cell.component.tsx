@@ -15,8 +15,8 @@ import {
   hasNextShiftClassName,
   keepOnShiftClassName,
 } from "../base-cell/base-cell.models";
-import { CellDetails } from "../base-cell/cell-details-content.component";
-import { Popper } from "../base-cell/popper";
+// import { CellDetails } from "../base-cell/cell-details-content.component";
+// import { Popper } from "../base-cell/popper";
 import useComponentVisible from "../base-cell/use-component-visible";
 import useTimeout from "../base-cell/use-timeout";
 import { CellInput } from "../cell-blockable-input.component";
@@ -54,8 +54,8 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     onValueChange,
     onClick,
     onBlur,
-    verboseDate,
-    monthNumber,
+    // verboseDate,
+    // monthNumber,
     errorSelector = (_): ScheduleError[] => [],
     keepOn,
     hasNext,
@@ -75,9 +75,9 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     setIsComponentVisible(!isComponentVisible);
   }
 
-  const isEditMode = useSelector(
-    (state: ApplicationStateModel) => state.actualState.mode === "edit"
-  );
+  // const isEditMode = useSelector(
+  //   (state: ApplicationStateModel) => state.actualState.mode === "edit"
+  // );
   const shiftCode = getShiftCode(value);
   const keepOnClass = keepOnShiftClassName(keepOn) + shiftCode;
   const hasNextClass = hasNextShiftClassName(hasNext);
@@ -94,9 +94,9 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     setShowInput(isPointerOn && !isBlocked);
   }, [isPointerOn, isBlocked]);
 
-  const styles = usePopper(cellRef.current, cellDetailsPopperRef?.current, {
-    placement: "right-start",
-  }).styles.popper;
+  // const styles = usePopper(cellRef.current, cellDetailsPopperRef?.current, {
+  //   placement: "right-start",
+  // }).styles.popper;
 
   const WrapContentDiv = useCallback(
     ({ children }: { children: ReactNode }) => (
@@ -181,7 +181,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
             </div>
           </WrapContentDiv>
         </ErrorTooltipProvider>
-        {!isEditMode && (
+        {/* {!isEditMode && (
           <Popper
             ref={cellDetailsPopperRef}
             className="cell-details-popper"
@@ -198,7 +198,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
               close={(): void => setIsComponentVisible(false)}
             />
           </Popper>
-        )}
+        )} */}
         )
       </div>
     </>
