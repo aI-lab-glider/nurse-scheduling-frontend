@@ -13,10 +13,12 @@ import { fromBuffer } from "file-type/browser";
 import { useNotification } from "../../../common-components/notification/notification.context";
 import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
 import {
+  ParserHelper,
+  SHIFT_HEADERS,
   SHIFTS_WORKSHEET_NAME,
   WORKERS_WORKSHEET_NAME,
   WORKSHEET_NAME,
-} from "../../../../logic/schedule-exporter/schedule-export.logic";
+} from "../../../../helpers/parser.helper";
 
 export interface UseScheduleConverterOutput {
   monthModel?: MonthDataModel;
@@ -86,37 +88,6 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
     scheduleErrors: scheduleErrors,
   };
 
-  function isEmpty(rowValues: Array<string>): boolean {
-    const rowValuesSet = new Set(rowValues.map((a) => a.toString()));
-    let undefinedSeen = false;
-    rowValuesSet.forEach((a) => {
-      if (typeof a === "undefined") {
-        undefinedSeen = true;
-        return;
-      }
-    });
-
-    const cellsToAvoid = [
-      "godziny wymagane",
-      "godziny wypracowane",
-      "nadgodziny",
-      "grafik",
-      "imię i nazwisko",
-    ];
-
-    return (
-      undefinedSeen ||
-      rowValuesSet.size === 0 ||
-      (rowValuesSet.size === 4 &&
-        Array.from(rowValuesSet).some((setItem) =>
-          cellsToAvoid.some((cellToAvoid) => setItem.trim().toLowerCase().includes(cellToAvoid))
-        )) ||
-      Array.from(rowValuesSet).some((setItem) => setItem.trim().toLowerCase().includes("grafik")) ||
-      Array.from(rowValuesSet).some((setItem) => setItem.trim().toLowerCase().includes("nazwa")) ||
-      (rowValuesSet.size === 1 && rowValuesSet.has(""))
-    );
-  }
-
   function extractWorkers(workbook): Array<Array<string>> {
     const workers = Array<Array<string>>();
     const workersWorkSheet = workbook.getWorksheet(WORKERS_WORKSHEET_NAME);
@@ -125,12 +96,11 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       workersWorkSheet.eachRow(false, (row) => {
         const rowValues = Array<string>();
 
-        let iter;
-        for (iter = 1; iter <= row.cellCount; iter++) {
+        for (let iter = 1; iter <= row.cellCount; iter++) {
           rowValues.push(row.getCell(iter).text);
         }
 
-        if (!isEmpty(rowValues)) {
+        if (!ParserHelper.isEmptyRow(rowValues)) {
           workers.push(rowValues);
         }
       });
@@ -146,16 +116,17 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       shiftsWorkSheet.eachRow(false, (row) => {
         const rowValues = Array<string>();
 
-        let iter;
-        for (iter = 1; iter <= 5; iter++) {
-          rowValues.push(row.getCell(iter).text.trim().toLowerCase());
+        for (let iter = 1; iter <= SHIFT_HEADERS.length; iter++) {
+          if (iter - 1 === ParserHelper.getShiftColorHeaderIndex()) {
+            rowValues.push(
+              (row.getCell(iter).style.fill as FillPattern).fgColor?.argb?.toString() ?? ""
+            );
+          } else {
+            rowValues.push(row.getCell(iter).text.trim().toLowerCase());
+          }
         }
 
-        rowValues.push(
-          (row.getCell(iter).style.fill as FillPattern).fgColor?.argb?.toString() ?? ""
-        );
-
-        if (!isEmpty(rowValues)) {
+        if (!ParserHelper.isEmptyRow(rowValues)) {
           shifts.push(rowValues);
         }
       });
@@ -174,18 +145,16 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
 
     let emptyCounter = 0;
 
-    let rowIter;
-    for (rowIter = 1; rowIter <= scheduleWorkSheet.rowCount; rowIter++) {
+    for (let rowIter = 1; rowIter <= scheduleWorkSheet.rowCount; rowIter++) {
       const row = scheduleWorkSheet.getRow(rowIter);
 
       const rowValues = Array<string>();
 
-      let iter;
-      for (iter = 1; iter <= row.cellCount; iter++) {
+      for (let iter = 1; iter <= row.cellCount; iter++) {
         rowValues.push(row.getCell(iter).text);
       }
 
-      if (isEmpty(rowValues)) {
+      if (ParserHelper.isEmptyRow(rowValues)) {
         if (innerArray.length !== 0) {
           outerArray.push(innerArray);
         }

@@ -25,12 +25,15 @@ import {
   MetaDataRowLabel,
   MetaDataSectionKey,
 } from "../section.model";
-
-const EMPTY_ROW = Array(100).fill("");
-
-export const WORKSHEET_NAME = "grafik";
-export const WORKERS_WORKSHEET_NAME = "pracownicy";
-export const SHIFTS_WORKSHEET_NAME = "zmiany";
+import {
+  EMPTY_ROW,
+  ParserHelper,
+  SHIFT_HEADERS,
+  SHIFTS_WORKSHEET_NAME,
+  WORKER_HEADERS,
+  WORKERS_WORKSHEET_NAME,
+  WORKSHEET_NAME,
+} from "../../helpers/parser.helper";
 
 export interface ScheduleExportLogicOptions {
   scheduleModel: MonthDataModel;
@@ -160,6 +163,8 @@ export class ScheduleExportLogic {
 
     const workersInfoArray = ScheduleExportLogic.createWorkersInfoSection(this.scheduleModel);
 
+    const cellMargin = 4;
+
     const colLens = workersInfoArray[0].map((_, colIndex) =>
       Math.max(...workersInfoArray.map((row) => row[colIndex].toString().length))
     );
@@ -167,7 +172,7 @@ export class ScheduleExportLogic {
     workSheet.addRows(workersInfoArray);
 
     colLens.forEach((len, id) => {
-      workSheet.getColumn(id + 1).width = len + 4;
+      workSheet.getColumn(id + 1).width = len + cellMargin;
     });
 
     workSheet.getColumn(1).alignment = { vertical: "middle", horizontal: "left" };
@@ -188,6 +193,8 @@ export class ScheduleExportLogic {
 
     const shiftsInfoArray = ScheduleExportLogic.createShiftsInfoSection(this.scheduleModel);
 
+    const cellMargin = 4;
+
     const colLens = shiftsInfoArray[0].map((_, colIndex) =>
       Math.max(...shiftsInfoArray.map((row) => row[colIndex].toString().length))
     );
@@ -195,12 +202,12 @@ export class ScheduleExportLogic {
     workSheet.addRows(shiftsInfoArray);
 
     colLens.forEach((len, id) => {
-      workSheet.getColumn(id + 1).width = len + 4;
+      workSheet.getColumn(id + 1).width = len + cellMargin;
     });
 
-    let iter;
-    for (iter = 3; iter <= workSheet.rowCount; iter++) {
-      const cell = workSheet.getCell(iter, 6);
+    const firstShiftRow = 3;
+    for (let iter = firstShiftRow; iter <= workSheet.rowCount; iter++) {
+      const cell = workSheet.getCell(iter, ParserHelper.getShiftColorHeaderIndex() + 1);
       cell.style.fill = {
         type: "pattern",
         pattern: "solid",
@@ -209,12 +216,13 @@ export class ScheduleExportLogic {
       cell.value = "";
     }
 
-    workSheet.getColumn(1).alignment = { vertical: "middle", horizontal: "left" };
-    workSheet.getColumn(2).alignment = { vertical: "middle", horizontal: "center" };
-    workSheet.getColumn(3).alignment = { vertical: "middle", horizontal: "center" };
-    workSheet.getColumn(4).alignment = { vertical: "middle", horizontal: "center" };
-    workSheet.getColumn(5).alignment = { vertical: "middle", horizontal: "center" };
-    workSheet.getColumn(6).alignment = { vertical: "middle", horizontal: "center" };
+    for (let iter = 1; iter <= SHIFT_HEADERS.length; iter++) {
+      if (iter - 1 === ParserHelper.getShiftNameHeaderIndex()) {
+        workSheet.getColumn(iter).alignment = { vertical: "middle", horizontal: "left" };
+      } else {
+        workSheet.getColumn(iter).alignment = { vertical: "middle", horizontal: "center" };
+      }
+    }
 
     workSheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
     workSheet.getRow(1).font = { bold: true };
@@ -423,7 +431,7 @@ export class ScheduleExportLogic {
 
     const workers: (string | number)[][] = [];
 
-    workers.push(["Imię i nazwisko", "Stanowisko/funkcja", "Rodzaj umowy", "Wymiar czasu pracy"]);
+    workers.push(WORKER_HEADERS);
     workers.push(EMPTY_ROW);
     names.forEach((name) =>
       workers.push([
@@ -439,21 +447,21 @@ export class ScheduleExportLogic {
   private static createShiftsInfoSection(scheduleModel: MonthDataModel): (string | number)[][] {
     const names = Object.values(scheduleModel.shift_types);
 
-    const workers: (string | number)[][] = [];
+    const shifts: (string | number)[][] = [];
 
-    workers.push(["Nazwa", "Skrót", "Od", "Do", "Zmiana pracująca", "Kolor"]);
-    workers.push(EMPTY_ROW);
+    shifts.push(SHIFT_HEADERS);
+    shifts.push(EMPTY_ROW);
     names.forEach((name) =>
-      workers.push([
+      shifts.push([
         name.name,
         name.code,
         name.from,
         name.to,
-        name.isWorkingShift === true ? "TAK" : "NIE",
+        ParserHelper.translateBooleanToString(name.isWorkingShift).toUpperCase(),
         name.color,
       ])
     );
-    return [...workers];
+    return [...shifts];
   }
 
   private static createWorkHoursInfoHeader(startIndex: number): string[] {
