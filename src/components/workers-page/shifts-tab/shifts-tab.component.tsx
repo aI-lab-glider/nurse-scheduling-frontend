@@ -7,7 +7,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
-import { Shift } from "../../../common-models/shift-info.model";
+import { Shift, ShiftCode } from "../../../common-models/shift-info.model";
 import { Button } from "../../common-components";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
@@ -82,6 +82,7 @@ export default function ShiftTab(): JSX.Element {
         <Table size="small">
           <EnhancedTableHeaderComponent toggleOpen={toggleOpen} />
           <TableBody>
+<<<<<<< HEAD
             {Object.values(shiftData).map((shift) => {
               return (
                 <TableRow key={shift.code} className={classes.row}>
@@ -116,6 +117,44 @@ export default function ShiftTab(): JSX.Element {
                 </TableRow>
               );
             })}
+=======
+            {Object.values(shiftData)
+              .filter((shift) => shift.code !== ShiftCode.W)
+              .map((shift) => {
+                return (
+                  <TableRow key={shift.code} className={classes.row}>
+                    <TableCell className={classes.tableCell}>{shift.name}</TableCell>
+                    <TableCell className={classes.tableCell}>
+                      {shift.isWorkingShift ? `${shift.from}:00 ` : ""}-
+                      {shift.isWorkingShift ? ` ${shift.to}:00` : ""}
+                    </TableCell>
+                    <TableCell className={classes.tableCell}>{shift.code}</TableCell>
+                    <TableCell className={classes.tableCell}>
+                      <div
+                        className={classes.colorSample}
+                        style={{ backgroundColor: `#${shift.color}` }}
+                      />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Button
+                        variant="primary"
+                        className="action-button"
+                        onClick={(): void => toggleOpen(shift, ShiftDrawerMode.EDIT)}
+                      >
+                        Edytuj
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        className="action-button"
+                        onClick={(): void => handleRemoveItem(shift)}
+                      >
+                        Usuń
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+>>>>>>> f180e76b (TASK-360-delete-shifts)
           </TableBody>
         </Table>
       </TableContainer>

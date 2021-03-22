@@ -18,7 +18,6 @@ export function shiftsModelReducer(
   switch (action.type) {
     case ScheduleActionType.MODIFY_SHIFT:
       const shiftArray = action.payload as Array<Shift>;
-
       const newShift = shiftArray[0];
       const oldShift = shiftArray[1];
       if (newShift.code !== oldShift.code) {
