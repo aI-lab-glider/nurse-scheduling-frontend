@@ -1,12 +1,11 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useRef, useState } from "react";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Popper from "@material-ui/core/Popper";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import React, { useRef, useState } from "react";
 import { Button, ButtonVariant } from "..";
-import classNames from "classnames/bind";
 
 export interface ButtonData {
   label: string;
