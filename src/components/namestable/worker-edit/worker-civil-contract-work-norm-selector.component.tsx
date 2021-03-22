@@ -42,7 +42,7 @@ export function WorkerCivilContractWorkNormSelector({
     const workerTimeCivilTimeAsNumber = parseInt(workerCivilTime);
     const isTimeValid =
       !_.isNaN(workerTimeCivilTimeAsNumber) &&
-      workerTimeCivilTimeAsNumber < maximumWorkHoursForMonth;
+      workerTimeCivilTimeAsNumber <= maximumWorkHoursForMonth;
     setIsFormValid?.(isTimeValid);
     return isTimeValid;
   }
