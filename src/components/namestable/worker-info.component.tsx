@@ -26,7 +26,8 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
   };
   const { workerInfo } = useWorkerInfo(info.name);
 
-  return <>
+  return (
+    <>
       <div
         className={"span-primary workers-table"}
         style={{
@@ -37,21 +38,24 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
           <div className={"workers-table"}>
             <p>{StringHelper.capitalizeEach(info.name)}</p>
 
-          {info.type && (
-            <span
-              className={classNames("worker-label", `${info.type?.toString().toLowerCase()}-label`)}
-            >
-              {StringHelper.capitalize(WorkerTypeHelper.translate(info.type))}
-            </span>
-          )}
-        </div>
-        <br />
-        <div className="worker-info">
+            {info.type && (
+              <span
+                className={classNames(
+                  "worker-label",
+                  `${info.type?.toString().toLowerCase()}-label`
+                )}
+              >
+                {StringHelper.capitalize(WorkerTypeHelper.translate(info.type))}
+              </span>
+            )}
+          </div>
+          <br />
+          <div className="worker-info">
             {workerInfo.contractType && (
-            <p>Typ umowy: {ContractTypeHelper.translate(workerInfo.contractType)}</p>
-          )}
-            <p>Ilość godzin: {workerHoursInfo.workerHourNorm}</p>
-            <p>Ilość nadgodzin: {workerHoursInfo.overTime}</p>
+              <p>Typ umowy: {ContractTypeHelper.translate(workerInfo.contractType)}</p>
+            )}
+            <p>Liczba godzin: {workerHoursInfo.workerHourNorm}</p>
+            <p>Liczba nadgodzin: {workerHoursInfo.overTime}</p>
             <p>Suma godzin: {info.time}</p>
             <div data-html2canvas-ignore="true">
               <Divider />
@@ -59,20 +63,20 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
             <div id={"shiftsWord"}>
               <b>ZMIANY</b>
             </div>
+          </div>
+          <div
+            id={calendarExport}
+            style={{
+              height: "500px",
+            }}
+          >
+            <WorkersCalendar shiftsArr={info.shifts!} />
+          </div>
         </div>
-        <div
-          id={calendarExport}
-          style={{
-            height: "500px",
-          }}
-        >
-          <WorkersCalendar shiftsArr={info.shifts!} />
-        </div>
-      </div>
-      <Button variant={"primary"} onClick={handleExport}>
-        Pobierz
-      </Button>
+        <Button variant={"primary"} onClick={handleExport}>
+          Pobierz
+        </Button>
       </div>
     </>
-  ;
+  );
 }
