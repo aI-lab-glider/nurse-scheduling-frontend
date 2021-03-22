@@ -82,42 +82,6 @@ export default function ShiftTab(): JSX.Element {
         <Table size="small">
           <EnhancedTableHeaderComponent toggleOpen={toggleOpen} />
           <TableBody>
-<<<<<<< HEAD
-            {Object.values(shiftData).map((shift) => {
-              return (
-                <TableRow key={shift.code} className={classes.row}>
-                  <TableCell className={classes.tableCell}>{shift.name}</TableCell>
-                  <TableCell className={classes.tableCell}>
-                    {shift.isWorkingShift ? `${shift.from}:00 ` : ""}-
-                    {shift.isWorkingShift ? ` ${shift.to}:00` : ""}
-                  </TableCell>
-                  <TableCell className={classes.tableCell}>{shift.code}</TableCell>
-                  <TableCell className={classes.tableCell}>
-                    <div
-                      className={classes.colorSample}
-                      style={{ backgroundColor: `#${shift.color}` }}
-                    />
-                  </TableCell>
-                  <TableCell align="right">
-                    <Button
-                      variant="primary"
-                      className="action-button"
-                      onClick={(): void => toggleOpen(shift, ShiftDrawerMode.EDIT)}
-                    >
-                      Edytuj
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      className="action-button"
-                      onClick={(): void => handleRemoveItem(shift)}
-                    >
-                      Usuń
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-=======
             {Object.values(shiftData)
               .filter((shift) => shift.code !== ShiftCode.W)
               .map((shift) => {
@@ -154,7 +118,6 @@ export default function ShiftTab(): JSX.Element {
                   </TableRow>
                 );
               })}
->>>>>>> f180e76b (TASK-360-delete-shifts)
           </TableBody>
         </Table>
       </TableContainer>
