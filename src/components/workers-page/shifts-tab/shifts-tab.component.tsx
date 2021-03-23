@@ -82,42 +82,42 @@ export default function ShiftTab(): JSX.Element {
         <Table size="small">
           <EnhancedTableHeaderComponent toggleOpen={toggleOpen} />
           <TableBody>
-            {Object.values(shiftData)
-              .filter((shift) => shift.code !== ShiftCode.W && shift.code !== ShiftCode.NZ)
-              .map((shift) => {
-                return (
-                  <TableRow key={shift.code} className={classes.row}>
-                    <TableCell className={classes.tableCell}>{shift.name}</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      {shift.isWorkingShift ? `${shift.from}:00 ` : ""}-
-                      {shift.isWorkingShift ? ` ${shift.to}:00` : ""}
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>{shift.code}</TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <div
-                        className={classes.colorSample}
-                        style={{ backgroundColor: `#${shift.color}` }}
-                      />
-                    </TableCell>
-                    <TableCell align="right">
-                      <Button
-                        variant="primary"
-                        className="action-button"
-                        onClick={(): void => toggleOpen(shift, ShiftDrawerMode.EDIT)}
-                      >
-                        Edytuj
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        className="action-button"
-                        onClick={(): void => handleRemoveItem(shift)}
-                      >
-                        Usuń
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+            {Object.values(shiftData).map((shift) => {
+              return (
+                <TableRow key={shift.code} className={classes.row}>
+                  <TableCell className={classes.tableCell}>{shift.name}</TableCell>
+                  <TableCell className={classes.tableCell}>
+                    {shift.isWorkingShift ? `${shift.from}:00 ` : ""}-
+                    {shift.isWorkingShift ? ` ${shift.to}:00` : ""}
+                  </TableCell>
+                  <TableCell className={classes.tableCell}>{shift.code}</TableCell>
+                  <TableCell className={classes.tableCell}>
+                    <div
+                      className={classes.colorSample}
+                      style={{ backgroundColor: `#${shift.color}` }}
+                    />
+                  </TableCell>
+                  <TableCell align="right">
+                    <Button
+                      variant="primary"
+                      className="action-button"
+                      onClick={(): void => toggleOpen(shift, ShiftDrawerMode.EDIT)}
+                      disabled={shift.code === ShiftCode.W}
+                    >
+                      Edytuj
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      className="action-button"
+                      onClick={(): void => handleRemoveItem(shift)}
+                      disabled={shift.code === ShiftCode.W || !shift.isWorkingShift}
+                    >
+                      Usuń
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
