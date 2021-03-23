@@ -13,6 +13,7 @@ import { PrimaryMonthRevisionDataModel } from "../state/models/application-state
 import { MonthDataArray, ShiftHelper, WORK_HOURS_PER_DAY } from "./shifts.helper";
 import { TranslationHelper } from "./translations.helper";
 import { VerboseDateHelper } from "./verbose-date.helper";
+import { ContractType } from "../common-models/worker-info.model";
 
 interface WorkerInfoForCalculateWorkerHoursInfo {
   actualWorkerShifts: ShiftCode[];
@@ -20,6 +21,7 @@ interface WorkerInfoForCalculateWorkerHoursInfo {
   workerNorm: number;
   month: string;
   dates: DateInformationForWorkInfoCalculation[];
+  workerContractType: ContractType;
 }
 
 type DateInformationForWorkInfoCalculation = Pick<
@@ -76,7 +78,11 @@ export class WorkerHourInfo {
     scheduleModel: ScheduleDataModel | MonthDataModel,
     primarySchedule?: PrimaryMonthRevisionDataModel
   ): WorkerHourInfo {
-    const { time } = scheduleModel.employee_info;
+    const { time, contractType } = scheduleModel.employee_info;
+    const workerContractType =
+      contractType && contractType[workerName]
+        ? contractType[workerName]
+        : ContractType.CIVIL_CONTRACT;
     const { shifts } = scheduleModel;
     let month: number, year: number;
     if (!_.isNil((scheduleModel as ScheduleDataModel).schedule_info)) {
@@ -93,6 +99,7 @@ export class WorkerHourInfo {
       shifts[workerName],
       primarySchedule?.shifts[workerName] as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
       time[workerName],
+      workerContractType,
       month,
       year,
       dates
@@ -103,6 +110,7 @@ export class WorkerHourInfo {
     shifts: ShiftCode[],
     primaryScheduleWorkerShifts: MonthDataArray<ShiftCode>,
     workerNorm: number,
+    workerEmploymentContract: ContractType,
     month: number,
     year: number,
     dates: number[]
@@ -115,6 +123,7 @@ export class WorkerHourInfo {
       workerNorm: workerNorm,
       dates: verboseDates,
       month: monthName,
+      workerContractType: workerEmploymentContract,
     });
   }
 
@@ -124,6 +133,7 @@ export class WorkerHourInfo {
     dates,
     month,
     primaryScheduleWorkerShifts,
+    workerContractType,
   }: WorkerInfoForCalculateWorkerHoursInfo): WorkerHourInfo {
     this.validateActualWorkersShifts(actualWorkerShifts, dates);
 
@@ -144,14 +154,16 @@ export class WorkerHourInfo {
       actualShiftsFromCurrentMonth,
       primaryScheduleWorkerShifts,
       currentMonthDates,
-      workerNorm
+      workerNorm,
+      workerContractType
     );
     const workerActualWorkTime = this.calculateWorkerActualWorkTime(actualShiftsFromCurrentMonth);
     const workerOvertime = this.calculateWorkerOvertime(
       actualShiftsFromCurrentMonth,
       primaryScheduleWorkerShifts,
       currentMonthDates,
-      workerNorm
+      workerNorm,
+      workerContractType
     );
 
     return new WorkerHourInfo(workerHourNorm, workerActualWorkTime, workerOvertime);
@@ -199,14 +211,18 @@ export class WorkerHourInfo {
     actualShiftsFromCurrentMonth: ShiftCode[],
     primaryScheduleWorkerShifts: ShiftCode[],
     currentMonthDates: DateInformationForWorkInfoCalculation[],
-    workerNorm: number
+    workerNorm: number,
+    workerContractType: ContractType
   ): number {
     const requiredHours = this.calculateRequiredHoursFromVerboseDates(currentMonthDates);
-    const freeHours = this.calculateFreeHours(
-      actualShiftsFromCurrentMonth,
-      primaryScheduleWorkerShifts,
-      currentMonthDates
-    );
+    const freeHours =
+      workerContractType === ContractType.CIVIL_CONTRACT
+        ? 0
+        : this.calculateFreeHours(
+            actualShiftsFromCurrentMonth,
+            primaryScheduleWorkerShifts,
+            currentMonthDates
+          );
     return Math.max((requiredHours - freeHours) * workerNorm, 0);
   }
 
@@ -261,13 +277,15 @@ export class WorkerHourInfo {
     actualShiftsFromCurrentMonth: ShiftCode[],
     primaryScheduleWorkerShifts: ShiftCode[],
     currentMonthDates: DateInformationForWorkInfoCalculation[],
-    workerNorm: number
+    workerNorm: number,
+    workerContractType: ContractType
   ): number {
     const workerHourNorm = this.calculateWorkerHourNorm(
       actualShiftsFromCurrentMonth,
       primaryScheduleWorkerShifts,
       currentMonthDates,
-      workerNorm
+      workerNorm,
+      workerContractType
     );
     const workerActualWorkTime = this.calculateWorkerActualWorkTime(actualShiftsFromCurrentMonth);
 
@@ -329,7 +347,7 @@ export class WorkerHourInfo {
       .forEach((shift) => {
         const shiftWorkTime = ShiftHelper.shiftCodeToWorkTime(SHIFTS[shift]);
         if (shiftWorkTime > MAXIMUM_NOT_OVERTIME_HOURS) {
-          exceedMaximumDayWorkTimeOvertime = +Math.max(
+          exceedMaximumDayWorkTimeOvertime += Math.max(
             shiftWorkTime - MAXIMUM_NOT_OVERTIME_HOURS,
             0
           );
