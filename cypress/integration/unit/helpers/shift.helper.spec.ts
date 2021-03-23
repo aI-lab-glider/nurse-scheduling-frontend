@@ -88,7 +88,8 @@ describe("ShiftHelper", () => {
     [ShiftCode.L4]: 0,
     [ShiftCode.K]: 0,
     [ShiftCode.OP]: 0,
-    [ShiftCode.OK]: 0,
+    [ShiftCode.O8]: 0,
+    [ShiftCode.O12]: 0,
     [ShiftCode.NZ]: 0,
   };
 

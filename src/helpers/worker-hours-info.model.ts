@@ -71,10 +71,6 @@ export class WorkerHourInfo {
     };
   }
 
-  public get workHoursDiff(): number {
-    return this.workerTime - this.workerHourNorm;
-  }
-
   public static fromSchedules(
     workerName: string,
     scheduleModel: ScheduleDataModel | MonthDataModel,
@@ -211,7 +207,7 @@ export class WorkerHourInfo {
       primaryScheduleWorkerShifts,
       currentMonthDates
     );
-    return (requiredHours - freeHours) * workerNorm;
+    return Math.max((requiredHours - freeHours) * workerNorm, 0);
   }
 
   public static calculateRequiredHoursFromVerboseDates(
@@ -234,20 +230,22 @@ export class WorkerHourInfo {
       actualShiftsFromCurrentMonth,
       primaryScheduleWorkerShifts,
       currentMonthDates
-    );
+    ) as [ShiftCode, ShiftCode, DateInformationForWorkInfoCalculation][];
     return monthShiftsWithHistoryShiftsAndDates.reduce((calculateFreeHours, shiftPair) => {
       const [actualShift, historyShift, day] = shiftPair;
-      if (!ShiftHelper.isNotWorkingShift(actualShift!)) {
+      if (!ShiftHelper.isNotWorkingShift(actualShift)) {
         return calculateFreeHours;
       }
       // ignore any free shifts in weekends
       if (!VerboseDateHelper.isWorkingDay(day)) {
         return calculateFreeHours;
       }
+      const shiftSubtraction = SHIFTS[actualShift].normSubtraction ?? WORK_HOURS_PER_DAY;
+
       const subtractFromNorm =
-        actualShift === historyShift
-          ? WORK_HOURS_PER_DAY
-          : ShiftHelper.shiftCodeToWorkTime(SHIFTS[historyShift!]);
+        actualShift === historyShift || !SHIFTS[historyShift].isWorkingShift
+          ? shiftSubtraction
+          : ShiftHelper.shiftCodeToWorkTime(SHIFTS[historyShift]);
       return calculateFreeHours + subtractFromNorm;
     }, 0);
   }
