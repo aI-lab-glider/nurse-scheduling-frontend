@@ -2,9 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { TranslationHelper } from "./translations.helper";
-
-export const EMPTY_ROW = Array(100).fill("");
+export const EMPTY_ROW_SIZE = 40;
+export const EMPTY_ROW = Array(EMPTY_ROW_SIZE).fill("");
 
 export const WORKSHEET_NAME = "grafik";
 export const WORKERS_WORKSHEET_NAME = "pracownicy";
@@ -23,11 +22,7 @@ export const WORKER_HEADERS = [
   "Stanowisko/funkcja",
   "Rodzaj umowy",
   "Wymiar czasu pracy",
-];
-export const WORK_HOURS_INFO_HEADER = [
-  TranslationHelper.workHoursInfoHeader.requiredHours,
-  TranslationHelper.workHoursInfoHeader.actualHours,
-  TranslationHelper.workHoursInfoHeader.overtime,
+  "Zespół",
 ];
 const CELLS_TO_AVOID = [WORKSHEET_NAME, NAZWA_ZMIANY];
 
@@ -39,7 +34,6 @@ export class ParserHelper {
       rowValuesSet.size === 0 ||
       (rowValuesSet.size === 1 && rowValuesSet.has("")) ||
       Array.from(rowValuesSet).some((a) => typeof a === "undefined") ||
-      (rowValuesSet.size === 4 && contains(WORK_HOURS_INFO_HEADER)) ||
       contains(CELLS_TO_AVOID) ||
       contains(WORKER_HEADERS)
     );
