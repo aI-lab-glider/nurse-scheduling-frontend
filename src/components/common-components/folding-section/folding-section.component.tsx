@@ -30,7 +30,7 @@ export function FoldingSection({ name, children }: FoldingSectionOptions): JSX.E
         </div>
         <hr className="middle" />
       </div>
-      <div style={{ height: opened ? "initial" : "none" }}>{children}</div>
+      <div style={{ display: opened ? "initial" : "none" }}>{children}</div>
     </div>
   );
 }
