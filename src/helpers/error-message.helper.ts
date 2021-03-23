@@ -142,13 +142,6 @@ export class ErrorMessageHelper {
         type = ScheduleErrorType.WUH;
         title = `${error.worker}`;
         break;
-      case AlgorithmErrorCode.WorkerOvertime:
-        message = `Pracownik ma <b>${error.hours}</b> nad${TranslationHelper.hourAccusativus(
-          error.hours
-        )}.`;
-        type = ScheduleErrorType.WOH;
-        title = `${error.worker}`;
-        break;
       case ParseErrorCode.UNKNOWN_VALUE:
         message = `Nieznana wartość zmiany: "${error.actual}" w dniu ${
           error.day! + 1

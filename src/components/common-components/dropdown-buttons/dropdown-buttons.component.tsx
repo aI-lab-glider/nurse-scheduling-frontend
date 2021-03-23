@@ -1,10 +1,10 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useRef, useState } from "react";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Popper from "@material-ui/core/Popper";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import React, { useRef, useState } from "react";
 import { Button, ButtonVariant } from "..";
 
 export interface ButtonData {
@@ -41,6 +41,7 @@ export function DropdownButtons({
     setOpen(false);
   }
 
+  const dropdownZIndex = 100;
   return (
     <div className="dropdown-container">
       <Button
@@ -50,6 +51,9 @@ export function DropdownButtons({
         ref={anchorRef}
         data-cy={dataCy}
         disabled={disabled}
+        style={{
+          zIndex: open ? dropdownZIndex + 1 : "initial",
+        }}
       >
         <div className="centeredButtonWithArrow">
           <div>{mainLabel}</div>
@@ -64,7 +68,9 @@ export function DropdownButtons({
         placement="bottom"
         anchorEl={anchorRef.current}
         disablePortal
-        className={"z-index100"}
+        style={{
+          zIndex: dropdownZIndex,
+        }}
       >
         <ClickAwayListener onClickAway={handleClickAway}>
           <div className="dropdown-buttons-list" id={variant}>
