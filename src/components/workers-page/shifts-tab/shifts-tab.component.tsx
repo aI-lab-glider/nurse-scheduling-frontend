@@ -16,6 +16,7 @@ import ShiftDrawerComponent, { ShiftDrawerMode } from "./shift-drawer.component"
 import { useDispatch, useSelector } from "react-redux";
 import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ShiftsActionCreator } from "../../../state/reducers/shifts.action-creator";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -74,6 +75,7 @@ export default function ShiftTab(): JSX.Element {
 
   const handleRemoveItem = (shift: Shift): void => {
     dispatcher(ScheduleDataActionCreator.deleteShift(shift));
+    dispatcher(ShiftsActionCreator.deleteShift(shift));
   };
 
   return (
