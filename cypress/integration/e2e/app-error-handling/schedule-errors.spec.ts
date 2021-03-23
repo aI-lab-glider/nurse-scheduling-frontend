@@ -32,6 +32,7 @@ context("Schedule errors", () => {
 
   it("Should restore previous version from corrupted page", () => {
     addWorker("testUser", WorkerType.NURSE);
+    cy.get('[data-cy="btn-schedule-tab"]').click();
     addWorker(Cypress.env("REACT_APP_ERROR_WORKER"), WorkerType.NURSE);
     cy.get('[data-cy="btn-schedule-tab"]').click();
     Cypress.on("uncaught:exception", () => {
