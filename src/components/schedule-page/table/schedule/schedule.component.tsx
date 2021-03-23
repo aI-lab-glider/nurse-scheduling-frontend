@@ -36,12 +36,12 @@ export function ScheduleComponent(): JSX.Element {
             <TimeTableComponent />
           </div>
           <div className="summaryContainer">
-            <OvertimeHeaderComponent data={["norma", "aktualne", "różnica"]} />
+            <OvertimeHeaderComponent data={["norma", "aktualne", "różnica", "nadgodziny"]} />
           </div>
         </div>
 
         {Object.entries(workerGroups).map(([groupName, workers], index) => (
-          <ScheduleFoldingSection name={groupName}>
+          <ScheduleFoldingSection name={groupName} key={groupName}>
             <WorkerInfoSection sectionIndex={index} data={workers} sectionName={groupName} />
           </ScheduleFoldingSection>
         ))}

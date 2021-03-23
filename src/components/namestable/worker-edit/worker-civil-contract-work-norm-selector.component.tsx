@@ -65,7 +65,7 @@ export function WorkerCivilContractWorkNormSelector({
   return (
     <>
       <Grid item xs={6}>
-        <Typography className={classes.label}>Ilość godzin</Typography>
+        <Typography className={classes.label}>Liczba godzin</Typography>
         <TextField
           fullWidth
           name="civilTime"
