@@ -12,15 +12,6 @@ export class TranslationHelper {
     return Object.values(TranslationHelper.monthsGenetivus);
   }
 
-  // suggestions appreciated since this is kinda whack
-  public static get workHoursInfoHeader(): { [key: string]: string } {
-    return {
-      requiredHours: "Godziny wymagane",
-      actualHours: "Godziny wypracowane",
-      overtime: "Nadgodziny",
-    };
-  }
-
   private static get monthTranslations(): { [key: string]: string } {
     return {
       styczeń: "january",

@@ -8,6 +8,7 @@ import { ScheduleDataModel } from "../../../../common-models/schedule-data.model
 import { ActionModel } from "../../../models/action.model";
 import { ApplicationStateModel } from "../../../models/application-state.model";
 import { UndoableConfig } from "../../undoable.action-creator";
+import { FoundationInfoActionType } from "./foundation-info.action-creator";
 import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
 
 export function isScheduleAction(action: ActionModel<unknown>): action is ScheduleActionModel {
@@ -19,7 +20,6 @@ export type ScheduleActionModel = ActionModel<ScheduleDataModel>;
 export enum ScheduleActionType {
   UPDATE = "UPDATE_SCHEDULE",
   ADD_NEW = "ADD_NEW_SCHEDULE",
-  UPDATE_WORKER_INFO = "UPDATE_WORKER_INFO",
   CLEAN_ERRORS = "CLEAN_ERRORS",
   ADD_NEW_SHIFT = "ADD_NEW_SHIFT",
   MODIFY_SHIFT = "MODIFY_SHIFT",
@@ -27,7 +27,10 @@ export enum ScheduleActionType {
   SET_SCHEDULE_CORRUPTED = "SET_SCHEDULE_CORRUPTED",
 }
 
-export function createActionName(name: string, action: ScheduleActionType): string {
+export function createActionName(
+  name: string,
+  action: ScheduleActionType | FoundationInfoActionType
+): string {
   return `${name}/${action}`;
 }
 

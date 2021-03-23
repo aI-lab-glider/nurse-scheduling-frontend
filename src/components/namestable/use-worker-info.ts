@@ -5,7 +5,13 @@ import * as _ from "lodash";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ShiftCode } from "../../common-models/shift-info.model";
-import { ContractType, WorkersInfoModel, WorkerType } from "../../common-models/worker-info.model";
+import {
+  ContractType,
+  WorkerGroup,
+  WorkersInfoModel,
+  WorkerType,
+} from "../../common-models/worker-info.model";
+import { DEFAULT_WORKER_GROUP } from "../../logic/schedule-parser/workers-info.parser";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
 import { WorkerInfoExtendedInterface } from "./worker-edit";
 
@@ -56,7 +62,8 @@ export class WorkerInfo {
     public contractType?: ContractType,
     public workerTime: number = 1,
     public workerType?: WorkerType,
-    public workerShifts: ShiftCode[] = []
+    public workerShifts: ShiftCode[] = [],
+    public workerGroup: WorkerGroup = DEFAULT_WORKER_GROUP
   ) {
     this.previousWorkerName = workerName;
   }
@@ -85,6 +92,12 @@ export class WorkerInfo {
     return copy;
   }
 
+  public withNewWorkerGroup(newWorkerGroup: WorkerGroup): WorkerInfo {
+    const copy = _.cloneDeep(this);
+    copy.workerGroup = newWorkerGroup;
+    return copy;
+  }
+
   asWorkerInfoExtendedInterface(): WorkerInfoExtendedInterface {
     return {
       prevName: this.previousWorkerName,
@@ -92,6 +105,7 @@ export class WorkerInfo {
       workerType: this.workerType,
       contractType: this.contractType,
       time: this.workerTime,
+      workerGroup: this.workerGroup,
     };
   }
 }

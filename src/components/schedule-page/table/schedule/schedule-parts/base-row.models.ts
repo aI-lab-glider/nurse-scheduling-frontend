@@ -5,17 +5,14 @@ import {
   GroupedScheduleErrors,
   ScheduleError,
 } from "../../../../../common-models/schedule-error.model";
-import { Sections } from "../../../../../logic/providers/schedule-provider.model";
 import { DataRow } from "../../../../../logic/schedule-logic/data-row";
 import { BaseCellOptions, PivotCell } from "./base-cell/base-cell.models";
 
 export const baseRowDataCy = (index: number): string => `${index}Row`;
 
 export interface BaseRowOptions {
-  uuid: string;
   rowIndex: number;
   dataRow: DataRow;
-  sectionKey: keyof Sections;
   cellComponent?: React.FC<BaseCellOptions>;
   onKeyDown?: (cellIndex: number, event: React.KeyboardEvent) => void;
   onClick?: (cellIndex: number) => void;
@@ -27,6 +24,7 @@ export interface BaseRowOptions {
   onSave?: (newValue: string) => void;
   selection?: boolean[];
   isEditable?: boolean;
+  sectionKey: string;
   errorSelector?: (cellIndex: number, scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
   defaultEmpty?: string;
 }

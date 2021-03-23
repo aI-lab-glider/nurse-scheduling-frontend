@@ -29,16 +29,9 @@ function nametableErrorSelector(
 }
 
 export function NameTableComponent(options: NameSectionOptions): JSX.Element {
-  const { data = [], workerType, clickable } = options;
+  const { data = [], clickable } = options;
 
   return (
-    <div>
-      <NameTableSection
-        dataRow={data}
-        workerType={workerType}
-        errorSelector={nametableErrorSelector}
-        clickable={clickable}
-      />
-    </div>
+    <NameTableSection data={data} errorSelector={nametableErrorSelector} clickable={clickable} />
   );
 }

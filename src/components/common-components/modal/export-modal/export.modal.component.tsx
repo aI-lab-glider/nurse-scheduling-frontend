@@ -112,9 +112,10 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
       <div>
         <p className="label">Opcje pliku: </p>
         <FormGroup row>
-          {Object.keys(exportOptions).map((key) => (
+          {Object.keys(exportOptions).map((key, index) => (
             <FormControlLabel
               style={{ color: "black" }}
+              key={key + index}
               control={
                 <BlueCheckBox
                   checked={exportOptions[key].value}

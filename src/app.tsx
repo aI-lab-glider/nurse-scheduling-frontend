@@ -15,7 +15,6 @@ import ManagementPage from "./components/workers-page/management-page.component"
 import { ScheduleDataActionCreator } from "./state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { NotificationProvider } from "./components/common-components/notification/notification.context";
 import { NetlifyProFooter } from "./components/common-components/netlify-pro-footer/netlify-pro-footer.component";
-import isElectron from "is-electron";
 import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import JiraLikeDrawer from "./components/common-components/drawer/jira-like-drawer.component";
@@ -35,7 +34,7 @@ const useStyles = makeStyles(() => ({
     display: "block",
     overflowX: "auto",
     overflowY: "auto",
-    height: `calc(100vh - ${parseInt(ScssVars.footerHeight.slice(0, -2))}px)`,
+    height: "100vh",
     flexGrow: 1,
   },
   drawer: {
@@ -116,12 +115,12 @@ function App(): JSX.Element {
               <Box className={classes.content}>
                 <HeaderComponent />
                 <RouteButtonsComponent tabs={tabs} disabled={disableRouteButtons} />
+                <NetlifyProFooter />
               </Box>
               <Box className={classes.drawer}>
                 <JiraLikeDrawer width={690} />
               </Box>
             </Box>
-            {isElectron() ? <></> : <NetlifyProFooter />}
           </Route>
         </Switch>
       </JiraLikeDrawerProvider>

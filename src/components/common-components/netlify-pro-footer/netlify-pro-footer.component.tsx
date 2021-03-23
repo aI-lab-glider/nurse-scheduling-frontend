@@ -28,7 +28,7 @@ export function NetlifyProFooter(): JSX.Element {
     <Grid container className={classes.footer} justify="space-between" alignItems="center">
       <Grid item>{`Wersja: ${process.env.REACT_APP_VERSION}`}</Grid>
       <Grid item>
-        Wszelkie prawa zastrzeżone. Copyright © 2020-2021:
+        Wykonanie:
         <a href="http://www.glider.agh.edu.pl/" target="_blank" rel="noopener noreferrer">
           <img className={classes.logo} src={gliderLogo} alt="Logo koła naukowego Glider" />
           Glider

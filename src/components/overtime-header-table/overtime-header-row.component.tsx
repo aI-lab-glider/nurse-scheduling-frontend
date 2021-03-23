@@ -6,16 +6,16 @@ import { ArrayHelper } from "../../helpers/array.helper";
 import { OvertimeHeaderCell } from "./overtime-header-cell.component";
 
 export interface OvertimeHeaderRowOptions {
-  data: [string, string, string];
+  data: string[];
 }
 
 export function OvertimeHeaderRowF({ data }: OvertimeHeaderRowOptions): JSX.Element {
   return (
-    <tr className="row" id="summaryRow">
+    <div className="row" id="summaryRow">
       {data.map((cellData) => {
         return <OvertimeHeaderCell value={cellData} key={cellData} />;
       })}
-    </tr>
+    </div>
   );
 }
 

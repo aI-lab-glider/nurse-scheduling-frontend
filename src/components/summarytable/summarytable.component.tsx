@@ -2,20 +2,19 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { SummaryTableSection } from "./summarytable-section.component";
 import { BaseSectionOptions } from "../schedule-page/table/schedule/sections/base-section/base-section.component";
-import { WorkerType } from "../../common-models/worker-info.model";
+import { SummaryTableSection } from "./summarytable-section.component";
 
-interface SummaryTableOptions extends Partial<BaseSectionOptions> {
-  workerType: WorkerType;
+export interface SummaryTableOptions extends Partial<BaseSectionOptions> {
+  sectionIndex: number;
 }
 
 export function SummaryTableComponent(options: SummaryTableOptions): JSX.Element {
-  const { data = [], workerType } = options;
+  const { data = [], sectionIndex: sectionIdx } = options;
 
   return (
     <div>
-      <SummaryTableSection dataRows={data} workerType={workerType} />
+      <SummaryTableSection dataRows={data} sectionIdx={sectionIdx} />
     </div>
   );
 }

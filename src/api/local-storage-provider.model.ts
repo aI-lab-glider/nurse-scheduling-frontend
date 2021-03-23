@@ -43,6 +43,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     this.storage = new PouchDB(DATABASE_NAME);
     this.applicationVersionStorage = new PouchDB(`${DATABASE_NAME}-application-version`);
   }
+
   async reloadDb(): Promise<void> {
     try {
       await this.storage.destroy();
@@ -168,12 +169,15 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       const newShifts = _.cloneDeep(updatedMonthDataModel.shifts);
 
       Object.keys(updatedMonthDataModel.shifts).forEach((key) => {
-        newShifts[key] = ArrayHelper.update(
-          updatedMonthDataModel.shifts[key],
-          updatePosition,
-          scheduleDataModel.shifts[key],
-          missingDays
-        );
+        newShifts[key] =
+          _.isNil(scheduleDataModel.shifts[key]) || scheduleDataModel.shifts[key]?.length === 0
+            ? updatedMonthDataModel.shifts[key]
+            : ArrayHelper.update(
+                updatedMonthDataModel.shifts[key],
+                updatePosition,
+                scheduleDataModel.shifts[key],
+                missingDays
+              );
       });
 
       updatedMonthDataModel.shifts = newShifts;

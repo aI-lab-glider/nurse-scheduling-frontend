@@ -4,6 +4,7 @@
 import { VerboseDate } from "./month-info.model";
 import { ShiftCode } from "./shift-info.model";
 import * as _ from "lodash";
+import { Opaque } from "./type-utils";
 
 export enum WorkerType {
   NURSE = "NURSE",
@@ -61,10 +62,12 @@ export enum TimeDrawerType {
   OTHER = "inne",
 }
 
+export type WorkerGroup = Opaque<string, "WorkerGroup">;
 export interface WorkersInfoModel {
   time: { [key: string]: number };
   type: { [workerName: string]: WorkerType };
   contractType?: { [workerName: string]: ContractType };
+  workerGroup: { [workerName: string]: WorkerGroup };
 }
 
 export interface WorkerDescription {
@@ -77,8 +80,10 @@ export interface WorkerDescription {
 export interface WorkerInfoModel {
   name: string;
   time: number;
+  contractType?: ContractType;
   type?: WorkerType;
   shifts?: [VerboseDate, ShiftCode][];
+  workerGroup?: WorkerGroup;
 }
 
 export function validateEmployeeInfo(employeeInfo: WorkersInfoModel): void {
@@ -94,11 +99,10 @@ export function validateEmployeeInfo(employeeInfo: WorkersInfoModel): void {
   //     );
   //   }
   // }
-
   if (!_.isEqual(workersWithType, workersWithTime)) {
     throw new Error(
       `Working time cannot be defined for workers without defined type. Workers without defined time are
-         ${workersWithType.filter((w) => !workersWithTime.includes(w)).join(", ")}`
+         ${workersWithTime.filter((w) => !workersWithType.includes(w)).join(", ")}`
     );
   }
 }
