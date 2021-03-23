@@ -1,21 +1,24 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { ChangeEvent, useEffect, useMemo } from "react";
-import { ScheduleError } from "../../../../common-models/schedule-error.model";
-import ParseErrorModal from "../../../common-components/modal/error-modal/errors.modal.component";
-import { ScheduleDataActionCreator } from "../../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
-import { ScheduleErrorActionType } from "../../../../state/reducers/month-state/schedule-errors.reducer";
-import { ActionModel } from "../../../../state/models/action.model";
-import { useDispatch } from "react-redux";
-import { useScheduleConverter } from "./use-schedule-converter";
 
-export interface UseScheduleImporterOptions {
+import React, { ChangeEvent, createContext, useContext, useEffect, useMemo } from "react";
+import { useDispatch } from "react-redux";
+import { useScheduleConverter } from "./hooks/use-schedule-converter";
+import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
+import { ActionModel } from "../../../state/models/action.model";
+import { ScheduleError } from "../../../common-models/schedule-error.model";
+import ParseErrorModal from "../../common-components/modal/error-modal/errors.modal.component";
+
+export interface ImportModalContextValues {
   handleImport: (e: React.ChangeEvent<HTMLInputElement>) => void;
   ParseErrorModal: JSX.Element | undefined;
 }
 
-export function useScheduleImporter(): UseScheduleImporterOptions {
+export const ImportModalContext = createContext<ImportModalContextValues | null>(null);
+
+export function ImportModalProvider({ children }): JSX.Element {
   const [open, setParserModalOpen] = React.useState(false);
   const scheduleDipatcher = useDispatch();
   const { monthModel, setSrcFile, scheduleErrors } = useScheduleConverter();
@@ -33,6 +36,7 @@ export function useScheduleImporter(): UseScheduleImporterOptions {
       type: ScheduleErrorActionType.UPDATE,
       payload: scheduleErrors,
     } as ActionModel<ScheduleError[]>);
+    debugger;
   }, [monthModel, scheduleDipatcher, scheduleErrors]);
 
   const parserErrorModal = useMemo(() => {
@@ -48,8 +52,22 @@ export function useScheduleImporter(): UseScheduleImporterOptions {
     }
   }
 
-  return {
-    handleImport,
-    ParseErrorModal: parserErrorModal,
-  };
+  return (
+    <ImportModalContext.Provider
+      value={{
+        handleImport,
+        ParseErrorModal: parserErrorModal,
+      }}
+    >
+      {children}
+    </ImportModalContext.Provider>
+  );
+}
+
+export function useImportModal(): ImportModalContextValues {
+  const context = useContext(ImportModalContext);
+
+  if (!context) throw new Error("useImportModal have to be used within ImportModalProvider");
+
+  return context;
 }

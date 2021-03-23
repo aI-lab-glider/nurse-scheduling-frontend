@@ -24,6 +24,7 @@ import { ApplicationStateModel } from "./state/models/application-state.model";
 import { ScheduleKey } from "./api/persistance-store.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
 import { cropScheduleDMToMonthDM } from "./logic/schedule-container-convertion/schedule-container-convertion";
+import { ImportModalProvider } from "./components/schedule-page/import-buttons/import-modal-context";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -104,20 +105,22 @@ function App(): JSX.Element {
   return (
     <NotificationProvider>
       <JiraLikeDrawerProvider>
-        <Switch>
-          <Route path="/">
-            <Box className={classes.root}>
-              <Box className={classes.content}>
-                <HeaderComponent />
-                <RouteButtonsComponent tabs={tabs} disabled={disableRouteButtons} />
-                <NetlifyProFooter />
+        <ImportModalProvider>
+          <Switch>
+            <Route path="/">
+              <Box className={classes.root}>
+                <Box className={classes.content}>
+                  <HeaderComponent />
+                  <RouteButtonsComponent tabs={tabs} disabled={disableRouteButtons} />
+                  <NetlifyProFooter />
+                </Box>
+                <Box className={classes.drawer}>
+                  <JiraLikeDrawer width={690} />
+                </Box>
               </Box>
-              <Box className={classes.drawer}>
-                <JiraLikeDrawer width={690} />
-              </Box>
-            </Box>
-          </Route>
-        </Switch>
+            </Route>
+          </Switch>
+        </ImportModalProvider>
       </JiraLikeDrawerProvider>
     </NotificationProvider>
   );

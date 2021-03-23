@@ -10,10 +10,10 @@ import {
   DropdownButtons,
 } from "../../common-components/dropdown-buttons/dropdown-buttons.component";
 import ExportModal from "../../common-components/modal/export-modal/export.modal.component";
-import { useScheduleImporter } from "./hooks/use-schedule-import";
+import { useImportModal } from "./import-modal-context";
 
 export function ImportButtonsComponent(): JSX.Element {
-  const { handleImport, ParseErrorModal } = useScheduleImporter();
+  const { handleImport } = useImportModal();
   const fileUpload = useRef<HTMLInputElement>(null);
 
   const stateScheduleModel = useSelector(
@@ -59,7 +59,6 @@ export function ImportButtonsComponent(): JSX.Element {
         type="file"
         accept=".xlsx"
       />
-      {ParseErrorModal}
       <ExportModal open={exportModalOpen} setOpen={setExportModalOpen} model={stateScheduleModel} />
     </div>
   );

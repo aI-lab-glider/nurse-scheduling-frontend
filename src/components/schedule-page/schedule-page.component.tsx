@@ -12,6 +12,7 @@ import { ScheduleActionType } from "../../state/reducers/month-state/schedule-da
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
 import { CorruptedScheduleComponent } from "./corrupted-schedule.component";
+import { useImportModal } from "./import-buttons/import-modal-context";
 
 interface SchedulePageOptions {
   editModeHandler: (editMode: boolean) => void;
@@ -61,6 +62,8 @@ export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Elem
     );
   }, [editModeHandler, setDrawerOpen]);
 
+  const { ParseErrorModal } = useImportModal();
+
   return (
     <>
       <div className="schedule-container">
@@ -73,6 +76,7 @@ export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Elem
               <Route path="/" component={ViewOnly} exact />
             </Switch>
           )}
+          {ParseErrorModal}
         </Sentry.ErrorBoundary>
       </div>
     </>

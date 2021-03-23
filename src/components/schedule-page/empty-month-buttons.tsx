@@ -11,7 +11,7 @@ import { MonthSwitchActionCreator } from "../../state/reducers/month-state/sched
 import { LocalStorageProvider } from "../../api/local-storage-provider.model";
 import { MonthDataModel } from "../../common-models/schedule-data.model";
 import { MonthHelper } from "../../helpers/month.helper";
-import { useScheduleImporter } from "./import-buttons/hooks/use-schedule-import";
+import { useImportModal } from "./import-buttons/import-modal-context";
 
 export function EmptyMonthButtons(): JSX.Element {
   const { month_number: currentMonth, year: currentYear } = useSelector(
@@ -22,7 +22,7 @@ export function EmptyMonthButtons(): JSX.Element {
   const prevDate = MonthHelper.getDateWithMonthOffset(currentMonth, currentYear, -1);
 
   const [hasValidPrevious, setHasValidPrevious] = useState<boolean>(false);
-  const { handleImport, ParseErrorModal } = useScheduleImporter();
+  const { handleImport } = useImportModal();
 
   const dispatch = useDispatch();
 
@@ -84,7 +84,6 @@ export function EmptyMonthButtons(): JSX.Element {
         />
         Wgraj z pliku
       </Button>
-      {ParseErrorModal}
     </div>
   );
 }
