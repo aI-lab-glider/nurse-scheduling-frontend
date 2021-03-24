@@ -3,7 +3,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import classNames from "classnames/bind";
 import * as _ from "lodash";
-import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  CSSProperties,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import mergeRefs from "react-merge-refs";
 import { useSelector } from "react-redux";
 import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
@@ -43,6 +51,7 @@ interface ShiftCellOptions extends BaseCellOptions {
 export function getColor(value: string, shifts: ShiftTypesDict): string {
   return Object.values(shifts).filter((s) => s.code === value)[0]?.color ?? "FFD100";
 }
+
 /**
  * @description Function component that creates cell containing Details or Autocomplete when in edit mode
  * @param option : ShiftCellOption
@@ -80,6 +89,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   function toggleComponentVisibility(): void {
     setIsComponentVisible(!isComponentVisible);
   }
+
   // TODO revert cell details
   // const isEditMode = useSelector(
   //   (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
@@ -122,9 +132,21 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   const { shift_types: shiftTypes } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
   );
-  const theColor = ColorHelper.hexToRgb(getColor(shiftCode, shiftTypes));
+  const theColor = ColorHelper.hexToRgb(getColor(shiftCode, SHIFTS));
   const color = `rgba(${theColor?.r},${theColor?.g},${theColor?.b},0.3)`;
   const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
+
+  const cellStyle: CSSProperties = useMemo(() => {
+    return !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W"
+      ? {
+          boxShadow: !keepOn ? `-1px 0 0 0 ${color}` : "",
+          marginLeft: keepOn ? "0" : "0 0 4px 4px",
+          backgroundColor: color,
+          color,
+        }
+      : {};
+  }, [shiftCode, keepOn, color]);
+
   return (
     <>
       {showInput && (
@@ -184,16 +206,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
               className={`content ${hasNextClass} ${
                 keepOn ? "keepOnTrue" : "keepOnFalse"
               } ${keepOnClass}`}
-              style={
-                !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W"
-                  ? {
-                      boxShadow: !keepOn ? `-1px 0 0 0 ${color}` : "",
-                      marginLeft: keepOn ? "0" : "0 0 4px 4px",
-                      backgroundColor: color,
-                      color,
-                    }
-                  : {}
-              }
+              style={cellStyle}
               data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
             >
               {!keepOn && !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W" && (
