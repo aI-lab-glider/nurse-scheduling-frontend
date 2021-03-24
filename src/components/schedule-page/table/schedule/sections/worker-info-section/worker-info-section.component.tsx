@@ -19,9 +19,10 @@ import {
 } from "../shifts-section/shifts-section.component";
 import { shiftSectionDataCy } from "./worker-info-section.models";
 
-type SubcomponentsOptions = Omit<NameTableSectionOptions, "clickable" | "uuid" | "updateData"> &
+type SubcomponentsOptions = Omit<NameTableSectionOptions, "isWorker" | "uuid" | "updateData"> &
   ShiftsSectionOptions &
   SummaryTableOptions;
+
 export interface WorkerInfoSectionOptions
   extends Omit<SubcomponentsOptions, "data" | "workerGroup" | "sectionKey"> {
   sectionName: string;
@@ -42,14 +43,12 @@ export function WorkerInfoSection({
   );
   return (
     <div className="sectionContainer">
-      <div>
-        <NameTableComponent data={dataRows} clickable={true} {...options} />
-      </div>
-      <div>
+      <div className="sectionContainer borderContainer">
         <div>
-          <div className="table" data-cy={shiftSectionDataCy(sectionIndex)}>
-            <ShiftsSectionComponent sectionKey={options.sectionName} data={dataRows} {...options} />
-          </div>
+          <NameTableComponent data={dataRows} isWorker={true} {...options} />
+        </div>
+        <div className="table leftContainerBorder" data-cy={shiftSectionDataCy(sectionIndex)}>
+          <ShiftsSectionComponent sectionKey={options.sectionName} data={dataRows} {...options} />
         </div>
       </div>
       <div className="summaryContainer">
