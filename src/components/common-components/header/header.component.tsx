@@ -15,6 +15,8 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../../state/app-config-context";
 import { ScheduleMode } from "../../schedule-page/table/schedule/schedule-state.model";
+import AppErrorModal from "../modal/app-error-modal/app-error.modal.component";
+import { AppErrorBoundary } from "../../app-error-boundary/app-error-boundary.component";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -70,6 +72,8 @@ export function HeaderComponent(): JSX.Element {
     window.open(process.env.REACT_APP_HELP_PAGE_URL);
   }, []);
 
+  const [isOpenAppError, setIsAppErrorOpen] = useState(false);
+
   return (
     <>
       <div id={"header"}>
@@ -84,6 +88,15 @@ export function HeaderComponent(): JSX.Element {
         >
           Wróć do teraz
         </Button>
+        <Button
+          variant={"secondary"}
+          onClick={(): boolean => {
+            setIsAppErrorOpen(true);
+            return isOpenAppError;
+          }}
+        >
+          Error
+        </Button>
         <div className={"filler"} />
         <MonthSwitchComponent isInViewMode={isInViewMode} />
         <div className={"filler"} />
@@ -94,6 +107,7 @@ export function HeaderComponent(): JSX.Element {
         <SettingsIcon className="header-icon" />
         <HelpOutlineIcon className="header-icon" onClick={redirectToDocumentation} />
       </div>
+      <AppErrorModal onClick={() => 1} open={isOpenAppError} setOpen={setIsAppErrorOpen} />
     </>
   );
 }

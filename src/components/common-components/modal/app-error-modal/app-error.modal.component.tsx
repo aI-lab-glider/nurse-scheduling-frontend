@@ -38,6 +38,18 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
       >
         OK
       </Button>
+      <Button
+        onClick={(): void => {
+          window.location.reload(false);
+          handleClose();
+        }}
+        size="small"
+        className="submit-button"
+        variant="primary"
+        data-cy="btn-reload-app-error"
+      >
+        Odśwież aplikację
+      </Button>
     </div>
   );
 
