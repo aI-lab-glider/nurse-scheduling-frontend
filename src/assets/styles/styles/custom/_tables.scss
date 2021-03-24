@@ -8,11 +8,11 @@
   padding: 0;
 
   background: $white;
-  border: 1px solid $table-border-color-grey;
   box-sizing: border-box;
-  border-radius: 10px;
 
   overflow: hidden;
+  border: 1px solid $table-border-color-grey;
+  border-radius: $table-radius;
 
   .row {
     display: flex;
@@ -248,6 +248,11 @@
   flex-direction: row;
 }
 
+.borderContainer {
+  border: 1px solid $table-border-color-grey;
+  border-radius: $table-radius;
+}
+
 span {
   &.circle {
     border-radius: 50%;
@@ -378,4 +383,10 @@ p {
 
 .nametableRow-error-tooltip {
   right: -3px !important;
+}
+
+.leftContainerBorder {
+  border: none;
+  border-radius: 0;
+  border-left: 1px solid $table-border-color-grey;
 }

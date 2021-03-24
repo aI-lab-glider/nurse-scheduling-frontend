@@ -15,9 +15,11 @@ $header-height: 52px !default;
 $primary-header-color: #1d3557 !default;
 $header-text-color: #ffffff !default;
 
-$babysitter-label-background: #ffd100 !default;
-$nurse-label-background: #c8dfff !default;
-$worker-table-border-color: #d5e6fe !default;
+$babysitter-color: #ffd100;
+$babysitter-label-background: $babysitter-color !default;
+
+$nurse-color: #c8dfff;
+$nurse-label-background: $nurse-color !default;
 
 // Drawer
 
@@ -62,6 +64,10 @@ $error-list-item-border-color: #c8dfff !default;
 
 $table-color: #14142b !default;
 $table-border-color-grey: #d6d8e7 !default;
+$table-border-color-blue: #c8dfff !default;
+
+$table-radius: 10px;
+
 $cell-color: #4e4b66 !default;
 $cell-weekend-background-color: rgba(60, 105, 168, 0.2) !default;
 $cell-weekend-header-background-color: rgba(60, 105, 168, 0.3) !default;
