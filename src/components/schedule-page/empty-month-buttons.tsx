@@ -1,18 +1,17 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TranslationHelper } from "../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
-import { ScheduleDataActionCreator } from "../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { Button } from "../common-components";
-import { useScheduleConverter } from "./import-buttons/hooks/use-schedule-converter";
 import { ScheduleKey } from "../../api/persistance-store.model";
 import { MonthSwitchActionCreator } from "../../state/reducers/month-state/schedule-data/month-switch.action-creator";
 import { LocalStorageProvider } from "../../api/local-storage-provider.model";
 import { MonthDataModel } from "../../common-models/schedule-data.model";
 import { MonthHelper } from "../../helpers/month.helper";
+import { useImportModal } from "./import-buttons/import-modal-context";
 
 export function EmptyMonthButtons(): JSX.Element {
   const { month_number: currentMonth, year: currentYear } = useSelector(
@@ -23,7 +22,8 @@ export function EmptyMonthButtons(): JSX.Element {
   const prevDate = MonthHelper.getDateWithMonthOffset(currentMonth, currentYear, -1);
 
   const [hasValidPrevious, setHasValidPrevious] = useState<boolean>(false);
-  const { monthModel, setSrcFile } = useScheduleConverter();
+  const { handleImport } = useImportModal();
+
   const dispatch = useDispatch();
 
   const fileUpload = useRef<HTMLInputElement>(null);
@@ -55,20 +55,6 @@ export function EmptyMonthButtons(): JSX.Element {
       !month.isCorrupted
     );
   };
-
-  useEffect(() => {
-    if (monthModel) {
-      const action = ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(monthModel);
-      dispatch(action);
-    }
-  }, [monthModel, dispatch]);
-
-  function handleImport(event: ChangeEvent<HTMLInputElement>): void {
-    const file = event.target?.files && event.target?.files[0];
-    if (file) {
-      setSrcFile(file);
-    }
-  }
 
   return (
     <div className={"newPageButtonsPane"}>
