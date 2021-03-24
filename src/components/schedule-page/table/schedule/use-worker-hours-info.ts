@@ -12,6 +12,7 @@ import {
   ScheduleStateModel,
 } from "../../../../state/models/application-state.model";
 import { ScheduleMode } from "./schedule-state.model";
+import { ContractType } from "../../../../common-models/worker-info.model";
 
 export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
   const isEditMode = useSelector(
@@ -27,6 +28,16 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
   const workerShifts = useSelector(
     (state: ApplicationStateModel) => state.actualState[scheduleKey].present.shifts
   )[workerName];
+
+  const contractType = useSelector(
+    (state: ApplicationStateModel) =>
+      state.actualState[scheduleKey].present.employee_info.contractType
+  );
+
+  const workerContractType =
+    contractType && contractType[workerName]
+      ? contractType[workerName]
+      : ContractType.EMPLOYMENT_CONTRACT;
 
   const primaryWorkerShifts = useSelector(
     (state: ApplicationStateModel) => state.actualState.primaryRevision.shifts
@@ -49,7 +60,7 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
 
   useEffect(() => {
     if (primaryRevisionMonth === month) {
-      if (!isAllValuesDefined([workerTime, workerShifts])) {
+      if (!isAllValuesDefined([workerTime, workerShifts, workerContractType])) {
         return setWorkHoursInfo(new WorkerHourInfo(0, 0, 0));
       }
       setWorkHoursInfo(
@@ -57,6 +68,7 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
           workerShifts,
           primaryWorkerShifts as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
           workerTime,
+          workerContractType,
           month,
           year,
           dates,
@@ -69,6 +81,7 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
     workerShifts,
     primaryWorkerShifts,
     workerTime,
+    workerContractType,
     month,
     year,
     dates,

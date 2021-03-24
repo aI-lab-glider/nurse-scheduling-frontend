@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ShiftCode } from "../../src/common-models/shift-info.model";
 import { MonthDataArray } from "../../src/helpers/shifts.helper";
+import { ContractType } from "../../src/common-models/worker-info.model";
 
 const monthWorkerData = {
   expectedRequiredWorkHours: {
@@ -1023,6 +1024,7 @@ const createWorkerInfoObject = (workerName: string): WorkerTestDataInstance => {
   return {
     workerName,
     workerNorm: monthWorkerData.time[workerName],
+    workerContract: ContractType.EMPLOYMENT_CONTRACT,
     workerReqiuredHours: monthWorkerData.expectedRequiredWorkHours[workerName],
     workerActualHours: monthWorkerData.expectedActualHours[workerName],
     actualWorkerShifts: currentMonthShifts,
@@ -1036,6 +1038,7 @@ const createWorkerInfoObject = (workerName: string): WorkerTestDataInstance => {
 export interface WorkerTestDataInstance {
   workerName: string;
   workerNorm: number;
+  workerContract: ContractType;
   workerReqiuredHours: number;
   workerActualHours: number;
   actualWorkerShifts: ShiftCode[];

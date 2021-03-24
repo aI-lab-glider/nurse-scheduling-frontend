@@ -12,6 +12,7 @@ import {
 import { MonthDataArray, ShiftHelper } from "../../../../src/helpers/shifts.helper";
 import { WorkerHourInfo } from "../../../../src/helpers/worker-hours-info.model";
 import { workerTestData, WorkerTestDataInstance } from "../../../fixtures/march-2021-worker-data";
+import { ContractType } from "../../../../src/common-models/worker-info.model";
 
 describe("Worker hours info", () => {
   workerTestData.forEach((workerInstance) => {
@@ -72,6 +73,7 @@ describe("Worker hours info", () => {
         shifts,
         primaryShifts as MonthDataArray<ShiftCode>,
         1,
+        ContractType.EMPLOYMENT_CONTRACT,
         testedMonthParams.monthNumber,
         testedMonthParams.year,
         dates,
@@ -97,6 +99,7 @@ function calculateWorkerHoursFromWorkerInstance(
     actualWorkerShifts ?? workerInstance.actualWorkerShifts,
     baseWorkerShifts as MonthDataArray<ShiftCode>,
     workerInstance.workerNorm,
+    workerInstance.workerContract,
     workerInstance.month,
     workerInstance.year,
     workerInstance.dates,
