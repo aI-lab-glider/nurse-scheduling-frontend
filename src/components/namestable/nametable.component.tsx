@@ -32,6 +32,6 @@ export function NameTableComponent(options: NameSectionOptions): JSX.Element {
   const { data = [], clickable } = options;
 
   return (
-      <NameTableSection data={data} errorSelector={nametableErrorSelector} clickable={clickable} />
+    <NameTableSection data={data} errorSelector={nametableErrorSelector} clickable={clickable} />
   );
 }
