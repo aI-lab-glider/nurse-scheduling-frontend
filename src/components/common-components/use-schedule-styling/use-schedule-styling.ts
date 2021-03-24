@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { ShiftCode } from "../../../common-models/shift-info.model";
+import { ShiftCode, SHIFTS } from "../../../common-models/shift-info.model";
 import { CellDataItem } from "../../schedule-page/table/schedule/schedule-parts/base-row.models";
 
 interface UseScheduleStylingReturn extends CellDataItem {
@@ -23,8 +23,8 @@ export function applyScheduleStyling(data: ShiftCode[]): UseScheduleStylingRetur
     } else {
       nextShift = null;
     }
-    keepOn = prevShift === value && [ShiftCode.K, ShiftCode.U, ShiftCode.L4, null].includes(value);
-    hasNext = nextShift === value && [ShiftCode.K, ShiftCode.U, ShiftCode.L4, null].includes(value);
+    keepOn = prevShift === value && !SHIFTS[value].isWorkingShift;
+    hasNext = nextShift === value && !SHIFTS[value].isWorkingShift;
     prevShift = value;
 
     return result.push({ value, keepOn, hasNext });
