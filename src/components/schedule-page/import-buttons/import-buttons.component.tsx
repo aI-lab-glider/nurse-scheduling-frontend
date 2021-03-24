@@ -2,29 +2,23 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import React, { ChangeEvent, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ScheduleError } from "../../../common-models/schedule-error.model";
-import { ActionModel } from "../../../state/models/action.model";
+import React, { useRef } from "react";
+import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
-import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
 import {
   ButtonData,
   DropdownButtons,
 } from "../../common-components/dropdown-buttons/dropdown-buttons.component";
-import { useScheduleConverter } from "./hooks/use-schedule-converter";
-import ParseErrorModal from "../../common-components/modal/error-modal/errors.modal.component";
 import ExportModal from "../../common-components/modal/export-modal/export.modal.component";
+import { useImportModal } from "./import-modal-context";
 
 export function ImportButtonsComponent(): JSX.Element {
-  const { monthModel, setSrcFile, scheduleErrors } = useScheduleConverter();
+  const { handleImport } = useImportModal();
   const fileUpload = useRef<HTMLInputElement>(null);
 
   const stateScheduleModel = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule?.present
   );
-  const scheduleDipatcher = useDispatch();
 
   const btnData1: ButtonData = {
     label: "Wczytaj",
@@ -38,27 +32,6 @@ export function ImportButtonsComponent(): JSX.Element {
   };
 
   const btnData = [btnData1, btnData2];
-  useEffect(() => {
-    if (monthModel) {
-      const action = ScheduleDataActionCreator.setScheduleFromMonthDMAndSaveInDB(monthModel);
-      scheduleDipatcher(action);
-    }
-    if (scheduleErrors) {
-      setOpen(true);
-    }
-
-    scheduleDipatcher({
-      type: ScheduleErrorActionType.UPDATE,
-      payload: scheduleErrors,
-    } as ActionModel<ScheduleError[]>);
-  }, [monthModel, scheduleDipatcher, scheduleErrors]);
-
-  function handleImport(event: ChangeEvent<HTMLInputElement>): void {
-    const file = event.target?.files && event.target?.files[0];
-    if (file) {
-      setSrcFile(file);
-    }
-  }
 
   function handleExport(): void {
     if (stateScheduleModel) {
@@ -66,7 +39,6 @@ export function ImportButtonsComponent(): JSX.Element {
     }
   }
 
-  const [open, setOpen] = React.useState(false);
   const [exportModalOpen, setExportModalOpen] = React.useState(false);
 
   return (
@@ -87,7 +59,6 @@ export function ImportButtonsComponent(): JSX.Element {
         type="file"
         accept=".xlsx"
       />
-      {scheduleErrors.length !== 0 && <ParseErrorModal open={open} setOpen={setOpen} />}
       <ExportModal open={exportModalOpen} setOpen={setExportModalOpen} model={stateScheduleModel} />
     </div>
   );

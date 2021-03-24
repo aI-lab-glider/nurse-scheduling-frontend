@@ -63,7 +63,7 @@ Cypress.Commands.add(
     cy.visit(Cypress.env("baseUrl"));
     cy.get("[data-cy=file-input]").should("exist");
     cy.get("[data-cy=file-input]").attachFile(scheduleName);
-    cy.get(`[data-cy=${shiftSection}]`).should("exist");
+    cy.get(`[data-cy=${shiftSection}]`, { timeout: 5000 }).should("exist");
     cy.window()
       .its("store")
       .invoke("getState")
