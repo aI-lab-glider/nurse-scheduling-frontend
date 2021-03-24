@@ -166,7 +166,6 @@
       padding-bottom: 50%;
       width: 100%;
       border-left: 1px solid $table-border-color-grey;
-      background-color: $white;
 
       &:first-child {
         border-left: 0;
@@ -211,7 +210,6 @@
     width: 1156px;
     height: 70px;
     cursor: default;
-    background-color: $body-bg;
   }
 }
 
@@ -240,7 +238,6 @@
 }
 .timeTableContainer {
   margin-left: 126px;
-  background-color: $body-bg;
 }
 .summaryContainer {
   margin-left: 2%;
