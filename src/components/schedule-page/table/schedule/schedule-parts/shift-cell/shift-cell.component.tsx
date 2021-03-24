@@ -5,8 +5,13 @@ import classNames from "classnames/bind";
 import * as _ from "lodash";
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import mergeRefs from "react-merge-refs";
+import { useSelector } from "react-redux";
 import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
-import { ShiftCode, SHIFTS } from "../../../../../../common-models/shift-info.model";
+import {
+  ShiftCode,
+  ShiftsTypesDict as ShiftTypesDict,
+} from "../../../../../../common-models/shift-info.model";
+import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 import {
   baseCellDataCy,
   BaseCellOptions,
@@ -33,8 +38,8 @@ interface ShiftCellOptions extends BaseCellOptions {
   workerName?: string;
 }
 
-export function getColor(value: string): string {
-  return Object.values(SHIFTS).filter((s) => s.code === value)[0].color ?? "FFD100";
+export function getColor(value: string, shifts: ShiftTypesDict): string {
+  return Object.values(shifts).filter((s) => s.code === value)[0]?.color ?? "FFD100";
 }
 /**
  * @description Function component that creates cell containing Details or Autocomplete when in edit mode
@@ -112,6 +117,9 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     ),
     [isBlocked, onClick]
   );
+  const { shift_types: shiftTypes } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
+  );
 
   const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
   return (
@@ -175,7 +183,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
               <p
                 data-cy={baseCellDataCy(cellIndex, "cell")}
                 className={"relative "}
-                style={{ color: `#${getColor(shiftCode)}` }}
+                style={{ color: `#${getColor(shiftCode, shiftTypes)}` }}
               >
                 {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
               </p>

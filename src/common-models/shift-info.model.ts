@@ -201,7 +201,7 @@ export interface ShiftInfoModel {
   [nurseName: string]: ShiftCode[];
 }
 
-export interface ShiftModel {
+export interface ShiftsTypesDict {
   [shiftCode: string]: Shift;
 }
 

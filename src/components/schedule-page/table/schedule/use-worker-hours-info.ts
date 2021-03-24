@@ -52,6 +52,9 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
   const { dates } = useSelector(
     (state: ApplicationStateModel) => state.actualState[scheduleKey].present.month_info
   );
+  const { shift_types: shiftTypes } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
+  );
 
   const [workHoursInfo, setWorkHoursInfo] = useState<WorkerHourInfo>(new WorkerHourInfo(0, 0, 0));
 
@@ -60,7 +63,6 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
       if (!isAllValuesDefined([workerTime, workerShifts, workerContractType])) {
         return setWorkHoursInfo(new WorkerHourInfo(0, 0, 0));
       }
-
       setWorkHoursInfo(
         WorkerHourInfo.fromWorkerInfo(
           workerShifts,
@@ -69,11 +71,13 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
           workerContractType,
           month,
           year,
-          dates
+          dates,
+          shiftTypes
         )
       );
     }
   }, [
+    shiftTypes,
     workerShifts,
     primaryWorkerShifts,
     workerTime,

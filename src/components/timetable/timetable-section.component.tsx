@@ -6,8 +6,8 @@ import { TimeTableRow } from "./timetable-row.component";
 
 export function TimeTableSection(): JSX.Element {
   return (
-      <div className="table">
-          <TimeTableRow data-cy="timetable-row" />
-      </div>
+    <div className="table">
+      <TimeTableRow data-cy="timetable-row" />
+    </div>
   );
 }

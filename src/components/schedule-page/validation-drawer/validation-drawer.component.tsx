@@ -35,6 +35,9 @@ export default function ValidationDrawerContentComponent(
   const [isNetworkError, setIsNetworkError] = useState(false);
   const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
   const { setOpen, loadingErrors } = options;
+  const { shift_types: shiftTypes } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
+  );
 
   useEffect(() => {
     const spinner = {
@@ -55,7 +58,7 @@ export default function ValidationDrawerContentComponent(
       setLoadingState(spinner);
     } else {
       if (Object.keys(scheduleErrors).length > 0) {
-        const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors);
+        const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors, shiftTypes);
         if (errors.length > 0) {
           setMappedErrors(errors);
           setLoadingState(errorsFound);
@@ -66,7 +69,7 @@ export default function ValidationDrawerContentComponent(
         setLoadingState(noErrors);
       }
     }
-  }, [scheduleErrors, loadingErrors]);
+  }, [scheduleErrors, loadingErrors, shiftTypes]);
 
   return (
     <ErrorLoader
