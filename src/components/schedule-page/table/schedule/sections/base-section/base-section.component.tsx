@@ -13,7 +13,7 @@ import { BaseCellOptions } from "../../schedule-parts/base-cell/base-cell.models
 import { BaseRowComponent } from "../../schedule-parts/base-row.component";
 import { PivotCell } from "../../schedule-parts/hooks/use-cell-selection";
 import { ShiftRowOptions } from "../../schedule-parts/shift-row.component";
-import { SelectionMatrix, useSelectionMatrix } from "./use-selection-matrix";
+import { areDimesionsEqual, SelectionMatrix, useSelectionMatrix } from "./use-selection-matrix";
 
 export enum DirectionKey {
   ArrowRight = "ArrowRight",
@@ -78,8 +78,9 @@ function BaseSectionComponentF({
     }
   }
 
+  const dataArray = data.map((d) => d.rowData());
   const { selectionMatrix, setSelectionMatrix, resetSelectionMatrix } = useSelectionMatrix(
-    data.map((d) => d.rowData())
+    dataArray
   );
 
   const resetSelection = useCallback((): void => {
@@ -112,29 +113,30 @@ function BaseSectionComponentF({
 
   return (
     <>
-      {data.map((dataRow, rowInd) => (
-        <RowComponent
-          selection={[...selectionMatrix[rowInd]]}
-          key={`${dataRow.rowKey}_${rowInd}`}
-          rowIndex={rowInd}
-          dataRow={dataRow}
-          cellComponent={cellComponent}
-          pointerPosition={pointerPosition.row === rowInd ? pointerPosition.cell : -1}
-          onKeyDown={movePointer}
-          onClick={(cellInd): void => handleCellClick(rowInd, cellInd)}
-          onDrag={(pivot, cellInd): void => onDrag(pivot, rowInd, cellInd)}
-          onDragEnd={(rowIndex, cellIndex): void =>
-            setPointerPosition({ row: rowIndex, cell: cellIndex })
-          }
-          sectionKey={sectionKey}
-          onSave={onSave}
-          onBlur={resetSelection}
-          isEditable={dataRow.isEditable}
-          errorSelector={(cellIndex, scheduleErrors): ScheduleError[] =>
-            errorSelector?.(dataRow.rowKey, cellIndex, scheduleErrors) ?? []
-          }
-        />
-      ))}
+      {areDimesionsEqual(selectionMatrix, dataArray) &&
+        data.map((dataRow, rowInd) => (
+          <RowComponent
+            selection={[...selectionMatrix[rowInd]]}
+            key={`${dataRow.rowKey}_${rowInd}`}
+            rowIndex={rowInd}
+            dataRow={dataRow}
+            cellComponent={cellComponent}
+            pointerPosition={pointerPosition.row === rowInd ? pointerPosition.cell : -1}
+            onKeyDown={movePointer}
+            onClick={(cellInd): void => handleCellClick(rowInd, cellInd)}
+            onDrag={(pivot, cellInd): void => onDrag(pivot, rowInd, cellInd)}
+            onDragEnd={(rowIndex, cellIndex): void =>
+              setPointerPosition({ row: rowIndex, cell: cellIndex })
+            }
+            sectionKey={sectionKey}
+            onSave={onSave}
+            onBlur={resetSelection}
+            isEditable={dataRow.isEditable}
+            errorSelector={(cellIndex, scheduleErrors): ScheduleError[] =>
+              errorSelector?.(dataRow.rowKey, cellIndex, scheduleErrors) ?? []
+            }
+          />
+        ))}
     </>
   );
 }
