@@ -29,9 +29,9 @@ export function ScheduleComponent(): JSX.Element {
   }
 
   return (
-    <div style={{ margin: 20 }}>
+    <div style={{ margin: "20 0" }}>
       <div>
-        <div className="sectionContainer" style={{ position: "sticky", top: "8vh", zIndex: 3 }}>
+        <div className="sectionContainer timeHeader">
           <div className="timeTableContainer">
             <TimeTableComponent />
           </div>
