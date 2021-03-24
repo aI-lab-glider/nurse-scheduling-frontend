@@ -31,7 +31,7 @@ export function ScheduleComponent(): JSX.Element {
   return (
     <div style={{ margin: 20 }}>
       <div>
-        <div className="sectionContainer">
+        <div className="sectionContainer" style={{ position: "sticky", top: "8vh", zIndex: 3 }}>
           <div className="timeTableContainer">
             <TimeTableComponent />
           </div>
