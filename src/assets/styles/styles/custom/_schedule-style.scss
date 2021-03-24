@@ -87,17 +87,25 @@
     margin: 0 0 4px 4px;
     border-radius: 2px 0 0 2px;
   }
+  .keepOnTrue {
+    width: 100%;
+    margin: 0 0 4px 0;
+    border-radius: 0;
 
+    .leftBorderColor {
+      width: 0;
+    }
+  }
   .keepOntrueL4 {
     width: 100%;
     margin: 0 0 4px 0;
     border-radius: 0;
-    box-shadow: -1px 0 0 0 change-color($color: $l4, $alpha: 0.3);
 
     .leftBorderColor {
       width: 0;
     }
 
+    box-shadow: -1px 0 0 0 change-color($color: $l4, $alpha: 0.3);
     background-color: change-color($color: $l4, $alpha: 0.3);
     color: change-color($color: $l4, $alpha: 0.3);
   }
