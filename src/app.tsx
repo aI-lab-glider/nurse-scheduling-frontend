@@ -24,6 +24,7 @@ import { ApplicationStateModel } from "./state/models/application-state.model";
 import { ScheduleKey } from "./api/persistance-store.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
 import { cropScheduleDMToMonthDM } from "./logic/schedule-container-convertion/schedule-container-convertion";
+import { LocalStorageProvider } from "./api/local-storage-provider.model";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -100,6 +101,10 @@ function App(): JSX.Element {
   useEffect(() => {
     fetchGlobalState();
   }, [fetchGlobalState]);
+
+  useEffect(() => {
+    new LocalStorageProvider().saveApplicationVersion().then();
+  }, []);
 
   return (
     <NotificationProvider>

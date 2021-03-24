@@ -7,16 +7,12 @@ import { SummaryTableCell } from "./summarytable-cell.component";
 import { summaryRowDataCy, SummaryTableRowOptions } from "./summarytable-row.models";
 
 export function SummaryTableRowF({ workerName, rowIndex }: SummaryTableRowOptions): JSX.Element {
-  const workerHours = useWorkerHoursInfo(workerName).asArray();
+  const workerHours = useWorkerHoursInfo(workerName);
   return (
     <div className="row" id="summaryRow" data-cy={summaryRowDataCy(rowIndex)}>
-      {workerHours.map((cellData, cellIndex) => {
+      {Object.keys(workerHours).map((key, index) => {
         return (
-          <SummaryTableCell
-            key={`${cellData}_${cellIndex}`}
-            value={cellData}
-            cellIndex={cellIndex}
-          />
+          <SummaryTableCell key={`${key}_${index}`} value={workerHours[key]} cellIndex={index} />
         );
       })}
     </div>

@@ -9,9 +9,9 @@ export interface OvertimeHeaderCellOptions {
 
 function OvertimeHeaderCellF({ value }: OvertimeHeaderCellOptions): JSX.Element {
   return (
-    <td className="overtimeHeaderCell" id="thisMonthHeader">
+    <div className="overtimeHeaderCell" id="thisMonthHeader">
       <span className="rotated">{value}</span>
-    </td>
+    </div>
   );
 }
 

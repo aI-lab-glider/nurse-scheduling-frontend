@@ -54,8 +54,8 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
             {workerInfo.contractType && (
               <p>Typ umowy: {ContractTypeHelper.translate(workerInfo.contractType)}</p>
             )}
-            <p>Ilość godzin: {workerHoursInfo.workerHourNorm}</p>
-            <p>Ilość nadgodzin: {workerHoursInfo.overTime}</p>
+            <p>Liczba godzin: {workerHoursInfo.workerHourNorm}</p>
+            <p>Liczba nadgodzin: {workerHoursInfo.overTime}</p>
             <p>Suma godzin: {info.time}</p>
             <div data-html2canvas-ignore="true">
               <Divider />
