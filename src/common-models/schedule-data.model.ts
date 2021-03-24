@@ -56,7 +56,7 @@ export function validateScheduleDM({
   validateShiftInfoModel(shifts, ScheduleContainerType.SCHEDULE_DM);
   validateMonthInfo(monthInfo, ScheduleContainerType.SCHEDULE_DM);
   validateEmployeeInfo(employeeInfo);
-  validateScheduleContainerDataIntegrity({
+  validateScheduleIntegrity({
     shifts,
     month_info: monthInfo,
     employee_info: employeeInfo,
@@ -73,7 +73,7 @@ export function validateMonthDM({
   validateShiftInfoModel(shifts, ScheduleContainerType.MONTH_DM);
   validateMonthInfo(monthInfo, ScheduleContainerType.MONTH_DM);
   validateEmployeeInfo(employeeInfo);
-  validateScheduleContainerDataIntegrity({
+  validateMonthIntegrity({
     shifts,
     month_info: monthInfo,
     employee_info: employeeInfo,
@@ -134,7 +134,17 @@ export function getScheduleKey(newSchedule: ScheduleDataModel): ScheduleKey {
   );
 }
 
-function validateScheduleContainerDataIntegrity({
+function validateScheduleIntegrity({
+  month_info: monthInfo,
+  employee_info: employeeInfo,
+  shifts,
+}: Pick<ScheduleDataModel, "month_info" | "employee_info" | "shifts" | "shift_types">): void {
+  const scheduleLen = monthInfo.dates.length;
+  validateShiftLengthIntegrity(scheduleLen, shifts);
+  validateWorkersIntegrity(employeeInfo, shifts);
+  //validateShiftTypesIntegrity(shiftTypes, shifts);
+}
+function validateMonthIntegrity({
   month_info: monthInfo,
   employee_info: employeeInfo,
   shifts,

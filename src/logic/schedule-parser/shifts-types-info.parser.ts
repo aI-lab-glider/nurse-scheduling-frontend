@@ -64,7 +64,7 @@ export class ShiftsTypesInfoParser {
     const index = ParserHelper.getShiftCodeHeaderIndex();
 
     if (index >= 0 && shiftRow[index]) {
-      return shiftRow[index];
+      return shiftRow[index].toUpperCase();
     } else {
       const generatedCode = AcronymGenerator.generate(name, SHIFTS);
 

@@ -6,6 +6,7 @@ import * as _ from "lodash";
 import { Shift, ShiftCode } from "../../common-models/shift-info.model";
 import { MonthDataModel } from "../../common-models/schedule-data.model";
 import { updateStateAndDB } from "../../logic/month-update/month-update.logic";
+import { StringHelper } from "../../helpers/string.helper";
 
 export class ShiftsActionCreator {
   static addNewShift(createdShift) {
@@ -47,7 +48,7 @@ export class ShiftsActionCreator {
     Object.entries(monthDataModelCopy.shifts).forEach(([workerName, workersShifts]) => {
       monthDataModelCopy.shifts[workerName] = workersShifts.map(
         (shiftCodeInArray): ShiftCode =>
-          shiftCodeInArray === shift.code ? ShiftCode.W : shiftCodeInArray
+          StringHelper.areEquivalent(shiftCodeInArray, shift.code) ? ShiftCode.W : shiftCodeInArray
       );
     });
     delete monthDataModelCopy.shift_types[shift.code];

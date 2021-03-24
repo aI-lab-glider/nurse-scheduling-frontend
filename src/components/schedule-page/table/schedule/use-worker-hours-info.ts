@@ -43,6 +43,10 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
     (state: ApplicationStateModel) => state.actualState.primaryRevision.shifts
   )[workerName];
 
+  const { shift_types: primaryShiftTypes } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.primaryRevision
+  );
+
   const { month: primaryRevisionMonth } = useSelector(
     (state: ApplicationStateModel) => state.actualState.primaryRevision.scheduleKey
   );
@@ -72,7 +76,8 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
           month,
           year,
           dates,
-          shiftTypes
+          shiftTypes,
+          primaryShiftTypes
         )
       );
     }
@@ -86,6 +91,7 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
     year,
     dates,
     primaryRevisionMonth,
+    primaryShiftTypes,
   ]);
 
   return workHoursInfo.summary;

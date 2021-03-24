@@ -26,7 +26,7 @@ import { ScheduleExportLogic } from "./schedule-export.logic";
 
 export interface ScheduleExportLogicOptions {
   scheduleModel: MonthDataModel;
-  primaryScheduleModel?: PrimaryMonthRevisionDataModel;
+  primaryScheduleModel: PrimaryMonthRevisionDataModel;
   overtimeExport?: boolean;
   extraWorkersExport?: boolean;
 }
@@ -43,7 +43,7 @@ const METADATA_START_COL = 1;
 
 export class ScheduleInfoExportLogic {
   private scheduleModel: MonthDataModel;
-  private primaryScheduleModel?: PrimaryMonthRevisionDataModel;
+  private primaryScheduleModel: PrimaryMonthRevisionDataModel;
   private overtimeExport?: boolean;
   private extraWorkersExport: boolean;
   private scheduleLen: number;

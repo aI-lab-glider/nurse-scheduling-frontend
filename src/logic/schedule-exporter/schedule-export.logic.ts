@@ -21,7 +21,7 @@ export const CELL_MARGIN = 4;
 
 export interface ScheduleExportLogicOptions {
   scheduleModel: MonthDataModel;
-  primaryScheduleModel?: PrimaryMonthRevisionDataModel;
+  primaryScheduleModel: PrimaryMonthRevisionDataModel;
   overtimeExport?: boolean;
   extraWorkersExport?: boolean;
 }
