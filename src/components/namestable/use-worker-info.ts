@@ -35,20 +35,27 @@ export function useWorkerInfo(workerName: string): UseWorkerInfoReturn {
   const workerContractType = useSelector((state: ApplicationStateModel) =>
     getWorkerInfo<ContractType>(state, "contractType")
   );
+
+  const workerGroup = useSelector((state: ApplicationStateModel) =>
+    getWorkerInfo<WorkerGroup>(state, "workerGroup")
+  );
+
   const workerShifts = useSelector(
     (state: ApplicationStateModel) =>
       state.actualState.persistentSchedule.present.shifts[workerName]
   );
+
   useEffect(() => {
     const newWorkerInfo = new WorkerInfo(
       workerName,
       workerContractType,
       workerTime,
       workerType,
-      workerShifts
+      workerShifts,
+      workerGroup
     );
     setWorkerInfo(newWorkerInfo);
-  }, [workerName, workerContractType, workerTime, workerType, workerShifts]);
+  }, [workerName, workerContractType, workerTime, workerType, workerShifts, workerGroup]);
   return {
     workerInfo,
     setWorkerInfo,
