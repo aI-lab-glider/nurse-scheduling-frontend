@@ -52,17 +52,17 @@ export class ErrorMessageHelper {
     switch (error.kind) {
       case AlgorithmErrorCode.AlwaysAtLeastOneNurse:
         i = 0;
-        if (error.segments[i][0] !== 1 || error.segments[i][1] !== 24) {
+        if (error.segments[i][0] !== 7 || error.segments[i][1] !== 7) {
           message += `<b>${error.segments[i][0]}:00-${error.segments[i][1]}:00</b>`;
           newline = true;
         }
         while (error.segments[i + 1]) {
           i++;
-          if (error.segments[i][0] !== 1 || error.segments[i][1] !== 24) {
+          if (error.segments[i][0] !== 7 || error.segments[i][1] !== 7) {
             message += `, <b>${error.segments[i][0]}:00-${error.segments[i][1]}:00</b>`;
           }
         }
-        message += `${newline ? `<br>` : ``}brak pielęgniarek`;
+        message += `${newline ? `<br>b` : `B`}rak pielęgniarek`;
         type = ScheduleErrorType.AON;
         title = "date";
         if (error.day) {
