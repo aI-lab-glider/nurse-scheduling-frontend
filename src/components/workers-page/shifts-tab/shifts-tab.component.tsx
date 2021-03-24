@@ -14,7 +14,6 @@ import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component"
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import ShiftDrawerComponent, { ShiftDrawerMode } from "./shift-drawer.component";
 import { useDispatch, useSelector } from "react-redux";
-import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ShiftsActionCreator } from "../../../state/reducers/shifts.action-creator";
 
@@ -62,19 +61,19 @@ export default function ShiftTab(): JSX.Element {
   function toggleClose(): void {
     setIsOpen(false);
   }
+
   const dispatcher = useDispatch();
   const handleChangeItem = (createdShift: Shift): void => {
     if (mode === ShiftDrawerMode.ADD_NEW) {
-      dispatcher(ScheduleDataActionCreator.addNewShift(createdShift));
+      dispatcher(ShiftsActionCreator.addNewShift(createdShift));
     } else {
-      dispatcher(ScheduleDataActionCreator.modifyShift(createdShift, selectedShift));
+      dispatcher(ShiftsActionCreator.modifyShift(createdShift, selectedShift));
     }
 
     toggleClose();
   };
 
   const handleRemoveItem = (shift: Shift): void => {
-    dispatcher(ScheduleDataActionCreator.deleteShift(shift));
     dispatcher(ShiftsActionCreator.deleteShift(shift));
   };
 

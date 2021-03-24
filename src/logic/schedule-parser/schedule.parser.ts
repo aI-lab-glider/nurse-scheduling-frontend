@@ -13,6 +13,7 @@ import { MetaDataParser } from "./metadata.parser";
 import { ShiftsInfoParser } from "./shifts-info.parser";
 import { DEFAULT_WORKER_TYPE, WorkersInfoParser } from "./workers-info.parser";
 import { ShiftsTypesInfoParser } from "./shifts-types-info.parser";
+import { SHIFTS, ShiftsTypesDict } from "../../common-models/shift-info.model";
 
 type WorkerTypesDict = { [key: string]: WorkerType };
 export class ScheduleParser implements ScheduleProvider {
@@ -85,6 +86,13 @@ export class ScheduleParser implements ScheduleProvider {
     return this.getTypesFromWorkerDescription();
   }
 
+  getShiftTypes(): ShiftsTypesDict {
+    if (!this.shiftsInfo) {
+      return this.mockShiftTypes();
+    }
+    return this.shiftsInfo.shiftTypes;
+  }
+
   private getTypesFromWorkerDescription(): WorkerTypesDict {
     const workers = this.workersInfo.workerDescriptions;
     const result = {};
@@ -103,5 +111,9 @@ export class ScheduleParser implements ScheduleProvider {
       });
     });
     return result;
+  }
+
+  public mockShiftTypes(): ShiftsTypesDict {
+    return SHIFTS;
   }
 }

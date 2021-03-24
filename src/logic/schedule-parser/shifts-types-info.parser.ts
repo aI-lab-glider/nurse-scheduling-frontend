@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
-import { Shift, SHIFTS } from "../../common-models/shift-info.model";
+import { Shift, SHIFTS, ShiftsTypesDict } from "../../common-models/shift-info.model";
 import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
 import { ParserHelper } from "../../helpers/parser.helper";
 
@@ -14,7 +14,7 @@ const DEFAULT_COLOR = { name: "czerwony", value: "FF0000" };
 
 export class ShiftsTypesInfoParser {
   private namelessShifts: number;
-  private _shiftsInfoRows: { [key: string]: Shift } = {};
+  private _shiftsInfoRows: ShiftsTypesDict = {};
   private _parseErrors: ScheduleError[] = [];
 
   constructor(data: string[][]) {
@@ -31,6 +31,10 @@ export class ShiftsTypesInfoParser {
 
   public get shiftsDescriptions(): Shift[] {
     return Object.values(this._shiftsInfoRows);
+  }
+
+  public get shiftTypes(): ShiftsTypesDict {
+    return this._shiftsInfoRows;
   }
 
   private logLoadFileError(msg: string): void {

@@ -7,9 +7,13 @@ import { ActionModel } from "../state/models/action.model";
 import { ApplicationStateModel } from "../state/models/application-state.model";
 import { ArrayPositionPointer } from "../helpers/array.helper";
 
+export type AppThunkDispatch<T> = ThunkDispatch<ApplicationStateModel, void, ActionModel<T>>;
+export type GetAppState = () => ApplicationStateModel;
+export type MonthUpdater = (month: MonthDataModel) => MonthDataModel;
+
 export type ThunkFunction<TDispatchedActionPayload> = (
-  dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<TDispatchedActionPayload>>,
-  getState: () => ApplicationStateModel
+  dispatch: AppThunkDispatch<TDispatchedActionPayload>,
+  getState: GetAppState
 ) => Promise<unknown> | unknown;
 
 export type ScheduleKeyString = string;

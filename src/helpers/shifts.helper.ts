@@ -16,6 +16,7 @@ import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Color, Colors } from "./colors/color.model";
 import { VerboseDateHelper } from "./verbose-date.helper";
+import * as _ from "lodash";
 
 export const WORK_HOURS_PER_DAY = 8;
 export type MonthDataArray<T> = Opaque<"MonthData", T[]>;
@@ -43,6 +44,9 @@ export class ShiftHelper {
 
   public static isNotWorkingShift(shiftCode: ShiftCode, shiftTypes: ShiftsTypesDict): boolean {
     const shift = shiftTypes[shiftCode] as Shift;
+    if (_.isNil(shift)) {
+      return true;
+    }
     return !shift.isWorkingShift && shift.code !== ShiftCode.W;
   }
 

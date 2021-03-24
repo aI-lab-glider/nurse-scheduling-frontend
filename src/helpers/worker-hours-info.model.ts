@@ -96,6 +96,8 @@ export class WorkerHourInfo {
       year = info.year;
     }
     const { dates } = scheduleModel.month_info;
+
+    this.validateActualWorkersShiftTypes(workerName, shifts[workerName], scheduleModel.shift_types);
     return this.fromWorkerInfo(
       shifts[workerName],
       primarySchedule?.shifts[workerName] as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
@@ -141,6 +143,8 @@ export class WorkerHourInfo {
     shiftTypes,
   }: WorkerInfoForCalculateWorkerHoursInfo): WorkerHourInfo {
     this.validateActualWorkersShifts(actualWorkerShifts, dates);
+    this.validateActualWorkersShiftTypes("", actualWorkerShifts, shiftTypes);
+    this.validateActualWorkersShiftTypes("", primaryScheduleWorkerShifts, shiftTypes);
 
     const cropToMonth = this.createCropToMonthFunc(dates, month);
     const currentMonthDates = cropToMonth(dates);
@@ -190,6 +194,18 @@ export class WorkerHourInfo {
         })}`
       );
     }
+  }
+  private static validateActualWorkersShiftTypes(
+    workerName: string,
+    actualWorkerShifts: ShiftCode[],
+    shiftTypes: ShiftsTypesDict
+  ): void {
+    const shiftKeys = Object.keys(shiftTypes);
+    actualWorkerShifts.forEach((shift) => {
+      if (!shiftKeys.includes(shift)) {
+        throw Error(`Worker ${workerName} shifts include not allowed shift ${shift}`);
+      }
+    });
   }
 
   private static createCropToMonthFunc(

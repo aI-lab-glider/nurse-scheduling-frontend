@@ -16,7 +16,6 @@ export function isScheduleAction(action: ActionModel<unknown>): action is Schedu
 }
 
 export type ScheduleActionModel = ActionModel<ScheduleDataModel>;
-
 export enum ScheduleActionType {
   UPDATE = "UPDATE_SCHEDULE",
   ADD_NEW = "ADD_NEW_SCHEDULE",
