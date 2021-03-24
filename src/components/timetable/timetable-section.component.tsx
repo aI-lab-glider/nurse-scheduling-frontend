@@ -6,7 +6,7 @@ import { TimeTableRow } from "./timetable-row.component";
 
 export function TimeTableSection(): JSX.Element {
   return (
-    <div className="table">
+    <div className="table borderContainer">
       <TimeTableRow data-cy="timetable-row" />
     </div>
   );
