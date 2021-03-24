@@ -8,11 +8,11 @@
   padding: 0;
 
   background: $white;
-  border: 1px solid $table-border-color-grey;
   box-sizing: border-box;
-  border-radius: 10px;
 
   overflow: hidden;
+  border: 1px solid $table-border-color-grey;
+  border-radius: $table-radius;
 
   .row {
     display: flex;
@@ -211,7 +211,6 @@
     width: 1156px;
     height: 70px;
     cursor: default;
-    background-color: $body-bg;
   }
 }
 
@@ -225,7 +224,6 @@
   z-index: 3;
   display: flex;
   flex: 1;
-  background-color: $body-bg;
   padding-top: 19px;
   width: 1500px;
 }
@@ -234,13 +232,11 @@
 }
 
 #overtimeHeaderTable {
-  width: 130px;
-  height: 74px;
+  height: 71px;
   cursor: default;
 }
 .timeTableContainer {
   margin-left: 126px;
-  background-color: $body-bg;
 }
 .summaryContainer {
   margin-left: 2%;
@@ -249,6 +245,11 @@
 .sectionContainer {
   display: flex;
   flex-direction: row;
+}
+
+.borderContainer {
+  border: 1px solid $table-border-color-grey;
+  border-radius: $table-radius;
 }
 
 span {
@@ -381,4 +382,10 @@ p {
 
 .nametableRow-error-tooltip {
   right: -3px !important;
+}
+
+.leftContainerBorder {
+  border: none;
+  border-radius: 0;
+  border-left: 1px solid $table-border-color-grey;
 }
