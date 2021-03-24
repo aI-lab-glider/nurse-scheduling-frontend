@@ -10,10 +10,21 @@ interface Options {
 }
 
 export default function ModalErrorListItem({ error }: Options): JSX.Element {
+  const displayTitle = error.title && error.title !== "Nie rozpoznano błędu";
   return (
     <div className="error-list-item">
       <div className="red-rectangle" />
-      <div className="error-text">{error.message}</div>
+      <div className="error-modal">
+        {displayTitle && (
+          <div className="error-title">
+            <p className="error-title-content">{error.title}</p>
+          </div>
+        )}
+        <div
+          className="error-text-modal"
+          dangerouslySetInnerHTML={{ __html: error.message || "" }}
+        />
+      </div>
     </div>
   );
 }

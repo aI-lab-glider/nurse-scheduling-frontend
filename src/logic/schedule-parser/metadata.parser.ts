@@ -20,7 +20,7 @@ export class MetaDataParser extends MetadataProvider {
     } else {
       this.offset = 1;
       this.logLoadFIleError(
-        "Nie znaleziono nagłówka z informacją o datach. Jako pierwszy dzień miesiąca wczytano pierwszą kolumnę pliku."
+        "Nie znaleziono nagłówka z informacją o datach. Jako pierwszy dzień miesiąca wczytano pierwszą kolumnę grafiku."
       );
     }
 
@@ -50,7 +50,7 @@ export class MetaDataParser extends MetadataProvider {
 
     if (startOfMonth === -1) {
       this.logLoadFIleError(
-        "Nie znaleziono nagłówka z informacją o datach. Jako pierwszy dzień miesiąca wczytano pierwszą kolumnę pliku."
+        "Nie znaleziono nagłówka z informacją o datach. Jako pierwszy dzień miesiąca wczytano pierwszą kolumnę grafiku."
       );
       return 0;
     }

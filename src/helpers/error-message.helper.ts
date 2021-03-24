@@ -145,7 +145,7 @@ export class ErrorMessageHelper {
       case ParseErrorCode.UNKNOWN_VALUE:
         message = `Nieznana wartość zmiany: "${error.actual}" w dniu ${
           error.day! + 1
-        }. Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub przedtem utworzyć nową.`;
+        }. Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub utworzyć nową.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
         title = `${error.worker}`;
         break;
