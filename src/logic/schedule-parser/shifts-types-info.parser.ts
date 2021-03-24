@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
-import { Shift } from "../../common-models/shift-info.model";
+import { Shift, SHIFTS } from "../../common-models/shift-info.model";
 import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
 import { ParserHelper } from "../../helpers/parser.helper";
 
@@ -62,7 +62,7 @@ export class ShiftsTypesInfoParser {
     if (index >= 0 && shiftRow[index]) {
       return shiftRow[index];
     } else {
-      const generatedCode = AcronymGenerator.generate(name);
+      const generatedCode = AcronymGenerator.generate(name, SHIFTS);
 
       this.logLoadFileError(
         "Nie ustawiono skrótu dla zmiany: " + name + ". Ustawiono: " + generatedCode

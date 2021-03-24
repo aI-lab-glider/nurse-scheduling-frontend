@@ -110,7 +110,7 @@ describe("ShiftHelper", () => {
     describe("getWorkersCount", () => {
       const shifts = Object.values(testCase.arr);
       it(`should return ${testCase.exp} for all days and array ${shifts}`, () => {
-        const amount = ShiftHelper.getWorkersCount(testCase.arr);
+        const amount = ShiftHelper.getWorkersCount(testCase.arr, SHIFTS);
         expect(amount).to.eql(testCase.exp);
       });
     });
