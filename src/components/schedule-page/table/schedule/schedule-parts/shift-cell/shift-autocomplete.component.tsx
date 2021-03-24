@@ -2,33 +2,43 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useAutocomplete } from "@material-ui/lab";
+import classNames from "classnames/bind";
 import _ from "lodash";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useSelector } from "react-redux";
-import { ShiftCode, SHIFTS as shifts } from "../../../../../../common-models/shift-info.model";
+import { ShiftCode, ShiftsTypesDict } from "../../../../../../common-models/shift-info.model";
 import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 import { BaseCellInputOptions } from "../base-cell/base-cell-input.component";
-import classNames from "classnames/bind";
 import useTimeout from "../base-cell/use-timeout";
 
 const MODAL_CLOSE_MS = 444;
-const ShiftCodeSelectItems = _.sortBy(
-  Object.values(shifts).map((shift) => {
-    return {
-      name: `${shift.name} ${shift.isWorkingShift ? `(${shift.from}-${shift.to})` : ""}`,
-      symbol: shift.code,
-      from: shift.from,
-      to: shift.to,
-      isWorkingShift: shift!.isWorkingShift,
-      code: shift.code,
-      color: shift.color ? shift.color : "$white",
-      "data-cy": `autocomplete-${shift.code}`,
-    };
-  }),
-  ["from", "to", "name"]
-);
-type ShiftCodeSelectItem = typeof ShiftCodeSelectItems[0];
+interface ShiftCodeSelectItem {
+  name: string;
+  symbol: string;
+  from: number;
+  to: number;
+  isWorkingShift?: boolean;
+  code: string;
+  color: string;
+}
+const ShiftCodeSelectItems = (shifts: ShiftsTypesDict): ShiftCodeSelectItem[] =>
+  _.sortBy(
+    Object.values(shifts).map((shift) => {
+      return {
+        name: `${shift.name} ${shift.isWorkingShift ? `(${shift.from}-${shift.to})` : ""}`,
+        symbol: shift.code,
+        from: shift.from,
+        to: shift.to,
+        isWorkingShift: shift!.isWorkingShift,
+        code: shift.code,
+        color: shift.color ? shift.color : "$white",
+        "data-cy": `autocomplete-${shift.code}`,
+      };
+    }),
+    ["from", "to", "name"]
+  );
+
 /**
  * @description Input & MaterialAutocomplete component for rendering employees shifts
  * @param inputOptions : BaseCellInputOptions
@@ -54,6 +64,9 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
     }
   }, [value, onValueChange]);
 
+  const { shift_types: shiftTypes } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
+  );
   const {
     getRootProps,
     getInputProps,
@@ -61,13 +74,10 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
     getOptionProps,
     groupedOptions,
   } = useAutocomplete({
-    options: ShiftCodeSelectItems,
+    options: ShiftCodeSelectItems(shiftTypes),
     getOptionLabel,
     open: true,
   });
-  const shiftTypes = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
-  );
 
   const [isComponentVisible, setIsComponentVisible] = useState(true);
   const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));

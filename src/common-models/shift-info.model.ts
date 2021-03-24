@@ -12,6 +12,7 @@ export interface Shift {
   to: number;
   color: string;
   isWorkingShift?: boolean;
+  normSubtraction?: number;
 }
 
 export enum ShiftCode {
@@ -36,8 +37,10 @@ export enum ShiftCode {
   K = "K",
   NZ = "NZ",
   OP = "OP",
-  OK = "OK",
+  O8 = "O8",
+  O12 = "O12",
 }
+
 export const SHIFTS: { [code in ShiftCode]: Shift } = {
   RP: {
     code: "RP",
@@ -158,13 +161,23 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
     color: "fc03e7",
     isWorkingShift: false,
   },
-  OK: {
-    code: "OK",
-    name: "urlop okolicznościowy",
+  O8: {
+    code: "O8",
+    name: "urlop okolicznościowy 8h",
     from: 0,
     to: 24,
     color: "56f5f5",
     isWorkingShift: false,
+    normSubtraction: 8,
+  },
+  O12: {
+    code: "O12",
+    name: "urlop okolicznościowy 12h",
+    from: 0,
+    to: 24,
+    color: "C3A000",
+    isWorkingShift: false,
+    normSubtraction: 12,
   },
   NZ: {
     code: "NZ",
@@ -188,7 +201,7 @@ export interface ShiftInfoModel {
   [nurseName: string]: ShiftCode[];
 }
 
-export interface ShiftModel {
+export interface ShiftsTypesDict {
   [shiftCode: string]: Shift;
 }
 
