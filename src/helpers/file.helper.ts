@@ -100,7 +100,7 @@ export class FileHelper {
       .forEach((revisionKey) => {
         const [name, workbook] = new ScheduleExportLogic({
           scheduleModel: docs[revisionKey],
-        }).createWorkbook(getRevisionTypeFromKey(revisionKey), docs[revisionKey].shift_types);
+        }).createWorkbook(getRevisionTypeFromKey(revisionKey));
         workbooks[name] = workbook;
       });
 

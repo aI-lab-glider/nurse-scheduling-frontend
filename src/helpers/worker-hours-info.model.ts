@@ -149,14 +149,19 @@ export class WorkerHourInfo {
       actualShiftsFromCurrentMonth,
       primaryScheduleWorkerShifts,
       currentMonthDates,
-      workerNorm
+      workerNorm,
+      shiftTypes
     );
-    const workerActualWorkTime = this.calculateWorkerActualWorkTime(actualShiftsFromCurrentMonth);
+    const workerActualWorkTime = this.calculateWorkerActualWorkTime(
+      actualShiftsFromCurrentMonth,
+      shiftTypes
+    );
     const workerOvertime = this.calculateWorkerOvertime(
       actualShiftsFromCurrentMonth,
       primaryScheduleWorkerShifts,
       currentMonthDates,
-      workerNorm
+      workerNorm,
+      shiftTypes
     );
 
     return new WorkerHourInfo(workerHourNorm, workerActualWorkTime, workerOvertime);
@@ -204,13 +209,15 @@ export class WorkerHourInfo {
     actualShiftsFromCurrentMonth: ShiftCode[],
     primaryScheduleWorkerShifts: ShiftCode[],
     currentMonthDates: DateInformationForWorkInfoCalculation[],
-    workerNorm: number
+    workerNorm: number,
+    shiftTypes: ShiftsTypesDict
   ): number {
     const requiredHours = this.calculateRequiredHoursFromVerboseDates(currentMonthDates);
     const freeHours = this.calculateFreeHours(
       actualShiftsFromCurrentMonth,
       primaryScheduleWorkerShifts,
-      currentMonthDates
+      currentMonthDates,
+      shiftTypes
     );
     return (requiredHours - freeHours) * workerNorm;
   }
@@ -229,7 +236,8 @@ export class WorkerHourInfo {
   private static calculateFreeHours(
     actualShiftsFromCurrentMonth: ShiftCode[],
     primaryScheduleWorkerShifts: ShiftCode[],
-    currentMonthDates: DateInformationForWorkInfoCalculation[]
+    currentMonthDates: DateInformationForWorkInfoCalculation[],
+    shiftTypes: ShiftsTypesDict
   ): number {
     const monthShiftsWithHistoryShiftsAndDates = _.zip(
       actualShiftsFromCurrentMonth,
@@ -238,7 +246,7 @@ export class WorkerHourInfo {
     );
     return monthShiftsWithHistoryShiftsAndDates.reduce((calculateFreeHours, shiftPair) => {
       const [actualShift, historyShift, day] = shiftPair;
-      if (!ShiftHelper.isNotWorkingShift(actualShift!)) {
+      if (!ShiftHelper.isNotWorkingShift(actualShift!, shiftTypes)) {
         return calculateFreeHours;
       }
       // ignore any free shifts in weekends
@@ -248,14 +256,17 @@ export class WorkerHourInfo {
       const subtractFromNorm =
         actualShift === historyShift
           ? WORK_HOURS_PER_DAY
-          : ShiftHelper.shiftCodeToWorkTime(SHIFTS[historyShift!]);
+          : ShiftHelper.shiftCodeToWorkTime(shiftTypes[historyShift!]);
       return calculateFreeHours + subtractFromNorm;
     }, 0);
   }
 
-  private static calculateWorkerActualWorkTime(actualShiftsFromCurrentMonth: ShiftCode[]): number {
+  private static calculateWorkerActualWorkTime(
+    actualShiftsFromCurrentMonth: ShiftCode[],
+    shiftTypes: ShiftsTypesDict
+  ): number {
     return actualShiftsFromCurrentMonth.reduce(
-      (acc, shift) => acc + ShiftHelper.shiftCodeToWorkTime(SHIFTS[shift!]),
+      (acc, shift) => acc + ShiftHelper.shiftCodeToWorkTime(shiftTypes[shift!]),
       0
     );
   }
@@ -264,23 +275,30 @@ export class WorkerHourInfo {
     actualShiftsFromCurrentMonth: ShiftCode[],
     primaryScheduleWorkerShifts: ShiftCode[],
     currentMonthDates: DateInformationForWorkInfoCalculation[],
-    workerNorm: number
+    workerNorm: number,
+    shiftTypes: ShiftsTypesDict
   ): number {
     const workerHourNorm = this.calculateWorkerHourNorm(
       actualShiftsFromCurrentMonth,
       primaryScheduleWorkerShifts,
       currentMonthDates,
-      workerNorm
+      workerNorm,
+      shiftTypes
     );
-    const workerActualWorkTime = this.calculateWorkerActualWorkTime(actualShiftsFromCurrentMonth);
+    const workerActualWorkTime = this.calculateWorkerActualWorkTime(
+      actualShiftsFromCurrentMonth,
+      shiftTypes
+    );
 
     const diffBetweenRevisionsOvertime = this.calculateOvertimeForRevisionDifference(
       actualShiftsFromCurrentMonth,
-      primaryScheduleWorkerShifts
+      primaryScheduleWorkerShifts,
+      shiftTypes
     );
     const exceedMaximumDayWorkTimeOvertime = this.calculateOvertimeForExceeding(
       actualShiftsFromCurrentMonth,
-      primaryScheduleWorkerShifts
+      primaryScheduleWorkerShifts,
+      shiftTypes
     );
 
     const normAndActualDiff = Math.round(workerActualWorkTime) - Math.round(workerHourNorm);
@@ -291,7 +309,8 @@ export class WorkerHourInfo {
 
   private static calculateOvertimeForRevisionDifference(
     actualShiftsFromCurrentMonth: ShiftCode[],
-    primaryScheduleWorkerShifts: ShiftCode[]
+    primaryScheduleWorkerShifts: ShiftCode[],
+    shiftTypes: ShiftsTypesDict
   ): number {
     const monthShiftsWithHistoryShifts = _.zip(
       actualShiftsFromCurrentMonth,
@@ -302,10 +321,10 @@ export class WorkerHourInfo {
     monthShiftsWithHistoryShifts.forEach(([actualShift, historyShift]) => {
       if (actualShift !== historyShift) {
         const workHoursDiffBetweenRevisions =
-          ShiftHelper.shiftCodeToWorkTime(SHIFTS[actualShift]) -
-          ShiftHelper.shiftCodeToWorkTime(SHIFTS[historyShift]);
+          ShiftHelper.shiftCodeToWorkTime(shiftTypes[actualShift]) -
+          ShiftHelper.shiftCodeToWorkTime(shiftTypes[historyShift]);
         const exceedMaxNormalTime =
-          ShiftHelper.shiftCodeToWorkTime(SHIFTS[actualShift]) - MAXIMUM_NOT_OVERTIME_HOURS;
+          ShiftHelper.shiftCodeToWorkTime(shiftTypes[actualShift]) - MAXIMUM_NOT_OVERTIME_HOURS;
         diffBetweenRevisionsOvertime += Math.max(
           workHoursDiffBetweenRevisions,
           exceedMaxNormalTime,
@@ -318,7 +337,8 @@ export class WorkerHourInfo {
 
   private static calculateOvertimeForExceeding(
     actualShiftsFromCurrentMonth: ShiftCode[],
-    primaryScheduleWorkerShifts: ShiftCode[]
+    primaryScheduleWorkerShifts: ShiftCode[],
+    shiftTypes: ShiftsTypesDict
   ): number {
     const monthShiftsWithHistoryShifts = _.zip(
       actualShiftsFromCurrentMonth,
@@ -330,7 +350,7 @@ export class WorkerHourInfo {
       .filter(([actualShift, historyShift]) => actualShift === historyShift)
       .map(([actualShift]) => actualShift)
       .forEach((shift) => {
-        const shiftWorkTime = ShiftHelper.shiftCodeToWorkTime(SHIFTS[shift]);
+        const shiftWorkTime = ShiftHelper.shiftCodeToWorkTime(shiftTypes[shift]);
         if (shiftWorkTime > MAXIMUM_NOT_OVERTIME_HOURS) {
           exceedMaximumDayWorkTimeOvertime = +Math.max(
             shiftWorkTime - MAXIMUM_NOT_OVERTIME_HOURS,

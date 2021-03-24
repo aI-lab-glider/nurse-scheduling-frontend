@@ -38,14 +38,12 @@ export class ShiftsActionCreator {
     shiftCode: string
   ): MonthDataModel {
     const monthDataModelCopy = _.cloneDeep(monthDataModel);
-    console.log(shiftCode);
     Object.entries(monthDataModelCopy.shifts).forEach(([workerName, workersShifts]) => {
       monthDataModelCopy.shifts[workerName] = workersShifts.map((shiftCodeInArray) =>
         shiftCodeInArray === shiftCode ? ShiftCode.W : shiftCodeInArray
       );
     });
     delete monthDataModelCopy.shift_types[shiftCode];
-    console.log(monthDataModelCopy);
     return monthDataModelCopy;
   }
 
