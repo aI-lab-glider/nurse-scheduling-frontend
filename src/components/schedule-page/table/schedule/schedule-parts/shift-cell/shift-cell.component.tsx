@@ -18,6 +18,7 @@ import {
   baseCellDataCy,
   BaseCellOptions,
   hasNextShiftClassName,
+  keepOnShiftClassName,
 } from "../base-cell/base-cell.models";
 import useComponentVisible from "../base-cell/use-component-visible";
 import useTimeout from "../base-cell/use-timeout";
@@ -85,6 +86,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   // );
 
   const shiftCode = getShiftCode(value);
+  const keepOnClass = keepOnShiftClassName(keepOn) + shiftCode;
   const hasNextClass = hasNextShiftClassName(hasNext);
 
   function _onValueChange(inputValue: string): void {
@@ -179,7 +181,9 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
           <WrapContentDiv>
             <div
               ref={cellRef}
-              className={`content ${hasNextClass} ${keepOn ? "keepOnTrue" : "keepOnFalse"}`}
+              className={`content ${hasNextClass} ${
+                keepOn ? "keepOnTrue" : "keepOnFalse"
+              } ${keepOnClass}`}
               style={
                 !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W"
                   ? {
