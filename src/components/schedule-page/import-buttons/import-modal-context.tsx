@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import React, { ChangeEvent, createContext, useContext, useEffect, useMemo } from "react";
+import React, { ChangeEvent, createContext, useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useScheduleConverter } from "./hooks/use-schedule-converter";
 import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
@@ -13,7 +13,6 @@ import ParseErrorModal from "../../common-components/modal/error-modal/errors.mo
 
 export interface ImportModalContextValues {
   handleImport: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  ParseErrorModal: JSX.Element | undefined;
 }
 
 export const ImportModalContext = createContext<ImportModalContextValues | null>(null);
@@ -39,12 +38,6 @@ export function ImportModalProvider({ children }): JSX.Element {
     debugger;
   }, [monthModel, scheduleDipatcher, scheduleErrors]);
 
-  const parserErrorModal = useMemo(() => {
-    if (scheduleErrors.length > 0) {
-      return <ParseErrorModal open={open} setOpen={setParserModalOpen} />;
-    }
-  }, [open, setParserModalOpen, scheduleErrors]);
-
   function handleImport(event: ChangeEvent<HTMLInputElement>): void {
     const file = event.target?.files && event.target?.files[0];
     if (file) {
@@ -56,10 +49,10 @@ export function ImportModalProvider({ children }): JSX.Element {
     <ImportModalContext.Provider
       value={{
         handleImport,
-        ParseErrorModal: parserErrorModal,
       }}
     >
       {children}
+      {scheduleErrors.length > 0 && <ParseErrorModal open={open} setOpen={setParserModalOpen} />}
     </ImportModalContext.Provider>
   );
 }
