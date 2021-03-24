@@ -11,6 +11,8 @@ import {
   hasNextShiftClassName,
   keepOnShiftClassName,
 } from "../../schedule-page/table/schedule/schedule-parts/base-cell/base-cell.models";
+import { useSelector } from "react-redux";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
 
 interface CellOptions {
   keepOn: boolean;
@@ -32,8 +34,13 @@ export function WorkersCalendarCell(params: CellOptions): JSX.Element {
   const workersCalendar =
     params.keepOn || params.hasNext ? "" : "_workersCalendar" + params.workersCalendar;
   let shiftColor, background;
+
+  const { shift_types: shiftTypes } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
+  );
+
   if (shift) {
-    shiftColor = `#${getColor(shift)}`;
+    shiftColor = `#${getColor(shift, shiftTypes)}`;
     background = fade(shiftColor, 0.3);
   } else {
     shiftColor = fade("#FFFFFF", 0);

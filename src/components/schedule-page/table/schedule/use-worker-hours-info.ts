@@ -12,6 +12,7 @@ import {
   ScheduleStateModel,
 } from "../../../../state/models/application-state.model";
 import { ScheduleMode } from "./schedule-state.model";
+import { ContractType } from "../../../../common-models/worker-info.model";
 
 export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
   const isEditMode = useSelector(
@@ -28,6 +29,16 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
     (state: ApplicationStateModel) => state.actualState[scheduleKey].present.shifts
   )[workerName];
 
+  const contractType = useSelector(
+    (state: ApplicationStateModel) =>
+      state.actualState[scheduleKey].present.employee_info.contractType
+  );
+
+  const workerContractType =
+    contractType && contractType[workerName]
+      ? contractType[workerName]
+      : ContractType.EMPLOYMENT_CONTRACT;
+
   const primaryWorkerShifts = useSelector(
     (state: ApplicationStateModel) => state.actualState.primaryRevision.shifts
   )[workerName];
@@ -41,27 +52,41 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
   const { dates } = useSelector(
     (state: ApplicationStateModel) => state.actualState[scheduleKey].present.month_info
   );
+  const { shift_types: shiftTypes } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
+  );
 
   const [workHoursInfo, setWorkHoursInfo] = useState<WorkerHourInfo>(new WorkerHourInfo(0, 0, 0));
 
   useEffect(() => {
     if (primaryRevisionMonth === month) {
-      if (!isAllValuesDefined([workerTime, workerShifts])) {
+      if (!isAllValuesDefined([workerTime, workerShifts, workerContractType])) {
         return setWorkHoursInfo(new WorkerHourInfo(0, 0, 0));
       }
-
       setWorkHoursInfo(
         WorkerHourInfo.fromWorkerInfo(
           workerShifts,
           primaryWorkerShifts as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
           workerTime,
+          workerContractType,
           month,
           year,
-          dates
+          dates,
+          shiftTypes
         )
       );
     }
-  }, [workerShifts, primaryWorkerShifts, workerTime, month, year, dates, primaryRevisionMonth]);
+  }, [
+    shiftTypes,
+    workerShifts,
+    primaryWorkerShifts,
+    workerTime,
+    workerContractType,
+    month,
+    year,
+    dates,
+    primaryRevisionMonth,
+  ]);
 
   return workHoursInfo.summary;
 }

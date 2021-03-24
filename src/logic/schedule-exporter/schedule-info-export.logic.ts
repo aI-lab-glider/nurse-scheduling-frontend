@@ -105,7 +105,7 @@ export class ScheduleInfoExportLogic {
     workSheet.addRows(schedule);
 
     const emptySpace = 1;
-    const shiftSectionStartIndex = 1 + foundationInfoLen + HEADER_LEN + emptySpace; 
+    const shiftSectionStartIndex = 1 + foundationInfoLen + HEADER_LEN + emptySpace;
     this.styleWorksheet(workSheet, shiftSectionStartIndex);
 
     workSheet.mergeCells(
@@ -197,7 +197,7 @@ export class ScheduleInfoExportLogic {
 
     row.eachCell((cell, colNumber) => {
       const cellValue = cell.value?.toString() || "";
-      cell.style = ScheduleInfoExportLogic.getShiftStyle(
+      cell.style = this.getShiftStyle(
         ShiftCode[cellValue] || ShiftCode.W,
         verboseDates[colNumber + calendarDataMargin]
       );
@@ -215,8 +215,12 @@ export class ScheduleInfoExportLogic {
     });
   }
 
-  private static getShiftStyle(code: ShiftCode, verboseDate?: VerboseDate): Partial<xlsx.Style> {
-    const shiftFillColor = ShiftHelper.getShiftColor(code, verboseDate).backgroundColor;
+  private getShiftStyle(code: ShiftCode, verboseDate?: VerboseDate): Partial<xlsx.Style> {
+    const shiftFillColor = ShiftHelper.getShiftColor(
+      code,
+      this.scheduleModel.shift_types,
+      verboseDate
+    ).backgroundColor;
     const borderColor: Partial<xlsx.Border> = {
       color: { argb: ScheduleExportLogic.rgbaToArgbHex(ColorHelper.getBorderColor()) },
       style: "thin",
@@ -240,7 +244,8 @@ export class ScheduleInfoExportLogic {
       font: {
         color: {
           argb: ScheduleExportLogic.decideBlackOrWhite(
-            ShiftHelper.getShiftColor(code, verboseDate).backgroundColor
+            ShiftHelper.getShiftColor(code, this.scheduleModel.shift_types, verboseDate)
+              .backgroundColor
           ),
         },
       },
