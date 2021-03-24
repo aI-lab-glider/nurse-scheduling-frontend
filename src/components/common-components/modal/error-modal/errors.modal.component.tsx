@@ -28,12 +28,15 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
   };
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
 
+  const { shift_types: shiftTypes } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
+  );
   useEffect(() => {
-    const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors);
+    const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors, shiftTypes);
     if (errors) {
       setMappedErrors(errors);
     }
-  }, [scheduleErrors]);
+  }, [scheduleErrors, shiftTypes]);
 
   const title = "Napotkano błędy podczas wczytywania pliku";
 

@@ -74,7 +74,8 @@ describe("Worker hours info", () => {
         1,
         testedMonthParams.monthNumber,
         testedMonthParams.year,
-        dates
+        dates,
+        SHIFTS
       );
 
     expect(calculateWorkerDataAction).to.not.throw();
@@ -98,7 +99,8 @@ function calculateWorkerHoursFromWorkerInstance(
     workerInstance.workerNorm,
     workerInstance.month,
     workerInstance.year,
-    workerInstance.dates
+    workerInstance.dates,
+    SHIFTS
   );
 }
 function calculateRequiredTimeForPrimaryScheduleWithShiftAndForActualScheduleAfterShiftReplacement(

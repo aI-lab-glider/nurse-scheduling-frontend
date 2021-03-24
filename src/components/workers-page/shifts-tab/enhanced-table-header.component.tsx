@@ -68,7 +68,6 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
               );
             }}
             className="header-button"
-            disabled={true}
           >
             Dodaj zmianę
           </Button>

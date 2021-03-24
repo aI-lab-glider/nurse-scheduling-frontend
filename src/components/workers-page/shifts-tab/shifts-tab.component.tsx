@@ -7,7 +7,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
-import { Shift } from "../../../common-models/shift-info.model";
+import { Shift, ShiftCode } from "../../../common-models/shift-info.model";
 import { Button } from "../../common-components";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
@@ -16,6 +16,7 @@ import ShiftDrawerComponent, { ShiftDrawerMode } from "./shift-drawer.component"
 import { useDispatch, useSelector } from "react-redux";
 import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ShiftsActionCreator } from "../../../state/reducers/shifts.action-creator";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -74,6 +75,7 @@ export default function ShiftTab(): JSX.Element {
 
   const handleRemoveItem = (shift: Shift): void => {
     dispatcher(ScheduleDataActionCreator.deleteShift(shift));
+    dispatcher(ShiftsActionCreator.deleteShift(shift));
   };
 
   return (
@@ -102,7 +104,7 @@ export default function ShiftTab(): JSX.Element {
                       variant="primary"
                       className="action-button"
                       onClick={(): void => toggleOpen(shift, ShiftDrawerMode.EDIT)}
-                      disabled={true}
+                      disabled={shift.code === ShiftCode.W}
                     >
                       Edytuj
                     </Button>
@@ -110,7 +112,7 @@ export default function ShiftTab(): JSX.Element {
                       variant="secondary"
                       className="action-button"
                       onClick={(): void => handleRemoveItem(shift)}
-                      disabled={true}
+                      disabled={shift.code === ShiftCode.W || !shift.isWorkingShift}
                     >
                       Usuń
                     </Button>
