@@ -12,6 +12,7 @@ import { ApplicationStateModel } from "../../../state/models/application-state.m
 import { MonthSwitchActionCreator } from "../../../state/reducers/month-state/schedule-data/month-switch.action-creator";
 import { ScheduleMode } from "../../schedule-page/table/schedule/schedule-state.model";
 import { Button } from "../button-component/button.component";
+import AppErrorModal from "../modal/app-error-modal/app-error.modal.component";
 import ReportIssueModal from "../modal/report-issue-modal/report-issue-modal.component";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
 
@@ -69,6 +70,8 @@ export function HeaderComponent(): JSX.Element {
     window.open(process.env.REACT_APP_HELP_PAGE_URL);
   }, []);
 
+  const [isOpenAppError, setIsAppErrorOpen] = useState(false);
+
   return (
     <>
       <div id={"header"}>
@@ -83,6 +86,15 @@ export function HeaderComponent(): JSX.Element {
         >
           Wróć do teraz
         </Button>
+        <Button
+          variant={"secondary"}
+          onClick={(): boolean => {
+            setIsAppErrorOpen(true);
+            return isOpenAppError;
+          }}
+        >
+          Error
+        </Button>
         <div className={"filler"} />
         <MonthSwitchComponent isInViewMode={isInViewMode} />
         <div className={"filler"} />
@@ -92,6 +104,7 @@ export function HeaderComponent(): JSX.Element {
         <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
         <HelpOutlineIcon className="header-icon" onClick={redirectToDocumentation} />
       </div>
+      <AppErrorModal onClick={() => 1} open={isOpenAppError} setOpen={setIsAppErrorOpen} />
     </>
   );
 }
