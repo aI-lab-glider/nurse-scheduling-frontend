@@ -88,7 +88,8 @@ describe("ShiftHelper", () => {
     [ShiftCode.L4]: 0,
     [ShiftCode.K]: 0,
     [ShiftCode.OP]: 0,
-    [ShiftCode.OK]: 0,
+    [ShiftCode.O8]: 0,
+    [ShiftCode.O12]: 0,
     [ShiftCode.NZ]: 0,
   };
 
@@ -109,7 +110,7 @@ describe("ShiftHelper", () => {
     describe("getWorkersCount", () => {
       const shifts = Object.values(testCase.arr);
       it(`should return ${testCase.exp} for all days and array ${shifts}`, () => {
-        const amount = ShiftHelper.getWorkersCount(testCase.arr);
+        const amount = ShiftHelper.getWorkersCount(testCase.arr, SHIFTS);
         expect(amount).to.eql(testCase.exp);
       });
     });

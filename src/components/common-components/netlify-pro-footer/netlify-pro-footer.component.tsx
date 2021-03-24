@@ -23,8 +23,10 @@ const useStyles = makeStyles({
 
 export function NetlifyProFooter(): JSX.Element {
   const classes = useStyles();
+
   return (
     <Grid container className={classes.footer} justify="space-between" alignItems="center">
+      <Grid item>{`Wersja: ${process.env.REACT_APP_VERSION}`}</Grid>
       <Grid item>
         Wykonanie:
         <a href="http://www.glider.agh.edu.pl/" target="_blank" rel="noopener noreferrer">
