@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /// <reference path="../../../support/index.d.ts" />
 
-import { WorkerType } from "../../../../src/common-models/worker-info.model";
 import { GetWorkerShiftOptions } from "../../../support/commands";
 import { ShiftCode } from "../../../../src/common-models/shift-info.model";
 

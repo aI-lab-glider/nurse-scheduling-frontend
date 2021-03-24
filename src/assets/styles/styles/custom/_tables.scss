@@ -217,7 +217,16 @@
   width: 130px;
   cursor: default;
 }
-
+.timeHeader {
+  position: sticky;
+  top: 52px;
+  z-index: 3;
+  display: flex;
+  flex: 1;
+  background-color: $body-bg;
+  padding-top: 19px;
+  width: 1500px;
+}
 #mainTable {
   width: 1156px;
 }
@@ -231,8 +240,7 @@
   margin-left: 126px;
 }
 .summaryContainer {
-  width: 134px;
-  padding-left: 2%;
+  margin-left: 2%;
 }
 
 .sectionContainer {
