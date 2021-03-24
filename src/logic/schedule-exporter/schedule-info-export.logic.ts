@@ -105,7 +105,7 @@ export class ScheduleInfoExportLogic {
     workSheet.addRows(schedule);
 
     const emptySpace = 1;
-    const shiftSectionStartIndex = 1 + foundationInfoLen + HEADER_LEN + emptySpace; 
+    const shiftSectionStartIndex = 1 + foundationInfoLen + HEADER_LEN + emptySpace;
     this.styleWorksheet(workSheet, shiftSectionStartIndex);
 
     workSheet.mergeCells(
