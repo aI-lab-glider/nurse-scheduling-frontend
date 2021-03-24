@@ -15,26 +15,6 @@ const nurseInitialWorkHours: HoursInfo[] = [
     [HoursInfoCells.actual]: 240,
     [HoursInfoCells.overtime]: 80,
   },
-  {
-    [HoursInfoCells.required]: 128,
-    [HoursInfoCells.actual]: 264,
-    [HoursInfoCells.overtime]: 136,
-  },
-  {
-    [HoursInfoCells.required]: 128,
-    [HoursInfoCells.actual]: 144,
-    [HoursInfoCells.overtime]: 16,
-  },
-  {
-    [HoursInfoCells.required]: 160,
-    [HoursInfoCells.actual]: 144,
-    [HoursInfoCells.overtime]: -16,
-  },
-  {
-    [HoursInfoCells.required]: 48,
-    [HoursInfoCells.actual]: 84,
-    [HoursInfoCells.overtime]: 36,
-  },
 ];
 const babysitterInitialWorkHours: HoursInfo[] = [
   {
@@ -43,29 +23,14 @@ const babysitterInitialWorkHours: HoursInfo[] = [
     [HoursInfoCells.overtime]: 28,
   },
   {
+    [HoursInfoCells.required]: 136,
+    [HoursInfoCells.actual]: 184,
+    [HoursInfoCells.overtime]: 48,
+  },
+  {
     [HoursInfoCells.required]: 72,
     [HoursInfoCells.actual]: 96,
     [HoursInfoCells.overtime]: 24,
-  },
-  {
-    [HoursInfoCells.required]: 40,
-    [HoursInfoCells.actual]: 48,
-    [HoursInfoCells.overtime]: 8,
-  },
-  {
-    [HoursInfoCells.required]: 72,
-    [HoursInfoCells.actual]: 108,
-    [HoursInfoCells.overtime]: 36,
-  },
-  {
-    [HoursInfoCells.required]: 160,
-    [HoursInfoCells.actual]: 260,
-    [HoursInfoCells.overtime]: 100,
-  },
-  {
-    [HoursInfoCells.required]: 160,
-    [HoursInfoCells.actual]: 224,
-    [HoursInfoCells.overtime]: 64,
   },
 ];
 
@@ -182,14 +147,14 @@ context("Work hours info (summary table)", () => {
   it("Is removed, should subtract 12 from actual and overtime hours and not change required", () => {
     const data = {
       workerGroupIdx: 1,
-      workerIdx: 1,
+      workerIdx: 2,
       shiftIdx: prevMonthDays + 6,
       initialShiftCode: ShiftCode.N,
       desiredShiftCode: ShiftCode.W,
       expectedWorkHoursInfo: {
-        [HoursInfoCells.required]: babysitterInitialWorkHours[1][HoursInfoCells.required],
-        [HoursInfoCells.actual]: babysitterInitialWorkHours[1][HoursInfoCells.actual] - 12,
-        [HoursInfoCells.overtime]: babysitterInitialWorkHours[1][HoursInfoCells.overtime] - 12,
+        [HoursInfoCells.required]: babysitterInitialWorkHours[2][HoursInfoCells.required],
+        [HoursInfoCells.actual]: babysitterInitialWorkHours[2][HoursInfoCells.actual] - 12,
+        [HoursInfoCells.overtime]: babysitterInitialWorkHours[2][HoursInfoCells.overtime] - 12,
       },
     };
     testWorkHoursInfoUpdate(data);

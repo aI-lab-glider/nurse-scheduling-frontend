@@ -14,9 +14,7 @@ import { WorkerInfo } from "../../../namestable/use-worker-info";
 import { ScheduleMode } from "./schedule-state.model";
 import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 
-interface GroupedWorkers {
-  [groupName: string]: WorkerInfo[];
-}
+export type GroupedWorkers = Map<string, WorkerInfo[]>;
 
 const aggregateWorkerInfo = (
   workerName: string,
@@ -40,8 +38,15 @@ export function groupWorkers({
   const aggregatedData = Object.keys(workerShifts).map((workerName) =>
     aggregateWorkerInfo(workerName, workerShifts, workerInfo)
   );
-  const sortedData = _.sortBy(aggregatedData, (item) => item.workerGroup);
-  return _.groupBy(sortedData, (item) => item.workerGroup);
+  const groupedWorkers = _.groupBy(aggregatedData, (item) => item.workerGroup);
+  const sortedGroupedWorkers = new Map();
+  _.sortBy(Object.keys(groupedWorkers)).forEach((key) => {
+    sortedGroupedWorkers[key] = _.sortBy(Object.values(groupedWorkers[key]), [
+      "workerType",
+      "workerName",
+    ]);
+  });
+  return sortedGroupedWorkers;
 }
 
 export function useWorkerGroups(): GroupedWorkers {
