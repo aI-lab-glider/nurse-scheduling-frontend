@@ -223,7 +223,6 @@
   z-index: 3;
   display: flex;
   flex: 1;
-  background-color: $body-bg;
   padding-top: 19px;
   width: 1500px;
 }
@@ -232,8 +231,7 @@
 }
 
 #overtimeHeaderTable {
-  width: 130px;
-  height: 74px;
+  height: 71px;
   cursor: default;
 }
 .timeTableContainer {

@@ -9,8 +9,10 @@ import { useSelector } from "react-redux";
 import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
 import {
   ShiftCode,
+  SHIFTS,
   ShiftsTypesDict as ShiftTypesDict,
 } from "../../../../../../common-models/shift-info.model";
+import { ColorHelper } from "../../../../../../helpers/colors/color.helper";
 import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 import {
   baseCellDataCy,
@@ -120,7 +122,8 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   const { shift_types: shiftTypes } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
   );
-
+  const theColor = ColorHelper.hexToRgb(getColor(shiftCode, shiftTypes));
+  const color = `rgba(${theColor?.r},${theColor?.g},${theColor?.b},0.3)`;
   const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
   return (
     <>
@@ -146,7 +149,9 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
           selection: isSelected || (isComponentVisible && isBlocked),
           blocked: isBlocked,
         })}
-        onClick={(): void => toggleComponentVisibility()}
+        onClick={(): void => {
+          toggleComponentVisibility();
+        }}
         onMouseEnter={(): void => {
           setIsCounting(false);
         }}
@@ -176,10 +181,27 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
           <WrapContentDiv>
             <div
               ref={cellRef}
-              className={`content ${hasNextClass} ${keepOnClass}`}
+              className={`content ${hasNextClass} ${
+                keepOn ? "keepOnTrue" : "keepOnFalse"
+              } ${keepOnClass}`}
+              style={
+                !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W"
+                  ? {
+                      boxShadow: !keepOn ? `-1px 0 0 0 ${color}` : "",
+                      marginLeft: keepOn ? "0" : "0 0 4px 4px",
+                      backgroundColor: color,
+                      color,
+                    }
+                  : {}
+              }
               data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
             >
-              <div className={"leftBorder leftBorderColor"} />
+              {!keepOn && !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W" && (
+                <div
+                  style={{ backgroundColor: `#${getColor(shiftCode, shiftTypes)}` }}
+                  className={"leftBorder"}
+                />
+              )}
               <p
                 data-cy={baseCellDataCy(cellIndex, "cell")}
                 className={"relative "}
