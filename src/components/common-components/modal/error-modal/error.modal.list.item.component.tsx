@@ -12,29 +12,24 @@ interface Options {
   error: ScheduleErrorMessageModel;
 }
 
+function prepareMonthName(index: number, day: number, month: number): string {
+  let monthName = `${TranslationHelper.polishMonthsGenetivus[month]}`;
+
+  if (index < day - 1) {
+    monthName = `${TranslationHelper.polishMonthsGenetivus[(month + 11) % 12]}`;
+  } else if (index > 20 && day < 8) {
+    monthName = `${TranslationHelper.polishMonthsGenetivus[(month + 1) % 12]}`;
+  }
+  return monthName;
+}
+
 export default function ModalErrorListItem({ error }: Options): JSX.Element {
   const { verboseDates, monthNumber } = useMonthInfo();
   const mappedDays = verboseDates.map((d: VerboseDate) => d.date);
-  const monthStartIndex = verboseDates.findIndex((d: VerboseDate) => d.date === 1) ?? 0;
-
-  let currMonthGenetivus = "";
-  let prevMonthGenetivus = "";
-  if (monthNumber) {
-    currMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[monthNumber]}`;
-    if (monthNumber > 0) {
-      prevMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[monthNumber - 1]}`;
-    } else {
-      prevMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[monthNumber + 11]}`;
-    }
-  }
 
   const errorDayIndex = error.day && error.day > 0 ? error.day : -1;
-  const errorDay = errorDayIndex ? mappedDays[errorDayIndex - 1] : "";
-  const monthName = errorDayIndex
-    ? errorDayIndex < monthStartIndex
-      ? prevMonthGenetivus
-      : currMonthGenetivus
-    : "";
+  const errorDay = errorDayIndex ? mappedDays[errorDayIndex - 1] : 0;
+  const monthName = prepareMonthName(errorDayIndex, errorDay, monthNumber);
 
   const displayTitle = error.title && error.title !== "Nie rozpoznano błędu";
   return (
