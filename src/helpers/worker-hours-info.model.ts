@@ -269,7 +269,7 @@ export class WorkerHourInfo {
       if (!VerboseDateHelper.isWorkingDay(day)) {
         return calculateFreeHours;
       }
-      const shiftSubtraction = shiftTypes[actualShift].normSubtraction ?? WORK_HOURS_PER_DAY;
+      const shiftSubtraction = shiftTypes[actualShift]?.normSubtraction ?? WORK_HOURS_PER_DAY;
 
       const subtractFromNorm =
         actualShift === historyShift || !shiftTypes[historyShift].isWorkingShift
