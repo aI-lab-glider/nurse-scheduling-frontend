@@ -48,19 +48,14 @@
       size: 14px;
       flex: 1;
       text-align: center;
-      padding-top: 20px;
-      padding-left: 15px;
-      padding-right: 25px;
-      padding-bottom: 0 !important;
+      padding: 20px 25px 0px 15px !important;
       position: relative;
 
       .error-title-content {
         font-family: "Roboto";
         position: absolute;
-        padding-top: 20px;
-        padding-left: 10px;
+        padding: 20px 10px 0px 10px;
         margin-bottom: 0;
-        padding-bottom: 0;
       }
     }
     .error-text-modal {
@@ -69,7 +64,6 @@
       size: 13px;
       flex: 2.5;
       margin: 10px 10px;
-      margin-top: 10;
       padding-left: 15px;
       text-align: justify;
       font-family: "Roboto";
