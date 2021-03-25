@@ -28,8 +28,8 @@ export default function ModalErrorListItem({ error }: Options): JSX.Element {
     }
   }
 
-  const errorDayIndex = error.day ? error.day : -1;
-  const errorDay = errorDayIndex ? mappedDays[errorDayIndex] : "";
+  const errorDayIndex = error.day && error.day > 0 ? error.day : -1;
+  const errorDay = errorDayIndex ? mappedDays[errorDayIndex - 1] : "";
   const monthName = errorDayIndex
     ? errorDayIndex < monthStartIndex
       ? prevMonthGenetivus
@@ -44,8 +44,8 @@ export default function ModalErrorListItem({ error }: Options): JSX.Element {
         {displayTitle && (
           <div className="error-title">
             <p className="error-title-content">
-              {error.title}
-              {errorDayIndex > -1 ? `, ${errorDay} ` + monthName : ``}
+              {error.title === "date" ? `${errorDay} ` + monthName : `${error.title}`}
+              {errorDayIndex > -1 && error.title !== "date" ? `, ${errorDay} ` + monthName : ``}
             </p>
           </div>
         )}

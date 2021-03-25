@@ -149,12 +149,10 @@ export class ErrorMessageHelper {
         title = `${error.worker}`;
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
-        message = `Nieznana wartość zmiany: "<b>${error.actual}</b>" w dniu ${
-          error.day! + 1
-        }. Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub utworzyć nową.`;
+        message = `Nieznana wartość zmiany: "<b>${error.actual}</b>". Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub utworzyć nową.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
         title = `${error.worker}`;
-        day += error.day!;
+        day += error.day! + 1;
         break;
       case InputFileErrorCode.EMPTY_FILE:
         message = `Błąd podczas wczytywania pliku wejściowego: Pusty plik`;
