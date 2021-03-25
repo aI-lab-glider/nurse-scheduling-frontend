@@ -33,8 +33,9 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
   private generateChildren(raw?: string[]): number[] {
     if (!raw) {
       this.logLoadFileError(
-        "Brak informacji o liczbie dzieci. Dla każdego dnia przyjęto wartość " +
-          DEFAULT_CHILDREN_NUMBER
+        "Nie znaleziono informacji o <b>liczbie dzieci</b>. Dla każdego dnia przyjęto wartość " +
+          DEFAULT_CHILDREN_NUMBER +
+          "."
       );
       const N = this.metaData.dayCount;
       const children = Array(N);
@@ -51,7 +52,7 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
 
     if (slicedChildrenRow.length !== this.metaData.dayCount) {
       this.logLoadFileError(
-        "Sekcja dzieci nie ma oczekiwanych wymiarów. Dla brakujących dni przyjęto, że liczba dzieci wynosi 0"
+        "Sekcja <b>dzieci</b> nie ma oczekiwanych wymiarów. Dla brakujących dni przyjęto, że liczba dzieci wynosi 0."
       );
     }
 
@@ -60,10 +61,11 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
       const numDay = parseInt(slicedChildrenRow[i]);
       if (isNaN(numDay) || numDay < 0) {
         this.logLoadFileError(
-          "Nieoczekiwana wartość w sekcji dzieci w dniu " +
+          "Nieoczekiwana wartość w sekcji <b>dzieci</b> w dniu " +
             (i + 1) +
             ". Przyjęto, że liczba dzieci wynosi " +
-            DEFAULT_CHILDREN_NUMBER
+            DEFAULT_CHILDREN_NUMBER +
+            "."
         );
         children.push(DEFAULT_CHILDREN_NUMBER);
       } else {
