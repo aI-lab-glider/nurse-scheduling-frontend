@@ -71,8 +71,6 @@ describe("ShiftHelper", () => {
     [ShiftCode.RP]: 12,
     [ShiftCode.RPN]: 24,
     [ShiftCode.N8]: 8,
-    [ShiftCode.RN8]: 17,
-    [ShiftCode.DN8]: 21,
     [ShiftCode.D1]: 10,
     [ShiftCode.D2]: 9,
     [ShiftCode.P1]: 6,
@@ -87,16 +85,13 @@ describe("ShiftHelper", () => {
     [ShiftCode.U]: 0,
     [ShiftCode.L4]: 0,
     [ShiftCode.K]: 0,
-    [ShiftCode.OP]: 0,
-    [ShiftCode.O8]: 0,
-    [ShiftCode.O12]: 0,
     [ShiftCode.NZ]: 0,
   };
 
-  Object.values(SHIFTS).forEach((shift) => {
-    it(`Should calculate correct duration ${shift.code}`, () => {
-      const shiftCode = ShiftCode[shift.code];
-      const hours = ShiftHelper.shiftCodeToWorkTime(shift);
+  Object.keys(expectedHours).forEach((shiftCode) => {
+    it(`Should calculate correct duration ${shiftCode}`, () => {
+      const shiftModel = SHIFTS[shiftCode];
+      const hours = ShiftHelper.shiftCodeToWorkTime(shiftModel);
       expect(hours).to.equal(expectedHours[shiftCode]);
     });
   });

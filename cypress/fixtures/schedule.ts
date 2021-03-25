@@ -994,14 +994,6 @@ export default {
       color: "76a877",
       isWorkingShift: true,
     },
-    RN8: {
-      code: "RN8",
-      name: "noc 8h, rano",
-      from: 22,
-      to: 15,
-      color: "805646",
-      isWorkingShift: true,
-    },
     DN8: {
       code: "DN8",
       name: "dzień, noc 8h",
