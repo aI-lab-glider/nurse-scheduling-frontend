@@ -28,7 +28,7 @@ function prepareMonthName(index: number, day: number, month: number): string {
 
 export default function ErrorListItem({
   error,
-  interactable = true,
+  interactable = false,
   className = "",
   showTitle = true,
 }: Options): JSX.Element {
