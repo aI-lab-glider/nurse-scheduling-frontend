@@ -43,11 +43,11 @@ export class ShiftHelper {
 
   public static isNotWorkingShift(shiftCode: ShiftCode, shiftTypes: ShiftsTypesDict): boolean {
     const shift = shiftTypes[shiftCode] as Shift;
-    return !shift.isWorkingShift && shift.code !== ShiftCode.W;
+    return (!shift?.isWorkingShift ?? true) && shift?.code !== ShiftCode.W;
   }
 
   public static shiftCodeToWorkTime(shift: Shift): number {
-    if (!shift.isWorkingShift) {
+    if (!shift?.isWorkingShift ?? true) {
       return 0;
     }
     let duration = shift.to - shift.from;
