@@ -7,7 +7,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
-import { Shift, ShiftCode } from "../../../common-models/shift-info.model";
+import { Shift } from "../../../common-models/shift-info.model";
 import { Button } from "../../common-components";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
