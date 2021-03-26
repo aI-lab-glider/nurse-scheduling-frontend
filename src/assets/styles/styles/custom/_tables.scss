@@ -76,7 +76,7 @@
           flex-direction: row;
           margin: auto;
           font-family: Roboto, serif;
-          font-size: 14px;
+          font-size: 12px;
           font-style: normal;
           font-weight: 600;
           line-height: 20px;
@@ -197,17 +197,17 @@
   }
 
   #summaryRow {
-    width: 130px;
     height: 40px;
+    width: 130px;
   }
 
   #mainRow {
-    width: 1156px;
+    width: 1350px;
     height: 40px;
   }
 
   #timetableRow {
-    width: 1156px;
+    width: 1350px;
     height: 70px;
     cursor: default;
   }
