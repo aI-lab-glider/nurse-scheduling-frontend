@@ -87,76 +87,23 @@
     margin: 0 0 4px 4px;
     border-radius: 2px 0 0 2px;
   }
-
-  .keepOntrueL4 {
+  .keepOnTrue {
     width: 100%;
     margin: 0 0 4px 0;
     border-radius: 0;
-    box-shadow: -1px 0 0 0 change-color($color: $l4, $alpha: 0.3);
 
     .leftBorderColor {
       width: 0;
     }
-
-    background-color: change-color($color: $l4, $alpha: 0.3);
-    color: change-color($color: $l4, $alpha: 0.3);
   }
-
-  .keepOntrueK {
-    width: 100%;
-    margin: 0 0 4px 0;
-    border-radius: 0;
-    box-shadow: -1px 0 0 0 change-color($color: $kwaratanna, $alpha: 0.3);
-
-    .leftBorderColor {
-      width: 0;
-    }
-
-    background-color: change-color($color: $kwaratanna, $alpha: 0.3);
-    color: change-color($color: $kwaratanna, $alpha: 0.3);
-  }
-
-  .keepOntrueU {
-    width: 100%;
-    margin: 0 0 4px 0;
-    border-radius: 0;
-    box-shadow: -1px 0 0 0 change-color($color: $urlop, $alpha: 0.3);
-
-    .leftBorderColor {
-      width: 0;
-    }
-
-    background-color: change-color($color: $urlop, $alpha: 0.3);
-  }
-
   .hasNextfalse {
     margin: 0 0 4px 0;
     width: 90%;
     border-radius: 0 2px 2px 0;
   }
 
-  .keepOnfalse {
+  .keepOnFalse {
     margin-left: 4px;
-  }
-
-  .keepOnfalseD {
-    color: $dzien;
-  }
-
-  .keepOnfalseDN {
-    color: $dzien-noc;
-  }
-
-  .keepOnfalseR {
-    color: $rano;
-  }
-
-  .keepOnfalseN {
-    color: $noc;
-  }
-
-  .keepOnfalseP {
-    color: $popoludnie;
   }
 
   .keepOnfalse_workersCalendartrueD {
@@ -214,34 +161,5 @@
       width: 4px;
       background-color: $popoludnie;
     }
-  }
-
-  .keepOnfalseL4 {
-    .leftBorderColor {
-      background-color: $l4;
-    }
-
-    margin-left: 4px;
-    background-color: change-color($color: $l4, $alpha: 0.3);
-    color: $white;
-  }
-
-  .keepOnfalseK {
-    .leftBorderColor {
-      background-color: $kwaratanna;
-    }
-
-    margin-left: 4px;
-    background-color: change-color($color: $kwaratanna, $alpha: 0.3);
-    color: $white;
-  }
-
-  .keepOnfalseU {
-    .leftBorderColor {
-      background-color: $urlop;
-    }
-
-    margin-left: 4px;
-    background-color: change-color($color: $urlop, $alpha: 0.3);
   }
 }
