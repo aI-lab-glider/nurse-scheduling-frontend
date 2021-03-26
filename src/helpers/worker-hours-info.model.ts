@@ -272,7 +272,7 @@ export class WorkerHourInfo {
       const shiftSubtraction = shiftTypes[actualShift]?.normSubtraction ?? WORK_HOURS_PER_DAY;
 
       const subtractFromNorm =
-        actualShift === historyShift || !shiftTypes[historyShift].isWorkingShift
+        actualShift === historyShift || !shiftTypes[historyShift]?.isWorkingShift
           ? shiftSubtraction
           : ShiftHelper.shiftCodeToWorkTime(shiftTypes[historyShift]);
       return calculateFreeHours + subtractFromNorm;
