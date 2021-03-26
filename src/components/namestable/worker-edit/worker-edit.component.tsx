@@ -115,17 +115,18 @@ export function WorkerEditComponent({
           setWorkerGroup={handleWorkerWorkerGroupUpdate}
         />
       </Grid>
-      <Grid item>
-        <Button
-          disabled={!canSaveWorker()}
-          variant="primary"
-          className={classNames({ "disabled-submit-button": !canSaveWorker() })}
-          data-cy="btn-save-worker"
-          onClick={handleClose}
-        >
-          Zapisz pracownika
-        </Button>
-      </Grid>
+      <Button
+        disabled={!canSaveWorker()}
+        variant="primary"
+        className={classNames(
+          { "disabled-submit-button": !canSaveWorker() },
+          "drawer-bottom-button"
+        )}
+        data-cy="btn-save-worker"
+        onClick={handleClose}
+      >
+        Zapisz pracownika
+      </Button>
     </Grid>
   );
   //#endregion
