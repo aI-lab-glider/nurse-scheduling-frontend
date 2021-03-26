@@ -1,19 +1,19 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import { Button as MaterialButton } from "@material-ui/core";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import classNames from "classnames/bind";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { AppConfigContext, AppConfigOptions, AppMode } from "../../../state/app-config-context";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { MonthSwitchActionCreator } from "../../../state/reducers/month-state/schedule-data/month-switch.action-creator";
+import { ScheduleMode } from "../../schedule-page/table/schedule/schedule-state.model";
 import { Button } from "../button-component/button.component";
-import { MonthSwitchComponent } from "../month-switch/month-switch.component";
-import classNames from "classnames/bind";
-import { Button as MaterialButton } from "@material-ui/core";
 import ReportIssueModal from "../modal/report-issue-modal/report-issue-modal.component";
-import SettingsIcon from "@material-ui/icons/Settings";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import { AppConfigContext, AppConfigOptions, AppMode } from "../../../state/app-config-context";
+import { MonthSwitchComponent } from "../month-switch/month-switch.component";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -43,7 +43,7 @@ export function HeaderComponent(): JSX.Element {
     const offset = monthDiff(new Date(year, monthNumber), new Date());
     dispatch(MonthSwitchActionCreator.switchToNewMonth(offset));
   }
-  const isInViewMode = applicationStateModel === "readonly";
+  const isInViewMode = applicationStateModel === ScheduleMode.Readonly;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   function onReportIssueClick(): void {
@@ -90,7 +90,6 @@ export function HeaderComponent(): JSX.Element {
           Zgłoś błąd
         </MaterialButton>
         <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
-        <SettingsIcon className="header-icon" />
         <HelpOutlineIcon className="header-icon" onClick={redirectToDocumentation} />
       </div>
     </>

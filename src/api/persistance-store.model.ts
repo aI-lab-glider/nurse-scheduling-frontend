@@ -7,8 +7,8 @@ import { ActionModel } from "../state/models/action.model";
 import { ApplicationStateModel } from "../state/models/application-state.model";
 import { ArrayPositionPointer } from "../helpers/array.helper";
 
-export type ThunkFunction<T> = (
-  dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<T>>,
+export type ThunkFunction<TDispatchedActionPayload> = (
+  dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<TDispatchedActionPayload>>,
   getState: () => ApplicationStateModel
 ) => Promise<unknown> | unknown;
 
@@ -72,6 +72,12 @@ export const RevisionTypeLabels: { [key: string]: string } = {
 export const getRevisionTypeFromKey = (revisionKey: RevisionKey): RevisionType => {
   return revisionKey.split("_")[RevisionKeyIndexes.REVISION_TYPE] as RevisionType;
 };
+
+export interface ApplicationVersionRevision {
+  _id: RevisionKey;
+  version: string;
+  _rev?: Revision;
+}
 
 export interface MonthRevision {
   _id: RevisionKey;

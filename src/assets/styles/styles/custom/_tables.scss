@@ -1,5 +1,5 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public 
- * License, v. 2.0. If a copy of the MPL was not distributed with this 
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 .table {
   display: flex;
@@ -8,11 +8,11 @@
   padding: 0;
 
   background: $white;
-  border: 1px solid $table-border-color-grey;
   box-sizing: border-box;
-  border-radius: 10px;
 
   overflow: hidden;
+  border: 1px solid $table-border-color-grey;
+  border-radius: $table-radius;
 
   .row {
     display: flex;
@@ -76,7 +76,7 @@
           flex-direction: row;
           margin: auto;
           font-family: Roboto, serif;
-          font-size: 14px;
+          font-size: 12px;
           font-style: normal;
           font-weight: 600;
           line-height: 20px;
@@ -197,47 +197,58 @@
   }
 
   #summaryRow {
-    width: 102px;
     height: 40px;
+    width: 130px;
   }
 
   #mainRow {
-    width: 1156px;
+    width: 1350px;
     height: 40px;
   }
 
   #timetableRow {
-    width: 1156px;
+    width: 1350px;
     height: 70px;
     cursor: default;
   }
 }
 
 #summaryTable {
-  width: 102px;
+  width: 130px;
   cursor: default;
 }
-
+.timeHeader {
+  position: sticky;
+  top: 52px;
+  z-index: 3;
+  display: flex;
+  flex: 1;
+  padding-top: 19px;
+  width: 1500px;
+}
 #mainTable {
   width: 1156px;
 }
 
 #overtimeHeaderTable {
-  width: 102px;
-  height: 74px;
+  height: 71px;
   cursor: default;
 }
 .timeTableContainer {
   margin-left: 126px;
 }
 .summaryContainer {
-  width: 134px;
-  padding-left: 2%;
+  margin-left: 2%;
 }
 
 .sectionContainer {
   display: flex;
   flex-direction: row;
+}
+
+.borderContainer {
+  border: 1px solid $table-border-color-grey;
+  border-radius: $table-radius;
 }
 
 span {
@@ -268,6 +279,8 @@ span {
     writing-mode: vertical-rl;
     -ms-writing-mode: tb-lr;
     transform: rotate(180deg);
+    letter-spacing: 0.4px;
+    margin-top: -5px;
   }
 
   .container {
@@ -368,4 +381,10 @@ p {
 
 .nametableRow-error-tooltip {
   right: -3px !important;
+}
+
+.leftContainerBorder {
+  border: none;
+  border-radius: 0;
+  border-left: 1px solid $table-border-color-grey;
 }

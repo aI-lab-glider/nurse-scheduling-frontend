@@ -6,15 +6,17 @@ import { useSelector } from "react-redux";
 import { ShiftCode } from "../../../../common-models/shift-info.model";
 import { isAllValuesDefined } from "../../../../common-models/type-utils";
 import { MonthDataArray } from "../../../../helpers/shifts.helper";
-import { WorkerHourInfo } from "../../../../helpers/worker-hours-info.model";
+import { WorkerHourInfo, WorkerHourInfoSummary } from "../../../../helpers/worker-hours-info.model";
 import {
   ApplicationStateModel,
   ScheduleStateModel,
 } from "../../../../state/models/application-state.model";
+import { ScheduleMode } from "./schedule-state.model";
+import { ContractType } from "../../../../common-models/worker-info.model";
 
-export function useWorkerHoursInfo(workerName: string): WorkerHourInfo {
+export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
   const isEditMode = useSelector(
-    (state: ApplicationStateModel) => state.actualState.mode === "edit"
+    (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
   );
   const scheduleKey: keyof ScheduleStateModel = isEditMode
     ? "temporarySchedule"
@@ -26,6 +28,16 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfo {
   const workerShifts = useSelector(
     (state: ApplicationStateModel) => state.actualState[scheduleKey].present.shifts
   )[workerName];
+
+  const contractType = useSelector(
+    (state: ApplicationStateModel) =>
+      state.actualState[scheduleKey].present.employee_info.contractType
+  );
+
+  const workerContractType =
+    contractType && contractType[workerName]
+      ? contractType[workerName]
+      : ContractType.EMPLOYMENT_CONTRACT;
 
   const primaryWorkerShifts = useSelector(
     (state: ApplicationStateModel) => state.actualState.primaryRevision.shifts
@@ -40,27 +52,41 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfo {
   const { dates } = useSelector(
     (state: ApplicationStateModel) => state.actualState[scheduleKey].present.month_info
   );
+  const { shift_types: shiftTypes } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
+  );
 
-  const [workHoursInfo, setWorkHoursInfo] = useState(new WorkerHourInfo(0, 0));
+  const [workHoursInfo, setWorkHoursInfo] = useState<WorkerHourInfo>(new WorkerHourInfo(0, 0, 0));
 
   useEffect(() => {
     if (primaryRevisionMonth === month) {
-      if (!isAllValuesDefined([workerTime, workerShifts])) {
-        return setWorkHoursInfo(new WorkerHourInfo(0, 0));
+      if (!isAllValuesDefined([workerTime, workerShifts, workerContractType])) {
+        return setWorkHoursInfo(new WorkerHourInfo(0, 0, 0));
       }
-
       setWorkHoursInfo(
         WorkerHourInfo.fromWorkerInfo(
           workerShifts,
           primaryWorkerShifts as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
           workerTime,
+          workerContractType,
           month,
           year,
-          dates
+          dates,
+          shiftTypes
         )
       );
     }
-  }, [workerShifts, primaryWorkerShifts, workerTime, month, year, dates, primaryRevisionMonth]);
+  }, [
+    shiftTypes,
+    workerShifts,
+    primaryWorkerShifts,
+    workerTime,
+    workerContractType,
+    month,
+    year,
+    dates,
+    primaryRevisionMonth,
+  ]);
 
-  return workHoursInfo;
+  return workHoursInfo.summary;
 }

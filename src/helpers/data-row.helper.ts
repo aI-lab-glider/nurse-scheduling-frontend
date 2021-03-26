@@ -8,7 +8,7 @@ import { ArrayHelper } from "./array.helper";
 export class DataRowHelper {
   public static dataRowsAsValueDict<T>(
     dataRows: DataRowModel[],
-    includeNulls: boolean
+    includeNulls = false
   ): { [key: string]: T[] } {
     return ArrayHelper.arrayToObject<DataRowModel, T[]>(
       dataRows,
@@ -36,11 +36,11 @@ export class DataRowHelper {
     });
   }
 
-  public static copyWithReplaced(
+  public static copyWithReplaced<TData>(
     booleanMatrix: boolean[][],
-    source: DataRow[],
-    newValue: string
-  ): DataRow[] {
+    source: DataRow<TData>[],
+    newValue: TData
+  ): DataRow<TData>[] {
     const copy = source.map(DataRowHelper.deepCopy);
     copy.forEach((row, rowInd) => {
       row.updateData((data) =>
@@ -55,7 +55,7 @@ export class DataRowHelper {
     return copy;
   }
 
-  public static deepCopy(dataRow: DataRow): DataRow {
+  public static deepCopy<TData = string>(dataRow: DataRow<TData>): DataRow<TData> {
     return new DataRow(dataRow.rowKey, [...dataRow.rowData(true)]);
   }
 
@@ -71,7 +71,9 @@ export class DataRowHelper {
   ): boolean {
     if (dataRowArray1.length !== dataRowArray2.length) return false;
     for (let ind = 0; ind < dataRowArray1.length; ++ind) {
-      if (!DataRowHelper.areDataRowsEqual(dataRowArray1[ind], dataRowArray2[ind])) return false;
+      const isContentSame = DataRowHelper.areDataRowsEqual(dataRowArray1[ind], dataRowArray2[ind]);
+      const isEditModeSame = dataRowArray1[ind].isEditable === dataRowArray2[ind].isEditable;
+      if (!isContentSame || !isEditModeSame) return false;
     }
     return true;
   }

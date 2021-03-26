@@ -14,7 +14,7 @@ import {
   ParseErrorCode,
   ScheduleError,
 } from "../common-models/schedule-error.model";
-import { SHIFTS as shifts } from "../common-models/shift-info.model";
+import { ShiftsTypesDict } from "../common-models/shift-info.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Color, Colors } from "./colors/color.model";
 import { ShiftHelper } from "./shifts.helper";
@@ -23,39 +23,46 @@ import { TranslationHelper } from "./translations.helper";
 type Error = ScheduleErrorLevel;
 
 export class ErrorMessageHelper {
-  public static mapScheduleErrors(errors: GroupedScheduleErrors): ScheduleErrorMessageModel[] {
+  public static mapScheduleErrors(
+    errors: GroupedScheduleErrors,
+    shiftTypes: ShiftsTypesDict
+  ): ScheduleErrorMessageModel[] {
     const mappedErrors = Object.values(errors).reduce(
       (previous, current) => [
         ...previous,
-        ...(current ?? []).map(ErrorMessageHelper.getErrorMessage),
+        ...(current ?? []).map((error) => ErrorMessageHelper.getErrorMessage(error, shiftTypes)),
       ],
       [] as ScheduleErrorMessageModel[]
     );
     return mappedErrors;
   }
 
-  public static getErrorMessage(error: ScheduleError): ScheduleErrorMessageModel {
+  public static getErrorMessage(
+    error: ScheduleError,
+    shiftsTypes: ShiftsTypesDict
+  ): ScheduleErrorMessageModel {
     const kind = error.kind;
-    let message: string;
+    let message = ``;
     let title = "Nie rozpoznano błędu";
     let day = 0;
     let i = 0;
     let type = ScheduleErrorType.OTH;
+    let newline = false;
 
     switch (error.kind) {
       case AlgorithmErrorCode.AlwaysAtLeastOneNurse:
         i = 0;
-        message = `Brak pielęgniarek`;
-        if (error.segments[i][0] !== 1 || error.segments[i][1] !== 24) {
-          message += ` w godzinach <b>${error.segments[i][0]}-${error.segments[i][1]}</b>`;
+        if (error.segments[i][0] !== 7 || error.segments[i][1] !== 7) {
+          message += `<b>${error.segments[i][0]}:00-${error.segments[i][1]}:00</b>`;
+          newline = true;
         }
         while (error.segments[i + 1]) {
           i++;
-          if (error.segments[i][0] !== 1 || error.segments[i][1] !== 24) {
-            message += `, <b>${error.segments[i][0]}-${error.segments[i][1]}</b>`;
+          if (error.segments[i][0] !== 7 || error.segments[i][1] !== 7) {
+            message += `, <b>${error.segments[i][0]}:00-${error.segments[i][1]}:00</b>`;
           }
         }
-        message += `.`;
+        message += `${newline ? `<br>b` : `B`}rak pielęgniarek`;
         type = ScheduleErrorType.AON;
         title = "date";
         if (error.day) {
@@ -64,17 +71,19 @@ export class ErrorMessageHelper {
         break;
       case AlgorithmErrorCode.WorkerNumberDuringDay:
         i = 0;
-        message = `Za mało pracowników w trakcie dnia`;
         if (error.segments && (error.segments[i][0] !== 6 || error.segments[i][1] !== 22)) {
-          message += ` w godzinach <b>${error.segments[i][0]}-${error.segments[i][1]}</b>`;
+          message += `<b>${error.segments[i][0]}:00-${error.segments[i][1]}:00</b>`;
+          newline = true;
           while (error.segments[i + 1]) {
             i++;
             if (error.segments[i][0] !== 6 || error.segments[i][1] !== 22) {
-              message += `, <b>${error.segments[i][0]}-${error.segments[i][1]}</b>`;
+              message += `, <b>${error.segments[i][0]}:00-${error.segments[i][1]}:00</b>`;
             }
           }
         }
-        message += `: potrzeba <b>${error.required}</b>, jest <b>${error.actual}</b>.`;
+        message += `${newline ? `<br>z` : `Z`}a mało pracowników w trakcie dnia: potrzeba <b>${
+          error.required
+        }</b>, jest <b>${error.actual}</b>.`;
         type = ScheduleErrorType.WND;
         title = "date";
         if (error.day) {
@@ -83,17 +92,19 @@ export class ErrorMessageHelper {
         break;
       case AlgorithmErrorCode.WorkerNumberDuringNight:
         i = 0;
-        message = `Za mało pracowników w nocy`;
         if (error.segments && (error.segments[i][0] !== 22 || error.segments[i][1] !== 6)) {
-          message += ` w godzinach <b>${error.segments[i][0]}-${error.segments[i][1]}</b>`;
+          message += `<b>${error.segments[i][0]}:00-${error.segments[i][1]}:00</b>`;
+          newline = true;
           while (error.segments[i + 1]) {
             i++;
             if (error.segments[i][0] !== 22 || error.segments[i][1] !== 6) {
-              message += `, <b>${error.segments[i][0]}-${error.segments[i][1]}</b>`;
+              message += `, <b>${error.segments[i][0]}:00-${error.segments[i][1]}:00</b>`;
             }
           }
         }
-        message += `: potrzeba <b>${error.required}</b>, jest <b>${error.actual}</b>.`;
+        message += `${newline ? `<br>z` : `Z`}a mało pracowników w nocy: potrzeba <b>${
+          error.required
+        }</b>, jest <b>${error.actual}</b>.`;
         type = ScheduleErrorType.WNN;
         title = "date";
         if (error.day) {
@@ -101,23 +112,23 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.DissalowedShiftSequence:
-        const timeNeeded = ShiftHelper.requiredFreeTimeAfterShift(shifts[error.preceding]);
+        const timeNeeded = ShiftHelper.requiredFreeTimeAfterShift(shiftsTypes[error.preceding]);
         const [earliestPossible, nextDay] = ShiftHelper.nextLegalShiftStart(
-          shifts[error.preceding]
+          shiftsTypes[error.preceding]
         );
-        let tooEarly = earliestPossible - shifts[error.succeeding].from;
+        let tooEarly = earliestPossible - shiftsTypes[error.succeeding].from;
         if (tooEarly < 1) tooEarly += 24;
         message = `Pracownik <strong>${
           error.worker
         }</strong> potrzebuje ${timeNeeded} godzin przerwy po zmianie <strong>${
           error.preceding
         }</strong>
-          (${shifts[error.preceding].from}-${shifts[error.preceding].to}).
+          (${shiftsTypes[error.preceding].from}-${shiftsTypes[error.preceding].to}).
           Nie może mieć zmiany wcześniej niż o ${earliestPossible}`;
         if (nextDay) message += ` następnego dnia`;
         message += `. Przypisana zmiana <strong>${error.succeeding}</strong> (${
-          shifts[error.succeeding].from
-        }-${shifts[error.succeeding].to}) zaczyna się
+          shiftsTypes[error.succeeding].from
+        }-${shiftsTypes[error.succeeding].to}) zaczyna się
         o ${tooEarly} ${TranslationHelper.hourAccusativus(tooEarly)} za wcześnie.`;
         type = ScheduleErrorType.DSS;
         title = "date";
@@ -126,28 +137,20 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.LackingLongBreak:
-        message = `Brak wymaganej długiej przerwy w tygodniu <b>${error.week + 1}</b>.`;
+        message = `<b>Tydzień ${error.week + 1}</b><br>brak wymaganej długiej przerwy.`;
         type = ScheduleErrorType.LLB;
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WorkerUnderTime:
-        message = `Pracownik ma <b>${error.hours}</b> niedo${TranslationHelper.hourAccusativus(
-          error.hours
-        )}.`;
+        message = `<b>${error.hours}</b> niedo${TranslationHelper.hourAccusativus(error.hours)}`;
         type = ScheduleErrorType.WUH;
         title = `${error.worker}`;
         break;
-      case AlgorithmErrorCode.WorkerOvertime:
-        message = `Pracownik ma <b>${error.hours}</b> nad${TranslationHelper.hourAccusativus(
-          error.hours
-        )}.`;
-        type = ScheduleErrorType.WOH;
-        title = `${error.worker}`;
-        break;
       case ParseErrorCode.UNKNOWN_VALUE:
-        message = `Nieznana wartość zmiany: "${error.actual}" w dniu ${error.day! + 1}.`;
+        message = `Nieznana wartość zmiany: "<b>${error.actual}</b>". Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub utworzyć nową.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
         title = `${error.worker}`;
+        day += error.day! + 1;
         break;
       case InputFileErrorCode.EMPTY_FILE:
         message = `Błąd podczas wczytywania pliku wejściowego: Pusty plik`;

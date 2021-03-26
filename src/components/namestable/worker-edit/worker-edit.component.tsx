@@ -6,19 +6,20 @@ import { makeStyles } from "@material-ui/core/styles";
 import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ContractType, WorkerType } from "../../../common-models/worker-info.model";
+import { ContractType, WorkerGroup, WorkerType } from "../../../common-models/worker-info.model";
 import { WorkerActionCreator } from "../../../state/reducers/worker.action-creator";
 import { Button } from "../../common-components";
 import { useWorkerInfo, WorkerInfo } from "../use-worker-info";
 import { CombinedWorkNormSelector } from "./combined-worknorm-selector.component";
 import { WorkerContractTypeSelector } from "./worker-contract-type-selector.component";
 import { WorkerEditComponentOptions, WorkerEditComponentMode } from "./worker-edit.models";
+import { WorkerGroupSelector } from "./worker-group-selector.component";
 import { WorkerNameEditField } from "./worker-name-edit-field.components";
 import { WorkerWorkerTypeSelector } from "./worker-position-selector.component";
 
 const useStyles = makeStyles({
   container: {
-    height: "93%",
+    minHeight: "80%",
   },
 });
 
@@ -57,6 +58,10 @@ export function WorkerEditComponent({
   function handleWorkerWorkerTypeUpdate(newWorkerType: WorkerType): void {
     setWorkerInfo(workerInfo.withNewWorkerType(newWorkerType));
   }
+
+  function handleWorkerWorkerGroupUpdate(newWorkerGroup: WorkerGroup): void {
+    setWorkerInfo(workerInfo.withNewWorkerGroup(newWorkerGroup));
+  }
   //#endregion
 
   function canSaveWorker(): boolean {
@@ -78,7 +83,7 @@ export function WorkerEditComponent({
   // #region view
   return (
     <Grid container direction="column" justify="space-between">
-      <Grid container className={classes.container} direction="column" spacing={5}>
+      <Grid container className={classes.container} direction="column">
         <WorkerNameEditField
           workerName={workerInfo.workerName}
           setWorkerName={handleWorkerNameUpdate}
@@ -104,18 +109,24 @@ export function WorkerEditComponent({
           setIsFieldValid={setIsWorkerTimeValid}
           workerContractType={workerInfo.contractType}
         />
+
+        <WorkerGroupSelector
+          workerGroup={workerInfo.workerGroup}
+          setWorkerGroup={handleWorkerWorkerGroupUpdate}
+        />
       </Grid>
-      <Grid item>
-        <Button
-          disabled={!canSaveWorker()}
-          variant="primary"
-          className={classNames({ "disabled-submit-button": !canSaveWorker() })}
-          data-cy="btn-save-worker"
-          onClick={handleClose}
-        >
-          Zapisz pracownika
-        </Button>
-      </Grid>
+      <Button
+        disabled={!canSaveWorker()}
+        variant="primary"
+        className={classNames(
+          { "disabled-submit-button": !canSaveWorker() },
+          "drawer-bottom-button"
+        )}
+        data-cy="btn-save-worker"
+        onClick={handleClose}
+      >
+        Zapisz pracownika
+      </Button>
     </Grid>
   );
   //#endregion

@@ -4,12 +4,17 @@
 import { Divider } from "@material-ui/core";
 import classNames from "classnames/bind";
 import React from "react";
-import { WorkerInfoModel, WorkerTypeHelper } from "../../common-models/worker-info.model";
+import {
+  ContractTypeHelper,
+  WorkerInfoModel,
+  WorkerTypeHelper,
+} from "../../common-models/worker-info.model";
 import { StringHelper } from "../../helpers/string.helper";
 import { useWorkerHoursInfo } from "../schedule-page/table/schedule/use-worker-hours-info";
 import WorkersCalendar from "../workers-page/workers-calendar/workers-calendar.component";
 import { Button } from "../common-components";
 import { exportToPdf } from "./export-to-pdf";
+import { useWorkerInfo } from "./use-worker-info";
 
 export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
   const workerHoursInfo = useWorkerHoursInfo(info.name);
@@ -19,6 +24,7 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
   const handleExport = (): void => {
     exportToPdf(info.name, { calendarExport, workerInfoExport });
   };
+  const { workerInfo } = useWorkerInfo(info.name);
 
   return (
     <>
@@ -45,9 +51,11 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
           </div>
           <br />
           <div className="worker-info">
-            <p>Typ umowy:</p>
-            <p>Ilość godzin: {workerHoursInfo.workerHourNorm}</p>
-            <p>Ilość nadgodzin: {workerHoursInfo.overTime}</p>
+            {workerInfo.contractType && (
+              <p>Typ umowy: {ContractTypeHelper.translate(workerInfo.contractType)}</p>
+            )}
+            <p>Liczba godzin: {workerHoursInfo.workerHourNorm}</p>
+            <p>Liczba nadgodzin: {workerHoursInfo.overTime}</p>
             <p>Suma godzin: {info.time}</p>
             <div data-html2canvas-ignore="true">
               <Divider />
@@ -66,7 +74,7 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
           <WorkersCalendar shiftsArr={info.shifts!} />
         </div>
       </div>
-      <Button variant={"primary"} onClick={handleExport}>
+      <Button variant={"primary"} onClick={handleExport} className="drawer-bottom-button">
         Pobierz
       </Button>
     </>

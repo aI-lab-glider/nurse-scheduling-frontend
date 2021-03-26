@@ -15,26 +15,25 @@ interface Options {
   showTitle?: boolean;
 }
 
+function prepareMonthName(index: number, day: number, month: number): string {
+  let monthName = `${TranslationHelper.polishMonthsGenetivus[month]}`;
+
+  if (index < day - 1) {
+    monthName = `${TranslationHelper.polishMonthsGenetivus[(month + 11) % 12]}`;
+  } else if (index > 20 && day < 8) {
+    monthName = `${TranslationHelper.polishMonthsGenetivus[(month + 1) % 12]}`;
+  }
+  return monthName;
+}
+
 export default function ErrorListItem({
   error,
-  interactable = true,
+  interactable = false,
   className = "",
   showTitle = true,
 }: Options): JSX.Element {
   const { verboseDates, monthNumber } = useMonthInfo();
   const mappedDays = verboseDates.map((d: VerboseDate) => d.date);
-  const monthStartIndex = verboseDates.findIndex((d: VerboseDate) => d.date === 1) ?? 0;
-
-  let currMonthGenetivus = "";
-  let prevMonthGenetivus = "";
-  if (monthNumber) {
-    currMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[monthNumber]}`;
-    if (monthNumber > 0) {
-      prevMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[monthNumber - 1]}`;
-    } else {
-      prevMonthGenetivus = `${TranslationHelper.polishMonthsGenetivus[monthNumber + 11]}`;
-    }
-  }
 
   if (typeof error.day === "undefined" || typeof mappedDays === "undefined") {
     throw Error(`Error undefined or mappedDays undefined`);
@@ -42,8 +41,7 @@ export default function ErrorListItem({
 
   const errorDayIndex = error.day;
   const errorDay = mappedDays[errorDayIndex];
-
-  const monthName = errorDayIndex < monthStartIndex ? prevMonthGenetivus : currMonthGenetivus;
+  const monthName = prepareMonthName(errorDayIndex, errorDay, monthNumber);
 
   return (
     <div className={`error-list-item ${className}`}>

@@ -23,5 +23,12 @@ export function BaseCellInputComponent({
     onKeyDown(e);
   }
 
-  return <input autoFocus={true} className={className} onKeyDown={handleKeyDown} />;
+  return (
+    <input
+      autoFocus={true}
+      className={className}
+      onKeyDown={handleKeyDown}
+      onBlur={(e) => !!e.currentTarget.value && onValueChange(e.currentTarget.value)}
+    />
+  );
 }

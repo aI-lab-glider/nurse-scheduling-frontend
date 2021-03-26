@@ -7,7 +7,7 @@ import {
   FREE_SHIFTS,
   ShiftCode,
   ShiftInfoModel,
-  SHIFTS,
+  ShiftsTypesDict,
 } from "../common-models/shift-info.model";
 import { Opaque } from "../common-models/type-utils";
 import { WorkerType } from "../common-models/worker-info.model";
@@ -23,14 +23,17 @@ export type MonthDataArray<T> = Opaque<"MonthData", T[]>;
 export type WorkHourInfoArray = Opaque<"WorkHourInfoArray", [number, number, number]>;
 
 export class ShiftHelper {
-  public static getWorkersCount(shifts: ShiftInfoModel): Array<number> {
+  public static getWorkersCount(
+    shifts: ShiftInfoModel,
+    shiftTypes: ShiftsTypesDict
+  ): Array<number> {
     const shiftsArray = Object.values(shifts);
     const workersPerDays: Array<number> = [];
     if (shiftsArray.length === 0) return [];
     for (let i = 0; i < shiftsArray[0].length; i++) {
       workersPerDays.push(
         shiftsArray.reduce((a, b) => {
-          const shift = SHIFTS[b[i]];
+          const shift = shiftTypes[b[i]];
           return a + (this.shiftCodeToWorkTime(shift) ? 1 : 0);
         }, 0)
       );
@@ -38,13 +41,13 @@ export class ShiftHelper {
     return workersPerDays;
   }
 
-  public static isNotWorkingShift(shiftCode: ShiftCode): boolean {
-    const shift = SHIFTS[shiftCode] as Shift;
-    return !shift.isWorkingShift && shift.code !== ShiftCode.W;
+  public static isNotWorkingShift(shiftCode: ShiftCode, shiftTypes: ShiftsTypesDict): boolean {
+    const shift = shiftTypes[shiftCode] as Shift;
+    return (!shift?.isWorkingShift ?? true) && shift?.code !== ShiftCode.W;
   }
 
   public static shiftCodeToWorkTime(shift: Shift): number {
-    if (!shift.isWorkingShift) {
+    if (!shift?.isWorkingShift ?? true) {
       return 0;
     }
     let duration = shift.to - shift.from;
@@ -107,12 +110,13 @@ export class ShiftHelper {
 
   static getShiftColor(
     shift: ShiftCode,
+    shiftTypes: ShiftsTypesDict,
     day?: VerboseDate,
     isFrozen?: boolean,
     ignoreFrozenState = false
   ): CellColorSet {
     const colorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET;
-    const shiftFromSHIFTS = SHIFTS[shift];
+    const shiftFromSHIFTS = shiftTypes[shift];
 
     if (shiftFromSHIFTS && shift !== "W") {
       if (shiftFromSHIFTS.isWorkingShift) {

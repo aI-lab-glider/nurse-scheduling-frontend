@@ -58,6 +58,21 @@ export class ServerMiddleware {
       delete schedule.employee_info.type[shiftName];
     });
 
+    Object.keys(schedule.employee_info.workerGroup).forEach((shiftName) => {
+      schedule.employee_info.workerGroup[nameToUuid[shiftName]] =
+        schedule.employee_info.workerGroup[shiftName];
+      delete schedule.employee_info.workerGroup[shiftName];
+    });
+
+    if (schedule.employee_info.contractType !== undefined) {
+      Object.keys(schedule.employee_info.contractType).forEach((shiftName) => {
+        schedule.employee_info.contractType![
+          nameToUuid[shiftName]
+        ] = schedule.employee_info.contractType![shiftName];
+        delete schedule.employee_info.contractType![shiftName];
+      });
+    }
+
     return {
       anonynimizedSchedule: schedule,
       anonymizationMap: nameToUuid,
@@ -94,7 +109,7 @@ export class ServerMiddleware {
     scheduleErrors: ScheduleError[]
   ): ScheduleError[] {
     const calculateNormHoursDiff = (workerName: string): number =>
-      WorkerHourInfo.fromSchedules(workerName, actualSchedule, primaryMonthData).overTime;
+      WorkerHourInfo.fromSchedules(workerName, actualSchedule, primaryMonthData).workHoursDiff;
 
     const validBackendScheduleErros = scheduleErrors.filter(
       (err) =>
@@ -104,12 +119,9 @@ export class ServerMiddleware {
     const overtimeAndUndetimeErrors: (WorkerOvertime | WorkerUnderTime)[] = [];
     Object.keys(actualSchedule.shifts).forEach((workerName) => {
       const workHoursDiff = calculateNormHoursDiff(workerName);
-      if (workHoursDiff !== 0) {
+      if (workHoursDiff < 0) {
         overtimeAndUndetimeErrors.push({
-          kind:
-            workHoursDiff > 0
-              ? AlgorithmErrorCode.WorkerOvertime
-              : AlgorithmErrorCode.WorkerUnderTime,
+          kind: AlgorithmErrorCode.WorkerUnderTime,
           hours: Math.abs(workHoursDiff),
           worker: workerName,
         });

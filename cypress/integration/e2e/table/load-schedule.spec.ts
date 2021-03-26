@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { ShiftCode } from "../../../../src/common-models/shift-info.model";
-import { WorkerType } from "../../../../src/common-models/worker-info.model";
 import { FoundationInfoRowType } from "../../../support/commands";
 //#region Test data
 interface CheckFoundationInfoReadCorrectly {
@@ -28,7 +27,7 @@ const checkFoundationInfoReadProperlyData: CheckFoundationInfoReadCorrectly[] = 
 context("Load schedule", () => {
   it("Shoud be able to save file to database and after that load new schedule", () => {
     const cell = {
-      workerType: WorkerType.NURSE,
+      workerGroupIdx: 0,
       workerIdx: 0,
       shiftIdx: 6,
     };

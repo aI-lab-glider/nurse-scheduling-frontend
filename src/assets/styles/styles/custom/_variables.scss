@@ -15,9 +15,11 @@ $header-height: 52px !default;
 $primary-header-color: #1d3557 !default;
 $header-text-color: #ffffff !default;
 
-$babysitter-label-background: #ffd100 !default;
-$nurse-label-background: #c8dfff !default;
-$worker-table-border-color: #d5e6fe !default;
+$babysitter-color: #ffd100;
+$babysitter-label-background: $babysitter-color !default;
+
+$nurse-color: #c8dfff;
+$nurse-label-background: $nurse-color !default;
 
 // Drawer
 
@@ -32,7 +34,7 @@ $popoludnie: rgba(0, 163, 255, 1);
 $noc: rgba(16, 32, 70, 1);
 $l4: rgba(198, 0, 0, 1);
 $kwaratanna: rgba(0, 0, 0, 1);
-$urlop: rgba(255, 138, 0, 1);
+$urlop: rgb(146, 208, 80);
 
 // Color system
 $primary: #1d3557 !default;
@@ -62,6 +64,10 @@ $error-list-item-border-color: #c8dfff !default;
 
 $table-color: #14142b !default;
 $table-border-color-grey: #d6d8e7 !default;
+$table-border-color-blue: #c8dfff !default;
+
+$table-radius: 10px;
+
 $cell-color: #4e4b66 !default;
 $cell-weekend-background-color: rgba(60, 105, 168, 0.2) !default;
 $cell-weekend-header-background-color: rgba(60, 105, 168, 0.3) !default;

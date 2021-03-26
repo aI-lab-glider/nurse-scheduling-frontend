@@ -7,13 +7,11 @@ import {
   GroupedScheduleErrors,
   ScheduleError,
 } from "../../common-models/schedule-error.model";
-import { WorkerType } from "../../common-models/worker-info.model";
 import { BaseSectionOptions } from "../schedule-page/table/schedule/sections/base-section/base-section.component";
 import { NameTableSection } from "./nametable-section.component";
 
 interface NameSectionOptions extends Partial<BaseSectionOptions> {
-  workerType?: WorkerType;
-  clickable: boolean;
+  isWorker: boolean;
 }
 
 function nametableErrorSelector(
@@ -29,14 +27,9 @@ function nametableErrorSelector(
 }
 
 export function NameTableComponent(options: NameSectionOptions): JSX.Element {
-  const { data = [], workerType, clickable } = options;
+  const { data = [], isWorker } = options;
 
   return (
-    <NameTableSection
-      dataRow={data}
-      workerType={workerType}
-      errorSelector={nametableErrorSelector}
-      clickable={clickable}
-    />
+    <NameTableSection data={data} errorSelector={nametableErrorSelector} isWorker={isWorker} />
   );
 }

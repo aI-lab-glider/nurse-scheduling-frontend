@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /// <reference path="../../../support/index.d.ts" />
 
-import { WorkerType } from "../../../../src/common-models/worker-info.model";
 import { GetWorkerShiftOptions } from "../../../support/commands";
 import { ShiftCode } from "../../../../src/common-models/shift-info.model";
 
@@ -17,7 +16,7 @@ const daysFromPrevMonths = 6;
 const testCases: TestCase[] = [
   {
     testedShiftCell: {
-      workerType: WorkerType.NURSE,
+      workerGroupIdx: 0,
       workerIdx: 0,
       shiftIdx: daysFromPrevMonths + 9,
     },
@@ -26,7 +25,7 @@ const testCases: TestCase[] = [
   },
   {
     testedShiftCell: {
-      workerType: WorkerType.OTHER,
+      workerGroupIdx: 1,
       workerIdx: 3,
       shiftIdx: daysFromPrevMonths + 2,
     },
@@ -47,20 +46,20 @@ context("Undo/Redo test", () => {
   });
 
   testCases.forEach((testCase) => {
-    it(`Should change worker (type: ${testCase.testedShiftCell.workerType.toLowerCase()}) shift and
+    it(`Should change worker (worker group: ${testCase.testedShiftCell.workerGroupIdx}) shift and
        use undo and redo buttons to set proper cell state`, () => {
       performShiftChanges(testCase);
 
-      cy.get("[data-cy=undo-button]").click();
+      cy.get("[data-cy=undo-button]").click({ force: true });
       cy.getWorkerShift(testCase.testedShiftCell).should("contain", testCase.firstShift);
 
-      cy.get("[data-cy=redo-button]").click();
+      cy.get("[data-cy=redo-button]").click({ force: true });
       cy.getWorkerShift(testCase.testedShiftCell).should("contain", testCase.secondShift);
     });
   });
 
   testCases.forEach((testCase) => {
-    it(`Should change worker (type: ${testCase.testedShiftCell.workerType.toLowerCase()}shift and
+    it(`Should change worker (worker group: ${testCase.testedShiftCell.workerGroupIdx}shift and
        use undo and redo shortcuts to set proper cell state`, () => {
       performShiftChanges(testCase);
 
@@ -76,7 +75,7 @@ context("Undo/Redo test", () => {
 context("Edit mode test", () => {
   it("Save button should be disabled when there are no changes", () => {
     const cell = {
-      workerType: WorkerType.NURSE,
+      workerGroupIdx: 0,
       workerIdx: 0,
       shiftIdx: 6,
     };
