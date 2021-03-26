@@ -38,7 +38,6 @@ export function FoundationInfoComponent(options: FoundationInfoOptions): JSX.Ele
         parseInt(newValue)
       );
       const updatedFoundationInfo = DataRowHelper.dataRowsAsValueDict<number>(updatedDataRows);
-      debugger;
       const action = FoundationInfoActionCreator.updateFoundationInfo(
         updatedFoundationInfo[FoundationSectionKey.ChildrenCount],
         updatedFoundationInfo[FoundationSectionKey.ExtraWorkersCount]
