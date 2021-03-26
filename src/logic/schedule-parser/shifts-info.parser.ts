@@ -126,9 +126,10 @@ export class ShiftsInfoParser extends ShiftsProvider {
   }
 
   private logLoadFileError(msg: string): void {
-    this._parseErrors.push({
-      kind: InputFileErrorCode.LOAD_FILE_ERROR,
-      message: msg,
-    });
+    // TODO uncomennt
+    // this._parseErrors.push({
+    //   kind: InputFileErrorCode.LOAD_FILE_ERROR,
+    //   message: msg,
+    // });
   }
 }
