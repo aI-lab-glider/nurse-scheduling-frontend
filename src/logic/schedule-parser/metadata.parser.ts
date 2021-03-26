@@ -20,7 +20,7 @@ export class MetaDataParser extends MetadataProvider {
     } else {
       this.offset = 1;
       this.logLoadFIleError(
-        "Nie znaleziono nagłówka z <b>informacją o datach</b>. Jako pierwszy dzień miesiąca wczytano pierwszą kolumnę grafiku."
+        "Nie znaleziono nagłówka z <b>informacją o datach</b>. Jako pierwszy dzień miesiąca wczytano pierwszą kolumnę grafiku uzupełnioną wartościami zmian."
       );
     }
 
