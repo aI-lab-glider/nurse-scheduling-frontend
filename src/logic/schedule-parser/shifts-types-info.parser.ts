@@ -142,9 +142,9 @@ export class ShiftsTypesInfoParser {
     if (index >= 0 && shiftRow[index]) {
       return shiftRow[index];
     } else {
-      this.logLoadFileError(
-        "Nie ustawiono koloru dla zmiany: " + name + ". Ustawiono: " + DEFAULT_COLOR.name
-      );
+      // this.logLoadFileError(
+      //   "Nie ustawiono koloru dla zmiany: " + name + ". Ustawiono: " + DEFAULT_COLOR.name
+      // );
       return DEFAULT_COLOR.value;
     }
   }
