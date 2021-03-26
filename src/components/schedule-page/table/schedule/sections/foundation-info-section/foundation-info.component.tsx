@@ -2,12 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { DataRowHelper } from "../../../../../../helpers/data-row.helper";
 import { DataRow } from "../../../../../../logic/schedule-logic/data-row";
 import { FoundationSectionKey } from "../../../../../../logic/section.model";
+import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 import { FoundationInfoActionCreator } from "../../../../../../state/reducers/month-state/schedule-data/foundation-info.action-creator";
 import { NameTableComponent } from "../../../../../namestable/nametable.component";
+import { ScheduleMode } from "../../schedule-state.model";
 import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-section.component";
 import { SelectionMatrix } from "../base-section/use-selection-matrix";
 import { useFoundationInfo } from "./use-foundation-info";
@@ -17,9 +19,13 @@ export type FoundationInfoOptions = Omit<BaseSectionOptions, "sectionKey" | "upd
 export function FoundationInfoComponent(options: FoundationInfoOptions): JSX.Element {
   const { childrenNumber, extraWorkers } = useFoundationInfo();
 
+  const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
+
+  const isEditable = mode === ScheduleMode.Edit;
+
   const sectionData = [
-    new DataRow(FoundationSectionKey.ChildrenCount, childrenNumber),
-    new DataRow(FoundationSectionKey.ExtraWorkersCount, extraWorkers),
+    new DataRow(FoundationSectionKey.ChildrenCount, childrenNumber, isEditable),
+    new DataRow(FoundationSectionKey.ExtraWorkersCount, extraWorkers, isEditable),
   ];
 
   const dispatch = useDispatch();
@@ -32,6 +38,7 @@ export function FoundationInfoComponent(options: FoundationInfoOptions): JSX.Ele
         parseInt(newValue)
       );
       const updatedFoundationInfo = DataRowHelper.dataRowsAsValueDict<number>(updatedDataRows);
+      debugger;
       const action = FoundationInfoActionCreator.updateFoundationInfo(
         updatedFoundationInfo[FoundationSectionKey.ChildrenCount],
         updatedFoundationInfo[FoundationSectionKey.ExtraWorkersCount]
