@@ -14,6 +14,7 @@ const useStyles = makeStyles({
     borderTop: "1px solid #E9EEF9",
     color: ScssVars.primary,
     height: ScssVars.footerHeight,
+    marginTop: 40,
   },
   logo: {
     height: 46,
