@@ -142,9 +142,7 @@ export class ErrorMessageHelper {
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WorkerUnderTime:
-        message = `Pracownik ma <b>${error.hours}</b> niedo${TranslationHelper.hourAccusativus(
-          error.hours
-        )}.`;
+        message = `<b>${error.hours}</b> niedo${TranslationHelper.hourAccusativus(error.hours)}`;
         type = ScheduleErrorType.WUH;
         title = `${error.worker}`;
         break;
