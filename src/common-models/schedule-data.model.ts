@@ -143,7 +143,7 @@ function validateScheduleContainerDataIntegrity({
   const scheduleLen = monthInfo.dates.length;
   validateShiftLengthIntegrity(scheduleLen, shifts);
   validateWorkersIntegrity(employeeInfo, shifts);
-  validateShiftTypesIntegrity(shiftTypes, shifts);
+  ensureShiftTypesIntegrity(shiftTypes, shifts);
 }
 
 function validateShiftLengthIntegrity(scheduleLen: number, shifts: ShiftInfoModel): void {
@@ -169,18 +169,12 @@ function validateWorkersIntegrity(employeeInfo: WorkersInfoModel, shifts: ShiftI
   }
 }
 
-function validateShiftTypesIntegrity(shiftModel: ShiftsTypesDict, shifts: ShiftInfoModel): void {
+function ensureShiftTypesIntegrity(shiftModel: ShiftsTypesDict, shifts: ShiftInfoModel): void {
   const shiftTypes = Object.keys(shiftModel);
-  Object.values(shifts).forEach((workerShifts) => {
-    const shiftsNotIncludedInShiftTypes = workerShifts.filter(
-      (shift) => !shiftTypes.includes(shift)
+
+  Object.keys(shifts).forEach((worker) => {
+    shifts[worker] = shifts[worker].map((shiftCode) =>
+      !shiftTypes.includes(shiftCode) ? ShiftCode.W : shiftCode
     );
-    if (shiftsNotIncludedInShiftTypes.length > 0) {
-      throw new Error(
-        `Worker shifts contain shifts codes ${JSON.stringify(
-          shiftsNotIncludedInShiftTypes
-        )} which are not included in shift model`
-      );
-    }
   });
 }
