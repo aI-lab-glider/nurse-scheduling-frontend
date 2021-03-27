@@ -11,6 +11,7 @@ import { NameTableComponent } from "../../../../../namestable/nametable.componen
 import { BaseSectionComponent, BaseSectionOptions } from "../base-section/base-section.component";
 import { SelectionMatrix } from "../base-section/use-selection-matrix";
 import { useFoundationInfo } from "./use-foundation-info";
+
 export type FoundationInfoOptions = Omit<BaseSectionOptions, "sectionKey" | "updateData">;
 
 export function FoundationInfoComponent(options: FoundationInfoOptions): JSX.Element {
@@ -40,22 +41,23 @@ export function FoundationInfoComponent(options: FoundationInfoOptions): JSX.Ele
     [dispatch]
   );
   return (
-    <div className="sectionContainer">
-      <div>
-        <NameTableComponent data={sectionData} clickable={false} />
-      </div>
-      <div>
+    <div style={{ display: "inline-block" }}>
+      <div className="sectionContainer borderContainer">
         <div>
-          <div className="table" data-cy="foundationInfoSection">
-            <BaseSectionComponent
-              sectionKey="foundationInfo"
-              data={sectionData}
-              updateData={updateFoundationInfoData}
-            />
+          <NameTableComponent data={sectionData} isWorker={false} />
+        </div>
+        <div>
+          <div>
+            <div className="table leftContainerBorder" data-cy="foundationInfoSection">
+              <BaseSectionComponent
+                sectionKey="foundationInfo"
+                data={sectionData}
+                updateData={updateFoundationInfoData}
+              />
+            </div>
           </div>
         </div>
       </div>
-      <div />
     </div>
   );
 }

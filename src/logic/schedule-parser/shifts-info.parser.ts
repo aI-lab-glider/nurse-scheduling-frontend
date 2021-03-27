@@ -12,13 +12,13 @@ import { StringHelper } from "../../helpers/string.helper";
 import { ShiftsProvider } from "../providers/shifts-provider.model";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
-import { DEFAULT_WORKER_GROUP } from "./workers-info.parser";
+import { WORKER_GROUP_PREFIX } from "./workers-info.parser";
 
 export class ShiftsInfoParser extends ShiftsProvider {
   get availableWorkersGroup(): { [workerName: string]: WorkerGroup } {
     const result = {};
     Object.keys(this.workerShifts).forEach((workerName) => {
-      result[workerName] = `${DEFAULT_WORKER_GROUP} ${this.groupNumber}`;
+      result[workerName] = `${WORKER_GROUP_PREFIX} ${this.groupNumber}`;
     });
     return result;
   }

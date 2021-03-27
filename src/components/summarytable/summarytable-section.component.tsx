@@ -16,18 +16,18 @@ export function SummaryTableSection({
   sectionIdx,
 }: SummaryTableSectionOptions): JSX.Element {
   return (
-      <div className="table" id="summaryTable" data-cy={summaryTableSectionDataCy(sectionIdx)}>
-        <div>
-          {dataRows.map((dataRow, rowIndex) => {
-            return (
-              <SummaryTableRow
-                key={dataRow.rowKey}
-                workerName={dataRow.rowKey}
-                rowIndex={rowIndex}
-              />
-            );
-          })}
-        </div>
+    <div
+      className="table borderContainer"
+      id="summaryTable"
+      data-cy={summaryTableSectionDataCy(sectionIdx)}
+    >
+      <div>
+        {dataRows.map((dataRow, rowIndex) => {
+          return (
+            <SummaryTableRow key={dataRow.rowKey} workerName={dataRow.rowKey} rowIndex={rowIndex} />
+          );
+        })}
       </div>
+    </div>
   );
 }

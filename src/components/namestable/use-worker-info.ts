@@ -35,20 +35,27 @@ export function useWorkerInfo(workerName: string): UseWorkerInfoReturn {
   const workerContractType = useSelector((state: ApplicationStateModel) =>
     getWorkerInfo<ContractType>(state, "contractType")
   );
+
+  const workerGroup = useSelector((state: ApplicationStateModel) =>
+    getWorkerInfo<WorkerGroup>(state, "workerGroup")
+  );
+
   const workerShifts = useSelector(
     (state: ApplicationStateModel) =>
       state.actualState.persistentSchedule.present.shifts[workerName]
   );
+
   useEffect(() => {
     const newWorkerInfo = new WorkerInfo(
       workerName,
       workerContractType,
       workerTime,
       workerType,
-      workerShifts
+      workerShifts,
+      workerGroup
     );
     setWorkerInfo(newWorkerInfo);
-  }, [workerName, workerContractType, workerTime, workerType, workerShifts]);
+  }, [workerName, workerContractType, workerTime, workerType, workerShifts, workerGroup]);
   return {
     workerInfo,
     setWorkerInfo,
@@ -92,6 +99,12 @@ export class WorkerInfo {
     return copy;
   }
 
+  public withNewWorkerGroup(newWorkerGroup: WorkerGroup): WorkerInfo {
+    const copy = _.cloneDeep(this);
+    copy.workerGroup = newWorkerGroup;
+    return copy;
+  }
+
   asWorkerInfoExtendedInterface(): WorkerInfoExtendedInterface {
     return {
       prevName: this.previousWorkerName,
@@ -99,6 +112,7 @@ export class WorkerInfo {
       workerType: this.workerType,
       contractType: this.contractType,
       time: this.workerTime,
+      workerGroup: this.workerGroup,
     };
   }
 }

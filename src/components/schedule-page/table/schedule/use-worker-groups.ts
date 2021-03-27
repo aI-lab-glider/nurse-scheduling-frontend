@@ -12,10 +12,9 @@ import {
 } from "../../../../state/models/application-state.model";
 import { WorkerInfo } from "../../../namestable/use-worker-info";
 import { ScheduleMode } from "./schedule-state.model";
+import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
 
-interface GroupedWorkers {
-  [groupName: string]: WorkerInfo[];
-}
+export type GroupedWorkers = Map<string, WorkerInfo[]>;
 
 const aggregateWorkerInfo = (
   workerName: string,
@@ -31,6 +30,25 @@ const aggregateWorkerInfo = (
     workerInfo.workerGroup[workerName]
   );
 
+/* eslint-disable @typescript-eslint/camelcase */
+export function groupWorkers({
+  shifts: workerShifts,
+  employee_info: workerInfo,
+}: Pick<ScheduleDataModel, "shifts" | "employee_info">): GroupedWorkers {
+  const aggregatedData = Object.keys(workerShifts).map((workerName) =>
+    aggregateWorkerInfo(workerName, workerShifts, workerInfo)
+  );
+  const groupedWorkers = _.groupBy(aggregatedData, (item) => item.workerGroup);
+  const sortedGroupedWorkers = new Map();
+  _.sortBy(Object.keys(groupedWorkers)).forEach((key) => {
+    sortedGroupedWorkers[key] = _.sortBy(Object.values(groupedWorkers[key]), [
+      "workerType",
+      "workerName",
+    ]);
+  });
+  return sortedGroupedWorkers;
+}
+
 export function useWorkerGroups(): GroupedWorkers {
   const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
   const targetSchedule: keyof ScheduleStateModel =
@@ -43,8 +61,5 @@ export function useWorkerGroups(): GroupedWorkers {
     (state: ApplicationStateModel) => state.actualState[targetSchedule].present.shifts
   );
 
-  const aggregatedData = Object.keys(workerShifts).map((workerName) =>
-    aggregateWorkerInfo(workerName, workerShifts, workerInfo)
-  );
-  return _.groupBy(aggregatedData, (item) => item.workerGroup);
+  return groupWorkers({ shifts: workerShifts, employee_info: workerInfo });
 }

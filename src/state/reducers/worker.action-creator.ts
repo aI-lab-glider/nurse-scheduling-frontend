@@ -9,16 +9,16 @@ import { LocalStorageProvider } from "../../api/local-storage-provider.model";
 import { RevisionType, ScheduleKey, ThunkFunction } from "../../api/persistance-store.model";
 import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
 import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
-import {
-  ContractType,
-  WorkerInfoModel,
-  WorkersInfoModel,
-  WorkerType
-} from "../../common-models/worker-info.model";
+import { WorkerInfoModel, WorkersInfoModel } from "../../common-models/worker-info.model";
 import { WorkerInfoExtendedInterface } from "../../components/namestable/worker-edit";
 import { MonthHelper } from "../../helpers/month.helper";
 import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 import { cropScheduleDMToMonthDM } from "../../logic/schedule-container-convertion/schedule-container-convertion";
+import {
+  DEFAULT_CONTRACT_TYPE,
+  DEFAULT_WORKER_GROUP,
+  DEFAULT_WORKER_TYPE,
+} from "../../logic/schedule-parser/workers-info.parser";
 import { ScheduleDataActionCreator } from "./month-state/schedule-data/schedule-data.action-creator";
 
 export interface WorkerActionPayload {
@@ -156,7 +156,7 @@ export class WorkerActionCreator {
     newWorkerShifts: ShiftCode[]
   ): MonthDataModel {
     const updatedSchedule = _.cloneDeep(monthDataModel);
-    const { workerName, workerType, contractType } = worker;
+    const { workerName, workerType, contractType, workerGroup } = worker;
 
     updatedSchedule.shifts = {
       ...updatedSchedule.shifts,
@@ -169,14 +169,15 @@ export class WorkerActionCreator {
       },
       type: {
         ...updatedSchedule.employee_info.type,
-        [workerName]: workerType ?? WorkerType.NURSE,
+        [workerName]: workerType ?? DEFAULT_WORKER_TYPE,
       },
       contractType: {
         ...updatedSchedule.employee_info.contractType,
-        [workerName]: contractType ?? ContractType.EMPLOYMENT_CONTRACT,
+        [workerName]: contractType ?? DEFAULT_CONTRACT_TYPE,
       },
       workerGroup: {
         ...updatedSchedule.employee_info.workerGroup,
+        [workerName]: workerGroup ?? DEFAULT_WORKER_GROUP,
       },
     };
 

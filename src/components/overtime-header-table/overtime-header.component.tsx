@@ -5,19 +5,15 @@ import React from "react";
 import { OvertimeHeaderRow } from "./overtime-header-row.component";
 
 interface OvertimeHeaderTableOptions {
-  data: [string, string, string];
+  data: string[];
 }
 
 export function OvertimeHeaderComponent(options: OvertimeHeaderTableOptions): JSX.Element {
   const { data } = options;
 
   return (
-    <div>
-      <div className="table" id="overtimeHeaderTable">
-        <div>
-          <OvertimeHeaderRow data={data} />
-        </div>
-      </div>
+    <div className="table" id="overtimeHeaderTable">
+      <OvertimeHeaderRow data={data} />
     </div>
   );
 }

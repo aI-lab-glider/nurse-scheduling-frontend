@@ -47,6 +47,7 @@ const headCells: WorkerDataCell[] = [
   { id: "name", numeric: false, label: "Imię i nazwisko" },
   { id: "type", numeric: true, label: "Stanowisko" },
   { id: "time", numeric: true, label: "Wymiar pracy" },
+  { id: "workerGroup", numeric: false, label: "Zespół" },
 ];
 
 export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Element {

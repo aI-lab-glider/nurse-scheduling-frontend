@@ -48,7 +48,7 @@ const exampleData = [
 ];
 
 const shifts: ShiftInfoModel = {};
-const employee_info: WorkersInfoModel = { type: {}, time: {} };
+const employee_info: WorkersInfoModel = { type: {}, time: {}, workerGroup: {} };
 
 fillWorkerInfo(shifts, employee_info, nurseSection, WorkerType.NURSE);
 fillWorkerInfo(shifts, employee_info, babysitterSection, WorkerType.OTHER);
@@ -70,7 +70,7 @@ fillWorkerInfo(shifts, employee_info, babysitterSection, WorkerType.OTHER);
 //#endregion
 
 describe("Schedule parser", () => {
-  const scheduleParser = new ScheduleParser(10, 2020, exampleData, []);
+  const scheduleParser = new ScheduleParser(10, 2020, exampleData, [], []);
   const result = scheduleParser.schedule.getDataModel();
   //todo update test
   // it("check if workerType was parsed correctly ", () => {

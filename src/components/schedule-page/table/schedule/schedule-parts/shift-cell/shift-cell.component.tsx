@@ -5,20 +5,19 @@ import classNames from "classnames/bind";
 import * as _ from "lodash";
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import mergeRefs from "react-merge-refs";
-// import { usePopper } from "react-popper";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
-import { ShiftCode, SHIFTS } from "../../../../../../common-models/shift-info.model";
-// import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
-// import { ScheduleMode } from "../../schedule-state.model";
+import {
+  ShiftCode,
+  ShiftsTypesDict as ShiftTypesDict,
+} from "../../../../../../common-models/shift-info.model";
+import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 import {
   baseCellDataCy,
   BaseCellOptions,
   hasNextShiftClassName,
   keepOnShiftClassName,
 } from "../base-cell/base-cell.models";
-// import { CellDetails } from "../base-cell/cell-details-content.component";
-// import { Popper } from "../base-cell/popper";
 import useComponentVisible from "../base-cell/use-component-visible";
 import useTimeout from "../base-cell/use-timeout";
 import { CellInput } from "../cell-blockable-input.component";
@@ -28,6 +27,7 @@ import { useCellSelection } from "../hooks/use-cell-selection";
 import { ShiftAutocompleteComponent } from "./shift-autocomplete.component";
 
 const MODAL_CLOSE_MS = 444;
+
 function getShiftCode(value: string | number): ShiftCode {
   return typeof value === "number" ? value.toString() : ShiftCode[value] || ShiftCode.W;
 }
@@ -38,8 +38,8 @@ interface ShiftCellOptions extends BaseCellOptions {
   workerName?: string;
 }
 
-export function getColor(value: string): string {
-  return Object.values(SHIFTS).filter((s) => s.code === value)[0].color ?? "FFD100";
+export function getColor(value: string, shifts: ShiftTypesDict): string {
+  return Object.values(shifts).filter((s) => s.code === value)[0]?.color ?? "FFD100";
 }
 /**
  * @description Function component that creates cell containing Details or Autocomplete when in edit mode
@@ -63,12 +63,13 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     keepOn,
     hasNext,
   } = options;
+  // TODO revert cell details
   // const { year } = useSelector(
   //   (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   // );
-  const cellRef = useRef<HTMLDivElement>(null);
-
   // const cellDetailsPopperRef = useRef<HTMLDivElement>(null);
+
+  const cellRef = useRef<HTMLDivElement>(null);
 
   const { componentContainer, isComponentVisible, setIsComponentVisible } = useComponentVisible(
     false
@@ -77,7 +78,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   function toggleComponentVisibility(): void {
     setIsComponentVisible(!isComponentVisible);
   }
-
+  // TODO revert cell details
   // const isEditMode = useSelector(
   //   (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
   // );
@@ -115,6 +116,9 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
       </div>
     ),
     [isBlocked, onClick]
+  );
+  const { shift_types: shiftTypes } = useSelector(
+    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
   );
 
   const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
@@ -179,7 +183,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
               <p
                 data-cy={baseCellDataCy(cellIndex, "cell")}
                 className={"relative "}
-                style={{ color: `#${getColor(shiftCode)}` }}
+                style={{ color: `#${getColor(shiftCode, shiftTypes)}` }}
               >
                 {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
               </p>

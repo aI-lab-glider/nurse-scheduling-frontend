@@ -14,7 +14,7 @@ import {
   ParseErrorCode,
   ScheduleError,
 } from "../common-models/schedule-error.model";
-import { SHIFTS as shifts } from "../common-models/shift-info.model";
+import { ShiftsTypesDict } from "../common-models/shift-info.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Color, Colors } from "./colors/color.model";
 import { ShiftHelper } from "./shifts.helper";
@@ -23,18 +23,24 @@ import { TranslationHelper } from "./translations.helper";
 type Error = ScheduleErrorLevel;
 
 export class ErrorMessageHelper {
-  public static mapScheduleErrors(errors: GroupedScheduleErrors): ScheduleErrorMessageModel[] {
+  public static mapScheduleErrors(
+    errors: GroupedScheduleErrors,
+    shiftTypes: ShiftsTypesDict
+  ): ScheduleErrorMessageModel[] {
     const mappedErrors = Object.values(errors).reduce(
       (previous, current) => [
         ...previous,
-        ...(current ?? []).map(ErrorMessageHelper.getErrorMessage),
+        ...(current ?? []).map((error) => ErrorMessageHelper.getErrorMessage(error, shiftTypes)),
       ],
       [] as ScheduleErrorMessageModel[]
     );
     return mappedErrors;
   }
 
-  public static getErrorMessage(error: ScheduleError): ScheduleErrorMessageModel {
+  public static getErrorMessage(
+    error: ScheduleError,
+    shiftsTypes: ShiftsTypesDict
+  ): ScheduleErrorMessageModel {
     const kind = error.kind;
     let message: string;
     let title = "Nie rozpoznano błędu";
@@ -101,23 +107,23 @@ export class ErrorMessageHelper {
         }
         break;
       case AlgorithmErrorCode.DissalowedShiftSequence:
-        const timeNeeded = ShiftHelper.requiredFreeTimeAfterShift(shifts[error.preceding]);
+        const timeNeeded = ShiftHelper.requiredFreeTimeAfterShift(shiftsTypes[error.preceding]);
         const [earliestPossible, nextDay] = ShiftHelper.nextLegalShiftStart(
-          shifts[error.preceding]
+          shiftsTypes[error.preceding]
         );
-        let tooEarly = earliestPossible - shifts[error.succeeding].from;
+        let tooEarly = earliestPossible - shiftsTypes[error.succeeding].from;
         if (tooEarly < 1) tooEarly += 24;
         message = `Pracownik <strong>${
           error.worker
         }</strong> potrzebuje ${timeNeeded} godzin przerwy po zmianie <strong>${
           error.preceding
         }</strong>
-          (${shifts[error.preceding].from}-${shifts[error.preceding].to}).
+          (${shiftsTypes[error.preceding].from}-${shiftsTypes[error.preceding].to}).
           Nie może mieć zmiany wcześniej niż o ${earliestPossible}`;
         if (nextDay) message += ` następnego dnia`;
         message += `. Przypisana zmiana <strong>${error.succeeding}</strong> (${
-          shifts[error.succeeding].from
-        }-${shifts[error.succeeding].to}) zaczyna się
+          shiftsTypes[error.succeeding].from
+        }-${shiftsTypes[error.succeeding].to}) zaczyna się
         o ${tooEarly} ${TranslationHelper.hourAccusativus(tooEarly)} za wcześnie.`;
         type = ScheduleErrorType.DSS;
         title = "date";
@@ -135,13 +141,6 @@ export class ErrorMessageHelper {
           error.hours
         )}.`;
         type = ScheduleErrorType.WUH;
-        title = `${error.worker}`;
-        break;
-      case AlgorithmErrorCode.WorkerOvertime:
-        message = `Pracownik ma <b>${error.hours}</b> nad${TranslationHelper.hourAccusativus(
-          error.hours
-        )}.`;
-        type = ScheduleErrorType.WOH;
         title = `${error.worker}`;
         break;
       case ParseErrorCode.UNKNOWN_VALUE:

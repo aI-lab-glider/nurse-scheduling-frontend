@@ -29,19 +29,19 @@ export function ScheduleComponent(): JSX.Element {
   }
 
   return (
-    <div style={{ margin: 20 }}>
+    <div style={{ margin: "20 0" }}>
       <div>
-        <div className="sectionContainer">
+        <div className="sectionContainer timeHeader">
           <div className="timeTableContainer">
             <TimeTableComponent />
           </div>
           <div className="summaryContainer">
-            <OvertimeHeaderComponent data={["norma", "aktualne", "różnica"]} />
+            <OvertimeHeaderComponent data={["norma", "aktualne", "różnica", "nadgodziny"]} />
           </div>
         </div>
 
         {Object.entries(workerGroups).map(([groupName, workers], index) => (
-          <ScheduleFoldingSection name={groupName} key={groupName + index}>
+          <ScheduleFoldingSection name={groupName} key={groupName}>
             <WorkerInfoSection sectionIndex={index} data={workers} sectionName={groupName} />
           </ScheduleFoldingSection>
         ))}
