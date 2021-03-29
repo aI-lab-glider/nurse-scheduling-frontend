@@ -11,22 +11,29 @@ const testedCell = {
   desiredShiftCode: ShiftCode.W,
 };
 
-context("Schedule modes spec", () => {
+describe("Schedule modes spec", () => {
   beforeEach(() => {
     cy.loadScheduleToMonth();
   });
 
-  it("Should not be able to change shift in readonly mode", () => {
-    cy.getWorkerShift(testedCell);
-    cy.get(`[data-cy=autocomplete-${testedCell.initialShiftCode}]`, { timeout: 100000 }).should(
-      "not.exist"
-    );
+  context("when in readonly mode", () => {
+    it("is not able to change shift", () => {
+      cy.getWorkerShift(testedCell);
+      cy.get(`[data-cy=autocomplete-${testedCell.initialShiftCode}]`, { timeout: 100000 }).should(
+        "not.exist"
+      );
+    });
   });
 
-  // it("Should be able to change shift in edit mode", () => {
-  //   cy.enterEditMode();
-  //   cy.checkWorkerShift({ ...testedCell, desiredShiftCode: testedCell.initialShiftCode });
-  //   cy.changeWorkerShift({ ...testedCell, newShiftCode: testedCell.desiredShiftCode });
-  //   cy.checkWorkerShift({ ...testedCell });
-  // });
+  context("when in readonly mode", () => {
+    beforeEach(() => {
+      cy.enterEditMode();
+    });
+
+    it("Should be able to change shift in edit mode", () => {
+      cy.checkWorkerShift({ ...testedCell, desiredShiftCode: testedCell.initialShiftCode });
+      cy.changeWorkerShift({ ...testedCell, newShiftCode: testedCell.desiredShiftCode });
+      cy.checkWorkerShift({ ...testedCell });
+    });
+  });
 });

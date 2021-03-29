@@ -10,6 +10,7 @@ export interface BaseCellInputOptions {
   onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
+// eslint-disable @typescript-eslint/explicit-function-return-type
 export function BaseCellInputComponent({
   className,
   onValueChange,

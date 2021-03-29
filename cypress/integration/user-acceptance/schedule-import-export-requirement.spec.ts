@@ -4,7 +4,7 @@
 describe("schedule import and export requirement", () => {
   it("shows how to import schedule", () => {
     cy.loadScheduleToMonth();
-    cy.visit(Cypress.env("baseUrl")).screenshotSync();
+    cy.visit("/").screenshotSync();
     cy.get("[data-cy=file-dropdown]").click().screenshotSync();
     cy.get('[data-cy="file-input"]').attachFile("example.xlsx");
   });
