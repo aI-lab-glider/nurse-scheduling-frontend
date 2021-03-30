@@ -172,7 +172,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
             alignContent: "center",
             justifyItems: "center",
             alignItems: "center",
-            width: 39 * 34 + `px`,
+            width: "1350px",
             height: 40 * howManyRows + `px`,
             top: cellRef.current?.getBoundingClientRect().top! - 40 * (rowIndex + 1) - 7 + `px`,
             alignSelf: "center",
