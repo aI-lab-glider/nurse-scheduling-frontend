@@ -39,7 +39,7 @@ export class FileHelper {
     }
     const zipFile = await zip.generateAsync({ type: "blob" });
     const timestamp = new Date().toLocaleDateString("pl").replaceAll(".", "_");
-    this.saveFileAs(zipFile, `historia_${timestamp}`);
+    this.saveFileAs(zipFile, `historia_${timestamp}.zip`);
   }
 
   private static splitWorkbooksInDirs(workbooks): FilenamesToDirnameDict {
