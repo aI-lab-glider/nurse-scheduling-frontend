@@ -36,6 +36,7 @@ export interface BaseCellOptions
   extends UseCellSelectionOptions,
     UseCellBackgroundHighlightOptions,
     Omit<CellInputOptions, "input" | "isVisible"> {
+  howManyRows: number;
   rowIndex: number;
   value: string;
   isBlocked: boolean;

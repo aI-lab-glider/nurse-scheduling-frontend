@@ -46,6 +46,7 @@ interface ShiftCellOptions extends BaseCellOptions {
   keepOn?: boolean;
   hasNext?: boolean;
   workerName?: string;
+  howManyRows: number;
 }
 
 export function getColor(value: string, shifts: ShiftTypesDict): string {
@@ -59,7 +60,9 @@ export function getColor(value: string, shifts: ShiftTypesDict): string {
  */
 export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   const {
+    rowIndex,
     cellIndex,
+    howManyRows,
     value,
     isBlocked,
     isSelected,
@@ -79,7 +82,6 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   //   (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   // );
   // const cellDetailsPopperRef = useRef<HTMLDivElement>(null);
-
   const cellRef = useRef<HTMLDivElement>(null);
 
   const { componentContainer, isComponentVisible, setIsComponentVisible } = useComponentVisible(
@@ -94,15 +96,12 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   // const isEditMode = useSelector(
   //   (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
   // );
-
   const shiftCode = getShiftCode(value);
   const keepOnClass = keepOnShiftClassName(keepOn) + shiftCode;
   const hasNextClass = hasNextShiftClassName(hasNext);
-
   function _onValueChange(inputValue: string): void {
     onValueChange?.(getShiftCode(inputValue));
   }
-
   const selectableItemRef = useCellSelection(options);
   const id = useCellBackgroundHighlight(options);
 
@@ -135,6 +134,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   const theColor = ColorHelper.hexToRgb(getColor(shiftCode, SHIFTS));
   const color = `rgba(${theColor?.r},${theColor?.g},${theColor?.b},0.3)`;
   const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
+  const mainRef = mergeRefs([selectableItemRef, componentContainer]);
 
   const cellStyle: CSSProperties = useMemo(() => {
     return !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W"
@@ -146,7 +146,6 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
         }
       : {};
   }, [shiftCode, keepOn, color]);
-
   return (
     <>
       {showInput && (
@@ -165,12 +164,54 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
           }}
         />
       )}
+      {showInput && (
+        <div
+          style={{
+            position: "absolute",
+            display: "flex",
+            alignContent: "center",
+            justifyItems: "center",
+            alignItems: "center",
+            width: 39 * 34 + `px`,
+            height: 40 * howManyRows + `px`,
+            top: cellRef.current?.getBoundingClientRect().top! - 40 * (rowIndex + 1) - 7 + `px`,
+            alignSelf: "center",
+            zIndex: 2,
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              width: "1350px",
+              height: "40px",
+              top: 40 * rowIndex + `px`,
+              alignSelf: "center",
+              backgroundColor: "#303F9F",
+              opacity: 0.15,
+            }}
+          />
+          {/* <div
+            style={{
+              position: "absolute",
+              width: "39px",
+              left: 38.6 * cellIndex + `px`,
+              // top: "-2px",
+              height: 40 * howManyRows + 0 + `px`,
+              alignSelf: "center",
+              backgroundColor: "black",
+              opacity: 0.15,
+            }}
+          /> */}
+        </div>
+      )}
       <div
-        ref={mergeRefs([selectableItemRef, componentContainer])}
-        className={classNames("mainCell", {
-          selection: isSelected || (isComponentVisible && isBlocked),
-          blocked: isBlocked,
-        })}
+        ref={mainRef}
+        className={
+          classNames("mainCell", {
+            selection: isSelected || (isComponentVisible && isBlocked),
+            blocked: isBlocked,
+          }) + ` X${rowIndex} ${cellIndex}`
+        }
         onClick={(): void => {
           toggleComponentVisibility();
         }}
@@ -203,9 +244,10 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
           <WrapContentDiv>
             <div
               ref={cellRef}
-              className={`content ${hasNextClass} ${
-                keepOn ? "keepOnTrue" : "keepOnFalse"
-              } ${keepOnClass}`}
+              className={
+                `content ${hasNextClass} ${keepOn ? "keepOnTrue" : "keepOnFalse"} ${keepOnClass}` +
+                ` X${rowIndex} ${cellIndex}`
+              }
               style={cellStyle}
               data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
             >

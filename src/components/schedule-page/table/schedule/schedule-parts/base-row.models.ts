@@ -11,6 +11,7 @@ import { BaseCellOptions, PivotCell } from "./base-cell/base-cell.models";
 export const baseRowDataCy = (index: number): string => `${index}Row`;
 
 export interface BaseRowOptions {
+  howManyRows: number;
   rowIndex: number;
   dataRow: DataRow;
   cellComponent?: React.FC<BaseCellOptions>;

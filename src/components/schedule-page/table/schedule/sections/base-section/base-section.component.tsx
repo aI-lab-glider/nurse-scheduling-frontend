@@ -116,6 +116,7 @@ function BaseSectionComponentF({
       {areDimesionsEqual(selectionMatrix, dataArray) &&
         data.map((dataRow, rowInd) => (
           <RowComponent
+            howManyRows={data.length}
             selection={[...selectionMatrix[rowInd]]}
             key={`${dataRow.rowKey}_${rowInd}`}
             rowIndex={rowInd}

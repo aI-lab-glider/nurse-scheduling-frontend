@@ -52,6 +52,7 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
             ...options,
             ...dataItem,
           }}
+          rowIndex={rowIndex}
           sectionKey={sectionKey}
           cellIndex={cellIndex}
           key={`${dataItem.value}_${cellIndex}`}
