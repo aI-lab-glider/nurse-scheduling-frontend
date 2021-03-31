@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../../button-component/button.component";
 import DefaultModal from "../modal.component";
 import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
@@ -23,9 +23,13 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
     setOpen(false);
   };
 
+  useEffect(() => {
+    setIsOpenExtension(false);
+  }, [open]);
+
   const closeAndSaveDB = async (): Promise<void> => {
-    await new LocalStorageProvider().reloadDb();
     await FileHelper.handleDbDump();
+    await new LocalStorageProvider().reloadDb();
   };
 
   const title = "Wystąpił błąd";
@@ -58,9 +62,9 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
       <br />
       <br />
       <div className={"app-error-button error-modal-text"}>
-        <a href={"#"} onClick={(): void => setIsOpenExtension(!openExtension)}>
+        <p onClick={(): void => setIsOpenExtension(!openExtension)}>
           Dalej nie działa? Zobacz co możesz zrobić.
-        </a>
+        </p>
       </div>
       {openExtension && (
         <>
