@@ -15,7 +15,7 @@ const monthWorkerData = {
     "Pracownik 6": 184,
     "Pracownik 7": 138,
     "Pracownik 8": 184,
-    "Pracownik 9": 120,
+    "Pracownik 9": 112,
     "Pracownik 10": 184,
     "Pracownik 11": 184,
     "Pracownik 12": 184,
