@@ -64,19 +64,19 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
               <b>ZMIANY</b>
             </div>
           </div>
-          <div
-            id={calendarExport}
-            style={{
-              height: "500px",
-            }}
-          >
-            <WorkersCalendar shiftsArr={info.shifts!} />
-          </div>
         </div>
-        <Button variant={"primary"} onClick={handleExport}>
-          Pobierz
-        </Button>
+        <div
+          id={calendarExport}
+          style={{
+            height: "500px",
+          }}
+        >
+          <WorkersCalendar shiftsArr={info.shifts!} />
+        </div>
       </div>
+      <Button variant={"primary"} onClick={handleExport} className="drawer-bottom-button">
+        Pobierz
+      </Button>
     </>
   );
 }
