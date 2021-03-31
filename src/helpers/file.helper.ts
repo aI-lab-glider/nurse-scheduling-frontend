@@ -14,6 +14,7 @@ import {
 import { MonthDataModel } from "../common-models/schedule-data.model";
 import { LocalStorageProvider } from "../api/local-storage-provider.model";
 import { ScheduleExportLogic } from "../logic/schedule-exporter/schedule-export.logic";
+import { PrimaryMonthRevisionDataModel } from "../state/models/application-state.model";
 
 type FilenamesToDirnameDict = { [dirName: string]: string[] };
 export type WorkbookToFilename = { [name: string]: xlsx.Workbook };
