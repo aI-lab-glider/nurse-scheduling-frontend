@@ -25,12 +25,12 @@ describe("Schedule modes spec", () => {
     });
   });
 
-  context("when in readonly mode", () => {
+  context("when in edit mode", () => {
     beforeEach(() => {
       cy.enterEditMode();
     });
 
-    it("Should be able to change shift in edit mode", () => {
+    it("Should be able to change shift", () => {
       cy.checkWorkerShift({ ...testedCell, desiredShiftCode: testedCell.initialShiftCode });
       cy.changeWorkerShift({ ...testedCell, newShiftCode: testedCell.desiredShiftCode });
       cy.checkWorkerShift({ ...testedCell });

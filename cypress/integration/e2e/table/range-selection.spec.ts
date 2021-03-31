@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
 import { ShiftCode } from "../../../../src/common-models/shift-info.model";
+import { shiftSectionDataCy } from "../../../../src/components/schedule-page/table/schedule/sections/worker-info-section/worker-info-section.models";
 import { GetWorkerShiftOptions } from "../../../support/commands";
 
 const prevMonthDays = 6;
@@ -19,12 +20,12 @@ const workerTestCases: WorkerTestCase[] = [
     title: "Should be able to edit multiple days of single nurse (drag left to right)",
     startShiftCell: {
       workerGroupIdx: 0,
-      workerIdx: 3,
+      workerIdx: 0,
       shiftIdx: 3,
     },
     endShiftCell: {
       workerGroupIdx: 0,
-      workerIdx: 3,
+      workerIdx: 0,
       shiftIdx: 7,
     },
     desiredShiftCode: ShiftCode.L4,
@@ -33,12 +34,12 @@ const workerTestCases: WorkerTestCase[] = [
     title: "Should be able to edit multiple days of single nurse (drag right to left)",
     startShiftCell: {
       workerGroupIdx: 0,
-      workerIdx: 3,
+      workerIdx: 0,
       shiftIdx: prevMonthDays + 3,
     },
     endShiftCell: {
       workerGroupIdx: 0,
-      workerIdx: 3,
+      workerIdx: 0,
       shiftIdx: prevMonthDays,
     },
     desiredShiftCode: ShiftCode.U,
@@ -52,7 +53,7 @@ const workerTestCases: WorkerTestCase[] = [
     },
     endShiftCell: {
       workerGroupIdx: 0,
-      workerIdx: 2,
+      workerIdx: 1,
       shiftIdx: prevMonthDays + 5,
     },
     desiredShiftCode: ShiftCode.L4,
@@ -75,12 +76,12 @@ const workerTestCases: WorkerTestCase[] = [
     title: "Should be able to edit multiple single day of multiple babysitters",
     startShiftCell: {
       workerGroupIdx: 1,
-      workerIdx: 3,
+      workerIdx: 0,
       shiftIdx: prevMonthDays + 3,
     },
     endShiftCell: {
       workerGroupIdx: 1,
-      workerIdx: 3,
+      workerIdx: 1,
       shiftIdx: prevMonthDays + 6,
     },
     desiredShiftCode: ShiftCode.L4,
@@ -119,7 +120,7 @@ const foundationTestCases: FoundationTestCase[] = [
 
 context("Shift range selection", () => {
   beforeEach(() => {
-    cy.loadScheduleToMonth();
+    cy.loadScheduleToMonth("small_test_schedule.xlsx");
     cy.enterEditMode();
   });
 
@@ -128,7 +129,8 @@ context("Shift range selection", () => {
       cy.getWorkerShift(test.startShiftCell).trigger("dragstart");
       cy.getWorkerShift(test.endShiftCell).trigger("drop");
       cy.useAutocomplete(test.desiredShiftCode);
-      cy.get('p[data-cy*="cell"]')
+      const groupIndx = shiftSectionDataCy(test.startShiftCell.workerGroupIdx);
+      cy.get(`[data-cy=${groupIndx}] p[data-cy*="cell"]`)
         .then(($cell) => {
           return $cell
             .map((i, el) => {

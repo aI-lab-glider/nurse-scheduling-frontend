@@ -50,7 +50,8 @@ export type ScheduleName =
   | "example.xlsx"
   | "example_2.xlsx"
   | "childrens_extraworkers.xlsx"
-  | "extraworkers_childrens.xlsx";
+  | "extraworkers_childrens.xlsx"
+  | "small_test_schedule.xlsx";
 const TEST_SCHEDULE_MONTH = 10;
 const TEST_SCHEDULE_YEAR = 2020;
 
@@ -127,7 +128,8 @@ Cypress.Commands.add("enterEditMode", () => {
 
 Cypress.Commands.add("leaveEditMode", () => {
   cy.get("[data-cy=leave-edit-mode]").click();
-  cy.get(`[data-cy=workerGroup0ShiftsTable]`);
+  const dataCy = shiftSectionDataCy(0);
+  cy.get(`[data-cy=${dataCy}]`);
 });
 
 Cypress.Commands.add(
@@ -156,9 +158,11 @@ export interface GetFoundationInfoCellOptions {
 Cypress.Commands.add(
   "getFoundationInfoCell",
   ({ cellIdx, rowType, actualValue }: GetFoundationInfoCellOptions) => {
-    cy.get(
-      `[data-cy=foundationInfoSection] [data-cy=${rowType}Row] [data-cy=${cellIdx}-cell]`
-    ).contains(actualValue);
+    const row = baseRowDataCy(rowType);
+    const cell = baseCellDataCy(cellIdx, "cell");
+    cy.get(`[data-cy=foundationInfoSection] [data-cy=${row}] [data-cy=${cell}]`).contains(
+      actualValue
+    );
   }
 );
 

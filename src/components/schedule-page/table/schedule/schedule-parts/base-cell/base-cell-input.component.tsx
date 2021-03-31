@@ -10,7 +10,6 @@ export interface BaseCellInputOptions {
   onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-// eslint-disable @typescript-eslint/explicit-function-return-type
 export function BaseCellInputComponent({
   className,
   onValueChange,
@@ -29,7 +28,9 @@ export function BaseCellInputComponent({
       autoFocus={true}
       className={className}
       onKeyDown={handleKeyDown}
-      onBlur={(e) => !!e.currentTarget.value && onValueChange(e.currentTarget.value)}
+      onBlur={(e): void | boolean =>
+        !!e.currentTarget.value && onValueChange(e.currentTarget.value)
+      }
     />
   );
 }
