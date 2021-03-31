@@ -86,15 +86,6 @@ export function HeaderComponent(): JSX.Element {
         >
           Wróć do teraz
         </Button>
-        <Button
-          variant={"secondary"}
-          onClick={(): boolean => {
-            setIsAppErrorOpen(true);
-            return isOpenAppError;
-          }}
-        >
-          Error
-        </Button>
         <div className={"filler"} />
         <MonthSwitchComponent isInViewMode={isInViewMode} />
         <div className={"filler"} />
