@@ -13,7 +13,7 @@ import { shiftSectionDataCy } from "../../src/components/schedule-page/table/sch
 import { summaryCellDataCy } from "../../src/components/summarytable/summarytable-cell.models";
 import { summaryRowDataCy } from "../../src/components/summarytable/summarytable-row.models";
 import { summaryTableSectionDataCy } from "../../src/components/summarytable/summarytable-section.models";
-import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../../src/helpers/month.helper";
+require("@cypress/snapshot").register();
 
 export type CypressScreenshotOptions = Partial<
   Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions
@@ -50,29 +50,20 @@ export type ScheduleName =
   | "example.xlsx"
   | "example_2.xlsx"
   | "childrens_extraworkers.xlsx"
-  | "extraworkers_childrens.xlsx";
+  | "extraworkers_childrens.xlsx"
+  | "small_test_schedule.xlsx";
 const TEST_SCHEDULE_MONTH = 10;
 const TEST_SCHEDULE_YEAR = 2020;
 
 Cypress.Commands.add(
   "loadScheduleToMonth",
   (scheduleName: ScheduleName = "example.xlsx", month: number, year: number) => {
-    new LocalStorageProvider().reloadDb();
-    const shiftSection = shiftSectionDataCy(0);
-    cy.clock(Date.UTC(year ?? TEST_SCHEDULE_YEAR, month ?? TEST_SCHEDULE_MONTH, 15), ["Date"]);
-    cy.visit(Cypress.env("baseUrl"));
-    cy.get("[data-cy=file-input]").should("exist");
-    cy.get("[data-cy=file-input]").attachFile(scheduleName);
-    cy.get(`[data-cy=${shiftSection}]`, { timeout: 5000 }).should("exist");
-    cy.window()
-      .its("store")
-      .invoke("getState")
-      .its("actualState.temporarySchedule.present.month_info.children_number")
-      .should(
-        "have.length",
-        MonthHelper.numberOfWeeksInMonth(month ?? TEST_SCHEDULE_MONTH, year ?? TEST_SCHEDULE_YEAR) *
-          NUMBER_OF_DAYS_IN_WEEK
-      );
+    cy.wrap(new LocalStorageProvider().reloadDb()).then(() => {
+      cy.clock(Date.UTC(year ?? TEST_SCHEDULE_YEAR, month ?? TEST_SCHEDULE_MONTH, 15), ["Date"]);
+      cy.visit("/");
+      cy.get("[data-cy=file-input]").attachFile(scheduleName);
+      cy.get(`[data-cy=workerGroup0ShiftsTable]`, { timeout: 10000 });
+    });
   }
 );
 
@@ -98,14 +89,14 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("useAutocomplete", (newShiftCode: ShiftCode) => {
-  return cy.get(`[data-cy=autocomplete-${newShiftCode}]`).should("exist").click({ force: true });
+  return cy.get(`[data-cy=autocomplete-${newShiftCode}]`).click({ force: true });
 });
 
 Cypress.Commands.add(
   "changeWorkerShift",
   ({ newShiftCode, ...getWorkerShiftOptions }: ChangeWorkerShiftOptions) => {
     cy.getWorkerShift(getWorkerShiftOptions).click();
-    return cy.useAutocomplete(newShiftCode);
+    cy.useAutocomplete(newShiftCode);
   }
 );
 
@@ -131,21 +122,14 @@ Cypress.Commands.add("saveToDatabase", () => {
 });
 
 Cypress.Commands.add("enterEditMode", () => {
-  // TODO: uncomment and test on refactoring
-  const actualRevisionValue = "actual";
-  cy.get("[data-cy=revision-select]")
-    //   .select(RevisionTypeLabels[actualRevisionValue])
-    .should("have.value", actualRevisionValue);
-  // cy.get("[data-cy=revision-select]").blur();
   cy.get("[data-cy=edit-mode-button]").click();
-  const dataCy = shiftSectionDataCy(0);
-  return cy.get(`[data-cy=${dataCy}]`).should("exist");
+  cy.get("[data-cy=edit-mode-text]");
 });
 
 Cypress.Commands.add("leaveEditMode", () => {
   cy.get("[data-cy=leave-edit-mode]").click();
   const dataCy = shiftSectionDataCy(0);
-  return cy.get(`[data-cy=${dataCy}]`).should("exist");
+  cy.get(`[data-cy=${dataCy}]`);
 });
 
 Cypress.Commands.add(

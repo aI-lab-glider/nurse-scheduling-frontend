@@ -129,7 +129,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
           />
         </Button>
 
-        <div id="edit-panel-text-container">
+        <div id="edit-panel-text-container" data-cy="edit-mode-text">
           <p>Tryb edycji aktywny</p>
         </div>
 
