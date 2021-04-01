@@ -71,7 +71,7 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
           <div className={"span-primary error-modal-text"}>
             Aplikacja prawdopodbnie zawiera błędne dane.
             <br />
-            Pobierz ostatni grafiki i wyczyść dane aplikacji.
+            Pobierz wszystkie grafiki i wyczyść dane aplikacji.
           </div>
 
           <Button
