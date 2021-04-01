@@ -36,7 +36,7 @@ import { useCellBackgroundHighlight } from "../hooks/use-cell-highlight";
 import { useCellSelection } from "../hooks/use-cell-selection";
 import { ShiftAutocompleteComponent } from "./shift-autocomplete.component";
 
-const MODAL_CLOSE_MS = 444;
+const MODAL_CLOSE_MS = 4444;
 
 function getShiftCode(value: string | number): ShiftCode {
   return typeof value === "number" ? value.toString() : ShiftCode[value] || ShiftCode.W;
