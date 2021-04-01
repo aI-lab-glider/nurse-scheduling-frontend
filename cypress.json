@@ -7,5 +7,6 @@
   "viewportHeight": 1080,
   "projectId": "p2u9dy",
   "trashAssetsBeforeRuns": true,
-  "retries": 1
+  "retries": 1,
+  "baseUrl": "http://localhost:3000"
 }
