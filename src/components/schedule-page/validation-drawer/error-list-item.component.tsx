@@ -2,14 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
+import { useDispatch } from "react-redux";
 import { VerboseDate } from "../../../common-models/month-info.model";
 import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
 import { TranslationHelper } from "../../../helpers/translations.helper";
+import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { Button } from "../../common-components";
 import { useMonthInfo } from "./use-verbose-dates";
 
 interface Options {
   error: ScheduleErrorMessageModel;
+  index: number;
   interactable?: boolean;
   className?: string;
   showTitle?: boolean;
@@ -29,6 +32,7 @@ function prepareMonthName(index: number, day: number, month: number): string {
 export default function ErrorListItem({
   error,
   interactable = false,
+  index,
   className = "",
   showTitle = true,
 }: Options): JSX.Element {
@@ -38,11 +42,15 @@ export default function ErrorListItem({
   if (typeof error.day === "undefined" || typeof mappedDays === "undefined") {
     throw Error(`Error undefined or mappedDays undefined`);
   }
-
+  error.index = index;
   const errorDayIndex = error.day;
   const errorDay = mappedDays[errorDayIndex];
   const monthName = prepareMonthName(errorDayIndex, errorDay, monthNumber);
+  const dispatch = useDispatch();
 
+  const handleShow = (e): void => {
+    dispatch(ScheduleDataActionCreator.showError(e));
+  };
   return (
     <div className={`error-list-item ${className}`}>
       <div className="red-rectangle" />
@@ -57,11 +65,12 @@ export default function ErrorListItem({
       {interactable && (
         <div className="error-btn">
           <Button
-            disabled
-            className="disabled-submit-button"
+            // disabled
+            className="submit-button"
             variant="primary"
             id="error-buttons"
             style={{ width: "90px", height: "26px" }}
+            onClick={(): void => handleShow(error)}
           >
             Pokaż
           </Button>

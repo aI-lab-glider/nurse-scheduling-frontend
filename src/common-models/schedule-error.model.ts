@@ -29,6 +29,8 @@ export enum NetworkErrorCode {
 
 interface UnknownValueError {
   kind: ParseErrorCode.UNKNOWN_VALUE;
+  isVisible?: boolean;
+
   actual: string;
   day?: number;
   worker?: string;
@@ -36,11 +38,15 @@ interface UnknownValueError {
 
 interface InputFileError {
   kind: InputFileErrorCode;
+  isVisible?: boolean;
+
   message?: string;
   filename?: string;
 }
 
 export interface NetworkError {
+  isVisible?: boolean;
+
   kind: NetworkErrorCode;
 }
 
@@ -50,6 +56,7 @@ export type DayTime = "MORNING" | "AFTERNOON" | "NIGHT";
 
 export interface AlwaysAtLeastOneNurse {
   kind: AlgorithmErrorCode.AlwaysAtLeastOneNurse;
+  isVisible?: boolean;
   day: number;
   day_time: number;
   segments: [[number, number]];
@@ -57,6 +64,8 @@ export interface AlwaysAtLeastOneNurse {
 
 export interface WorkerNumberDuringDay {
   kind: AlgorithmErrorCode.WorkerNumberDuringDay;
+  isVisible?: boolean;
+
   day: number;
   required: number;
   actual: number;
@@ -64,6 +73,8 @@ export interface WorkerNumberDuringDay {
 }
 export interface WorkerNumberDuringNight {
   kind: AlgorithmErrorCode.WorkerNumberDuringNight;
+  isVisible?: boolean;
+
   day: number;
   required: number;
   actual: number;
@@ -71,6 +82,8 @@ export interface WorkerNumberDuringNight {
 }
 export interface DissalowedShiftSequence {
   kind: AlgorithmErrorCode.DissalowedShiftSequence;
+  isVisible?: boolean;
+
   day: number;
   worker: string;
   preceding: ShiftCode;
@@ -78,16 +91,22 @@ export interface DissalowedShiftSequence {
 }
 export interface LackingLongBreak {
   kind: AlgorithmErrorCode.LackingLongBreak;
+  isVisible?: boolean;
+
   week: number;
   worker: string;
 }
 export interface WorkerUnderTime {
   kind: AlgorithmErrorCode.WorkerUnderTime;
+  isVisible?: boolean;
+
   hours: number;
   worker: string;
 }
 export interface WorkerOvertime {
   kind: AlgorithmErrorCode.WorkerOvertime;
+  isVisible?: boolean;
+
   hours: number;
   worker: string;
 }
