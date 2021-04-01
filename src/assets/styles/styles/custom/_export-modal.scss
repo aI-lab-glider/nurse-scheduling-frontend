@@ -10,17 +10,17 @@
   line-height: $modal-title-line-height;
 }
 
-.app-error-button > p {
+.app-error-button > .not-clicked {
   color: $brand-info !important;
   text-decoration: underline;
 }
 
-.app-error-button > p:visited {
-  color: $dark-gray;
+.app-error-button > .clicked {
+  color: $dark-gray !important;
   text-decoration: underline;
 }
 
-.app-error-button > p:hover {
+.app-error-button > .not-clicked:hover {
   color: $brand-primary !important;
   text-decoration: underline;
   cursor: pointer;

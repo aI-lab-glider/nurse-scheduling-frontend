@@ -62,7 +62,10 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
       <br />
       <br />
       <div className={"app-error-button error-modal-text"}>
-        <p onClick={(): void => setIsOpenExtension(!openExtension)}>
+        <p
+          className={openExtension ? "clicked" : "not-clicked"}
+          onClick={(): void => setIsOpenExtension(true)}
+        >
           Dalej nie działa? Zobacz co możesz zrobić.
         </p>
       </div>
