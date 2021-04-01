@@ -178,7 +178,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
   },
   OP: {
     code: ShiftCode.OP,
-    name: "urlop okolicznościowy 12h",
+    name: "urlop opiekuńczy",
     from: 0,
     to: 24,
     color: "C3A000",
