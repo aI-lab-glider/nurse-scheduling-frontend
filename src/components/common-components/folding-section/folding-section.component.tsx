@@ -18,7 +18,7 @@ interface FoldingSectionOptions {
 export function FoldingSection({ name, children }: FoldingSectionOptions): JSX.Element {
   const [opened, setOpened] = useState(false);
   return (
-    <div className="foldingSection">
+    <div className="foldingSection" data-cy="folding-section">
       <div className="header">
         <div
           onClick={(): void => setOpened((prev) => !prev)}
