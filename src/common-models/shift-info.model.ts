@@ -34,10 +34,9 @@ export enum ShiftCode {
   L4 = "L4",
   K = "K",
   NZ = "NZ",
-  OK8 = "OK8",
-  OK12 = "OK12",
-  OP8 = "OP8",
-  OP12 = "OP12",
+  IZ = "IZ",
+  OK = "OK",
+  OP = "OP",
   P2 = "P2",
 }
 
@@ -159,25 +158,17 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
     color: "000000",
     isWorkingShift: false,
   },
-  OP8: {
-    code: ShiftCode.OP8,
-    name: "urlop opiekuńczy 8",
-    from: 0,
-    to: 24,
-    color: "641EAA",
-    isWorkingShift: false,
-  },
-  OP12: {
-    code: ShiftCode.OP12,
-    name: "urlop opiekuńczy 12",
+  IZ: {
+    code: ShiftCode.IZ,
+    name: "izolacja",
     from: 0,
     to: 24,
     color: "fc03e7",
     isWorkingShift: false,
   },
 
-  OK8: {
-    code: ShiftCode.OK8,
+  OK: {
+    code: ShiftCode.OK,
     name: "urlop okolicznościowy 8h",
     from: 0,
     to: 24,
@@ -185,9 +176,9 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
     isWorkingShift: false,
     normSubtraction: 8,
   },
-  OK12: {
-    code: ShiftCode.OK12,
-    name: "urlop okolicznościowy 12h",
+  OP: {
+    code: ShiftCode.OP,
+    name: "urlop opiekuńczy",
     from: 0,
     to: 24,
     color: "C3A000",
