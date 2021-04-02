@@ -53,20 +53,9 @@ export function ErrorTooltipProvider({
   const [isToolTipOpen, setToolTipOpen] = useState(false);
   let isOpen = isToolTipOpen;
   const ea = errors.filter((error) => error.isVisible);
-  if (ea.length !== 0) {
-    let flag = true;
-    ea.forEach((e) => {
-      if (e["className"] === "middle" || e["classname"] === "left") {
-        flag = false;
-      }
-      if (e["className"] === "right") {
-        isOpen = true;
-      }
-    });
-    if (flag) {
-      isOpen = true;
-    }
-  }
+  if (ea.length !== 0)
+    isOpen = !ea.some((e) => e["className"] === "middle" || e["className"] === "left");
+
   const { styles, attributes } = usePopper(
     container.current,
     isOpen && errors.length !== 0 ? tooltipRef.current : null,
