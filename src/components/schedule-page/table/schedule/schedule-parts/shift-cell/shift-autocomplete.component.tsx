@@ -12,7 +12,7 @@ import { ApplicationStateModel } from "../../../../../../state/models/applicatio
 import { BaseCellInputOptions } from "../base-cell/base-cell-input.component";
 import useTimeout from "../base-cell/use-timeout";
 
-const MODAL_CLOSE_MS = 444;
+const MODAL_CLOSE_MS = 4444;
 interface ShiftCodeSelectItem {
   name: string;
   symbol: string;
