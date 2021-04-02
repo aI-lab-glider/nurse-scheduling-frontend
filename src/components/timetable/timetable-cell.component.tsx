@@ -48,9 +48,9 @@ function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.
         ...(scheduleErrors[AlgorithmErrorCode.WorkerNumberDuringNight] ?? []),
         ...(scheduleErrors[AlgorithmErrorCode.AlwaysAtLeastOneNurse] ?? []),
       ];
-      return matchingErrorTypes.filter((error) => error.day + 1 === value.date);
+      return matchingErrorTypes.filter((error) => error.day === index);
     },
-    [value.date]
+    [index]
   );
 
   return (
