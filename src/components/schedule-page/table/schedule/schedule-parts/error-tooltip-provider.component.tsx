@@ -54,7 +54,8 @@ export function ErrorTooltipProvider({
   let isOpen = isToolTipOpen;
   const ea = errors.filter((error) => error.isVisible);
   if (ea.length !== 0)
-    isOpen = !ea.some((e) => e["className"] === "middle" || e["className"] === "left");
+    isOpen =
+      ea.some((e) => e["className"] === "right") || ea.every((e) => e["className"] === undefined);
 
   const { styles, attributes } = usePopper(
     container.current,
