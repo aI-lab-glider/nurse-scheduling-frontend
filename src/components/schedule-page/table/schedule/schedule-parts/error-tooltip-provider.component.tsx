@@ -69,11 +69,6 @@ export function ErrorTooltipProvider({
     setToolTipOpen(true);
   }
 
-  const scrollToRef = (): void => tooltipRef?.current?.scrollIntoView({ behavior: "auto" });
-  if (errors.filter((error) => error.isVisible).length !== 0) {
-    scrollToRef();
-  }
-
   function hideErrorTooltip(ignoreFixed = false): void {
     if (ea.length !== 0) handleShow();
     if (!isFixed || (ignoreFixed && isFixed)) {
