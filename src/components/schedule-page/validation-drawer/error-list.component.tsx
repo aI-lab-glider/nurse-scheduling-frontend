@@ -80,7 +80,12 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
       <FoldingSection name={`${errorData.errorDescription} (${errorData.errors.length})`}>
         {errorData.errors.sort(compareErrors).map(
           (error, index): JSX.Element => (
-            <ErrorListItem key={`${error.kind ? error.kind : "0"}_${index}`} error={error} />
+            <ErrorListItem
+              key={`${error.kind ? error.kind : "0"}_${index}`}
+              error={error}
+              index={index}
+              interactable={true}
+            />
           )
         )}
       </FoldingSection>
