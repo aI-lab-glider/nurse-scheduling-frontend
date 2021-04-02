@@ -52,10 +52,11 @@ export function ErrorTooltipProvider({
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [isToolTipOpen, setToolTipOpen] = useState(false);
   let isOpen = isToolTipOpen;
-  const ea = errors.filter((error) => error.isVisible);
-  if (ea.length !== 0)
+  const manuallySelectedErrors = errors.filter((error) => error.isVisible);
+  if (manuallySelectedErrors.length !== 0)
     isOpen =
-      ea.some((e) => e["className"] === "right") || ea.every((e) => e["className"] === undefined);
+      manuallySelectedErrors.some((e) => e["className"] === "right") ||
+      manuallySelectedErrors.every((e) => e["className"] === undefined);
 
   const { styles, attributes } = usePopper(
     container.current,
@@ -71,7 +72,7 @@ export function ErrorTooltipProvider({
   }
 
   function hideErrorTooltip(ignoreFixed = false): void {
-    if (ea.length !== 0) handleShow();
+    if (manuallySelectedErrors.length !== 0) handleShow();
     if (!isFixed || (ignoreFixed && isFixed)) {
       setToolTipOpen(false);
       setIsFixed(false);

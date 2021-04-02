@@ -171,14 +171,15 @@ export class ScheduleDataActionCreator {
       dispatch(action);
     };
   }
-  static showError(error: ScheduleErrorMessageModel | undefined): (dispatch) => Promise<void> {
-    return async (dispatch): Promise<void> => {
-      const action = {
-        type: ScheduleActionType.SHOW_ERROR,
-        payload: error,
-      };
-      dispatch(action);
+  static hideErrors(): ActionModel<unknown> {
+    return this.showError(undefined);
+  }
+  static showError(error: ScheduleErrorMessageModel | undefined): ActionModel<unknown> {
+    const action = {
+      type: ScheduleActionType.SHOW_ERROR,
+      payload: error,
     };
+    return action;
   }
   static cleanErrors(): ActionModel<unknown> {
     const action = {

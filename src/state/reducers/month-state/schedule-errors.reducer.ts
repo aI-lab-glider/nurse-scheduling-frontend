@@ -22,7 +22,7 @@ export function scheduleErrorsReducer(
       const errors = _.groupBy(response, (item) => item.kind);
       return errors;
     case ScheduleActionType.SHOW_ERROR:
-      let s = { ...state };
+      let s = _.cloneDeep(state);
       s = _.forEach(s, (v) => {
         return _.forEach(v, (e) => {
           if (e.isVisible) {

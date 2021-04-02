@@ -48,7 +48,7 @@ export default function ErrorListItem({
   const monthName = prepareMonthName(errorDayIndex, errorDay, monthNumber);
   const dispatch = useDispatch();
 
-  const handleShow = (e): void => {
+  const handleShow = (e: ScheduleErrorMessageModel): void => {
     dispatch(ScheduleDataActionCreator.showError(e));
   };
   return (
@@ -65,7 +65,6 @@ export default function ErrorListItem({
       {interactable && (
         <div className="error-btn">
           <Button
-            // disabled
             className="submit-button"
             variant="primary"
             id="error-buttons"
