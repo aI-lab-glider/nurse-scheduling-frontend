@@ -40,7 +40,7 @@ export function ErrorTooltipProvider({
   const dispatch = useDispatch();
 
   const handleShow = (): void => {
-    dispatch(ScheduleDataActionCreator.showError(undefined));
+    dispatch(ScheduleDataActionCreator.hideErrors());
   };
   let triangleStyle = "single";
   errors.forEach((element) => {
