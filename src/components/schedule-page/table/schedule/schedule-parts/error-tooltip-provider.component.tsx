@@ -78,14 +78,6 @@ export function ErrorTooltipProvider({
       setIsFixed(false);
     }
   }
-  function handleTriangleClick(event: React.MouseEvent<HTMLHRElement, MouseEvent>): void {
-    event.stopPropagation();
-    if (!isFixed) {
-      setIsFixed(true);
-    } else {
-      hideErrorTooltip(true);
-    }
-  }
   const { shift_types: shiftTypes } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
   );
@@ -101,7 +93,6 @@ export function ErrorTooltipProvider({
           zIndex: 1000,
         }}
         onMouseLeave={(): void => hideErrorTooltip(false)}
-        onClick={handleTriangleClick}
       >
         {errors.map((error, index) => (
           <ErrorListItem
@@ -126,38 +117,27 @@ export function ErrorTooltipProvider({
         onMouseLeave={(): void => hideErrorTooltip(false)}
       >
         {errors.length !== 0 && triangleStyle === "single" && (
-          <span
-            ref={errorTriangle}
-            className={classNames("error-triangle", tooltipClassname)}
-            onClick={handleTriangleClick}
-          />
+          <span ref={errorTriangle} className={classNames("error-triangle", tooltipClassname)} />
         )}
         {errors.length !== 0 && triangleStyle === "right" && (
           <div>
             <span
               ref={errorTriangle}
               className={classNames("error-triangle bottom", tooltipClassname)}
-              onClick={handleTriangleClick}
             />
             <span
               ref={errorTriangle}
               className={classNames("error-triangle line", tooltipClassname)}
-              onClick={handleTriangleClick}
             />
           </div>
         )}
         {errors.length > 1 && (
-          <span
-            ref={errorTriangle}
-            className={classNames("error-triangle", tooltipClassname)}
-            onClick={handleTriangleClick}
-          />
+          <span ref={errorTriangle} className={classNames("error-triangle", tooltipClassname)} />
         )}
         {errors.length !== 0 && triangleStyle === "middle" && (
           <span
             ref={errorTriangle}
             className={classNames("error-triangle line", tooltipClassname)}
-            onClick={handleTriangleClick}
           />
         )}
         {errors.length !== 0 && triangleStyle === "left" && (
@@ -165,12 +145,10 @@ export function ErrorTooltipProvider({
             <span
               ref={errorTriangle}
               className={classNames("error-triangle bottom-mirrored", tooltipClassname)}
-              onClick={handleTriangleClick}
             />
             <span
               ref={errorTriangle}
               className={classNames("error-triangle line", tooltipClassname)}
-              onClick={handleTriangleClick}
             />
           </div>
         )}
