@@ -195,36 +195,38 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
             />
           </WrapContentDiv>
         )}
-        <ErrorTooltipProvider
-          className="wrapContent"
-          errorSelector={errorSelector}
-          showTooltip={!showInput}
-        >
-          <WrapContentDiv>
-            <div
-              ref={cellRef}
-              className={`content ${hasNextClass} ${
-                keepOn ? "keepOnTrue" : "keepOnFalse"
-              } ${keepOnClass}`}
-              style={cellStyle}
-              data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
-            >
-              {!keepOn && !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W" && (
-                <div
-                  style={{ backgroundColor: `#${getColor(shiftCode, shiftTypes)}` }}
-                  className={"leftBorder"}
-                />
-              )}
-              <p
-                data-cy={baseCellDataCy(cellIndex, "cell")}
-                className={"relative "}
-                style={{ color: `#${getColor(shiftCode, shiftTypes)}` }}
+        {!showInput && (
+          <ErrorTooltipProvider
+            className="wrapContent"
+            errorSelector={errorSelector}
+            showTooltip={!showInput}
+          >
+            <WrapContentDiv>
+              <div
+                ref={cellRef}
+                className={`content ${hasNextClass} ${
+                  keepOn ? "keepOnTrue" : "keepOnFalse"
+                } ${keepOnClass}`}
+                style={cellStyle}
+                data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
               >
-                {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
-              </p>
-            </div>
-          </WrapContentDiv>
-        </ErrorTooltipProvider>
+                {!keepOn && !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W" && (
+                  <div
+                    style={{ backgroundColor: `#${getColor(shiftCode, shiftTypes)}` }}
+                    className={"leftBorder"}
+                  />
+                )}
+                <p
+                  data-cy={baseCellDataCy(cellIndex, "cell")}
+                  className={"relative "}
+                  style={{ color: `#${getColor(shiftCode, shiftTypes)}` }}
+                >
+                  {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
+                </p>
+              </div>
+            </WrapContentDiv>
+          </ErrorTooltipProvider>
+        )}
         {/* TODO revert cell details
         {!isEditMode && (
           <Popper
