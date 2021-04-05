@@ -4,7 +4,7 @@
 
 import React, { useRef } from "react";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ButtonData, DropdownButtons } from "../dropdown-buttons/dropdown-buttons.component";
 import ExportModal from "../../modals/export-modal/export.modal.component";
 import { useImportModal } from "./import-modal-context";

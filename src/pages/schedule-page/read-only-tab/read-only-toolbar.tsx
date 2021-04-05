@@ -6,9 +6,9 @@ import { ImportButtonsComponent } from "../../../components/buttons/import-butto
 import { useHistory } from "react-router-dom";
 import { Button } from "../../../components/common-components";
 import { useDispatch, useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { RevisionReducerActionCreator } from "../../../state/schedule-state/schedule-condition/revision-info.reducer";
-import { isRevisionType, RevisionTypeLabels } from "../../../api/persistance-store.model";
+import { ApplicationStateModel } from "../../../state/application-state.model";
+import { RevisionReducerActionCreator } from "../../../state/schedule-data/schedule-condition/revision-info.reducer";
+import { isRevisionType, RevisionTypeLabels } from "../../../data-access/persistance-store.model";
 import classNames from "classnames/bind";
 import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
 

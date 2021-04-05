@@ -7,8 +7,8 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { ScheduleDataActionCreator } from "../../../state/schedule-state/schedule-data.action-creator";
+import { ApplicationStateModel } from "../../../state/application-state.model";
+import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
 import { Button } from "../../buttons/button-component/button.component";
 import DefaultModal from "../modal.component";
 

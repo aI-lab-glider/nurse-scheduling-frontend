@@ -1,16 +1,16 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { VerboseDate } from "../state/models/common-models/month-info.model";
+import { VerboseDate } from "../state/schedule-data/foundation-info/foundation-info.model";
+import { WorkerShiftsModel } from "../state/schedule-data/workers-shifts/worker-shifts.model";
 import {
   Shift,
   FREE_SHIFTS,
   ShiftCode,
-  ShiftInfoModel,
   ShiftsTypesDict,
-} from "../state/models/common-models/shift-info.model";
-import { Opaque } from "../state/models/common-models/type-utils";
-import { WorkerType } from "../state/models/common-models/worker-info.model";
+} from "../state/schedule-data/shifts-types/shift-types.model";
+import { Opaque } from "../utils/type-utils";
+import { WorkerType } from "../state/schedule-data/worker-info/worker-info.model";
 import { ArrayHelper } from "./array.helper";
 import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
@@ -24,7 +24,7 @@ export type WorkHourInfoArray = Opaque<"WorkHourInfoArray", [number, number, num
 
 export class ShiftHelper {
   public static getWorkersCount(
-    shifts: ShiftInfoModel,
+    shifts: WorkerShiftsModel,
     shiftTypes: ShiftsTypesDict
   ): Array<number> {
     const shiftsArray = Object.values(shifts);
@@ -74,10 +74,10 @@ export class ShiftHelper {
   }
 
   public static groupShiftsByWorkerType(
-    shifts: ShiftInfoModel = {},
+    shifts: WorkerShiftsModel = {},
     workerTypes: { [workerName: string]: WorkerType } = {}
-  ): { [key: string]: ShiftInfoModel } {
-    const grouped = ArrayHelper.arrayToObject<WorkerType, ShiftInfoModel>(
+  ): { [key: string]: WorkerShiftsModel } {
+    const grouped = ArrayHelper.arrayToObject<WorkerType, WorkerShiftsModel>(
       Object.values(WorkerType),
       (wt) => wt
     );

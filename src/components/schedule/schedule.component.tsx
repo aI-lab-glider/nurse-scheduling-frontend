@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../state/application-state.model";
 import { OvertimeHeaderComponent } from "./schedule-header/overtime-header-table/overtime-header.component";
 import { TimeTableComponent } from "./schedule-header/timetable/timetable.component";
 import { ScheduleFoldingSection } from "./schedule-folding-section.component";

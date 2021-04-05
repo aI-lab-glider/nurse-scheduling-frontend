@@ -8,7 +8,7 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import { usePersistentDrawer } from "./persistent-drawer-context";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleMode } from "../../schedule/schedule-state.model";
 
 export interface StyleProps {

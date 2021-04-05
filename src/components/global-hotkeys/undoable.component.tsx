@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import {
   UndoableConfig,
   UndoActionCreator,
-} from "../../state/schedule-state/undoable.action-creator";
+} from "../../state/schedule-data/undoable.action-creator";
 
 interface UndoableHotkeysOptions {
   config: UndoableConfig<unknown>;

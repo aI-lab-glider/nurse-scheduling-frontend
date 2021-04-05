@@ -10,8 +10,8 @@ import { useSelector } from "react-redux";
 import {
   ShiftCode,
   ShiftsTypesDict,
-} from "../../../../state/models/common-models/shift-info.model";
-import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+} from "../../../../state/schedule-data/shifts-types/shift-types.model";
+import { ApplicationStateModel } from "../../../../state/application-state.model";
 import { BaseCellInputOptions } from "../../base/base-cell/base-cell-input.component";
 import useTimeout from "../../../../hooks/use-timeout";
 

@@ -6,14 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import backend from "../../../api/backend";
 import ok from "../../../assets/images/ok.svg";
 import warning from "../../../assets/images/warning.svg";
-import { ScheduleErrorMessageModel } from "../../../state/models/common-models/schedule-error-message.model";
+import { ScheduleErrorMessageModel } from "../../../state/schedule-data/schedule-errors/schedule-error-message.model";
 import {
   NetworkErrorCode,
   ScheduleError,
-} from "../../../state/models/common-models/schedule-error.model";
-import { ActionModel } from "../../../state/models/action.model";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { ScheduleErrorActionType } from "../../../state/schedule-state/schedule-errors/schedule-errors.reducer";
+} from "../../../state/schedule-data/schedule-errors/schedule-error.model";
+import { ActionModel } from "../../../utils/action.model";
+import { ApplicationStateModel } from "../../../state/application-state.model";
+import { ScheduleErrorActionType } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 import { Button } from "../../common-components";
 import ErrorList from "../../error-list/error-list.component";
 import { SpanErrors } from "../../error-list/span-errors.component";

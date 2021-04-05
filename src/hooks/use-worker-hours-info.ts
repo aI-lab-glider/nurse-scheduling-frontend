@@ -3,13 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { ShiftCode } from "../state/models/common-models/shift-info.model";
-import { isAllValuesDefined } from "../state/models/common-models/type-utils";
+import { ShiftCode } from "../state/schedule-data/shifts-types/shift-types.model";
+import { isAllValuesDefined } from "../utils/type-utils";
 import { MonthDataArray } from "../helpers/shifts.helper";
 import { WorkerHourInfo, WorkerHourInfoSummary } from "../helpers/worker-hours-info.model";
-import { ApplicationStateModel, ScheduleStateModel } from "../state/models/application-state.model";
+import { ApplicationStateModel, ScheduleStateModel } from "../state/application-state.model";
 import { ScheduleMode } from "../components/schedule/schedule-state.model";
-import { ContractType } from "../state/models/common-models/worker-info.model";
+import { ContractType } from "../state/schedule-data/worker-info/worker-info.model";
 
 export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
   const isEditMode = useSelector(

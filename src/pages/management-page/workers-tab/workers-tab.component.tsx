@@ -13,15 +13,15 @@ import { useSelector } from "react-redux";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import {
   ContractType,
-  ContractTypeHelper,
   WorkerInfoModel,
   WorkerType,
-  WorkerTypeHelper,
-} from "../../../state/models/common-models/worker-info.model";
+} from "../../../state/schedule-data/worker-info/worker-info.model";
+import { ContractTypeHelper } from "../../../helpers/contract-type.helper";
+import { WorkerTypeHelper } from "../../../helpers/worker-type.helper";
 import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
 import { WorkerHourInfo } from "../../../helpers/worker-hours-info.model";
 import { StringHelper } from "../../../helpers/string.helper";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../../state/application-state.model";
 import { Button } from "../../../components/common-components";
 import DeleteWorkerModalComponent from "../../../components/modals/delete-worker-modal/delete-worker.modal.component";
 import { WorkingTimeHelper } from "../../../helpers/working-time.helper";

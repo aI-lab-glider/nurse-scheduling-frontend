@@ -4,9 +4,9 @@
 
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { VerboseDate } from "../state/models/common-models/month-info.model";
+import { VerboseDate } from "../state/schedule-data/foundation-info/foundation-info.model";
 import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
-import { ApplicationStateModel } from "../state/models/application-state.model";
+import { ApplicationStateModel } from "../state/application-state.model";
 
 interface UseMonthInfoReturn {
   verboseDates: VerboseDate[];

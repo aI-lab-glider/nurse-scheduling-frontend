@@ -4,11 +4,9 @@
 import { Divider } from "@material-ui/core";
 import classNames from "classnames/bind";
 import React from "react";
-import {
-  ContractTypeHelper,
-  WorkerInfoModel,
-  WorkerTypeHelper,
-} from "../../../../state/models/common-models/worker-info.model";
+import { WorkerInfoModel } from "../../../../state/schedule-data/worker-info/worker-info.model";
+import { ContractTypeHelper } from "../../../../helpers/contract-type.helper";
+import { WorkerTypeHelper } from "../../../../helpers/worker-type.helper";
 import { StringHelper } from "../../../../helpers/string.helper";
 import { useWorkerHoursInfo } from "../../../../hooks/use-worker-hours-info";
 import WorkersCalendar from "../../../workers-calendar/workers-calendar.component";

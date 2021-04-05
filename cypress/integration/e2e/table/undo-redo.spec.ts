@@ -4,7 +4,7 @@
 /// <reference path="../../../support/index.d.ts" />
 
 import { GetWorkerShiftOptions } from "../../../support/commands";
-import { ShiftCode } from "../../../../src/state/models/common-models/shift-info.model";
+import { ShiftCode } from "../../../../src/utils/shift-info.model";
 
 interface TestCase {
   testedShiftCell: GetWorkerShiftOptions;

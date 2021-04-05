@@ -9,7 +9,7 @@ import { Button } from "../../../components/common-components";
 import { ShiftDrawerMode } from "../../../components/shifts-drawer/shift-drawer.component";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
-import { Shift } from "../../../state/models/common-models/shift-info.model";
+import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
 
 const useStyles = makeStyles(() =>
   createStyles({

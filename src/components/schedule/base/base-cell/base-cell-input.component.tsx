@@ -28,7 +28,9 @@ export function BaseCellInputComponent({
       autoFocus={true}
       className={className}
       onKeyDown={handleKeyDown}
-      onBlur={(e) => !!e.currentTarget.value && onValueChange(e.currentTarget.value)}
+      onBlur={(e): void => {
+        !!e.currentTarget.value && onValueChange(e.currentTarget.value);
+      }}
     />
   );
 }

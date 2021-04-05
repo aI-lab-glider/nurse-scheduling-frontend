@@ -4,12 +4,12 @@
 import { makeStyles } from "@material-ui/core";
 import {
   ContractType,
-  ContractTypeHelper,
   WorkerGroup,
   WorkerInfoModel,
   WorkerType,
-  WorkerTypeHelper,
-} from "../../../../state/models/common-models/worker-info.model";
+} from "../../../../state/schedule-data/worker-info/worker-info.model";
+import { ContractTypeHelper } from "../../../../helpers/contract-type.helper";
+import { WorkerTypeHelper } from "../../../../helpers/worker-type.helper";
 import { StringHelper } from "../../../../helpers/string.helper";
 import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
 

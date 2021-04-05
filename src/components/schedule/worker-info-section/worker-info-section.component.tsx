@@ -4,7 +4,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { DataRow } from "../../../logic/schedule-logic/data-row";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../../state/application-state.model";
 import { NameTableSectionOptions } from "./name-table/nametable-section.component";
 import { NameTableComponent } from "./name-table/nametable.component";
 import { WorkerInfo } from "../../../hooks/use-worker-info";

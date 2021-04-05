@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useSelector } from "react-redux";
 import { StringHelper } from "../helpers/string.helper";
-import { ApplicationStateModel } from "../state/models/application-state.model";
+import { ApplicationStateModel } from "../state/application-state.model";
 import { TranslationHelper } from "../helpers/translations.helper";
 import { useEffect, useState } from "react";
 

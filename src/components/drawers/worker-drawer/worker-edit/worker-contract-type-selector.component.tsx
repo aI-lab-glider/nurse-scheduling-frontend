@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid, Typography } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
-import { ContractType } from "../../../../state/models/common-models/worker-info.model";
+import { ContractType } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import {
   ButtonData,
   DropdownButtons,

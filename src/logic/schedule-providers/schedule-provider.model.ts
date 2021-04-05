@@ -2,9 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
-import { ScheduleDataModel } from "../../state/models/common-models/schedule-data.model";
-import { SHIFTS } from "../../state/models/common-models/shift-info.model";
-import { WorkerType } from "../../state/models/common-models/worker-info.model";
+import { ScheduleDataModel } from "../../state/schedule-data/schedule-data.model";
+import { SHIFTS } from "../../state/schedule-data/shifts-types/shift-types.model";
+import { WorkerType } from "../../state/schedule-data/worker-info/worker-info.model";
 import { FoundationInfoProvider } from "./foundation-info-provider.model";
 import { MetadataProvider } from "./metadata-provider.model";
 import { ShiftsProvider } from "./shifts-provider.model";

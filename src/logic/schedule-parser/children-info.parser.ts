@@ -5,7 +5,7 @@ import { ChildrenInfoProvider } from "../schedule-providers/children-info-provid
 import {
   InputFileErrorCode,
   ScheduleError,
-} from "../../state/models/common-models/schedule-error.model";
+} from "../../state/schedule-data/schedule-errors/schedule-error.model";
 import { MetaDataParser } from "./metadata.parser";
 
 export const DEFAULT_CHILDREN_NUMBER = 20;

@@ -4,15 +4,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 /// <reference types="cypress" />
 import { ScheduleParser } from "../../../../../src/logic/schedule-parser/schedule.parser";
-// import { ScheduleDataModel } from "../../../../../src/common-models/schedule-data.model";
-import {
-  ShiftCode,
-  ShiftInfoModel,
-} from "../../../../../src/state/models/common-models/shift-info.model";
-import {
-  WorkersInfoModel,
-  WorkerType,
-} from "../../../../../src/state/models/common-models/worker-info.model";
+// import { ScheduleDataModel } from "../../../../../src/schedule-data.model";
+import { ShiftCode, ShiftInfoModel } from "../../../../../src/utils/shift-info.model";
+import { WorkersInfoModel, WorkerType } from "../../../../../src/utils/worker-info.model";
 
 function fillWorkerInfo(
   shifts: ShiftInfoModel,

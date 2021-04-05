@@ -10,8 +10,8 @@ import {
   ContractType,
   WorkerGroup,
   WorkerType,
-} from "../../../../state/models/common-models/worker-info.model";
-import { WorkerActionCreator } from "../../../../state/schedule-state/worker-info/worker.action-creator";
+} from "../../../../state/schedule-data/worker-info/worker-info.model";
+import { WorkerActionCreator } from "../../../../state/schedule-data/worker-info/worker.action-creator";
 import { Button } from "../../../common-components";
 import { useWorkerInfo, WorkerInfo } from "../../../../hooks/use-worker-info";
 import { CombinedWorkNormSelector } from "./combined-worknorm-selector.component";

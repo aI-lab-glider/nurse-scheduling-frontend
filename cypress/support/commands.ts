@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import "cypress-file-upload";
-import { LocalStorageProvider } from "../../src/api/local-storage-provider.model";
-import { ShiftCode } from "../../src/state/models/common-models/shift-info.model";
+import { LocalStorageProvider } from "../../src/data-access/local-storage-provider.model";
+import { ShiftCode } from "../../src/utils/shift-info.model";
 import {
   baseCellDataCy,
   CellType,

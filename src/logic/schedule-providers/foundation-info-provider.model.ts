@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
-import { ScheduleError } from "../../state/models/common-models/schedule-error.model";
+import { ScheduleError } from "../../state/schedule-data/schedule-errors/schedule-error.model";
 import { ChildrenInfoProvider } from "./children-info-provider.model";
 import { ExtraWorkersInfoProvider } from "./extra-workers-info-provider.model";
 import { Sections } from "./schedule-provider.model";

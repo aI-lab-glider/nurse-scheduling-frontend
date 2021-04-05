@@ -4,7 +4,7 @@
 import { Grid, Input, Typography } from "@material-ui/core";
 import * as _ from "lodash";
 import React, { useState } from "react";
-import { TimeDrawerType } from "../../../../state/models/common-models/worker-info.model";
+import { TimeDrawerType } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import {
   ButtonData,
   DropdownButtons,

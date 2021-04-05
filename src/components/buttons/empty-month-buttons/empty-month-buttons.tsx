@@ -4,12 +4,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TranslationHelper } from "../../../helpers/translations.helper";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../../state/application-state.model";
 import { Button } from "../../common-components";
-import { ScheduleKey } from "../../../api/persistance-store.model";
-import { MonthSwitchActionCreator } from "../../../state/schedule-state/month-switch.action-creator";
-import { LocalStorageProvider } from "../../../api/local-storage-provider.model";
-import { MonthDataModel } from "../../../state/models/common-models/schedule-data.model";
+import { ScheduleKey } from "../../../data-access/persistance-store.model";
+import { MonthSwitchActionCreator } from "../../../state/schedule-data/month-switch.action-creator";
+import { LocalStorageProvider } from "../../../data-access/local-storage-provider.model";
+import { MonthDataModel } from "../../../state/schedule-data/schedule-data.model";
 import { MonthHelper } from "../../../helpers/month.helper";
 import { useImportModal } from "../import-buttons/import-modal-context";
 

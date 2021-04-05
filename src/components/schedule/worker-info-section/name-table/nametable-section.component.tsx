@@ -4,16 +4,16 @@
 import classNames from "classnames/bind";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { VerboseDate } from "../../../../state/models/common-models/month-info.model";
-import { ScheduleError } from "../../../../state/models/common-models/schedule-error.model";
-import { ShiftCode } from "../../../../state/models/common-models/shift-info.model";
+import { VerboseDate } from "../../../../state/schedule-data/foundation-info/foundation-info.model";
+import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
+import { ShiftCode } from "../../../../state/schedule-data/shifts-types/shift-types.model";
 import {
   WorkerInfoModel,
   WorkerType,
-} from "../../../../state/models/common-models/worker-info.model";
+} from "../../../../state/schedule-data/worker-info/worker-info.model";
 import { ArrayHelper } from "../../../../helpers/array.helper";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
-import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../../../state/application-state.model";
 import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
 import { BaseSectionOptions } from "../../base/base-section/base-section.component";
 import { useMonthInfo } from "../../../../hooks/use-month-info";

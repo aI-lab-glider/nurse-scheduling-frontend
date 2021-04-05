@@ -3,8 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import React from "react";
-import { VerboseDate } from "../../../state/models/common-models/month-info.model";
-import { ScheduleErrorMessageModel } from "../../../state/models/common-models/schedule-error-message.model";
+import { VerboseDate } from "../../../state/schedule-data/foundation-info/foundation-info.model";
+import { ScheduleErrorMessageModel } from "../../../state/schedule-data/schedule-errors/schedule-error-message.model";
 import { TranslationHelper } from "../../../helpers/translations.helper";
 import { useMonthInfo } from "../../../hooks/use-month-info";
 

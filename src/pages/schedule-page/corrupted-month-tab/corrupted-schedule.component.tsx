@@ -5,11 +5,11 @@ import React, { useCallback } from "react";
 import { EmptyMonthButtons } from "../../../components/buttons/empty-month-buttons/empty-month-buttons";
 import sadEmoji from "../../../assets/images/sadEmoji.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { UndoActionCreator } from "../../../state/schedule-state/undoable.action-creator";
-import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-state/schedule.actions";
+import { ApplicationStateModel } from "../../../state/application-state.model";
+import { UndoActionCreator } from "../../../state/schedule-data/undoable.action-creator";
+import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-data/schedule.actions";
 import { Button } from "../../../components/common-components";
-import { ScheduleDataModel } from "../../../state/models/common-models/schedule-data.model";
+import { ScheduleDataModel } from "../../../state/schedule-data/schedule-data.model";
 
 const MINIMUM_UNDO_COUNT_TO_REVERT_NORMAL_SCHEDULE = 2; // schedule which caused corruption and the same schedule with isCorrupted=true
 const MSG_UNABLE_TO_LOAD_SCHEDULE = "Nie można wyświetlić zapisanego grafiku";

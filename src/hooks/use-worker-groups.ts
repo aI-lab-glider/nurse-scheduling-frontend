@@ -4,18 +4,18 @@
 
 import _ from "lodash";
 import { useSelector } from "react-redux";
-import { ShiftInfoModel } from "../state/models/common-models/shift-info.model";
-import { WorkersInfoModel } from "../state/models/common-models/worker-info.model";
-import { ApplicationStateModel, ScheduleStateModel } from "../state/models/application-state.model";
+import { WorkerShiftsModel } from "../state/schedule-data/workers-shifts/worker-shifts.model";
+import { WorkersInfoModel } from "../state/schedule-data/worker-info/worker-info.model";
+import { ApplicationStateModel, ScheduleStateModel } from "../state/application-state.model";
 import { WorkerInfo } from "./use-worker-info";
 import { ScheduleMode } from "../components/schedule/schedule-state.model";
-import { ScheduleDataModel } from "../state/models/common-models/schedule-data.model";
+import { ScheduleDataModel } from "../state/schedule-data/schedule-data.model";
 
 export type GroupedWorkers = Map<string, WorkerInfo[]>;
 
 const aggregateWorkerInfo = (
   workerName: string,
-  workerShifts: ShiftInfoModel,
+  workerShifts: WorkerShiftsModel,
   workerInfo: WorkersInfoModel
 ): WorkerInfo =>
   new WorkerInfo(

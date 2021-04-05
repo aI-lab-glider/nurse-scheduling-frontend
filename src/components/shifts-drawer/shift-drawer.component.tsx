@@ -4,7 +4,7 @@
 import React from "react";
 import Drawer, { DrawerOptions } from "../drawers/drawer/drawer.component";
 import ShiftEditDrawer from "./shift-edit-drawer.component";
-import { Shift } from "../../state/models/common-models/shift-info.model";
+import { Shift } from "../../state/schedule-data/shifts-types/shift-types.model";
 
 export enum ShiftDrawerMode {
   EDIT,

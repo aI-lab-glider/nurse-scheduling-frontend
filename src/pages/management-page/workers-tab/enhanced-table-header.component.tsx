@@ -11,7 +11,7 @@ import { createStyles, makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import classNames from "classnames/bind";
 import { Order } from "../../../helpers/comparator.helper";
-import { WorkerInfoModel } from "../../../state/models/common-models/worker-info.model";
+import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { WorkerDrawerMode } from "../../../components/drawers/worker-drawer/worker-drawer.component";
 
 const useStyles = makeStyles(() =>

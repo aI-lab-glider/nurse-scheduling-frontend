@@ -2,12 +2,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback } from "react";
-import { VerboseDate, WeekDay } from "../../../../state/models/common-models/month-info.model";
+import {
+  VerboseDate,
+  WeekDay,
+} from "../../../../state/schedule-data/foundation-info/foundation-info.model";
 import {
   AlgorithmErrorCode,
   GroupedScheduleErrors,
   ScheduleError,
-} from "../../../../state/models/common-models/schedule-error.model";
+} from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { TranslationHelper } from "../../../../helpers/translations.helper";
 import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
 

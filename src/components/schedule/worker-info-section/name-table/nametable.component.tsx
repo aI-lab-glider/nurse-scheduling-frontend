@@ -6,7 +6,7 @@ import {
   AlgorithmErrorCode,
   GroupedScheduleErrors,
   ScheduleError,
-} from "../../../../state/models/common-models/schedule-error.model";
+} from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { BaseSectionOptions } from "../../base/base-section/base-section.component";
 import { NameTableSection } from "./nametable-section.component";
 

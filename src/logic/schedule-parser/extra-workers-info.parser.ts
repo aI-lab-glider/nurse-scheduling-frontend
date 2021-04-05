@@ -4,7 +4,7 @@
 import {
   InputFileErrorCode,
   ScheduleError,
-} from "../../state/models/common-models/schedule-error.model";
+} from "../../state/schedule-data/schedule-errors/schedule-error.model";
 import { MetaDataParser } from "./metadata.parser";
 import { ExtraWorkersInfoProvider } from "../schedule-providers/extra-workers-info-provider.model";
 

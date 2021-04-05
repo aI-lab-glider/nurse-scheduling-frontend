@@ -5,7 +5,7 @@ import React, { useCallback, useState } from "react";
 import {
   GroupedScheduleErrors,
   ScheduleError,
-} from "../../../../state/models/common-models/schedule-error.model";
+} from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { DataRowHelper } from "../../../../helpers/data-row.helper";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { BaseCellComponent } from "../base-cell/base-cell.component";

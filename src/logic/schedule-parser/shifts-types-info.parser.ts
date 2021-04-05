@@ -4,8 +4,8 @@
 import {
   InputFileErrorCode,
   ScheduleError,
-} from "../../state/models/common-models/schedule-error.model";
-import { Shift, SHIFTS } from "../../state/models/common-models/shift-info.model";
+} from "../../state/schedule-data/schedule-errors/schedule-error.model";
+import { Shift, SHIFTS } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
 import { ParserHelper } from "../../helpers/parser.helper";
 

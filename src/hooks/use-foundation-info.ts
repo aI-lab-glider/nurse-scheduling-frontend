@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { useSelector } from "react-redux";
-import { ApplicationStateModel, ScheduleStateModel } from "../state/models/application-state.model";
+import { ApplicationStateModel, ScheduleStateModel } from "../state/application-state.model";
 import { ScheduleMode } from "../components/schedule/schedule-state.model";
 
 export function useFoundationInfo(): {

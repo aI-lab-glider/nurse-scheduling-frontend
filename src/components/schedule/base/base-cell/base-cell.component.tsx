@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import classNames from "classnames/bind";
 import React from "react";
-import { ScheduleError } from "../../../../state/models/common-models/schedule-error.model";
+import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { CellInput } from "./cell-blockable-input.component";
 import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
 import { useCellBackgroundHighlight } from "../../hooks/use-cell-highlight";

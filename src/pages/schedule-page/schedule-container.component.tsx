@@ -4,10 +4,7 @@
 import * as _ from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
-import {
-  ApplicationStateModel,
-  ScheduleStateModel,
-} from "../../state/models/application-state.model";
+import { ApplicationStateModel, ScheduleStateModel } from "../../state/application-state.model";
 import { NewScheduleComponent } from "./new-month-tab/new-schedule.component";
 import { ScheduleComponent } from "../../components/schedule/schedule.component";
 import { ScheduleMode } from "../../components/schedule/schedule-state.model";

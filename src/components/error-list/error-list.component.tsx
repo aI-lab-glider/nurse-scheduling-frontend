@@ -5,7 +5,7 @@ import React from "react";
 import {
   ScheduleErrorMessageModel,
   ScheduleErrorType,
-} from "../../state/models/common-models/schedule-error-message.model";
+} from "../../state/schedule-data/schedule-errors/schedule-error-message.model";
 import { FoldingSection } from "../common-components";
 import ErrorListItem from "./error-list-item.component";
 

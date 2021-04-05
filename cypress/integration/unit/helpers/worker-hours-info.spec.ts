@@ -8,11 +8,11 @@ import {
   ShiftCode,
   SHIFTS,
   WORKING_SHIFTS,
-} from "../../../../src/state/models/common-models/shift-info.model";
+} from "../../../../src/utils/shift-info.model";
 import { MonthDataArray, ShiftHelper } from "../../../../src/helpers/shifts.helper";
 import { WorkerHourInfo } from "../../../../src/helpers/worker-hours-info.model";
 import { workerTestData, WorkerTestDataInstance } from "../../../fixtures/march-2021-worker-data";
-import { ContractType } from "../../../../src/state/models/common-models/worker-info.model";
+import { ContractType } from "../../../../src/utils/worker-info.model";
 
 describe("Worker hours info", () => {
   workerTestData.forEach((workerInstance) => {

@@ -5,7 +5,7 @@
 import {
   GroupedScheduleErrors,
   ScheduleError,
-} from "../../../../state/models/common-models/schedule-error.model";
+} from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { CellInputOptions } from "./cell-blockable-input.component";
 import { UseCellBackgroundHighlightOptions } from "../../hooks/use-cell-highlight";
 import { UseCellSelectionOptions } from "../../hooks/use-cell-selection";

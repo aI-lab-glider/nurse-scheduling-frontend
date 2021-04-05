@@ -3,15 +3,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useEffect, useState } from "react";
 import Excel, { FillPattern } from "exceljs";
-import { MonthDataModel } from "../../../../state/models/common-models/schedule-data.model";
+import { MonthDataModel } from "../../../../state/schedule-data/schedule-data.model";
 import {
   InputFileErrorCode,
   ScheduleError,
-} from "../../../../state/models/common-models/schedule-error.model";
+} from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
 import { useFileReader } from "./use-file-reader";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../../../state/application-state.model";
 import { fromBuffer } from "file-type/browser";
 import { useNotification } from "../../../notification/notification.context";
 import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-converter/schedule-container-converter";

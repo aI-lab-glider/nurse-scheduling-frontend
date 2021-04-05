@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable @typescript-eslint/camelcase */
-import { ContractType, WorkerGroup } from "../../state/models/common-models/worker-info.model";
-import { ScheduleDataModel } from "../../state/models/common-models/schedule-data.model";
+import { ContractType, WorkerGroup } from "../../state/schedule-data/worker-info/worker-info.model";
+import { ScheduleDataModel } from "../../state/schedule-data/schedule-data.model";
 
 export default {
   schedule_info: { UUID: "0", month_number: 1, year: 2021 },

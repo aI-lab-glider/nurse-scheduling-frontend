@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useMemo } from "react";
-import { ShiftCode } from "../../../../state/models/common-models/shift-info.model";
+import { ShiftCode } from "../../../../state/schedule-data/shifts-types/shift-types.model";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { applyScheduleStyling } from "../../../../hooks/use-schedule-styling/use-schedule-styling";
 import { BaseCellOptions } from "../../base/base-cell/base-cell.models";

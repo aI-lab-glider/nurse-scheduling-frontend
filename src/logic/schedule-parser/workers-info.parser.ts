@@ -4,15 +4,15 @@
 import {
   InputFileErrorCode,
   ScheduleError,
-} from "../../state/models/common-models/schedule-error.model";
+} from "../../state/schedule-data/schedule-errors/schedule-error.model";
 import {
   ContractType,
-  ContractTypeHelper,
   WorkerDescription,
   WorkerGroup,
   WorkerType,
-  WorkerTypeHelper,
-} from "../../state/models/common-models/worker-info.model";
+} from "../../state/schedule-data/worker-info/worker-info.model";
+import { ContractTypeHelper } from "../../helpers/contract-type.helper";
+import { WorkerTypeHelper } from "../../helpers/worker-type.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import * as _ from "lodash";
 

@@ -2,11 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import xlsx from "exceljs";
-import { RevisionType } from "../../api/persistance-store.model";
-import { MonthDataModel } from "../../state/models/common-models/schedule-data.model";
+import { RevisionType } from "../../data-access/persistance-store.model";
+import { MonthDataModel } from "../../state/schedule-data/schedule-data.model";
 import { Color } from "../../helpers/colors/color.model";
 import { FileHelper } from "../../helpers/file.helper";
-import { PrimaryMonthRevisionDataModel } from "../../state/models/application-state.model";
+import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
 import {
   EMPTY_ROW_SIZE,
   SHIFTS_WORKSHEET_NAME,

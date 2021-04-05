@@ -4,17 +4,17 @@
 
 import { combineReducers } from "redux";
 import undoable from "redux-undo";
-import { ActionModel } from "./models/action.model";
-import { ApplicationStateModel, ScheduleStateModel } from "./models/application-state.model";
+import { ActionModel } from "../utils/action.model";
+import { ApplicationStateModel, ScheduleStateModel } from "./application-state.model";
 import {
   PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
   TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
-} from "./schedule-state/schedule.actions";
-import { scheduleReducerF } from "./schedule-state/schedule.reducer";
-import { scheduleErrorsReducer } from "./schedule-state/schedule-errors/schedule-errors.reducer";
-import { revisionInfoReducer } from "./schedule-state/schedule-condition/revision-info.reducer";
+} from "./schedule-data/schedule.actions";
+import { scheduleReducerF } from "./schedule-data/schedule.reducer";
+import { scheduleErrorsReducer } from "./schedule-data/schedule-errors/schedule-errors.reducer";
+import { revisionInfoReducer } from "./schedule-data/schedule-condition/revision-info.reducer";
 import { modeInfoReducer } from "./app-condition/mode-info-reducer";
-import { primaryRevisionReducer } from "./schedule-state/primary-revision/primary-revision.reducer";
+import { primaryRevisionReducer } from "./schedule-data/primary-revision/primary-revision.reducer";
 
 export type CombinedReducers<StateModel> = {
   [key in keyof StateModel]: <T, U>(state: T, action: ActionModel<U>) => T;

@@ -4,10 +4,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { ScheduleErrorMessageModel } from "../../../state/models/common-models/schedule-error-message.model";
+import { ApplicationStateModel } from "../../../state/application-state.model";
+import { ScheduleErrorMessageModel } from "../../../state/schedule-data/schedule-errors/schedule-error-message.model";
 import ErrorLoader from "./loading-errors-view.component";
-import { NetworkErrorCode } from "../../../state/models/common-models/schedule-error.model";
+import { NetworkErrorCode } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
 
 export interface ErrorContainerDrawerComponentOptions {

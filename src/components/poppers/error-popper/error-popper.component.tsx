@@ -9,9 +9,9 @@ import { useSelector } from "react-redux";
 import {
   GroupedScheduleErrors,
   ScheduleError,
-} from "../../../state/models/common-models/schedule-error.model";
+} from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../../state/application-state.model";
 import ErrorListItem from "../../error-list/error-list-item.component";
 import { Popper } from "../popper";
 

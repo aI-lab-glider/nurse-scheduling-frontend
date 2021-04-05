@@ -4,15 +4,15 @@
 import * as _ from "lodash";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { ShiftCode } from "../state/models/common-models/shift-info.model";
+import { ShiftCode } from "../state/schedule-data/shifts-types/shift-types.model";
 import {
   ContractType,
   WorkerGroup,
   WorkersInfoModel,
   WorkerType,
-} from "../state/models/common-models/worker-info.model";
+} from "../state/schedule-data/worker-info/worker-info.model";
 import { DEFAULT_WORKER_GROUP } from "../logic/schedule-parser/workers-info.parser";
-import { ApplicationStateModel } from "../state/models/application-state.model";
+import { ApplicationStateModel } from "../state/application-state.model";
 import { WorkerInfoExtendedInterface } from "../components/drawers/worker-drawer/worker-edit";
 
 interface UseWorkerInfoReturn {

@@ -5,7 +5,7 @@ import { Grid, TextField, Typography } from "@material-ui/core";
 import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../../../state/application-state.model";
 import {
   FormFieldErrorLabelOptions,
   FormFieldErrorLabelStack,

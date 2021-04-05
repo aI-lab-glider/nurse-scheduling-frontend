@@ -4,7 +4,7 @@
 import { Grid, Typography } from "@material-ui/core";
 import * as _ from "lodash";
 import React from "react";
-import { WorkerGroup } from "../../../../state/models/common-models/worker-info.model";
+import { WorkerGroup } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import { WORKER_GROUP_PREFIX } from "../../../../logic/schedule-parser/workers-info.parser";
 import {
   ButtonData,

@@ -14,14 +14,14 @@ import React, {
 } from "react";
 import mergeRefs from "react-merge-refs";
 import { useSelector } from "react-redux";
-import { ScheduleError } from "../../../../state/models/common-models/schedule-error.model";
+import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import {
   ShiftCode,
   SHIFTS,
   ShiftsTypesDict as ShiftTypesDict,
-} from "../../../../state/models/common-models/shift-info.model";
+} from "../../../../state/schedule-data/shifts-types/shift-types.model";
 import { ColorHelper } from "../../../../helpers/colors/color.helper";
-import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../../../state/application-state.model";
 import {
   baseCellDataCy,
   BaseCellOptions,

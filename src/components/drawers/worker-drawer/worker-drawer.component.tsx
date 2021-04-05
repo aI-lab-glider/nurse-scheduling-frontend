@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { WorkerInfoModel } from "../../../state/models/common-models/worker-info.model";
+import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
 import Drawer, { DrawerOptions } from "../drawer/drawer.component";
 import { WorkerEditComponent, WorkerEditComponentMode } from "./worker-edit";
 import { WorkerInfoComponent } from "./worker-info/worker-info.component";

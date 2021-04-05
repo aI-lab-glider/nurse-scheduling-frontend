@@ -8,9 +8,9 @@ import { ScheduleReadOnlyPage } from "./read-only-tab/schedule-read-only.page";
 import { usePersistentDrawer } from "../../components/drawers/drawer/persistent-drawer-context";
 import * as Sentry from "@sentry/react";
 import AppErrorModal from "../../components/modals/app-error-modal/app-error.modal.component";
-import { ScheduleActionType } from "../../state/schedule-state/schedule.actions";
+import { ScheduleActionType } from "../../state/schedule-data/schedule.actions";
 import { useDispatch, useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../state/application-state.model";
 import { CorruptedScheduleComponent } from "./corrupted-month-tab/corrupted-schedule.component";
 
 interface SchedulePageOptions {

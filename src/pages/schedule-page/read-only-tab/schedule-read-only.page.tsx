@@ -4,7 +4,7 @@
 import React, { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { ModeInfoActionCreator } from "../../../state/app-condition/mode-info-reducer";
-import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-state/schedule.actions";
+import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-data/schedule.actions";
 import { UndoableHotkeys } from "../../../components/common-components";
 import { ScheduleContainerComponent } from "../schedule-container.component";
 import { ScheduleMode } from "../../../components/schedule/schedule-state.model";

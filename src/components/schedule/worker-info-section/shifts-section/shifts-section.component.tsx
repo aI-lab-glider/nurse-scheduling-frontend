@@ -3,22 +3,22 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
+import { DataRowHelper } from "../../../../helpers/data-row.helper";
+import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import {
   AlgorithmErrorCode,
   GroupedScheduleErrors,
   ScheduleError,
-} from "../../../../state/models/common-models/schedule-error.model";
-import { ShiftCode } from "../../../../state/models/common-models/shift-info.model";
-import { DataRowHelper } from "../../../../helpers/data-row.helper";
-import { DataRow } from "../../../../logic/schedule-logic/data-row";
-import { WorkerActionCreator } from "../../../../state/schedule-state/worker-info/worker.action-creator";
-import { ShiftCellComponent } from "./shift-cell.component";
-import { ShiftRowComponent } from "./shift-row.component";
+} from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
+import { ShiftCode } from "../../../../state/schedule-data/shifts-types/shift-types.model";
+import { WorkerShiftsActionCreator } from "../../../../state/schedule-data/workers-shifts/worker-shifts.action-creator";
 import {
   BaseSectionComponent,
   BaseSectionOptions,
 } from "../../base/base-section/base-section.component";
 import { SelectionMatrix } from "../../base/base-section/use-selection-matrix";
+import { ShiftCellComponent } from "./shift-cell.component";
+import { ShiftRowComponent } from "./shift-row.component";
 
 export type ShiftsSectionOptions = Omit<BaseSectionOptions, "updateData">;
 
@@ -57,7 +57,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
         newShift
       );
       const newWorkers = DataRowHelper.dataRowsAsValueDict<ShiftCode>(updatedDataRows);
-      const action = WorkerActionCreator.replaceWorkerShiftsInTmpSchedule(newWorkers);
+      const action = WorkerShiftsActionCreator.replaceWorkerShiftsInTmpSchedule(newWorkers);
       dispatch(action);
     },
     [dispatch]

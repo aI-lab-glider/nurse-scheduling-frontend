@@ -5,7 +5,7 @@
 // import { DataRowParser } from "../../../../../src/logic/schedule-parser/data-row.parser";
 // import { MetaDataParser } from "../../../../../src/logic/schedule-parser/metadata.parser";
 // import { ShiftsInfoParser } from "../../../../../src/logic/schedule-parser/shifts-info.parser";
-// import { WorkerType } from "../../../../../src/common-models/worker-info.model";
+// import { WorkerType } from "../../../../../src/worker-info.model";
 
 //#region  data declaration
 

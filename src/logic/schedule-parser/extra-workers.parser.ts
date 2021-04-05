@@ -4,7 +4,7 @@
 import { ExtraWorkersInfoProvider } from "../schedule-providers/extra-workers-info-provider.model";
 import { DataRow } from "../schedule-logic/data-row";
 import { ExtraWorkersSectionKey } from "../section.model";
-import { ScheduleError } from "../../state/models/common-models/schedule-error.model";
+import { ScheduleError } from "../../state/schedule-data/schedule-errors/schedule-error.model";
 
 export const DEFAULT_EXTRA_WORKERS_NUMBER = 0;
 

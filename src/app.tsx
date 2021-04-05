@@ -5,14 +5,14 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import schedule from "./assets/devMode/schedule";
-import { ScheduleDataModel } from "./state/models/common-models/schedule-data.model";
+import { ScheduleDataModel } from "./state/schedule-data/schedule-data.model";
 import { HeaderComponent } from "./components/common-components";
 import RouteButtonsComponent, {
   Tabs,
 } from "./components/buttons/route-buttons/route-buttons.component";
 import { SchedulePage } from "./pages/schedule-page/schedule-page.component";
 import ManagementPage from "./pages/management-page/management-page.component";
-import { ScheduleDataActionCreator } from "./state/schedule-state/schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "./state/schedule-data/schedule-data.action-creator";
 import { NotificationProvider } from "./components/notification/notification.context";
 import { Footer } from "./components/footer/footer.component";
 import { Box } from "@material-ui/core";
@@ -20,12 +20,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import PersistentDrawer from "./components/drawers/drawer/persistent-drawer.component";
 import { PersistentDrawerProvider } from "./components/drawers/drawer/persistent-drawer-context";
 import ScssVars from "./assets/styles/styles/custom/_variables.module.scss";
-import { ApplicationStateModel } from "./state/models/application-state.model";
-import { ScheduleKey } from "./api/persistance-store.model";
+import { ApplicationStateModel } from "./state/application-state.model";
+import { ScheduleKey } from "./data-access/persistance-store.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
 import { cropScheduleDMToMonthDM } from "./logic/schedule-container-converter/schedule-container-converter";
 import { ImportModalProvider } from "./components/buttons/import-buttons/import-modal-context";
-import { LocalStorageProvider } from "./api/local-storage-provider.model";
+import { LocalStorageProvider } from "./data-access/local-storage-provider.model";
 
 const useStyles = makeStyles(() => ({
   root: {

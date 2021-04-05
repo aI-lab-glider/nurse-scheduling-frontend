@@ -1,9 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { ShiftCode } from "../../src/state/models/common-models/shift-info.model";
+import { ShiftCode } from "../../src/utils/shift-info.model";
 import { MonthDataArray } from "../../src/helpers/shifts.helper";
-import { ContractType } from "../../src/state/models/common-models/worker-info.model";
+import { ContractType } from "../../src/utils/worker-info.model";
 
 const monthWorkerData = {
   expectedRequiredWorkHours: {
