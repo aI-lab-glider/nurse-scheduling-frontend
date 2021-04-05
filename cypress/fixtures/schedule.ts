@@ -3,8 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* eslint-disable @typescript-eslint/camelcase */
 
-import { ContractType, WorkerGroup } from "../../src/common-models/worker-info.model";
-import { ScheduleDataModel } from "../../src/common-models/schedule-data.model";
+import { ContractType, WorkerGroup } from "../../src/state/models/common-models/worker-info.model";
+import { ScheduleDataModel } from "../../src/state/models/common-models/schedule-data.model";
 
 export default {
   schedule_info: { UUID: "0", month_number: 1, year: 2021 },

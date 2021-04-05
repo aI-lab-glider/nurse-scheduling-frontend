@@ -4,7 +4,7 @@
 
 /* eslint-disable @typescript-eslint/camelcase */
 import { combineReducers } from "redux";
-import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
+import { ScheduleDataModel } from "../../../models/common-models/schedule-data.model";
 import { CombinedReducers } from "../../../app.reducer";
 import { employeeInfoReducerF } from "../employee-info.reducer";
 import { monthInfoReducerF } from "../month-info.reducer";

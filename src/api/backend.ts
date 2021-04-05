@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { ScheduleDataModel } from "../common-models/schedule-data.model";
-import { ScheduleError } from "../common-models/schedule-error.model";
+import { ScheduleDataModel } from "../state/models/common-models/schedule-data.model";
+import { ScheduleError } from "../state/models/common-models/schedule-error.model";
 import { PrimaryMonthRevisionDataModel } from "../state/models/application-state.model";
 import { ServerMiddleware } from "./server.middleware";
 

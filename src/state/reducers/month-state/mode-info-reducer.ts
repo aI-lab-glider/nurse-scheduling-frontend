@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { ActionModel } from "../../models/action.model";
-import { ScheduleMode } from "../../../components/schedule-page/table/schedule/schedule-state.model";
+import { ScheduleMode } from "../../../components/schedule/schedule-state.model";
 
 export enum ModeInfoReducer {
   SET_MODE = "SET_MODE",

@@ -48,11 +48,11 @@ const metaData: MetaDataParser = new MetaDataParser(2020, 10, [
 
 describe("ShifstInfo parser", () => {
   //todo update test
-  // context("Testing detection of errors", () => {
+  // context("Testing detection of error-list", () => {
   //   TestCases.forEach((element) => {
   //     const shiftsInfoParser = new ShiftsInfoParser(WorkerType.OTHER, metaData, element.data);
-  //     const result = shiftsInfoParser.errors;
-  //     it(`should have exaclty ${element.errorCount} errors`, () => {
+  //     const result = shiftsInfoParser.error-list;
+  //     it(`should have exaclty ${element.errorCount} error-list`, () => {
   //       expect(result).have.lengthOf(element.errorCount);
   //     });
   //   });

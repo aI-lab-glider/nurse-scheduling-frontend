@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-context("Schedule errors", () => {
+context("Schedule error-list", () => {
   before(() => {
     cy.intercept(
       {
@@ -16,7 +16,7 @@ context("Schedule errors", () => {
     cy.enterEditMode();
   });
 
-  //   it("Should show errors returned by server", () => {
+  //   it("Should show error-list returned by server", () => {
   //     cy.get("[data-cy=save-schedule-button]").click();
   //     cy.get("[data-cy=check-schedule-button]").click();
   //     cy.get("[data-cy=open-folding-section]").click({ multiple: true });

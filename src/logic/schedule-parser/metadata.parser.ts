@@ -2,10 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { WeekDay } from "../../common-models/month-info.model";
-import { MetadataProvider } from "../providers/metadata-provider.model";
+import { WeekDay } from "../../state/models/common-models/month-info.model";
+import { MetadataProvider } from "../schedule-providers/metadata-provider.model";
 import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
-import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
+import {
+  InputFileErrorCode,
+  ScheduleError,
+} from "../../state/models/common-models/schedule-error.model";
 
 export class MetaDataParser extends MetadataProvider {
   public monthLogic: MonthInfoLogic;

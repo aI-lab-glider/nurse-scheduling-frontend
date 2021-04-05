@@ -2,11 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
-import { MonthInfoModel, validateMonthInfo } from "../../../../src/common-models/month-info.model";
+import {
+  MonthInfoModel,
+  validateMonthInfo,
+} from "../../../../src/state/models/common-models/month-info.model";
 import {
   ScheduleContainerType,
   SCHEDULE_CONTAINERS_LENGTH,
-} from "../../../../src/common-models/schedule-data.model";
+} from "../../../../src/state/models/common-models/schedule-data.model";
 
 describe("Month info validation", () => {
   it("Should throw when length of dates in month info model is not allowed length for schedule data model", () => {

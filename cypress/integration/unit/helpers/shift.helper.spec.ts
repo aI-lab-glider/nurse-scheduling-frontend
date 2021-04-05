@@ -1,8 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { VerboseDate } from "../../../../src/common-models/month-info.model";
-import { ShiftCode, ShiftInfoModel, SHIFTS } from "../../../../src/common-models/shift-info.model";
+import { VerboseDate } from "../../../../src/state/models/common-models/month-info.model";
+import {
+  ShiftCode,
+  ShiftInfoModel,
+  SHIFTS,
+} from "../../../../src/state/models/common-models/shift-info.model";
 import { ShiftHelper } from "../../../../src/helpers/shifts.helper";
 import { WorkerHourInfo } from "../../../../src/helpers/worker-hours-info.model";
 

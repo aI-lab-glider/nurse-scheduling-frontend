@@ -3,10 +3,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { RevisionType, ThunkFunction } from "../../api/persistance-store.model";
 import * as _ from "lodash";
-import { cropScheduleDMToMonthDM } from "../../logic/schedule-container-convertion/schedule-container-convertion";
+import { cropScheduleDMToMonthDM } from "../../logic/schedule-container-converter/schedule-container-converter";
 import { LocalStorageProvider } from "../../api/local-storage-provider.model";
-import { Shift, ShiftCode } from "../../common-models/shift-info.model";
-import { MonthDataModel, ScheduleDataModel } from "../../common-models/schedule-data.model";
+import { Shift, ShiftCode } from "../models/common-models/shift-info.model";
+import { MonthDataModel, ScheduleDataModel } from "../models/common-models/schedule-data.model";
 import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 import { ScheduleDataActionCreator } from "./month-state/schedule-data/schedule-data.action-creator";
 

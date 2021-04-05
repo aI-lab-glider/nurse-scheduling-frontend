@@ -2,7 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ThunkDispatch } from "redux-thunk";
-import { MonthDataModel, ScheduleDataModel } from "../common-models/schedule-data.model";
+import {
+  MonthDataModel,
+  ScheduleDataModel,
+} from "../state/models/common-models/schedule-data.model";
 import { ActionModel } from "../state/models/action.model";
 import { ApplicationStateModel } from "../state/models/application-state.model";
 import { ArrayPositionPointer } from "../helpers/array.helper";

@@ -3,16 +3,16 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import "cypress-file-upload";
 import { LocalStorageProvider } from "../../src/api/local-storage-provider.model";
-import { ShiftCode } from "../../src/common-models/shift-info.model";
+import { ShiftCode } from "../../src/state/models/common-models/shift-info.model";
 import {
   baseCellDataCy,
   CellType,
-} from "../../src/components/schedule-page/table/schedule/schedule-parts/base-cell/base-cell.models";
-import { baseRowDataCy } from "../../src/components/schedule-page/table/schedule/schedule-parts/base-row.models";
-import { shiftSectionDataCy } from "../../src/components/schedule-page/table/schedule/sections/worker-info-section/worker-info-section.models";
-import { summaryCellDataCy } from "../../src/components/summarytable/summarytable-cell.models";
-import { summaryRowDataCy } from "../../src/components/summarytable/summarytable-row.models";
-import { summaryTableSectionDataCy } from "../../src/components/summarytable/summarytable-section.models";
+} from "../../src/components/schedule/base/base-cell/base-cell.models";
+import { baseRowDataCy } from "../../src/components/schedule/base/base-row/base-row.models";
+import { shiftSectionDataCy } from "../../src/components/schedule/worker-info-section/worker-info-section.models";
+import { summaryCellDataCy } from "../../src/components/schedule/worker-info-section/summary-table/summarytable-cell.models";
+import { summaryRowDataCy } from "../../src/components/schedule/worker-info-section/summary-table/summarytable-row.models";
+import { summaryTableSectionDataCy } from "../../src/components/schedule/worker-info-section/summary-table/summarytable-section.models";
 import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../../src/helpers/month.helper";
 
 export type CypressScreenshotOptions = Partial<
@@ -155,10 +155,10 @@ Cypress.Commands.add(
     if (Cypress.env("makeScreenshots") !== "true") {
       return cy;
     }
-    cy.get("#header").invoke("css", "position", "absolute");
+    cy.get("#app-header").invoke("css", "position", "absolute");
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.screenshot(cyScreenshotOptions).wait(awaitTime);
-    return cy.get("#header").invoke("css", "position", null);
+    return cy.get("#app-header").invoke("css", "position", null);
   }
 );
 

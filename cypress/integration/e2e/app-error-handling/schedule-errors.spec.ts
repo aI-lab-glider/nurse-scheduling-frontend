@@ -18,7 +18,7 @@
 //   return cy.get('[data-cy="btn-add-worker"]').should("be.visible");
 // };
 //
-// context("Schedule errors", () => {
+// context("Schedule error-list", () => {
 //   beforeEach(() => {
 //     cy.loadScheduleToMonth();
 //   });

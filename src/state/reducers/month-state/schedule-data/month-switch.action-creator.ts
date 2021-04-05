@@ -11,7 +11,7 @@ import { RevisionReducerAction } from "../revision-info.reducer";
 import { VerboseDateHelper } from "../../../../helpers/verbose-date.helper";
 import { copyMonthDM } from "../../../../logic/month-copy/month-copy.logic";
 import { MonthHelper } from "../../../../helpers/month.helper";
-import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
+import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-converter/schedule-container-converter";
 import { UndoActionCreator } from "../../undoable.action-creator";
 import {
   PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,

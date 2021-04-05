@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import _ from "lodash";
-import { ScheduleDataModel } from "../../../common-models/schedule-data.model";
-import { WorkersInfoModel } from "../../../common-models/worker-info.model";
+import { ScheduleDataModel } from "../../models/common-models/schedule-data.model";
+import { WorkersInfoModel } from "../../models/common-models/worker-info.model";
 import {
   DEFAULT_CONTRACT_TYPE,
   DEFAULT_WORKER_GROUP,

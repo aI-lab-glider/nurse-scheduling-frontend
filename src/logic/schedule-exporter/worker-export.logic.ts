@@ -2,8 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import xlsx from "exceljs";
-import { MonthDataModel } from "../../common-models/schedule-data.model";
-import { ContractTypeHelper, WorkerTypeHelper } from "../../common-models/worker-info.model";
+import { MonthDataModel } from "../../state/models/common-models/schedule-data.model";
+import {
+  ContractTypeHelper,
+  WorkerTypeHelper,
+} from "../../state/models/common-models/worker-info.model";
 import { PrimaryMonthRevisionDataModel } from "../../state/models/application-state.model";
 import { EMPTY_ROW, WORKER_HEADERS } from "../../helpers/parser.helper";
 import { CELL_MARGIN, ScheduleExportLogic } from "./schedule-export.logic";

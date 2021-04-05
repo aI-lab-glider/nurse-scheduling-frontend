@@ -5,11 +5,11 @@ import {
   InputFileErrorCode,
   ParseErrorCode,
   ScheduleError,
-} from "../../common-models/schedule-error.model";
-import { ShiftCode } from "../../common-models/shift-info.model";
-import { WorkerGroup } from "../../common-models/worker-info.model";
+} from "../../state/models/common-models/schedule-error.model";
+import { ShiftCode } from "../../state/models/common-models/shift-info.model";
+import { WorkerGroup } from "../../state/models/common-models/worker-info.model";
 import { StringHelper } from "../../helpers/string.helper";
-import { ShiftsProvider } from "../providers/shifts-provider.model";
+import { ShiftsProvider } from "../schedule-providers/shifts-provider.model";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { WORKER_GROUP_PREFIX } from "./workers-info.parser";

@@ -6,11 +6,14 @@ import {
   MonthDataModel,
   ScheduleDataModel,
   validateScheduleDM,
-} from "../../common-models/schedule-data.model";
+} from "../../state/models/common-models/schedule-data.model";
 import * as _ from "lodash";
-import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
+import { ShiftCode, ShiftInfoModel } from "../../state/models/common-models/shift-info.model";
 import { ArrayHelper } from "../../helpers/array.helper";
-import { createDatesForMonth, MonthInfoModel } from "../../common-models/month-info.model";
+import {
+  createDatesForMonth,
+  MonthInfoModel,
+} from "../../state/models/common-models/month-info.model";
 import { ScheduleKey } from "../../api/persistance-store.model";
 import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../../helpers/month.helper";
 import { ShiftHelper } from "../../helpers/shifts.helper";

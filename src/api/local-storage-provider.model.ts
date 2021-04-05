@@ -12,7 +12,7 @@ import {
   MonthDataModel,
   ScheduleDataModel,
   validateMonthDM,
-} from "../common-models/schedule-data.model";
+} from "../state/models/common-models/schedule-data.model";
 
 import {
   getRevisionTypeFromKey,
@@ -27,7 +27,7 @@ import _ from "lodash";
 import { ArrayHelper, ArrayPositionPointer } from "../helpers/array.helper";
 import { VerboseDateHelper } from "../helpers/verbose-date.helper";
 import { MonthHelper } from "../helpers/month.helper";
-import { cropScheduleDMToMonthDM } from "../logic/schedule-container-convertion/schedule-container-convertion";
+import { cropScheduleDMToMonthDM } from "../logic/schedule-container-converter/schedule-container-converter";
 
 export const DATABASE_NAME = "nurse-scheduling";
 const APPLICATION_VERSION_TAG_DATABASE_KEY = "application_version_tag";

@@ -11,7 +11,7 @@ import {
   RevisionType,
   RevisionTypeLabels,
 } from "../api/persistance-store.model";
-import { MonthDataModel } from "../common-models/schedule-data.model";
+import { MonthDataModel } from "../state/models/common-models/schedule-data.model";
 import { LocalStorageProvider } from "../api/local-storage-provider.model";
 import { ScheduleExportLogic } from "../logic/schedule-exporter/schedule-export.logic";
 

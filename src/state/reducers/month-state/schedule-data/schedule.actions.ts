@@ -4,7 +4,7 @@
 
 import * as _ from "lodash";
 import { ThunkDispatch } from "redux-thunk";
-import { ScheduleDataModel } from "../../../../common-models/schedule-data.model";
+import { ScheduleDataModel } from "../../../models/common-models/schedule-data.model";
 import { ActionModel } from "../../../models/action.model";
 import { ApplicationStateModel } from "../../../models/application-state.model";
 import { UndoableConfig } from "../../undoable.action-creator";

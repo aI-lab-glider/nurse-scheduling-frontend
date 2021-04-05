@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { ScheduleActionType } from "./schedule-data/schedule.actions";
-import { Shift, ShiftsTypesDict } from "../../../common-models/shift-info.model";
+import { Shift, ShiftsTypesDict } from "../../models/common-models/shift-info.model";
 import { ActionModel } from "../../models/action.model";
 import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
 

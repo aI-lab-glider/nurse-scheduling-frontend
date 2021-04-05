@@ -3,13 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
-import { ScheduleDataModel } from "../common-models/schedule-data.model";
+import { ScheduleDataModel } from "../state/models/common-models/schedule-data.model";
 import {
   AlgorithmErrorCode,
   ScheduleError,
   WorkerOvertime,
   WorkerUnderTime,
-} from "../common-models/schedule-error.model";
+} from "../state/models/common-models/schedule-error.model";
 import { WorkerHourInfo } from "../helpers/worker-hours-info.model";
 import { PrimaryMonthRevisionDataModel } from "../state/models/application-state.model";
 

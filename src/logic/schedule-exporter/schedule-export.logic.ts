@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import xlsx from "exceljs";
 import { RevisionType } from "../../api/persistance-store.model";
-import { MonthDataModel } from "../../common-models/schedule-data.model";
+import { MonthDataModel } from "../../state/models/common-models/schedule-data.model";
 import { Color } from "../../helpers/colors/color.model";
 import { FileHelper } from "../../helpers/file.helper";
 import { PrimaryMonthRevisionDataModel } from "../../state/models/application-state.model";
