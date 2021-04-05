@@ -3,15 +3,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TranslationHelper } from "../../helpers/translations.helper";
-import { ApplicationStateModel } from "../../state/models/application-state.model";
-import { Button } from "../../components/common-components";
-import { ScheduleKey } from "../../api/persistance-store.model";
-import { MonthSwitchActionCreator } from "../../state/reducers/month-state/schedule-data/month-switch.action-creator";
-import { LocalStorageProvider } from "../../api/local-storage-provider.model";
-import { MonthDataModel } from "../../state/models/common-models/schedule-data.model";
-import { MonthHelper } from "../../helpers/month.helper";
-import { useImportModal } from "../../components/buttons/import-buttons/import-modal-context";
+import { TranslationHelper } from "../../../helpers/translations.helper";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { Button } from "../../common-components";
+import { ScheduleKey } from "../../../api/persistance-store.model";
+import { MonthSwitchActionCreator } from "../../../state/reducers/month-state/schedule-data/month-switch.action-creator";
+import { LocalStorageProvider } from "../../../api/local-storage-provider.model";
+import { MonthDataModel } from "../../../state/models/common-models/schedule-data.model";
+import { MonthHelper } from "../../../helpers/month.helper";
+import { useImportModal } from "../import-buttons/import-modal-context";
 
 export function EmptyMonthButtons(): JSX.Element {
   const { month_number: currentMonth, year: currentYear } = useSelector(

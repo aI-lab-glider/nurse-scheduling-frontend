@@ -2,9 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import Drawer, { DrawerOptions } from "../../../components/drawers/drawer/drawer.component";
+import Drawer, { DrawerOptions } from "../drawers/drawer/drawer.component";
 import ShiftEditDrawer from "./shift-edit-drawer.component";
-import { Shift } from "../../../state/models/common-models/shift-info.model";
+import { Shift } from "../../state/models/common-models/shift-info.model";
 
 export enum ShiftDrawerMode {
   EDIT,

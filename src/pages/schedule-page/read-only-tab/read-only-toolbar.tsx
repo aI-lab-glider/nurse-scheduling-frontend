@@ -15,7 +15,7 @@ import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
 interface ViewOnlyToolbarOptions {
   openEdit: () => void;
 }
-export function ViewOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Element {
+export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Element {
   const [isEditDisable, setEditDisable] = React.useState<boolean>(false);
   const [isMonthFromFuture, setIsMonthFromFuture] = React.useState<boolean>(false);
   const dispatch = useDispatch();

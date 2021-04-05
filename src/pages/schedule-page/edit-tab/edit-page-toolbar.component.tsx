@@ -24,7 +24,7 @@ import { usePersistentDrawer } from "../../../components/drawers/drawer/persiste
 import SaveChangesModal from "../../../components/modals/save-changes-modal/save-changes-modal.component";
 import { useNotification } from "../../../components/notification/notification.context";
 import ErrorContainerDrawerComponent from "../../../components/drawers/error-container-drawer/error-container-drawer.component";
-import { useTemporarySchedule } from "./use-temporary-schedule";
+import { useTemporarySchedule } from "../../../hooks/use-temporary-schedule";
 
 interface EditPageToolbarOptions {
   close: () => void;

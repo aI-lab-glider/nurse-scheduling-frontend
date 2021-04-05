@@ -8,7 +8,7 @@ import {
   ApplicationStateModel,
   ScheduleStateModel,
 } from "../../state/models/application-state.model";
-import { NewScheduleComponent } from "./new-schedule.component";
+import { NewScheduleComponent } from "./new-month-tab/new-schedule.component";
 import { ScheduleComponent } from "../../components/schedule/schedule.component";
 import { ScheduleMode } from "../../components/schedule/schedule-state.model";
 

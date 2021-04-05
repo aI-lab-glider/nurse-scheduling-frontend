@@ -2,10 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { VerboseDate } from "../../../state/models/common-models/month-info.model";
-import { ShiftCode } from "../../../state/models/common-models/shift-info.model";
+import { VerboseDate } from "../../state/models/common-models/month-info.model";
+import { ShiftCode } from "../../state/models/common-models/shift-info.model";
 import { WorkersCalendarCell } from "./worker-calendar-cell.component";
-import { applyScheduleStyling } from "../../../hooks/use-schedule-styling/use-schedule-styling";
+import { applyScheduleStyling } from "../../hooks/use-schedule-styling/use-schedule-styling";
 
 interface CalendarOptions {
   shiftsArr: [VerboseDate, ShiftCode][];

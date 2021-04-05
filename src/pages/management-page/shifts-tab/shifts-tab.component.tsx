@@ -12,7 +12,9 @@ import { Button } from "../../../components/common-components";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
-import ShiftDrawerComponent, { ShiftDrawerMode } from "./shift-drawer.component";
+import ShiftDrawerComponent, {
+  ShiftDrawerMode,
+} from "../../../components/shifts-drawer/shift-drawer.component";
 import { useDispatch, useSelector } from "react-redux";
 import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";

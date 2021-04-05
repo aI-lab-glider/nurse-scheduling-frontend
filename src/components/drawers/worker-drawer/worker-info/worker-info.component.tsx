@@ -11,7 +11,7 @@ import {
 } from "../../../../state/models/common-models/worker-info.model";
 import { StringHelper } from "../../../../helpers/string.helper";
 import { useWorkerHoursInfo } from "../../../../hooks/use-worker-hours-info";
-import WorkersCalendar from "../../../../pages/workers-page/workers-calendar/workers-calendar.component";
+import WorkersCalendar from "../../../workers-calendar/workers-calendar.component";
 import { Button } from "../../../common-components";
 import { exportToPdf } from "./export-to-pdf";
 import { useWorkerInfo } from "../../../../hooks/use-worker-info";

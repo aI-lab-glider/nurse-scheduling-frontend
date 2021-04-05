@@ -2,17 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { VerboseDate } from "../../../state/models/common-models/month-info.model";
-import { ShiftCode } from "../../../state/models/common-models/shift-info.model";
-import { getColor } from "../../../components/schedule/worker-info-section/shifts-section/shift-cell.component";
+import { VerboseDate } from "../../state/models/common-models/month-info.model";
+import { ShiftCode } from "../../state/models/common-models/shift-info.model";
+import { getColor } from "../schedule/worker-info-section/shifts-section/shift-cell.component";
 import { fade } from "@material-ui/core";
 import {
   bottomCellPartClassName,
   hasNextShiftClassName,
   keepOnShiftClassName,
-} from "../../../components/schedule/base/base-cell/base-cell.models";
+} from "../schedule/base/base-cell/base-cell.models";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../state/models/application-state.model";
 
 interface CellOptions {
   keepOn: boolean;

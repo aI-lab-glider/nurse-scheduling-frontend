@@ -6,7 +6,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import { Button } from "../../../components/common-components";
-import { ShiftDrawerMode } from "./shift-drawer.component";
+import { ShiftDrawerMode } from "../../../components/shifts-drawer/shift-drawer.component";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import { Shift } from "../../../state/models/common-models/shift-info.model";

@@ -6,13 +6,13 @@ import React, { useState } from "react";
 import { MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { FormControl, FormControlLabel, Grid, Radio, RadioGroup } from "@material-ui/core";
-import { Shift } from "../../../state/models/common-models/shift-info.model";
-import { AcronymGenerator } from "../../../helpers/acronym-generator.helper";
-import { DropdownColors } from "../../../components/buttons/dropdown-buttons/dropdown-colors.component";
-import { Button } from "../../../components/common-components";
+import { Shift } from "../../state/models/common-models/shift-info.model";
+import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
+import { DropdownColors } from "../buttons/dropdown-buttons/dropdown-colors.component";
+import { Button } from "../common-components";
 import { ShiftDrawerMode } from "./shift-drawer.component";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { ApplicationStateModel } from "../../state/models/application-state.model";
 
 interface ShiftEditDrawerOptions {
   selectedShift: Shift;

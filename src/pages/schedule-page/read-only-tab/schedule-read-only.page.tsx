@@ -8,13 +8,13 @@ import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/mon
 import { UndoableHotkeys } from "../../../components/common-components";
 import { ScheduleContainerComponent } from "../schedule-container.component";
 import { ScheduleMode } from "../../../components/schedule/schedule-state.model";
-import { ViewOnlyToolbar } from "./view-only-toolbar";
+import { ReadOnlyToolbar } from "./read-only-toolbar";
 
 interface ScheduleViewOnlyPageOptions {
   openEdit: () => void;
 }
 
-export function ScheduleViewOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.Element {
+export function ScheduleReadOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.Element {
   const mode = useMemo(() => ScheduleMode.Readonly, []);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -25,7 +25,7 @@ export function ScheduleViewOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.El
   return (
     <>
       <UndoableHotkeys config={PERSISTENT_SCHEDULE_UNDOABLE_CONFIG} />
-      <ViewOnlyToolbar openEdit={props.openEdit} />
+      <ReadOnlyToolbar openEdit={props.openEdit} />
       <div className={"schedule"}>
         <ScheduleContainerComponent mode={mode} />
       </div>

@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { EmptyMonthButtons } from "./empty-month-buttons";
-import nurse from "../../assets/images/nurse.png";
+import { EmptyMonthButtons } from "../../../components/buttons/empty-month-buttons/empty-month-buttons";
+import nurse from "../../../assets/images/nurse.png";
 
 export function NewScheduleComponent(): JSX.Element {
   return (

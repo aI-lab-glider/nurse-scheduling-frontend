@@ -2,14 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback } from "react";
-import { EmptyMonthButtons } from "./empty-month-buttons";
-import sadEmoji from "../../assets/images/sadEmoji.svg";
+import { EmptyMonthButtons } from "../../../components/buttons/empty-month-buttons/empty-month-buttons";
+import sadEmoji from "../../../assets/images/sadEmoji.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../state/models/application-state.model";
-import { UndoActionCreator } from "../../state/reducers/undoable.action-creator";
-import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../state/reducers/month-state/schedule-data/schedule.actions";
-import { Button } from "../../components/common-components";
-import { ScheduleDataModel } from "../../state/models/common-models/schedule-data.model";
+import { ApplicationStateModel } from "../../../state/models/application-state.model";
+import { UndoActionCreator } from "../../../state/reducers/undoable.action-creator";
+import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
+import { Button } from "../../../components/common-components";
+import { ScheduleDataModel } from "../../../state/models/common-models/schedule-data.model";
 
 const MINIMUM_UNDO_COUNT_TO_REVERT_NORMAL_SCHEDULE = 2; // schedule which caused corruption and the same schedule with isCorrupted=true
 const MSG_UNABLE_TO_LOAD_SCHEDULE = "Nie można wyświetlić zapisanego grafiku";
