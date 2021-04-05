@@ -3,14 +3,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ScheduleDataModel } from "../../models/common-models/schedule-data.model";
 import { Shift, ShiftCode, ShiftInfoModel } from "../../models/common-models/shift-info.model";
-import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
-import {
-  createActionName,
-  ScheduleActionModel,
-  ScheduleActionType,
-} from "./schedule-data/schedule.actions";
+import { scheduleDataInitialState } from "../schedule-data-initial-state";
+import { createActionName, ScheduleActionModel, ScheduleActionType } from "../schedule.actions";
 import { ActionModel } from "../../models/action.model";
-import { WorkerActionPayload } from "../worker.action-creator";
+import { WorkerActionPayload } from "../worker-info/worker.action-creator";
 import * as _ from "lodash";
 
 export function scheduleShiftsInfoReducerF(name: string) {

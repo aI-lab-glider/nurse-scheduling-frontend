@@ -5,8 +5,8 @@
 import React, { ChangeEvent, createContext, useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useScheduleConverter } from "./hooks/use-schedule-converter";
-import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
-import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
+import { ScheduleDataActionCreator } from "../../../state/schedule-state/schedule-data.action-creator";
+import { ScheduleErrorActionType } from "../../../state/schedule-state/schedule-errors/schedule-errors.reducer";
 import { ActionModel } from "../../../state/models/action.model";
 import { ScheduleError } from "../../../state/models/common-models/schedule-error.model";
 import ParseErrorModal from "../../modals/error-modal/errors.modal.component";

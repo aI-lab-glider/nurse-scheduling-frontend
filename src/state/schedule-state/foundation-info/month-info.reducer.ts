@@ -3,17 +3,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { MonthInfoModel } from "../../models/common-models/month-info.model";
-import {
-  FoundationInfoAction,
-  FoundationInfoActionType,
-} from "./schedule-data/foundation-info.action-creator";
-import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
+import { FoundationInfoAction, FoundationInfoActionType } from "./foundation-info.action-creator";
+import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import {
   createActionName,
   isScheduleAction,
   ScheduleActionModel,
   ScheduleActionType,
-} from "./schedule-data/schedule.actions";
+} from "../schedule.actions";
 import * as _ from "lodash";
 
 export function monthInfoReducerF(name: string) {

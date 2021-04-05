@@ -3,12 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ScheduleDataModel } from "../../models/common-models/schedule-data.model";
 import { ScheduleMetadata } from "../../models/common-models/schedule.model";
-import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
-import {
-  createActionName,
-  ScheduleActionModel,
-  ScheduleActionType,
-} from "./schedule-data/schedule.actions";
+import { scheduleDataInitialState } from "../schedule-data-initial-state";
+import { createActionName, ScheduleActionModel, ScheduleActionType } from "../schedule.actions";
 let uuid = 0;
 
 /* eslint-disable @typescript-eslint/camelcase */

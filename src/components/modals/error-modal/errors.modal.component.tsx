@@ -10,7 +10,7 @@ import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import DefaultModal from "../modal.component";
 import ModalErrorList from "./error.modal.list.component";
-import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "../../../state/schedule-state/schedule-data.action-creator";
 
 export interface ErrorsModalComponent {
   setOpen: (open: boolean) => void;

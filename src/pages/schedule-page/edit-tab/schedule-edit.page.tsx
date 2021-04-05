@@ -3,8 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { ModeInfoActionCreator } from "../../../state/reducers/month-state/mode-info-reducer";
-import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
+import { ModeInfoActionCreator } from "../../../state/app-condition/mode-info-reducer";
+import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-state/schedule.actions";
 import { UndoableHotkeys } from "../../../components/common-components";
 import { ScheduleContainerComponent } from "../schedule-container.component";
 import { ScheduleMode } from "../../../components/schedule/schedule-state.model";

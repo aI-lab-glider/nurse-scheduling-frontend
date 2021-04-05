@@ -9,12 +9,12 @@ import { ApplicationStateModel, ScheduleStateModel } from "./models/application-
 import {
   PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
   TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
-} from "./reducers/month-state/schedule-data/schedule.actions";
-import { scheduleReducerF } from "./reducers/month-state/schedule-data/schedule.reducer";
-import { scheduleErrorsReducer } from "./reducers/month-state/schedule-errors.reducer";
-import { revisionInfoReducer } from "./reducers/month-state/revision-info.reducer";
-import { modeInfoReducer } from "./reducers/month-state/mode-info-reducer";
-import { primaryRevisionReducer } from "./reducers/base-revision.reducer";
+} from "./schedule-state/schedule.actions";
+import { scheduleReducerF } from "./schedule-state/schedule.reducer";
+import { scheduleErrorsReducer } from "./schedule-state/schedule-errors/schedule-errors.reducer";
+import { revisionInfoReducer } from "./schedule-state/schedule-condition/revision-info.reducer";
+import { modeInfoReducer } from "./app-condition/mode-info-reducer";
+import { primaryRevisionReducer } from "./schedule-state/primary-revision/primary-revision.reducer";
 
 export type CombinedReducers<StateModel> = {
   [key in keyof StateModel]: <T, U>(state: T, action: ActionModel<U>) => T;

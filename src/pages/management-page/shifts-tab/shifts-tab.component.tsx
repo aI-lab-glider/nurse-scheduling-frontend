@@ -16,9 +16,9 @@ import ShiftDrawerComponent, {
   ShiftDrawerMode,
 } from "../../../components/shifts-drawer/shift-drawer.component";
 import { useDispatch, useSelector } from "react-redux";
-import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "../../../state/schedule-state/schedule-data.action-creator";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { ShiftsActionCreator } from "../../../state/reducers/shifts.action-creator";
+import { ShiftsActionCreator } from "../../../state/schedule-state/shifts-types/shifts.action-creator";
 
 const useStyles = makeStyles(() =>
   createStyles({

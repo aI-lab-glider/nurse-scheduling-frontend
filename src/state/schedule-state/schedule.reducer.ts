@@ -4,15 +4,15 @@
 
 /* eslint-disable @typescript-eslint/camelcase */
 import { combineReducers } from "redux";
-import { ScheduleDataModel } from "../../../models/common-models/schedule-data.model";
-import { CombinedReducers } from "../../../app.reducer";
-import { employeeInfoReducerF } from "../employee-info.reducer";
-import { monthInfoReducerF } from "../month-info.reducer";
-import { scheduleInfoReducerF } from "../schedule-info.reducer";
-import { scheduleShiftsInfoReducerF } from "../shifts-info.reducer";
-import { generationInfoReducerF } from "../generation-info.reducer";
-import { shiftsModelReducer } from "../shifts-model.reducer";
-import { corruptedInfoReducerF } from "../corrupted-info.reducer";
+import { ScheduleDataModel } from "../models/common-models/schedule-data.model";
+import { CombinedReducers } from "../app.reducer";
+import { employeeInfoReducerF } from "./worker-info/employee-info.reducer";
+import { monthInfoReducerF } from "./foundation-info/month-info.reducer";
+import { scheduleInfoReducerF } from "./month-info/schedule-info.reducer";
+import { scheduleShiftsInfoReducerF } from "./workers-shifts/shifts-info.reducer";
+import { generationInfoReducerF } from "./schedule-condition/generation-info.reducer";
+import { shiftsModelReducer } from "./shifts-types/shifts-model.reducer";
+import { corruptedInfoReducerF } from "./schedule-condition/corrupted-info.reducer";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function scheduleReducerF(name: string) {

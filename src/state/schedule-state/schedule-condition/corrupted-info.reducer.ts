@@ -6,9 +6,9 @@ import {
   isScheduleAction,
   ScheduleActionModel,
   ScheduleActionType,
-} from "./schedule-data/schedule.actions";
+} from "../schedule.actions";
 import { ActionModel } from "../../models/action.model";
-import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
+import { scheduleDataInitialState } from "../schedule-data-initial-state";
 
 export function corruptedInfoReducerF(name: string) {
   return (

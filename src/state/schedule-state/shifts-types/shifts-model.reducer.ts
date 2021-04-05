@@ -2,10 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { ScheduleActionType } from "./schedule-data/schedule.actions";
+import { ScheduleActionType } from "../schedule.actions";
 import { Shift, ShiftsTypesDict } from "../../models/common-models/shift-info.model";
 import { ActionModel } from "../../models/action.model";
-import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
+import { scheduleDataInitialState } from "../schedule-data-initial-state";
 
 export function shiftsModelReducer(
   state: ShiftsTypesDict = scheduleDataInitialState.shift_types,

@@ -3,23 +3,23 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 /* eslint-disable @typescript-eslint/camelcase */
-import {
-  MonthDataModel,
-  ScheduleDataModel,
-} from "../../../models/common-models/schedule-data.model";
-import { RevisionType, ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
-import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
+import { MonthDataModel, ScheduleDataModel } from "../models/common-models/schedule-data.model";
+import { RevisionType, ScheduleKey, ThunkFunction } from "../../api/persistance-store.model";
+import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../app.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
-import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
+import { LocalStorageProvider } from "../../api/local-storage-provider.model";
 import _ from "lodash";
-import { ActionModel } from "../../../models/action.model";
-import { Shift } from "../../../models/common-models/shift-info.model";
-import { AddMonthRevisionAction, PrimaryRevisionAction } from "../../base-revision.reducer";
-import { PrimaryMonthRevisionDataModel } from "../../../models/application-state.model";
+import { ActionModel } from "../models/action.model";
+import { Shift } from "../models/common-models/shift-info.model";
+import {
+  AddMonthRevisionAction,
+  PrimaryRevisionAction,
+} from "./primary-revision/primary-revision.reducer";
+import { PrimaryMonthRevisionDataModel } from "../models/application-state.model";
 import {
   cropScheduleDMToMonthDM,
   extendMonthDMRevisionToScheduleDM,
-} from "../../../../logic/schedule-container-converter/schedule-container-converter";
+} from "../../logic/schedule-container-converter/schedule-container-converter";
 
 export class ScheduleDataActionCreator {
   //#region Update state

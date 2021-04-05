@@ -7,7 +7,7 @@ import {
   ScheduleError,
 } from "../../models/common-models/schedule-error.model";
 import { ActionModel } from "../../models/action.model";
-import { ScheduleActionType } from "./schedule-data/schedule.actions";
+import { ScheduleActionType } from "../schedule.actions";
 
 export enum ScheduleErrorActionType {
   UPDATE = "updateScheduleError",

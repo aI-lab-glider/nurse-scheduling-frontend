@@ -1,13 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
+import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import {
   createActionName,
   isScheduleAction,
   ScheduleActionModel,
   ScheduleActionType,
-} from "./schedule-data/schedule.actions";
+} from "../schedule.actions";
 
 export function generationInfoReducerF(name: string) {
   return (

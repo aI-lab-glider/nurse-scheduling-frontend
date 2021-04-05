@@ -15,9 +15,9 @@ import {
 } from "../../../state/models/common-models/schedule-error.model";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
-import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
-import { UndoActionCreator } from "../../../state/reducers/undoable.action-creator";
+import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-state/schedule.actions";
+import { ScheduleErrorActionType } from "../../../state/schedule-state/schedule-errors/schedule-errors.reducer";
+import { UndoActionCreator } from "../../../state/schedule-state/undoable.action-creator";
 import { Button } from "../../../components/common-components";
 import ConditionalLink from "../../../components/common-components/conditional-link/conditional-link.component";
 import { usePersistentDrawer } from "../../../components/drawers/drawer/persistent-drawer-context";

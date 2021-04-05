@@ -4,7 +4,7 @@
 
 import { RevisionType, ThunkFunction } from "../../../api/persistance-store.model";
 import { ActionModel } from "../../models/action.model";
-import { ScheduleDataActionCreator } from "./schedule-data/schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "../schedule-data.action-creator";
 import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
 
 export enum RevisionReducerAction {

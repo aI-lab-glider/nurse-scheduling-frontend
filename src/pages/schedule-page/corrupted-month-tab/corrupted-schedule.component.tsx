@@ -6,8 +6,8 @@ import { EmptyMonthButtons } from "../../../components/buttons/empty-month-butto
 import sadEmoji from "../../../assets/images/sadEmoji.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { UndoActionCreator } from "../../../state/reducers/undoable.action-creator";
-import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/reducers/month-state/schedule-data/schedule.actions";
+import { UndoActionCreator } from "../../../state/schedule-state/undoable.action-creator";
+import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-state/schedule.actions";
 import { Button } from "../../../components/common-components";
 import { ScheduleDataModel } from "../../../state/models/common-models/schedule-data.model";
 

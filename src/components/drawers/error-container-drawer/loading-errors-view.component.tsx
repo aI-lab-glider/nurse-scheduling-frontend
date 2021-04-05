@@ -13,7 +13,7 @@ import {
 } from "../../../state/models/common-models/schedule-error.model";
 import { ActionModel } from "../../../state/models/action.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { ScheduleErrorActionType } from "../../../state/reducers/month-state/schedule-errors.reducer";
+import { ScheduleErrorActionType } from "../../../state/schedule-state/schedule-errors/schedule-errors.reducer";
 import { Button } from "../../common-components";
 import ErrorList from "../../error-list/error-list.component";
 import { SpanErrors } from "../../error-list/span-errors.component";

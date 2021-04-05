@@ -1,14 +1,14 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { RevisionType, ThunkFunction } from "../../api/persistance-store.model";
+import { RevisionType, ThunkFunction } from "../../../api/persistance-store.model";
 import * as _ from "lodash";
-import { cropScheduleDMToMonthDM } from "../../logic/schedule-container-converter/schedule-container-converter";
-import { LocalStorageProvider } from "../../api/local-storage-provider.model";
-import { Shift, ShiftCode } from "../models/common-models/shift-info.model";
-import { MonthDataModel, ScheduleDataModel } from "../models/common-models/schedule-data.model";
-import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
-import { ScheduleDataActionCreator } from "./month-state/schedule-data/schedule-data.action-creator";
+import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
+import { LocalStorageProvider } from "../../../api/local-storage-provider.model";
+import { Shift, ShiftCode } from "../../models/common-models/shift-info.model";
+import { MonthDataModel, ScheduleDataModel } from "../../models/common-models/schedule-data.model";
+import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
+import { ScheduleDataActionCreator } from "../schedule-data.action-creator";
 
 export class ShiftsActionCreator {
   static deleteShift(shift: Shift | undefined): ThunkFunction<unknown> {

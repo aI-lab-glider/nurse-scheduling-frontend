@@ -7,7 +7,7 @@ import { TranslationHelper } from "../../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { Button } from "../../common-components";
 import { ScheduleKey } from "../../../api/persistance-store.model";
-import { MonthSwitchActionCreator } from "../../../state/reducers/month-state/schedule-data/month-switch.action-creator";
+import { MonthSwitchActionCreator } from "../../../state/schedule-state/month-switch.action-creator";
 import { LocalStorageProvider } from "../../../api/local-storage-provider.model";
 import { MonthDataModel } from "../../../state/models/common-models/schedule-data.model";
 import { MonthHelper } from "../../../helpers/month.helper";

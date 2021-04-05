@@ -2,9 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { TEMPORARY_SCHEDULE_NAME } from "../../../app.reducer";
-import { ActionModel } from "../../../models/action.model";
-import { createActionName } from "./schedule.actions";
+import { TEMPORARY_SCHEDULE_NAME } from "../../app.reducer";
+import { ActionModel } from "../../models/action.model";
+import { createActionName } from "../schedule.actions";
 
 export enum FoundationInfoActionType {
   UPDATE_CHILDREN_AND_EXTRAWORKERS = "UPDATE_CHILDREN_AND_EXTRAWORKERS",

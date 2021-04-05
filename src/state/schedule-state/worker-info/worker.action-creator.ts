@@ -5,21 +5,21 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
 import * as _ from "lodash";
-import { LocalStorageProvider } from "../../api/local-storage-provider.model";
-import { RevisionType, ScheduleKey, ThunkFunction } from "../../api/persistance-store.model";
-import { MonthDataModel, ScheduleDataModel } from "../models/common-models/schedule-data.model";
-import { ShiftCode, ShiftInfoModel } from "../models/common-models/shift-info.model";
-import { WorkerInfoModel, WorkersInfoModel } from "../models/common-models/worker-info.model";
-import { WorkerInfoExtendedInterface } from "../../components/drawers/worker-drawer/worker-edit";
-import { MonthHelper } from "../../helpers/month.helper";
-import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
-import { cropScheduleDMToMonthDM } from "../../logic/schedule-container-converter/schedule-container-converter";
+import { LocalStorageProvider } from "../../../api/local-storage-provider.model";
+import { RevisionType, ScheduleKey, ThunkFunction } from "../../../api/persistance-store.model";
+import { MonthDataModel, ScheduleDataModel } from "../../models/common-models/schedule-data.model";
+import { ShiftCode, ShiftInfoModel } from "../../models/common-models/shift-info.model";
+import { WorkerInfoModel, WorkersInfoModel } from "../../models/common-models/worker-info.model";
+import { WorkerInfoExtendedInterface } from "../../../components/drawers/worker-drawer/worker-edit";
+import { MonthHelper } from "../../../helpers/month.helper";
+import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
+import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
 import {
   DEFAULT_CONTRACT_TYPE,
   DEFAULT_WORKER_GROUP,
   DEFAULT_WORKER_TYPE,
-} from "../../logic/schedule-parser/workers-info.parser";
-import { ScheduleDataActionCreator } from "./month-state/schedule-data/schedule-data.action-creator";
+} from "../../../logic/schedule-parser/workers-info.parser";
+import { ScheduleDataActionCreator } from "../schedule-data.action-creator";
 
 export interface WorkerActionPayload {
   updatedShifts: ShiftInfoModel;
@@ -28,6 +28,7 @@ export interface WorkerActionPayload {
 
 export class WorkerActionCreator {
   static replaceWorkerShiftsInTmpSchedule(newWorkerShifts: ShiftInfoModel): ThunkFunction<unknown> {
+    // TODO: Move to workers-shift/workers-shift.action-creator
     newWorkerShifts = _.cloneDeep(newWorkerShifts);
     return async (dispatch, getState): Promise<void> => {
       const temporarySchedule = _.cloneDeep(getState().actualState.temporarySchedule.present);

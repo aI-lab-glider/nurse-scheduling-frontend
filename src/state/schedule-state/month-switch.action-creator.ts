@@ -4,15 +4,15 @@
 
 /* eslint-disable @typescript-eslint/camelcase */
 
-import { ScheduleKey, ThunkFunction } from "../../../../api/persistance-store.model";
+import { ScheduleKey, ThunkFunction } from "../../api/persistance-store.model";
 import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
-import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
-import { RevisionReducerAction } from "../revision-info.reducer";
-import { VerboseDateHelper } from "../../../../helpers/verbose-date.helper";
-import { copyMonthDM } from "../../../../logic/month-copy/month-copy.logic";
-import { MonthHelper } from "../../../../helpers/month.helper";
-import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-converter/schedule-container-converter";
-import { UndoActionCreator } from "../../undoable.action-creator";
+import { LocalStorageProvider } from "../../api/local-storage-provider.model";
+import { RevisionReducerAction } from "./schedule-condition/revision-info.reducer";
+import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
+import { copyMonthDM } from "../../logic/month-copy/month-copy.logic";
+import { MonthHelper } from "../../helpers/month.helper";
+import { cropScheduleDMToMonthDM } from "../../logic/schedule-container-converter/schedule-container-converter";
+import { UndoActionCreator } from "./undoable.action-creator";
 import {
   PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
   TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,

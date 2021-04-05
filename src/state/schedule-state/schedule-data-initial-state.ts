@@ -2,16 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
-import { ScheduleKey } from "../../../../api/persistance-store.model";
-import { MonthInfoModel } from "../../../models/common-models/month-info.model";
-import { ScheduleMetadata } from "../../../models/common-models/schedule.model";
-import { ShiftInfoModel, SHIFTS } from "../../../models/common-models/shift-info.model";
-import { WorkersInfoModel } from "../../../models/common-models/worker-info.model";
-import { ScheduleDataModel } from "../../../models/common-models/schedule-data.model";
-import { MonthHelper } from "../../../../helpers/month.helper";
-import { PrimaryMonthRevisionDataModel } from "../../../models/application-state.model";
+import { ScheduleKey } from "../../api/persistance-store.model";
+import { MonthInfoModel } from "../models/common-models/month-info.model";
+import { ScheduleMetadata } from "../models/common-models/schedule.model";
+import { ShiftInfoModel, SHIFTS } from "../models/common-models/shift-info.model";
+import { WorkersInfoModel } from "../models/common-models/worker-info.model";
+import { ScheduleDataModel } from "../models/common-models/schedule-data.model";
+import { MonthHelper } from "../../helpers/month.helper";
+import { PrimaryMonthRevisionDataModel } from "../models/application-state.model";
 
 /* eslint-disable @typescript-eslint/camelcase */
+// TODO: Split to separate states for each schedule props
 const employeeInfoinitialState: WorkersInfoModel = {
   time: {},
   type: {},

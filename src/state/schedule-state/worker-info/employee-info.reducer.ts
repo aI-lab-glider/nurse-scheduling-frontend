@@ -8,12 +8,8 @@ import {
   DEFAULT_CONTRACT_TYPE,
   DEFAULT_WORKER_GROUP,
 } from "../../../logic/schedule-parser/workers-info.parser";
-import { scheduleDataInitialState } from "./schedule-data/schedule-data-initial-state";
-import {
-  createActionName,
-  ScheduleActionModel,
-  ScheduleActionType,
-} from "./schedule-data/schedule.actions";
+import { scheduleDataInitialState } from "../schedule-data-initial-state";
+import { createActionName, ScheduleActionModel, ScheduleActionType } from "../schedule.actions";
 
 /* eslint-disable @typescript-eslint/camelcase */
 export function employeeInfoReducerF(name: string) {

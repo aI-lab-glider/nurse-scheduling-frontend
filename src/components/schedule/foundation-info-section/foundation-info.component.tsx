@@ -7,7 +7,7 @@ import { DataRowHelper } from "../../../helpers/data-row.helper";
 import { DataRow } from "../../../logic/schedule-logic/data-row";
 import { FoundationSectionKey } from "../../../logic/section.model";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
-import { FoundationInfoActionCreator } from "../../../state/reducers/month-state/schedule-data/foundation-info.action-creator";
+import { FoundationInfoActionCreator } from "../../../state/schedule-state/foundation-info/foundation-info.action-creator";
 import { NameTableComponent } from "../worker-info-section/name-table/nametable.component";
 import { ScheduleMode } from "../schedule-state.model";
 import { BaseSectionComponent } from "../base/base-section/base-section.component";

@@ -12,7 +12,7 @@ import RouteButtonsComponent, {
 } from "./components/buttons/route-buttons/route-buttons.component";
 import { SchedulePage } from "./pages/schedule-page/schedule-page.component";
 import ManagementPage from "./pages/management-page/management-page.component";
-import { ScheduleDataActionCreator } from "./state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "./state/schedule-state/schedule-data.action-creator";
 import { NotificationProvider } from "./components/notification/notification.context";
 import { Footer } from "./components/footer/footer.component";
 import { Box } from "@material-ui/core";

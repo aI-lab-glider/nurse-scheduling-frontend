@@ -4,7 +4,10 @@
 import { GlobalHotKeys } from "react-hotkeys";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { UndoableConfig, UndoActionCreator } from "../../state/reducers/undoable.action-creator";
+import {
+  UndoableConfig,
+  UndoActionCreator,
+} from "../../state/schedule-state/undoable.action-creator";
 
 interface UndoableHotkeysOptions {
   config: UndoableConfig<unknown>;

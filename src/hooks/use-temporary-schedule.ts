@@ -4,7 +4,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ScheduleDataModel } from "../state/models/common-models/schedule-data.model";
 import { ApplicationStateModel } from "../state/models/application-state.model";
-import { ScheduleDataActionCreator } from "../state/reducers/month-state/schedule-data/schedule-data.action-creator";
+import { ScheduleDataActionCreator } from "../state/schedule-state/schedule-data.action-creator";
 import * as _ from "lodash";
 
 export function useTemporarySchedule(): {

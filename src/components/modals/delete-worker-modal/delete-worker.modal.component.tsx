@@ -6,7 +6,7 @@ import { Button } from "../../buttons/button-component/button.component";
 import DefaultModal from "../modal.component";
 import { WorkerInfoModel } from "../../../state/models/common-models/worker-info.model";
 import { useDispatch } from "react-redux";
-import { WorkerActionCreator } from "../../../state/reducers/worker.action-creator";
+import { WorkerActionCreator } from "../../../state/schedule-state/worker-info/worker.action-creator";
 
 interface DeleteWorkerModalOptions {
   setOpen: (open: boolean) => void;

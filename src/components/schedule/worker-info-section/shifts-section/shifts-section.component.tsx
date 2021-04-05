@@ -11,7 +11,7 @@ import {
 import { ShiftCode } from "../../../../state/models/common-models/shift-info.model";
 import { DataRowHelper } from "../../../../helpers/data-row.helper";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
-import { WorkerActionCreator } from "../../../../state/reducers/worker.action-creator";
+import { WorkerActionCreator } from "../../../../state/schedule-state/worker-info/worker.action-creator";
 import { ShiftCellComponent } from "./shift-cell.component";
 import { ShiftRowComponent } from "./shift-row.component";
 import {

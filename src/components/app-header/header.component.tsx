@@ -9,7 +9,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../state/app-config-context";
 import { ApplicationStateModel } from "../../state/models/application-state.model";
-import { MonthSwitchActionCreator } from "../../state/reducers/month-state/schedule-data/month-switch.action-creator";
+import { MonthSwitchActionCreator } from "../../state/schedule-state/month-switch.action-creator";
 import { ScheduleMode } from "../schedule/schedule-state.model";
 import { Button } from "../buttons/button-component/button.component";
 import ReportIssueModal from "../modals/report-issue-modal/report-issue-modal.component";
