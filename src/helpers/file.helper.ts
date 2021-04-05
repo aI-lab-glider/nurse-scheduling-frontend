@@ -10,9 +10,9 @@ import {
   getRevisionTypeFromKey,
   RevisionType,
   RevisionTypeLabels,
-} from "../data-access/persistance-store.model";
+} from "../logic/data-access/persistance-store.model";
 import { MonthDataModel } from "../state/schedule-data/schedule-data.model";
-import { LocalStorageProvider } from "../data-access/local-storage-provider.model";
+import { LocalStorageProvider } from "../logic/data-access/local-storage-provider.model";
 import { ScheduleExportLogic } from "../logic/schedule-exporter/schedule-export.logic";
 
 type FilenamesToDirnameDict = { [dirName: string]: string[] };

@@ -4,31 +4,29 @@
 
 /* eslint-disable @typescript-eslint/camelcase */
 
+import _ from "lodash";
 import PouchDB from "pouchdb-browser";
+import { ArrayPositionPointer, ArrayHelper } from "../../helpers/array.helper";
+import { MonthHelper } from "../../helpers/month.helper";
+import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 import {
-  createEmptyMonthDataModel,
-  getScheduleKey,
-  isMonthModelEmpty,
   MonthDataModel,
-  ScheduleDataModel,
+  isMonthModelEmpty,
   validateMonthDM,
-} from "../state/schedule-data/schedule-data.model";
-
+  ScheduleDataModel,
+  getScheduleKey,
+  createEmptyMonthDataModel,
+} from "../../state/schedule-data/schedule-data.model";
+import { cropScheduleDMToMonthDM } from "../schedule-container-converter/schedule-container-converter";
 import {
-  getRevisionTypeFromKey,
-  ApplicationVersionRevision,
-  MonthRevision,
   PersistenceStoreProvider,
-  RevisionKey,
+  MonthRevision,
+  ApplicationVersionRevision,
   RevisionType,
+  RevisionKey,
+  getRevisionTypeFromKey,
   ScheduleKey,
 } from "./persistance-store.model";
-import _ from "lodash";
-import { ArrayHelper, ArrayPositionPointer } from "../helpers/array.helper";
-import { VerboseDateHelper } from "../helpers/verbose-date.helper";
-import { MonthHelper } from "../helpers/month.helper";
-import { cropScheduleDMToMonthDM } from "../logic/schedule-container-converter/schedule-container-converter";
-
 export const DATABASE_NAME = "nurse-scheduling";
 const APPLICATION_VERSION_TAG_DATABASE_KEY = "application_version_tag";
 const APPLICATION_VERSION_DEFAULT_TAG = "1.0.0";

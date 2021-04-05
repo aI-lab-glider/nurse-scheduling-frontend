@@ -2,8 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import "cypress-file-upload";
-import { LocalStorageProvider } from "../../src/data-access/local-storage-provider.model";
-import { ShiftCode } from "../../src/utils/shift-info.model";
+import { LocalStorageProvider } from "../../src/logic/data-access/local-storage-provider.model";
 import {
   baseCellDataCy,
   CellType,
@@ -14,6 +13,7 @@ import { summaryCellDataCy } from "../../src/components/schedule/worker-info-sec
 import { summaryRowDataCy } from "../../src/components/schedule/worker-info-section/summary-table/summarytable-row.models";
 import { summaryTableSectionDataCy } from "../../src/components/schedule/worker-info-section/summary-table/summarytable-section.models";
 import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../../src/helpers/month.helper";
+import { ShiftCode } from "../../src/state/schedule-data/shifts-types/shift-types.model";
 
 export type CypressScreenshotOptions = Partial<
   Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions

@@ -4,12 +4,16 @@
 /* eslint-disable @typescript-eslint/camelcase */
 /// <reference types="cypress" />
 import { ScheduleParser } from "../../../../../src/logic/schedule-parser/schedule.parser";
+import { ShiftCode } from "../../../../../src/state/schedule-data/shifts-types/shift-types.model";
+import {
+  WorkersInfoModel,
+  WorkerType,
+} from "../../../../../src/state/schedule-data/worker-info/worker-info.model";
+import { WorkerShiftsModel } from "../../../../../src/state/schedule-data/workers-shifts/worker-shifts.model";
 // import { ScheduleDataModel } from "../../../../../src/schedule-data.model";
-import { ShiftCode, ShiftInfoModel } from "../../../../../src/utils/shift-info.model";
-import { WorkersInfoModel, WorkerType } from "../../../../../src/utils/worker-info.model";
 
 function fillWorkerInfo(
-  shifts: ShiftInfoModel,
+  shifts: WorkerShiftsModel,
   employeeInfo: WorkersInfoModel,
   section: string[][],
   sectionType: WorkerType
@@ -47,7 +51,7 @@ const exampleData = [
   babysitterSection,
 ];
 
-const shifts: ShiftInfoModel = {};
+const shifts: WorkerShiftsModel = {};
 const employee_info: WorkersInfoModel = { type: {}, time: {}, workerGroup: {} };
 
 fillWorkerInfo(shifts, employee_info, nurseSection, WorkerType.NURSE);

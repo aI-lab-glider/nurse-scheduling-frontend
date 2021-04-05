@@ -2,17 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
-import {
-  FREE_SHIFTS,
-  Shift,
-  ShiftCode,
-  SHIFTS,
-  WORKING_SHIFTS,
-} from "../../../../src/utils/shift-info.model";
 import { MonthDataArray, ShiftHelper } from "../../../../src/helpers/shifts.helper";
 import { WorkerHourInfo } from "../../../../src/helpers/worker-hours-info.model";
+import {
+  SHIFTS,
+  WORKING_SHIFTS,
+  FREE_SHIFTS,
+  ShiftCode,
+  Shift,
+} from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
+import { ContractType } from "../../../../src/state/schedule-data/worker-info/worker-info.model";
 import { workerTestData, WorkerTestDataInstance } from "../../../fixtures/march-2021-worker-data";
-import { ContractType } from "../../../../src/utils/worker-info.model";
 
 describe("Worker hours info", () => {
   workerTestData.forEach((workerInstance) => {

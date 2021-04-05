@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { StateWithHistory } from "redux-undo";
-import { RevisionType } from "../data-access/persistance-store.model";
+import { RevisionType } from "../logic/data-access/persistance-store.model";
 import { MonthDataModel, ScheduleDataModel } from "./schedule-data/schedule-data.model";
 import { GroupedScheduleErrors } from "./schedule-data/schedule-errors/schedule-error.model";
 import { Opaque } from "../utils/type-utils";

@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import xlsx from "exceljs";
-import { RevisionType } from "../../data-access/persistance-store.model";
+import { RevisionType } from "../../logic/data-access/persistance-store.model";
 import { MonthDataModel } from "../../state/schedule-data/schedule-data.model";
 import { Color } from "../../helpers/colors/color.model";
 import { FileHelper } from "../../helpers/file.helper";

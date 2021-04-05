@@ -5,12 +5,12 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
 import * as _ from "lodash";
-import { LocalStorageProvider } from "../../../data-access/local-storage-provider.model";
+import { LocalStorageProvider } from "../../../logic/data-access/local-storage-provider.model";
 import {
   RevisionType,
   ScheduleKey,
   ThunkFunction,
-} from "../../../data-access/persistance-store.model";
+} from "../../../logic/data-access/persistance-store.model";
 import { MonthDataModel, ScheduleDataModel } from "../schedule-data.model";
 import { WorkerShiftsModel } from "../workers-shifts/worker-shifts.model";
 import { ShiftCode } from "../shifts-types/shift-types.model";

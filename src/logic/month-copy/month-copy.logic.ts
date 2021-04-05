@@ -15,7 +15,7 @@ import {
   createDatesForMonth,
   FoundationInfoModel,
 } from "../../state/schedule-data/foundation-info/foundation-info.model";
-import { ScheduleKey } from "../../data-access/persistance-store.model";
+import { ScheduleKey } from "../../logic/data-access/persistance-store.model";
 import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../../helpers/month.helper";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { DEFAULT_CHILDREN_NUMBER } from "../schedule-parser/children-info.parser";

@@ -2,11 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { validateEmployeeInfo, WorkersInfoModel } from "./worker-info/worker-info.model";
-import { FoundationInfoModel, validateMonthInfo } from "./foundation-info/foundation-info.model";
+import {
+  FoundationInfoModel,
+  validateFoundationInfo,
+} from "./foundation-info/foundation-info.model";
 import { MonthInfoModel, validateScheduleInfo } from "./month-info/month-info.model";
 import { WorkerShiftsModel, validateWorkerShiftsModel } from "./workers-shifts/worker-shifts.model";
 import { ShiftCode, ShiftsTypesDict } from "./shifts-types/shift-types.model";
-import { ScheduleKey } from "../../data-access/persistance-store.model";
+import { ScheduleKey } from "../../logic/data-access/persistance-store.model";
 import * as _ from "lodash";
 import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../../helpers/month.helper";
 
@@ -50,7 +53,7 @@ export function validateScheduleDM({
 }: ScheduleDataModel): void {
   validateScheduleInfo(scheduleInfo);
   validateWorkerShiftsModel(shifts, ScheduleContainerType.SCHEDULE_DM);
-  validateMonthInfo(monthInfo, ScheduleContainerType.SCHEDULE_DM);
+  validateFoundationInfo(monthInfo, ScheduleContainerType.SCHEDULE_DM);
   validateEmployeeInfo(employeeInfo);
   validateScheduleContainerDataIntegrity({
     shifts,
@@ -67,7 +70,7 @@ export function validateMonthDM({
   shift_types: shiftTypes,
 }: MonthDataModel): void {
   validateWorkerShiftsModel(shifts, ScheduleContainerType.MONTH_DM);
-  validateMonthInfo(monthInfo, ScheduleContainerType.MONTH_DM);
+  validateFoundationInfo(monthInfo, ScheduleContainerType.MONTH_DM);
   validateEmployeeInfo(employeeInfo);
   validateScheduleContainerDataIntegrity({
     shifts,

@@ -8,10 +8,10 @@ import {
   RevisionType,
   ScheduleKey,
   ThunkFunction,
-} from "../../data-access/persistance-store.model";
+} from "../../logic/data-access/persistance-store.model";
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../app.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
-import { LocalStorageProvider } from "../../data-access/local-storage-provider.model";
+import { LocalStorageProvider } from "../../logic/data-access/local-storage-provider.model";
 import _ from "lodash";
 import { ActionModel } from "../../utils/action.model";
 import { Shift } from "./shifts-types/shift-types.model";

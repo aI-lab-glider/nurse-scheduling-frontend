@@ -21,11 +21,11 @@ import PersistentDrawer from "./components/drawers/drawer/persistent-drawer.comp
 import { PersistentDrawerProvider } from "./components/drawers/drawer/persistent-drawer-context";
 import ScssVars from "./assets/styles/styles/custom/_variables.module.scss";
 import { ApplicationStateModel } from "./state/application-state.model";
-import { ScheduleKey } from "./data-access/persistance-store.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
 import { cropScheduleDMToMonthDM } from "./logic/schedule-container-converter/schedule-container-converter";
 import { ImportModalProvider } from "./components/buttons/import-buttons/import-modal-context";
-import { LocalStorageProvider } from "./data-access/local-storage-provider.model";
+import { LocalStorageProvider } from "./logic/data-access/local-storage-provider.model";
+import { ScheduleKey } from "./logic/data-access/persistance-store.model";
 
 const useStyles = makeStyles(() => ({
   root: {

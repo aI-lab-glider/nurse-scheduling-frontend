@@ -4,9 +4,9 @@
 
 /* eslint-disable @typescript-eslint/camelcase */
 
-import { ScheduleKey, ThunkFunction } from "../../data-access/persistance-store.model";
+import { ScheduleKey, ThunkFunction } from "../../logic/data-access/persistance-store.model";
 import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
-import { LocalStorageProvider } from "../../data-access/local-storage-provider.model";
+import { LocalStorageProvider } from "../../logic/data-access/local-storage-provider.model";
 import { RevisionReducerAction } from "./schedule-condition/revision-info.reducer";
 import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 import { copyMonthDM } from "../../logic/month-copy/month-copy.logic";

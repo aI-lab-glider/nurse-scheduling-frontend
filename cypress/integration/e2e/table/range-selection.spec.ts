@@ -4,7 +4,7 @@
 import * as _ from "lodash";
 import { Simulate } from "react-dom/test-utils";
 import { keepOnShiftClassName } from "../../../../src/components/schedule/base/base-cell/base-cell.models";
-import { ShiftCode } from "../../../../src/utils/shift-info.model";
+import { ShiftCode } from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
 import { GetWorkerShiftOptions } from "../../../support/commands";
 import error = Simulate.error;
 

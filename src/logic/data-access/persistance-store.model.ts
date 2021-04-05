@@ -1,11 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 import { ThunkDispatch } from "redux-thunk";
-import { MonthDataModel, ScheduleDataModel } from "../state/schedule-data/schedule-data.model";
-import { ActionModel } from "../utils/action.model";
-import { ApplicationStateModel } from "../state/application-state.model";
-import { ArrayPositionPointer } from "../helpers/array.helper";
+import { ArrayPositionPointer } from "../../helpers/array.helper";
+import { ApplicationStateModel } from "../../state/application-state.model";
+import { MonthDataModel, ScheduleDataModel } from "../../state/schedule-data/schedule-data.model";
+import { ActionModel } from "../../utils/action.model";
 
 export type ThunkFunction<TDispatchedActionPayload> = (
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<TDispatchedActionPayload>>,

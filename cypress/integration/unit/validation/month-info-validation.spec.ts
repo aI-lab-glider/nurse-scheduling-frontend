@@ -2,25 +2,28 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
-import { FoundationInfoModel, validateMonthInfo } from "../../../../src/utils/month-info.model";
 import {
-  ScheduleContainerType,
+  validateFoundationInfo,
+  FoundationInfoModel,
+} from "../../../../src/state/schedule-data/foundation-info/foundation-info.model";
+import {
   SCHEDULE_CONTAINERS_LENGTH,
-} from "../../../../src/utils/schedule-data.model";
-
+  ScheduleContainerType,
+} from "../../../../src/state/schedule-data/schedule-data.model";
 describe("Month info validation", () => {
   it("Should throw when length of dates in month info model is not allowed length for schedule data model", () => {
     const invalidScheduleLenghth = SCHEDULE_CONTAINERS_LENGTH.SCHEDULE_DM[0] + 1;
     const invalidScheduleModel = createFoundationInfoModel(invalidScheduleLenghth);
     const action = (): void =>
-      validateMonthInfo(invalidScheduleModel, ScheduleContainerType.SCHEDULE_DM);
+      validateFoundationInfo(invalidScheduleModel, ScheduleContainerType.SCHEDULE_DM);
     expect(action).to.throw();
   });
 
   it("Should throw when length of dates in month info model is not allowed length for month data model ", () => {
     const invalidMOnthDayCount = 32;
     const invalidMonthModel = createFoundationInfoModel(invalidMOnthDayCount);
-    const action = (): void => validateMonthInfo(invalidMonthModel, ScheduleContainerType.MONTH_DM);
+    const action = (): void =>
+      validateFoundationInfo(invalidMonthModel, ScheduleContainerType.MONTH_DM);
     expect(action).to.throw();
   });
 
@@ -28,7 +31,7 @@ describe("Month info validation", () => {
     const validMonthDayCount = SCHEDULE_CONTAINERS_LENGTH.SCHEDULE_DM[0];
     const validMonthModel = createFoundationInfoModel(validMonthDayCount);
     const action = (): void =>
-      validateMonthInfo(validMonthModel, ScheduleContainerType.SCHEDULE_DM);
+      validateFoundationInfo(validMonthModel, ScheduleContainerType.SCHEDULE_DM);
     expect(action).to.not.throw();
   });
 
@@ -37,7 +40,7 @@ describe("Month info validation", () => {
     const invalidChildrenCount = validLength - 1;
     const invalidFoundationInfoModel = createFoundationInfoModel(validLength, invalidChildrenCount);
     const action = (): void =>
-      validateMonthInfo(invalidFoundationInfoModel, ScheduleContainerType.SCHEDULE_DM);
+      validateFoundationInfo(invalidFoundationInfoModel, ScheduleContainerType.SCHEDULE_DM);
     expect(action).to.throw();
   });
 
@@ -50,7 +53,7 @@ describe("Month info validation", () => {
       invalidExtraWorkersCount
     );
     const action = (): void =>
-      validateMonthInfo(invalidFoundationInfoModel, ScheduleContainerType.SCHEDULE_DM);
+      validateFoundationInfo(invalidFoundationInfoModel, ScheduleContainerType.SCHEDULE_DM);
     expect(action).to.throw();
   });
 
@@ -62,7 +65,7 @@ describe("Month info validation", () => {
       validLength
     );
     const action = (): void =>
-      validateMonthInfo(invalidFoundationInfoModel, ScheduleContainerType.SCHEDULE_DM);
+      validateFoundationInfo(invalidFoundationInfoModel, ScheduleContainerType.SCHEDULE_DM);
     expect(action).to.throw();
   });
 });

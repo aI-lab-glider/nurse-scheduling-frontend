@@ -1,38 +1,42 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { VerboseDate } from "../../../../src/utils/month-info.model";
-import { ShiftCode, ShiftInfoModel, SHIFTS } from "../../../../src/utils/shift-info.model";
+import { VerboseDate } from "../../../../src/state/schedule-data/foundation-info/foundation-info.model";
+import {
+  ShiftCode,
+  SHIFTS,
+} from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
 import { ShiftHelper } from "../../../../src/helpers/shifts.helper";
 import { WorkerHourInfo } from "../../../../src/helpers/worker-hours-info.model";
+import { WorkerShiftsModel } from "../../../../src/state/schedule-data/workers-shifts/worker-shifts.model";
 
 //#region getWorkersCount data
-type GetWorkersCountTestCase = { arr: ShiftInfoModel; exp: Array<number> };
+type GetWorkersCountTestCase = { arr: WorkerShiftsModel; exp: Array<number> };
 
-const testData1: ShiftInfoModel = {
+const testData1: WorkerShiftsModel = {
   "0": ["R", "DN", "W"].map((d) => ShiftCode[d]),
   "1": ["P", "D", "W"].map((d) => ShiftCode[d]),
   "2": ["D", "W", "W"].map((d) => ShiftCode[d]),
 };
 
-const testData2: ShiftInfoModel = {
+const testData2: WorkerShiftsModel = {
   "0": ["W", "W", "W"].map((d) => ShiftCode[d]),
   "1": ["W", "W", "W"].map((d) => ShiftCode[d]),
   "2": ["W", "W", "W"].map((d) => ShiftCode[d]),
 };
 
-const testData3: ShiftInfoModel = {
+const testData3: WorkerShiftsModel = {
   "0": ["R", "R", "R"].map((d) => ShiftCode[d]),
   "1": ["R", "R", "R"].map((d) => ShiftCode[d]),
   "2": ["R", "R", "R"].map((d) => ShiftCode[d]),
 };
 
-const testData4: ShiftInfoModel = {
+const testData4: WorkerShiftsModel = {
   "0": ["R", "W", "R", "W"].map((d) => ShiftCode[d]),
   "1": ["R", "R", "R", "W"].map((d) => ShiftCode[d]),
   "2": ["R", "W", "R", "R"].map((d) => ShiftCode[d]),
 };
-const testData5: ShiftInfoModel = {
+const testData5: WorkerShiftsModel = {
   "0": ["R", "W", "R", "W"].map((d) => ShiftCode[d]),
   "1": ["R", "R", "R", "W"].map((d) => ShiftCode[d]),
   "2": ["P", "R", "R", "R"].map((d) => ShiftCode[d]),

@@ -11,7 +11,7 @@ import {
 import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import {
   FoundationInfoModel,
-  validateMonthInfo,
+  validateFoundationInfo,
 } from "../../state/schedule-data/foundation-info/foundation-info.model";
 import {
   getScheduleKey,
@@ -21,9 +21,9 @@ import {
   validateMonthDM,
   validateScheduleDM,
 } from "../../state/schedule-data/schedule-data.model";
-import { RevisionType, ScheduleKey } from "../../data-access/persistance-store.model";
+import { RevisionType, ScheduleKey } from "../../logic/data-access/persistance-store.model";
 import * as _ from "lodash";
-import { LocalStorageProvider } from "../../data-access/local-storage-provider.model";
+import { LocalStorageProvider } from "../../logic/data-access/local-storage-provider.model";
 
 /* eslint-disable @typescript-eslint/camelcase */
 export function extendMonthDMToScheduleDM(
@@ -141,7 +141,7 @@ export function cropMonthInfoToMonth(
     frozen_shifts: [],
   };
 
-  validateMonthInfo(monthInfoModel, ScheduleContainerType.MONTH_DM);
+  validateFoundationInfo(monthInfoModel, ScheduleContainerType.MONTH_DM);
   return monthInfoModel;
 }
 

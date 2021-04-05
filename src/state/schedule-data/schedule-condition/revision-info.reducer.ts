@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { RevisionType, ThunkFunction } from "../../../data-access/persistance-store.model";
+import { RevisionType, ThunkFunction } from "../../../logic/data-access/persistance-store.model";
 import { ActionModel } from "../../../utils/action.model";
 import { ScheduleDataActionCreator } from "../schedule-data.action-creator";
 import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";

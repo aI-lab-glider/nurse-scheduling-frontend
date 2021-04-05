@@ -8,7 +8,10 @@ import { Button } from "../../../components/common-components";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { RevisionReducerActionCreator } from "../../../state/schedule-data/schedule-condition/revision-info.reducer";
-import { isRevisionType, RevisionTypeLabels } from "../../../data-access/persistance-store.model";
+import {
+  isRevisionType,
+  RevisionTypeLabels,
+} from "../../../logic/data-access/persistance-store.model";
 import classNames from "classnames/bind";
 import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
 

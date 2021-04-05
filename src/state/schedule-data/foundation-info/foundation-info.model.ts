@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { SCHEDULE_CONTAINERS_LENGTH, ScheduleContainerType } from "../schedule-data.model";
 import { MonthHelper } from "../../../helpers/month.helper";
-import { ScheduleKey } from "../../../data-access/persistance-store.model";
+import { ScheduleKey } from "../../../logic/data-access/persistance-store.model";
 import * as _ from "lodash";
 
 export enum WeekDay {
@@ -31,7 +31,7 @@ export interface FoundationInfoModel {
   dates: number[];
 }
 
-export function validateMonthInfo(
+export function validateFoundationInfo(
   foundationInfo: FoundationInfoModel,
   containerType: ScheduleContainerType
 ): void {
