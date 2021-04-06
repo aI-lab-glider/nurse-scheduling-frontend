@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { Shift } from "../common-models/shift-info.model";
+
 export const EMPTY_ROW_SIZE = 40;
 export const EMPTY_ROW = Array(EMPTY_ROW_SIZE).fill("");
 
@@ -105,5 +107,9 @@ export class ParserHelper {
 
   public static getShiftColorHeaderIndex(): number {
     return this.getShiftHeaderIndex(KOLOR);
+  }
+
+  public static shiftPasses7am(shift: Shift): boolean {
+    return shift.from <= shift.to ? shift.from < 7 && 7 < shift.to : 7 < shift.to || shift.from < 7;
   }
 }

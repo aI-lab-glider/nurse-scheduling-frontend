@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { ApplicationStateModel } from "../../../state/models/application-state.model";
 import { ShiftsActionCreator } from "../../../state/reducers/shifts.action-creator";
+import { ParserHelper } from "../../../helpers/parser.helper";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -64,13 +65,17 @@ export default function ShiftTab(): JSX.Element {
   }
   const dispatcher = useDispatch();
   const handleChangeItem = (createdShift: Shift): void => {
-    if (mode === ShiftDrawerMode.ADD_NEW) {
-      dispatcher(ScheduleDataActionCreator.addNewShift(createdShift));
-    } else {
-      dispatcher(ScheduleDataActionCreator.modifyShift(createdShift, selectedShift));
-    }
+    if (!ParserHelper.shiftPasses7am(createdShift)) {
+      if (mode === ShiftDrawerMode.ADD_NEW) {
+        dispatcher(ScheduleDataActionCreator.addNewShift(createdShift));
+      } else {
+        dispatcher(ScheduleDataActionCreator.modifyShift(createdShift, selectedShift));
+      }
 
-    toggleClose();
+      toggleClose();
+    } else {
+      console.log("error error co teraz?");
+    }
   };
 
   const handleRemoveItem = (shift: Shift): void => {

@@ -21,7 +21,11 @@ export class ShiftsTypesInfoParser {
     this.namelessShifts = 0;
     data.forEach((a) => {
       const shift = this.mapShift(a);
-      this._shiftsInfoRows[shift.code] = shift;
+      if (!ParserHelper.shiftPasses7am(shift)) {
+        this._shiftsInfoRows[shift.code] = shift;
+      } else {
+        this.logLoadFileError("Nie dodano zmiany " + shift.name + ". Przecina godzinę 7:00.");
+      }
     });
   }
 
