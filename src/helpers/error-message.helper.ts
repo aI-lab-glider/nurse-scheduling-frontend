@@ -5,7 +5,7 @@ import {
   ScheduleErrorLevel,
   ScheduleErrorMessageModel,
   ScheduleErrorType,
-} from "../common-models/schedule-error-message.model";
+} from "../state/schedule-data/schedule-errors/schedule-error-message.model";
 import {
   AlgorithmErrorCode,
   GroupedScheduleErrors,
@@ -13,8 +13,8 @@ import {
   NetworkErrorCode,
   ParseErrorCode,
   ScheduleError,
-} from "../common-models/schedule-error.model";
-import { ShiftsTypesDict } from "../common-models/shift-info.model";
+} from "../state/schedule-data/schedule-errors/schedule-error.model";
+import { ShiftsTypesDict } from "../state/schedule-data/shifts-types/shift-types.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Color, Colors } from "./colors/color.model";
 import { ShiftHelper } from "./shifts.helper";

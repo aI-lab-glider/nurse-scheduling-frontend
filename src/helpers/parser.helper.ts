@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { Shift } from "../common-models/shift-info.model";
 import { DEFAULT_FROM } from "../logic/schedule-parser/shifts-types-info.parser";
+import { Shift } from "../state/schedule-data/shifts-types/shift-types.model";
 
 export const EMPTY_ROW_SIZE = 40;
 export const EMPTY_ROW = Array(EMPTY_ROW_SIZE).fill("");

@@ -6,12 +6,16 @@ import {
   MonthDataModel,
   ScheduleDataModel,
   validateScheduleDM,
-} from "../../common-models/schedule-data.model";
+} from "../../state/schedule-data/schedule-data.model";
 import * as _ from "lodash";
-import { ShiftCode, ShiftInfoModel } from "../../common-models/shift-info.model";
+import { WorkerShiftsModel } from "../../state/schedule-data/workers-shifts/worker-shifts.model";
+import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { ArrayHelper } from "../../helpers/array.helper";
-import { createDatesForMonth, MonthInfoModel } from "../../common-models/month-info.model";
-import { ScheduleKey } from "../../api/persistance-store.model";
+import {
+  createDatesForMonth,
+  FoundationInfoModel,
+} from "../../state/schedule-data/foundation-info/foundation-info.model";
+import { ScheduleKey } from "../../logic/data-access/persistance-store.model";
 import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../../helpers/month.helper";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { DEFAULT_CHILDREN_NUMBER } from "../schedule-parser/children-info.parser";
@@ -41,9 +45,9 @@ export function copyMonthDM(
 
 export function copyShifts(
   { scheduleKey: currentScheduleKey, shifts: currentScheduleShifts }: MonthDataModel,
-  baseShifts: ShiftInfoModel
-): ShiftInfoModel {
-  const newMonthWorkersShifts: ShiftInfoModel = {};
+  baseShifts: WorkerShiftsModel
+): WorkerShiftsModel {
+  const newMonthWorkersShifts: WorkerShiftsModel = {};
   const { daysMissingFromPrevMonth } = MonthHelper.calculateMissingFullWeekDays(currentScheduleKey);
   const replacementStart = daysMissingFromPrevMonth > 0 ? NUMBER_OF_DAYS_IN_WEEK : 0;
 
@@ -64,8 +68,8 @@ export function copyShifts(
 
 export function copyMonthInfo(
   { scheduleKey: currentScheduleKey, month_info: currentMonthInfo }: MonthDataModel,
-  baseMonthInfo: MonthInfoModel
-): MonthInfoModel {
+  baseMonthInfo: FoundationInfoModel
+): FoundationInfoModel {
   const dates = createDatesForMonth(currentScheduleKey.year, currentScheduleKey.month);
   return {
     children_number: copyMonthData(

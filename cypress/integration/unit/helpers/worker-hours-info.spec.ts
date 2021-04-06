@@ -2,23 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
-import {
-  NotWorkingShift,
-  NotWorkingShiftType,
-  Shift,
-  ShiftCode,
-  SHIFTS,
-} from "../../../../src/common-models/shift-info.model";
-import { ContractType } from "../../../../src/common-models/worker-info.model";
-import { MonthDataArray, ShiftHelper } from "../../../../src/helpers/shifts.helper";
-import {
-  DEFAULT_NORM_SUBTRACTION,
-  WorkerHourInfo,
-} from "../../../../src/helpers/worker-hours-info.model";
-import {
-  workerTestData,
-  WorkerTestDataInstance,
-} from "../../../fixtures/worker-data/worker-data-preprocessor";
+import { ShiftHelper, MonthDataArray } from "../../../../src/helpers/shifts.helper";
+import { DEFAULT_NORM_SUBTRACTION, WorkerHourInfo } from "../../../../src/helpers/worker-hours-info.model";
+import { SHIFTS, ShiftCode, Shift, NotWorkingShift, NotWorkingShiftType } from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
+import { ContractType } from "../../../../src/state/schedule-data/worker-info/worker-info.model";
+import { workerTestData, WorkerTestDataInstance } from "../../../fixtures/worker-data/worker-data-preprocessor";
+
 
 describe("Worker hours info", () => {
   workerTestData.forEach((workerInstance) => {

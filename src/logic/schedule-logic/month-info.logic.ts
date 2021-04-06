@@ -3,7 +3,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { StringHelper } from "../../helpers/string.helper";
 import { TranslationHelper } from "../../helpers/translations.helper";
-import { VerboseDate, WeekDay } from "../../common-models/month-info.model";
+import {
+  VerboseDate,
+  WeekDay,
+} from "../../state/schedule-data/foundation-info/foundation-info.model";
 import { PublicHolidaysLogic } from "./public-holidays.logic";
 
 export class MonthInfoLogic {

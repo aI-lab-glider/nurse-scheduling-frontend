@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { WorkerType } from "../../../../src/common-models/worker-info.model";
+import { WorkerType } from "../../../../src/state/schedule-data/worker-info/worker-info.model";
 
 const addWorker = (workerName: string, position: WorkerType): void => {
   cy.get('[data-cy="btn-management-tab"]').click();
@@ -36,9 +36,9 @@ context("Schedule errors", () => {
     addWorker(Cypress.env("REACT_APP_ERROR_WORKER"), WorkerType.NURSE);
     cy.get('[data-cy="btn-schedule-tab"]').click({ force: true });
     Cypress.on("uncaught:exception", () => {
-      cy.get('[data-cy="btn-ok-app-error"]').click();
+      cy.get('[data-cy="btn-reload-app-error"]').click();
       cy.get('[data-cy="timetable-row"]').should("be.visible");
-      cy.get('[data-cy="btn-ok-app-error"]').click();
+      cy.get('[data-cy="btn-reload-app-error"]').click();
       cy.get('[data-cy="restore-prev-version"]').click();
       cy.contains("testUser");
       return false;

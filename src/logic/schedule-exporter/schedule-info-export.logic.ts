@@ -2,14 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import xlsx from "exceljs";
-import { VerboseDate } from "../../common-models/month-info.model";
-import { MonthDataModel } from "../../common-models/schedule-data.model";
-import { ShiftCode } from "../../common-models/shift-info.model";
+import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
+import { MonthDataModel } from "../../state/schedule-data/schedule-data.model";
+import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { ColorHelper } from "../../helpers/colors/color.helper";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { TranslationHelper } from "../../helpers/translations.helper";
 import { WorkerHourInfo } from "../../helpers/worker-hours-info.model";
-import { PrimaryMonthRevisionDataModel } from "../../state/models/application-state.model";
+import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
 import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
 import {
   ChildrenSectionKey,
@@ -18,8 +18,8 @@ import {
   MetaDataSectionKey,
 } from "../section.model";
 import { EMPTY_ROW } from "../../helpers/parser.helper";
-import { groupWorkers } from "../../components/schedule-page/table/schedule/use-worker-groups";
-import { WorkerInfo } from "../../components/namestable/use-worker-info";
+import { groupWorkers } from "../../hooks/use-worker-groups";
+import { WorkerInfo } from "../../hooks/use-worker-info";
 import { MonthHelper } from "../../helpers/month.helper";
 import * as _ from "lodash";
 import { ScheduleExportLogic } from "./schedule-export.logic";

@@ -1,23 +1,16 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { VerboseDate } from "../common-models/month-info.model";
-import {
-  Shift,
-  FREE_SHIFTS_CODES,
-  ShiftCode,
-  ShiftInfoModel,
-  ShiftsTypesDict,
-  NotWorkingShiftType,
-  NotWorkingShift,
-} from "../common-models/shift-info.model";
-import { Opaque } from "../common-models/type-utils";
-import { WorkerType } from "../common-models/worker-info.model";
+import { VerboseDate } from "../state/schedule-data/foundation-info/foundation-info.model";
+import { WorkerShiftsModel } from "../state/schedule-data/workers-shifts/worker-shifts.model";
+import { Opaque } from "../utils/type-utils";
+import { WorkerType } from "../state/schedule-data/worker-info/worker-info.model";
 import { ArrayHelper } from "./array.helper";
 import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Color, Colors } from "./colors/color.model";
 import { VerboseDateHelper } from "./verbose-date.helper";
+import { ShiftsTypesDict, Shift, ShiftCode, FREE_SHIFTS_CODES, NotWorkingShift, NotWorkingShiftType } from "../state/schedule-data/shifts-types/shift-types.model";
 
 export const WORK_HOURS_PER_DAY = 8;
 export type MonthDataArray<T> = Opaque<"MonthData", T[]>;
@@ -26,7 +19,7 @@ export type WorkHourInfoArray = Opaque<"WorkHourInfoArray", [number, number, num
 
 export class ShiftHelper {
   public static getWorkersCount(
-    shifts: ShiftInfoModel,
+    shifts: WorkerShiftsModel,
     shiftTypes: ShiftsTypesDict
   ): Array<number> {
     const shiftsArray = Object.values(shifts);
@@ -75,10 +68,10 @@ export class ShiftHelper {
   }
 
   public static groupShiftsByWorkerType(
-    shifts: ShiftInfoModel = {},
+    shifts: WorkerShiftsModel = {},
     workerTypes: { [workerName: string]: WorkerType } = {}
-  ): { [key: string]: ShiftInfoModel } {
-    const grouped = ArrayHelper.arrayToObject<WorkerType, ShiftInfoModel>(
+  ): { [key: string]: WorkerShiftsModel } {
+    const grouped = ArrayHelper.arrayToObject<WorkerType, WorkerShiftsModel>(
       Object.values(WorkerType),
       (wt) => wt
     );

@@ -2,8 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { ShiftCode } from "../../../../src/common-models/shift-info.model";
-import { shiftSectionDataCy } from "../../../../src/components/schedule-page/table/schedule/sections/worker-info-section/worker-info-section.models";
+
+import { shiftSectionDataCy } from "../../../../src/components/schedule/worker-info-section/worker-info-section.models";
+import { ShiftCode } from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
 import { FoundationInfoRowType } from "../../../support/commands";
 //#region Test data
 interface CheckFoundationInfoReadCorrectly {
