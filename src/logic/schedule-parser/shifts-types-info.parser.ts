@@ -1,8 +1,11 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
-import { Shift, SHIFTS } from "../../common-models/shift-info.model";
+import {
+  InputFileErrorCode,
+  ScheduleError,
+} from "../../state/schedule-data/schedule-errors/schedule-error.model";
+import { Shift, SHIFTS } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
 import { ParserHelper } from "../../helpers/parser.helper";
 

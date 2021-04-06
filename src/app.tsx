@@ -5,27 +5,27 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import schedule from "./assets/devMode/schedule";
-import { ScheduleDataModel } from "./common-models/schedule-data.model";
+import { ScheduleDataModel } from "./state/schedule-data/schedule-data.model";
 import { HeaderComponent } from "./components/common-components";
 import RouteButtonsComponent, {
   Tabs,
-} from "./components/common-components/route-buttons/route-buttons.component";
-import { SchedulePage } from "./components/schedule-page/schedule-page.component";
-import ManagementPage from "./components/workers-page/management-page.component";
-import { ScheduleDataActionCreator } from "./state/reducers/month-state/schedule-data/schedule-data.action-creator";
-import { NotificationProvider } from "./components/common-components/notification/notification.context";
-import { NetlifyProFooter } from "./components/common-components/netlify-pro-footer/netlify-pro-footer.component";
+} from "./components/buttons/route-buttons/route-buttons.component";
+import { SchedulePage } from "./pages/schedule-page/schedule-page.component";
+import ManagementPage from "./pages/management-page/management-page.component";
+import { ScheduleDataActionCreator } from "./state/schedule-data/schedule-data.action-creator";
+import { NotificationProvider } from "./components/notification/notification.context";
+import { Footer } from "./components/footer/footer.component";
 import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import JiraLikeDrawer from "./components/common-components/drawer/jira-like-drawer.component";
-import { JiraLikeDrawerProvider } from "./components/common-components/drawer/jira-like-drawer-context";
+import PersistentDrawer from "./components/drawers/drawer/persistent-drawer.component";
+import { PersistentDrawerProvider } from "./components/drawers/drawer/persistent-drawer-context";
 import ScssVars from "./assets/styles/styles/custom/_variables.module.scss";
-import { ApplicationStateModel } from "./state/models/application-state.model";
-import { ScheduleKey } from "./api/persistance-store.model";
+import { ApplicationStateModel } from "./state/application-state.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
-import { cropScheduleDMToMonthDM } from "./logic/schedule-container-convertion/schedule-container-convertion";
-import { ImportModalProvider } from "./components/schedule-page/import-buttons/import-modal-context";
-import { LocalStorageProvider } from "./api/local-storage-provider.model";
+import { cropScheduleDMToMonthDM } from "./logic/schedule-container-converter/schedule-container-converter";
+import { ImportModalProvider } from "./components/buttons/import-buttons/import-modal-context";
+import { LocalStorageProvider } from "./logic/data-access/local-storage-provider.model";
+import { ScheduleKey } from "./logic/data-access/persistance-store.model";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -109,7 +109,7 @@ function App(): JSX.Element {
 
   return (
     <NotificationProvider>
-      <JiraLikeDrawerProvider>
+      <PersistentDrawerProvider>
         <ImportModalProvider>
           <Switch>
             <Route path="/">
@@ -117,16 +117,16 @@ function App(): JSX.Element {
                 <Box className={classes.content}>
                   <HeaderComponent />
                   <RouteButtonsComponent tabs={tabs} disabled={disableRouteButtons} />
-                  <NetlifyProFooter />
+                  <Footer />
                 </Box>
                 <Box className={classes.drawer}>
-                  <JiraLikeDrawer width={690} />
+                  <PersistentDrawer width={690} />
                 </Box>
               </Box>
             </Route>
           </Switch>
         </ImportModalProvider>
-      </JiraLikeDrawerProvider>
+      </PersistentDrawerProvider>
     </NotificationProvider>
   );
 }

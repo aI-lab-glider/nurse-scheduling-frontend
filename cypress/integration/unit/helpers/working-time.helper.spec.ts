@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { WorkingTimeHelper } from "../../../../src/components/namestable/working-time.helper";
+import { WorkingTimeHelper } from "../../../../src/helpers/working-time.helper";
 
 describe("WorkingTimeHelper", () => {
   describe("fromHoursToFraction", () => {

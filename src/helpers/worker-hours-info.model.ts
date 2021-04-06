@@ -3,17 +3,17 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import * as _ from "lodash";
-import { VerboseDate } from "../common-models/month-info.model";
-import { MonthDataModel, ScheduleDataModel } from "../common-models/schedule-data.model";
-import { ShiftCode, ShiftsTypesDict } from "../common-models/shift-info.model";
-import { isAllValuesDefined, Opaque } from "../common-models/type-utils";
-import { nameOf } from "../common-models/utils";
+import { VerboseDate } from "../state/schedule-data/foundation-info/foundation-info.model";
+import { MonthDataModel, ScheduleDataModel } from "../state/schedule-data/schedule-data.model";
+import { ShiftCode, ShiftsTypesDict } from "../state/schedule-data/shifts-types/shift-types.model";
+import { isAllValuesDefined, Opaque } from "../utils/type-utils";
+import { nameOf } from "../utils/utils";
 import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
-import { PrimaryMonthRevisionDataModel } from "../state/models/application-state.model";
+import { PrimaryMonthRevisionDataModel } from "../state/application-state.model";
 import { MonthDataArray, ShiftHelper, WORK_HOURS_PER_DAY } from "./shifts.helper";
 import { TranslationHelper } from "./translations.helper";
 import { VerboseDateHelper } from "./verbose-date.helper";
-import { ContractType } from "../common-models/worker-info.model";
+import { ContractType } from "../state/schedule-data/worker-info/worker-info.model";
 
 interface WorkerInfoForCalculateWorkerHoursInfo {
   actualWorkerShifts: ShiftCode[];

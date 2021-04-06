@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // TODO: Uncomment after release version 2.0.0
-// import { WorkerType } from "../../../../src/common-models/worker-info.model";
+// import { WorkerType } from "../../../../src/worker-info.model";
 //
 // const addWorker = (workerName: string, position: WorkerType): Cypress.Chainable => {
 //   cy.get('[data-cy="btn-management-tab"]').click();
@@ -18,7 +18,7 @@
 //   return cy.get('[data-cy="btn-add-worker"]').should("be.visible");
 // };
 //
-// context("Schedule errors", () => {
+// context("Schedule error-list", () => {
 //   beforeEach(() => {
 //     cy.loadScheduleToMonth();
 //   });

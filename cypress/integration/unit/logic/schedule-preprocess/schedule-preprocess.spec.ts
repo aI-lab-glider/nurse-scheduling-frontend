@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { ScheduleKey } from "../../../../../src/api/persistance-store.model";
+import { ScheduleKey } from "../../../../../src/logic/data-access/persistance-store.model";
 import { MonthHelper } from "../../../../../src/helpers/month.helper";
 
 interface TestCase {

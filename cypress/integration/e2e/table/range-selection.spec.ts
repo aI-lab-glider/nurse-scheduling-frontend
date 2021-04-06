@@ -3,8 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
 import { Simulate } from "react-dom/test-utils";
-import { keepOnShiftClassName } from "../../../../src/components/schedule-page/table/schedule/schedule-parts/base-cell/base-cell.models";
-import { ShiftCode } from "../../../../src/common-models/shift-info.model";
+import { keepOnShiftClassName } from "../../../../src/components/schedule/base/base-cell/base-cell.models";
+import { ShiftCode } from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
 import { GetWorkerShiftOptions } from "../../../support/commands";
 import error = Simulate.error;
 

@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
-import { ScheduleKey } from "../../../../src/api/persistance-store.model";
+import { ScheduleKey } from "../../../../src/logic/data-access/persistance-store.model";
 
 describe("Schedule key validation", () => {
   const validYear = 2020;

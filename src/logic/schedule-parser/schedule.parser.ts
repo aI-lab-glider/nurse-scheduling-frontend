@@ -2,10 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { ScheduleError } from "../../common-models/schedule-error.model";
-import { WorkerType } from "../../common-models/worker-info.model";
-import { FoundationInfoOptions } from "../providers/foundation-info-provider.model";
-import { Schedule, ScheduleProvider, Sections } from "../providers/schedule-provider.model";
+import { ScheduleError } from "../../state/schedule-data/schedule-errors/schedule-error.model";
+import { WorkerType } from "../../state/schedule-data/worker-info/worker-info.model";
+import { FoundationInfoOptions } from "../schedule-providers/foundation-info-provider.model";
+import {
+  Schedule,
+  ScheduleProvider,
+  Sections,
+} from "../schedule-providers/schedule-provider.model";
 import { ChildrenInfoParser } from "./children-info.parser";
 import { ExtraWorkersInfoParser } from "./extra-workers-info.parser";
 import { FoundationInfoHeaders, FoundationInfoParser } from "./foundation-info.parser";

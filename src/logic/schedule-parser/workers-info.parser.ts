@@ -1,15 +1,18 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { InputFileErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
+import {
+  InputFileErrorCode,
+  ScheduleError,
+} from "../../state/schedule-data/schedule-errors/schedule-error.model";
 import {
   ContractType,
-  ContractTypeHelper,
   WorkerDescription,
   WorkerGroup,
   WorkerType,
-  WorkerTypeHelper,
-} from "../../common-models/worker-info.model";
+} from "../../state/schedule-data/worker-info/worker-info.model";
+import { ContractTypeHelper } from "../../helpers/contract-type.helper";
+import { WorkerTypeHelper } from "../../helpers/worker-type.helper";
 import { StringHelper } from "../../helpers/string.helper";
 import * as _ from "lodash";
 

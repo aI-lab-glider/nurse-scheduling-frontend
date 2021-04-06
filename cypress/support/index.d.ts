@@ -10,7 +10,7 @@ declare namespace Cypress {
     ): Chainable<Element>;
 
     useAutocomplete(
-      newShiftCode: import("../../src/common-models/shift-info.model").ShiftCode
+      newShiftCode: import("../../src/shift-info.model").ShiftCode
     ): Chainable<Element>;
 
     getWorkerShift(
