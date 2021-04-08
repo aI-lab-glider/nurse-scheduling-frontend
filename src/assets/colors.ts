@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-export const theme = {
+export const colors = {
   linkDisabled: "#666666",
   transparentBg: "transparent",
   lightBg: "#f5f6fa",
@@ -39,10 +39,9 @@ export const fontFamilyPrimary = "Roboto, sans-serif";
 
 export const fontSizeDash = 0.875;
 export const fontSizeBase = 1; // Assumes the browser default, typically `16px`
-export const fontSizeLg = fontSizeBase * 1.142;
-export const fontSizeXl = fontSizeBase * 1.428;
-export const fontSizeSm = fontSizeBase * 0.85714286;
-export const fontSizeXs = fontSizeBase * 0.714;
+export const fontSizeLg = fontSizeBase * 1.25;
+export const fontSizeXl = fontSizeBase * 1.5;
+export const fontSizeXs = fontSizeBase * 0.75;
 
 export const fontWeightLight = 300;
 export const fontWeightNormal = 400;

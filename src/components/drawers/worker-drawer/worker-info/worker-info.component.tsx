@@ -13,6 +13,7 @@ import WorkersCalendar from "../../../workers-calendar/workers-calendar.componen
 import { Button } from "../../../common-components";
 import { exportToPdf } from "./export-to-pdf";
 import { useWorkerInfo } from "../../../../hooks/use-worker-info";
+import styled from "styled-components";
 
 export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
   const workerHoursInfo = useWorkerHoursInfo(info.name);
@@ -72,9 +73,15 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
           <WorkersCalendar shiftsArr={info.shifts!} />
         </div>
       </div>
-      <Button variant={"primary"} onClick={handleExport} className="drawer-bottom-button">
+      <DownloadButton variant={"primary"} onClick={handleExport}>
         Pobierz
-      </Button>
+      </DownloadButton>
     </>
   );
 }
+
+const DownloadButton = styled(Button)`
+  position: absolute;
+  bottom: 74px;
+  left: 23px;
+`;

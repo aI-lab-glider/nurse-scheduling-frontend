@@ -13,6 +13,7 @@ import classNames from "classnames/bind";
 import { Order } from "../../../helpers/comparator.helper";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { WorkerDrawerMode } from "../../../components/drawers/worker-drawer/worker-drawer.component";
+import styled from "styled-components";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -82,8 +83,7 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
           );
         })}
         <TableCell align="right">
-          <Button
-            className="header-button"
+          <HeaderButton
             variant="primary"
             data-cy="btn-add-worker"
             onClick={(): void => {
@@ -91,9 +91,13 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
             }}
           >
             Dodaj pracownika
-          </Button>
+          </HeaderButton>
         </TableCell>
       </TableRow>
     </TableHead>
   );
 }
+
+const HeaderButton = styled(Button)`
+  width: 187px;
+`;

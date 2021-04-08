@@ -10,6 +10,7 @@ import { ShiftDrawerMode } from "../../../components/shifts-drawer/shift-drawer.
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
+import styled from "styled-components";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -52,7 +53,7 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
           );
         })}
         <TableCell align="right">
-          <Button
+          <HeaderButton
             variant="primary"
             disabled
             onClick={(): void => {
@@ -68,12 +69,15 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
                 ShiftDrawerMode.ADD_NEW
               );
             }}
-            className="header-button"
           >
             Dodaj zmianę
-          </Button>
+          </HeaderButton>
         </TableCell>
       </TableRow>
     </TableHead>
   );
 }
+
+const HeaderButton = styled(Button)`
+  width: 187px;
+`;

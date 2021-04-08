@@ -14,6 +14,12 @@ import { ApplicationStateModel } from "../../../../state/application-state.model
 import { BaseCellInputOptions } from "../../base/base-cell/base-cell-input.component";
 import useTimeout from "../../../../hooks/use-timeout";
 import styled from "styled-components";
+import {
+  colors,
+  fontFamilyPrimary,
+  fontSizeBase,
+  fontWeightNormal,
+} from "../../../../assets/colors";
 
 const MODAL_CLOSE_MS = 444;
 interface ShiftCodeSelectItem {
@@ -172,7 +178,7 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
 const AutoSeparator = styled.div`
   flex: 1;
   width: 90%;
-  background-color: ${theme.gray400};
+  background-color: ${colors.gray400};
   height: 1.25px;
   display: flex;
   align-self: center;
@@ -188,8 +194,8 @@ const ListBox = styled.div`
   font-family: ${fontFamilyPrimary};
   font-size: ${fontSizeBase}rem;
   text-align: left;
-  color: ${theme.primary};
-  background-color: ${theme.white};
+  color: ${colors.primary};
+  background-color: ${colors.white};
   font-weight: ${fontWeightNormal};
   box-shadow: 0 4px 7px rgba(16, 32, 70, 0.2);
   max-height: 500px;
