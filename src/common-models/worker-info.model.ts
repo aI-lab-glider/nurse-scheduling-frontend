@@ -62,12 +62,12 @@ export enum TimeDrawerType {
   OTHER = "inne",
 }
 
-export type WorkerGroup = Opaque<string, "WorkerGroup">;
+export type Team = Opaque<string, "Team">;
 export interface WorkersInfoModel {
   time: { [key: string]: number };
   type: { [workerName: string]: WorkerType };
   contractType?: { [workerName: string]: ContractType };
-  workerGroup: { [workerName: string]: WorkerGroup };
+  team: { [workerName: string]: Team };
 }
 
 export interface WorkerDescription {
@@ -83,7 +83,7 @@ export interface WorkerInfoModel {
   contractType?: ContractType;
   type?: WorkerType;
   shifts?: [VerboseDate, ShiftCode][];
-  workerGroup?: WorkerGroup;
+  team?: Team;
 }
 
 export function validateEmployeeInfo(employeeInfo: WorkersInfoModel): void {

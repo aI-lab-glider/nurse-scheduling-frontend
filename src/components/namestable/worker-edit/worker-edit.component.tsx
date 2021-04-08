@@ -6,14 +6,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ContractType, WorkerGroup, WorkerType } from "../../../common-models/worker-info.model";
+import { ContractType, Team, WorkerType } from "../../../common-models/worker-info.model";
 import { WorkerActionCreator } from "../../../state/reducers/worker.action-creator";
 import { Button } from "../../common-components";
 import { useWorkerInfo, WorkerInfo } from "../use-worker-info";
 import { CombinedWorkNormSelector } from "./combined-worknorm-selector.component";
 import { WorkerContractTypeSelector } from "./worker-contract-type-selector.component";
 import { WorkerEditComponentOptions, WorkerEditComponentMode } from "./worker-edit.models";
-import { WorkerGroupSelector } from "./worker-group-selector.component";
+import { TeamSelector } from "./worker-group-selector.component";
 import { WorkerNameEditField } from "./worker-name-edit-field.components";
 import { WorkerWorkerTypeSelector } from "./worker-position-selector.component";
 
@@ -59,8 +59,8 @@ export function WorkerEditComponent({
     setWorkerInfo(workerInfo.withNewWorkerType(newWorkerType));
   }
 
-  function handleWorkerWorkerGroupUpdate(newWorkerGroup: WorkerGroup): void {
-    setWorkerInfo(workerInfo.withNewWorkerGroup(newWorkerGroup));
+  function handleWorkerTeamUpdate(newTeam: Team): void {
+    setWorkerInfo(workerInfo.withNewTeam(newTeam));
   }
   //#endregion
 
@@ -110,10 +110,7 @@ export function WorkerEditComponent({
           workerContractType={workerInfo.contractType}
         />
 
-        <WorkerGroupSelector
-          workerGroup={workerInfo.workerGroup}
-          setWorkerGroup={handleWorkerWorkerGroupUpdate}
-        />
+        <TeamSelector team={workerInfo.team} setTeam={handleWorkerTeamUpdate} />
       </Grid>
       <Button
         disabled={!canSaveWorker()}

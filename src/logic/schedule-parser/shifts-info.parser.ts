@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ParseErrorCode, ScheduleError } from "../../common-models/schedule-error.model";
 import { ShiftCode } from "../../common-models/shift-info.model";
-import { WorkerGroup } from "../../common-models/worker-info.model";
+import { Team } from "../../common-models/worker-info.model";
 import { StringHelper } from "../../helpers/string.helper";
 import { ShiftsProvider } from "../providers/shifts-provider.model";
 import { DataRowParser } from "./data-row.parser";
@@ -11,7 +11,7 @@ import { MetaDataParser } from "./metadata.parser";
 import { WORKER_GROUP_PREFIX } from "./workers-info.parser";
 
 export class ShiftsInfoParser extends ShiftsProvider {
-  get availableWorkersGroup(): { [workerName: string]: WorkerGroup } {
+  get availableWorkersGroup(): { [workerName: string]: Team } {
     const result = {};
     Object.keys(this.workerShifts).forEach((workerName) => {
       result[workerName] = `${WORKER_GROUP_PREFIX} ${this.groupNumber}`;

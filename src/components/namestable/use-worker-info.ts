@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { ShiftCode } from "../../common-models/shift-info.model";
 import {
   ContractType,
-  WorkerGroup,
+  Team,
   WorkersInfoModel,
   WorkerType,
 } from "../../common-models/worker-info.model";
@@ -36,9 +36,7 @@ export function useWorkerInfo(workerName: string): UseWorkerInfoReturn {
     getWorkerInfo<ContractType>(state, "contractType")
   );
 
-  const workerGroup = useSelector((state: ApplicationStateModel) =>
-    getWorkerInfo<WorkerGroup>(state, "workerGroup")
-  );
+  const team = useSelector((state: ApplicationStateModel) => getWorkerInfo<Team>(state, "team"));
 
   const workerShifts = useSelector(
     (state: ApplicationStateModel) =>
@@ -52,10 +50,10 @@ export function useWorkerInfo(workerName: string): UseWorkerInfoReturn {
       workerTime,
       workerType,
       workerShifts,
-      workerGroup
+      team
     );
     setWorkerInfo(newWorkerInfo);
-  }, [workerName, workerContractType, workerTime, workerType, workerShifts, workerGroup]);
+  }, [workerName, workerContractType, workerTime, workerType, workerShifts, team]);
   return {
     workerInfo,
     setWorkerInfo,
@@ -70,7 +68,7 @@ export class WorkerInfo {
     public workerTime: number = 1,
     public workerType?: WorkerType,
     public workerShifts: ShiftCode[] = [],
-    public workerGroup: WorkerGroup = DEFAULT_WORKER_GROUP
+    public team: Team = DEFAULT_WORKER_GROUP
   ) {
     this.previousWorkerName = workerName;
   }
@@ -99,9 +97,9 @@ export class WorkerInfo {
     return copy;
   }
 
-  public withNewWorkerGroup(newWorkerGroup: WorkerGroup): WorkerInfo {
+  public withNewTeam(newTeam: Team): WorkerInfo {
     const copy = _.cloneDeep(this);
-    copy.workerGroup = newWorkerGroup;
+    copy.team = newTeam;
     return copy;
   }
 
@@ -112,7 +110,7 @@ export class WorkerInfo {
       workerType: this.workerType,
       contractType: this.contractType,
       time: this.workerTime,
-      workerGroup: this.workerGroup,
+      team: this.team,
     };
   }
 }

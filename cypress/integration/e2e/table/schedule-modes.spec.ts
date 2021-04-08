@@ -4,7 +4,7 @@
 import { ShiftCode } from "../../../../src/common-models/shift-info.model";
 
 const testedCell = {
-  workerGroupIdx: 0,
+  teamIdx: 0,
   workerIdx: 0,
   shiftIdx: 6,
   initialShiftCode: ShiftCode.U,

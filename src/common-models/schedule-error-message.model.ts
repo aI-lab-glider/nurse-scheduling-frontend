@@ -16,6 +16,7 @@ export enum ScheduleErrorType {
   LLB = "LLB",
   WUH = "WUH",
   WOH = "WOH",
+  WTC = "WTC",
   ILLEGAL_SHIFT_VALUE = "ILLEGAL_SHIFT_VALUE",
 }
 

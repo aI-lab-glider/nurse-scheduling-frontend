@@ -20,7 +20,7 @@ export type CypressScreenshotOptions = Partial<
 >;
 
 export interface GetWorkerShiftOptions {
-  workerGroupIdx: number;
+  teamIdx: number;
   workerIdx: number;
   shiftIdx: number;
   selector?: CellType;
@@ -32,7 +32,7 @@ export interface ChangeWorkerShiftOptions extends GetWorkerShiftOptions {
   newShiftCode: ShiftCode;
 }
 export interface CheckHoursInfoOptions {
-  workerGroupIdx: number;
+  teamIdx: number;
   workerIdx: number;
   hoursInfo: HoursInfo;
 }
@@ -62,15 +62,15 @@ Cypress.Commands.add(
       cy.clock(Date.UTC(year ?? TEST_SCHEDULE_YEAR, month ?? TEST_SCHEDULE_MONTH, 15), ["Date"]);
       cy.visit("/");
       cy.get("[data-cy=file-input]").attachFile(scheduleName);
-      cy.get(`[data-cy=workerGroup0ShiftsTable]`, { timeout: 10000 });
+      cy.get(`[data-cy=team0ShiftsTable]`, { timeout: 10000 });
     });
   }
 );
 
 Cypress.Commands.add(
   "getWorkerShift",
-  ({ workerGroupIdx, workerIdx, shiftIdx, selector = "cell" }: GetWorkerShiftOptions) => {
-    const section = shiftSectionDataCy(workerGroupIdx);
+  ({ teamIdx, workerIdx, shiftIdx, selector = "cell" }: GetWorkerShiftOptions) => {
+    const section = shiftSectionDataCy(teamIdx);
     const row = baseRowDataCy(workerIdx);
     const cell = baseCellDataCy(shiftIdx, selector);
     return cy.get(`[data-cy=${section}] [data-cy=${row}] [data-cy=${cell}]`);
@@ -102,8 +102,8 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   "checkHoursInfo",
-  ({ workerGroupIdx, workerIdx, hoursInfo }: CheckHoursInfoOptions) => {
-    const section = summaryTableSectionDataCy(workerGroupIdx);
+  ({ teamIdx, workerIdx, hoursInfo }: CheckHoursInfoOptions) => {
+    const section = summaryTableSectionDataCy(teamIdx);
     const row = summaryRowDataCy(workerIdx);
     Object.keys(HoursInfoCells)
       .filter((key) => isNaN(Number(HoursInfoCells[key])))

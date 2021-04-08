@@ -6,14 +6,14 @@ import { ScheduleError } from "../../common-models/schedule-error.model";
 import { ChildrenInfoProvider } from "./children-info-provider.model";
 import { ExtraWorkersInfoProvider } from "./extra-workers-info-provider.model";
 import { Sections } from "./schedule-provider.model";
-export interface FoundationInfoOptions extends Pick<Sections, "WorkerGroups"> {
+export interface FoundationInfoOptions extends Pick<Sections, "Teams"> {
   ChildrenInfo: ChildrenInfoProvider;
   ExtraWorkersInfo: ExtraWorkersInfoProvider;
 }
 
 export abstract class FoundationInfoProvider {
   get errors(): ScheduleError[] {
-    return _.flatten(this.sections.WorkerGroups.map((group) => group.errors));
+    return _.flatten(this.sections.Teams.map((group) => group.errors));
   }
   get childrenInfo(): number[] {
     return this.sections.ChildrenInfo.registeredChildrenNumber;
@@ -25,7 +25,7 @@ export abstract class FoundationInfoProvider {
 
   getAllWorkersNumber(): number {
     return (
-      this.sections.WorkerGroups.reduce((acc, group) => acc + group.workersCount, 0) +
+      this.sections.Teams.reduce((acc, group) => acc + group.workersCount, 0) +
       this.sections.ExtraWorkersInfo.workersCount
     );
   }

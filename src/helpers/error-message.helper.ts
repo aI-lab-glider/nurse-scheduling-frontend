@@ -146,6 +146,11 @@ export class ErrorMessageHelper {
         type = ScheduleErrorType.WUH;
         title = `${error.worker}`;
         break;
+      case AlgorithmErrorCode.WorkerTeamsCollision:
+        message = `Pracownicy z różnych zespołów na jednej zmianie: ${error.workers}`;
+        type = ScheduleErrorType.WTC;
+        title = `Dzień ${error.day}, ${error.hour}:00`;
+        break;
       case ParseErrorCode.UNKNOWN_VALUE:
         message = `Nieznana wartość zmiany: "<b>${error.actual}</b>". Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub utworzyć nową.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
