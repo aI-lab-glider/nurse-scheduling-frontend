@@ -113,6 +113,8 @@ export interface WorkerOvertime {
 }
 export interface WorkerTeamsCollision {
   kind: AlgorithmErrorCode.WorkerTeamsCollision;
+  isVisible?: boolean;
+
   day: number;
   hour: number;
   workers: string[];
