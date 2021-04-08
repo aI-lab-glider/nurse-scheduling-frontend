@@ -46,6 +46,7 @@ export class ErrorMessageHelper {
     let title = "Nie rozpoznano błędu";
     let day = 0;
     let i = 0;
+    let workers = [""];
     let type = ScheduleErrorType.OTH;
     let newline = false;
 
@@ -146,6 +147,45 @@ export class ErrorMessageHelper {
         type = ScheduleErrorType.WUH;
         title = `${error.worker}`;
         break;
+      case AlgorithmErrorCode.WorkerTeamsCollision:
+        i = 0;
+        message = `W godzinach: <b>${error.hours![i]}:00</b>`;
+        let prev = error.hours![i];
+        i++;
+        while (error.hours && error.hours[i]) {
+          if (error.hours[i + 1]) {
+            if (
+              error.hours[i + 1] !== error.hours[i] + 1 &&
+              error.hours[i + 1] !== 1 &&
+              error.hours[i] !== 24
+            ) {
+              if (prev !== error.hours[i]) {
+                if (error.hours[i - 1] === error.hours[i] - 1) {
+                  message += `-<b>${error.hours[i]}:00</b>, <b>${error.hours[i + 1]}:00</b>`;
+                  prev = error.hours[i + 1];
+                } else {
+                  message += `, <b>${error.hours[i]}:00</b>`;
+                  prev = error.hours[i];
+                }
+              }
+            }
+          } else if (prev !== error.hours[i]) message += `-<b>${error.hours[i]}:00</b>`;
+          i++;
+        }
+        i = 0;
+        message += `<br>Pracownicy z różnych zespołów na jednej zmianie: <b>${error.workers[i]}</b>`;
+        while (error.workers[i + 1]) {
+          i++;
+          message += `, <b>${error.workers[i]}</b>`;
+        }
+        message += `.`;
+        type = ScheduleErrorType.WTC;
+        title = "date";
+        if (error.day) {
+          day += error.day;
+        }
+        workers = error.workers;
+        break;
       case ParseErrorCode.UNKNOWN_VALUE:
         message = `Nieznana wartość zmiany: "<b>${error.actual}</b>". Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub utworzyć nową.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
@@ -172,7 +212,7 @@ export class ErrorMessageHelper {
     const level = AlgorithmErrorCode[kind]
       ? ScheduleErrorLevel.CRITICAL_ERROR
       : ScheduleErrorLevel.WARNING;
-    return { kind, title, day, message, level, type };
+    return { kind, title, day, message, level, type, workers };
   }
 
   public static getErrorColor(error: Error): Color {

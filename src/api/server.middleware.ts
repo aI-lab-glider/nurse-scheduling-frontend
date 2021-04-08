@@ -8,6 +8,7 @@ import {
   AlgorithmErrorCode,
   ScheduleError,
   WorkerOvertime,
+  WorkerTeamsCollision,
   WorkerUnderTime,
 } from "../state/schedule-data/schedule-errors/schedule-error.model";
 import { WorkerHourInfo } from "../helpers/worker-hours-info.model";
@@ -58,10 +59,9 @@ export class ServerMiddleware {
       delete schedule.employee_info.type[shiftName];
     });
 
-    Object.keys(schedule.employee_info.workerGroup).forEach((shiftName) => {
-      schedule.employee_info.workerGroup[nameToUuid[shiftName]] =
-        schedule.employee_info.workerGroup[shiftName];
-      delete schedule.employee_info.workerGroup[shiftName];
+    Object.keys(schedule.employee_info.team).forEach((shiftName) => {
+      schedule.employee_info.team[nameToUuid[shiftName]] = schedule.employee_info.team[shiftName];
+      delete schedule.employee_info.team[shiftName];
     });
 
     if (schedule.employee_info.contractType !== undefined) {
@@ -100,7 +100,63 @@ export class ServerMiddleware {
         if (anonimizationMap[workerName] === el["worker"]) el["worker"] = workerName;
       });
     }
+    if ("workers" in el) {
+      for (let i = 0; el["workers"][i]; i++) {
+        Object.keys(anonimizationMap).forEach((workerName) => {
+          if (anonimizationMap[workerName] === el["workers"][i]) el["workers"][i] = workerName;
+        });
+      }
+    }
     return el;
+  }
+
+  public static aggregateWTCErrors(errors: ScheduleError[]): ScheduleError[] {
+    const validBackendScheduleErros = errors.filter(
+      (err) => err.kind !== AlgorithmErrorCode.WorkerTeamsCollision
+    );
+    const WTCErrors = errors.filter((err) => err.kind === AlgorithmErrorCode.WorkerTeamsCollision);
+
+    const aggregatedWTCErrors: WorkerTeamsCollision[] = [];
+    for (let i = 0; i < WTCErrors.length; i++) {
+      const hoursArray: number[] = [];
+      hoursArray.push((WTCErrors[i] as WorkerTeamsCollision).hour);
+
+      const newWTCError: WorkerTeamsCollision = {
+        kind: AlgorithmErrorCode.WorkerTeamsCollision,
+        day: (WTCErrors[i] as WorkerTeamsCollision).day,
+        hour: -1,
+        hours: hoursArray,
+        workers: (WTCErrors[i] as WorkerTeamsCollision).workers,
+      };
+
+      if ((WTCErrors[i] as WorkerTeamsCollision).hour > -1) {
+        for (let j = i + 1; j < WTCErrors.length; j++) {
+          if (
+            (WTCErrors[i] as WorkerTeamsCollision).day ===
+            (WTCErrors[j] as WorkerTeamsCollision).day
+          ) {
+            newWTCError.hours!.push((WTCErrors[j] as WorkerTeamsCollision).hour);
+            for (
+              let worker = 0;
+              worker < (WTCErrors[j] as WorkerTeamsCollision).workers.length;
+              worker++
+            ) {
+              if (
+                !newWTCError.workers.includes(
+                  (WTCErrors[j] as WorkerTeamsCollision).workers[worker]
+                )
+              ) {
+                newWTCError.workers.push((WTCErrors[j] as WorkerTeamsCollision).workers[worker]);
+              }
+            }
+            (WTCErrors[j] as WorkerTeamsCollision).hour = -1;
+          }
+        }
+        aggregatedWTCErrors.push(newWTCError);
+      }
+    }
+
+    return _.concat(validBackendScheduleErros, aggregatedWTCErrors);
   }
 
   public static replaceOvertimeAndUndertimeErrors(

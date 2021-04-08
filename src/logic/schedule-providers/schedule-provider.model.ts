@@ -35,9 +35,12 @@ export class Schedule {
         month_number: sections.Metadata !== undefined ? sections.Metadata.monthNumber : 0,
         year: sections.Metadata !== undefined ? sections.Metadata?.year : 0,
       },
-      shifts: sections.WorkerGroups.map(
-        (section) => section.workerShifts
-      ).reduce((acc, section) => ({ ...acc, ...section })),
+      shifts: sections.WorkerGroups.map((section) => section.workerShifts).reduce(
+        (acc, section) => ({
+          ...acc,
+          ...section,
+        })
+      ),
       month_info: {
         frozen_shifts: sections.Metadata !== undefined ? sections.Metadata.frozenDates : [],
         children_number:
@@ -51,7 +54,7 @@ export class Schedule {
         time: sections.WorkerGroups.map(
           (section) => section.availableWorkersWorkTime
         ).reduce((acc, section) => ({ ...acc, ...section })),
-        workerGroup: sections.WorkerGroups.map(
+        team: sections.WorkerGroups.map(
           (section) => section.availableWorkersGroup
         ).reduce((acc, section) => ({ ...acc, ...section })),
       },

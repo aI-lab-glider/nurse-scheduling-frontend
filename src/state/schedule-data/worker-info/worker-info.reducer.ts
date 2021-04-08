@@ -57,6 +57,6 @@ function preprocessWorkerInfoModel(workerInfo: WorkersInfoModel): WorkersInfoMod
   workerInfo = _.cloneDeep(workerInfo);
   const workerNames = Object.keys(workerInfo.type);
   fillWorkerInfoWithDefaultValue(workerInfo, workerNames, "contractType", DEFAULT_CONTRACT_TYPE);
-  fillWorkerInfoWithDefaultValue(workerInfo, workerNames, "workerGroup", DEFAULT_WORKER_GROUP);
+  fillWorkerInfoWithDefaultValue(workerInfo, workerNames, "team", DEFAULT_WORKER_GROUP);
   return workerInfo;
 }

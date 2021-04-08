@@ -52,7 +52,7 @@ const exampleData = [
 ];
 
 const shifts: WorkerShiftsModel = {};
-const employee_info: WorkersInfoModel = { type: {}, time: {}, workerGroup: {} };
+const employee_info: WorkersInfoModel = { type: {}, time: {}, team: {} };
 
 fillWorkerInfo(shifts, employee_info, nurseSection, WorkerType.NURSE);
 fillWorkerInfo(shifts, employee_info, babysitterSection, WorkerType.OTHER);

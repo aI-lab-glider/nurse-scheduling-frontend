@@ -24,7 +24,7 @@ const aggregateWorkerInfo = (
     workerInfo.time[workerName],
     workerInfo.type[workerName],
     workerShifts[workerName],
-    workerInfo.workerGroup[workerName]
+    workerInfo.team[workerName]
   );
 
 /* eslint-disable @typescript-eslint/camelcase */

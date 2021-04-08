@@ -4,11 +4,15 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { TranslationHelper } from "../../helpers/translations.helper";
-import { useMonthInfo } from "../../hooks/use-month-info";
+import {
+  ScheduleErrorMessageModel,
+  ScheduleErrorType,
+} from "../../state/schedule-data/schedule-errors/schedule-error-message.model";
 import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
+import { useWorkerGroups } from "../../hooks/use-worker-groups";
+import { useMonthInfo } from "../../hooks/use-month-info";
 import { ScheduleDataActionCreator } from "../../state/schedule-data/schedule-data.action-creator";
-import { ScheduleErrorMessageModel } from "../../state/schedule-data/schedule-errors/schedule-error-message.model";
-import { Button } from "../common-components";
+import { Button } from "../buttons/button-component/button.component";
 
 interface Options {
   error: ScheduleErrorMessageModel;
@@ -29,6 +33,15 @@ function prepareMonthName(index: number, day: number, month: number): string {
   return monthName;
 }
 
+function insertWorkerGroup(a, b, at): string {
+  let position = a.indexOf(at);
+  if (position !== -1) {
+    position += at.length;
+    return a.substr(0, position) + "</b> (" + b + ")<b>" + a.substr(position);
+  }
+  return a;
+}
+
 export default function ErrorListItem({
   error,
   interactable = false,
@@ -37,7 +50,9 @@ export default function ErrorListItem({
   showTitle = true,
 }: Options): JSX.Element {
   const { verboseDates, monthNumber } = useMonthInfo();
+  const groupedWorkers = useWorkerGroups();
   const mappedDays = verboseDates.map((d: VerboseDate) => d.date);
+  let message = error.message;
 
   if (typeof error.day === "undefined" || typeof mappedDays === "undefined") {
     throw Error(`Error undefined or mappedDays undefined`);
@@ -51,6 +66,19 @@ export default function ErrorListItem({
   const handleShow = (e: ScheduleErrorMessageModel): void => {
     dispatch(ScheduleDataActionCreator.showError(e));
   };
+
+  if (error.type === ScheduleErrorType.WTC) {
+    Object.entries(groupedWorkers).forEach(([groupName, workers]) => {
+      workers.forEach((worker) => {
+        const isInError =
+          error.workers!.find((workerName) => workerName === worker.workerName) !== undefined;
+        if (isInError) {
+          message = insertWorkerGroup(message, `${groupName}`, worker.workerName);
+        }
+      });
+    });
+  }
+
   return (
     <div className={`error-list-item ${className}`}>
       <div className="red-rectangle" />
@@ -61,7 +89,7 @@ export default function ErrorListItem({
           </p>
         </div>
       )}
-      <div className="error-text" dangerouslySetInnerHTML={{ __html: error.message || "" }} />
+      <div className="error-text" dangerouslySetInnerHTML={{ __html: message || "" }} />
       {interactable && (
         <div className="error-btn">
           <Button

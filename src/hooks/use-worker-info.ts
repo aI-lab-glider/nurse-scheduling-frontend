@@ -37,7 +37,7 @@ export function useWorkerInfo(workerName: string): UseWorkerInfoReturn {
   );
 
   const workerGroup = useSelector((state: ApplicationStateModel) =>
-    getWorkerInfo<WorkerGroup>(state, "workerGroup")
+    getWorkerInfo<WorkerGroup>(state, "team")
   );
 
   const workerShifts = useSelector(

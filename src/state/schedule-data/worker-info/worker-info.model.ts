@@ -27,7 +27,7 @@ export interface WorkersInfoModel {
   time: { [key: string]: number };
   type: { [workerName: string]: WorkerType };
   contractType?: { [workerName: string]: ContractType };
-  workerGroup: { [workerName: string]: WorkerGroup };
+  team: { [workerName: string]: WorkerGroup };
 }
 
 export interface WorkerDescription {
