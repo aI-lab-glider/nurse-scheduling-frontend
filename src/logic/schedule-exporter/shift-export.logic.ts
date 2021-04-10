@@ -66,8 +66,8 @@ export class ShiftExportLogic {
       shifts.push([
         name.name,
         name.code,
-        name.from,
-        name.to,
+        name.isWorkingShift ? name.from : "-",
+        name.isWorkingShift ? name.to : "-",
         ParserHelper.translateBooleanToString(name.isWorkingShift).toUpperCase(),
         name.color,
       ])

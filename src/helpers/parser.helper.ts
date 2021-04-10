@@ -110,6 +110,10 @@ export class ParserHelper {
   }
 
   public static shiftPasses7am(shift: Shift): boolean {
-    return shift.from <= shift.to ? shift.from < 7 && 7 < shift.to : 7 < shift.to || shift.from < 7;
+    return shift.isWorkingShift
+      ? shift.from <= shift.to
+        ? shift.from < 7 && 7 < shift.to
+        : 7 < shift.to || shift.from < 7
+      : false;
   }
 }

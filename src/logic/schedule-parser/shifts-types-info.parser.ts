@@ -8,7 +8,9 @@ import { ParserHelper } from "../../helpers/parser.helper";
 
 const DEFAULT_SHIFT_NAME = "Zmiana";
 const DEFAULT_FROM = 7;
+const DEFAULT_NON_WORKING_FROM = 0;
 const DEFAULT_TO = 7;
+const DEFAULT_NON_WORKING_TO = 24;
 const DEFAULT_IS_WORKING = false;
 const DEFAULT_COLOR = { name: "czerwony", value: "FF0000" };
 
@@ -75,10 +77,20 @@ export class ShiftsTypesInfoParser {
     }
   }
 
-  private parseShiftFrom(shiftRow: string[], name: string): number {
+  private parseShiftFrom(shiftRow: string[], name: string, isWorkingShift: boolean): number {
     const index = ParserHelper.getShiftStartHeaderIndex();
 
     if (index >= 0 && shiftRow[index]) {
+      if (!isWorkingShift) {
+        const from = shiftRow[index].trim();
+        if (from !== "" && from !== "-") {
+          this.logLoadFileError(
+            "Nieoczekiwana wartość dla początku dla niepracującej zmiany: " + name
+          );
+        }
+        return DEFAULT_NON_WORKING_FROM;
+      }
+
       const number = parseInt(shiftRow[index].trim());
       if (isNaN(number) || number < 0 || number > 24) {
         this.logLoadFileError(
@@ -88,31 +100,42 @@ export class ShiftsTypesInfoParser {
         return number;
       }
     } else {
-      this.logLoadFileError(
-        "Nie ustawiono początku zmiany: " + name + ". Ustawiono: " + DEFAULT_FROM
-      );
+      if (isWorkingShift) {
+        this.logLoadFileError(
+          "Nie ustawiono początku zmiany: " + name + ". Ustawiono: " + DEFAULT_FROM
+        );
+      }
     }
-    return DEFAULT_FROM;
+    return isWorkingShift ? DEFAULT_FROM : DEFAULT_NON_WORKING_FROM;
   }
 
-  private parseShiftTo(shiftRow: string[], name: string): number {
+  private parseShiftTo(shiftRow: string[], name: string, isWorkingShift: boolean): number {
     const index = ParserHelper.getShiftEndHeaderIndex();
 
     if (index >= 0 && shiftRow[index]) {
+      if (!isWorkingShift) {
+        const to = shiftRow[index].trim();
+        if (to !== "" && to !== "-") {
+          this.logLoadFileError(
+            "Nieoczekiwana wartość dla końca dla niepracującej zmiany: " + name
+          );
+        }
+        return DEFAULT_NON_WORKING_TO;
+      }
       const number = parseInt(shiftRow[index].trim());
       if (isNaN(number) || number < 0 || number > 24) {
         this.logLoadFileError(
-          "Nieoczekiwana wartość dla początku zmiany: " + name + ". Ustawiono: " + DEFAULT_TO
+          "Nieoczekiwana wartość dla końca zmiany: " + name + ". Ustawiono: " + DEFAULT_TO
         );
       } else {
         return number;
       }
     } else {
-      this.logLoadFileError(
-        "Nie ustawiono początku zmiany: " + name + ". Ustawiono: " + DEFAULT_TO
-      );
+      if (isWorkingShift) {
+        this.logLoadFileError("Nie ustawiono końca zmiany: " + name + ". Ustawiono: " + DEFAULT_TO);
+      }
     }
-    return DEFAULT_TO;
+    return isWorkingShift ? DEFAULT_TO : DEFAULT_NON_WORKING_TO;
   }
 
   private parseShiftIsWorking(shiftRow: string[], name: string): boolean {
@@ -156,9 +179,9 @@ export class ShiftsTypesInfoParser {
   private mapShift(row: string[]): Shift {
     const name = this.parseShiftName(row);
     const code = this.parseShiftCode(row, name);
-    const from = this.parseShiftFrom(row, name);
-    const to = this.parseShiftTo(row, name);
     const isWorkingShift = this.parseShiftIsWorking(row, name);
+    const from = this.parseShiftFrom(row, name, isWorkingShift);
+    const to = this.parseShiftTo(row, name, isWorkingShift);
     const color = this.parseShiftColor(row, name);
 
     return {
