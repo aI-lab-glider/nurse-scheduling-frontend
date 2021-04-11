@@ -71,7 +71,7 @@ export default function ErrorLoaderComponent(options: ErrorLoaderOptions): JSX.E
           </div>
         </div>
       )}
-      {isNetworkError && !spinnerAgain && (
+      {isNetworkError && !spinnerAgain && options.state?.state !== ErrorLoaderState.CHECKING && (
         <div className="error-loading-container">
           <div className="center">
             <img src={warning} alt="" />

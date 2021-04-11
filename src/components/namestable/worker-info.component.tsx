@@ -74,7 +74,7 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
           <WorkersCalendar shiftsArr={info.shifts!} />
         </div>
       </div>
-      <Button variant={"primary"} onClick={handleExport}>
+      <Button variant={"primary"} onClick={handleExport} className="drawer-bottom-button">
         Pobierz
       </Button>
     </>

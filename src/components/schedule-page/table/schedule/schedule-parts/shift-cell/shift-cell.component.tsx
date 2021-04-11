@@ -3,14 +3,24 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import classNames from "classnames/bind";
 import * as _ from "lodash";
-import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  CSSProperties,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import mergeRefs from "react-merge-refs";
 import { useSelector } from "react-redux";
 import { ScheduleError } from "../../../../../../common-models/schedule-error.model";
 import {
   ShiftCode,
+  SHIFTS,
   ShiftsTypesDict as ShiftTypesDict,
 } from "../../../../../../common-models/shift-info.model";
+import { ColorHelper } from "../../../../../../helpers/colors/color.helper";
 import { ApplicationStateModel } from "../../../../../../state/models/application-state.model";
 import {
   baseCellDataCy,
@@ -26,7 +36,7 @@ import { useCellBackgroundHighlight } from "../hooks/use-cell-highlight";
 import { useCellSelection } from "../hooks/use-cell-selection";
 import { ShiftAutocompleteComponent } from "./shift-autocomplete.component";
 
-const MODAL_CLOSE_MS = 444;
+const MODAL_CLOSE_MS = 4444;
 
 function getShiftCode(value: string | number): ShiftCode {
   return typeof value === "number" ? value.toString() : ShiftCode[value] || ShiftCode.W;
@@ -41,6 +51,7 @@ interface ShiftCellOptions extends BaseCellOptions {
 export function getColor(value: string, shifts: ShiftTypesDict): string {
   return Object.values(shifts).filter((s) => s.code === value)[0]?.color ?? "FFD100";
 }
+
 /**
  * @description Function component that creates cell containing Details or Autocomplete when in edit mode
  * @param option : ShiftCellOption
@@ -78,6 +89,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   function toggleComponentVisibility(): void {
     setIsComponentVisible(!isComponentVisible);
   }
+
   // TODO revert cell details
   // const isEditMode = useSelector(
   //   (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
@@ -120,8 +132,21 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   const { shift_types: shiftTypes } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
   );
-
+  const theColor = ColorHelper.hexToRgb(getColor(shiftCode, SHIFTS));
+  const color = `rgba(${theColor?.r},${theColor?.g},${theColor?.b},0.3)`;
   const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
+
+  const cellStyle: CSSProperties = useMemo(() => {
+    return !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W"
+      ? {
+          boxShadow: !keepOn ? `-1px 0 0 0 ${color}` : "",
+          margin: "0 0 4px 0px",
+          backgroundColor: color,
+          color,
+        }
+      : {};
+  }, [shiftCode, keepOn, color]);
+
   return (
     <>
       {showInput && (
@@ -146,7 +171,9 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
           selection: isSelected || (isComponentVisible && isBlocked),
           blocked: isBlocked,
         })}
-        onClick={(): void => toggleComponentVisibility()}
+        onClick={(): void => {
+          toggleComponentVisibility();
+        }}
         onMouseEnter={(): void => {
           setIsCounting(false);
         }}
@@ -168,28 +195,38 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
             />
           </WrapContentDiv>
         )}
-        <ErrorTooltipProvider
-          className="wrapContent"
-          errorSelector={errorSelector}
-          showTooltip={!showInput}
-        >
-          <WrapContentDiv>
-            <div
-              ref={cellRef}
-              className={`content ${hasNextClass} ${keepOnClass}`}
-              data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
-            >
-              <div className={"leftBorder leftBorderColor"} />
-              <p
-                data-cy={baseCellDataCy(cellIndex, "cell")}
-                className={"relative "}
-                style={{ color: `#${getColor(shiftCode, shiftTypes)}` }}
+        {!showInput && (
+          <ErrorTooltipProvider
+            className="wrapContent"
+            errorSelector={errorSelector}
+            showTooltip={!showInput}
+          >
+            <WrapContentDiv>
+              <div
+                ref={cellRef}
+                className={`content ${hasNextClass} ${
+                  keepOn ? "keepOnTrue" : "keepOnFalse"
+                } ${keepOnClass}`}
+                style={cellStyle}
+                data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
               >
-                {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
-              </p>
-            </div>
-          </WrapContentDiv>
-        </ErrorTooltipProvider>
+                {!keepOn && !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W" && (
+                  <div
+                    style={{ backgroundColor: `#${getColor(shiftCode, shiftTypes)}` }}
+                    className={"leftBorder"}
+                  />
+                )}
+                <p
+                  data-cy={baseCellDataCy(cellIndex, "cell")}
+                  className={"relative "}
+                  style={{ color: `#${getColor(shiftCode, shiftTypes)}` }}
+                >
+                  {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
+                </p>
+              </div>
+            </WrapContentDiv>
+          </ErrorTooltipProvider>
+        )}
         {/* TODO revert cell details
         {!isEditMode && (
           <Popper
