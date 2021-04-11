@@ -17,6 +17,7 @@ import {
   cropScheduleDMToMonthDM,
   extendMonthDMRevisionToScheduleDM,
 } from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
+import { ScheduleErrorMessageModel } from "../../../../common-models/schedule-error-message.model";
 
 export class ScheduleDataActionCreator {
   //#region Update state
@@ -170,7 +171,16 @@ export class ScheduleDataActionCreator {
       dispatch(action);
     };
   }
-
+  static hideErrors(): ActionModel<unknown> {
+    return this.showError(undefined);
+  }
+  static showError(error: ScheduleErrorMessageModel | undefined): ActionModel<unknown> {
+    const action = {
+      type: ScheduleActionType.SHOW_ERROR,
+      payload: error,
+    };
+    return action;
+  }
   static cleanErrors(): ActionModel<unknown> {
     const action = {
       type: ScheduleActionType.CLEAN_ERRORS,

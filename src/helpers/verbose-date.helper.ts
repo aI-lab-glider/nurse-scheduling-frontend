@@ -8,7 +8,9 @@ import { ColorHelper } from "./colors/color.helper";
 import { Colors } from "./colors/color.model";
 import * as _ from "lodash";
 import { MonthDataArray } from "./shifts.helper";
+import { Opaque } from "../common-models/type-utils";
 
+export type WorkingDay = Opaque<"WorkingDay", VerboseDate>;
 export class VerboseDateHelper {
   public static generateVerboseDatesForMonth(
     month: number,
@@ -36,13 +38,22 @@ export class VerboseDateHelper {
     return dates as MonthDataArray<VerboseDate>;
   }
 
-  static isWorkingDay(date?: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek">): boolean {
+  static isNotWeekend(date?: Pick<VerboseDate, "dayOfWeek">): date is WorkingDay {
     if (!date) {
       return false;
     }
-    return (
-      !date.isPublicHoliday && !(date.dayOfWeek === WeekDay.SA || date.dayOfWeek === WeekDay.SU)
-    );
+    return !(date.dayOfWeek === WeekDay.SA || date.dayOfWeek === WeekDay.SU);
+  }
+
+  /** 
+   According to the law, for each holiday, in other day than Sunday 
+   an employer should provide an employee with one day off.
+  */
+  static countDayOffsFromHolidays(
+    dates: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek">[]
+  ): number {
+    return (dates ?? []).filter((date) => date.isPublicHoliday && date.dayOfWeek !== WeekDay.SU)
+      .length;
   }
 
   static isHolidaySaturday(date?: Pick<VerboseDate, "isPublicHoliday" | "dayOfWeek">): boolean {

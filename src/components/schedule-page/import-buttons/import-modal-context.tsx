@@ -35,7 +35,7 @@ export function ImportModalProvider({ children }): JSX.Element {
       type: ScheduleErrorActionType.UPDATE,
       payload: scheduleErrors,
     } as ActionModel<ScheduleError[]>);
-  }, [monthModel, scheduleDipatcher, scheduleErrors]);
+  }, [monthModel, scheduleErrors, scheduleDipatcher]);
 
   function handleImport(event: ChangeEvent<HTMLInputElement>): void {
     const file = event.target?.files && event.target?.files[0];

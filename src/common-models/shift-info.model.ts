@@ -5,15 +5,31 @@
 import { SCHEDULE_CONTAINERS_LENGTH, ScheduleContainerType } from "./schedule-data.model";
 import * as _ from "lodash";
 
-export interface Shift {
+interface BaseShift {
   code: string;
   name: string;
   from: number;
   to: number;
   color: string;
-  isWorkingShift?: boolean;
-  normSubtraction?: number;
 }
+
+export interface WorkingShift extends BaseShift {
+  isWorkingShift?: true;
+}
+
+export enum NotWorkingShiftType {
+  MedicalLeave = "zwolnienie lekarskie",
+  AnnualLeave = "urlop",
+  Util = "util",
+}
+export interface NotWorkingShift extends BaseShift {
+  isWorkingShift?: false;
+  normSubtraction?: number;
+  // TODO: remove optionality after migration
+  type?: NotWorkingShiftType;
+}
+
+export type Shift = WorkingShift | NotWorkingShift;
 
 export enum ShiftCode {
   RP = "RP",
@@ -34,10 +50,9 @@ export enum ShiftCode {
   L4 = "L4",
   K = "K",
   NZ = "NZ",
-  OK8 = "OK8",
-  OK12 = "OK12",
-  OP8 = "OP8",
-  OP12 = "OP12",
+  IZ = "IZ",
+  OK = "OK",
+  OP = "OP",
   P2 = "P2",
 }
 
@@ -134,7 +149,15 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
     color: "FFD100",
     isWorkingShift: true,
   },
-  W: { code: ShiftCode.W, name: "wolne", from: 0, to: 24, color: "FF8A00", isWorkingShift: false },
+  W: {
+    code: ShiftCode.W,
+    name: "wolne",
+    from: 0,
+    to: 24,
+    color: "FF8A00",
+    isWorkingShift: false,
+    type: NotWorkingShiftType.Util,
+  },
   U: {
     code: ShiftCode.U,
     name: "urlop wypoczynkowy",
@@ -142,6 +165,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
     to: 24,
     color: "92D050",
     isWorkingShift: false,
+    type: NotWorkingShiftType.AnnualLeave,
   },
   L4: {
     code: ShiftCode.L4,
@@ -150,6 +174,7 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
     to: 24,
     color: "C60000",
     isWorkingShift: false,
+    type: NotWorkingShiftType.MedicalLeave,
   },
   K: {
     code: ShiftCode.K,
@@ -158,41 +183,37 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
     to: 24,
     color: "000000",
     isWorkingShift: false,
+    type: NotWorkingShiftType.MedicalLeave,
   },
-  OP8: {
-    code: ShiftCode.OP8,
-    name: "urlop opiekuńczy 8",
-    from: 0,
-    to: 24,
-    color: "641EAA",
-    isWorkingShift: false,
-  },
-  OP12: {
-    code: ShiftCode.OP12,
-    name: "urlop opiekuńczy 12",
+  IZ: {
+    code: ShiftCode.IZ,
+    name: "izolacja",
     from: 0,
     to: 24,
     color: "fc03e7",
     isWorkingShift: false,
+    type: NotWorkingShiftType.MedicalLeave,
   },
 
-  OK8: {
-    code: ShiftCode.OK8,
+  OK: {
+    code: ShiftCode.OK,
     name: "urlop okolicznościowy 8h",
     from: 0,
     to: 24,
     color: "127622",
     isWorkingShift: false,
     normSubtraction: 8,
+    type: NotWorkingShiftType.AnnualLeave,
   },
-  OK12: {
-    code: ShiftCode.OK12,
-    name: "urlop okolicznościowy 12h",
+  OP: {
+    code: ShiftCode.OP,
+    name: "urlop opiekuńczy",
     from: 0,
     to: 24,
     color: "C3A000",
     isWorkingShift: false,
     normSubtraction: 12,
+    type: NotWorkingShiftType.AnnualLeave,
   },
   NZ: {
     code: ShiftCode.NZ,
@@ -201,14 +222,15 @@ export const SHIFTS: { [code in ShiftCode]: Shift } = {
     to: 24,
     color: "000000",
     isWorkingShift: false,
+    type: NotWorkingShiftType.Util,
   },
 };
 
-export const FREE_SHIFTS = Object.values(SHIFTS)
+export const FREE_SHIFTS_CODES = Object.values(SHIFTS)
   .filter((shift) => !shift.isWorkingShift && shift.code !== "W")
   .map((shift) => shift.code);
 
-export const WORKING_SHIFTS = Object.values(SHIFTS)
+export const WORKING_SHIFTS_CODES = Object.values(SHIFTS)
   .filter((shift) => shift.isWorkingShift)
   .map((shift) => shift.code);
 

@@ -91,7 +91,7 @@ describe("ShiftHelper", () => {
   Object.keys(expectedHours).forEach((shiftCode) => {
     it(`Should calculate correct duration ${shiftCode}`, () => {
       const shiftModel = SHIFTS[shiftCode];
-      const hours = ShiftHelper.shiftCodeToWorkTime(shiftModel);
+      const hours = ShiftHelper.shiftToWorkTime(shiftModel);
       expect(hours).to.equal(expectedHours[shiftCode]);
     });
   });

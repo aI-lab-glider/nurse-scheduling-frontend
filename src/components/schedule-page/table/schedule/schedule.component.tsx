@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useSelector } from "react-redux";
+import { WorkerHourInfo } from "../../../../helpers/worker-hours-info.model";
 import { ApplicationStateModel } from "../../../../state/models/application-state.model";
 import { OvertimeHeaderComponent } from "../../../overtime-header-table/overtime-header.component";
 import { TimeTableComponent } from "../../../timetable/timetable.component";
@@ -36,7 +37,7 @@ export function ScheduleComponent(): JSX.Element {
             <TimeTableComponent />
           </div>
           <div className="summaryContainer">
-            <OvertimeHeaderComponent data={["norma", "aktualne", "różnica", "nadgodziny"]} />
+            <OvertimeHeaderComponent data={Object.values(WorkerHourInfo.summaryTranslations)} />
           </div>
         </div>
 
