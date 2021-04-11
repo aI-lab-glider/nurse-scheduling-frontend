@@ -4,10 +4,12 @@
 import { VerboseDate } from "../common-models/month-info.model";
 import {
   Shift,
-  FREE_SHIFTS,
+  FREE_SHIFTS_CODES,
   ShiftCode,
   ShiftInfoModel,
   ShiftsTypesDict,
+  NotWorkingShiftType,
+  NotWorkingShift,
 } from "../common-models/shift-info.model";
 import { Opaque } from "../common-models/type-utils";
 import { WorkerType } from "../common-models/worker-info.model";
@@ -34,19 +36,18 @@ export class ShiftHelper {
       workersPerDays.push(
         shiftsArray.reduce((a, b) => {
           const shift = shiftTypes[b[i]];
-          return a + (this.shiftCodeToWorkTime(shift) ? 1 : 0);
+          return a + (this.shiftToWorkTime(shift) ? 1 : 0);
         }, 0)
       );
     }
     return workersPerDays;
   }
 
-  public static isNotWorkingShift(shiftCode: ShiftCode, shiftTypes: ShiftsTypesDict): boolean {
-    const shift = shiftTypes[shiftCode] as Shift;
-    return (!shift?.isWorkingShift ?? true) && shift?.code !== ShiftCode.W;
+  public static isNotWorkingShift(shift?: Shift): shift is NotWorkingShift {
+    return shift?.isWorkingShift === false && shift?.type !== NotWorkingShiftType.Util;
   }
 
-  public static shiftCodeToWorkTime(shift: Shift): number {
+  public static shiftToWorkTime(shift: Shift): number {
     if (!shift?.isWorkingShift ?? true) {
       return 0;
     }
@@ -59,8 +60,8 @@ export class ShiftHelper {
   }
 
   public static requiredFreeTimeAfterShift(shift: Shift): number {
-    if (this.shiftCodeToWorkTime(shift) < 9) return 11;
-    if (this.shiftCodeToWorkTime(shift) > 12) return 24;
+    if (this.shiftToWorkTime(shift) < 9) return 11;
+    if (this.shiftToWorkTime(shift) > 12) return 24;
     return 16;
   }
 
@@ -162,7 +163,7 @@ export class ShiftHelper {
   static replaceFreeShiftsWithFreeDay(shifts: ShiftCode[], startIndex = 0): ShiftCode[] {
     return shifts.map((shift, idx) => {
       const isIndexValid = idx >= startIndex;
-      const shouldReplace = FREE_SHIFTS.includes(shift);
+      const shouldReplace = FREE_SHIFTS_CODES.includes(shift);
       return isIndexValid && shouldReplace ? ShiftCode.W : shift;
     });
   }
