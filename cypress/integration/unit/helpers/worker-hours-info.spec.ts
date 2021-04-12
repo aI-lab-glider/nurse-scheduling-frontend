@@ -181,7 +181,7 @@ function calculateRequiredTimeBeforeAndAfterShiftReplacement(
   };
 }
 
-function findFreeShift(shiftType: NotWorkingShiftType) {
+function findFreeShift(shiftType: NotWorkingShiftType): NotWorkingShift {
   return Object.values(SHIFTS).find(
     (shift) => shift.isWorkingShift === false && shift.type === shiftType
   ) as NotWorkingShift;

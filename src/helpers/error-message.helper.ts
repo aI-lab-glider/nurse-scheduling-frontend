@@ -173,7 +173,10 @@ export class ErrorMessageHelper {
         }
         message += `.`;
         type = ScheduleErrorType.WTC;
-        title = `Dzień ${error.day}`;
+        title = "date";
+        if (error.day) {
+          day += error.day;
+        }
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
         message = `Nieznana wartość zmiany: "<b>${error.actual}</b>". Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub utworzyć nową.`;
