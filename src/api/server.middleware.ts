@@ -99,6 +99,13 @@ export class ServerMiddleware {
         if (anonimizationMap[workerName] === el["worker"]) el["worker"] = workerName;
       });
     }
+    if ("workers" in el) {
+      for (let i = 0; el["workers"][i]; i++) {
+        Object.keys(anonimizationMap).forEach((workerName) => {
+          if (anonimizationMap[workerName] === el["workers"][i]) el["workers"][i] = workerName;
+        });
+      }
+    }
     return el;
   }
 
