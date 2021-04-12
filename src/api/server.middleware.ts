@@ -114,7 +114,7 @@ export class ServerMiddleware {
     const validBackendScheduleErros = errors.filter(
       (err) => err.kind !== AlgorithmErrorCode.WorkerTeamsCollision
     );
-    const WTCErrors = errors.filter((err) => err.kind == AlgorithmErrorCode.WorkerTeamsCollision);
+    const WTCErrors = errors.filter((err) => err.kind === AlgorithmErrorCode.WorkerTeamsCollision);
 
     const aggregatedWTCErrors: WorkerTeamsCollision[] = [];
     for (let i = 0; i < WTCErrors.length; i++) {
@@ -132,7 +132,8 @@ export class ServerMiddleware {
       if ((WTCErrors[i] as WorkerTeamsCollision).hour > -1) {
         for (let j = i + 1; j < WTCErrors.length; j++) {
           if (
-            (WTCErrors[i] as WorkerTeamsCollision).day == (WTCErrors[j] as WorkerTeamsCollision).day
+            (WTCErrors[i] as WorkerTeamsCollision).day ===
+            (WTCErrors[j] as WorkerTeamsCollision).day
           ) {
             newWTCError.hours!.push((WTCErrors[j] as WorkerTeamsCollision).hour);
             (WTCErrors[j] as WorkerTeamsCollision).hour = -1;
