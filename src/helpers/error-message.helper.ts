@@ -148,9 +148,21 @@ export class ErrorMessageHelper {
         break;
       case AlgorithmErrorCode.WorkerTeamsCollision:
         i = 0;
-        message = `O godzinach:`;
+        message = `W godzinach: <b>${error.hours![i]}:00</b>`;
+        let prev = error.hours![i];
+        i++;
         while (error.hours && error.hours[i]) {
-          message += ` <b>${error.hours[i]}</b>,`;
+          if (error.hours[i + 1]) {
+            if (error.hours[i + 1] !== error.hours[i] + 1) {
+              if (prev !== error.hours[i]) {
+                if (error.hours[i - 1] === error.hours[i] - 1) {
+                  message += `-<b>${error.hours[i]}:00</b>, <b>${error.hours[i + 1]}:00</b>`;
+                  prev = error.hours[i + 1];
+                } else message += `, <b>${error.hours[i]}</b>:00`;
+                prev = error.hours[i];
+              }
+            }
+          } else if (prev !== error.hours[i]) message += `-<b>${error.hours[i]}:00</b>`;
           i++;
         }
         i = 0;
