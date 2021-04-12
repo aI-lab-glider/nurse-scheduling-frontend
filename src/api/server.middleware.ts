@@ -9,6 +9,7 @@ import {
   ScheduleError,
   WorkerOvertime,
   WorkerUnderTime,
+  WorkerTeamsCollision,
 } from "../common-models/schedule-error.model";
 import { WorkerHourInfo } from "../helpers/worker-hours-info.model";
 import { PrimaryMonthRevisionDataModel } from "../state/models/application-state.model";
@@ -107,6 +108,41 @@ export class ServerMiddleware {
       }
     }
     return el;
+  }
+
+  public static aggregateWTCErrors(errors: ScheduleError[]): ScheduleError[] {
+    const validBackendScheduleErros = errors.filter(
+      (err) => err.kind !== AlgorithmErrorCode.WorkerTeamsCollision
+    );
+    const WTCErrors = errors.filter((err) => err.kind == AlgorithmErrorCode.WorkerTeamsCollision);
+
+    const aggregatedWTCErrors: WorkerTeamsCollision[] = [];
+    for (let i = 0; i < WTCErrors.length; i++) {
+      const hoursArray: number[] = [];
+      hoursArray.push((WTCErrors[i] as WorkerTeamsCollision).hour);
+
+      const newWTCError: WorkerTeamsCollision = {
+        kind: AlgorithmErrorCode.WorkerTeamsCollision,
+        day: (WTCErrors[i] as WorkerTeamsCollision).day,
+        hour: -1,
+        hours: hoursArray,
+        workers: (WTCErrors[i] as WorkerTeamsCollision).workers,
+      };
+
+      if ((WTCErrors[i] as WorkerTeamsCollision).hour > -1) {
+        for (let j = i + 1; j < WTCErrors.length; j++) {
+          if (
+            (WTCErrors[i] as WorkerTeamsCollision).day == (WTCErrors[j] as WorkerTeamsCollision).day
+          ) {
+            newWTCError.hours!.push((WTCErrors[j] as WorkerTeamsCollision).hour);
+            (WTCErrors[j] as WorkerTeamsCollision).hour = -1;
+          }
+        }
+        aggregatedWTCErrors.push(newWTCError);
+      }
+    }
+
+    return _.concat(validBackendScheduleErros, aggregatedWTCErrors);
   }
 
   public static replaceOvertimeAndUndertimeErrors(

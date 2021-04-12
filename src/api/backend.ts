@@ -52,6 +52,7 @@ class Backend {
             ServerMiddleware.remapScheduleErrorUsernames(error, anonymizationMap)
           )
         )
+        .then((errors) => ServerMiddleware.aggregateWTCErrors(errors))
     );
   }
 }

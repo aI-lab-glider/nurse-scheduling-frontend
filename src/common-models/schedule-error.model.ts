@@ -117,6 +117,7 @@ export interface WorkerTeamsCollision {
 
   day: number;
   hour: number;
+  hours?: number[];
   workers: string[];
 }
 

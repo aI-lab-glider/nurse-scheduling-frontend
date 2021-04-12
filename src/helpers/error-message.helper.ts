@@ -147,9 +147,21 @@ export class ErrorMessageHelper {
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WorkerTeamsCollision:
-        message = `Pracownicy z różnych zespołów na jednej zmianie: ${error.workers}`;
+        i = 0;
+        message = `O godzinach:`;
+        while (error.hours && error.hours[i]) {
+          message += ` <b>${error.hours[i]}</b>,`;
+          i++;
+        }
+        i = 0;
+        message += `<br>Pracownicy z różnych zespołów na jednej zmianie: <b>${error.workers[i]}</b> (Zespół ?)`;
+        while (error.workers[i + 1]) {
+          i++;
+          message += `, <b>${error.workers[i]}</b> (Zespół ?)`;
+        }
+        message += `.`;
         type = ScheduleErrorType.WTC;
-        title = `Dzień ${error.day}, ${error.hour}:00`;
+        title = `Dzień ${error.day}`;
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
         message = `Nieznana wartość zmiany: "<b>${error.actual}</b>". Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub utworzyć nową.`;
