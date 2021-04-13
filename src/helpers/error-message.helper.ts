@@ -153,13 +153,19 @@ export class ErrorMessageHelper {
         i++;
         while (error.hours && error.hours[i]) {
           if (error.hours[i + 1]) {
-            if (error.hours[i + 1] !== error.hours[i] + 1) {
+            if (
+              error.hours[i + 1] !== error.hours[i] + 1 &&
+              error.hours[i + 1] !== 1 &&
+              error.hours[i] !== 24
+            ) {
               if (prev !== error.hours[i]) {
                 if (error.hours[i - 1] === error.hours[i] - 1) {
                   message += `-<b>${error.hours[i]}:00</b>, <b>${error.hours[i + 1]}:00</b>`;
                   prev = error.hours[i + 1];
-                } else message += `, <b>${error.hours[i]}</b>:00`;
-                prev = error.hours[i];
+                } else {
+                  message += `, <b>${error.hours[i]}:00</b>`;
+                  prev = error.hours[i];
+                }
               }
             }
           } else if (prev !== error.hours[i]) message += `-<b>${error.hours[i]}:00</b>`;
