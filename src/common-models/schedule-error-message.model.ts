@@ -26,6 +26,7 @@ export interface ScheduleErrorMessageModel {
   title?: string;
   message?: string;
   worker?: string;
+  workers?: string[];
   day?: number;
   week?: number;
   level?: ScheduleErrorLevel;

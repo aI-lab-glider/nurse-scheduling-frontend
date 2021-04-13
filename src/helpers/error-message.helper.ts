@@ -46,6 +46,7 @@ export class ErrorMessageHelper {
     let title = "Nie rozpoznano błędu";
     let day = 0;
     let i = 0;
+    let workers = [""];
     let type = ScheduleErrorType.OTH;
     let newline = false;
 
@@ -172,10 +173,10 @@ export class ErrorMessageHelper {
           i++;
         }
         i = 0;
-        message += `<br>Pracownicy z różnych zespołów na jednej zmianie: <b>${error.workers[i]}</b> (Zespół ?)`;
+        message += `<br>Pracownicy z różnych zespołów na jednej zmianie: <b>${error.workers[i]}</b>`;
         while (error.workers[i + 1]) {
           i++;
-          message += `, <b>${error.workers[i]}</b> (Zespół ?)`;
+          message += `, <b>${error.workers[i]}</b>`;
         }
         message += `.`;
         type = ScheduleErrorType.WTC;
@@ -183,6 +184,7 @@ export class ErrorMessageHelper {
         if (error.day) {
           day += error.day;
         }
+        workers = error.workers;
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
         message = `Nieznana wartość zmiany: "<b>${error.actual}</b>". Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub utworzyć nową.`;
@@ -210,7 +212,7 @@ export class ErrorMessageHelper {
     const level = AlgorithmErrorCode[kind]
       ? ScheduleErrorLevel.CRITICAL_ERROR
       : ScheduleErrorLevel.WARNING;
-    return { kind, title, day, message, level, type };
+    return { kind, title, day, message, level, type, workers };
   }
 
   public static getErrorColor(error: Error): Color {

@@ -4,10 +4,14 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { VerboseDate } from "../../../common-models/month-info.model";
-import { ScheduleErrorMessageModel } from "../../../common-models/schedule-error-message.model";
+import {
+  ScheduleErrorMessageModel,
+  ScheduleErrorType,
+} from "../../../common-models/schedule-error-message.model";
 import { TranslationHelper } from "../../../helpers/translations.helper";
 import { ScheduleDataActionCreator } from "../../../state/reducers/month-state/schedule-data/schedule-data.action-creator";
 import { Button } from "../../common-components";
+import { useWorkerGroups } from "../table/schedule/use-worker-groups";
 import { useMonthInfo } from "./use-verbose-dates";
 
 interface Options {
@@ -37,6 +41,7 @@ export default function ErrorListItem({
   showTitle = true,
 }: Options): JSX.Element {
   const { verboseDates, monthNumber } = useMonthInfo();
+  const groupedWorkers = useWorkerGroups();
   const mappedDays = verboseDates.map((d: VerboseDate) => d.date);
 
   if (typeof error.day === "undefined" || typeof mappedDays === "undefined") {
@@ -51,6 +56,21 @@ export default function ErrorListItem({
   const handleShow = (e: ScheduleErrorMessageModel): void => {
     dispatch(ScheduleDataActionCreator.showError(e));
   };
+
+  if (error.type === ScheduleErrorType.WTC) {
+    for (let i = 0; error.workers && i < error.workers?.length; i++) {
+      Object.entries(groupedWorkers).forEach(([groupName, workers]) => {
+        const workerNames = [""];
+        workers.forEach((workerInfo) => workerNames.push(workerInfo.workerName));
+
+        if (workerNames.includes(error.workers![i])) {
+          error.message = error.message
+            ?.split(`${error.workers![i]}`)
+            .join(`${error.workers![i]} (${groupName})`);
+        }
+      });
+    }
+  }
   return (
     <div className={`error-list-item ${className}`}>
       <div className="red-rectangle" />
