@@ -136,6 +136,19 @@ export class ServerMiddleware {
             (WTCErrors[j] as WorkerTeamsCollision).day
           ) {
             newWTCError.hours!.push((WTCErrors[j] as WorkerTeamsCollision).hour);
+            for (
+              let worker = 0;
+              worker < (WTCErrors[j] as WorkerTeamsCollision).workers.length;
+              worker++
+            ) {
+              if (
+                !newWTCError.workers.includes(
+                  (WTCErrors[j] as WorkerTeamsCollision).workers[worker]
+                )
+              ) {
+                newWTCError.workers.push((WTCErrors[j] as WorkerTeamsCollision).workers[worker]);
+              }
+            }
             (WTCErrors[j] as WorkerTeamsCollision).hour = -1;
           }
         }
