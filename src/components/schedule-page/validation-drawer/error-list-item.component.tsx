@@ -33,6 +33,15 @@ function prepareMonthName(index: number, day: number, month: number): string {
   return monthName;
 }
 
+function insertTeam(a, b, at): string {
+  let position = a.indexOf(at);
+  if (position !== -1) {
+    position += at.length;
+    return a.substr(0, position) + "</b> (" + b + ")<b>" + a.substr(position);
+  }
+  return a;
+}
+
 export default function ErrorListItem({
   error,
   interactable = false,
@@ -43,6 +52,7 @@ export default function ErrorListItem({
   const { verboseDates, monthNumber } = useMonthInfo();
   const groupedWorkers = useWorkerGroups();
   const mappedDays = verboseDates.map((d: VerboseDate) => d.date);
+  let message = error.message;
 
   if (typeof error.day === "undefined" || typeof mappedDays === "undefined") {
     throw Error(`Error undefined or mappedDays undefined`);
@@ -58,19 +68,17 @@ export default function ErrorListItem({
   };
 
   if (error.type === ScheduleErrorType.WTC) {
-    for (let i = 0; error.workers && i < error.workers?.length; i++) {
-      Object.entries(groupedWorkers).forEach(([groupName, workers]) => {
-        const workerNames = [""];
-        workers.forEach((workerInfo) => workerNames.push(workerInfo.workerName));
-
-        if (workerNames.includes(error.workers![i])) {
-          error.message = error.message
-            ?.split(`${error.workers![i]}`)
-            .join(`${error.workers![i]} (${groupName})`);
+    Object.entries(groupedWorkers).forEach(([groupName, workers]) => {
+      workers.forEach((worker) => {
+        const isInError =
+          error.workers!.find((workerName) => workerName === worker.workerName) !== undefined;
+        if (isInError) {
+          message = insertTeam(message, `${groupName}`, worker.workerName);
         }
       });
-    }
+    });
   }
+
   return (
     <div className={`error-list-item ${className}`}>
       <div className="red-rectangle" />
@@ -81,7 +89,7 @@ export default function ErrorListItem({
           </p>
         </div>
       )}
-      <div className="error-text" dangerouslySetInnerHTML={{ __html: error.message || "" }} />
+      <div className="error-text" dangerouslySetInnerHTML={{ __html: message || "" }} />
       {interactable && (
         <div className="error-btn">
           <Button
