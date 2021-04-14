@@ -103,7 +103,7 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   "checkHoursInfo",
   ({ workerGroupIdx, workerIdx, hoursInfo }: CheckHoursInfoOptions) => {
-    const section = summaryTableSectionDataCy(WorkerGroupIdx);
+    const section = summaryTableSectionDataCy(workerGroupIdx);
     const row = summaryRowDataCy(workerIdx);
     Object.keys(HoursInfoCells)
       .filter((key) => isNaN(Number(HoursInfoCells[key])))

@@ -38,7 +38,7 @@ export function WorkerGroupSelector({
     <Grid item xs={6}>
       <Typography className={classes.label}>Zespół pracownika</Typography>
       <DropdownButtons
-        dataCy="WorkerGroup-dropdown"
+        dataCy="workergroup-dropdown"
         buttons={workerGroupsOptions}
         mainLabel={workerGroup}
         buttonVariant="secondary"
