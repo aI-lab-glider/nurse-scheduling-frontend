@@ -33,7 +33,7 @@ function prepareMonthName(index: number, day: number, month: number): string {
   return monthName;
 }
 
-function insertTeam(a, b, at): string {
+function insertWorkerGroup(a, b, at): string {
   let position = a.indexOf(at);
   if (position !== -1) {
     position += at.length;
@@ -73,7 +73,7 @@ export default function ErrorListItem({
         const isInError =
           error.workers!.find((workerName) => workerName === worker.workerName) !== undefined;
         if (isInError) {
-          message = insertTeam(message, `${groupName}`, worker.workerName);
+          message = insertWorkerGroup(message, `${groupName}`, worker.workerName);
         }
       });
     });

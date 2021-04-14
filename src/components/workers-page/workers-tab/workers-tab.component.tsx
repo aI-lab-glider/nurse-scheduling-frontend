@@ -53,7 +53,7 @@ export default function WorkersTab(): JSX.Element {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof WorkerInfoModel>("name");
-  const { type, time, contractType, team } = useSelector(
+  const { type, time, contractType, workerGroup } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.employee_info
   );
   const { year, monthNumber } = useMonthInfo();
@@ -67,11 +67,11 @@ export default function WorkersTab(): JSX.Element {
   useEffect(() => {
     const newWorkerData = Object.keys(type).map(
       (key): WorkerInfoModel => {
-        return { name: key, type: type[key], time: time[key], team: team[key] };
+        return { name: key, type: type[key], time: time[key], workerGroup: workerGroup[key] };
       }
     );
     setWorkerData(newWorkerData);
-  }, [type, time, setWorkerData, team]);
+  }, [type, time, setWorkerData, workerGroup]);
 
   function handleRequestSort(
     event: React.MouseEvent<unknown>,
@@ -148,7 +148,7 @@ export default function WorkersTab(): JSX.Element {
                     {getWorkerTimeLabel(worker.name)}
                   </TableCell>
                   <TableCell className={classes.tableCell} align="left">
-                    {worker.team}
+                    {worker.workerGroup}
                   </TableCell>
                   <TableCell align="right">
                     <Button

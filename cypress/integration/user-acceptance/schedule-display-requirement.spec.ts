@@ -76,7 +76,7 @@ context("Display schedule", () => {
   ];
 
   const WORKER = {
-    teamIdx: 0,
+    workerGroupIdx: 0,
     workerIdx: 1,
   };
 

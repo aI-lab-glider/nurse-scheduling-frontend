@@ -16,7 +16,7 @@ const employeeInfoinitialState: WorkersInfoModel = {
   time: {},
   type: {},
   contractType: {},
-  team: {},
+  workerGroup: {},
 };
 const initialDate = new Date();
 const monthDays = MonthHelper.daysInMonth(initialDate.getMonth(), initialDate.getFullYear());

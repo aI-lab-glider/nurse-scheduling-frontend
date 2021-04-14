@@ -27,7 +27,7 @@ const aggregateWorkerInfo = (
     workerInfo.time[workerName],
     workerInfo.type[workerName],
     workerShifts[workerName],
-    workerInfo.team[workerName]
+    workerInfo.workerGroup[workerName]
   );
 
 /* eslint-disable @typescript-eslint/camelcase */
@@ -38,7 +38,7 @@ export function groupWorkers({
   const aggregatedData = Object.keys(workerShifts).map((workerName) =>
     aggregateWorkerInfo(workerName, workerShifts, workerInfo)
   );
-  const groupedWorkers = _.groupBy(aggregatedData, (item) => item.team);
+  const groupedWorkers = _.groupBy(aggregatedData, (item) => item.workerGroup);
   const sortedGroupedWorkers = new Map();
   _.sortBy(Object.keys(groupedWorkers)).forEach((key) => {
     sortedGroupedWorkers[key] = _.sortBy(Object.values(groupedWorkers[key]), [

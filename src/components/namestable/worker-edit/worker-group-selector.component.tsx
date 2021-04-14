@@ -4,30 +4,33 @@
 import { Grid, Typography } from "@material-ui/core";
 import * as _ from "lodash";
 import React from "react";
-import { Team } from "../../../common-models/worker-info.model";
+import { WorkerGroup } from "../../../common-models/worker-info.model";
 import { WORKER_GROUP_PREFIX } from "../../../logic/schedule-parser/workers-info.parser";
 import {
   ButtonData,
   DropdownButtons,
 } from "../../common-components/dropdown-buttons/dropdown-buttons.component";
 import { FormFieldOptions, useFormFieldStyles } from "./worker-edit.models";
-interface TeamSelectorOptions extends FormFieldOptions {
-  setTeam: (team: Team) => void;
-  team: Team;
+interface WorkerGroupSelectorOptions extends FormFieldOptions {
+  setWorkerGroup: (workerGroup: WorkerGroup) => void;
+  workerGroup: WorkerGroup;
 }
 
-export function TeamSelector({ setTeam, team }: TeamSelectorOptions): JSX.Element {
+export function WorkerGroupSelector({
+  setWorkerGroup,
+  workerGroup,
+}: WorkerGroupSelectorOptions): JSX.Element {
   const classes = useFormFieldStyles();
 
-  function handleTeamUpdate(newGroup: Team): void {
-    setTeam(newGroup);
+  function handleWorkerGroupUpdate(newGroup: WorkerGroup): void {
+    setWorkerGroup(newGroup);
   }
 
-  const defaultGroups = _.range(1, 6).map((i) => `${WORKER_GROUP_PREFIX} ${i}` as Team);
+  const defaultGroups = _.range(1, 6).map((i) => `${WORKER_GROUP_PREFIX} ${i}` as WorkerGroup);
 
-  const teamsOptions: ButtonData[] = defaultGroups.map((groupName) => ({
+  const workerGroupsOptions: ButtonData[] = defaultGroups.map((groupName) => ({
     label: groupName,
-    action: (): void => handleTeamUpdate(groupName),
+    action: (): void => handleWorkerGroupUpdate(groupName),
     dataCy: groupName.toLowerCase(),
   }));
 
@@ -35,9 +38,9 @@ export function TeamSelector({ setTeam, team }: TeamSelectorOptions): JSX.Elemen
     <Grid item xs={6}>
       <Typography className={classes.label}>Zespół pracownika</Typography>
       <DropdownButtons
-        dataCy="team-dropdown"
-        buttons={teamsOptions}
-        mainLabel={team}
+        dataCy="WorkerGroup-dropdown"
+        buttons={workerGroupsOptions}
+        mainLabel={workerGroup}
         buttonVariant="secondary"
         variant="contract-time-dropdown"
       />

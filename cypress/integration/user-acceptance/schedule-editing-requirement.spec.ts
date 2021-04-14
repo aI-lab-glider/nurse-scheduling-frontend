@@ -14,7 +14,7 @@ interface WorkerCellDescription extends GetWorkerShiftOptions {
 }
 const workerCells: WorkerCellDescription[] = [
   {
-    teamIdx: 0,
+    workerGroupIdx: 0,
     workerIdx: 0,
     shiftIdx: 6,
     actualShiftCode: ShiftCode.U,

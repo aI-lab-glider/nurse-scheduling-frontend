@@ -11,7 +11,7 @@ import { ShiftsProvider } from "./shifts-provider.model";
 
 export interface Sections {
   Metadata: MetadataProvider;
-  Teams: ShiftsProvider[];
+  WorkerGroups: ShiftsProvider[];
   FoundationInfo: FoundationInfoProvider;
 }
 export interface ScheduleProvider {
@@ -35,10 +35,12 @@ export class Schedule {
         month_number: sections.Metadata !== undefined ? sections.Metadata.monthNumber : 0,
         year: sections.Metadata !== undefined ? sections.Metadata?.year : 0,
       },
-      shifts: sections.Teams.map((section) => section.workerShifts).reduce((acc, section) => ({
-        ...acc,
-        ...section,
-      })),
+      shifts: sections.WorkerGroups.map((section) => section.workerShifts).reduce(
+        (acc, section) => ({
+          ...acc,
+          ...section,
+        })
+      ),
       month_info: {
         frozen_shifts: sections.Metadata !== undefined ? sections.Metadata.frozenDates : [],
         children_number:
@@ -49,10 +51,10 @@ export class Schedule {
       },
       employee_info: {
         type: this.provider.getWorkerTypes(),
-        time: sections.Teams.map(
+        time: sections.WorkerGroups.map(
           (section) => section.availableWorkersWorkTime
         ).reduce((acc, section) => ({ ...acc, ...section })),
-        team: sections.Teams.map(
+        workerGroup: sections.WorkerGroups.map(
           (section) => section.availableWorkersGroup
         ).reduce((acc, section) => ({ ...acc, ...section })),
       },

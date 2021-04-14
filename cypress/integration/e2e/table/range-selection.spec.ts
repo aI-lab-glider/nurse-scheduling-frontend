@@ -19,12 +19,12 @@ const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple days of single nurse (drag left to right)",
     startShiftCell: {
-      teamIdx: 0,
+      workerGroupIdx: 0,
       workerIdx: 0,
       shiftIdx: 3,
     },
     endShiftCell: {
-      teamIdx: 0,
+      workerGroupIdx: 0,
       workerIdx: 0,
       shiftIdx: 7,
     },
@@ -33,12 +33,12 @@ const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple days of single nurse (drag right to left)",
     startShiftCell: {
-      teamIdx: 0,
+      workerGroupIdx: 0,
       workerIdx: 0,
       shiftIdx: prevMonthDays + 3,
     },
     endShiftCell: {
-      teamIdx: 0,
+      workerGroupIdx: 0,
       workerIdx: 0,
       shiftIdx: prevMonthDays,
     },
@@ -47,12 +47,12 @@ const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple single day of multiple nurses",
     startShiftCell: {
-      teamIdx: 0,
+      workerGroupIdx: 0,
       workerIdx: 0,
       shiftIdx: prevMonthDays + 5,
     },
     endShiftCell: {
-      teamIdx: 0,
+      workerGroupIdx: 0,
       workerIdx: 1,
       shiftIdx: prevMonthDays + 5,
     },
@@ -61,12 +61,12 @@ const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple days of single babysitter",
     startShiftCell: {
-      teamIdx: 1,
+      workerGroupIdx: 1,
       workerIdx: 0,
       shiftIdx: 0,
     },
     endShiftCell: {
-      teamIdx: 1,
+      workerGroupIdx: 1,
       workerIdx: 0,
       shiftIdx: prevMonthDays + 8,
     },
@@ -75,12 +75,12 @@ const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple single day of multiple babysitters",
     startShiftCell: {
-      teamIdx: 1,
+      workerGroupIdx: 1,
       workerIdx: 0,
       shiftIdx: prevMonthDays + 3,
     },
     endShiftCell: {
-      teamIdx: 1,
+      workerGroupIdx: 1,
       workerIdx: 1,
       shiftIdx: prevMonthDays + 6,
     },
@@ -129,7 +129,7 @@ context("Shift range selection", () => {
       cy.getWorkerShift(test.startShiftCell).trigger("dragstart");
       cy.getWorkerShift(test.endShiftCell).trigger("drop");
       cy.useAutocomplete(test.desiredShiftCode);
-      const groupIndx = shiftSectionDataCy(test.startShiftCell.teamIdx);
+      const groupIndx = shiftSectionDataCy(test.startShiftCell.workerGroupIdx);
       cy.get(`[data-cy=${groupIndx}] p[data-cy*="cell"]`)
         .then(($cell) => {
           return $cell
