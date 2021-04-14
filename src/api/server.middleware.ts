@@ -59,10 +59,9 @@ export class ServerMiddleware {
       delete schedule.employee_info.type[shiftName];
     });
 
-    Object.keys(schedule.employee_info.workerGroup).forEach((shiftName) => {
-      schedule.employee_info.workerGroup[nameToUuid[shiftName]] =
-        schedule.employee_info.workerGroup[shiftName];
-      delete schedule.employee_info.workerGroup[shiftName];
+    Object.keys(schedule.employee_info.team).forEach((shiftName) => {
+      schedule.employee_info.team[nameToUuid[shiftName]] = schedule.employee_info.team[shiftName];
+      delete schedule.employee_info.team[shiftName];
     });
 
     if (schedule.employee_info.contractType !== undefined) {

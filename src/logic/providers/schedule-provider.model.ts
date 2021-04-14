@@ -54,7 +54,7 @@ export class Schedule {
         time: sections.WorkerGroups.map(
           (section) => section.availableWorkersWorkTime
         ).reduce((acc, section) => ({ ...acc, ...section })),
-        workerGroup: sections.WorkerGroups.map(
+        team: sections.WorkerGroups.map(
           (section) => section.availableWorkersGroup
         ).reduce((acc, section) => ({ ...acc, ...section })),
       },

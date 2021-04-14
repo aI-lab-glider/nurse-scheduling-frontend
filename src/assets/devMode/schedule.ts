@@ -179,7 +179,7 @@ export default {
       "Opiekunka 12": ContractType.EMPLOYMENT_CONTRACT,
       "Opiekunka 13": ContractType.EMPLOYMENT_CONTRACT,
     },
-    workerGroup: {
+    team: {
       "Opiekunka 1": "Zespół 1" as WorkerGroup,
       "Opiekunka 2": "Zespół 1" as WorkerGroup,
       "Opiekunka 3": "Zespół 1" as WorkerGroup,

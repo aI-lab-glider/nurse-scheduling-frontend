@@ -175,8 +175,8 @@ export class WorkerActionCreator {
         ...updatedSchedule.employee_info.contractType,
         [workerName]: contractType ?? DEFAULT_CONTRACT_TYPE,
       },
-      workerGroup: {
-        ...updatedSchedule.employee_info.workerGroup,
+      team: {
+        ...updatedSchedule.employee_info.team,
         [workerName]: workerGroup ?? DEFAULT_WORKER_GROUP,
       },
     };
