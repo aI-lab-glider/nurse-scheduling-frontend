@@ -10,6 +10,7 @@ export abstract class MetadataProvider {
   abstract get year(): number;
   abstract get frozenDates(): [number | string, number][];
   abstract get dates(): number[];
+  abstract get holidays(): number[];
   abstract get monthLogic(): MonthInfoLogic;
   get verboseDates(): VerboseDate[] {
     return [];

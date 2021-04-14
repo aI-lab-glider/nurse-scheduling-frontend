@@ -99,6 +99,7 @@ export default {
       28,
     ],
     frozen_shifts: [],
+    holidays: [],
   },
   employee_info: {
     type: {

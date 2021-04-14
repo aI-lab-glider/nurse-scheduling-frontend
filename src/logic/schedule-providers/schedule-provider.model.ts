@@ -45,6 +45,7 @@ export class Schedule {
         dates: sections.Metadata !== undefined ? sections.Metadata.dates : [],
         extra_workers:
           sections.FoundationInfo !== undefined ? sections.FoundationInfo.extraWorkersInfo : [],
+        holidays: sections.Metadata !== undefined ? sections.Metadata.holidays : [],
       },
       employee_info: {
         type: this.provider.getWorkerTypes(),

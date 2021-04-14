@@ -113,6 +113,7 @@ export function createEmptyMonthDataModel(
       children_number: new Array(monthLength).fill(0),
       extra_workers: new Array(monthLength).fill(0),
       frozen_shifts: [],
+      holidays: [],
       dates,
     },
     employee_info: _.cloneDeep(employee_info),

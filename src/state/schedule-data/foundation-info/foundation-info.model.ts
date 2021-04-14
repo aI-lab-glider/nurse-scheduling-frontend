@@ -29,6 +29,7 @@ export interface FoundationInfoModel {
   extra_workers?: number[];
   frozen_shifts?: [number | string, number][];
   dates: number[];
+  holidays: number[];
 }
 
 export function validateFoundationInfo(
