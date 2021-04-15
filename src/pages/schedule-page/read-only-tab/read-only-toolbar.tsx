@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect } from "react";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { ImportButtonsComponent } from "../../../components/buttons/import-buttons/import-buttons.component";
 import { useHistory } from "react-router-dom";
 import { Button } from "../../../components/common-components";
@@ -83,6 +84,10 @@ export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
                 </select>
               </form>
             )}
+          </div>
+          <div className="errors-present-info">
+            <ErrorOutlineIcon />
+            <p>Plan zawiera błędy. Zobacz je w trybie edycji</p>
           </div>
           <div className="filler" />
           <ImportButtonsComponent />
