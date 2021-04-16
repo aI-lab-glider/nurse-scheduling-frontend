@@ -90,7 +90,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
   ): Promise<void> {
     validateMonthDM(monthDataModel);
     const revisionKey = monthDataModel.scheduleKey.getRevisionKey(revisionType);
-    let revision;
+    let revision: string | undefined;
     try {
       const document = await this.storage.get(revisionKey);
       revision = document._rev;

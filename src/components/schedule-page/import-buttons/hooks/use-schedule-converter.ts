@@ -1,36 +1,93 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { useEffect, useState } from "react";
 import Excel, { FillPattern } from "exceljs";
+import { fromBuffer } from "file-type/browser";
+import { useCallback, useEffect, useReducer } from "react";
+import { useSelector } from "react-redux";
 import { MonthDataModel } from "../../../../common-models/schedule-data.model";
 import { InputFileErrorCode, ScheduleError } from "../../../../common-models/schedule-error.model";
-import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
-import { useFileReader } from "./use-file-reader";
-import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../../state/models/application-state.model";
-import { fromBuffer } from "file-type/browser";
-import { useNotification } from "../../../common-components/notification/notification.context";
-import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
 import {
   ParserHelper,
-  SHIFT_HEADERS,
   SHIFTS_WORKSHEET_NAME,
+  SHIFT_HEADERS,
   WORKERS_WORKSHEET_NAME,
   WORKSHEET_NAME,
 } from "../../../../helpers/parser.helper";
+import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-convertion/schedule-container-convertion";
+import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
+import { ApplicationStateModel } from "../../../../state/models/application-state.model";
+import { useNotification } from "../../../common-components/notification/notification.context";
+import { useFileReader } from "./use-file-reader";
 
-export interface UseScheduleConverterOutput {
+interface ScheduleConverterState {
   monthModel?: MonthDataModel;
-  scheduleSheet?: Array<object>;
-  setSrcFile: (srcFile: File) => void;
   scheduleErrors: ScheduleError[];
+}
+const initialConverterState: ScheduleConverterState = {
+  scheduleErrors: [],
+  monthModel: undefined,
+};
+
+enum ScheduleConverterActionType {
+  SetErrors = "Set Errors",
+  UpdateScheduleModel = "Update Schedule Errors",
+}
+interface SetErrorsAction {
+  type: ScheduleConverterActionType.SetErrors;
+  payload: ScheduleError[];
+}
+
+interface UpdateScheduleModelAction {
+  type: ScheduleConverterActionType.UpdateScheduleModel;
+  payload: ScheduleConverterState;
+}
+
+export interface UseScheduleConverterOutput extends ScheduleConverterState {
+  setSrcFile: (srcFile: File) => void;
 }
 
 export function useScheduleConverter(): UseScheduleConverterOutput {
-  const [scheduleErrors, setScheduleErrors] = useState<ScheduleError[]>([]);
   const [fileContent, setSrcFile] = useFileReader();
-  const [monthModel, setMonthModel] = useState<MonthDataModel>();
+
+  const [{ scheduleErrors, monthModel }, dispatch] = useReducer(
+    (
+      state: ScheduleConverterState,
+      action: SetErrorsAction | UpdateScheduleModelAction
+    ): ScheduleConverterState => {
+      switch (action.type) {
+        case ScheduleConverterActionType.SetErrors:
+          return {
+            monthModel: undefined,
+            scheduleErrors: action.payload ?? [],
+          };
+        case ScheduleConverterActionType.UpdateScheduleModel:
+          return { ...(action.payload ?? initialConverterState) };
+      }
+    },
+    initialConverterState
+  );
+
+  const dispatchErrors = useCallback(
+    (errors: ScheduleError[]) => {
+      dispatch({
+        type: ScheduleConverterActionType.SetErrors,
+        payload: errors,
+      });
+    },
+    [dispatch]
+  );
+
+  const dispatchModelUpdate = useCallback(
+    (newState: ScheduleConverterState) => {
+      dispatch({
+        type: ScheduleConverterActionType.UpdateScheduleModel,
+        payload: newState,
+      });
+    },
+    [dispatch]
+  );
+
   const { month_number: month, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
   );
@@ -42,13 +99,12 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       ext.ext !== "xlsx" ||
       ext.mime !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ) {
-      setScheduleErrors([
+      dispatchErrors([
         {
           kind: InputFileErrorCode.UNHANDLED_FILE_EXTENSION,
           filename: ext?.ext.toString(),
         },
       ]);
-      setMonthModel(undefined);
       createNotification({ type: "error", message: "Plan nie został wczytany!" });
       return false;
     }
@@ -67,13 +123,12 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
           try {
             readFileContent(workbook);
           } catch (e) {
-            setScheduleErrors([
+            dispatchErrors([
               {
                 kind: InputFileErrorCode.LOAD_FILE_ERROR,
                 message: e.toString(),
               },
             ]);
-            setMonthModel(undefined);
             createNotification({ type: "error", message: "Plan nie został wczytany!" });
           }
         });
@@ -184,15 +239,16 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
     if (Object.keys(scheduleArray).length !== 0) {
       const parser = new ScheduleParser(month, year, scheduleArray, workersArray, shiftsArray);
 
-      setScheduleErrors([
-        ...parser._parseErrors,
-        ...parser.sections.Metadata.errors,
-        ...parser.sections.FoundationInfo.errors,
-        ...parser.workersInfo.errors,
-        ...parser.shiftsInfo.errors,
-      ]);
-      setMonthModel(cropScheduleDMToMonthDM(parser.schedule.getDataModel()));
-
+      dispatchModelUpdate({
+        scheduleErrors: [
+          ...parser._parseErrors,
+          ...parser.sections.Metadata.errors,
+          ...parser.sections.FoundationInfo.errors,
+          ...parser.workersInfo.errors,
+          ...parser.shiftsInfo.errors,
+        ],
+        monthModel: cropScheduleDMToMonthDM(parser.schedule.getDataModel()),
+      });
       createNotification({ type: "success", message: "Plan został wczytany!" });
     }
     return;
