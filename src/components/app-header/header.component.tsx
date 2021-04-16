@@ -14,6 +14,7 @@ import { ScheduleMode } from "../schedule/schedule-state.model";
 import { Button } from "../buttons/button-component/button.component";
 import ReportIssueModal from "../modals/report-issue-modal/report-issue-modal.component";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
+import { useTranslation } from "react-i18next";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -68,7 +69,7 @@ export function HeaderComponent(): JSX.Element {
   const redirectToDocumentation = useCallback((): void => {
     window.open(process.env.REACT_APP_HELP_PAGE_URL);
   }, []);
-
+  const { t } = useTranslation();
   return (
     <>
       <div id={"header"}>
@@ -81,13 +82,13 @@ export function HeaderComponent(): JSX.Element {
           onClick={returnToCurrentMonth}
           disabled={!isNewMonth || !showNowNavigation}
         >
-          Wróć do teraz
+          {t("comeBackToNow")}
         </Button>
         <div className={"filler"} />
         <MonthSwitchComponent isInViewMode={isInViewMode} />
         <div className={"filler"} />
         <MaterialButton className={"reportIssueLink"} onClick={onReportIssueClick}>
-          Zgłoś błąd
+          {t("reportError")}
         </MaterialButton>
         <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
         <HelpOutlineIcon className="header-icon" onClick={redirectToDocumentation} />

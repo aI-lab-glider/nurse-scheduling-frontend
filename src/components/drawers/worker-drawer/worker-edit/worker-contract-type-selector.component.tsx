@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid, Typography } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ContractType } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import {
   ButtonData,
@@ -28,6 +29,7 @@ export function WorkerContractTypeSelector({
   const classes = useFormFieldStyles();
 
   const [firstEditMade, setFirstEditMade] = useState(false);
+  const { t } = useTranslation();
 
   function handleWorkerTypeUpdate(contractType: ContractType): void {
     setWorkerContractType(contractType);
@@ -68,7 +70,7 @@ export function WorkerContractTypeSelector({
 
         <FormFieldErrorLabel
           shouldBeVisible={!isContractTypeValid() && firstEditMade}
-          message="Wybierz typ umowy"
+          message={t("selectContractType")}
         />
       </Grid>
     </>

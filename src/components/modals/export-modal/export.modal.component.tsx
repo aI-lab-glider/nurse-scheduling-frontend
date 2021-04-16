@@ -22,6 +22,7 @@ import {
   DropdownButtons,
 } from "../../buttons/dropdown-buttons/dropdown-buttons.component";
 import DefaultModal from "../modal.component";
+import { useTranslation } from "react-i18next";
 
 export interface ExportModalComponent {
   setOpen: (open: boolean) => void;
@@ -44,10 +45,11 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   const handleClose = (): void => {
     setOpen(false);
   };
+  const { t } = useTranslation();
 
   const [exportOptions, setExportOptions] = React.useState({
-    extraWorkers: { value: true, label: "dzienni pracownicy" },
-    overtime: { value: true, label: "nadgodzinny" },
+    extraWorkers: { value: true, label: t("dayWorkers") },
+    overtime: { value: true, label: t("overtime").toLowerCase() },
   });
   const { primaryRevision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
@@ -82,10 +84,10 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   const footer = (
     <div>
       <Button onClick={handleExport} size="small" variant="primary" data-cy="confirm-export-button">
-        Potwierdź
+        {t("confirm")}
       </Button>
       <Button onClick={handleClose} size="small" variant="secondary">
-        Anuluj
+        {t("cancel")}
       </Button>
     </div>
   );
@@ -102,7 +104,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   const body = (
     <div style={{ paddingLeft: "15px" }}>
       <div style={{ display: "flex", msFlexDirection: "row" }}>
-        <p className="label">Format pliku: </p>
+        <p className="label">{t("downloadSchedule")}: </p>
         <div style={{ top: "50%", marginTop: "-15px" }}>
           <DropdownButtons
             buttons={btnData}
@@ -113,7 +115,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
         </div>
       </div>
       <div>
-        <p className="label">Opcje pliku: </p>
+        <p className="label">{t("fileOptions")}: </p>
         <FormGroup row>
           {Object.keys(exportOptions).map((key, index) => (
             <FormControlLabel

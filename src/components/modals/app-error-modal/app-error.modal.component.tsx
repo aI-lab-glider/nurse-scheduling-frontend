@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "../../buttons/button-component/button.component";
 import DefaultModal from "../modal.component";
 
@@ -13,17 +14,18 @@ interface AppErrorModalOptions {
 
 export default function AppErrorModal(options: AppErrorModalOptions): JSX.Element {
   const { setOpen, open, onClick } = options;
+  const { t } = useTranslation();
 
   const handleClose = (): void => {
     onClick();
     setOpen(false);
   };
 
-  const title = "Coś poszło nie tak :(";
+  const title = `${t("somethingWentWrong")} :(`;
 
   const body = (
     <div className={"span-primary"}>
-      <p>Wiadomość o błędzie została wysłana do twórców.</p>
+      <p>{t("errorMessageWasSent")}</p>
     </div>
   );
 

@@ -14,6 +14,7 @@ import { WorkingTimeHelper } from "../../../../helpers/working-time.helper";
 import { WorkNormSelectorOptions } from "./combined-worknorm-selector.component";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
 import { useFormFieldStyles } from "./worker-edit.models";
+import { useTranslation } from "react-i18next";
 
 export function WorkerEmploymentContractWorkNormSelector({
   employmentTime,
@@ -21,6 +22,8 @@ export function WorkerEmploymentContractWorkNormSelector({
   setIsFieldValid: setIsFormValid,
 }: WorkNormSelectorOptions): JSX.Element {
   const classes = useFormFieldStyles();
+  const { t } = useTranslation();
+
   const [selectedTimeType, setSelectedTimeType] = useState<TimeDrawerType>(TimeDrawerType.FULL);
   const [firstEditMade, setFirstEditMade] = useState(false);
 
@@ -74,7 +77,7 @@ export function WorkerEmploymentContractWorkNormSelector({
         <DropdownButtons
           dataCy="contract-time-dropdown"
           buttons={contractTimeDropdownOptions}
-          mainLabel={employmentTimeAsFraction ?? "Wybierz etat pracownika"}
+          mainLabel={employmentTimeAsFraction ?? t("selectWorkerHours")}
           buttonVariant="secondary"
           variant="contract-time-dropdown"
         />
@@ -99,7 +102,7 @@ export function WorkerEmploymentContractWorkNormSelector({
           />
           <FormFieldErrorLabel
             shouldBeVisible={!isEmploymentTimeValid(employmentTime) && firstEditMade}
-            message="Pracownik nie może być zatrudniony na więcej niż jeden etat"
+            message={t("workerMayNotBeEmployedMore")}
           />
         </Grid>
       )}

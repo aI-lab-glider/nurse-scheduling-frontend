@@ -10,6 +10,7 @@ import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scs
 import DefaultModal from "../modal.component";
 import { send } from "emailjs-com";
 import { useNotification } from "../../notification/notification.context";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -83,8 +84,10 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   const classes = useStyles();
   const [isSent, setIsSent] = useState(false);
   const { open, setOpen, clear } = options;
+  const { t } = useTranslation();
+
   const [issueDescription, setIssueDescription] = useState("");
-  const title = "Zgłoś błąd";
+  const title = t("reportError");
   const { createNotification } = useNotification();
 
   function onIssueDescriptionChange(event): void {
@@ -127,13 +130,13 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
 
   const body = (
     <div className="report-issue-modal-body">
-      {isSent && <p>Wysłano powiadomienie o błędzie.</p>}
+      {isSent && <p>{t("errorMessageWasSent")}</p>}
       {!isSent && (
         <>
-          <p>Jaki błąd wystąpił?</p>
+          <p>{t("whatErrorOccurred")}</p>
           <TextField
             className={classes.textField}
-            placeholder="Opisz błąd"
+            placeholder={t("provideErrorDescription")}
             value={issueDescription}
             onChange={onIssueDescriptionChange}
             fullWidth={true}
@@ -158,16 +161,16 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
       {!isSent && (
         <>
           <Button variant="primary" onClick={handleSend} disabled={issueDescription.length < 20}>
-            Wyślij
+            {t("send")}
           </Button>
           <Button variant="secondary" color="secondary" onClick={handleClose}>
-            Anuluj
+            {t("cancel")}
           </Button>
         </>
       )}
       {isSent && (
         <Button variant="primary" onClick={handleClose}>
-          Zamknij
+          {t("close")}
         </Button>
       )}
     </div>

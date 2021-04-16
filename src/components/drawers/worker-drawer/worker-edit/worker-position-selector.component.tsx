@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid, Typography } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { WorkerType } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import {
   ButtonData,
@@ -27,6 +28,7 @@ export function WorkerWorkerTypeSelector({
 }: WorkerPositionSelectorOptions): JSX.Element {
   const classes = useFormFieldStyles();
   const [firstEditMade, setFirstEditMade] = useState(false);
+  const { t } = useTranslation();
 
   function handleWorkerTypeUpdate(workerType: WorkerType): void {
     setActualWorkerType(workerType);
@@ -51,17 +53,17 @@ export function WorkerWorkerTypeSelector({
   }, [workerType, setIsFieldValid, isWorkerPositionValid]);
   return (
     <Grid item xs={6}>
-      <Typography className={classes.label}>Stanowisko</Typography>
+      <Typography className={classes.label}>{t("position")}</Typography>
       <DropdownButtons
         dataCy="position"
         buttons={positionOptions}
-        mainLabel={workerType ? translateAndCapitalizeWorkerType(workerType) : "Stanowisko"}
+        mainLabel={workerType ? translateAndCapitalizeWorkerType(workerType) : t("position")}
         buttonVariant="secondary"
         variant="position"
       />
       <FormFieldErrorLabel
         shouldBeVisible={!isWorkerPositionValid() && firstEditMade}
-        message="Wybierz stanowisko pracownika"
+        message={t("selectWorkerPosition")}
       />
     </Grid>
   );

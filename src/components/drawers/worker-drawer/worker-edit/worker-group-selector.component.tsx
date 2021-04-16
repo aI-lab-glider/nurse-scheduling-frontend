@@ -11,6 +11,7 @@ import {
   DropdownButtons,
 } from "../../../buttons/dropdown-buttons/dropdown-buttons.component";
 import { FormFieldOptions, useFormFieldStyles } from "./worker-edit.models";
+import { useTranslation } from "react-i18next";
 interface WorkerGroupSelectorOptions extends FormFieldOptions {
   setWorkerGroup: (workerGroup: WorkerGroup) => void;
   workerGroup: WorkerGroup;
@@ -21,7 +22,7 @@ export function WorkerGroupSelector({
   workerGroup,
 }: WorkerGroupSelectorOptions): JSX.Element {
   const classes = useFormFieldStyles();
-
+  const { t } = useTranslation();
   function handleWorkerGroupUpdate(newGroup: WorkerGroup): void {
     setWorkerGroup(newGroup);
   }
@@ -36,7 +37,7 @@ export function WorkerGroupSelector({
 
   return (
     <Grid item xs={6}>
-      <Typography className={classes.label}>Zespół pracownika</Typography>
+      <Typography className={classes.label}>{t("workerTeam")}</Typography>
       <DropdownButtons
         dataCy="workergroup-dropdown"
         buttons={workerGroupsOptions}

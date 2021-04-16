@@ -4,6 +4,7 @@
 import { Grid, TextField, Typography } from "@material-ui/core";
 import * as _ from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { WorkerHourInfo } from "../../../../helpers/worker-hours-info.model";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
 import { WorkNormSelectorOptions } from "./combined-worknorm-selector.component";
@@ -19,6 +20,7 @@ export function WorkerCivilContractWorkNormSelector({
 
   const { year, monthNumber } = useMonthInfo();
   const requiredHours = WorkerHourInfo.calculateWorkNormForMonth(monthNumber, year);
+  const { t } = useTranslation();
 
   const convertToNormalHours = useCallback(
     (workNorm: number): number => {
@@ -82,7 +84,7 @@ export function WorkerCivilContractWorkNormSelector({
         />
         <FormFieldErrorLabel
           shouldBeVisible={!isTimeValid() && firstEditMade}
-          message={`Liczba godzin musi być w przedziałe od 0 do ${maximumWorkHoursForMonth}`}
+          message={`${t("maximumWorkHoursForMonth")} ${maximumWorkHoursForMonth}`}
         />
       </Grid>
     </>

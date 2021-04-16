@@ -12,6 +12,7 @@ import { LocalStorageProvider } from "../../../logic/data-access/local-storage-p
 import { MonthDataModel } from "../../../state/schedule-data/schedule-data.model";
 import { MonthHelper } from "../../../helpers/month.helper";
 import { useImportModal } from "../import-buttons/import-modal-context";
+import { useTranslation } from "react-i18next";
 
 export function EmptyMonthButtons(): JSX.Element {
   const { month_number: currentMonth, year: currentYear } = useSelector(
@@ -55,6 +56,7 @@ export function EmptyMonthButtons(): JSX.Element {
       !month.isCorrupted
     );
   };
+  const { t } = useTranslation();
 
   return (
     <div className={"newPageButtonsPane"}>
@@ -66,7 +68,7 @@ export function EmptyMonthButtons(): JSX.Element {
           variant="secondary"
         >
           {" "}
-          {`Kopiuj plan z ${
+          {`${t("loadScheduleFrom")} z ${
             TranslationHelper.polishMonths[prevDate.getMonth()]
           } ${prevDate.getFullYear()}`}
         </Button>
@@ -82,7 +84,7 @@ export function EmptyMonthButtons(): JSX.Element {
           type="file"
           accept=".xlsx"
         />
-        Wgraj z pliku
+        {t("loadFromFile")}
       </Button>
     </div>
   );

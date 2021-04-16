@@ -7,6 +7,7 @@ import { ScheduleErrorMessageModel } from "../../state/schedule-data/schedule-er
 import { TranslationHelper } from "../../helpers/translations.helper";
 import { Button } from "../common-components";
 import { useMonthInfo } from "../../hooks/use-month-info";
+import { useTranslation } from "react-i18next";
 
 interface Options {
   error: ScheduleErrorMessageModel;
@@ -38,7 +39,7 @@ export default function ErrorListItem({
   if (typeof error.day === "undefined" || typeof mappedDays === "undefined") {
     throw Error(`Error undefined or mappedDays undefined`);
   }
-
+  const { t } = useTranslation();
   const errorDayIndex = error.day;
   const errorDay = mappedDays[errorDayIndex];
   const monthName = prepareMonthName(errorDayIndex, errorDay, monthNumber);
@@ -63,7 +64,7 @@ export default function ErrorListItem({
             id="error-buttons"
             style={{ width: "90px", height: "26px" }}
           >
-            Pokaż
+            {t("show")}
           </Button>
         </div>
       )}
