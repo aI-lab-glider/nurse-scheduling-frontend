@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { SCHEDULE_CONTAINERS_LENGTH, ScheduleContainerType } from "./schedule-data.model";
 import * as _ from "lodash";
+import { ScheduleContainerType, SCHEDULE_CONTAINERS_LENGTH } from "./schedule-data.model";
 
 interface BaseShift {
   code: string;
@@ -12,9 +12,8 @@ interface BaseShift {
   to: number;
   color: string;
 }
-
 export interface WorkingShift extends BaseShift {
-  isWorkingShift?: true;
+  isWorkingShift: true;
 }
 
 export enum NotWorkingShiftType {
@@ -23,7 +22,7 @@ export enum NotWorkingShiftType {
   Util = "util",
 }
 export interface NotWorkingShift extends BaseShift {
-  isWorkingShift?: false;
+  isWorkingShift: false;
   normSubtraction?: number;
   // TODO: remove optionality after migration
   type?: NotWorkingShiftType;

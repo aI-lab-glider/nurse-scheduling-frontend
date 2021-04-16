@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { Shift } from "../common-models/shift-info.model";
+import { DEFAULT_FROM } from "../logic/schedule-parser/shifts-types-info.parser";
+
 export const EMPTY_ROW_SIZE = 40;
 export const EMPTY_ROW = Array(EMPTY_ROW_SIZE).fill("");
 
@@ -105,5 +108,13 @@ export class ParserHelper {
 
   public static getShiftColorHeaderIndex(): number {
     return this.getShiftHeaderIndex(KOLOR);
+  }
+
+  public static shiftPassesDayStart(shift: Shift): boolean {
+    return shift.isWorkingShift
+      ? shift.from <= shift.to
+        ? shift.from < DEFAULT_FROM && DEFAULT_FROM < shift.to
+        : DEFAULT_FROM < shift.to || shift.from < DEFAULT_FROM
+      : false;
   }
 }
