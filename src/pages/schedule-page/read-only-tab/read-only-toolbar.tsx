@@ -15,6 +15,7 @@ import {
 } from "../../../logic/data-access/persistance-store.model";
 import classNames from "classnames/bind";
 import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
+import { AlgorithmErrorCode } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 
 interface ViewOnlyToolbarOptions {
   openEdit: () => void;
@@ -22,6 +23,7 @@ interface ViewOnlyToolbarOptions {
 export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Element {
   const [isEditDisable, setEditDisable] = React.useState<boolean>(false);
   const [isMonthFromFuture, setIsMonthFromFuture] = React.useState<boolean>(false);
+  const [areAlgoErrorsPresent, setAreAlgoErrorsPresent] = React.useState<boolean>(false);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -37,6 +39,8 @@ export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
   );
 
+  const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
+
   const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   useEffect(() => {
@@ -45,7 +49,21 @@ export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
 
     const isRevisionEditDisable = revision === "actual" ? false : !isFuture;
     setEditDisable(isRevisionEditDisable || isCorrupted);
-  }, [year, month, revision, isCorrupted]);
+
+    if (
+      AlgorithmErrorCode.AlwaysAtLeastOneNurse in scheduleErrors ||
+      AlgorithmErrorCode.WorkerNumberDuringDay in scheduleErrors ||
+      AlgorithmErrorCode.WorkerNumberDuringNight in scheduleErrors ||
+      AlgorithmErrorCode.DissalowedShiftSequence in scheduleErrors ||
+      AlgorithmErrorCode.LackingLongBreak in scheduleErrors ||
+      AlgorithmErrorCode.WorkerUnderTime in scheduleErrors ||
+      AlgorithmErrorCode.WorkerOvertime in scheduleErrors
+    ) {
+      setAreAlgoErrorsPresent(true);
+    } else {
+      setAreAlgoErrorsPresent(false);
+    }
+  }, [year, month, revision, isCorrupted, scheduleErrors]);
 
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>): void => {
     const currentRev = event.target.value;
@@ -85,10 +103,12 @@ export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
               </form>
             )}
           </div>
-          <div className="errors-present-info">
-            <ErrorOutlineIcon />
-            <p>Plan zawiera błędy. Zobacz je w trybie edycji</p>
-          </div>
+          {areAlgoErrorsPresent && (
+            <div className="errors-present-info">
+              <ErrorOutlineIcon />
+              <p>Plan zawiera błędy. Zobacz je w trybie edycji</p>
+            </div>
+          )}
           <div className="filler" />
           <ImportButtonsComponent />
           <Button
