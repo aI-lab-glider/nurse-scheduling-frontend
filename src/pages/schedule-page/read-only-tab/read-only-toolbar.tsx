@@ -50,15 +50,7 @@ export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
     const isRevisionEditDisable = revision === "actual" ? false : !isFuture;
     setEditDisable(isRevisionEditDisable || isCorrupted);
 
-    if (
-      AlgorithmErrorCode.AlwaysAtLeastOneNurse in scheduleErrors ||
-      AlgorithmErrorCode.WorkerNumberDuringDay in scheduleErrors ||
-      AlgorithmErrorCode.WorkerNumberDuringNight in scheduleErrors ||
-      AlgorithmErrorCode.DissalowedShiftSequence in scheduleErrors ||
-      AlgorithmErrorCode.LackingLongBreak in scheduleErrors ||
-      AlgorithmErrorCode.WorkerUnderTime in scheduleErrors ||
-      AlgorithmErrorCode.WorkerOvertime in scheduleErrors
-    ) {
+    if (Object.values(AlgorithmErrorCode).some((errorCode) => errorCode in scheduleErrors)) {
       setAreAlgoErrorsPresent(true);
     } else {
       setAreAlgoErrorsPresent(false);
