@@ -1,11 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
 import gliderLogo from "../../assets/images/gliderLogo.png";
+import { getLatestAppVersion } from "../../api/latest-github-version";
 
 const useStyles = makeStyles({
   footer: {
@@ -24,10 +25,18 @@ const useStyles = makeStyles({
 
 export function Footer(): JSX.Element {
   const classes = useStyles();
+  const [latestVersion, setLatestVersion] = useState("");
+  useEffect(() => {
+    const awaitVersion = async (): Promise<void> => {
+      const version = await getLatestAppVersion;
+      setLatestVersion(version);
+    };
+    awaitVersion();
+  }, []);
 
   return (
     <Grid container className={classes.footer} justify="space-between" alignItems="center">
-      <Grid item>{`Wersja: ${process.env.REACT_APP_VERSION}`}</Grid>
+      <Grid item>{`Wersja: ${latestVersion}`}</Grid>
       <Grid item>
         Wykonanie:
         <a href="http://www.glider.agh.edu.pl/" target="_blank" rel="noopener noreferrer">
