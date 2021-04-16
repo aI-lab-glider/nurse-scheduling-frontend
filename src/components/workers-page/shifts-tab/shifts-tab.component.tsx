@@ -65,7 +65,7 @@ export default function ShiftTab(): JSX.Element {
   }
   const dispatcher = useDispatch();
   const handleChangeItem = (createdShift: Shift): void => {
-    if (!ParserHelper.shiftPasses7am(createdShift)) {
+    if (!ParserHelper.shiftPassesDayStart(createdShift)) {
       if (mode === ShiftDrawerMode.ADD_NEW) {
         dispatcher(ScheduleDataActionCreator.addNewShift(createdShift));
       } else {
@@ -74,7 +74,7 @@ export default function ShiftTab(): JSX.Element {
 
       toggleClose();
     } else {
-      console.log("error error co teraz?");
+      // TODO. Handle unappropriately created shift
     }
   };
 

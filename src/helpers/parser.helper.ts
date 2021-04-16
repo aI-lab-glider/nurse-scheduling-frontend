@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { Shift } from "../common-models/shift-info.model";
+import { DEFAULT_FROM } from "../logic/schedule-parser/shifts-types-info.parser";
 
 export const EMPTY_ROW_SIZE = 40;
 export const EMPTY_ROW = Array(EMPTY_ROW_SIZE).fill("");
@@ -109,11 +110,11 @@ export class ParserHelper {
     return this.getShiftHeaderIndex(KOLOR);
   }
 
-  public static shiftPasses7am(shift: Shift): boolean {
+  public static shiftPassesDayStart(shift: Shift): boolean {
     return shift.isWorkingShift
       ? shift.from <= shift.to
-        ? shift.from < 7 && 7 < shift.to
-        : 7 < shift.to || shift.from < 7
+        ? shift.from < DEFAULT_FROM && DEFAULT_FROM < shift.to
+        : DEFAULT_FROM < shift.to || shift.from < DEFAULT_FROM
       : false;
   }
 }

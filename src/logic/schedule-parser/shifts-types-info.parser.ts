@@ -7,7 +7,7 @@ import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
 import { ParserHelper } from "../../helpers/parser.helper";
 
 const DEFAULT_SHIFT_NAME = "Zmiana";
-const DEFAULT_FROM = 7;
+export const DEFAULT_FROM = 7;
 const DEFAULT_NON_WORKING_FROM = 0;
 const DEFAULT_TO = 7;
 const DEFAULT_NON_WORKING_TO = 24;
@@ -23,7 +23,7 @@ export class ShiftsTypesInfoParser {
     this.namelessShifts = 0;
     data.forEach((a) => {
       const shift = this.mapShift(a);
-      if (!ParserHelper.shiftPasses7am(shift)) {
+      if (!ParserHelper.shiftPassesDayStart(shift)) {
         this._shiftsInfoRows[shift.code] = shift;
       } else {
         this.logLoadFileError("Nie dodano zmiany " + shift.name + ". Przecina godzinę 7:00.");
