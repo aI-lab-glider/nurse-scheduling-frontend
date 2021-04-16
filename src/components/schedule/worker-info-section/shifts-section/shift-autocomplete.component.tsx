@@ -15,7 +15,7 @@ import { ApplicationStateModel } from "../../../../state/application-state.model
 import { BaseCellInputOptions } from "../../base/base-cell/base-cell-input.component";
 import useTimeout from "../../../../hooks/use-timeout";
 
-const MODAL_CLOSE_MS = 444;
+const MODAL_CLOSE_MS = 4444;
 interface ShiftCodeSelectItem {
   name: string;
   symbol: string;
@@ -150,19 +150,23 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
         >
           {groupedOptions.map((option, index) => {
             if (option.name.trim() === shiftTypes[ShiftCode.W].name) {
-              return <LabelComponent option={option} index={index} />;
+              return (
+                <LabelComponent option={option} index={index} key={option.name + option.symbol} />
+              );
             }
             return null;
           })}
           {groupedOptions.map((option, index) => {
             if (option.isWorkingShift) {
-              return <LabelComponent option={option} index={index} />;
+              return (
+                <LabelComponent option={option} index={index} key={option.name + option.symbol} />
+              );
             }
             return null;
           })}
           {nonWorkingShifts.length > 0 && <div className="autoSeparator" />}
           {nonWorkingShifts.map((option, index) => (
-            <LabelComponent option={option} index={index} />
+            <LabelComponent option={option} index={index} key={option.name + option.symbol} />
           ))}
         </div>
       )}

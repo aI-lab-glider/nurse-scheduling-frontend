@@ -20,6 +20,7 @@ export enum ScheduleErrorType {
 }
 
 export interface ScheduleErrorMessageModel {
+  index?: number;
   kind: string;
   title?: string;
   message?: string;
@@ -28,4 +29,5 @@ export interface ScheduleErrorMessageModel {
   week?: number;
   level?: ScheduleErrorLevel;
   type?: ScheduleErrorType;
+  isVisible?: boolean;
 }

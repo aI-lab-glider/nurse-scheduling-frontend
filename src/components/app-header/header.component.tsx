@@ -4,17 +4,18 @@
 import { Button as MaterialButton } from "@material-ui/core";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import SettingsIcon from "@material-ui/icons/Settings";
 import classNames from "classnames/bind";
 import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../state/app-config-context";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { MonthSwitchActionCreator } from "../../state/schedule-data/month-switch.action-creator";
-import { ScheduleMode } from "../schedule/schedule-state.model";
 import { Button } from "../buttons/button-component/button.component";
 import ReportIssueModal from "../modals/report-issue-modal/report-issue-modal.component";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
-import { useTranslation } from "react-i18next";
+import { ScheduleMode } from "../schedule/schedule-state.model";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -91,6 +92,7 @@ export function HeaderComponent(): JSX.Element {
           {t("reportError")}
         </MaterialButton>
         <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
+        <SettingsIcon className="header-icon" />
         <HelpOutlineIcon className="header-icon" onClick={redirectToDocumentation} />
       </div>
     </>

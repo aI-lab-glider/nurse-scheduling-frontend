@@ -66,6 +66,7 @@ export function EmptyMonthButtons(): JSX.Element {
             dispatch(MonthSwitchActionCreator.copyFromPrevMonth());
           }}
           variant="secondary"
+          data-cy="copy-prev-month"
         >
           {" "}
           {`${t("loadScheduleFrom")} z ${

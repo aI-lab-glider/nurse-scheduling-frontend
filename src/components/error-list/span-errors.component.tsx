@@ -12,6 +12,7 @@ interface SpanErrorOptions {
 export function SpanErrors({ errors = [] }: SpanErrorOptions): JSX.Element {
   const { t } = useTranslation();
 
+  //TODO Get rid of this file
   return (
     <>
       <div className={"span-errors"}>

@@ -1,10 +1,10 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export function useFileReader(): [ArrayBuffer | undefined, (srcFile: File) => void] {
-  const fileReader: FileReader = new FileReader();
+  const fileReader = useMemo(() => new FileReader(), []);
   const [content, setContent] = useState<ArrayBuffer>();
 
   useEffect(() => {
@@ -13,8 +13,11 @@ export function useFileReader(): [ArrayBuffer | undefined, (srcFile: File) => vo
     return (): void => fileReader.removeEventListener("loadend", updateContent);
   }, [fileReader]);
 
-  function setSrcFile(file: File): void {
-    fileReader.readAsArrayBuffer(file);
-  }
+  const setSrcFile = useCallback(
+    (file: File): void => {
+      fileReader.readAsArrayBuffer(file);
+    },
+    [fileReader]
+  );
   return [content, setSrcFile];
 }

@@ -18,9 +18,9 @@ const nurseInitialWorkHours: HoursInfo[] = [
 ];
 const babysitterInitialWorkHours: HoursInfo[] = [
   {
-    [HoursInfoCells.required]: 88,
+    [HoursInfoCells.required]: 80,
     [HoursInfoCells.actual]: 116,
-    [HoursInfoCells.overtime]: 28,
+    [HoursInfoCells.overtime]: 36,
   },
   {
     [HoursInfoCells.required]: 136,
@@ -28,9 +28,9 @@ const babysitterInitialWorkHours: HoursInfo[] = [
     [HoursInfoCells.overtime]: 48,
   },
   {
-    [HoursInfoCells.required]: 72,
+    [HoursInfoCells.required]: 160,
     [HoursInfoCells.actual]: 96,
-    [HoursInfoCells.overtime]: 24,
+    [HoursInfoCells.overtime]: -64,
   },
 ];
 

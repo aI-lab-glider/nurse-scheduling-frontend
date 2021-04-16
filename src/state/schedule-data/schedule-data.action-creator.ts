@@ -3,27 +3,28 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 /* eslint-disable @typescript-eslint/camelcase */
-import { MonthDataModel, ScheduleDataModel } from "./schedule-data.model";
+import _ from "lodash";
+import { LocalStorageProvider } from "../../logic/data-access/local-storage-provider.model";
 import {
   RevisionType,
   ScheduleKey,
   ThunkFunction,
 } from "../../logic/data-access/persistance-store.model";
-import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../app.reducer";
-import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
-import { LocalStorageProvider } from "../../logic/data-access/local-storage-provider.model";
-import _ from "lodash";
-import { ActionModel } from "../../utils/action.model";
-import { Shift } from "./shifts-types/shift-types.model";
-import {
-  AddMonthRevisionAction,
-  PrimaryRevisionAction,
-} from "./primary-revision/primary-revision.reducer";
-import { PrimaryMonthRevisionDataModel } from "../application-state.model";
 import {
   cropScheduleDMToMonthDM,
   extendMonthDMRevisionToScheduleDM,
 } from "../../logic/schedule-container-converter/schedule-container-converter";
+import { ActionModel } from "../../utils/action.model";
+import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../app.reducer";
+import { PrimaryMonthRevisionDataModel } from "../application-state.model";
+import {
+  AddMonthRevisionAction,
+  PrimaryRevisionAction,
+} from "./primary-revision/primary-revision.reducer";
+import { MonthDataModel, ScheduleDataModel } from "./schedule-data.model";
+import { ScheduleErrorMessageModel } from "./schedule-errors/schedule-error-message.model";
+import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
+import { Shift } from "./shifts-types/shift-types.model";
 
 export class ScheduleDataActionCreator {
   //#region Update state
@@ -177,7 +178,16 @@ export class ScheduleDataActionCreator {
       dispatch(action);
     };
   }
-
+  static hideErrors(): ActionModel<unknown> {
+    return this.showError(undefined);
+  }
+  static showError(error: ScheduleErrorMessageModel | undefined): ActionModel<unknown> {
+    const action = {
+      type: ScheduleActionType.SHOW_ERROR,
+      payload: error,
+    };
+    return action;
+  }
   static cleanErrors(): ActionModel<unknown> {
     const action = {
       type: ScheduleActionType.CLEAN_ERRORS,
