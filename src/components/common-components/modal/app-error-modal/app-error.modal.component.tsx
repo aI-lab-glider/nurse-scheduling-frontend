@@ -1,9 +1,11 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../../button-component/button.component";
 import DefaultModal from "../modal.component";
+import { LocalStorageProvider } from "../../../../api/local-storage-provider.model";
+import { FileHelper } from "../../../../helpers/file.helper";
 
 interface AppErrorModalOptions {
   onClick: () => void;
@@ -13,31 +15,78 @@ interface AppErrorModalOptions {
 
 export default function AppErrorModal(options: AppErrorModalOptions): JSX.Element {
   const { setOpen, open, onClick } = options;
+  const [openExtension, setIsOpenExtension] = useState(false);
 
   const handleClose = (): void => {
     onClick();
+    setIsOpenExtension(false);
     setOpen(false);
   };
 
-  const title = "Coś poszło nie tak :(";
+  useEffect(() => {
+    setIsOpenExtension(false);
+  }, [open]);
+
+  const closeAndSaveDB = async (): Promise<void> => {
+    await FileHelper.handleDbDump();
+    await new LocalStorageProvider().reloadDb();
+  };
+
+  const title = "Wystąpił błąd";
 
   const body = (
-    <div className={"span-primary"}>
-      <p>Wiadomość o błędzie została wysłana do twórców.</p>
+    <div className={"span-primary error-modal-text"}>
+      <p>
+        Wiadomość o błędzie została wysłana do twórców.
+        <br />
+        Proszę odświeżyć aplikację
+      </p>
     </div>
   );
 
   const footer = (
-    <div style={{ display: "flex", justifyContent: "center" }}>
+    <div style={{ display: "block" }}>
       <Button
-        onClick={handleClose}
+        onClick={(): void => {
+          window.location.reload(false);
+          setIsOpenExtension(false);
+          handleClose();
+        }}
         size="small"
         className="submit-button"
         variant="primary"
-        data-cy="btn-ok-app-error"
+        data-cy="btn-reload-app-error"
       >
-        OK
+        Odśwież aplikację
       </Button>
+      <br />
+      <br />
+      <div className={"app-error-button error-modal-text"}>
+        <p
+          className={openExtension ? "clicked" : "not-clicked"}
+          onClick={(): void => setIsOpenExtension(true)}
+        >
+          Dalej nie działa? Zobacz co możesz zrobić.
+        </p>
+      </div>
+      {openExtension && (
+        <>
+          <div className={"span-primary error-modal-text"}>
+            Aplikacja prawdopodbnie zawiera błędne dane.
+            <br />
+            Pobierz wszystkie grafiki i wyczyść dane aplikacji.
+          </div>
+
+          <Button
+            size="small"
+            className="submit-button"
+            variant="secondary"
+            onClick={closeAndSaveDB}
+          >
+            Pobierz grafik i wyczyść aplikację
+          </Button>
+        </>
+      )}
     </div>
   );
 
