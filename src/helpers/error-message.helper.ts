@@ -148,6 +148,9 @@ export class ErrorMessageHelper {
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WorkerTeamsCollision:
+        // const sections = findSections(error.hours);
+        // const sectionIntersectionMsg = sections.map(([start, end]) => start === end ? `${start}:00` : `${start}:00 - ${end}:00`);
+
         i = 0;
         message = `W godzinach: <b>${error.hours![i]}:00</b>`;
         let prev = error.hours![i];
@@ -185,6 +188,7 @@ export class ErrorMessageHelper {
           day += error.day;
         }
         workers = error.workers;
+
         break;
       case ParseErrorCode.UNKNOWN_VALUE:
         message = `Nieznana wartość zmiany: "<b>${error.actual}</b>". Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub utworzyć nową.`;
