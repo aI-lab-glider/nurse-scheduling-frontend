@@ -74,6 +74,7 @@ export class WorkerHourInfo {
     };
   }
 
+  //to test
   public static fromSchedules(
     workerName: string,
     scheduleModel: ScheduleDataModel | MonthDataModel,
@@ -108,6 +109,7 @@ export class WorkerHourInfo {
     );
   }
 
+  //to test
   public static fromWorkerInfo(
     shifts: ShiftCode[],
     primaryScheduleWorkerShifts: MonthDataArray<ShiftCode>,
@@ -238,7 +240,7 @@ export class WorkerHourInfo {
     return Math.max((requiredHours - freeHours) * workerNorm, 0);
   }
 
-  public static calculateRequiredHoursFromVerboseDates(
+  private static calculateRequiredHoursFromVerboseDates(
     verboseDates: DateInformationForWorkInfoCalculation[]
   ): number {
     const workingDaysCount = verboseDates.filter((d) => VerboseDateHelper.isWorkingDay(d)).length;
@@ -381,6 +383,7 @@ export class WorkerHourInfo {
     return exceedMaximumDayWorkTimeOvertime;
   }
 
+  //to test
   public static calculateWorkNormForMonth(month: number, year: number): number {
     const dates = VerboseDateHelper.generateVerboseDatesForMonth(month, year);
     return Math.round(this.calculateRequiredHoursFromVerboseDates(dates));

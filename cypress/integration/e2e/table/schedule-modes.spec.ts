@@ -30,7 +30,7 @@ describe("Schedule modes spec", () => {
       cy.enterEditMode();
     });
 
-    it("Should be able to change shift", () => {
+    it("changes shift", () => {
       cy.checkWorkerShift({ ...testedCell, desiredShiftCode: testedCell.initialShiftCode });
       cy.changeWorkerShift({ ...testedCell, newShiftCode: testedCell.desiredShiftCode });
       cy.checkWorkerShift({ ...testedCell });

@@ -7,12 +7,12 @@ import schedule from "../../../fixtures/schedule";
 import { cropScheduleDMToMonthDM } from "../../../../src/logic/schedule-container-convertion/schedule-container-convertion";
 
 describe("FileHelper", () => {
-  it(`Should properly create directory name based on filename`, () => {
+  it("properly creates directory name based on filename", () => {
     const result = FileHelper.createDirNameFromFile("maj_2021_wersja_bazowa.xlsx");
     expect(result).to.eql("maj_2021");
   });
 
-  it(`Should return properly create filename base on month model and revision type`, () => {
+  it("properly creates filename base on month model and revision type", () => {
     const result = FileHelper.createMonthFilename(
       cropScheduleDMToMonthDM(schedule as ScheduleDataModel),
       "actual"

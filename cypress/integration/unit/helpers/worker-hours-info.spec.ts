@@ -14,6 +14,7 @@ import { WorkerHourInfo } from "../../../../src/helpers/worker-hours-info.model"
 import { workerTestData, WorkerTestDataInstance } from "../../../fixtures/march-2021-worker-data";
 import { ContractType } from "../../../../src/common-models/worker-info.model";
 
+//todo refactor
 describe("Worker hours info", () => {
   workerTestData.forEach((workerInstance) => {
     it(`Should calculate same worker norm as norm in example schedule when no base schedule exists for worker ${workerInstance.workerName}`, () => {
