@@ -90,7 +90,7 @@ export interface ModalOptions {
 
 export default function DefaultModal(options: ModalOptions): JSX.Element {
   const { setOpen, open, title, body, footer, closeOptions, classNames } = options;
-  let classes = useStyles(options.height ?? 350, options.width ?? 600);
+  let classes = useStyles(options.height ?? 450, options.width ?? 600);
   classes = classNames ? classNames : classes;
 
   const handleClose = (): void => {

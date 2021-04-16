@@ -9,3 +9,23 @@
   font-weight: $font-weight-extra-bold;
   line-height: $modal-title-line-height;
 }
+
+.app-error-button > .not-clicked {
+  color: $brand-info !important;
+  text-decoration: underline;
+}
+
+.app-error-button > .clicked {
+  color: $dark-gray !important;
+  text-decoration: underline;
+}
+
+.app-error-button > .not-clicked:hover {
+  color: $brand-primary !important;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.error-modal-text {
+  margin-left: 10px;
+}
