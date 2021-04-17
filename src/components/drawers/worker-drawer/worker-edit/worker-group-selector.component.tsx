@@ -11,7 +11,7 @@ import {
   DropdownButtons,
 } from "../../../buttons/dropdown-buttons/dropdown-buttons.component";
 import { FormFieldOptions, useFormFieldStyles } from "./worker-edit.models";
-import { useTranslation } from "react-i18next";
+import { t } from "../../../../helpers/translations.helper";
 interface WorkerGroupSelectorOptions extends FormFieldOptions {
   setWorkerGroup: (workerGroup: WorkerGroup) => void;
   workerGroup: WorkerGroup;
@@ -22,7 +22,7 @@ export function WorkerGroupSelector({
   workerGroup,
 }: WorkerGroupSelectorOptions): JSX.Element {
   const classes = useFormFieldStyles();
-  const { t } = useTranslation();
+
   function handleWorkerGroupUpdate(newGroup: WorkerGroup): void {
     setWorkerGroup(newGroup);
   }

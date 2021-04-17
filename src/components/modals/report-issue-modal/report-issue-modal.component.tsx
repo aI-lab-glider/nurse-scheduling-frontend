@@ -10,7 +10,7 @@ import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scs
 import DefaultModal from "../modal.component";
 import { send } from "emailjs-com";
 import { useNotification } from "../../notification/notification.context";
-import { useTranslation } from "react-i18next";
+import { t } from "../../../helpers/translations.helper";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -84,7 +84,6 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   const classes = useStyles();
   const [isSent, setIsSent] = useState(false);
   const { open, setOpen, clear } = options;
-  const { t } = useTranslation();
 
   const [issueDescription, setIssueDescription] = useState("");
   const title = t("reportError");
@@ -115,7 +114,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
         setIsSent(true);
       })
       .catch(() => {
-        createNotification({ type: "error", message: "Wystąpił problem sieciowy!" });
+        createNotification({ type: "error", message: t("thereWasNetworkingError") });
         handleClose();
       });
   }

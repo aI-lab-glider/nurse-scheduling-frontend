@@ -11,7 +11,7 @@ import { ApplicationStateModel } from "../../../state/application-state.model";
 import DefaultModal from "../modal.component";
 import ModalErrorList from "./error.modal.list.component";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
-import { useTranslation } from "react-i18next";
+import { t } from "../../../helpers/translations.helper";
 
 export interface ErrorsModalComponent {
   setOpen: (open: boolean) => void;
@@ -22,7 +22,6 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
   const { setOpen, open } = options;
   const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
   const dispach = useDispatch();
-  const { t } = useTranslation();
 
   const handleClose = (): void => {
     setOpen(false);

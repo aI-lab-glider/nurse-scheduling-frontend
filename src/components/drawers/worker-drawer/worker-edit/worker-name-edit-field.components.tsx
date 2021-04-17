@@ -4,8 +4,8 @@
 import { Grid, TextField, Typography } from "@material-ui/core";
 import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+import { t } from "../../../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../../../state/application-state.model";
 import {
   FormFieldErrorLabelOptions,
@@ -31,7 +31,6 @@ export function WorkerNameEditField({
 }: WorkerNameEditFieldOptions): JSX.Element {
   const classes = useFormFieldStyles();
   const [firstEditMade, setFirstEditMade] = useState(false);
-  const { t } = useTranslation();
   const workerNames = useSelector((state: ApplicationStateModel) =>
     Object.keys(state.actualState.persistentSchedule.present.employee_info.type)
   );
@@ -54,7 +53,7 @@ export function WorkerNameEditField({
   const nameFieldErrorLabels: FormFieldErrorLabelOptions[] = [
     {
       shouldBeVisible: isWorkerWithSameNameExists() && firstEditMade,
-      message: `${t("workerWithFullName")}: ${workerName} ${t("alreadyExists")}`,
+      message: t("workerAlreadyExists", { name: workerName }),
     },
     {
       shouldBeVisible: isWorkerNameEmpty() && firstEditMade,

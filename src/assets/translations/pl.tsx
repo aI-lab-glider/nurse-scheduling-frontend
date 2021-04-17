@@ -9,7 +9,7 @@ export default {
     management: "Zarządzanie",
     //header.component.tsx
     reportError: "Zgłoś błąd",
-    comeBackToNow: "Wróć do teraz",
+    returnToNow: "Wróć do teraz",
     //empty-month-bttons.tsx
     loadScheduleFrom: "Kopiuj plan z",
     loadFromFile: "Wgraj z pliku",
@@ -18,22 +18,24 @@ export default {
     saveAs: "Zapisz jako...",
     file: "Plik",
     //worker-civil-contract-work-norm-selector.component.tsx
-    maximumWorkHoursForMonth: "Liczba godzin musi być w przedziałe od 0 do",
+    hourAmmount: "Liczba godzin",
+    incorrectWorkHoursForWorker: "Liczba godzin musi być w przedziałe od {{from}} do {{to}}",
     //worker-contract-type-selector.component.tsx
     selectContractType: "Wybierz typ umowy",
+    contractType: "Typ umowy",
+    workingTime: "Wymiar pracy",
     //worker-edit.component.tsx
     saveWorker: "Zapisz pracownika",
     //worker-employment-contract-work-norm-selector.component.tsx
     selectWorkerHours: "Wybierz etat pracownika",
     enterWorkerHours: "Wpisz wymiar etatu",
-    workerMayNotBeEmployedMore: "Pracownik nie może być zatrudniony na więcej niż jeden etat",
+    workerCouldNotBeEmployedMore: "Pracownik nie może być zatrudniony na więcej niż jeden etat",
     //worker-group-selector.component.tsx
     workerTeam: "Zespół pracownika",
     //worker-name-edit-field.component.tsx
     firstAndLastName: "Imię i nazwisko",
     enterWorkersFirstAndLastName: "Wpisz imię i nazwisko pracownika",
-    workerWithFullName: "Pracownik o imieniu i nazwisku",
-    alreadyExists: "już istnieje",
+    workerAlreadyExists: "Pracownik o imieniu i nazwisku {{name}} already exists",
     //worker-position-selector.component.tsx
     position: "Stanowisko",
     selectWorkerPosition: "Wybierz stanowisko pracownika",
@@ -64,7 +66,7 @@ export default {
     errorMessageWasSent: "Wiadomość o błędzie została wysłana do twórców.",
     //delete-worker.modal.component.tsx
     confirmAction: "Potwierdź akcje",
-    doYouReallyWantToRemoveAnEmployee: "Czy naprawde chcesz usunąć pracownika",
+    removeEmployeeQuestion: "Czy naprawde chcesz usunąć pracownika {{name}}",
     cancel: "Anuluj",
     confirm: "Zaakceptuj",
     //error.modal.list.component.tsx
@@ -78,7 +80,7 @@ export default {
     downloadSchedule: "Pobierz plan",
     fileOptions: "Opcje pliku",
     //report-issue-modal.component.tsx
-    thereWasnetworkingError: "Wystąpił problem sieciowy!",
+    thereWasNetworkingError: "Wystąpił problem sieciowy!",
     send: "Wyślij",
     close: "Zamknij",
     whatErrorOccurred: "Jaki bląd wystąpił?",
@@ -98,5 +100,13 @@ export default {
     short: "Skrót",
     shiftColor: "Kolor zmiany",
     selectColor: "Wybierz kolor",
+    //app-error.modal.component.tsx
+    errorOccured: "Wystąpił błąd",
+    pleaseRefreshApp: "proszę odświeżyć aplikacje",
+    refreshApp: "Odśwież aplikacje",
+    stillNotWorkingSeeWhatYouCanDo: "Dalej nie działa? Zobacz co możesz zrobić.",
+    appProbbablyContainedWrongData: "Aplikacja prawdopodbnie zawiera błędne dane.",
+    downloadAllSchedulesAndClearAppData: "Pobierz wszystkie grafiki i wyczyść dane aplikacji.",
+    downloadScheduleAndClearAppData: "Pobierz grafik i wyczyść aplikację",
   },
 };

@@ -9,7 +9,7 @@ export default {
     management: "Management",
     //header.component.tsx
     reportError: "Report error",
-    comeBackToNow: "Come back to now",
+    returnToNow: "Come back to now",
     //empty-month-bttons.tsx
     loadScheduleFrom: "Load schedule from",
     loadFromFile: "Load from file",
@@ -18,22 +18,24 @@ export default {
     saveAs: "Save as...",
     file: "File",
     //worker-civil-contract-work-norm-selector.component.tsx
-    maximumWorkHoursForMonth: "The number of hours must be between 0 and",
+    hourAmmount: "Liczba godzin",
+    incorrectWorkHoursForWorker: "The number of hours must be between {{from}} and {{to}}",
     //worker-contract-type-selector.component.tsx
     selectContractType: "Select contract type",
+    contractType: "Contract type",
+    workingTime: "Working time",
     //worker-edit.component.tsx
     saveWorker: "Save worker",
     //worker-employment-contract-work-norm-selector.component.tsx
     selectWorkerHours: "Select worker hours",
     enterWorkerHours: "Enter worker hours",
-    workerMayNotBeEmployedMore: "An worker may not be employed for more than one full-time job",
+    workerCouldNotBeEmployedMore: "An worker may not be employed for more than one full-time job",
     //worker-group-selector.component.tsx
     workerTeam: "Worker's team",
     //worker-name-edit-field.component.tsx
     firstAndLastName: "First and last name",
     enterWorkersFirstAndLastName: "Enter employees first and last name",
-    workerWithFullName: "Worker with full name",
-    alreadyExists: "already exists",
+    workerAlreadyExists: "Worker with full name {{name}} already exists",
     //worker-position-selector.component.tsx
     position: "Position",
     selectWorkerPosition: "Select employee position",
@@ -64,7 +66,7 @@ export default {
     errorMessageWasSent: "Error information was sent to the developers.",
     //delete-worker.modal.component.tsx
     confirmAction: "Confirm action",
-    doYouReallyWantToRemoveAnEmployee: "Czy naprawde chcesz usunąć pracownika",
+    removeEmployeeQuestion: "Do you really want to remove {{name}} employee",
     cancel: "Cancel",
     confirm: "Confirm",
     //error.modal.list.component.tsx
@@ -78,7 +80,7 @@ export default {
     downloadSchedule: "Download schedule",
     fileOptions: "File options",
     //report-issue-modal.component.tsx
-    thereWasnetworkingError: "There was an networking error!",
+    thereWasNetworkingError: "There was an networking error!",
     send: "Send",
     close: "Close",
     whatErrorOccurred: "What error has occured?",
@@ -97,5 +99,7 @@ export default {
     short: "Short",
     shiftColor: "Shift color",
     selectColor: "Select color",
+    //app-error.modal.component.tsx
+    errorOccured: "Error occured",
   },
 };

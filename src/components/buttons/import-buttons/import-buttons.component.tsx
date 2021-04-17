@@ -8,7 +8,7 @@ import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ButtonData, DropdownButtons } from "../dropdown-buttons/dropdown-buttons.component";
 import ExportModal from "../../modals/export-modal/export.modal.component";
 import { useImportModal } from "./import-modal-context";
-import { useTranslation } from "react-i18next";
+import { t } from "../../../helpers/translations.helper";
 
 export function ImportButtonsComponent(): JSX.Element {
   const { handleImport } = useImportModal();
@@ -17,7 +17,6 @@ export function ImportButtonsComponent(): JSX.Element {
   const stateScheduleModel = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule?.present
   );
-  const { t } = useTranslation();
 
   const btnData1: ButtonData = {
     label: t("load"),

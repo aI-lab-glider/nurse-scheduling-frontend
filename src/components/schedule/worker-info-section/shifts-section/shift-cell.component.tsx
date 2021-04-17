@@ -228,24 +228,24 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
           </ErrorPopper>
         )}
         {/* TODO revert cell details
-        {!isEditMode && (
-          <Popper
-            ref={cellDetailsPopperRef}
-            className="cell-details-poppers"
-            style={styles}
-            isOpen={isComponentVisible && isBlocked && value !== ""}
-          >
-            <CellDetails
-              index={cellIndex}
-              day={verboseDate?.date ?? 0}
-              month={monthNumber ?? new Date().getMonth()}
-              year={year}
-              shiftcode={value}
-              {...options}
-              close={(): void => setIsComponentVisible(false)}
-            />
-          </Popper>
-        )} */}
+         {!isEditMode && (
+           <Popper
+             ref={cellDetailsPopperRef}
+             className="cell-details-poppers"
+             style={styles}
+             isOpen={isComponentVisible && isBlocked && value !== ""}
+           >
+             <CellDetails
+               index={cellIndex}
+               day={verboseDate?.date ?? 0}
+               month={monthNumber ?? new Date().getMonth()}
+               year={year}
+               shiftcode={value}
+               {...options}
+               close={(): void => setIsComponentVisible(false)}
+             />
+           </Popper>
+         )} */}
         )
       </div>
     </>

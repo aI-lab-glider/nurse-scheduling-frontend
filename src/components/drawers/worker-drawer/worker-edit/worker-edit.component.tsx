@@ -20,7 +20,7 @@ import { WorkerEditComponentOptions, WorkerEditComponentMode } from "./worker-ed
 import { WorkerGroupSelector } from "./worker-group-selector.component";
 import { WorkerNameEditField } from "./worker-name-edit-field.components";
 import { WorkerWorkerTypeSelector } from "./worker-position-selector.component";
-import { useTranslation } from "react-i18next";
+import { t } from "../../../../helpers/translations.helper";
 
 const useStyles = makeStyles({
   container: {
@@ -34,7 +34,6 @@ export function WorkerEditComponent({
   setOpen,
 }: WorkerEditComponentOptions): JSX.Element {
   const classes = useStyles();
-  const { t } = useTranslation();
 
   const dispatcher = useDispatch();
   const { workerInfo, setWorkerInfo } = useWorkerInfo(name);

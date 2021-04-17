@@ -7,8 +7,8 @@ import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import SettingsIcon from "@material-ui/icons/Settings";
 import classNames from "classnames/bind";
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
+import { t } from "../../helpers/translations.helper";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../state/app-config-context";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { MonthSwitchActionCreator } from "../../state/schedule-data/month-switch.action-creator";
@@ -70,7 +70,6 @@ export function HeaderComponent(): JSX.Element {
   const redirectToDocumentation = useCallback((): void => {
     window.open(process.env.REACT_APP_HELP_PAGE_URL);
   }, []);
-  const { t } = useTranslation();
   return (
     <>
       <div id={"header"}>
@@ -83,7 +82,7 @@ export function HeaderComponent(): JSX.Element {
           onClick={returnToCurrentMonth}
           disabled={!isNewMonth || !showNowNavigation}
         >
-          {t("comeBackToNow")}
+          {t("returnToNow")}
         </Button>
         <div className={"filler"} />
         <MonthSwitchComponent isInViewMode={isInViewMode} />

@@ -6,7 +6,7 @@ import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
 import gliderLogo from "../../assets/images/gliderLogo.png";
-import { useTranslation } from "react-i18next";
+import { t } from "../../helpers/translations.helper";
 
 const useStyles = makeStyles({
   footer: {
@@ -25,7 +25,6 @@ const useStyles = makeStyles({
 
 export function Footer(): JSX.Element {
   const classes = useStyles();
-  const { t } = useTranslation();
 
   return (
     <Grid container className={classes.footer} justify="space-between" alignItems="center">

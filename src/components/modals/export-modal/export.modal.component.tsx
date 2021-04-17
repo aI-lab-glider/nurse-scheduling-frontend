@@ -22,7 +22,7 @@ import {
   DropdownButtons,
 } from "../../buttons/dropdown-buttons/dropdown-buttons.component";
 import DefaultModal from "../modal.component";
-import { useTranslation } from "react-i18next";
+import { t } from "../../../helpers/translations.helper";
 
 export interface ExportModalComponent {
   setOpen: (open: boolean) => void;
@@ -45,7 +45,6 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   const handleClose = (): void => {
     setOpen(false);
   };
-  const { t } = useTranslation();
 
   const [exportOptions, setExportOptions] = React.useState({
     extraWorkers: { value: true, label: t("dayWorkers") },
@@ -79,7 +78,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
     btnData.push(button);
   }
 
-  const title = "Pobierz plan";
+  const title = t("downloadSchedule");
 
   const footer = (
     <div>

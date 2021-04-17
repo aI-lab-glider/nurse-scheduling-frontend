@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid, Typography } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { t } from "../../../../helpers/translations.helper";
 import { WorkerType } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import {
   ButtonData,
@@ -28,7 +28,6 @@ export function WorkerWorkerTypeSelector({
 }: WorkerPositionSelectorOptions): JSX.Element {
   const classes = useFormFieldStyles();
   const [firstEditMade, setFirstEditMade] = useState(false);
-  const { t } = useTranslation();
 
   function handleWorkerTypeUpdate(workerType: WorkerType): void {
     setActualWorkerType(workerType);

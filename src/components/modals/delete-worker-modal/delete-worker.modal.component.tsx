@@ -7,7 +7,7 @@ import DefaultModal from "../modal.component";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { useDispatch } from "react-redux";
 import { WorkerActionCreator } from "../../../state/schedule-data/worker-info/worker.action-creator";
-import { useTranslation } from "react-i18next";
+import { t } from "../../../helpers/translations.helper";
 
 interface DeleteWorkerModalOptions {
   setOpen: (open: boolean) => void;
@@ -17,7 +17,6 @@ interface DeleteWorkerModalOptions {
 
 export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOptions): JSX.Element {
   const dispatcher = useDispatch();
-  const { t } = useTranslation();
 
   const { setOpen, open, worker } = options;
 
@@ -29,9 +28,7 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
 
   const body = (
     <div className={"span-primary workers-table"}>
-      <p>
-        {t("doYouReallyWantToRemoveAnEmployee")} {worker?.name} ?
-      </p>
+      <p>{t("removeEmployeeQuestion", { name: worker?.name })}?</p>
     </div>
   );
 

@@ -4,7 +4,7 @@
 import { Grid, TextField, Typography } from "@material-ui/core";
 import * as _ from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { t } from "../../../../helpers/translations.helper";
 import { WorkerHourInfo } from "../../../../helpers/worker-hours-info.model";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
 import { WorkNormSelectorOptions } from "./combined-worknorm-selector.component";
@@ -20,7 +20,6 @@ export function WorkerCivilContractWorkNormSelector({
 
   const { year, monthNumber } = useMonthInfo();
   const requiredHours = WorkerHourInfo.calculateWorkNormForMonth(monthNumber, year);
-  const { t } = useTranslation();
 
   const convertToNormalHours = useCallback(
     (workNorm: number): number => {
@@ -67,7 +66,7 @@ export function WorkerCivilContractWorkNormSelector({
   return (
     <>
       <Grid item xs={6}>
-        <Typography className={classes.label}>Liczba godzin</Typography>
+        <Typography className={classes.label}>{t("hourAmmount")}</Typography>
         <TextField
           fullWidth
           name="civilTime"
@@ -84,7 +83,7 @@ export function WorkerCivilContractWorkNormSelector({
         />
         <FormFieldErrorLabel
           shouldBeVisible={!isTimeValid() && firstEditMade}
-          message={`${t("maximumWorkHoursForMonth")} ${maximumWorkHoursForMonth}`}
+          message={t("incorrectWorkHoursForWorker", { from: 0, to: maximumWorkHoursForMonth })}
         />
       </Grid>
     </>

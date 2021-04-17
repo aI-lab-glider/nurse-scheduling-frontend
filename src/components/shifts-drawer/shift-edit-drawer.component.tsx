@@ -14,7 +14,7 @@ import { ShiftDrawerMode } from "./shift-drawer.component";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import i18next from "i18next";
-import { useTranslation } from "react-i18next";
+import { t } from "../../helpers/translations.helper";
 
 interface ShiftEditDrawerOptions {
   selectedShift: Shift;
@@ -87,7 +87,6 @@ export default function ShiftEditDrawer({
 
     return newDate;
   }
-  const { t } = useTranslation();
   const [valueTimeStart, onChangeTimeStart] = useState<Date | null>(getNewDate("start"));
   const [valueTimeEnd, onChangeTimeEnd] = useState<Date | null>(getNewDate("end"));
 

@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TranslationHelper } from "../../../helpers/translations.helper";
+import { t, TranslationHelper } from "../../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { Button } from "../../common-components";
 import { ScheduleKey } from "../../../logic/data-access/persistance-store.model";
@@ -12,7 +12,6 @@ import { LocalStorageProvider } from "../../../logic/data-access/local-storage-p
 import { MonthDataModel } from "../../../state/schedule-data/schedule-data.model";
 import { MonthHelper } from "../../../helpers/month.helper";
 import { useImportModal } from "../import-buttons/import-modal-context";
-import { useTranslation } from "react-i18next";
 
 export function EmptyMonthButtons(): JSX.Element {
   const { month_number: currentMonth, year: currentYear } = useSelector(
@@ -56,8 +55,6 @@ export function EmptyMonthButtons(): JSX.Element {
       !month.isCorrupted
     );
   };
-  const { t } = useTranslation();
-
   return (
     <div className={"newPageButtonsPane"}>
       {hasValidPrevious && (
