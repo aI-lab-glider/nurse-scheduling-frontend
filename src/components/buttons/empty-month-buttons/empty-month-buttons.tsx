@@ -64,6 +64,7 @@ export function EmptyMonthButtons(): JSX.Element {
             dispatch(MonthSwitchActionCreator.copyFromPrevMonth());
           }}
           variant="secondary"
+          data-cy="copy-prev-month"
         >
           {" "}
           {`Kopiuj plan z ${

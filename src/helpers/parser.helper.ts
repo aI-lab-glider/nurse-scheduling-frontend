@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { DEFAULT_FROM } from "../logic/schedule-parser/shifts-types-info.parser";
+import { Shift } from "../state/schedule-data/shifts-types/shift-types.model";
+
 export const EMPTY_ROW_SIZE = 40;
 export const EMPTY_ROW = Array(EMPTY_ROW_SIZE).fill("");
 
@@ -17,14 +20,26 @@ const ZMIANA_PRACUJACA = "Zmiana pracująca";
 const KOLOR = "Kolor";
 export const SHIFT_HEADERS = [NAZWA_ZMIANY, SKROT, OD, DO, ZMIANA_PRACUJACA, KOLOR];
 
+const IMIE_I_NAZWISKO = "Imię i nazwisko";
+const STANOWISKO_FUNKCJA = "Stanowisko/funkcja";
+const RODZAJ_UMOWY = "Rodzaj umowy";
+const WYMIAR_CZASU_PRACY = "Wymiar czasu pracy";
+const ZESPOL = "Zespół";
 export const WORKER_HEADERS = [
-  "Imię i nazwisko",
-  "Stanowisko/funkcja",
-  "Rodzaj umowy",
-  "Wymiar czasu pracy",
-  "Zespół",
+  IMIE_I_NAZWISKO,
+  STANOWISKO_FUNKCJA,
+  RODZAJ_UMOWY,
+  WYMIAR_CZASU_PRACY,
+  ZESPOL,
 ];
-const CELLS_TO_AVOID = [WORKSHEET_NAME, NAZWA_ZMIANY];
+const CELLS_TO_AVOID = [
+  WORKSHEET_NAME,
+  NAZWA_ZMIANY,
+  IMIE_I_NAZWISKO,
+  STANOWISKO_FUNKCJA,
+  RODZAJ_UMOWY,
+  WYMIAR_CZASU_PRACY,
+];
 
 export class ParserHelper {
   public static isEmptyRow(rowValues: Array<string>): boolean {
@@ -34,8 +49,7 @@ export class ParserHelper {
       rowValuesSet.size === 0 ||
       (rowValuesSet.size === 1 && rowValuesSet.has("")) ||
       Array.from(rowValuesSet).some((a) => typeof a === "undefined") ||
-      contains(CELLS_TO_AVOID) ||
-      contains(WORKER_HEADERS)
+      contains(CELLS_TO_AVOID)
     );
 
     function contains(cellToAvoid: Array<string>): boolean {
@@ -94,5 +108,13 @@ export class ParserHelper {
 
   public static getShiftColorHeaderIndex(): number {
     return this.getShiftHeaderIndex(KOLOR);
+  }
+
+  public static shiftPassesDayStart(shift: Shift): boolean {
+    return shift.isWorkingShift
+      ? shift.from <= shift.to
+        ? shift.from < DEFAULT_FROM && DEFAULT_FROM < shift.to
+        : DEFAULT_FROM < shift.to || shift.from < DEFAULT_FROM
+      : false;
   }
 }

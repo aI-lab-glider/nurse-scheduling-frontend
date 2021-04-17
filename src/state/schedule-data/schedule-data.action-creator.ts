@@ -21,9 +21,10 @@ import {
 } from "./primary-revision/primary-revision.reducer";
 import { PrimaryMonthRevisionDataModel } from "../application-state.model";
 import {
-  cropScheduleDMToMonthDM,
   extendMonthDMRevisionToScheduleDM,
+  cropScheduleDMToMonthDM,
 } from "../../logic/schedule-container-converter/schedule-container-converter";
+import { ScheduleErrorMessageModel } from "./schedule-errors/schedule-error-message.model";
 
 export class ScheduleDataActionCreator {
   //#region Update state
@@ -177,7 +178,16 @@ export class ScheduleDataActionCreator {
       dispatch(action);
     };
   }
-
+  static hideErrors(): ActionModel<unknown> {
+    return this.showError(undefined);
+  }
+  static showError(error: ScheduleErrorMessageModel | undefined): ActionModel<unknown> {
+    const action = {
+      type: ScheduleActionType.SHOW_ERROR,
+      payload: error,
+    };
+    return action;
+  }
   static cleanErrors(): ActionModel<unknown> {
     const action = {
       type: ScheduleActionType.CLEAN_ERRORS,

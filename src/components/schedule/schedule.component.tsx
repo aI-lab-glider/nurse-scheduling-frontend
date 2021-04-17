@@ -3,13 +3,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useSelector } from "react-redux";
+import { WorkerHourInfo } from "../../helpers/worker-hours-info.model";
+import { useWorkerGroups } from "../../hooks/use-worker-groups";
 import { ApplicationStateModel } from "../../state/application-state.model";
+import { FoundationInfoComponent } from "./foundation-info-section/foundation-info.component";
+import { ScheduleFoldingSection } from "./schedule-folding-section.component";
 import { OvertimeHeaderComponent } from "./schedule-header/overtime-header-table/overtime-header.component";
 import { TimeTableComponent } from "./schedule-header/timetable/timetable.component";
-import { ScheduleFoldingSection } from "./schedule-folding-section.component";
-import { FoundationInfoComponent } from "./foundation-info-section/foundation-info.component";
 import { WorkerInfoSection } from "./worker-info-section/worker-info-section.component";
-import { useWorkerGroups } from "../../hooks/use-worker-groups";
 
 export function ScheduleComponent(): JSX.Element {
   const workerGroups = useWorkerGroups();
@@ -36,7 +37,7 @@ export function ScheduleComponent(): JSX.Element {
             <TimeTableComponent />
           </div>
           <div className="summaryContainer">
-            <OvertimeHeaderComponent data={["norma", "aktualne", "różnica", "nadgodziny"]} />
+            <OvertimeHeaderComponent data={Object.values(WorkerHourInfo.summaryTranslations)} />
           </div>
         </div>
 

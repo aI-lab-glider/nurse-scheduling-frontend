@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend/compare/v2.0.0...v2.0.1) (2021-04-11)
+
+
+### Bug Fixes
+
+* **App:** v2.0.1 ([#346](https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend/issues/346)) ([03b9e29](https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend/commit/03b9e29991b533806a6a2023c73f69fe041d7d99)), closes [#336](https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend/issues/336) [#334](https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend/issues/334) [#337](https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend/issues/337) [#338](https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend/issues/338) [#339](https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend/issues/339) [#344](https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend/issues/344) [#345](https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend/issues/345) [#345](https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend/issues/345)
+
 ## [1.0.2](https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend/compare/v1.0.1...v1.0.2) (2021-03-26)
 
 

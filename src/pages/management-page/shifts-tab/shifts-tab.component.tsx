@@ -16,8 +16,9 @@ import ShiftDrawerComponent, {
   ShiftDrawerMode,
 } from "../../../components/shifts-drawer/shift-drawer.component";
 import { useDispatch, useSelector } from "react-redux";
-import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
+import { ParserHelper } from "../../../helpers/parser.helper";
 import { ApplicationStateModel } from "../../../state/application-state.model";
+import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
 import { ShiftsActionCreator } from "../../../state/schedule-data/shifts-types/shifts.action-creator";
 
 const useStyles = makeStyles(() =>
@@ -66,13 +67,17 @@ export default function ShiftTab(): JSX.Element {
   }
   const dispatcher = useDispatch();
   const handleChangeItem = (createdShift: Shift): void => {
-    if (mode === ShiftDrawerMode.ADD_NEW) {
-      dispatcher(ScheduleDataActionCreator.addNewShift(createdShift));
-    } else {
-      dispatcher(ScheduleDataActionCreator.modifyShift(createdShift, selectedShift));
-    }
+    if (!ParserHelper.shiftPassesDayStart(createdShift)) {
+      if (mode === ShiftDrawerMode.ADD_NEW) {
+        dispatcher(ScheduleDataActionCreator.addNewShift(createdShift));
+      } else {
+        dispatcher(ScheduleDataActionCreator.modifyShift(createdShift, selectedShift));
+      }
 
-    toggleClose();
+      toggleClose();
+    } else {
+      // TODO. Handle unappropriately created shift
+    }
   };
 
   const handleRemoveItem = (shift: Shift): void => {

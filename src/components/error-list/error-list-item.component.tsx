@@ -2,14 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
-import { ScheduleErrorMessageModel } from "../../state/schedule-data/schedule-errors/schedule-error-message.model";
+import { useDispatch } from "react-redux";
 import { TranslationHelper } from "../../helpers/translations.helper";
-import { Button } from "../common-components";
 import { useMonthInfo } from "../../hooks/use-month-info";
+import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
+import { ScheduleDataActionCreator } from "../../state/schedule-data/schedule-data.action-creator";
+import { ScheduleErrorMessageModel } from "../../state/schedule-data/schedule-errors/schedule-error-message.model";
+import { Button } from "../common-components";
 
 interface Options {
   error: ScheduleErrorMessageModel;
+  index: number;
   interactable?: boolean;
   className?: string;
   showTitle?: boolean;
@@ -29,6 +32,7 @@ function prepareMonthName(index: number, day: number, month: number): string {
 export default function ErrorListItem({
   error,
   interactable = false,
+  index,
   className = "",
   showTitle = true,
 }: Options): JSX.Element {
@@ -38,11 +42,15 @@ export default function ErrorListItem({
   if (typeof error.day === "undefined" || typeof mappedDays === "undefined") {
     throw Error(`Error undefined or mappedDays undefined`);
   }
-
+  error.index = index;
   const errorDayIndex = error.day;
   const errorDay = mappedDays[errorDayIndex];
   const monthName = prepareMonthName(errorDayIndex, errorDay, monthNumber);
+  const dispatch = useDispatch();
 
+  const handleShow = (e: ScheduleErrorMessageModel): void => {
+    dispatch(ScheduleDataActionCreator.showError(e));
+  };
   return (
     <div className={`error-list-item ${className}`}>
       <div className="red-rectangle" />
@@ -57,11 +65,11 @@ export default function ErrorListItem({
       {interactable && (
         <div className="error-btn">
           <Button
-            disabled
-            className="disabled-submit-button"
+            className="submit-button"
             variant="primary"
             id="error-buttons"
             style={{ width: "90px", height: "26px" }}
+            onClick={(): void => handleShow(error)}
           >
             Pokaż
           </Button>
