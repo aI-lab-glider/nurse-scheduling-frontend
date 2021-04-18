@@ -22,6 +22,11 @@ import {
   PrimaryRevisionAction,
 } from "./primary-revision/primary-revision.reducer";
 import { MonthDataModel, ScheduleDataModel } from "./schedule-data.model";
+import { PrimaryMonthRevisionDataModel } from "../application-state.model";
+import {
+  extendMonthDMRevisionToScheduleDM,
+  cropScheduleDMToMonthDM,
+} from "../../logic/schedule-container-converter/schedule-container-converter";
 import { ScheduleErrorMessageModel } from "./schedule-errors/schedule-error-message.model";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 import { Shift } from "./shifts-types/shift-types.model";

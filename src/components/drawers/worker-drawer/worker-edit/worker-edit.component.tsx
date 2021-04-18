@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
@@ -21,6 +20,7 @@ import { WorkerGroupSelector } from "./worker-group-selector.component";
 import { WorkerNameEditField } from "./worker-name-edit-field.components";
 import { WorkerWorkerTypeSelector } from "./worker-position-selector.component";
 import { t } from "../../../../helpers/translations.helper";
+import styled from "styled-components";
 
 const useStyles = makeStyles({
   container: {
@@ -120,19 +120,20 @@ export function WorkerEditComponent({
           setWorkerGroup={handleWorkerWorkerGroupUpdate}
         />
       </Grid>
-      <Button
+      <SubmitButton
         disabled={!canSaveWorker()}
         variant="primary"
-        className={classNames(
-          { "disabled-submit-button": !canSaveWorker() },
-          "drawer-bottom-button"
-        )}
         data-cy="btn-save-worker"
         onClick={handleClose}
       >
         {t("saveWorker")}
-      </Button>
+      </SubmitButton>
     </Grid>
   );
   //#endregion
 }
+const SubmitButton = styled(Button)`
+  position: absolute;
+  bottom: 74px;
+  left: 23px;
+`;

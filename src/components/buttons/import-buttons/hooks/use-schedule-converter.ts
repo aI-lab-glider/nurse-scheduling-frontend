@@ -6,10 +6,10 @@ import { fromBuffer } from "file-type";
 import { useCallback, useEffect, useReducer } from "react";
 import { useSelector } from "react-redux";
 import {
+  WORKERS_WORKSHEET_NAME,
   ParserHelper,
   SHIFTS_WORKSHEET_NAME,
   SHIFT_HEADERS,
-  WORKERS_WORKSHEET_NAME,
   WORKSHEET_NAME,
 } from "../../../../helpers/parser.helper";
 import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-converter/schedule-container-converter";
@@ -17,8 +17,8 @@ import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parse
 import { ApplicationStateModel } from "../../../../state/application-state.model";
 import { MonthDataModel } from "../../../../state/schedule-data/schedule-data.model";
 import {
-  InputFileErrorCode,
   ScheduleError,
+  InputFileErrorCode,
 } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { useNotification } from "../../../notification/notification.context";
 import { useFileReader } from "./use-file-reader";
