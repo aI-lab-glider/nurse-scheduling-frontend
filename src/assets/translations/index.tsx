@@ -4,5 +4,7 @@
 import en from "./en";
 import pl from "./pl";
 const translations = { en, pl };
-export type Localization = keyof typeof translations["pl"]["translation"];
+export type pl = keyof typeof pl["translation"];
+export type en = keyof typeof en["translation"];
+export type Localization = pl | en;
 export default translations;
