@@ -8,6 +8,7 @@ import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ButtonData, DropdownButtons } from "../dropdown-buttons/dropdown-buttons.component";
 import ExportModal from "../../modals/export-modal/export.modal.component";
 import { useImportModal } from "./import-modal-context";
+import { t } from "../../../helpers/translations.helper";
 
 export function ImportButtonsComponent(): JSX.Element {
   const { handleImport } = useImportModal();
@@ -18,12 +19,12 @@ export function ImportButtonsComponent(): JSX.Element {
   );
 
   const btnData1: ButtonData = {
-    label: "Wczytaj",
+    label: t("load"),
     action: () => fileUpload.current?.click(),
     dataCy: "load-schedule-button",
   };
   const btnData2: ButtonData = {
-    label: "Zapisz jako...",
+    label: t("saveAs"),
     action: (): void => handleExport(),
     dataCy: "export-schedule-button",
   };
@@ -42,9 +43,9 @@ export function ImportButtonsComponent(): JSX.Element {
     <div>
       <DropdownButtons
         buttons={btnData}
-        mainLabel="Plik"
+        mainLabel={t("file")}
         buttonVariant="primary"
-        width={122}
+        width={100}
         dataCy={"file-dropdown"}
       />
       <input

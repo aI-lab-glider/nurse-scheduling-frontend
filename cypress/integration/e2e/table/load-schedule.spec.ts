@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { shiftSectionDataCy } from "../../../../src/components/schedule/worker-info-section/worker-info-section.models";
 import { ShiftCode } from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
 import { FoundationInfoRowType } from "../../../support/commands";
 //#region Test data
@@ -24,7 +25,7 @@ const checkFoundationInfoReadProperlyData: CheckFoundationInfoReadCorrectly[] = 
   },
 ];
 //#endregion
-context("Load schedule", () => {
+describe("Load schedule", () => {
   it("Shoud be able to save file to database and after that load new schedule", () => {
     const cell = {
       workerGroupIdx: 0,
@@ -48,6 +49,7 @@ context("Load schedule", () => {
   });
 
   it("Should be able to save file and load the exported file", () => {
+    const shiftSection = shiftSectionDataCy(0);
     cy.loadScheduleToMonth();
     cy.get("[data-cy=file-dropdown]").click();
     cy.get("[data-cy=export-schedule-button]").click();
@@ -76,6 +78,7 @@ context("Load schedule", () => {
       .then((file: string) => {
         cy.writeFile("cypress/fixtures/grafik.xlsx", file, "binary");
         cy.get('[data-cy="file-input"]').attachFile("grafik.xlsx");
+        cy.get(`[data-cy=${shiftSection}]`);
       });
   });
 

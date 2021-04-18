@@ -6,15 +6,17 @@ import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { t } from "../../helpers/translations.helper";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../state/app-config-context";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { MonthSwitchActionCreator } from "../../state/schedule-data/month-switch.action-creator";
-import { ScheduleMode } from "../schedule/schedule-state.model";
 import { Button } from "../buttons/button-component/button.component";
 import ReportIssueModal from "../modals/report-issue-modal/report-issue-modal.component";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
 import styled from "styled-components";
 import { fontSizeBase } from "../../assets/colors";
+import { ScheduleMode } from "../schedule/schedule-state.model";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -69,7 +71,6 @@ export function HeaderComponent(): JSX.Element {
   const redirectToDocumentation = useCallback((): void => {
     window.open(process.env.REACT_APP_HELP_PAGE_URL);
   }, []);
-
   return (
     <>
       <div id={"header"}>
@@ -79,15 +80,16 @@ export function HeaderComponent(): JSX.Element {
           variant="secondary"
           onClick={returnToCurrentMonth}
         >
-          Wróć do teraz
+          {t("returnToNow")}
         </ReturnToNowBtn>
         <div className={"filler"} />
         <MonthSwitchComponent isInViewMode={isInViewMode} />
         <div className={"filler"} />
         <MaterialButton className={"reportIssueLink"} onClick={onReportIssueClick}>
-          Zgłoś błąd
+          {t("reportError")}
         </MaterialButton>
         <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
+        <SettingsIcon className="header-icon" />
         <HelpOutlineIcon className="header-icon" onClick={redirectToDocumentation} />
       </div>
     </>

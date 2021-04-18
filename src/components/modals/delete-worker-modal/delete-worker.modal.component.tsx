@@ -7,6 +7,7 @@ import DefaultModal from "../modal.component";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { useDispatch } from "react-redux";
 import { WorkerActionCreator } from "../../../state/schedule-data/worker-info/worker.action-creator";
+import { t } from "../../../helpers/translations.helper";
 
 interface DeleteWorkerModalOptions {
   setOpen: (open: boolean) => void;
@@ -23,18 +24,18 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
     setOpen(false);
   };
 
-  const title = "Potwierdź akcję";
+  const title = t("confirmAction");
 
   const body = (
     <div className={"span-primary workers-table"}>
-      <p>Czy naprawde chcesz usunąć pracownika {worker?.name} ?</p>
+      <p>{t("removeEmployeeQuestion", { name: worker?.name })}?</p>
     </div>
   );
 
   const footer = (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Button onClick={handleClose} size="small" className="submit-button" variant="secondary">
-        Anuluj
+        {t("cancel")}
       </Button>
       <Button
         onClick={(): void => {
@@ -45,7 +46,7 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
         className="submit-button"
         variant="primary"
       >
-        Zaakceptuj
+        {t("confirm")}
       </Button>
     </div>
   );

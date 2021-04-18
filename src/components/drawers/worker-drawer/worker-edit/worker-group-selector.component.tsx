@@ -11,6 +11,7 @@ import {
   DropdownButtons,
 } from "../../../buttons/dropdown-buttons/dropdown-buttons.component";
 import { FormFieldOptions, useFormFieldStyles } from "./worker-edit.models";
+import { t } from "../../../../helpers/translations.helper";
 interface WorkerGroupSelectorOptions extends FormFieldOptions {
   setWorkerGroup: (workerGroup: WorkerGroup) => void;
   workerGroup: WorkerGroup;
@@ -36,13 +37,13 @@ export function WorkerGroupSelector({
 
   return (
     <Grid item xs={6}>
-      <Typography className={classes.label}>Zespół pracownika</Typography>
+      <Typography className={classes.label}>{t("workerTeam")}</Typography>
       <DropdownButtons
         dataCy="workergroup-dropdown"
         buttons={workerGroupsOptions}
         mainLabel={workerGroup}
         buttonVariant="secondary"
-        width={112}
+        width={134}
       />
     </Grid>
   );

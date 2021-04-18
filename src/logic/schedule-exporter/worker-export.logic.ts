@@ -29,7 +29,7 @@ export class WorkerExportLogic {
     const workersInfoArray = WorkerExportLogic.createWorkersInfoSection(this.scheduleModel);
 
     const colLens = workersInfoArray[0].map((_, colIndex) =>
-      Math.max(...workersInfoArray.map((row) => row[colIndex].toString().length))
+      Math.max(...workersInfoArray.map((row) => row[colIndex]?.toString().length ?? 0))
     );
 
     workSheet.addRows(workersInfoArray);

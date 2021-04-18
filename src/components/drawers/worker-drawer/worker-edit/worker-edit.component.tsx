@@ -19,6 +19,7 @@ import { WorkerEditComponentOptions, WorkerEditComponentMode } from "./worker-ed
 import { WorkerGroupSelector } from "./worker-group-selector.component";
 import { WorkerNameEditField } from "./worker-name-edit-field.components";
 import { WorkerWorkerTypeSelector } from "./worker-position-selector.component";
+import { t } from "../../../../helpers/translations.helper";
 import styled from "styled-components";
 
 const useStyles = makeStyles({
@@ -125,7 +126,7 @@ export function WorkerEditComponent({
         data-cy="btn-save-worker"
         onClick={handleClose}
       >
-        Zapisz pracownika
+        {t("saveWorker")}
       </SubmitButton>
     </Grid>
   );

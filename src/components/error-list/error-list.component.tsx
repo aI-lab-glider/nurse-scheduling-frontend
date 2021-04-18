@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import i18next from "i18next";
 import React from "react";
 import {
   ScheduleErrorMessageModel,
@@ -24,47 +25,47 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
     {
       errorType: ScheduleErrorType.AON,
       errors: errors.filter((e) => e.type === ScheduleErrorType.AON),
-      errorDescription: "Brak pielęgniarek",
+      errorDescription: i18next.t("noNurses"),
     },
     {
       errorType: ScheduleErrorType.AON,
       errors: errors.filter((e) => e.type === ScheduleErrorType.WND),
-      errorDescription: "Za mało pracowników w trakcie dnia",
+      errorDescription: i18next.t("notEnoughWorkersDuringDay"),
     },
     {
       errorType: ScheduleErrorType.AON,
       errors: errors.filter((e) => e.type === ScheduleErrorType.WNN),
-      errorDescription: "Za mało pracowników w nocy",
+      errorDescription: i18next.t("notEnoughWorkersDuringNight"),
     },
     {
       errorType: ScheduleErrorType.AON,
       errors: errors.filter((e) => e.type === ScheduleErrorType.DSS),
-      errorDescription: "Naruszenie wymaganej przerwy",
+      errorDescription: i18next.t("requiredBreakViolation"),
     },
     {
       errorType: ScheduleErrorType.AON,
       errors: errors.filter((e) => e.type === ScheduleErrorType.LLB),
-      errorDescription: "Brak wymaganej długiej przerwy",
+      errorDescription: i18next.t("noRequiredBreak"),
     },
     {
       errorType: ScheduleErrorType.AON,
       errors: errors.filter((e) => e.type === ScheduleErrorType.WUH),
-      errorDescription: "Niedogodziny",
+      errorDescription: i18next.t("underHours"),
     },
     {
       errorType: ScheduleErrorType.AON,
       errors: errors.filter((e) => e.type === ScheduleErrorType.WOH),
-      errorDescription: "Nadgodziny",
+      errorDescription: i18next.t("overtime"),
     },
     {
       errorType: ScheduleErrorType.AON,
       errors: errors.filter((e) => e.type === ScheduleErrorType.ILLEGAL_SHIFT_VALUE),
-      errorDescription: "Niedozwolona wartość zmiany",
+      errorDescription: i18next.t("illegalScheduleValue"),
     },
     {
       errorType: ScheduleErrorType.AON,
       errors: errors.filter((e) => e.type === ScheduleErrorType.OTH),
-      errorDescription: "Pozostałe błędy",
+      errorDescription: i18next.t("otherErrors"),
     },
   ];
 
@@ -80,7 +81,12 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
       <FoldingSection name={`${errorData.errorDescription} (${errorData.errors.length})`}>
         {errorData.errors.sort(compareErrors).map(
           (error, index): JSX.Element => (
-            <ErrorListItem key={`${error.kind ? error.kind : "0"}_${index}`} error={error} />
+            <ErrorListItem
+              key={`${error.kind ? error.kind : "0"}_${index}`}
+              error={error}
+              index={index}
+              interactable={true}
+            />
           )
         )}
       </FoldingSection>

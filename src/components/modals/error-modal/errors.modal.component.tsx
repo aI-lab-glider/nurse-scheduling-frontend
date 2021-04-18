@@ -11,6 +11,7 @@ import { ApplicationStateModel } from "../../../state/application-state.model";
 import DefaultModal from "../modal.component";
 import ModalErrorList from "./error.modal.list.component";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
+import { t } from "../../../helpers/translations.helper";
 
 export interface ErrorsModalComponent {
   setOpen: (open: boolean) => void;
@@ -38,7 +39,7 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
     }
   }, [scheduleErrors, shiftTypes]);
 
-  const title = "Napotkano błędy podczas wczytywania pliku";
+  const title = t("errorsWereEncounteredWhileLoadingFile");
 
   const footer = (
     <div style={{ display: "flex", justifyContent: "center" }}>

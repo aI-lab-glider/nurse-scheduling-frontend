@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
+import { t } from "../../../helpers/translations.helper";
 import { Button } from "../../buttons/button-component/button.component";
 import DefaultModal from "../modal.component";
 
@@ -19,11 +20,11 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
     setOpen(false);
   };
 
-  const title = "Coś poszło nie tak :(";
+  const title = t("errorOccured");
 
   const body = (
-    <div className={"span-primary"}>
-      <p>Wiadomość o błędzie została wysłana do twórców.</p>
+    <div className={"span-primary error-modal-text"}>
+      <p>{t("errorMessageWasSent")}</p>
     </div>
   );
 
@@ -34,7 +35,7 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
         size="small"
         className="submit-button"
         variant="primary"
-        data-cy="btn-ok-app-error"
+        data-cy="btn-reload-app-error"
       >
         OK
       </Button>

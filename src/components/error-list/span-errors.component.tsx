@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
+import { t } from "../../helpers/translations.helper";
 import { ScheduleErrorMessageModel } from "../../state/schedule-data/schedule-errors/schedule-error-message.model";
 
 interface SpanErrorOptions {
@@ -15,7 +16,9 @@ export function SpanErrors({ errors = [] }: SpanErrorOptions): JSX.Element {
       <div className={"span-errors"}>
         <div className={"error-span-main-block"}>
           <div className={"error-numbers"}>
-            <p>Błędy : {errors?.length}</p>
+            <p>
+              {t("errors")} : {errors?.length}
+            </p>
           </div>
         </div>
       </div>

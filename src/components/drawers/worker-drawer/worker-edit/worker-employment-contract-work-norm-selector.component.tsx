@@ -14,6 +14,7 @@ import { WorkingTimeHelper } from "../../../../helpers/working-time.helper";
 import { WorkNormSelectorOptions } from "./combined-worknorm-selector.component";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
 import { useFormFieldStyles } from "./worker-edit.models";
+import { t } from "../../../../helpers/translations.helper";
 
 export function WorkerEmploymentContractWorkNormSelector({
   employmentTime,
@@ -21,6 +22,7 @@ export function WorkerEmploymentContractWorkNormSelector({
   setIsFieldValid: setIsFormValid,
 }: WorkNormSelectorOptions): JSX.Element {
   const classes = useFormFieldStyles();
+
   const [selectedTimeType, setSelectedTimeType] = useState<TimeDrawerType>(TimeDrawerType.FULL);
   const [firstEditMade, setFirstEditMade] = useState(false);
 
@@ -66,7 +68,7 @@ export function WorkerEmploymentContractWorkNormSelector({
     setWorkerTime(workerNorm);
     setFirstEditMade(true);
   }
-
+  const inputWidth = 100;
   const employmentTimeAsFraction = toFraction(employmentTime);
   return (
     <>
@@ -74,14 +76,14 @@ export function WorkerEmploymentContractWorkNormSelector({
         <DropdownButtons
           dataCy="contract-time-dropdown"
           buttons={contractTimeDropdownOptions}
-          mainLabel={employmentTimeAsFraction ?? "Wybierz etat pracownika"}
+          mainLabel={employmentTimeAsFraction ?? t("selectWorkerHours")}
           buttonVariant="secondary"
-          width={112}
+          width={inputWidth}
         />
       </Grid>
       {selectedTimeType === TimeDrawerType.OTHER && (
         <Grid item xs={6}>
-          <Typography className={classes.label}>Wpisz wymiar etatu</Typography>
+          <Typography className={classes.label}>{t("enterWorkerHours")}</Typography>
           <Input
             fullWidth
             name="employmentTimeOther"
@@ -89,7 +91,7 @@ export function WorkerEmploymentContractWorkNormSelector({
             onBlur={handleWorkerTimeUpdate}
             data-cy="input-employ-time-other"
             style={{
-              width: 100,
+              width: inputWidth,
             }}
             className={classes.formInput}
             inputComponent={
@@ -99,7 +101,7 @@ export function WorkerEmploymentContractWorkNormSelector({
           />
           <FormFieldErrorLabel
             shouldBeVisible={!isEmploymentTimeValid(employmentTime) && firstEditMade}
-            message="Pracownik nie może być zatrudniony na więcej niż jeden etat"
+            message={t("workerCouldNotBeEmployedMore")}
           />
         </Grid>
       )}

@@ -13,6 +13,8 @@ import { Button } from "../common-components";
 import { ShiftDrawerMode } from "./shift-drawer.component";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../state/application-state.model";
+import i18next from "i18next";
+import { t } from "../../helpers/translations.helper";
 
 interface ShiftEditDrawerOptions {
   selectedShift: Shift;
@@ -50,9 +52,9 @@ export default function ShiftEditDrawer({
   function getButtonLabel(mode: ShiftDrawerMode): string {
     switch (mode) {
       case ShiftDrawerMode.EDIT:
-        return "Modyfikuj zmianę";
+        return i18next.t("shiftEdit");
       case ShiftDrawerMode.ADD_NEW:
-        return "Dodaj zmianę";
+        return i18next.t("shiftAdd");
     }
   }
 
@@ -85,7 +87,6 @@ export default function ShiftEditDrawer({
 
     return newDate;
   }
-
   const [valueTimeStart, onChangeTimeStart] = useState<Date | null>(getNewDate("start"));
   const [valueTimeEnd, onChangeTimeEnd] = useState<Date | null>(getNewDate("end"));
 
@@ -94,18 +95,18 @@ export default function ShiftEditDrawer({
   return (
     <Grid container className="edit-field" direction="column" justify="space-between">
       <Grid item>
-        <h4>Nazwa zmiany</h4>
+        <h4>{t("shiftName")}</h4>
         <TextField
           type="text"
           placeholder={selectedShift.name}
           onChange={(event): void => shiftNameTextFieldOnChange(event.target.value)}
-          helperText={isInShiftNames ? "Zmiana z taką nazwą już istnieje" : ""}
+          helperText={isInShiftNames ? t("shiftAlreadyExists") : ""}
           error={isInShiftNames}
         />
 
         <br />
 
-        <h4>Typ zmiany</h4>
+        <h4>{t("shiftType")}</h4>
         <FormControl component="fieldset">
           <RadioGroup
             row
@@ -114,13 +115,17 @@ export default function ShiftEditDrawer({
             value={shiftType}
             onChange={(event): void => changeShiftType(event.target.value)}
           >
-            <FormControlLabel value="working" control={<Radio />} label="Pracująca" />
-            <FormControlLabel value="not_working" control={<Radio />} label="Niepracująca" />
+            <FormControlLabel value="working" control={<Radio />} label={t("workingShift")} />
+            <FormControlLabel
+              value="not_working"
+              control={<Radio />}
+              label={t("notWorkingShift")}
+            />
           </RadioGroup>
         </FormControl>
         <br />
 
-        <h4>Godziny zmiany</h4>
+        <h4>{t("shiftHours")}</h4>
         <div className={"time-range"}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <TimePicker
@@ -148,7 +153,7 @@ export default function ShiftEditDrawer({
         </div>
         <br />
 
-        <h4>Skrót zmiany</h4>
+        <h4>{t("shiftShort")}</h4>
         <TextField
           type="text"
           placeholder="Skrót"
@@ -158,16 +163,16 @@ export default function ShiftEditDrawer({
             checkShiftCode(shiftCodes.includes(event.target.value));
             setCodeManuallyChanged(true);
           }}
-          helperText={isInShiftCodes ? "Zmiana z takim kodem już istnieje" : ""}
+          helperText={isInShiftCodes ? t("shiftWithThatColorExist") : ""}
           error={isInShiftCodes}
         />
         <br />
 
-        <h4>Kolor zmiany</h4>
+        <h4>{t("shiftColor")}</h4>
 
         <DropdownColors
           shiftType={shiftType}
-          mainLabel="Wybierz kolory"
+          mainLabel={t("selectColor")}
           buttonVariant="secondary"
           colorClicker={setPicked}
           selectedColor={colorPicked}
