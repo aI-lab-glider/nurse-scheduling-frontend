@@ -11,7 +11,13 @@ import { VerboseDateHelper } from "./verbose-date.helper";
 import { ContractType } from "../state/schedule-data/worker-info/worker-info.model";
 import { VerboseDate } from "../state/schedule-data/foundation-info/foundation-info.model";
 import { ScheduleDataModel, MonthDataModel } from "../state/schedule-data/schedule-data.model";
-import { ShiftCode, ShiftsTypesDict, Shift, NotWorkingShift, NotWorkingShiftType } from "../state/schedule-data/shifts-types/shift-types.model";
+import {
+  ShiftCode,
+  ShiftsTypesDict,
+  Shift,
+  NotWorkingShift,
+  NotWorkingShiftType,
+} from "../state/schedule-data/shifts-types/shift-types.model";
 import { isAllValuesDefined, Opaque } from "../utils/type-utils";
 import { nameOf } from "../utils/utils";
 

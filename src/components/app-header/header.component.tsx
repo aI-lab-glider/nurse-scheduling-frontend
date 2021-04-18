@@ -4,17 +4,18 @@
 import { Button as MaterialButton } from "@material-ui/core";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import SettingsIcon from "@material-ui/icons/Settings";
-import classNames from "classnames/bind";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Button } from "../buttons/button-component/button.component";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../state/app-config-context";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { MonthSwitchActionCreator } from "../../state/schedule-data/month-switch.action-creator";
 import ReportIssueModal from "../modals/report-issue-modal/report-issue-modal.component";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
+import styled from "styled-components";
+import { fontSizeBase } from "../../assets/colors";
 import { ScheduleMode } from "../schedule/schedule-state.model";
-import { Button } from "../buttons/button-component/button.component";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -74,16 +75,13 @@ export function HeaderComponent(): JSX.Element {
     <>
       <div id={"header"}>
         <AssignmentIndIcon id={"AssignmentIndIcon"} />
-        <Button
-          className={classNames("submit-button", "returnToNowBtn", {
-            hidden: !isNewMonth || !showNowNavigation,
-          })}
+        <ReturnToNowBtn
+          hidden={!isNewMonth || !showNowNavigation}
           variant="secondary"
           onClick={returnToCurrentMonth}
-          disabled={!isNewMonth || !showNowNavigation}
         >
           Wróć do teraz
-        </Button>
+        </ReturnToNowBtn>
         <div className={"filler"} />
         <MonthSwitchComponent isInViewMode={isInViewMode} />
         <div className={"filler"} />
@@ -97,3 +95,10 @@ export function HeaderComponent(): JSX.Element {
     </>
   );
 }
+
+const ReturnToNowBtn = styled(Button)`
+  margin-top: 0;
+  font-size: ${fontSizeBase};
+  padding: 0 10px;
+  margin-bottom: 0;
+`;

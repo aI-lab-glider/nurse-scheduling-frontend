@@ -4,7 +4,7 @@
 import "cypress-file-upload";
 import {
   baseCellDataCy,
-  CellType
+  CellType,
 } from "../../src/components/schedule/base/base-cell/base-cell.models";
 import { baseRowDataCy } from "../../src/components/schedule/base/base-row/base-row.models";
 import { shiftSectionDataCy } from "../../src/components/schedule/worker-info-section/worker-info-section.models";
@@ -13,7 +13,6 @@ import { summaryRowDataCy } from "../../src/components//schedule/worker-info-sec
 import { summaryTableSectionDataCy } from "../../src/components//schedule/worker-info-section/summary-table/summarytable-section.models";
 import { LocalStorageProvider } from "../../src/logic/data-access/local-storage-provider.model";
 import { ShiftCode } from "../../src/state/schedule-data/shifts-types/shift-types.model";
-
 
 require("@cypress/snapshot").register();
 export type CypressScreenshotOptions = Partial<

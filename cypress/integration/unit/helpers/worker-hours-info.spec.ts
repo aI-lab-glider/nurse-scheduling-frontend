@@ -3,11 +3,22 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
 import { ShiftHelper, MonthDataArray } from "../../../../src/helpers/shifts.helper";
-import { DEFAULT_NORM_SUBTRACTION, WorkerHourInfo } from "../../../../src/helpers/worker-hours-info.model";
-import { SHIFTS, ShiftCode, Shift, NotWorkingShift, NotWorkingShiftType } from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
+import {
+  DEFAULT_NORM_SUBTRACTION,
+  WorkerHourInfo,
+} from "../../../../src/helpers/worker-hours-info.model";
+import {
+  SHIFTS,
+  ShiftCode,
+  Shift,
+  NotWorkingShift,
+  NotWorkingShiftType,
+} from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
 import { ContractType } from "../../../../src/state/schedule-data/worker-info/worker-info.model";
-import { workerTestData, WorkerTestDataInstance } from "../../../fixtures/worker-data/worker-data-preprocessor";
-
+import {
+  workerTestData,
+  WorkerTestDataInstance,
+} from "../../../fixtures/worker-data/worker-data-preprocessor";
 
 describe("Worker hours info", () => {
   workerTestData.forEach((workerInstance) => {

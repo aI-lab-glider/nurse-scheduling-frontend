@@ -10,7 +10,14 @@ import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Color, Colors } from "./colors/color.model";
 import { VerboseDateHelper } from "./verbose-date.helper";
-import { ShiftsTypesDict, Shift, ShiftCode, FREE_SHIFTS_CODES, NotWorkingShift, NotWorkingShiftType } from "../state/schedule-data/shifts-types/shift-types.model";
+import {
+  ShiftsTypesDict,
+  Shift,
+  ShiftCode,
+  FREE_SHIFTS_CODES,
+  NotWorkingShift,
+  NotWorkingShiftType,
+} from "../state/schedule-data/shifts-types/shift-types.model";
 
 export const WORK_HOURS_PER_DAY = 8;
 export type MonthDataArray<T> = Opaque<"MonthData", T[]>;

@@ -20,7 +20,10 @@ import {
   PrimaryRevisionAction,
 } from "./primary-revision/primary-revision.reducer";
 import { PrimaryMonthRevisionDataModel } from "../application-state.model";
-import { extendMonthDMRevisionToScheduleDM, cropScheduleDMToMonthDM } from "../../logic/schedule-container-converter/schedule-container-converter";
+import {
+  extendMonthDMRevisionToScheduleDM,
+  cropScheduleDMToMonthDM,
+} from "../../logic/schedule-container-converter/schedule-container-converter";
 import { ScheduleErrorMessageModel } from "./schedule-errors/schedule-error-message.model";
 
 export class ScheduleDataActionCreator {

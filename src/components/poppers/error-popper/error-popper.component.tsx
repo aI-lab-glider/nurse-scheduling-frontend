@@ -9,7 +9,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
-import { GroupedScheduleErrors, ScheduleError } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
+import {
+  GroupedScheduleErrors,
+  ScheduleError,
+} from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import ErrorListItem from "../../error-list/error-list-item.component";
 import { Popper } from "../popper";
 
