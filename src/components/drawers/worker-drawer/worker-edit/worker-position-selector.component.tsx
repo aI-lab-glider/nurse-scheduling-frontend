@@ -57,7 +57,7 @@ export function WorkerWorkerTypeSelector({
         buttons={positionOptions}
         mainLabel={workerType ? translateAndCapitalizeWorkerType(workerType) : "Stanowisko"}
         buttonVariant="secondary"
-        variant="position"
+        width={164}
       />
       <FormFieldErrorLabel
         shouldBeVisible={!isWorkerPositionValid() && firstEditMade}

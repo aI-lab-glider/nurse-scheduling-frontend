@@ -42,7 +42,7 @@ export function WorkerGroupSelector({
         buttons={workerGroupsOptions}
         mainLabel={workerGroup}
         buttonVariant="secondary"
-        variant="contract-time-dropdown"
+        width={112}
       />
     </Grid>
   );

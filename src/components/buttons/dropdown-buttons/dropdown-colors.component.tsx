@@ -5,29 +5,30 @@ import React, { useEffect, useRef, useState } from "react";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Popper from "@material-ui/core/Popper";
-import classNames from "classnames/bind";
-import { Button, ButtonVariant } from "../../common-components";
+import { ButtonVariant } from "../../common-components";
+import { Wrapper, PlaceholderButtonContent, PlaceholderButton, ButtonListWrapper } from "./styles";
+import styled from "styled-components";
 
 interface DropdownColorsOptions {
   shiftType: string;
   mainLabel: string;
   buttonVariant?: ButtonVariant;
-  variant?: string;
   dataCy?: string;
   disabled?: boolean;
   colorClicker: (event: string) => void;
   selectedColor: string;
+  width: number;
 }
 
 export function DropdownColors({
   shiftType,
   mainLabel,
   buttonVariant,
-  variant,
   dataCy,
   disabled = false,
   colorClicker,
   selectedColor,
+  width,
 }: DropdownColorsOptions): JSX.Element {
   useEffect(() => {
     setLocalColor(selectedColor);
@@ -71,78 +72,91 @@ export function DropdownColors({
     setOpen(false);
   }
 
+  // TODO: something is wrong here
+  const dropdownZIndex = 100;
   return (
-    <div className="dropdown-container">
-      <Button
+    <Wrapper>
+      <PlaceholderButton
         variant={buttonVariant}
-        id={variant + "-onTopButton"}
         onClick={handleToggle}
         ref={anchorRef}
         data-cy={dataCy}
         disabled={disabled}
+        style={
+          {
+            zIndex: open ? dropdownZIndex + 1 : "initial",
+            "--width": width,
+          } as React.CSSProperties
+        }
       >
-        <div className="centeredButtonWithArrow">
-          <div>
-            <div
-              className={classNames("colorSample", "margin6px0")}
-              style={{ backgroundColor: `#${colorPicked}` }}
-            />
-          </div>
-          <div>{mainLabel}</div>
-          <div>
-            <ArrowDropDownIcon />
-          </div>
-        </div>
-      </Button>
+        <PlaceholderButtonContent>
+          <ColorSample style={{ backgroundColor: `#${colorPicked}` }} />
+          <span>{mainLabel}</span>
+          <ArrowDropDownIcon />
+        </PlaceholderButtonContent>
+      </PlaceholderButton>
       <Popper
         data-cy="openedDropdown"
         open={open}
         placement="bottom"
         anchorEl={anchorRef.current}
         disablePortal
-        className={"z-index100"}
+        style={{
+          zIndex: dropdownZIndex,
+          width: `${width}px`,
+        }}
       >
         <ClickAwayListener onClickAway={handleClickAway}>
-          <div className="dropdown-buttons-list" id={variant}>
-            <div className="dropdown-buttons-container">
-              <div>
-                <>
-                  <div className={"colorSampleHolderHolder"}>
-                    {getChunckedColors(
-                      shiftType === "working" ? worksShiftsColors : notWorksShiftsColors,
-                      6
-                    ).map((colorRow) => {
+          <ButtonListWrapper>
+            <ColorSampleWrapper>
+              {getChunckedColors(
+                shiftType === "working" ? worksShiftsColors : notWorksShiftsColors,
+                6
+              ).map((colorRow) => {
+                return (
+                  <ColorSampleRow>
+                    {colorRow.map((color) => {
                       return (
-                        <div className={"colorSampleHolder"}>
-                          {colorRow.map((color) => {
-                            return (
-                              <>
-                                <div
-                                  className={classNames(
-                                    "colorSample",
-                                    "pointerCursor",
-                                    "marginTop10px"
-                                  )}
-                                  onClick={(): void => {
-                                    colorClicker(color);
-                                    setLocalColor(color);
-                                    handleClickAway();
-                                  }}
-                                  style={{ backgroundColor: `#${color}` }}
-                                />
-                              </>
-                            );
-                          })}
-                        </div>
+                        <ColorSample
+                          onClick={(): void => {
+                            colorClicker(color);
+                            setLocalColor(color);
+                            handleClickAway();
+                          }}
+                          style={{ backgroundColor: `#${color}` }}
+                        />
                       );
                     })}
-                  </div>
-                </>
-              </div>
-            </div>
-          </div>
+                  </ColorSampleRow>
+                );
+              })}
+            </ColorSampleWrapper>
+          </ButtonListWrapper>
         </ClickAwayListener>
       </Popper>
-    </div>
+    </Wrapper>
   );
 }
+
+const ColorSample = styled.div`
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-top: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const ColorSampleRow = styled.div`
+  display: flex;
+  position: relative;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const ColorSampleWrapper = styled.div`
+  margin-top: 20px;
+  padding: 10px 20px 20px;
+`;

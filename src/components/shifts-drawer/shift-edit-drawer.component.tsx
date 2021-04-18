@@ -169,9 +169,9 @@ export default function ShiftEditDrawer({
           shiftType={shiftType}
           mainLabel="Wybierz kolory"
           buttonVariant="secondary"
-          variant="colors"
           colorClicker={setPicked}
           selectedColor={colorPicked}
+          width={200}
         />
       </Grid>
       <Grid item>

@@ -55,7 +55,6 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
         <TableCell align="right">
           <HeaderButton
             variant="primary"
-            disabled
             onClick={(): void => {
               toggleOpen(
                 {

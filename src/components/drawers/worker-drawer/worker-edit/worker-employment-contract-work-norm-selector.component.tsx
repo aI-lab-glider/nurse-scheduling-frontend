@@ -76,7 +76,7 @@ export function WorkerEmploymentContractWorkNormSelector({
           buttons={contractTimeDropdownOptions}
           mainLabel={employmentTimeAsFraction ?? "Wybierz etat pracownika"}
           buttonVariant="secondary"
-          variant="contract-time-dropdown"
+          width={112}
         />
       </Grid>
       {selectedTimeType === TimeDrawerType.OTHER && (

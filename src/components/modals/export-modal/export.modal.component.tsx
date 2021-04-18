@@ -108,7 +108,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
             buttons={btnData}
             mainLabel={exportMode}
             buttonVariant="secondary"
-            variant="extension"
+            width={100}
           />
         </div>
       </div>
