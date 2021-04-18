@@ -3,17 +3,25 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import Excel, { FillPattern } from "exceljs";
 import { fromBuffer } from "file-type";
-import { useReducer, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { useSelector } from "react-redux";
-import { WORKERS_WORKSHEET_NAME, ParserHelper, SHIFTS_WORKSHEET_NAME, SHIFT_HEADERS, WORKSHEET_NAME } from "../../../../helpers/parser.helper";
+import {
+  WORKERS_WORKSHEET_NAME,
+  ParserHelper,
+  SHIFTS_WORKSHEET_NAME,
+  SHIFT_HEADERS,
+  WORKSHEET_NAME,
+} from "../../../../helpers/parser.helper";
 import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-converter/schedule-container-converter";
 import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
 import { ApplicationStateModel } from "../../../../state/application-state.model";
 import { MonthDataModel } from "../../../../state/schedule-data/schedule-data.model";
-import { ScheduleError, InputFileErrorCode } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
+import {
+  ScheduleError,
+  InputFileErrorCode,
+} from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { useNotification } from "../../../notification/notification.context";
 import { useFileReader } from "./use-file-reader";
-
 
 interface ScheduleConverterState {
   monthModel?: MonthDataModel;

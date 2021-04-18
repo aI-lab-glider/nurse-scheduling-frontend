@@ -7,6 +7,7 @@ import Drawer, { DrawerOptions } from "../drawer/drawer.component";
 import { WorkerEditComponent, WorkerEditComponentMode } from "./worker-edit";
 import { WorkerInfoComponent } from "./worker-info/worker-info.component";
 import { useWorkerHoursInfo } from "../../../hooks/use-worker-hours-info";
+import i18next from "i18next";
 
 export enum WorkerDrawerMode {
   EDIT,
@@ -22,9 +23,9 @@ interface WorkerDrawerOptions extends Omit<DrawerOptions, "title"> {
 
 function getTitle(mode: WorkerDrawerMode): string {
   return {
-    [WorkerDrawerMode.EDIT]: "Edycja pracownika",
-    [WorkerDrawerMode.ADD_NEW]: "Dodaj pracownika",
-    [WorkerDrawerMode.INFO]: "Pracownik",
+    [WorkerDrawerMode.EDIT]: i18next.t("workerEditing"),
+    [WorkerDrawerMode.ADD_NEW]: i18next.t("workerAdd"),
+    [WorkerDrawerMode.INFO]: i18next.t("worker"),
   }[mode];
 }
 

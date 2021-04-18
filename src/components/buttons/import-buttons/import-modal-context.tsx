@@ -6,10 +6,10 @@ import React, { ChangeEvent, createContext, useContext, useEffect } from "react"
 import { useDispatch } from "react-redux";
 import { useScheduleConverter } from "./hooks/use-schedule-converter";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
-import { ScheduleErrorActionType } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 import { ActionModel } from "../../../utils/action.model";
 import { ScheduleError } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import ParseErrorModal from "../../modals/error-modal/errors.modal.component";
+import { ScheduleErrorActionType } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 
 export interface ImportModalContextValues {
   handleImport: (e: React.ChangeEvent<HTMLInputElement>) => void;

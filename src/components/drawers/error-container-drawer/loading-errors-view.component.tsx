@@ -13,11 +13,11 @@ import {
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { ActionModel } from "../../../utils/action.model";
 import { ApplicationStateModel } from "../../../state/application-state.model";
-import { ScheduleErrorActionType } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 import { Button } from "../../common-components";
 import ErrorList from "../../error-list/error-list.component";
 import { SpanErrors } from "../../error-list/span-errors.component";
 import { ErrorLoaderState, Props } from "./error-container-drawer.component";
+import { ScheduleErrorActionType } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 
 interface ErrorLoaderOptions {
   state?: Props;

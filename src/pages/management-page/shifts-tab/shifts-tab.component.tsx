@@ -1,25 +1,25 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useState } from "react";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
-import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
-import { Button } from "../../../components/common-components";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import { Button } from "../../../components/common-components";
 import ShiftDrawerComponent, {
   ShiftDrawerMode,
 } from "../../../components/shifts-drawer/shift-drawer.component";
-import { useDispatch, useSelector } from "react-redux";
 import { ParserHelper } from "../../../helpers/parser.helper";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
+import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
 import { ShiftsActionCreator } from "../../../state/schedule-data/shifts-types/shifts.action-creator";
+import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
 
 const useStyles = makeStyles(() =>
   createStyles({

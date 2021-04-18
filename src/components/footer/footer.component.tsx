@@ -7,6 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
 import gliderLogo from "../../assets/images/gliderLogo.png";
 import { getLatestAppVersion } from "../../api/latest-github-version";
+import { t } from "../../helpers/translations.helper";
 
 const useStyles = makeStyles({
   footer: {
@@ -36,9 +37,9 @@ export function Footer(): JSX.Element {
 
   return (
     <Grid container className={classes.footer} justify="space-between" alignItems="center">
-      <Grid item>{`Wersja: ${latestVersion}`}</Grid>
+      <Grid item>{`${t("version")}: ${latestVersion}`}</Grid>
       <Grid item>
-        Wykonanie:
+        {t("realization")}
         <a href="http://www.glider.agh.edu.pl/" target="_blank" rel="noopener noreferrer">
           <img className={classes.logo} src={gliderLogo} alt="Logo koła naukowego Glider" />
           Glider

@@ -5,6 +5,7 @@ import { Grid, TextField, Typography } from "@material-ui/core";
 import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { t } from "../../../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../../../state/application-state.model";
 import {
   FormFieldErrorLabelOptions,
@@ -30,7 +31,6 @@ export function WorkerNameEditField({
 }: WorkerNameEditFieldOptions): JSX.Element {
   const classes = useFormFieldStyles();
   const [firstEditMade, setFirstEditMade] = useState(false);
-
   const workerNames = useSelector((state: ApplicationStateModel) =>
     Object.keys(state.actualState.persistentSchedule.present.employee_info.type)
   );
@@ -53,11 +53,11 @@ export function WorkerNameEditField({
   const nameFieldErrorLabels: FormFieldErrorLabelOptions[] = [
     {
       shouldBeVisible: isWorkerWithSameNameExists() && firstEditMade,
-      message: `Pracownik o imieniu i nazwisku: ${workerName} już istnieje`,
+      message: t("workerAlreadyExists", { name: workerName }),
     },
     {
       shouldBeVisible: isWorkerNameEmpty() && firstEditMade,
-      message: "Wpisz imię i nazwisko pracownika",
+      message: t("enterWorkersFirstAndLastName"),
     },
   ];
 
@@ -71,7 +71,7 @@ export function WorkerNameEditField({
   return (
     <>
       <Grid item xs={6}>
-        <Typography className={classes.label}>Imię i nazwisko</Typography>
+        <Typography className={classes.label}>{t("firstAndLastName")}</Typography>
         <TextField
           fullWidth
           name="workerName"
