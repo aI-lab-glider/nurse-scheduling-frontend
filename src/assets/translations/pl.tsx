@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-export default {
+const pl = {
   translation: {
     //App.tsx
     schedule: "Plan",
@@ -110,3 +110,5 @@ export default {
     downloadScheduleAndClearAppData: "Pobierz grafik i wyczyść aplikację",
   },
 };
+export type Translation = keyof typeof pl["translation"];
+export default pl;

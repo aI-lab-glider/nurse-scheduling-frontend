@@ -35,7 +35,7 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
         size="small"
         className="submit-button"
         variant="primary"
-        data-cy="btn-ok-app-error"
+        data-cy="btn-reload-app-error"
       >
         OK
       </Button>

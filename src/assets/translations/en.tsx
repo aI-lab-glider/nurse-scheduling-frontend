@@ -2,7 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-export default {
+import { Translation } from "./pl";
+
+const en: { translation: Translation } = {
   translation: {
     //App.tsx
     schedule: "Schedule",
@@ -101,5 +103,12 @@ export default {
     selectColor: "Select color",
     //app-error.modal.component.tsx
     errorOccured: "Error occured",
+    pleaseRefreshApp: "please refresh app",
+    refreshApp: "Refresh app",
+    stillNotWorkingSeeWhatYouCanDo: "Still not working? See what you can do.",
+    appProbbablyContainedWrongData: "Aplication probbably contained wrong data.",
+    downloadAllSchedulesAndClearAppData: "Download all schedules and clear app data.",
+    downloadScheduleAndClearAppData: "Download schedule and clear app data.",
   },
 };
+export default en;
