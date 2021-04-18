@@ -7,7 +7,6 @@ import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { t } from "../../helpers/translations.helper";
-import { Button } from "../buttons/button-component/button.component";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../state/app-config-context";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { MonthSwitchActionCreator } from "../../state/schedule-data/month-switch.action-creator";

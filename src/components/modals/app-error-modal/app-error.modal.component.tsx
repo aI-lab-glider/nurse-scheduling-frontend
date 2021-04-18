@@ -20,22 +20,11 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
     setOpen(false);
   };
 
-  useEffect(() => {
-    setIsOpenExtension(false);
-  }, [open]);
-
-  const closeAndSaveDB = async (): Promise<void> => {
-    await FileHelper.handleDbDump();
-    await new LocalStorageProvider().reloadDb();
-  };
-
   const title = t("errorOccured");
 
   const body = (
     <div className={"span-primary error-modal-text"}>
-      <p>
-        {t("errorMessageWasSent")}
-      </p>
+      <p>{t("errorMessageWasSent")}</p>
     </div>
   );
 

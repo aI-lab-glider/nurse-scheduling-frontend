@@ -10,13 +10,9 @@ import {
   ScheduleKey,
   ThunkFunction,
 } from "../../logic/data-access/persistance-store.model";
-import {
-  cropScheduleDMToMonthDM,
-  extendMonthDMRevisionToScheduleDM,
-} from "../../logic/schedule-container-converter/schedule-container-converter";
+
 import { ActionModel } from "../../utils/action.model";
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../app.reducer";
-import { PrimaryMonthRevisionDataModel } from "../application-state.model";
 import {
   AddMonthRevisionAction,
   PrimaryRevisionAction,
