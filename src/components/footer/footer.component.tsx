@@ -37,7 +37,7 @@ export function Footer(): JSX.Element {
 
   return (
     <Grid container className={classes.footer} justify="space-between" alignItems="center">
-      <Grid item>{`${t("version")}: ${latestVersion}`}</Grid>
+      <Grid item>{latestVersion && `${t("version")}: ${latestVersion}`}</Grid>
       <Grid item>
         {t("realization")}
         <a href="http://www.glider.agh.edu.pl/" target="_blank" rel="noopener noreferrer">
