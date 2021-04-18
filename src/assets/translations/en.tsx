@@ -2,9 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { Translation } from "./pl";
+import { LocalizationResource } from "./types";
 
-const en: { translation: Translation } = {
+const en: LocalizationResource = {
   translation: {
     //App.tsx
     schedule: "Schedule",
@@ -91,7 +91,7 @@ const en: { translation: Translation } = {
     shiftEdit: "Shift edit",
     shiftAdd: "Add shift",
     shiftName: "Shift name",
-    shiftTame: "Shift type",
+    shiftType: "Shift type",
     shiftAlreadyExists: "Shift already exists",
     shiftWithThatColorExist: "Shift with that color code already exists",
     shiftHours: "Shift hours",

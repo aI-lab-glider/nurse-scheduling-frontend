@@ -2,8 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import i18n from "i18next";
-import { Localization } from "../assets/translations";
-export function t(r: Localization, options?: {}): string {
+import { ResourceName } from "../assets/translations/types";
+
+export function t(r: ResourceName, options?: {}): string {
   return i18n.t(r, options);
 }
 export class TranslationHelper {
