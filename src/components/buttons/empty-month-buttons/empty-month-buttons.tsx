@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TranslationHelper } from "../../../helpers/translations.helper";
+import { t, TranslationHelper } from "../../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { Button } from "../../common-components";
 import { ScheduleKey } from "../../../logic/data-access/persistance-store.model";
@@ -55,7 +55,6 @@ export function EmptyMonthButtons(): JSX.Element {
       !month.isCorrupted
     );
   };
-
   return (
     <div className={"newPageButtonsPane"}>
       {hasValidPrevious && (
@@ -67,7 +66,7 @@ export function EmptyMonthButtons(): JSX.Element {
           data-cy="copy-prev-month"
         >
           {" "}
-          {`Kopiuj plan z ${
+          {`${t("loadScheduleFrom")} z ${
             TranslationHelper.polishMonths[prevDate.getMonth()]
           } ${prevDate.getFullYear()}`}
         </Button>
@@ -83,7 +82,7 @@ export function EmptyMonthButtons(): JSX.Element {
           type="file"
           accept=".xlsx"
         />
-        Wgraj z pliku
+        {t("loadFromFile")}
       </Button>
     </div>
   );

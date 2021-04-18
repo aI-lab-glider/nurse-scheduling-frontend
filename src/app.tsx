@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import schedule from "./assets/devMode/schedule";
@@ -26,6 +28,8 @@ import { cropScheduleDMToMonthDM } from "./logic/schedule-container-converter/sc
 import { ImportModalProvider } from "./components/buttons/import-buttons/import-modal-context";
 import { LocalStorageProvider } from "./logic/data-access/local-storage-provider.model";
 import { ScheduleKey } from "./logic/data-access/persistance-store.model";
+import resources from "./assets/translations";
+import { t } from "./helpers/translations.helper";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -48,6 +52,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+i18n.use(initReactI18next).init({
+  fallbackLng: "pl",
+  resources,
+});
 function App(): JSX.Element {
   const classes = useStyles();
   const scheduleDispatcher = useDispatch();
@@ -65,13 +73,13 @@ function App(): JSX.Element {
   const tabs: Tabs[] = useMemo(
     () => [
       {
-        label: "Plan",
+        label: t("schedule"),
         component: <SchedulePage editModeHandler={setDisableRouteButtons} />,
         onChange: (): void => setMode(AppMode.SCHEDULE),
         dataCy: "btn-schedule-tab",
       },
       {
-        label: "Zarządzanie",
+        label: t("management"),
         component: <ManagementPage />,
         onChange: (): void => setMode(AppMode.MANAGEMENT),
         dataCy: "btn-management-tab",

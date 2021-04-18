@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useDispatch } from "react-redux";
-import { TranslationHelper } from "../../helpers/translations.helper";
+import { t, TranslationHelper } from "../../helpers/translations.helper";
 import { useMonthInfo } from "../../hooks/use-month-info";
 import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
 import { ScheduleDataActionCreator } from "../../state/schedule-data/schedule-data.action-creator";
@@ -71,7 +71,7 @@ export default function ErrorListItem({
             style={{ width: "90px", height: "26px" }}
             onClick={(): void => handleShow(error)}
           >
-            Pokaż
+            {t("show")}
           </Button>
         </div>
       )}

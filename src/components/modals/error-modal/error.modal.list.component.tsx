@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import React from "react";
+import { t } from "../../../helpers/translations.helper";
 import { ScheduleErrorMessageModel } from "../../../state/schedule-data/schedule-errors/schedule-error-message.model";
 import ModalErrorListItem from "./error.modal.list.item.component";
 
@@ -19,7 +20,7 @@ export default function ModalErrorList({ errors = [] }: Options): JSX.Element {
             <ModalErrorListItem key={`${error.kind}_${index}`} error={error} />
           )
         )}
-      {errors?.length === 0 && "Nie znaleziono błędów"}{" "}
+      {errors?.length === 0 && t("noErrorsFound")}{" "}
     </>
   );
 }
