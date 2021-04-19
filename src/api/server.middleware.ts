@@ -114,47 +114,34 @@ export class ServerMiddleware {
     const validBackendScheduleErros = errors.filter(
       (err) => err.kind !== AlgorithmErrorCode.WorkerTeamsCollision
     );
-    const WTCErrors = errors.filter((err) => err.kind === AlgorithmErrorCode.WorkerTeamsCollision);
+    const WTCErrors = errors.filter(
+      (err) => err.kind === AlgorithmErrorCode.WorkerTeamsCollision
+    ) as WorkerTeamsCollision[];
+
+    const createWTCError = (item: WorkerTeamsCollision): WorkerTeamsCollision => ({
+      kind: AlgorithmErrorCode.WorkerTeamsCollision,
+      day: item.day,
+      hour: -1,
+      hours: [item.hour],
+      workers: item.workers,
+    });
 
     const aggregatedWTCErrors: WorkerTeamsCollision[] = [];
-    for (let i = 0; i < WTCErrors.length; i++) {
-      const hoursArray: number[] = [];
-      hoursArray.push((WTCErrors[i] as WorkerTeamsCollision).hour);
+    WTCErrors.forEach((item, index) => {
+      if (item.hour > -1) {
+        const newWTCError = createWTCError(item);
+        const sameDayErrors = WTCErrors.slice(index + 1).filter(
+          (otherError) => item.day === otherError.day
+        );
+        sameDayErrors.forEach((otherError) => {
+          newWTCError.hours!.push(otherError.hour);
+          newWTCError.workers = _.uniq(_.concat(newWTCError.workers, otherError.workers));
+          otherError.hour = -1;
+        });
 
-      const newWTCError: WorkerTeamsCollision = {
-        kind: AlgorithmErrorCode.WorkerTeamsCollision,
-        day: (WTCErrors[i] as WorkerTeamsCollision).day,
-        hour: -1,
-        hours: hoursArray,
-        workers: (WTCErrors[i] as WorkerTeamsCollision).workers,
-      };
-
-      if ((WTCErrors[i] as WorkerTeamsCollision).hour > -1) {
-        for (let j = i + 1; j < WTCErrors.length; j++) {
-          if (
-            (WTCErrors[i] as WorkerTeamsCollision).day ===
-            (WTCErrors[j] as WorkerTeamsCollision).day
-          ) {
-            newWTCError.hours!.push((WTCErrors[j] as WorkerTeamsCollision).hour);
-            for (
-              let worker = 0;
-              worker < (WTCErrors[j] as WorkerTeamsCollision).workers.length;
-              worker++
-            ) {
-              if (
-                !newWTCError.workers.includes(
-                  (WTCErrors[j] as WorkerTeamsCollision).workers[worker]
-                )
-              ) {
-                newWTCError.workers.push((WTCErrors[j] as WorkerTeamsCollision).workers[worker]);
-              }
-            }
-            (WTCErrors[j] as WorkerTeamsCollision).hour = -1;
-          }
-        }
         aggregatedWTCErrors.push(newWTCError);
       }
-    }
+    });
 
     return _.concat(validBackendScheduleErros, aggregatedWTCErrors);
   }
