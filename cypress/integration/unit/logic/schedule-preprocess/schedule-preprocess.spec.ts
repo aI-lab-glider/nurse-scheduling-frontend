@@ -50,12 +50,12 @@ const testCases: TestCase[] = [
 
 describe("Schedule preprocessor functions", () => {
   testCases.forEach((test) => {
-    it(`Should calculate proper month length for ${test.title}`, () => {
+    it(`calculates proper month length for ${test.title}`, () => {
       const days = MonthHelper.daysInMonth(test.monthNumber, test.year);
       expect(days.length).eql(test.dayInMonth);
     });
 
-    it(`Should calculate how many days are missing from previous and next month to create full weeks for ${test.title}`, () => {
+    it(`calculates how many days are missing from previous and next month to create full weeks for ${test.title}`, () => {
       const {
         daysMissingFromPrevMonth,
         daysMissingFromNextMonth,
@@ -65,7 +65,7 @@ describe("Schedule preprocessor functions", () => {
     });
   });
 
-  it(`Should calculate proper weeks number for different months`, () => {
+  it(`calculates proper weeks number for different months`, () => {
     expect(MonthHelper.numberOfWeeksInMonth(0, 2021)).eql(5);
     expect(MonthHelper.numberOfWeeksInMonth(1, 2021)).eql(4);
     expect(MonthHelper.numberOfWeeksInMonth(2, 2021)).eql(5);

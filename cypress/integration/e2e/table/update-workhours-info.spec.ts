@@ -53,7 +53,6 @@ function testWorkHoursInfoUpdate({
     workerIdx: workerIdx,
     shiftIdx,
   };
-  cy.checkWorkerShift({ ...workerData, desiredShiftCode: initialShiftCode });
   cy.changeWorkerShift({ ...workerData, newShiftCode: desiredShiftCode });
   cy.checkWorkerShift({ ...workerData, desiredShiftCode });
   cy.checkHoursInfo({ workerGroupIdx, workerIdx, hoursInfo: expectedWorkHoursInfo });
