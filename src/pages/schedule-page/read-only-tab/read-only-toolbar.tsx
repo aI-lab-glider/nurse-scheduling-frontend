@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect } from "react";
 import { ImportButtonsComponent } from "../../../components/buttons/import-buttons/import-buttons.component";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { useHistory } from "react-router-dom";
 import { Button } from "../../../components/common-components";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +15,7 @@ import {
 } from "../../../logic/data-access/persistance-store.model";
 import classNames from "classnames/bind";
 import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
+import { AlgorithmErrorCode } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 
 interface ViewOnlyToolbarOptions {
   openEdit: () => void;
@@ -21,6 +23,7 @@ interface ViewOnlyToolbarOptions {
 export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Element {
   const [isEditDisable, setEditDisable] = React.useState<boolean>(false);
   const [isMonthFromFuture, setIsMonthFromFuture] = React.useState<boolean>(false);
+  const [areAlgoErrorsPresent, setAreAlgoErrorsPresent] = React.useState<boolean>(false);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -38,13 +41,19 @@ export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
 
   const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
+  const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
+
   useEffect(() => {
     const isFuture = VerboseDateHelper.isMonthInFuture(month, year);
     setIsMonthFromFuture(isFuture);
 
     const isRevisionEditDisable = revision === "actual" ? false : !isFuture;
     setEditDisable(isRevisionEditDisable || isCorrupted);
-  }, [year, month, revision, isCorrupted]);
+
+    setAreAlgoErrorsPresent(
+      Object.values(AlgorithmErrorCode).some((errorCode) => errorCode in scheduleErrors)
+    );
+  }, [year, month, revision, isCorrupted, scheduleErrors]);
 
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>): void => {
     const currentRev = event.target.value;
@@ -84,6 +93,12 @@ export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
               </form>
             )}
           </div>
+          {areAlgoErrorsPresent && (
+            <div className="errors-present-info">
+              <ErrorOutlineIcon />
+              <p>Plan zawiera błędy. Zobacz je w trybie edycji</p>
+            </div>
+          )}
           <div className="filler" />
           <ImportButtonsComponent />
           <Button
