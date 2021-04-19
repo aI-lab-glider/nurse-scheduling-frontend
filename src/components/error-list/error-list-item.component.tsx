@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useDispatch } from "react-redux";
-import { TranslationHelper } from "../../helpers/translations.helper";
+import { t, TranslationHelper } from "../../helpers/translations.helper";
 import {
   ScheduleErrorMessageModel,
   ScheduleErrorType,
