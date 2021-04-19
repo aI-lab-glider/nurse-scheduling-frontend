@@ -4,14 +4,14 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { t, TranslationHelper } from "../../helpers/translations.helper";
+import { useMonthInfo } from "../../hooks/use-month-info";
+import { useWorkerGroups } from "../../hooks/use-worker-groups";
+import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
+import { ScheduleDataActionCreator } from "../../state/schedule-data/schedule-data.action-creator";
 import {
   ScheduleErrorMessageModel,
   ScheduleErrorType,
 } from "../../state/schedule-data/schedule-errors/schedule-error-message.model";
-import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
-import { useWorkerGroups } from "../../hooks/use-worker-groups";
-import { useMonthInfo } from "../../hooks/use-month-info";
-import { ScheduleDataActionCreator } from "../../state/schedule-data/schedule-data.action-creator";
 import { Button } from "../buttons/button-component/button.component";
 
 interface Options {
