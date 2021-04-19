@@ -99,7 +99,7 @@ export default function ErrorListItem({
             style={{ width: "90px", height: "26px" }}
             onClick={(): void => handleShow(error)}
           >
-            Pokaż
+            {t("show")}
           </Button>
         </div>
       )}

@@ -2,15 +2,22 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { VerboseDate } from "../state/schedule-data/foundation-info/foundation-info.model";
+import { WorkerType } from "../state/schedule-data/worker-info/worker-info.model";
 import { WorkerShiftsModel } from "../state/schedule-data/workers-shifts/worker-shifts.model";
 import { Opaque } from "../utils/type-utils";
-import { WorkerType } from "../state/schedule-data/worker-info/worker-info.model";
 import { ArrayHelper } from "./array.helper";
 import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Color, Colors } from "./colors/color.model";
 import { VerboseDateHelper } from "./verbose-date.helper";
-import { ShiftsTypesDict, Shift, ShiftCode, FREE_SHIFTS_CODES, NotWorkingShift, NotWorkingShiftType } from "../state/schedule-data/shifts-types/shift-types.model";
+import {
+  ShiftsTypesDict,
+  Shift,
+  ShiftCode,
+  FREE_SHIFTS_CODES,
+  NotWorkingShift,
+  NotWorkingShiftType,
+} from "../state/schedule-data/shifts-types/shift-types.model";
 
 export const WORK_HOURS_PER_DAY = 8;
 export type MonthDataArray<T> = Opaque<"MonthData", T[]>;

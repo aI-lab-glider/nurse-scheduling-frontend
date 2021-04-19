@@ -5,6 +5,7 @@ import React from "react";
 import Drawer, { DrawerOptions } from "../drawers/drawer/drawer.component";
 import ShiftEditDrawer from "./shift-edit-drawer.component";
 import { Shift } from "../../state/schedule-data/shifts-types/shift-types.model";
+import i18next from "i18next";
 
 export enum ShiftDrawerMode {
   EDIT,
@@ -20,9 +21,9 @@ interface ShiftDrawerOptions extends Omit<DrawerOptions, "title"> {
 function getTitle(mode: ShiftDrawerMode): string {
   switch (mode) {
     case ShiftDrawerMode.EDIT:
-      return "Edycja zmiany";
+      return i18next.t("shiftEdit");
     case ShiftDrawerMode.ADD_NEW:
-      return "Dodaj zmianę";
+      return i18next.t("shiftAdd");
   }
 }
 

@@ -6,7 +6,6 @@ import { shiftSectionDataCy } from "../../../../src/components/schedule/worker-i
 import { ShiftCode } from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
 import { GetWorkerShiftOptions } from "../../../support/commands";
 
-
 const prevMonthDays = 6;
 
 interface WorkerTestCase {
