@@ -58,7 +58,6 @@ const en: LocalizationResource = {
     overtime: "Overtime",
     illegalScheduleValue: "Illegal schedule value",
     otherErrors: "Other errors",
-    //span-errors.component.tsx
     errors: "Errors",
     //footer.component.tsx
     realization: "Realization",

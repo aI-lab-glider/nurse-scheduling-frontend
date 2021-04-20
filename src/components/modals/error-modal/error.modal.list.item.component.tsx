@@ -51,18 +51,15 @@ export default function ModalErrorListItem({ error }: Options): JSX.Element {
 }
 
 const Wrapper = styled.div`
-  border-radius: 2px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: ${colors.errorListItemBorder};
-  margin-left: 24px;
-  margin-right: 23px;
-  margin-bottom: 8px;
+  flex: 1;
   display: flex;
-  align-items: stretch;
-  align-content: center;
-  justify-items: center;
+  align-items: center;
+  justify-content: center;
   position: relative;
+
+  border: 1px solid ${colors.errorListItemBorder};
+  border-radius: 2px;
+  margin: 0 24px 8px 24px;
 `;
 
 const RedBar = styled.div`
@@ -71,6 +68,7 @@ const RedBar = styled.div`
   position: absolute;
   height: 100%;
   background-color: ${colors.errorRed};
+  left: 0;
 `;
 
 const Title = styled.div`

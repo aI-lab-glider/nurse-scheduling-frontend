@@ -100,7 +100,6 @@ export function ErrorPopper({
             key={`${error.kind}_${index}`}
             error={ErrorMessageHelper.getErrorMessage(error, shiftTypes)}
             interactable={false}
-            className="errorTooltip-item"
             showTitle={showErrorTitle}
           />
         ))}

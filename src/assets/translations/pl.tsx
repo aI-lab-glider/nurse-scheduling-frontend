@@ -56,7 +56,7 @@ export const pl = {
     overtime: "Nadgodziny",
     illegalScheduleValue: "Niedozwolona wartość zmiany",
     otherErrors: "Pozostałe błędy",
-    //span-errors.component.tsx
+
     errors: "Błędy",
     //footer.component.tsx
     realization: "Wykonanie",

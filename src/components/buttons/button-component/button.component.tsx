@@ -31,6 +31,7 @@ export const Button = React.forwardRef(
   }
 );
 
+// TODO: Get rid of padding, margin, border radius
 const ButtonBase = styled.button`
   background: none;
   border: none;
