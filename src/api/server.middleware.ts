@@ -100,13 +100,16 @@ export class ServerMiddleware {
         if (anonimizationMap[workerName] === el["worker"]) el["worker"] = workerName;
       });
     }
+
     if ("workers" in el) {
-      for (let i = 0; el["workers"][i]; i++) {
-        Object.keys(anonimizationMap).forEach((workerName) => {
-          if (anonimizationMap[workerName] === el["workers"][i]) el["workers"][i] = workerName;
+      el.workers = el.workers.map((worker) => {
+        const workerName = Object.keys(anonimizationMap).find((workerName) => {
+          return anonimizationMap[workerName] === worker;
         });
-      }
+        return workerName !== undefined ? workerName : worker;
+      });
     }
+
     return el;
   }
 

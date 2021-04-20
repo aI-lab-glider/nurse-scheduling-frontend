@@ -33,13 +33,16 @@ function prepareMonthName(index: number, day: number, month: number): string {
   return monthName;
 }
 
-function insertWorkerGroup(a, b, at): string {
+function insertWorkerGroup(a: string, b: string, at: string): string {
   let position = a.indexOf(at);
-  if (position !== -1) {
-    position += at.length;
-    return a.substr(0, position) + "</b> (" + b + ")<b>" + a.substr(position);
+  if (position === -1) return a;
+  let i = 1;
+  while (a[position + at.length + 4] !== "," && position < a.length) {
+    position = a.split(at, i).join(at).length;
+    i++;
   }
-  return a;
+  position += at.length;
+  return a.substr(0, position) + "</b> (" + b + ")<b>" + a.substr(position);
 }
 
 export default function ErrorListItem({
@@ -73,7 +76,7 @@ export default function ErrorListItem({
         const isInError =
           error.workers!.find((workerName) => workerName === worker.workerName) !== undefined;
         if (isInError) {
-          message = insertWorkerGroup(message, `${groupName}`, worker.workerName);
+          message = insertWorkerGroup(message!, `${groupName}`, worker.workerName);
         }
       });
     });
