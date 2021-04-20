@@ -36,6 +36,7 @@ export const colors = {
   errorRed: "#c60000",
   errorDateText: "#3c69a8",
   errorListItemBorder: "#c8dfff",
+  tableBorderGrey: "#d6d8e7",
 };
 
 export const fontFamilyPrimary = "Roboto, sans-serif";

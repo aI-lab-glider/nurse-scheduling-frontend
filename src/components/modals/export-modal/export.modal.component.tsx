@@ -23,6 +23,8 @@ import {
 } from "../../buttons/dropdown-buttons/dropdown-buttons.component";
 import DefaultModal from "../modal.component";
 import { t } from "../../../helpers/translations.helper";
+import styled from "styled-components";
+import { colors, fontSizeLg, fontWeightExtra } from "../../../assets/colors";
 
 export interface ExportModalComponent {
   setOpen: (open: boolean) => void;
@@ -103,7 +105,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   const body = (
     <div style={{ paddingLeft: "15px" }}>
       <div style={{ display: "flex", msFlexDirection: "row" }}>
-        <p className="label">{t("downloadSchedule")}: </p>
+        <Label>{t("downloadSchedule")}: </Label>
         <div style={{ top: "50%", marginTop: "-15px" }}>
           <DropdownButtons
             buttons={btnData}
@@ -114,7 +116,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
         </div>
       </div>
       <div>
-        <p className="label">{t("fileOptions")}: </p>
+        <Label>{t("fileOptions")}: </Label>
         <FormGroup row>
           {Object.keys(exportOptions).map((key, index) => (
             <FormControlLabel
@@ -148,3 +150,10 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
     </div>
   );
 }
+
+const Label = styled.p`
+  color: ${colors.primary};
+  font-size: ${fontSizeLg};
+  font-weight: ${fontWeightExtra};
+  line-height: 1.1;
+`;
