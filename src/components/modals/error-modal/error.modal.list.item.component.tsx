@@ -7,6 +7,8 @@ import { VerboseDate } from "../../../state/schedule-data/foundation-info/founda
 import { ScheduleErrorMessageModel } from "../../../state/schedule-data/schedule-errors/schedule-error-message.model";
 import { TranslationHelper } from "../../../helpers/translations.helper";
 import { useMonthInfo } from "../../../hooks/use-month-info";
+import styled from "styled-components";
+import { colors } from "../../../assets/colors";
 
 interface Options {
   error: ScheduleErrorMessageModel;
@@ -33,22 +35,59 @@ export default function ModalErrorListItem({ error }: Options): JSX.Element {
 
   const displayTitle = error.title && error.title !== "Nie rozpoznano błędu";
   return (
-    <div className="error-list-item">
-      <div className="red-rectangle" />
-      <div className="error-modal">
+    <Wrapper>
+      <RedBar />
+      <div>
         {displayTitle && (
-          <div className="error-title">
-            <p className="error-title-content">
-              {error.title === "date" ? `${errorDay} ` + monthName : `${error.title}`}
-              {errorDayIndex > -1 && error.title !== "date" ? `, ${errorDay} ` + monthName : ``}
-            </p>
-          </div>
+          <Title>
+            {error.title === "date" ? `${errorDay} ` + monthName : `${error.title}`}
+            {errorDayIndex > -1 && error.title !== "date" ? `, ${errorDay} ` + monthName : ``}
+          </Title>
         )}
-        <div
-          className="error-text-modal"
-          dangerouslySetInnerHTML={{ __html: error.message || "" }}
-        />
+        <Content dangerouslySetInnerHTML={{ __html: error.message || "" }} />
       </div>
-    </div>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  border-radius: 2px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: ${colors.errorListItemBorder};
+  margin-left: 24px;
+  margin-right: 23px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: stretch;
+  align-content: center;
+  justify-items: center;
+  position: relative;
+`;
+
+const RedBar = styled.div`
+  border-radius: 4px;
+  width: 4.5px;
+  position: absolute;
+  height: 100%;
+  background-color: ${colors.errorRed};
+`;
+
+const Title = styled.div`
+  padding: 10px 0 0 25px;
+  color: ${colors.errorDateText};
+  size: 14px;
+`;
+
+const Content = styled.div`
+  position: static;
+  color: ${colors.primaryTextColor};
+  size: 13px;
+  margin: 10px;
+  padding-left: 15px;
+  text-align: justify;
+  strong {
+    letter-spacing: 1.5px;
+    font-weight: bolder;
+  }
+`;

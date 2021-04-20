@@ -33,6 +33,9 @@ export const colors = {
   gray700: "#525f7f",
   gray800: "#32325d",
   gray900: "#212529",
+  errorRed: "#c60000",
+  errorDateText: "#3c69a8",
+  errorListItemBorder: "#c8dfff",
 };
 
 export const fontFamilyPrimary = "Roboto, sans-serif";
