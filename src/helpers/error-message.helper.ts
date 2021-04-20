@@ -148,37 +148,13 @@ export class ErrorMessageHelper {
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WorkerTeamsCollision:
+        const sections = findSections(error.hours!);
+        const sectionIntersectionMsg = sections.map(({ start, end }) =>
+          start === end ? `${start}:00` : `${start}:00-${end}:00`
+        );
+        message = `W godzinach: <b>${sectionIntersectionMsg.join(", ")}</b>`;
         i = 0;
-        message = `W godzinach: <b>${error.hours![i]}:00</b>`;
-        let prev = error.hours![i];
-        i++;
-        while (error.hours && error.hours[i]) {
-          if (error.hours[i + 1]) {
-            if (
-              error.hours[i + 1] !== error.hours[i] + 1 &&
-              error.hours[i + 1] !== 1 &&
-              error.hours[i] !== 24
-            ) {
-              if (prev !== error.hours[i]) {
-                if (error.hours[i - 1] === error.hours[i] - 1) {
-                  message += `-<b>${error.hours[i]}:00</b>, <b>${error.hours[i + 1]}:00</b>`;
-                  prev = error.hours[i + 1];
-                } else {
-                  message += `, <b>${error.hours[i]}:00</b>`;
-                  prev = error.hours[i];
-                }
-              }
-            }
-          } else if (prev !== error.hours[i]) message += `-<b>${error.hours[i]}:00</b>`;
-          i++;
-        }
-        i = 0;
-        message += `<br>Pracownicy z różnych zespołów na jednej zmianie: <b>${error.workers[i]}</b>`;
-        while (error.workers[i + 1]) {
-          i++;
-          message += `, <b>${error.workers[i]}</b>`;
-        }
-        message += `.`;
+        message += `<br>Niedozwolone połączenie zespołów: <b>${error.workers.join(", ")}</b>.`;
         type = ScheduleErrorType.WTC;
         title = "date";
         if (error.day) {
@@ -223,4 +199,23 @@ export class ErrorMessageHelper {
       }[error] ?? ColorHelper.getDefaultColor()
     );
   }
+}
+
+function findSections(array: number[]): Array<{ start: number; end: number }> {
+  let i = 0;
+  let resultIndex = -1;
+  const result: Array<{ start: number; end: number }> = [];
+  while (i < array.length) {
+    result.push({ start: array[i], end: array[i] });
+    resultIndex++;
+    while (
+      array[i + 1] &&
+      (array[i + 1] === array[i] + 1 || (array[i + 1] === 1 && array[i] === 24))
+    ) {
+      i++;
+    }
+    result[resultIndex].end = array[i];
+    i++;
+  }
+  return result;
 }

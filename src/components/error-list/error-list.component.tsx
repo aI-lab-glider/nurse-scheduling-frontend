@@ -65,7 +65,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
     {
       errorType: ScheduleErrorType.AON,
       errors: errors.filter((e) => e.type === ScheduleErrorType.WTC),
-      errorDescription: "Niedozwolone połączenie zespołów",
+      errorDescription: "Pracownicy z różnych zespołów na wspólnej zmianie",
     },
     {
       errorType: ScheduleErrorType.AON,

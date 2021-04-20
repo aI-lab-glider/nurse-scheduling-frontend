@@ -37,12 +37,14 @@ function insertWorkerGroup(a: string, b: string, at: string): string {
   let position = a.indexOf(at);
   if (position === -1) return a;
   let i = 1;
-  while (a[position + at.length + 4] !== "," && position < a.length) {
+  while (a[position + at.length] !== "," && position < a.length) {
     position = a.split(at, i).join(at).length;
     i++;
   }
   position += at.length;
-  return a.substr(0, position) + "</b> (" + b + ")<b>" + a.substr(position);
+  return a[position] === ","
+    ? a.substr(0, position) + "</b> (" + b + "), <b>" + a.substr(position + 2)
+    : a.substr(0, a.indexOf(".")) + "</b> (" + b + ").";
 }
 
 export default function ErrorListItem({
