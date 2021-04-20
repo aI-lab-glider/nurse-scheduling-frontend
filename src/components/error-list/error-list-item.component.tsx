@@ -44,7 +44,7 @@ function insertWorkerGroup(a: string, b: string, at: string): string {
   position += at.length;
   return a[position] === ","
     ? a.substr(0, position) + "</b> (" + b + "), <b>" + a.substr(position + 2)
-    : a.substr(0, a.indexOf(".")) + "</b> (" + b + ").";
+    : a.substr(0, a.indexOf(".")) + " (" + b + ").";
 }
 
 export default function ErrorListItem({
