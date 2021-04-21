@@ -42,9 +42,9 @@ export const colors = {
 export const fontFamilyPrimary = "Roboto, sans-serif";
 
 export const fontSizeDash = 0.875;
-export const fontSizeBase = 1; // Assumes the browser default, typically `16px`
-export const fontSizeLg = fontSizeBase * 1.25;
-export const fontSizeXl = fontSizeBase * 1.5;
+export const fontSizeBase = 1;
+export const fontSizeLg = fontSizeBase * 1.142;
+export const fontSizeXl = fontSizeBase * 1.428;
 export const fontSizeXs = fontSizeBase * 0.75;
 
 export const fontWeightLight = 300;
@@ -52,3 +52,9 @@ export const fontWeightNormal = 400;
 export const fontWeightBold = 600;
 export const fontWeightExtra = "bold";
 export const fontWeightBase = fontWeightNormal;
+
+export const iconSize = "auto";
+export const iconSizeRegular = "2.375rem";
+export const iconSizeSm = "1.5rem";
+export const iconSizeLg = "3.7rem";
+export const iconSizeXl = "5rem";
