@@ -12,6 +12,7 @@ import { ScheduleActionType } from "../../state/schedule-data/schedule.actions";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { CorruptedScheduleComponent } from "./corrupted-month-tab/corrupted-schedule.component";
+import styled from "styled-components";
 
 interface SchedulePageOptions {
   editModeHandler: (editMode: boolean) => void;
@@ -62,19 +63,25 @@ export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Elem
   }, [editModeHandler, setDrawerOpen]);
 
   return (
-    <>
-      <div className="schedule-container">
-        <Sentry.ErrorBoundary fallback={fallback} onError={onError}>
-          {isCorrupted ? (
-            <CorruptedScheduleComponent />
-          ) : (
-            <Switch>
-              <Route path="/schedule-editing" component={Edit} />
-              <Route path="/" component={ViewOnly} exact />
-            </Switch>
-          )}
-        </Sentry.ErrorBoundary>
-      </div>
-    </>
+    <Wrapper>
+      <Sentry.ErrorBoundary fallback={fallback} onError={onError}>
+        {isCorrupted ? (
+          <CorruptedScheduleComponent />
+        ) : (
+          <Switch>
+            <Route path="/schedule-editing" component={Edit} />
+            <Route path="/" component={ViewOnly} exact />
+          </Switch>
+        )}
+      </Sentry.ErrorBoundary>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  min-height: 100vh;
+`;

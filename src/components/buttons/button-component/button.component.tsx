@@ -63,8 +63,8 @@ const ButtonPrimary = styled(ButtonBase)`
   color: ${colors.white};
 
   &:disabled {
-    background-color: rgba(141, 153, 170, 255);
     color: ${colors.white};
+    opacity: 0.65;
 
     &:hover {
       cursor: default;
@@ -107,6 +107,7 @@ const ButtonCircle = styled(ButtonBase)`
 
   &:disabled {
     color: rgba(141, 153, 170, 255);
+    opacity: 0.65;
 
     &:hover {
       cursor: default;
