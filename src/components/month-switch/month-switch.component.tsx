@@ -81,7 +81,7 @@ const IconWrapper = styled(IconButton)`
 const MonthName = styled.h2`
   margin: 5px;
   font-weight: 500;
-  font-size: ${fontSizeLg}em;
+  font-size: ${fontSizeLg};
   letter-spacing: 0.035em;
   width: 140px;
   text-align: center;

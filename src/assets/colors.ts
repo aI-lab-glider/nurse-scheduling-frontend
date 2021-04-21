@@ -41,11 +41,11 @@ export const colors = {
 
 export const fontFamilyPrimary = "Roboto, sans-serif";
 
-export const fontSizeDash = 0.875;
-export const fontSizeBase = 1;
-export const fontSizeLg = fontSizeBase * 1.142;
-export const fontSizeXl = fontSizeBase * 1.428;
-export const fontSizeXs = fontSizeBase * 0.75;
+export const fontSizeBase = `${1}rem`;
+export const fontSizeXs = `${0.75}rem`;
+export const fontSizeDash = `${0.875}rem`;
+export const fontSizeLg = `${1.142}rem`;
+export const fontSizeXl = `${1.428}rem`;
 
 export const fontWeightLight = 300;
 export const fontWeightNormal = 400;
