@@ -22,6 +22,8 @@ import WorkerDrawerComponent, {
   WorkerDrawerWorkerInfo,
 } from "../../../drawers/worker-drawer/worker-drawer.component";
 import { WorkerInfo } from "../../../../hooks/use-worker-info";
+import styled from "styled-components";
+import { colors, fontSizeXs } from "../../../../assets/colors";
 
 export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "errorSelector"> {
   data: DataRow[];
@@ -74,8 +76,8 @@ export function NameTableSection({
   const data = getNames();
 
   return (
-    <React.Fragment>
-      <div className="nametable">
+    <>
+      <Wrapper>
         {data.map((workerName, index) => {
           const isNurse = type[workerName] === WorkerType.NURSE;
           const isLast = index === data.length - 1;
@@ -87,31 +89,28 @@ export function NameTableSection({
               errorSelector={(scheduleErrors): ScheduleError[] =>
                 errorSelector?.(workerName, 0, scheduleErrors) ?? []
               }
-              className={classNames("nametableRow", isWorker ? "pointerCursor" : "defaultCursor")}
               tooltipClassname="nametableRow-error-tooltip"
               showErrorTitle={false}
             >
-              <div
+              <Row
                 key={workerName}
                 onClick={(): void => toggleDrawer(true, workerName)}
                 className={classNames(
                   "nametableRow",
                   isNurse && isWorker && "nurseMarker",
-                  !isNurse && isWorker && "otherMarker",
-                  isFirst && "roundTop",
-                  isLast && "roundBottom",
-                  isWorker ? "pointerCursor" : "defaultCursor"
+                  !isNurse && isWorker && "babysitterMarker",
+                  isFirst && "isFirst",
+                  isLast && "isLast"
                 )}
               >
-                <div className="nameContainer">
+                <LabelWrapper>
                   <span>{workerName}</span>
-                  <span className="underline" />
-                </div>
-              </div>
+                </LabelWrapper>
+              </Row>
             </ErrorPopper>
           );
         })}
-      </div>
+      </Wrapper>
       <WorkerDrawerComponent
         open={open}
         onClose={(): void => toggleDrawer(false, "")}
@@ -119,6 +118,49 @@ export function NameTableSection({
         worker={workerInfo}
         setOpen={setIsOpen}
       />
-    </React.Fragment>
+    </>
   );
 }
+
+const Wrapper = styled.div`
+  align-items: center;
+  padding: 0;
+  width: 126px;
+`;
+const Row = styled.div`
+  display: flex;
+  align-items: center;
+  height: 40px;
+  width: 100%;
+
+  font-style: normal;
+  font-weight: 500;
+  font-size: ${fontSizeXs};
+
+  color: ${colors.primaryTextColor};
+  border-bottom: 1px solid ${colors.tableBorderGrey};
+  cursor: default;
+
+  &.babysitterMarker {
+    border-left: 3px solid ${colors.babysitterColor};
+    cursor: pointer;
+  }
+
+  &.nurseMarker {
+    border-left: 3px solid ${colors.nurseColor};
+    cursor: pointer;
+  }
+
+  &.isFirst {
+    border-top-left-radius: 10px;
+  }
+
+  &.isLast {
+    border-bottom-left-radius: 10px;
+    border-bottom: 0;
+  }
+`;
+
+const LabelWrapper = styled.div`
+  padding: 4px;
+`;
