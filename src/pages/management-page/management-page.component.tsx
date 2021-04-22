@@ -18,7 +18,7 @@ export default function ManagementPage(): JSX.Element {
   return (
     <Wrapper>
       <Title data-cy={"management-page-title"}>Panel zarządzania</Title>
-      <RouteButtonsComponent id="adjusted-tab-padding" tabs={tabs} />
+      <RouteButtonsComponent tabs={tabs} />
     </Wrapper>
   );
 }

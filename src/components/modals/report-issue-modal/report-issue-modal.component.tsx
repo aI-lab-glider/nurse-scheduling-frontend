@@ -11,6 +11,7 @@ import DefaultModal from "../modal.component";
 import { send } from "emailjs-com";
 import { useNotification } from "../../notification/notification.context";
 import { t } from "../../../helpers/translations.helper";
+import styled from "styled-components";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -128,12 +129,12 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   }
 
   const body = (
-    <div className="report-issue-modal-body">
-      {isSent && <p>{t("errorMessageWasSent")}</p>}
+    <div>
+      {isSent && <Message>{t("errorMessageWasSent")}</Message>}
       {!isSent && (
         <>
-          <p>{t("whatErrorOccurred")}</p>
-          <TextField
+          <Message>{t("whatErrorOccurred")}</Message>
+          <Input
             className={classes.textField}
             placeholder={t("provideErrorDescription")}
             value={issueDescription}
@@ -187,3 +188,13 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
     />
   );
 }
+
+const Message = styled.p`
+  font-weight: bolder;
+  letter-spacing: 0.75px;
+  margin-top: 24px;
+`;
+const Input = styled(TextField)`
+  letter-spacing: 0.25px;
+  margin-top: 0px;
+`;
