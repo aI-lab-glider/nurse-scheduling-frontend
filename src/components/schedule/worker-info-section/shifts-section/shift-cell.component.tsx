@@ -35,6 +35,7 @@ import { ErrorPopper } from "../../../poppers/error-popper/error-popper.componen
 import { useCellBackgroundHighlight } from "../../hooks/use-cell-highlight";
 import { useCellSelection } from "../../hooks/use-cell-selection";
 import { ShiftAutocompleteComponent } from "./shift-autocomplete.component";
+import styled from "styled-components";
 
 const MODAL_CLOSE_MS = 4444;
 
@@ -211,10 +212,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
                 data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
               >
                 {!keepOn && !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W" && (
-                  <div
-                    style={{ backgroundColor: `#${getColor(shiftCode, shiftTypes)}` }}
-                    className={"leftBorder"}
-                  />
+                  <ShiftBar style={{ backgroundColor: `#${getColor(shiftCode, shiftTypes)}` }} />
                 )}
                 <p
                   data-cy={baseCellDataCy(cellIndex, "cell")}
@@ -263,3 +261,10 @@ export const ShiftCellComponent = React.memo(ShiftCellComponentF, (prev, next) =
     _.isEqual(prev.verboseDate, next.verboseDate)
   );
 });
+
+const ShiftBar = styled.div`
+  width: 4px;
+  height: 100%;
+  margin-right: 4px;
+  border-radius: 2px 0 0 2px;
+`;

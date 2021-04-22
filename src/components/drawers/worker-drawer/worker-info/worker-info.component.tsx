@@ -49,13 +49,15 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
             )}
           </div>
           <br />
-          <div className="worker-info">
+          <div>
             {workerInfo.contractType && (
-              <p>Typ umowy: {ContractTypeHelper.translate(workerInfo.contractType)}</p>
+              <WorkerInfo>
+                Typ umowy: {ContractTypeHelper.translate(workerInfo.contractType)}
+              </WorkerInfo>
             )}
-            <p>Liczba godzin: {workerHoursInfo.workerHourNorm}</p>
-            <p>Liczba nadgodzin: {workerHoursInfo.overTime}</p>
-            <p>Suma godzin: {info.time}</p>
+            <WorkerInfo>Liczba godzin: {workerHoursInfo.workerHourNorm}</WorkerInfo>
+            <WorkerInfo>Liczba nadgodzin: {workerHoursInfo.overTime}</WorkerInfo>
+            <WorkerInfo>Suma godzin: {info.time}</WorkerInfo>
             <div data-html2canvas-ignore="true">
               <Divider />
             </div>
@@ -84,4 +86,7 @@ const DownloadButton = styled(Button)`
   position: absolute;
   bottom: 74px;
   left: 23px;
+`;
+const WorkerInfo = styled.p`
+  margin-bottom: 0;
 `;

@@ -45,7 +45,7 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
   }
 
   return (
-    <div className="row scheduleStyle" id="mainRow" data-cy={baseRowDataCy(rowIndex)}>
+    <div className="row" id="mainRow" data-cy={baseRowDataCy(rowIndex)}>
       {data.map((dataItem = { value: defaultEmpty }, cellIndex) => (
         <CellComponent
           {...{

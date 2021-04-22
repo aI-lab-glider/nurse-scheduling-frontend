@@ -11,6 +11,7 @@ import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
 import { Button } from "../../buttons/button-component/button.component";
 import DefaultModal from "../modal.component";
+import styled from "styled-components";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -102,14 +103,10 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
     handleClose();
   }
 
-  const body = (
-    <div className="save-changes-modal-body">
-      <p>Czy chcesz zapisać wprowadzone zmiany?</p>
-    </div>
-  );
+  const body = <Message>Czy chcesz zapisać wprowadzone zmiany?</Message>;
 
   const footer = (
-    <div className="save-changes-modal-footer">
+    <>
       <Link to="/">
         <Button variant="primary" onClick={onSaveClick}>
           Tak
@@ -121,7 +118,7 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
           Nie
         </Button>
       </Link>
-    </div>
+    </>
   );
 
   return (
@@ -136,3 +133,10 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
     />
   );
 }
+
+const Message = styled.p`
+  font-weight: bolder;
+  letter-spacing: 0.75px;
+  margin-top: 24px;
+  margin-bottom: 0;
+`;
