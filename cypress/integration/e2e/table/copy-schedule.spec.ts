@@ -4,7 +4,6 @@
 describe("Copy schedule from previous month", () => {
   before(() => {
     cy.loadScheduleToMonth("small_test_schedule.xlsx");
-    // cy.loadScheduleToMonth();
   });
 
   context("when iterating through entire year", () => {

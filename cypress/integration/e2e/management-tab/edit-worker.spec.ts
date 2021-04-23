@@ -35,7 +35,7 @@ describe("Tab management", () => {
       cy.get('[data-cy="contract"]').click();
     });
 
-    it("Should properly handle employment contract", () => {
+    it("properly handles employment contract", () => {
       cy.get('[data-cy="employment_contract"]').click();
       cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="full"]').click();
       cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="half"]').click();
@@ -45,7 +45,7 @@ describe("Tab management", () => {
         .clear({ force: true })
         .type("123");
     });
-    it("Should properly handle civil contract", () => {
+    it("properly handles civil contract", () => {
       cy.get('[data-cy="civil_contract"]').click();
       cy.get('[data-cy="input-civil-time"]').click();
       cy.get('[data-cy="input-civil-time"] input').clear({ force: true }).type("123");
