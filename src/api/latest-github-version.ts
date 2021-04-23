@@ -9,7 +9,7 @@ const latestReleaseRequest =
 export const getLatestAppVersion = axios
   .get(latestReleaseRequest)
   .then((res) => {
-    return res.data.name;
+    return res.data.name.substring(1);
   })
   .catch(() => {
     return;
