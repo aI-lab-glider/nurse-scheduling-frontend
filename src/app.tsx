@@ -28,6 +28,7 @@ import { cropScheduleDMToMonthDM } from "./logic/schedule-container-converter/sc
 import { ImportModalProvider } from "./components/buttons/import-buttons/import-modal-context";
 import { LocalStorageProvider } from "./logic/data-access/local-storage-provider.model";
 import { ScheduleKey } from "./logic/data-access/persistance-store.model";
+import { getLatestAppVersion } from "./api/latest-github-version";
 import resources from "./assets/translations";
 import { t } from "./helpers/translations.helper";
 
@@ -112,7 +113,15 @@ function App(): JSX.Element {
   }, [fetchGlobalState]);
 
   useEffect(() => {
-    new LocalStorageProvider().saveApplicationVersion().then();
+    const checkVersions = async (): Promise<void> => {
+      const latestLocalVersion = await new LocalStorageProvider().getLocalAppVersion();
+      const latestAppVersion = await getLatestAppVersion;
+      if (latestLocalVersion !== latestAppVersion) {
+        //tutaj bedzie wywolanie modala nowej wersji
+        new LocalStorageProvider().saveApplicationVersion(latestAppVersion).then();
+      }
+    };
+    checkVersions();
   }, []);
 
   return (

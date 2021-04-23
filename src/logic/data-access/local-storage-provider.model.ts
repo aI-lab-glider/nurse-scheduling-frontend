@@ -135,10 +135,8 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     }
   }
 
-  async saveApplicationVersion(): Promise<void> {
+  async saveApplicationVersion(version: string): Promise<void> {
     const db = this.applicationVersionStorage;
-    const version = process.env.REACT_APP_VERSION;
-
     try {
       const doc = await db.get(APPLICATION_VERSION_TAG_DATABASE_KEY);
       db.put({
@@ -230,6 +228,17 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       docs[revision._id] = revision.data;
     });
     return docs;
+  }
+
+  async getLocalAppVersion(): Promise<string | undefined> {
+    try {
+      const version = (await this.applicationVersionStorage.get("application_version_tag")).version;
+      return version;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      error.status !== 404 && console.error(error);
+      return undefined;
+    }
   }
 
   async fetchOrCreateMonthRevision(

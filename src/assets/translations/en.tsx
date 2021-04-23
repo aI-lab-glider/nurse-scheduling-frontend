@@ -81,6 +81,9 @@ const en: LocalizationResource = {
     dayWorkers: "day workers",
     downloadSchedule: "Download schedule",
     fileOptions: "File options",
+    //new-version.modal.component.tsx
+    update: "Update",
+    updateBody: "App has been updated. Current version is {{version}}",
     //report-issue-modal.component.tsx
     thereWasNetworkingError: "There was an networking error!",
     send: "Send",

@@ -79,6 +79,9 @@ export const pl = {
     dayWorkers: "dzienni pracownicy",
     downloadSchedule: "Pobierz plan",
     fileOptions: "Opcje pliku",
+    //new-version.modal.component.tsx
+    update: "Aktualizacja",
+    updateBody: "Aplikacja została zaktualizowana. Teraz jest w wersji {{version}}",
     //report-issue-modal.component.tsx
     thereWasNetworkingError: "Wystąpił problem sieciowy!",
     send: "Wyślij",
