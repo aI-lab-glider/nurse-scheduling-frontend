@@ -62,7 +62,7 @@ function App(): JSX.Element {
   const classes = useStyles();
   const scheduleDispatcher = useDispatch();
   const [disableRouteButtons, setDisableRouteButtons] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { setMode } = useAppConfig();
   const { month_number: month, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
