@@ -26,7 +26,8 @@ import { ApplicationStateModel } from "./state/application-state.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
 import { cropScheduleDMToMonthDM } from "./logic/schedule-container-converter/schedule-container-converter";
 import { ImportModalProvider } from "./components/buttons/import-buttons/import-modal-context";
-import { LocalStorageProvider } from "./logic/data-access/local-storage-provider.model";
+import NewVersionModal from "./components/modals/new-version-modal/new-version.modal.component";
+import { CookiesProvider } from "./logic/data-access/cookies-provider";
 import { ScheduleKey } from "./logic/data-access/persistance-store.model";
 import { getLatestAppVersion } from "./api/latest-github-version";
 import resources from "./assets/translations";
@@ -61,6 +62,7 @@ function App(): JSX.Element {
   const classes = useStyles();
   const scheduleDispatcher = useDispatch();
   const [disableRouteButtons, setDisableRouteButtons] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const { setMode } = useAppConfig();
   const { month_number: month, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
@@ -114,11 +116,11 @@ function App(): JSX.Element {
 
   useEffect(() => {
     const checkVersions = async (): Promise<void> => {
-      const latestLocalVersion = await new LocalStorageProvider().getLocalAppVersion();
+      const latestLocalVersion = CookiesProvider.getCookie("appversion");
       const latestAppVersion = await getLatestAppVersion;
       if (latestLocalVersion !== latestAppVersion) {
-        //tutaj bedzie wywolanie modala nowej wersji
-        new LocalStorageProvider().saveApplicationVersion(latestAppVersion).then();
+        CookiesProvider.saveCookie("appversion", latestAppVersion);
+        latestLocalVersion && setIsModalOpen(true);
       }
     };
     checkVersions();
@@ -139,6 +141,7 @@ function App(): JSX.Element {
                 <Box className={classes.drawer}>
                   <PersistentDrawer width={690} />
                 </Box>
+                <NewVersionModal open={isModalOpen} setOpen={setIsModalOpen} />
               </Box>
             </Route>
           </Switch>

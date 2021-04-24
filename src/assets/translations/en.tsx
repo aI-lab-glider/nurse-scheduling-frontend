@@ -83,7 +83,7 @@ const en: LocalizationResource = {
     fileOptions: "File options",
     //new-version.modal.component.tsx
     update: "Update",
-    updateBody: "App has been updated. Current version is {{version}}",
+    updateMessage: "App has been updated. Current version is {{version}}",
     //report-issue-modal.component.tsx
     thereWasNetworkingError: "There was an networking error!",
     send: "Send",
