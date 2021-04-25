@@ -20,6 +20,7 @@ import {
   WorkerTestDataInstance,
 } from "../../../fixtures/worker-data/worker-data-preprocessor";
 
+//todo refactor
 describe("Worker hours info", () => {
   workerTestData.forEach((workerInstance) => {
     context(

@@ -94,7 +94,11 @@ export default function ErrorListItem({
           </p>
         </div>
       )}
-      <div className="error-text" dangerouslySetInnerHTML={{ __html: message || "" }} />
+      <div
+        className="error-text"
+        data-cy="error-text"
+        dangerouslySetInnerHTML={{ __html: message || "" }}
+      />
       {interactable && (
         <div className="error-btn">
           <Button

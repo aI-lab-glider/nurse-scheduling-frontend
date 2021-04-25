@@ -3,47 +3,43 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ArrayHelper } from "../../../../src/helpers/array.helper";
 
-interface TestCase {
-  arr1: number[];
-  arr2: number[];
-  exp: [number, number][];
-}
-
-const testCases: TestCase[] = [
-  {
-    arr1: [1, 2],
-    arr2: [1, 2, 3],
-    exp: [
-      [1, 1],
-      [2, 2],
-      [undefined, 3],
-    ],
-  },
-  {
-    arr1: [1, 2],
-    arr2: [1, 2],
-    exp: [
-      [1, 1],
-      [2, 2],
-    ],
-  },
-  {
-    arr1: [1, 2, 6],
-    arr2: [1, 2],
-    exp: [
-      [1, 1],
-      [2, 2],
-      [6, undefined],
-    ],
-  },
-];
-
 describe("ArrayHelper", () => {
-  testCases.forEach((testCase) => {
-    describe("zip", () => {
-      it(`should return ${testCase.exp} for arrays ${testCase.arr1} and ${testCase.arr2}`, () => {
-        const result = ArrayHelper.zip(testCase.arr1, testCase.arr2);
-        expect(result).to.eql(testCase.exp);
+  describe("zip", () => {
+    context("when first array is shorter than second", () => {
+      const first = [1, 2];
+      const second = [1, 2, 3];
+
+      it("zips and fills with undefined", () => {
+        expect(ArrayHelper.zip(first, second)).to.eql([
+          [1, 1],
+          [2, 2],
+          [undefined, 3],
+        ]);
+      });
+    });
+
+    context("when first array is longer than second", () => {
+      const first = [1, 2, 3];
+      const second = [1, 2];
+
+      it("zips and fills with undefined", () => {
+        expect(ArrayHelper.zip(first, second)).to.eql([
+          [1, 1],
+          [2, 2],
+          [3, undefined],
+        ]);
+      });
+    });
+
+    context("when arrays are of equal length", () => {
+      const first = [1, 2];
+      const second = [1, 2];
+
+      it("zips", () => {
+        expect(ArrayHelper.zip(first, second)).to.eql([
+          [1, 1],
+          [2, 2],
+        ]);
       });
     });
   });
