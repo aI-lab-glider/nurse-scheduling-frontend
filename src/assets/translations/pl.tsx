@@ -87,7 +87,7 @@ export const pl = {
     provideErrorDescription: "Opisz błąd",
     //shift-drawer.component.tsx
     shiftEdit: "Edycja zmiany",
-    shiftAdd: "Dodaj smianę",
+    shiftAdd: "Dodaj zmianę",
     //shift-edit-drawer.component.tsx
     shiftName: "Nazwa zmiany",
     shiftType: "Typ zmiany",
