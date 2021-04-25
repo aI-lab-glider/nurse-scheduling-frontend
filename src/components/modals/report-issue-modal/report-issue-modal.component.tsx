@@ -5,75 +5,11 @@
 import { TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { Button } from "../../buttons/button-component/button.component";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import DefaultModal from "../modal.component";
 import { send } from "emailjs-com";
 import { useNotification } from "../../notification/notification.context";
 import { t } from "../../../helpers/translations.helper";
 import styled from "styled-components";
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    modal: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      position: "relative",
-    },
-
-    paper: {
-      backgroundColor: "#FFFFFF",
-      border: "0",
-      boxShadow: "-3px 4px 20px 4px rgba(0, 0, 0, 0.15)",
-      width: "483px",
-      minHeight: "142px",
-    },
-
-    modalBody: {
-      position: "relative",
-      overflow: "auto",
-      overflowX: "hidden",
-      width: "100%",
-      height: "auto",
-      alignItems: "center",
-      color: ScssVars.primary,
-      fontFamily: ScssVars.fontFamilyPrimary,
-      fontSize: 16,
-      lineHeight: 0,
-      padding: "15px 27px 23px 27px",
-    },
-
-    textField: {
-      overflowY: "auto",
-      overflowX: "hidden",
-      maxHeight: "600px",
-    },
-
-    titleMargin: {
-      margin: "9.6px 24px 0px 24px",
-    },
-
-    footer: {
-      paddingBottom: "24px",
-      paddingLeft: "14px",
-    },
-
-    exitButton: {
-      color: ScssVars.primary,
-      marginRight: "30px",
-      marginBottom: "10px",
-    },
-
-    title: {
-      fontFamily: ScssVars.fontFamilyPrimary,
-      fontWeight: 700,
-      fontSize: 18,
-      color: ScssVars.primary,
-      display: "flex",
-    },
-  })
-);
 
 export interface ReportIssueModalOptions {
   setOpen: (open: boolean) => void;
@@ -82,7 +18,6 @@ export interface ReportIssueModalOptions {
 }
 
 export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.Element {
-  const classes = useStyles();
   const [isSent, setIsSent] = useState(false);
   const { open, setOpen, clear } = options;
 
@@ -135,7 +70,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
         <>
           <Message>{t("whatErrorOccurred")}</Message>
           <Input
-            className={classes.textField}
+            // className={classes.textField}
             placeholder={t("provideErrorDescription")}
             value={issueDescription}
             onChange={onIssueDescriptionChange}
@@ -184,7 +119,6 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
       body={body}
       footer={footer}
       closeOptions={handleClose}
-      classNames={classes}
     />
   );
 }
@@ -192,9 +126,9 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
 const Message = styled.p`
   font-weight: bolder;
   letter-spacing: 0.75px;
-  margin-top: 24px;
 `;
+
 const Input = styled(TextField)`
   letter-spacing: 0.25px;
-  margin-top: 0px;
+  margin-top: 0;
 `;

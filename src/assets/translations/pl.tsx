@@ -77,8 +77,8 @@ export const pl = {
     errorsWereEncounteredWhileLoadingFile: "Napotkano błędy podczas wczytywania pliku",
     //export.modal.component.tsx
     dayWorkers: "dzienni pracownicy",
-    downloadSchedule: "Pobierz plan",
-    fileOptions: "Opcje pliku",
+    downloadSchedule: "Format pliku",
+    fileOptions: "Opcje",
     //report-issue-modal.component.tsx
     thereWasNetworkingError: "Wystąpił problem sieciowy!",
     send: "Wyślij",

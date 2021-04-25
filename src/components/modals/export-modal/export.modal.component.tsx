@@ -24,7 +24,7 @@ import {
 import DefaultModal from "../modal.component";
 import { t } from "../../../helpers/translations.helper";
 import styled from "styled-components";
-import { colors, fontSizeLg, fontWeightExtra } from "../../../assets/colors";
+import { colors, fontSizeBase } from "../../../assets/colors";
 
 export interface ExportModalComponent {
   setOpen: (open: boolean) => void;
@@ -83,14 +83,14 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   const title = t("downloadSchedule");
 
   const footer = (
-    <div>
+    <>
       <Button onClick={handleExport} size="small" variant="primary" data-cy="confirm-export-button">
         {t("confirm")}
       </Button>
       <Button onClick={handleClose} size="small" variant="secondary">
         {t("cancel")}
       </Button>
-    </div>
+    </>
   );
   const handleChange = (event): void => {
     setExportOptions({
@@ -103,21 +103,19 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   };
 
   const body = (
-    <div style={{ paddingLeft: "15px" }}>
-      <div style={{ display: "flex", msFlexDirection: "row" }}>
+    <>
+      <FormatWrapper>
         <Label>{t("downloadSchedule")}: </Label>
-        <div style={{ top: "50%", marginTop: "-15px" }}>
-          <DropdownButtons
-            buttons={btnData}
-            mainLabel={exportMode}
-            buttonVariant="secondary"
-            width={112}
-          />
-        </div>
-      </div>
+        <DropdownButtons
+          buttons={btnData}
+          mainLabel={exportMode}
+          buttonVariant="secondary"
+          width={112}
+        />
+      </FormatWrapper>
       <div>
         <Label>{t("fileOptions")}: </Label>
-        <FormGroup row>
+        <FormGroup>
           {Object.keys(exportOptions).map((key, index) => (
             <FormControlLabel
               style={{ color: "black" }}
@@ -134,26 +132,19 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
           ))}
         </FormGroup>
       </div>
-    </div>
+    </>
   );
 
-  return (
-    <div>
-      <DefaultModal
-        width={500}
-        open={open}
-        setOpen={setOpen}
-        title={title}
-        body={body}
-        footer={footer}
-      />
-    </div>
-  );
+  return <DefaultModal open={open} setOpen={setOpen} title={title} body={body} footer={footer} />;
 }
 
-const Label = styled.p`
+const Label = styled.span`
   color: ${colors.primary};
-  font-size: ${fontSizeLg};
-  font-weight: ${fontWeightExtra};
+  font-size: ${fontSizeBase};
   line-height: 1.1;
+`;
+
+const FormatWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;

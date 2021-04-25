@@ -6,11 +6,6 @@ import { VerboseDate } from "../../state/schedule-data/foundation-info/foundatio
 import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { getColor } from "../schedule/worker-info-section/shifts-section/shift-cell.component";
 import { fade } from "@material-ui/core";
-import {
-  bottomCellPartClassName,
-  hasNextShiftClassName,
-  keepOnShiftClassName,
-} from "../schedule/base/base-cell/base-cell.models";
 import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import styled from "styled-components";

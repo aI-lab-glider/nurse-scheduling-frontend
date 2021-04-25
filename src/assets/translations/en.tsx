@@ -78,8 +78,8 @@ const en: LocalizationResource = {
     errorsWereEncounteredWhileLoadingFile: "Errors were encountered while loading the file ",
     //export.modal.component.tsx
     dayWorkers: "day workers",
-    downloadSchedule: "Download schedule",
-    fileOptions: "File options",
+    downloadSchedule: "File format",
+    fileOptions: "Options",
     //report-issue-modal.component.tsx
     thereWasNetworkingError: "There was an networking error!",
     send: "Send",
