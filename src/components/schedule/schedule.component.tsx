@@ -4,7 +4,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { WorkerHourInfo } from "../../helpers/worker-hours-info.model";
-import { useTeams } from "../../hooks/use-worker-groups";
+import { useTeams } from "../../hooks/use-teams";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { FoundationInfoComponent } from "./foundation-info-section/foundation-info.component";
 import { ScheduleFoldingSection } from "./schedule-folding-section.component";

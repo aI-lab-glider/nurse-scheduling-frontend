@@ -18,7 +18,7 @@ import {
   MetaDataSectionKey,
 } from "../section.model";
 import { EMPTY_ROW } from "../../helpers/parser.helper";
-import { groupWorkers } from "../../hooks/use-worker-groups";
+import { groupWorkers } from "../../hooks/use-teams";
 import { WorkerInfo } from "../../hooks/use-worker-info";
 import { MonthHelper } from "../../helpers/month.helper";
 import * as _ from "lodash";
