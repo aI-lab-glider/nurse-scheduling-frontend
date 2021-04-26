@@ -6,13 +6,11 @@ import { CellManagementKeys } from "./cell-blockable-input.component";
 import styled from "styled-components";
 
 export interface BaseCellInputOptions {
-  className: string;
   onValueChange: (value: string) => void;
   onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 export function BaseCellInputComponent({
-  className,
   onValueChange,
   onKeyDown,
 }: BaseCellInputOptions): JSX.Element {
@@ -27,7 +25,6 @@ export function BaseCellInputComponent({
   return (
     <Input
       autoFocus={true}
-      className={className}
       onKeyDown={handleKeyDown}
       onBlur={(e): void => {
         !!e.currentTarget.value && onValueChange(e.currentTarget.value);

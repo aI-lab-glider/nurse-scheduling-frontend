@@ -11,6 +11,9 @@ import { ScheduleFoldingSection } from "./schedule-folding-section.component";
 import { OvertimeHeaderComponent } from "./schedule-header/overtime-header-table/overtime-header.component";
 import { TimeTableComponent } from "./schedule-header/timetable/timetable.component";
 import { WorkerInfoSection } from "./worker-info-section/worker-info-section.component";
+import { SectionContainer } from "./base/styled";
+import styled from "styled-components";
+import { colors } from "../../assets/colors";
 
 export function ScheduleComponent(): JSX.Element {
   const workerGroups = useWorkerGroups();
@@ -32,14 +35,14 @@ export function ScheduleComponent(): JSX.Element {
   return (
     <div style={{ margin: "20 0" }}>
       <div>
-        <div className="sectionContainer timeHeader">
-          <div className="timeTableContainer">
+        <TimeHeader>
+          <TimeTableContainer>
             <TimeTableComponent />
-          </div>
-          <div className="summaryContainer">
+          </TimeTableContainer>
+          <SummaryContainer>
             <OvertimeHeaderComponent data={Object.values(WorkerHourInfo.summaryTranslations)} />
-          </div>
-        </div>
+          </SummaryContainer>
+        </TimeHeader>
 
         {Object.entries(workerGroups).map(([groupName, workers], index) => (
           <ScheduleFoldingSection name={groupName} key={groupName}>
@@ -54,3 +57,21 @@ export function ScheduleComponent(): JSX.Element {
     </div>
   );
 }
+const TimeHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: sticky;
+
+  top: 52px;
+  z-index: 3;
+  flex: 1;
+  padding-top: 19px;
+  width: 1500px;
+`;
+
+const TimeTableContainer = styled.div`
+  margin-left: 128px;
+`;
+const SummaryContainer = styled.div`
+  margin-left: 32px;
+`;

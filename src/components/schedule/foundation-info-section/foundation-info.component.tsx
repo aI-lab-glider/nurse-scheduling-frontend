@@ -13,7 +13,9 @@ import { ScheduleMode } from "../schedule-state.model";
 import { BaseSectionComponent } from "../base/base-section/base-section.component";
 import { SelectionMatrix } from "../base/base-section/use-selection-matrix";
 import { useFoundationInfo } from "../../../hooks/use-foundation-info";
-import { SectionWrapper } from "../base/styled";
+import { SectionContainer, SectionWrapper } from "../base/styled";
+import styled from "styled-components";
+import { colors } from "../../../assets/colors";
 
 export function FoundationInfoComponent(): JSX.Element {
   const { childrenNumber, extraWorkers } = useFoundationInfo();
@@ -47,22 +49,28 @@ export function FoundationInfoComponent(): JSX.Element {
   );
   return (
     <div style={{ display: "inline-block" }}>
-      <div className="sectionContainer borderContainer">
+      <SectionContainer className="borderContainer">
         <div>
           <NameTableComponent data={sectionData} isWorker={false} />
         </div>
         <div>
           <div>
-            <SectionWrapper className="leftContainerBorder" data-cy="foundationInfoSection">
+            <FoundationSectionWrapper data-cy="foundationInfoSection">
               <BaseSectionComponent
                 sectionKey="foundationInfo"
                 data={sectionData}
                 updateData={updateFoundationInfoData}
               />
-            </SectionWrapper>
+            </FoundationSectionWrapper>
           </div>
         </div>
-      </div>
+      </SectionContainer>
     </div>
   );
 }
+
+const FoundationSectionWrapper = styled(SectionWrapper)`
+  border: none;
+  border-radius: 0;
+  border-left: 1px solid ${colors.tableBorderGrey};
+`;

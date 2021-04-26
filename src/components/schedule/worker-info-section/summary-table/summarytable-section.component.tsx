@@ -5,7 +5,7 @@ import React from "react";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { SummaryTableRow } from "./summarytable-row.component";
 import { summaryTableSectionDataCy } from "./summarytable-section.models";
-import { SectionRow, SectionWrapper } from "../../base/styled";
+import { SectionWrapper } from "../../base/styled";
 import styled from "styled-components";
 import { colors } from "../../../../assets/colors";
 

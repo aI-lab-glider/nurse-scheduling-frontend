@@ -34,7 +34,6 @@ export function CellInput({
     <>
       {isVisible && (
         <InputComponent
-          className="cell-input"
           onValueChange={(value): void => onValueChange?.(value)}
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
         />

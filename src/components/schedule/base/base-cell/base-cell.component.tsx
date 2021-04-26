@@ -33,7 +33,7 @@ export function BaseCellComponent(options: BaseCellOptions): JSX.Element {
   return (
     <Wrapper
       ref={selectableItemRef}
-      className={classNames("mainCell", { selection: isSelected, blocked: isBlocked })}
+      className={classNames({ selection: isSelected, blocked: isBlocked })}
       id={id}
       onBlur={onBlur}
     >
@@ -58,16 +58,14 @@ export function BaseCellComponent(options: BaseCellOptions): JSX.Element {
 }
 
 const Wrapper = styled.div`
-  &.mainCell {
-    flex: 1 1 auto;
-    border-left: 1px solid ${colors.tableBorderGrey};
-    align-items: center;
-    width: 120%;
-    height: 100%;
-    cursor: cell;
-    padding: 0;
-    overflow: hidden;
-  }
+  flex: 1 1 auto;
+  border-left: 1px solid ${colors.tableBorderGrey};
+  align-items: center;
+  width: 120%;
+  height: 100%;
+  cursor: cell;
+  padding: 0;
+  overflow: hidden;
 `;
 
 const ContentWrapper = styled.div`

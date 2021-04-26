@@ -136,7 +136,6 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
     >
       <div {...getRootProps()}>
         <input
-          className={inputOptions.className}
           autoFocus={true}
           value={value && getOptionLabel(value)}
           {...getInputProps()}

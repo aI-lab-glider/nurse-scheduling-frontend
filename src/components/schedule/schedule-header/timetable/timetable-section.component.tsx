@@ -4,13 +4,28 @@
 import React from "react";
 import { TimeTableRow } from "./timetable-row.component";
 import { SectionWrapper } from "../../base/styled";
+import styled from "styled-components";
+import { colors } from "../../../../assets/colors";
 
 export function TimeTableSection(): JSX.Element {
   // TODO: Remove this component too
 
   return (
-    <SectionWrapper className="borderContainer">
+    <Wrapper>
       <TimeTableRow data-cy="timetable-row" />
-    </SectionWrapper>
+    </Wrapper>
   );
 }
+export const Wrapper = styled(SectionWrapper)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+
+  background: ${colors.white};
+  box-sizing: border-box;
+
+  overflow: hidden;
+  border: 1px solid ${colors.tableBorderGrey};
+  border-radius: 10px;
+`;
