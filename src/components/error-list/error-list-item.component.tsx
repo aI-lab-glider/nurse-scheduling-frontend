@@ -55,7 +55,7 @@ export default function ErrorListItem({
   showTitle = true,
 }: Options): JSX.Element {
   const { verboseDates, monthNumber } = useMonthInfo();
-  const groupedWorkers = useTeams();
+  const workersByTeam = useTeams();
   const mappedDays = verboseDates.map((d: VerboseDate) => d.date);
   let message = error.message;
 
@@ -73,7 +73,7 @@ export default function ErrorListItem({
   };
 
   if (error.type === ScheduleErrorType.WTC) {
-    Object.entries(groupedWorkers).forEach(([teamName, workers]) => {
+    Object.entries(workersByTeam).forEach(([teamName, workers]) => {
       workers.forEach((worker) => {
         const isInError =
           error.workers!.find((workerName) => workerName === worker.workerName) !== undefined;
