@@ -12,7 +12,6 @@ import {
   isRevisionType,
   RevisionTypeLabels,
 } from "../../../logic/data-access/persistance-store.model";
-import classNames from "classnames/bind";
 import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
 import styled from "styled-components";
 import { colors, fontSizeBase } from "../../../assets/colors";

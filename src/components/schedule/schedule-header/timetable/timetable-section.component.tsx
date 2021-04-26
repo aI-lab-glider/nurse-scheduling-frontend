@@ -3,13 +3,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { TimeTableRow } from "./timetable-row.component";
+import { SectionWrapper } from "../../base/styled";
 
 export function TimeTableSection(): JSX.Element {
   // TODO: Remove this component too
 
   return (
-    <div className="table borderContainer">
+    <SectionWrapper className="borderContainer">
       <TimeTableRow data-cy="timetable-row" />
-    </div>
+    </SectionWrapper>
   );
 }

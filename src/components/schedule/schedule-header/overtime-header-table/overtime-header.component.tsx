@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { OvertimeHeaderRow } from "./overtime-header-row.component";
+import { SectionWrapper } from "../../base/styled";
 
 interface OvertimeHeaderTableOptions {
   data: string[];
@@ -13,8 +14,8 @@ export function OvertimeHeaderComponent(options: OvertimeHeaderTableOptions): JS
   const { data } = options;
 
   return (
-    <div className="table" id="overtimeHeaderTable">
+    <SectionWrapper id="overtimeHeaderTable">
       <OvertimeHeaderRow data={data} />
-    </div>
+    </SectionWrapper>
   );
 }

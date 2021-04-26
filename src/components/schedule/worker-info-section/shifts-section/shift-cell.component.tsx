@@ -69,18 +69,10 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     onValueChange,
     onClick,
     onBlur,
-    // verboseDate,
-    // monthNumber,
     errorSelector = (_): ScheduleError[] => [],
     keepOn,
     hasNext,
   } = options;
-  // TODO revert cell details
-  // const { year } = useSelector(
-  //   (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
-  // );
-  // const cellDetailsPopperRef = useRef<HTMLDivElement>(null);
-
   const cellRef = useRef<HTMLDivElement>(null);
 
   const { componentContainer, isComponentVisible, setIsComponentVisible } = useComponentVisible(
@@ -90,11 +82,6 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   function toggleComponentVisibility(): void {
     setIsComponentVisible(!isComponentVisible);
   }
-
-  // TODO revert cell details
-  // const isEditMode = useSelector(
-  //   (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
-  // );
 
   const shiftCode = getShiftCode(value);
   const keepOnClass = keepOnShiftClassName(keepOn) + shiftCode;
@@ -111,11 +98,6 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   useEffect(() => {
     setShowInput(isPointerOn && !isBlocked);
   }, [isPointerOn, isBlocked]);
-
-  // TODO revert cell details
-  // const styles = usePopper(cellRef.current, cellDetailsPopperRef?.current, {
-  //   placement: "right-start",
-  // }).styles.poppers;
 
   const WrapContentDiv = useCallback(
     ({ children }: { children: ReactNode }) => (
@@ -225,25 +207,6 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
             </WrapContentDiv>
           </ErrorPopper>
         )}
-        {/* TODO revert cell details
-         {!isEditMode && (
-           <Popper
-             ref={cellDetailsPopperRef}
-             className="cell-details-poppers"
-             style={styles}
-             isOpen={isComponentVisible && isBlocked && value !== ""}
-           >
-             <CellDetails
-               index={cellIndex}
-               day={verboseDate?.date ?? 0}
-               month={monthNumber ?? new Date().getMonth()}
-               year={year}
-               shiftcode={value}
-               {...options}
-               close={(): void => setIsComponentVisible(false)}
-             />
-           </Popper>
-         )} */}
         )
       </div>
     </>

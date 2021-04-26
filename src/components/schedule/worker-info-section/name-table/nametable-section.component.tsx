@@ -89,7 +89,6 @@ export function NameTableSection({
               errorSelector={(scheduleErrors): ScheduleError[] =>
                 errorSelector?.(workerName, 0, scheduleErrors) ?? []
               }
-              tooltipClassname="nametableRow-error-tooltip"
               showErrorTitle={false}
             >
               <Row

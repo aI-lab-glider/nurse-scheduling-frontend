@@ -15,6 +15,7 @@ import {
   ShiftsSectionOptions,
 } from "./shifts-section/shifts-section.component";
 import { shiftSectionDataCy } from "./worker-info-section.models";
+import { SectionWrapper } from "../base/styled";
 
 type SubcomponentsOptions = Omit<NameTableSectionOptions, "isWorker" | "uuid" | "updateData"> &
   ShiftsSectionOptions &
@@ -44,9 +45,9 @@ export function WorkerInfoSection({
         <div>
           <NameTableComponent data={dataRows} isWorker={true} {...options} />
         </div>
-        <div className="table leftContainerBorder" data-cy={shiftSectionDataCy(sectionIndex)}>
+        <SectionWrapper className="leftContainerBorder" data-cy={shiftSectionDataCy(sectionIndex)}>
           <ShiftsSectionComponent sectionKey={options.sectionName} data={dataRows} {...options} />
-        </div>
+        </SectionWrapper>
       </div>
       <div className="summaryContainer">
         <SummaryTableComponent data={dataRows} {...options} sectionIndex={sectionIndex} />

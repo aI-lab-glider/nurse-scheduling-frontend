@@ -13,6 +13,7 @@ import { ScheduleMode } from "../schedule-state.model";
 import { BaseSectionComponent } from "../base/base-section/base-section.component";
 import { SelectionMatrix } from "../base/base-section/use-selection-matrix";
 import { useFoundationInfo } from "../../../hooks/use-foundation-info";
+import { SectionWrapper } from "../base/styled";
 
 export function FoundationInfoComponent(): JSX.Element {
   const { childrenNumber, extraWorkers } = useFoundationInfo();
@@ -52,13 +53,13 @@ export function FoundationInfoComponent(): JSX.Element {
         </div>
         <div>
           <div>
-            <div className="table leftContainerBorder" data-cy="foundationInfoSection">
+            <SectionWrapper className="leftContainerBorder" data-cy="foundationInfoSection">
               <BaseSectionComponent
                 sectionKey="foundationInfo"
                 data={sectionData}
                 updateData={updateFoundationInfoData}
               />
-            </div>
+            </SectionWrapper>
           </div>
         </div>
       </div>

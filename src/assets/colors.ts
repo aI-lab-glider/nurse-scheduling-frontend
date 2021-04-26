@@ -19,10 +19,9 @@ export const colors = {
   nurseLabelBackground: "#c8dfff",
   cellColor: "#4e4b66",
   cellWeekendBackgroundColor: "rgba(60, 105, 168, 0.2)",
-  cellWeekendHeaderBackgroundColor: "rgba(60, 105, 168, 0.3)",
+  weekendHeader: "rgba(60, 105, 168, 0.3)",
   cellOtherMonthBackgroundColor: "#f5f9ff",
-  cellOtherColor: "rgba(78, 75, 102, 0.5)",
-  headerCurrMonthBackgroundColor: "#ecf4ff",
+  currMonthBackground: "#ecf4ff",
   white: "#FFFFFF",
   gray100: "#f6f9fc",
   gray200: "#e9ecef",
@@ -37,6 +36,9 @@ export const colors = {
   errorDateText: "#3c69a8",
   errorListItemBorder: "#c8dfff",
   tableBorderGrey: "#d6d8e7",
+  tableColor: "#14142b",
+  otherMonthBackground: "#ecf4ff",
+  weekendBackground: "#3c69a8",
 };
 
 export const fontFamilyPrimary = "Roboto, sans-serif";
