@@ -64,6 +64,7 @@ export function extendMonthDMToScheduleDM(
     extra_workers: extendSchedule("month_info", "extra_workers", 0, 0),
     dates: extendSchedule("month_info", "dates", 0, 0),
     frozen_shifts: [],
+    holidays: [],
   };
 
   const scheduleDataModel = {
@@ -139,6 +140,7 @@ export function cropMonthInfoToMonth(
     ),
     dates: days,
     frozen_shifts: [],
+    holidays: [],
   };
 
   validateFoundationInfo(monthInfoModel, ScheduleContainerType.MONTH_DM);

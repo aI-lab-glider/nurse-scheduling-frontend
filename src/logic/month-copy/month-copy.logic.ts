@@ -86,6 +86,7 @@ export function copyMonthInfo(
     ),
     dates,
     frozen_shifts: [],
+    holidays: [],
   };
 }
 
