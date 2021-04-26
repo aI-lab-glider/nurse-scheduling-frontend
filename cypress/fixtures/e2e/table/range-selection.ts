@@ -16,12 +16,12 @@ export const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple days of single nurse (drag left to right)",
     startShiftCell: {
-      workerGroupIdx: 0,
+      teamIdx: 0,
       workerIdx: 0,
       shiftIdx: 3,
     },
     endShiftCell: {
-      workerGroupIdx: 0,
+      teamIdx: 0,
       workerIdx: 0,
       shiftIdx: 7,
     },
@@ -30,12 +30,12 @@ export const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple days of single nurse (drag right to left)",
     startShiftCell: {
-      workerGroupIdx: 0,
+      teamIdx: 0,
       workerIdx: 0,
       shiftIdx: prevMonthDays + 3,
     },
     endShiftCell: {
-      workerGroupIdx: 0,
+      teamIdx: 0,
       workerIdx: 0,
       shiftIdx: prevMonthDays,
     },
@@ -44,12 +44,12 @@ export const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple single day of multiple nurses",
     startShiftCell: {
-      workerGroupIdx: 0,
+      teamIdx: 0,
       workerIdx: 0,
       shiftIdx: prevMonthDays + 5,
     },
     endShiftCell: {
-      workerGroupIdx: 0,
+      teamIdx: 0,
       workerIdx: 1,
       shiftIdx: prevMonthDays + 5,
     },
@@ -58,12 +58,12 @@ export const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple days of single babysitter",
     startShiftCell: {
-      workerGroupIdx: 1,
+      teamIdx: 1,
       workerIdx: 0,
       shiftIdx: 0,
     },
     endShiftCell: {
-      workerGroupIdx: 1,
+      teamIdx: 1,
       workerIdx: 0,
       shiftIdx: prevMonthDays + 8,
     },
@@ -72,12 +72,12 @@ export const workerTestCases: WorkerTestCase[] = [
   {
     title: "Should be able to edit multiple single day of multiple babysitters",
     startShiftCell: {
-      workerGroupIdx: 1,
+      teamIdx: 1,
       workerIdx: 0,
       shiftIdx: prevMonthDays + 3,
     },
     endShiftCell: {
-      workerGroupIdx: 1,
+      teamIdx: 1,
       workerIdx: 1,
       shiftIdx: prevMonthDays + 6,
     },

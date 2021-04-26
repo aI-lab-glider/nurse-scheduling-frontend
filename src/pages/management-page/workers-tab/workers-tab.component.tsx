@@ -69,7 +69,7 @@ export default function WorkersTab(): JSX.Element {
   useEffect(() => {
     const newWorkerData = Object.keys(type).map(
       (key): WorkerInfoModel => {
-        return { name: key, type: type[key], time: time[key], workerGroup: team[key] };
+        return { name: key, type: type[key], time: time[key], team: team[key] };
       }
     );
     setWorkerData(newWorkerData);
@@ -150,7 +150,7 @@ export default function WorkersTab(): JSX.Element {
                     {getWorkerTimeLabel(worker.name)}
                   </TableCell>
                   <TableCell className={classes.tableCell} align="left">
-                    {worker.workerGroup}
+                    {worker.team}
                   </TableCell>
                   <TableCell align="right">
                     <Button

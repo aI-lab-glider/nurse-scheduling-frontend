@@ -4,7 +4,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { WorkerHourInfo } from "../../helpers/worker-hours-info.model";
-import { useWorkerGroups } from "../../hooks/use-worker-groups";
+import { useTeams } from "../../hooks/use-worker-groups";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { FoundationInfoComponent } from "./foundation-info-section/foundation-info.component";
 import { ScheduleFoldingSection } from "./schedule-folding-section.component";
@@ -13,7 +13,7 @@ import { TimeTableComponent } from "./schedule-header/timetable/timetable.compon
 import { WorkerInfoSection } from "./worker-info-section/worker-info-section.component";
 
 export function ScheduleComponent(): JSX.Element {
-  const workerGroups = useWorkerGroups();
+  const teams = useTeams();
 
   const { time } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.employee_info
@@ -41,7 +41,7 @@ export function ScheduleComponent(): JSX.Element {
           </div>
         </div>
 
-        {Object.entries(workerGroups).map(([groupName, workers], index) => (
+        {Object.entries(teams).map(([groupName, workers], index) => (
           <ScheduleFoldingSection name={groupName} key={groupName}>
             <WorkerInfoSection sectionIndex={index} data={workers} sectionName={groupName} />
           </ScheduleFoldingSection>

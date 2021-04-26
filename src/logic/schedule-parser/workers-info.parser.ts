@@ -8,7 +8,7 @@ import {
 import {
   ContractType,
   WorkerDescription,
-  WorkerGroup,
+  Team,
   WorkerType,
 } from "../../state/schedule-data/worker-info/worker-info.model";
 import { ContractTypeHelper } from "../../helpers/contract-type.helper";
@@ -19,8 +19,8 @@ import * as _ from "lodash";
 export const DEFAULT_WORKER_TYPE = WorkerType.OTHER;
 export const DEFAULT_CONTRACT_TYPE = ContractType.EMPLOYMENT_CONTRACT;
 export const DEFAULT_TIME = 1;
-export const WORKER_GROUP_PREFIX: WorkerGroup = "Zespół" as WorkerGroup;
-export const DEFAULT_WORKER_GROUP: WorkerGroup = `${WORKER_GROUP_PREFIX} 1` as WorkerGroup;
+export const WORKER_GROUP_PREFIX: Team = "Zespół" as Team;
+export const DEFAULT_WORKER_GROUP: Team = `${WORKER_GROUP_PREFIX} 1` as Team;
 export class WorkersInfoParser {
   private _workerInfoRows: { [key: string]: WorkerDescription } = {};
   private _parseErrors: ScheduleError[] = [];

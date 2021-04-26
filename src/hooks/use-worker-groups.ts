@@ -35,7 +35,7 @@ export function groupWorkers({
   const aggregatedData = Object.keys(workerShifts).map((workerName) =>
     aggregateWorkerInfo(workerName, workerShifts, workerInfo)
   );
-  const groupedWorkers = _.groupBy(aggregatedData, (item) => item.workerGroup);
+  const groupedWorkers = _.groupBy(aggregatedData, (item) => item.team);
   const sortedGroupedWorkers = new Map();
   _.sortBy(Object.keys(groupedWorkers)).forEach((key) => {
     sortedGroupedWorkers[key] = _.sortBy(Object.values(groupedWorkers[key]), [
@@ -46,7 +46,7 @@ export function groupWorkers({
   return sortedGroupedWorkers;
 }
 
-export function useWorkerGroups(): GroupedWorkers {
+export function useTeams(): GroupedWorkers {
   const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
   const targetSchedule: keyof ScheduleStateModel =
     mode === ScheduleMode.Edit ? "temporarySchedule" : "persistentSchedule";

@@ -47,6 +47,6 @@ export const shiftCodes = [
 ];
 
 export const WORKER = {
-  workerGroupIdx: 0,
+  teamIdx: 0,
   workerIdx: 1,
 };

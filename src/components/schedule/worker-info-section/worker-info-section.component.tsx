@@ -21,7 +21,7 @@ type SubcomponentsOptions = Omit<NameTableSectionOptions, "isWorker" | "uuid" | 
   SummaryTableOptions;
 
 export interface WorkerInfoSectionOptions
-  extends Omit<SubcomponentsOptions, "data" | "workerGroup" | "sectionKey"> {
+  extends Omit<SubcomponentsOptions, "data" | "team" | "sectionKey"> {
   sectionName: string;
   data: WorkerInfo[];
   sectionIndex: number;

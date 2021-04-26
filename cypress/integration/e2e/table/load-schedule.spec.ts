@@ -28,7 +28,7 @@ const checkFoundationInfoReadProperlyData: CheckFoundationInfoReadCorrectly[] = 
 describe("Load schedule", () => {
   it("saves file to database and after that loads new schedule", () => {
     const cell = {
-      workerGroupIdx: 0,
+      teamIdx: 0,
       workerIdx: 0,
       shiftIdx: 6,
     };

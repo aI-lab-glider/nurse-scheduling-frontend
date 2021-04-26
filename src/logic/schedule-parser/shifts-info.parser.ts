@@ -7,7 +7,7 @@ import {
   ScheduleError,
 } from "../../state/schedule-data/schedule-errors/schedule-error.model";
 import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
-import { WorkerGroup } from "../../state/schedule-data/worker-info/worker-info.model";
+import { Team } from "../../state/schedule-data/worker-info/worker-info.model";
 import { StringHelper } from "../../helpers/string.helper";
 import { ShiftsProvider } from "../schedule-providers/shifts-provider.model";
 import { DataRowParser } from "./data-row.parser";
@@ -15,7 +15,7 @@ import { MetaDataParser } from "./metadata.parser";
 import { WORKER_GROUP_PREFIX } from "./workers-info.parser";
 
 export class ShiftsInfoParser extends ShiftsProvider {
-  get availableWorkersGroup(): { [workerName: string]: WorkerGroup } {
+  get availableWorkersGroup(): { [workerName: string]: Team } {
     const result = {};
     Object.keys(this.workerShifts).forEach((workerName) => {
       result[workerName] = `${WORKER_GROUP_PREFIX} ${this.groupNumber}`;

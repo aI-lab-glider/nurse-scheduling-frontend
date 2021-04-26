@@ -5,7 +5,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { t, TranslationHelper } from "../../helpers/translations.helper";
 import { useMonthInfo } from "../../hooks/use-month-info";
-import { useWorkerGroups } from "../../hooks/use-worker-groups";
+import { useTeams } from "../../hooks/use-worker-groups";
 import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
 import { ScheduleDataActionCreator } from "../../state/schedule-data/schedule-data.action-creator";
 import {
@@ -33,7 +33,7 @@ function prepareMonthName(index: number, day: number, month: number): string {
   return monthName;
 }
 
-function insertWorkerGroup(a: string, b: string, at: string): string {
+function insertTeam(a: string, b: string, at: string): string {
   let position = a.indexOf(at);
   if (position === -1) return a;
   let i = 1;
@@ -55,7 +55,7 @@ export default function ErrorListItem({
   showTitle = true,
 }: Options): JSX.Element {
   const { verboseDates, monthNumber } = useMonthInfo();
-  const groupedWorkers = useWorkerGroups();
+  const groupedWorkers = useTeams();
   const mappedDays = verboseDates.map((d: VerboseDate) => d.date);
   let message = error.message;
 
@@ -78,7 +78,7 @@ export default function ErrorListItem({
         const isInError =
           error.workers!.find((workerName) => workerName === worker.workerName) !== undefined;
         if (isInError) {
-          message = insertWorkerGroup(message!, `${groupName}`, worker.workerName);
+          message = insertTeam(message!, `${groupName}`, worker.workerName);
         }
       });
     });

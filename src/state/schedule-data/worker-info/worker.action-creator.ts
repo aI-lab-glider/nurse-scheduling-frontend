@@ -151,7 +151,7 @@ export class WorkerActionCreator {
     newWorkerShifts: ShiftCode[]
   ): MonthDataModel {
     const updatedSchedule = _.cloneDeep(monthDataModel);
-    const { workerName, workerType, contractType, workerGroup } = worker;
+    const { workerName, workerType, contractType, team } = worker;
 
     updatedSchedule.shifts = {
       ...updatedSchedule.shifts,
@@ -172,7 +172,7 @@ export class WorkerActionCreator {
       },
       team: {
         ...updatedSchedule.employee_info.team,
-        [workerName]: workerGroup ?? DEFAULT_WORKER_GROUP,
+        [workerName]: team ?? DEFAULT_WORKER_GROUP,
       },
     };
 

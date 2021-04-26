@@ -4,7 +4,7 @@
 import { makeStyles } from "@material-ui/core";
 import {
   ContractType,
-  WorkerGroup,
+  Team,
   WorkerInfoModel,
   WorkerType,
 } from "../../../../state/schedule-data/worker-info/worker-info.model";
@@ -58,7 +58,7 @@ export interface WorkerInfoExtendedInterface {
   workerType?: WorkerType;
   contractType?: ContractType;
   time: number;
-  workerGroup: WorkerGroup;
+  team: Team;
 }
 
 export enum WorkerEditComponentMode {
