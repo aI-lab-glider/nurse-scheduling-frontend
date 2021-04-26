@@ -11,9 +11,7 @@ import { ScheduleFoldingSection } from "./schedule-folding-section.component";
 import { OvertimeHeaderComponent } from "./schedule-header/overtime-header-table/overtime-header.component";
 import { TimeTableComponent } from "./schedule-header/timetable/timetable.component";
 import { WorkerInfoSection } from "./worker-info-section/worker-info-section.component";
-import { SectionContainer } from "./base/styled";
 import styled from "styled-components";
-import { colors } from "../../assets/colors";
 
 export function ScheduleComponent(): JSX.Element {
   const workerGroups = useWorkerGroups();

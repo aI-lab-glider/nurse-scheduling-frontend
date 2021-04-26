@@ -22,12 +22,7 @@ import {
 } from "../../../../state/schedule-data/shifts-types/shift-types.model";
 import { ColorHelper } from "../../../../helpers/colors/color.helper";
 import { ApplicationStateModel } from "../../../../state/application-state.model";
-import {
-  baseCellDataCy,
-  BaseCellOptions,
-  hasNextShiftClassName,
-  keepOnShiftClassName,
-} from "../../base/base-cell/base-cell.models";
+import { baseCellDataCy, BaseCellOptions } from "../../base/base-cell/base-cell.models";
 import useComponentVisible from "../../../../hooks/use-component-visible";
 import useTimeout from "../../../../hooks/use-timeout";
 import { CellInput } from "../../base/base-cell/cell-blockable-input.component";
@@ -36,6 +31,7 @@ import { useCellBackgroundHighlight } from "../../hooks/use-cell-highlight";
 import { useCellSelection } from "../../hooks/use-cell-selection";
 import { ShiftAutocompleteComponent } from "./shift-autocomplete.component";
 import styled from "styled-components";
+import { colors, fontSizeBase, fontWeightBold } from "../../../../assets/colors";
 
 const MODAL_CLOSE_MS = 4444;
 
@@ -84,15 +80,13 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   }
 
   const shiftCode = getShiftCode(value);
-  const keepOnClass = keepOnShiftClassName(keepOn) + shiftCode;
-  const hasNextClass = hasNextShiftClassName(hasNext);
 
   function _onValueChange(inputValue: string): void {
     onValueChange?.(getShiftCode(inputValue));
   }
 
   const selectableItemRef = useCellSelection(options);
-  const id = useCellBackgroundHighlight(options);
+  const backgroundHighlight = useCellBackgroundHighlight(options);
 
   const [showInput, setShowInput] = useState(isPointerOn && !isBlocked);
   useEffect(() => {
@@ -101,14 +95,13 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
 
   const WrapContentDiv = useCallback(
     ({ children }: { children: ReactNode }) => (
-      <div
-        className="wrapContent"
+      <ContentWrapper
         onClick={(): void => {
           if (!isBlocked) onClick?.();
         }}
       >
         {children}
-      </div>
+      </ContentWrapper>
     ),
     [isBlocked, onClick]
   );
@@ -148,9 +141,9 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
           }}
         />
       )}
-      <div
+      <CellWrapper
         ref={mergeRefs([selectableItemRef, componentContainer])}
-        className={classNames("mainCell", {
+        className={classNames(backgroundHighlight, {
           selection: isSelected || (isComponentVisible && isBlocked),
           blocked: isBlocked,
         })}
@@ -163,7 +156,6 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
         onMouseLeave={(): void => {
           setIsCounting(true);
         }}
-        id={id}
         onBlur={(): void => {
           onBlur?.();
         }}
@@ -179,36 +171,28 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
           </WrapContentDiv>
         )}
         {!showInput && (
-          <ErrorPopper
-            className="wrapContent"
-            errorSelector={errorSelector}
-            showTooltip={!showInput}
-          >
+          <ErrorWrapper errorSelector={errorSelector} showTooltip={!showInput}>
             <WrapContentDiv>
-              <div
+              <Content
                 ref={cellRef}
-                className={`content ${hasNextClass} ${
-                  keepOn ? "keepOnTrue" : "keepOnFalse"
-                } ${keepOnClass}`}
                 style={cellStyle}
                 data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
               >
                 {!keepOn && !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W" && (
                   <ShiftBar style={{ backgroundColor: `#${getColor(shiftCode, shiftTypes)}` }} />
                 )}
-                <p
+                <Shift
                   data-cy={baseCellDataCy(cellIndex, "cell")}
-                  className={"relative "}
                   style={{ color: `#${getColor(shiftCode, shiftTypes)}` }}
                 >
                   {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
-                </p>
-              </div>
+                </Shift>
+              </Content>
             </WrapContentDiv>
-          </ErrorPopper>
+          </ErrorWrapper>
         )}
         )
-      </div>
+      </CellWrapper>
     </>
   );
 }
@@ -225,9 +209,64 @@ export const ShiftCellComponent = React.memo(ShiftCellComponentF, (prev, next) =
   );
 });
 
+const CellWrapper = styled.div`
+  flex: 1 1 auto;
+  border-left: 1px solid ${colors.tableBorderGrey};
+  align-items: center;
+  width: 120%;
+  height: 100%;
+  cursor: cell;
+  padding: 0;
+  overflow: hidden;
+
+  &:first-child {
+    border-left: 0;
+  }
+
+  &.weekend {
+    background: ${colors.weekendHeader};
+  }
+
+  &.otherMonth {
+    background: ${colors.cellOtherMonthBackgroundColor};
+    color: ${colors.gray600};
+  }
+`;
+
+const ErrorWrapper = styled(ErrorPopper)`
+  height: 100%;
+  width: 100%;
+  padding: 4px 0 4px 0;
+`;
+
+const ContentWrapper = styled.div`
+  height: 100%;
+  width: 100%;
+  padding: 4px 0 4px 0;
+`;
+
+const Content = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+`;
+
 const ShiftBar = styled.div`
   width: 4px;
   height: 100%;
   margin-right: 4px;
   border-radius: 2px 0 0 2px;
+`;
+
+const Shift = styled.p`
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+  font-size: ${fontSizeBase};
+  font-weight: ${fontWeightBold};
+  line-height: 20px;
+  letter-spacing: 0.75px;
+  text-align: center;
+  left: -2px;
 `;

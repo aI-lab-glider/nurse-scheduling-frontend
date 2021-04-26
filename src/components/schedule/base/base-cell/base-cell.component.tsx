@@ -26,15 +26,14 @@ export function BaseCellComponent(options: BaseCellOptions): JSX.Element {
   } = options;
 
   const selectableItemRef = useCellSelection(options);
-  const id = useCellBackgroundHighlight(options);
+  const backgroundHighlight = useCellBackgroundHighlight(options);
 
   const showInput = isPointerOn && !isBlocked;
   //  #region view
   return (
     <Wrapper
       ref={selectableItemRef}
-      className={classNames({ selection: isSelected, blocked: isBlocked })}
-      id={id}
+      className={classNames(backgroundHighlight, { selection: isSelected, blocked: isBlocked })}
       onBlur={onBlur}
     >
       <Popper errorSelector={errorSelector} showTooltip={!showInput}>
@@ -66,6 +65,21 @@ const Wrapper = styled.div`
   cursor: cell;
   padding: 0;
   overflow: hidden;
+  color: ${colors.tableColor};
+  background: ${colors.white};
+
+  &:first-child {
+    border-left: 0;
+  }
+
+  &.weekend {
+    background: ${colors.weekendHeader};
+  }
+
+  &.otherMonth {
+    background: ${colors.cellOtherMonthBackgroundColor};
+    color: ${colors.gray600};
+  }
 `;
 
 const ContentWrapper = styled.div`
