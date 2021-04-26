@@ -9,5 +9,5 @@ export const workerInfoinitialState: WorkersInfoModel = {
   time: {},
   type: {},
   contractType: {},
-  workerGroup: {},
+  team: {},
 };

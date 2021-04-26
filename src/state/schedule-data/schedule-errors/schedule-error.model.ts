@@ -13,6 +13,7 @@ export enum AlgorithmErrorCode {
   LackingLongBreak = "LLB",
   WorkerUnderTime = "WUH",
   WorkerOvertime = "WOH",
+  WorkerTeamsCollision = "WTC",
 }
 
 export enum ParseErrorCode {
@@ -112,6 +113,15 @@ export interface WorkerOvertime {
   hours: number;
   worker: string;
 }
+export interface WorkerTeamsCollision {
+  kind: AlgorithmErrorCode.WorkerTeamsCollision;
+  isVisible?: boolean;
+
+  day: number;
+  hour: number;
+  hours?: number[];
+  workers: string[];
+}
 
 //#endregion
 
@@ -122,7 +132,8 @@ export type AlgorithmError =
   | DissalowedShiftSequence
   | LackingLongBreak
   | WorkerUnderTime
-  | WorkerOvertime;
+  | WorkerOvertime
+  | WorkerTeamsCollision;
 
 export type ScheduleError = UnknownValueError | InputFileError | NetworkError | AlgorithmError;
 
@@ -138,4 +149,5 @@ export type GroupedScheduleErrors = {
   [AlgorithmErrorCode.LackingLongBreak]?: LackingLongBreak[];
   [AlgorithmErrorCode.WorkerUnderTime]?: WorkerUnderTime[];
   [AlgorithmErrorCode.WorkerOvertime]?: WorkerOvertime[];
+  [AlgorithmErrorCode.WorkerTeamsCollision]?: WorkerTeamsCollision[];
 };

@@ -42,7 +42,7 @@ describe("Schedule parser", () => {
   });
 
   const shifts: WorkerShiftsModel = {};
-  const employee_info: WorkersInfoModel = { type: {}, time: {}, workerGroup: {} };
+  const employee_info: WorkersInfoModel = { type: {}, time: {}, team: {} };
   const scheduleParser = new ScheduleParser(10, 2020, exampleData, [], []);
   const result = scheduleParser.schedule.getDataModel();
   //todo update test

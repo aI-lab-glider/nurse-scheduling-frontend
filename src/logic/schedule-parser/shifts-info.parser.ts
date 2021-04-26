@@ -7,18 +7,18 @@ import {
   ScheduleError,
 } from "../../state/schedule-data/schedule-errors/schedule-error.model";
 import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
-import { WorkerGroup } from "../../state/schedule-data/worker-info/worker-info.model";
+import { Team } from "../../state/schedule-data/worker-info/worker-info.model";
 import { StringHelper } from "../../helpers/string.helper";
 import { ShiftsProvider } from "../schedule-providers/shifts-provider.model";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
-import { WORKER_GROUP_PREFIX } from "./workers-info.parser";
+import { TEAM_PREFIX } from "./workers-info.parser";
 
 export class ShiftsInfoParser extends ShiftsProvider {
-  get availableWorkersGroup(): { [workerName: string]: WorkerGroup } {
+  get availableTeam(): { [workerName: string]: Team } {
     const result = {};
     Object.keys(this.workerShifts).forEach((workerName) => {
-      result[workerName] = `${WORKER_GROUP_PREFIX} ${this.groupNumber}`;
+      result[workerName] = `${TEAM_PREFIX} ${this.teamNumber}`;
     });
     return result;
   }
@@ -26,7 +26,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
   private _sectionRows: { [key: string]: DataRowParser } = {};
   private _parseErrors: ScheduleError[] = [];
 
-  constructor(private metaData: MetaDataParser, private groupNumber: number, data?: string[][]) {
+  constructor(private metaData: MetaDataParser, private teamNumber: number, data?: string[][]) {
     super();
 
     if (data) {

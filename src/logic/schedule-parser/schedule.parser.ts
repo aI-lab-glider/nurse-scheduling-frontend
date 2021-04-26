@@ -64,19 +64,19 @@ export class ScheduleParser implements ScheduleProvider {
 
     rawSchedule.splice(rawSchedule.indexOf(foundationInfoRaw!), 1);
 
-    const groups = rawSchedule.map(
+    const teams = rawSchedule.map(
       (section, index) => new ShiftsInfoParser(metadata, index + 1, section)
     );
 
     const parsers: FoundationInfoOptions = {
       ChildrenInfo: children,
-      WorkerGroups: groups,
+      Teams: teams,
       ExtraWorkersInfo: extraWorkers,
     };
 
     const foundationParser = new FoundationInfoParser(parsers);
     return {
-      WorkerGroups: groups,
+      Teams: teams,
       FoundationInfo: foundationParser,
       Metadata: metadata,
     };
@@ -100,7 +100,7 @@ export class ScheduleParser implements ScheduleProvider {
 
   private mockWorkerTypes(): WorkerTypesDict {
     const result = {};
-    const shiftProviders = this.sections.WorkerGroups;
+    const shiftProviders = this.sections.Teams;
     shiftProviders.forEach((shifts) => {
       Object.keys(shifts.workerShifts).forEach((workerName) => {
         result[workerName] = DEFAULT_WORKER_TYPE;

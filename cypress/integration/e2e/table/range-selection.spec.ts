@@ -16,8 +16,8 @@ describe("Shift range selection", () => {
       cy.getWorkerShift(test.startShiftCell).trigger("dragstart");
       cy.getWorkerShift(test.endShiftCell).trigger("drop");
       cy.useAutocomplete(test.desiredShiftCode);
-      const groupIndx = shiftSectionDataCy(test.startShiftCell.workerGroupIdx);
-      cy.get(`[data-cy=${groupIndx}] p[data-cy*="cell"]`)
+      const teamIndx = shiftSectionDataCy(test.startShiftCell.teamIdx);
+      cy.get(`[data-cy=${teamIndx}] p[data-cy*="cell"]`)
         .then(($cell) => {
           return $cell
             .map((i, el) => {

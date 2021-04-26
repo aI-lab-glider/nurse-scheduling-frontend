@@ -16,6 +16,7 @@ export enum ScheduleErrorType {
   LLB = "LLB",
   WUH = "WUH",
   WOH = "WOH",
+  WTC = "WTC",
   ILLEGAL_SHIFT_VALUE = "ILLEGAL_SHIFT_VALUE",
 }
 
@@ -25,6 +26,7 @@ export interface ScheduleErrorMessageModel {
   title?: string;
   message?: string;
   worker?: string;
+  workers?: string[];
   day?: number;
   week?: number;
   level?: ScheduleErrorLevel;

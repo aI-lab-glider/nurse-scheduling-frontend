@@ -8,6 +8,7 @@ import {
   AlgorithmErrorCode,
   ScheduleError,
   WorkerOvertime,
+  WorkerTeamsCollision,
   WorkerUnderTime,
 } from "../state/schedule-data/schedule-errors/schedule-error.model";
 import { WorkerHourInfo } from "../helpers/worker-hours-info.model";
@@ -58,10 +59,9 @@ export class ServerMiddleware {
       delete schedule.employee_info.type[shiftName];
     });
 
-    Object.keys(schedule.employee_info.workerGroup).forEach((shiftName) => {
-      schedule.employee_info.workerGroup[nameToUuid[shiftName]] =
-        schedule.employee_info.workerGroup[shiftName];
-      delete schedule.employee_info.workerGroup[shiftName];
+    Object.keys(schedule.employee_info.team).forEach((shiftName) => {
+      schedule.employee_info.team[nameToUuid[shiftName]] = schedule.employee_info.team[shiftName];
+      delete schedule.employee_info.team[shiftName];
     });
 
     if (schedule.employee_info.contractType !== undefined) {
@@ -100,7 +100,53 @@ export class ServerMiddleware {
         if (anonimizationMap[workerName] === el["worker"]) el["worker"] = workerName;
       });
     }
+
+    if ("workers" in el) {
+      el.workers = el.workers.map((worker) => {
+        const workerName = Object.keys(anonimizationMap).find((workerName) => {
+          return anonimizationMap[workerName] === worker;
+        });
+        return workerName !== undefined ? workerName : worker;
+      });
+    }
+
     return el;
+  }
+
+  public static aggregateWTCErrors(errors: ScheduleError[]): ScheduleError[] {
+    const validBackendScheduleErros = errors.filter(
+      (err) => err.kind !== AlgorithmErrorCode.WorkerTeamsCollision
+    );
+    const WTCErrors = errors.filter(
+      (err) => err.kind === AlgorithmErrorCode.WorkerTeamsCollision
+    ) as WorkerTeamsCollision[];
+
+    const createWTCError = (item: WorkerTeamsCollision): WorkerTeamsCollision => ({
+      kind: AlgorithmErrorCode.WorkerTeamsCollision,
+      day: item.day,
+      hour: -1,
+      hours: [item.hour],
+      workers: item.workers,
+    });
+
+    const aggregatedWTCErrors: WorkerTeamsCollision[] = [];
+    WTCErrors.forEach((item, index) => {
+      if (item.hour > -1) {
+        const newWTCError = createWTCError(item);
+        const sameDayErrors = WTCErrors.slice(index + 1).filter(
+          (otherError) => item.day === otherError.day
+        );
+        sameDayErrors.forEach((otherError) => {
+          newWTCError.hours!.push(otherError.hour);
+          newWTCError.workers = _.uniq(_.concat(newWTCError.workers, otherError.workers));
+          otherError.hour = -1;
+        });
+
+        aggregatedWTCErrors.push(newWTCError);
+      }
+    });
+
+    return _.concat(validBackendScheduleErros, aggregatedWTCErrors);
   }
 
   public static replaceOvertimeAndUndertimeErrors(

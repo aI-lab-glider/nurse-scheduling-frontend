@@ -11,7 +11,7 @@ import { WorkerInfo } from "./use-worker-info";
 import { ScheduleMode } from "../components/schedule/schedule-state.model";
 import { ScheduleDataModel } from "../state/schedule-data/schedule-data.model";
 
-export type GroupedWorkers = Map<string, WorkerInfo[]>;
+export type WorkersByTeam = Map<string, WorkerInfo[]>;
 
 const aggregateWorkerInfo = (
   workerName: string,
@@ -24,29 +24,29 @@ const aggregateWorkerInfo = (
     workerInfo.time[workerName],
     workerInfo.type[workerName],
     workerShifts[workerName],
-    workerInfo.workerGroup[workerName]
+    workerInfo.team[workerName]
   );
 
 /* eslint-disable @typescript-eslint/camelcase */
-export function groupWorkers({
+export function groupWorkersByTeam({
   shifts: workerShifts,
   employee_info: workerInfo,
-}: Pick<ScheduleDataModel, "shifts" | "employee_info">): GroupedWorkers {
+}: Pick<ScheduleDataModel, "shifts" | "employee_info">): WorkersByTeam {
   const aggregatedData = Object.keys(workerShifts).map((workerName) =>
     aggregateWorkerInfo(workerName, workerShifts, workerInfo)
   );
-  const groupedWorkers = _.groupBy(aggregatedData, (item) => item.workerGroup);
-  const sortedGroupedWorkers = new Map();
-  _.sortBy(Object.keys(groupedWorkers)).forEach((key) => {
-    sortedGroupedWorkers[key] = _.sortBy(Object.values(groupedWorkers[key]), [
+  const workersByTeam = _.groupBy(aggregatedData, (item) => item.team);
+  const sortedWorkersByTeam = new Map();
+  _.sortBy(Object.keys(workersByTeam)).forEach((key) => {
+    sortedWorkersByTeam[key] = _.sortBy(Object.values(workersByTeam[key]), [
       "workerType",
       "workerName",
     ]);
   });
-  return sortedGroupedWorkers;
+  return sortedWorkersByTeam;
 }
 
-export function useWorkerGroups(): GroupedWorkers {
+export function useTeams(): WorkersByTeam {
   const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
   const targetSchedule: keyof ScheduleStateModel =
     mode === ScheduleMode.Edit ? "temporarySchedule" : "persistentSchedule";
@@ -58,5 +58,5 @@ export function useWorkerGroups(): GroupedWorkers {
     (state: ApplicationStateModel) => state.actualState[targetSchedule].present.shifts
   );
 
-  return groupWorkers({ shifts: workerShifts, employee_info: workerInfo });
+  return groupWorkersByTeam({ shifts: workerShifts, employee_info: workerInfo });
 }

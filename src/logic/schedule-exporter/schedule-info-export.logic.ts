@@ -18,7 +18,7 @@ import {
   MetaDataSectionKey,
 } from "../section.model";
 import { EMPTY_ROW } from "../../helpers/parser.helper";
-import { groupWorkers } from "../../hooks/use-worker-groups";
+import { groupWorkersByTeam } from "../../hooks/use-teams";
 import { WorkerInfo } from "../../hooks/use-worker-info";
 import { MonthHelper } from "../../helpers/month.helper";
 import * as _ from "lodash";
@@ -92,13 +92,13 @@ export class ScheduleInfoExportLogic {
 
     schedule.push(EMPTY_ROW);
 
-    const groupedWorkers = groupWorkers(this.scheduleModel);
-    Object.keys(groupedWorkers).forEach((group) => {
-      let groupRows = this.createGroupWorkersRows(groupedWorkers[group]);
+    const workersByTeam = groupWorkersByTeam(this.scheduleModel);
+    Object.keys(workersByTeam).forEach((team) => {
+      let teamRows = this.createGroupWorkersRows(workersByTeam[team]);
       if (this.overtimeExport) {
-        groupRows = this.extendWithOvertimeInfo(groupRows);
+        teamRows = this.extendWithOvertimeInfo(teamRows);
       }
-      schedule.push(...groupRows);
+      schedule.push(...teamRows);
       schedule.push(EMPTY_ROW);
     });
 

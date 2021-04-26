@@ -41,7 +41,7 @@ interface TestCase extends GetWorkerShiftOptions {
 }
 
 function testWorkHoursInfoUpdate({
-  workerGroupIdx,
+  teamIdx,
   workerIdx,
   shiftIdx,
   initialShiftCode,
@@ -49,13 +49,13 @@ function testWorkHoursInfoUpdate({
   expectedWorkHoursInfo,
 }: TestCase): void {
   const workerData = {
-    workerGroupIdx,
+    teamIdx,
     workerIdx: workerIdx,
     shiftIdx,
   };
   cy.changeWorkerShift({ ...workerData, newShiftCode: desiredShiftCode });
   cy.checkWorkerShift({ ...workerData, desiredShiftCode });
-  cy.checkHoursInfo({ workerGroupIdx, workerIdx, hoursInfo: expectedWorkHoursInfo });
+  cy.checkHoursInfo({ teamIdx, workerIdx, hoursInfo: expectedWorkHoursInfo });
 }
 
 const prevMonthDays = 6;
@@ -67,7 +67,7 @@ context("Work hours info (summary table)", () => {
 
     nurseInitialWorkHours.forEach((nurseHours, idx) => {
       cy.checkHoursInfo({
-        workerGroupIdx: 0,
+        teamIdx: 0,
         workerIdx: idx,
         hoursInfo: nurseHours,
       });
@@ -75,7 +75,7 @@ context("Work hours info (summary table)", () => {
 
     babysitterInitialWorkHours.forEach((babysitterHours, idx) => {
       cy.checkHoursInfo({
-        workerGroupIdx: 1,
+        teamIdx: 1,
         workerIdx: idx,
         hoursInfo: babysitterHours,
       });
@@ -84,7 +84,7 @@ context("Work hours info (summary table)", () => {
 
   it("Is added, should add 12 to actual and overtime hours and not change required", () => {
     const data = {
-      workerGroupIdx: 0,
+      teamIdx: 0,
       workerIdx: 0,
       shiftIdx: prevMonthDays + 9,
       initialShiftCode: ShiftCode.W,
@@ -101,7 +101,7 @@ context("Work hours info (summary table)", () => {
 
   it("Is removed, should subtract 12 from actual and overtime hours and not change required", () => {
     const data = {
-      workerGroupIdx: 0,
+      teamIdx: 0,
       workerIdx: 1,
       shiftIdx: prevMonthDays + 1,
       initialShiftCode: ShiftCode.D,
@@ -117,7 +117,7 @@ context("Work hours info (summary table)", () => {
 
   it("Cannot change previous month shifts", () => {
     const data = {
-      workerGroupIdx: 0,
+      teamIdx: 0,
       workerIdx: 4,
       shiftIdx: prevMonthDays - 2,
     };
@@ -129,7 +129,7 @@ context("Work hours info (summary table)", () => {
 
   it("When N for current month weekday is added, should add 12 to actual and overtime hours and not change required", () => {
     const data = {
-      workerGroupIdx: 1,
+      teamIdx: 1,
       workerIdx: 0,
       shiftIdx: prevMonthDays + 3,
       initialShiftCode: ShiftCode.W,
@@ -145,7 +145,7 @@ context("Work hours info (summary table)", () => {
 
   it("Is removed, should subtract 12 from actual and overtime hours and not change required", () => {
     const data = {
-      workerGroupIdx: 1,
+      teamIdx: 1,
       workerIdx: 2,
       shiftIdx: prevMonthDays + 6,
       initialShiftCode: ShiftCode.N,

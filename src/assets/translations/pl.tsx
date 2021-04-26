@@ -30,7 +30,7 @@ export const pl = {
     selectWorkerHours: "Wybierz etat pracownika",
     enterWorkerHours: "Wpisz wymiar etatu",
     workerCouldNotBeEmployedMore: "Pracownik nie może być zatrudniony na więcej niż jeden etat",
-    //worker-group-selector.component.tsx
+    //worker-team-selector.component.tsx
     workerTeam: "Zespół pracownika",
     //worker-name-edit-field.component.tsx
     firstAndLastName: "Imię i nazwisko",
