@@ -20,7 +20,15 @@ describe("Schedule errors", () => {
     it("shows errors returned by server", () => {
       cy.get("[data-cy=check-schedule-button]").click();
       cy.get("[data-cy=open-folding-section]").click({ multiple: true });
-      cy.get("[data-cy=folding-section]").snapshot();
+      cy.get("[data-cy=error-text]")
+        .then(($cell) => {
+          return $cell
+            .map((i, el) => {
+              return Cypress.$(el).text();
+            })
+            .get();
+        })
+        .snapshot();
     });
   });
 });

@@ -17,6 +17,7 @@ export class DataRowHelper {
     );
   }
 
+  //Unused
   public static dataRowsAsDataRowDict<T extends DataRowModel>(dataRows: T[]): { [key: string]: T } {
     return ArrayHelper.arrayToObject(
       dataRows,
@@ -25,6 +26,7 @@ export class DataRowHelper {
     );
   }
 
+  //Unused
   public static updateDataRowIndices(
     dataRow: DataRow,
     updateIndexes: number[],
@@ -55,11 +57,11 @@ export class DataRowHelper {
     return copy;
   }
 
-  public static deepCopy<TData = string>(dataRow: DataRow<TData>): DataRow<TData> {
+  private static deepCopy<TData = string>(dataRow: DataRow<TData>): DataRow<TData> {
     return new DataRow(dataRow.rowKey, [...dataRow.rowData(true)]);
   }
 
-  public static areDataRowsEqual(dataRow1: DataRow, dataRow2: DataRow): boolean {
+  private static areDataRowsEqual(dataRow1: DataRow, dataRow2: DataRow): boolean {
     const rowData1 = dataRow1.rowData(true, true);
     const rowData2 = dataRow2.rowData(true, true);
     return ArrayHelper.arePrimitiveArraysEqual(rowData1, rowData2);
