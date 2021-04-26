@@ -64,19 +64,19 @@ export class ScheduleParser implements ScheduleProvider {
 
     rawSchedule.splice(rawSchedule.indexOf(foundationInfoRaw!), 1);
 
-    const groups = rawSchedule.map(
+    const teams = rawSchedule.map(
       (section, index) => new ShiftsInfoParser(metadata, index + 1, section)
     );
 
     const parsers: FoundationInfoOptions = {
       ChildrenInfo: children,
-      Teams: groups,
+      Teams: teams,
       ExtraWorkersInfo: extraWorkers,
     };
 
     const foundationParser = new FoundationInfoParser(parsers);
     return {
-      Teams: groups,
+      Teams: teams,
       FoundationInfo: foundationParser,
       Metadata: metadata,
     };

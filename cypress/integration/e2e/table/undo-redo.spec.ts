@@ -46,7 +46,7 @@ context("Undo/Redo test", () => {
   });
 
   testCases.forEach((testCase) => {
-    it(`changes worker (worker group: ${testCase.testedShiftCell.teamIdx}) shifts and
+    it(`changes worker (team: ${testCase.testedShiftCell.teamIdx}) shifts and
        use undo and redo buttons to set proper cell state`, () => {
       performShiftChanges(testCase);
 
@@ -59,7 +59,7 @@ context("Undo/Redo test", () => {
   });
 
   testCases.forEach((testCase) => {
-    it(`changes worker (worker group: ${testCase.testedShiftCell.teamIdx} shift and
+    it(`changes worker (team: ${testCase.testedShiftCell.teamIdx} shift and
        uses undo and redo shortcuts to set proper cell state`, () => {
       performShiftChanges(testCase);
 

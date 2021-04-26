@@ -73,12 +73,12 @@ export default function ErrorListItem({
   };
 
   if (error.type === ScheduleErrorType.WTC) {
-    Object.entries(groupedWorkers).forEach(([groupName, workers]) => {
+    Object.entries(groupedWorkers).forEach(([teamName, workers]) => {
       workers.forEach((worker) => {
         const isInError =
           error.workers!.find((workerName) => workerName === worker.workerName) !== undefined;
         if (isInError) {
-          message = insertTeam(message!, `${groupName}`, worker.workerName);
+          message = insertTeam(message!, `${teamName}`, worker.workerName);
         }
       });
     });

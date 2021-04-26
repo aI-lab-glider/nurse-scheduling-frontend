@@ -32,7 +32,7 @@ const en: LocalizationResource = {
     selectWorkerHours: "Select worker hours",
     enterWorkerHours: "Enter worker hours",
     workerCouldNotBeEmployedMore: "An worker may not be employed for more than one full-time job",
-    //worker-group-selector.component.tsx
+    //worker-team-selector.component.tsx
     workerTeam: "Worker's team",
     //worker-name-edit-field.component.tsx
     firstAndLastName: "First and last name",

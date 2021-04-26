@@ -9,7 +9,7 @@ export abstract class ShiftsProvider {
   abstract get errors(): ScheduleError[];
   abstract get workerShifts(): { [workerName: string]: ShiftCode[] };
   abstract get availableWorkersWorkTime(): { [key: string]: number };
-  abstract get availableWorkersGroup(): { [workerName: string]: Team };
+  abstract get availableTeam(): { [workerName: string]: Team };
   abstract get workersCount(): number;
   get workers(): string[] {
     return [];

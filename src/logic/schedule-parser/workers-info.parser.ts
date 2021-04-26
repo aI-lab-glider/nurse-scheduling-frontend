@@ -19,8 +19,8 @@ import * as _ from "lodash";
 export const DEFAULT_WORKER_TYPE = WorkerType.OTHER;
 export const DEFAULT_CONTRACT_TYPE = ContractType.EMPLOYMENT_CONTRACT;
 export const DEFAULT_TIME = 1;
-export const WORKER_GROUP_PREFIX: Team = "Zespół" as Team;
-export const DEFAULT_WORKER_GROUP: Team = `${WORKER_GROUP_PREFIX} 1` as Team;
+export const TEAM_PREFIX: Team = "Zespół" as Team;
+export const DEFAULT_TEAM: Team = `${TEAM_PREFIX} 1` as Team;
 export class WorkersInfoParser {
   private _workerInfoRows: { [key: string]: WorkerDescription } = {};
   private _parseErrors: ScheduleError[] = [];

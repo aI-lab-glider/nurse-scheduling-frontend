@@ -5,7 +5,7 @@ import { Grid, Typography } from "@material-ui/core";
 import * as _ from "lodash";
 import React from "react";
 import { Team } from "../../../../state/schedule-data/worker-info/worker-info.model";
-import { WORKER_GROUP_PREFIX } from "../../../../logic/schedule-parser/workers-info.parser";
+import { TEAM_PREFIX } from "../../../../logic/schedule-parser/workers-info.parser";
 import {
   ButtonData,
   DropdownButtons,
@@ -20,23 +20,23 @@ interface TeamSelectorOptions extends FormFieldOptions {
 export function TeamSelector({ setTeam, team }: TeamSelectorOptions): JSX.Element {
   const classes = useFormFieldStyles();
 
-  function handleTeamUpdate(newGroup: Team): void {
-    setTeam(newGroup);
+  function handleTeamUpdate(newTeam: Team): void {
+    setTeam(newTeam);
   }
 
-  const defaultGroups = _.range(1, 6).map((i) => `${WORKER_GROUP_PREFIX} ${i}` as Team);
+  const defaultGroups = _.range(1, 6).map((i) => `${TEAM_PREFIX} ${i}` as Team);
 
-  const teamsOptions: ButtonData[] = defaultGroups.map((groupName) => ({
-    label: groupName,
-    action: (): void => handleTeamUpdate(groupName),
-    dataCy: groupName.toLowerCase(),
+  const teamsOptions: ButtonData[] = defaultGroups.map((team) => ({
+    label: team,
+    action: (): void => handleTeamUpdate(team),
+    dataCy: team.toLowerCase(),
   }));
 
   return (
     <Grid item xs={6}>
       <Typography className={classes.label}>{t("workerTeam")}</Typography>
       <DropdownButtons
-        dataCy="workergroup-dropdown"
+        dataCy="team-dropdown"
         buttons={teamsOptions}
         mainLabel={team}
         buttonVariant="secondary"

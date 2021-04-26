@@ -16,7 +16,7 @@ import { useWorkerInfo, WorkerInfo } from "../../../../hooks/use-worker-info";
 import { CombinedWorkNormSelector } from "./combined-worknorm-selector.component";
 import { WorkerContractTypeSelector } from "./worker-contract-type-selector.component";
 import { WorkerEditComponentOptions, WorkerEditComponentMode } from "./worker-edit.models";
-import { TeamSelector } from "./worker-group-selector.component";
+import { TeamSelector } from "./worker-team-selector.component";
 import { WorkerNameEditField } from "./worker-name-edit-field.components";
 import { WorkerWorkerTypeSelector } from "./worker-position-selector.component";
 import { t } from "../../../../helpers/translations.helper";

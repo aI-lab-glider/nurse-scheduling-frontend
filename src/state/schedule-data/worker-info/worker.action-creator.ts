@@ -21,7 +21,7 @@ import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
 import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
 import {
   DEFAULT_CONTRACT_TYPE,
-  DEFAULT_WORKER_GROUP,
+  DEFAULT_TEAM,
   DEFAULT_WORKER_TYPE,
 } from "../../../logic/schedule-parser/workers-info.parser";
 import { ScheduleDataActionCreator } from "../schedule-data.action-creator";
@@ -172,7 +172,7 @@ export class WorkerActionCreator {
       },
       team: {
         ...updatedSchedule.employee_info.team,
-        [workerName]: team ?? DEFAULT_WORKER_GROUP,
+        [workerName]: team ?? DEFAULT_TEAM,
       },
     };
 

@@ -13,7 +13,7 @@ export interface FoundationInfoOptions extends Pick<Sections, "Teams"> {
 
 export abstract class FoundationInfoProvider {
   get errors(): ScheduleError[] {
-    return _.flatten(this.sections.Teams.map((group) => group.errors));
+    return _.flatten(this.sections.Teams.map((team) => team.errors));
   }
   get childrenInfo(): number[] {
     return this.sections.ChildrenInfo.registeredChildrenNumber;
@@ -25,7 +25,7 @@ export abstract class FoundationInfoProvider {
 
   getAllWorkersNumber(): number {
     return (
-      this.sections.Teams.reduce((acc, group) => acc + group.workersCount, 0) +
+      this.sections.Teams.reduce((acc, team) => acc + team.workersCount, 0) +
       this.sections.ExtraWorkersInfo.workersCount
     );
   }

@@ -11,7 +11,7 @@ import {
   WorkersInfoModel,
   WorkerType,
 } from "../state/schedule-data/worker-info/worker-info.model";
-import { DEFAULT_WORKER_GROUP } from "../logic/schedule-parser/workers-info.parser";
+import { DEFAULT_TEAM } from "../logic/schedule-parser/workers-info.parser";
 import { ApplicationStateModel } from "../state/application-state.model";
 import { WorkerInfoExtendedInterface } from "../components/drawers/worker-drawer/worker-edit";
 
@@ -68,7 +68,7 @@ export class WorkerInfo {
     public workerTime: number = 1,
     public workerType?: WorkerType,
     public workerShifts: ShiftCode[] = [],
-    public team: Team = DEFAULT_WORKER_GROUP
+    public team: Team = DEFAULT_TEAM
   ) {
     this.previousWorkerName = workerName;
   }
