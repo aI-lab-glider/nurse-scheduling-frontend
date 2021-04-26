@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { shiftSectionDataCy } from "../../../../src/components/schedule/worker-info-section/worker-info-section.models";
 import { ShiftCode } from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
 import { FoundationInfoRowType } from "../../../support/commands";
 //#region Test data
@@ -24,8 +25,8 @@ const checkFoundationInfoReadProperlyData: CheckFoundationInfoReadCorrectly[] = 
   },
 ];
 //#endregion
-context("Load schedule", () => {
-  it("Shoud be able to save file to database and after that load new schedule", () => {
+describe("Load schedule", () => {
+  it("saves file to database and after that loads new schedule", () => {
     const cell = {
       workerGroupIdx: 0,
       workerIdx: 0,
@@ -47,7 +48,8 @@ context("Load schedule", () => {
     });
   });
 
-  it("Should be able to save file and load the exported file", () => {
+  it("saves file and loads the exported file", () => {
+    const shiftSection = shiftSectionDataCy(0);
     cy.loadScheduleToMonth();
     cy.get("[data-cy=file-dropdown]").click();
     cy.get("[data-cy=export-schedule-button]").click();
@@ -76,11 +78,12 @@ context("Load schedule", () => {
       .then((file: string) => {
         cy.writeFile("cypress/fixtures/grafik.xlsx", file, "binary");
         cy.get('[data-cy="file-input"]').attachFile("grafik.xlsx");
+        cy.get(`[data-cy=${shiftSection}]`);
       });
   });
 
   checkFoundationInfoReadProperlyData.forEach((testCase) => {
-    it(`Should be able to read file ${testCase.scheduleName}`, () => {
+    it(`reads file ${testCase.scheduleName}`, () => {
       cy.loadScheduleToMonth(testCase.scheduleName, 1, 2021);
       cy.getFoundationInfoCell({
         cellIdx: 0,

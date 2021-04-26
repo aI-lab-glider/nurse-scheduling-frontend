@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid, Typography } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
+import { t } from "../../../../helpers/translations.helper";
 import { ContractType } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import {
   ButtonData,
@@ -53,7 +54,7 @@ export function WorkerContractTypeSelector({
   return (
     <>
       <Grid item xs={6}>
-        <Typography className={classes.label}>Wymiar pracy</Typography>
+        <Typography className={classes.label}>{t("workingTime")}</Typography>
         <DropdownButtons
           dataCy="contract"
           buttons={contractOptions}
@@ -68,7 +69,7 @@ export function WorkerContractTypeSelector({
 
         <FormFieldErrorLabel
           shouldBeVisible={!isContractTypeValid() && firstEditMade}
-          message="Wybierz typ umowy"
+          message={t("selectContractType")}
         />
       </Grid>
     </>

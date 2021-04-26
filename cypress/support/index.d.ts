@@ -9,10 +9,6 @@ declare namespace Cypress {
       year?: number
     ): Chainable<Element>;
 
-    useAutocomplete(
-      newShiftCode: import("../../src/shift-info.model").ShiftCode
-    ): Chainable<Element>;
-
     getWorkerShift(
       GetWorkerShiftOptions: import("./commands").GetWorkerShiftOptions
     ): Chainable<Element>;

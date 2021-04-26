@@ -46,7 +46,7 @@ context("Undo/Redo test", () => {
   });
 
   testCases.forEach((testCase) => {
-    it(`Should change worker (worker group: ${testCase.testedShiftCell.workerGroupIdx}) shift and
+    it(`changes worker (worker group: ${testCase.testedShiftCell.workerGroupIdx}) shifts and
        use undo and redo buttons to set proper cell state`, () => {
       performShiftChanges(testCase);
 
@@ -59,8 +59,8 @@ context("Undo/Redo test", () => {
   });
 
   testCases.forEach((testCase) => {
-    it(`Should change worker (worker group: ${testCase.testedShiftCell.workerGroupIdx}shift and
-       use undo and redo shortcuts to set proper cell state`, () => {
+    it(`changes worker (worker group: ${testCase.testedShiftCell.workerGroupIdx} shift and
+       uses undo and redo shortcuts to set proper cell state`, () => {
       performShiftChanges(testCase);
 
       cy.get("body").type("{ctrl}{z}");
@@ -73,7 +73,7 @@ context("Undo/Redo test", () => {
 });
 
 context("Edit mode test", () => {
-  it("Save button should be disabled when there are no changes", () => {
+  it("save button is disabled when there are no changes", () => {
     const cell = {
       workerGroupIdx: 0,
       workerIdx: 0,
