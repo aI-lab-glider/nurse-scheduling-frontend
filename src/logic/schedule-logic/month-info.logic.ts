@@ -23,6 +23,14 @@ export class MonthInfoLogic {
     return this._verboseDates.map((d) => d.date);
   }
 
+  public get holidays(): number[] {
+    const holidays: number[] = [];
+    this._verboseDates.forEach((d) => {
+      d.isPublicHoliday && holidays.push(d.date);
+    });
+    return holidays;
+  }
+
   public get dayCount(): number {
     return this._verboseDates.length;
   }

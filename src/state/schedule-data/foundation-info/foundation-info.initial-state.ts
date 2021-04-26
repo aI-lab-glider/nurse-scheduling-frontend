@@ -11,5 +11,6 @@ export const foundationInfoInitialState: FoundationInfoModel = {
   children_number: new Array(monthDays.length).fill(0),
   extra_workers: new Array(monthDays.length).fill(0),
   frozen_shifts: [],
+  holidays: [],
   dates: monthDays,
 };

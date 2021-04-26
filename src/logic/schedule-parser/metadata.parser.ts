@@ -65,6 +65,10 @@ export class MetaDataParser extends MetadataProvider {
     return this.monthLogic.dates;
   }
 
+  public get holidays(): number[] {
+    return this.monthLogic.holidays;
+  }
+
   get frozenDates(): [string | number, number][] {
     return [];
   }
