@@ -16,14 +16,15 @@ import {
 import classNames from "classnames/bind";
 import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
 import { AlgorithmErrorCode } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
+import { t } from "../../../helpers/translations.helper";
 
 interface ViewOnlyToolbarOptions {
   openEdit: () => void;
 }
 export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Element {
-  const [isEditDisable, setEditDisable] = React.useState<boolean>(false);
-  const [isMonthFromFuture, setIsMonthFromFuture] = React.useState<boolean>(false);
-  const [areAlgoErrorsPresent, setAreAlgoErrorsPresent] = React.useState<boolean>(false);
+  const [isEditDisable, setEditDisable] = React.useState(false);
+  const [isMonthFromFuture, setIsMonthFromFuture] = React.useState(false);
+  const [areAlgoErrorsPresent, setAreAlgoErrorsPresent] = React.useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -96,7 +97,7 @@ export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
           {areAlgoErrorsPresent && (
             <div className="errors-present-info">
               <ErrorOutlineIcon />
-              <p>Plan zawiera błędy. Zobacz je w trybie edycji</p>
+              <p>{t("scheduleHasErrors")}</p>
             </div>
           )}
           <div className="filler" />

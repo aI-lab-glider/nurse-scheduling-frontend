@@ -108,6 +108,8 @@ export const pl = {
     appProbbablyContainedWrongData: "Aplikacja prawdopodbnie zawiera błędne dane.",
     downloadAllSchedulesAndClearAppData: "Pobierz wszystkie grafiki i wyczyść dane aplikacji.",
     downloadScheduleAndClearAppData: "Pobierz grafik i wyczyść aplikację",
+    //read-only-toolbar.tsx
+    scheduleHasErrors: "Plan zawiera błędy. Zobacz je w trybie edycji.",
   },
 };
 export default pl;
