@@ -44,11 +44,13 @@ const ButtonBase = styled.button`
   line-height: 28px;
   letter-spacing: 0.025em;
   text-align: center;
+  
   &:hover {
     cursor: pointer;
     font-weight: 500;
     box-shadow: 0 10px 20px -10px ${colors.gray500};
   }
+  
   &:focus {
     outline: none;
   }
@@ -58,9 +60,11 @@ const ButtonBase = styled.button`
 const ButtonPrimary = styled(ButtonBase)`
   background-color: ${colors.primary};
   color: ${colors.white};
+
   &:disabled {
     background-color: rgba(141, 153, 170, 255);
     color: ${colors.white};
+
     &:hover {
       cursor: default;
       box-shadow: none;
@@ -73,9 +77,11 @@ const ButtonSecondary = styled(ButtonBase)`
   border: 1px solid rgba(29, 53, 87, 1);
   background-color: rgba(255, 255, 255, 1);
   color: rgba(29, 53, 87, 1);
+
   &:disabled {
     border: 1px solid rgba(141, 153, 170, 255);
     color: rgba(141, 153, 170, 255);
+
     &:hover {
       cursor: default;
       box-shadow: none;
@@ -91,13 +97,16 @@ const ButtonCircle = styled(ButtonBase)`
   margin: 15px 10px 15px 10px;
   display: flex;
   justify-content: center;
+  
   &:hover {
     cursor: pointer;
     box-shadow: none;
     background-color: rgba(233, 235, 239, 255);
   }
+  
   &:disabled {
     color: rgba(141, 153, 170, 255);
+  
     &:hover {
       cursor: default;
       box-shadow: none;
