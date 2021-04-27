@@ -57,6 +57,16 @@
     }
   }
 
+  .errors-present-info {
+    display: flex;
+    flex-direction: row;
+    margin-top: 0;
+    color: $orange;
+    p {
+      margin: 2px auto auto 10px;
+    }
+  }
+
   .filler {
     flex-grow: 1;
   }

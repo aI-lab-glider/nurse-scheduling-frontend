@@ -109,6 +109,8 @@ const en: LocalizationResource = {
     appProbbablyContainedWrongData: "Aplication probbably contained wrong data.",
     downloadAllSchedulesAndClearAppData: "Download all schedules and clear app data.",
     downloadScheduleAndClearAppData: "Download schedule and clear app data.",
+    //read-only-toolbar.tsx
+    scheduleHasErrors: "The schedule contains errors. See them in the edit mode.",
   },
 };
 export default en;
