@@ -56,7 +56,8 @@ export function DropdownColors({
 
   function getChunckedColors(colorArrays: string[], chunkLen: number): string[][] {
     const result: string[][] = [];
-    let i, j;
+    let i;
+    let j;
 
     for (i = 0, j = colorArrays.length; i < j; i += chunkLen) {
       result.push(colorArrays.slice(i, i + chunkLen));
@@ -112,11 +113,9 @@ export function DropdownColors({
               {getChunckedColors(
                 shiftType === "working" ? worksShiftsColors : notWorksShiftsColors,
                 6
-              ).map((colorRow) => {
-                return (
+              ).map((colorRow) => (
                   <ColorSampleRow>
-                    {colorRow.map((color) => {
-                      return (
+                    {colorRow.map((color) => (
                         <ColorSample
                           onClick={(): void => {
                             colorClicker(color);
@@ -125,11 +124,9 @@ export function DropdownColors({
                           }}
                           style={{ backgroundColor: `#${color}` }}
                         />
-                      );
-                    })}
+                      ))}
                   </ColorSampleRow>
-                );
-              })}
+                ))}
             </ColorSampleWrapper>
           </ButtonListWrapper>
         </ClickAwayListener>

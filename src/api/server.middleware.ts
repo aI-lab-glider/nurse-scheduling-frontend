@@ -3,28 +3,36 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
+import { WorkerHourInfo } from "../helpers/worker-hours-info.model";
+import { PrimaryMonthRevisionDataModel } from "../state/application-state.model";
 import { ScheduleDataModel } from "../state/schedule-data/schedule-data.model";
 import {
+  AlgorithmError,
   AlgorithmErrorCode,
-  ScheduleError,
+  isWorkerRelatedError,
   WorkerOvertime,
   WorkerTeamsCollision,
   WorkerUnderTime,
 } from "../state/schedule-data/schedule-errors/schedule-error.model";
-import { WorkerHourInfo } from "../helpers/worker-hours-info.model";
-import { PrimaryMonthRevisionDataModel } from "../state/application-state.model";
+import {
+  getWorkerNames,
+  SensitiveDataFieldAccessors,
+  WorkerName,
+} from "../state/schedule-data/schedule-sensitive-data.model";
+import { Opaque } from "../utils/type-utils";
+import { BackendErrorObject } from "./backend";
 
-type NameUuidMapper = {
+type NameToUUIDMap = {
   [name: string]: string;
 };
-
-export interface AnonymizeScheduleReturn {
-  anonynimizedSchedule: ScheduleDataModel;
-  anonymizationMap: NameUuidMapper;
-}
+type AnonynimizedSchedule = Opaque<"Anonymized Schedule", ScheduleDataModel>;
+type AnonymizeScheduleReturn = [
+  anonynimizedSchedule: AnonynimizedSchedule,
+  anonymizationMap: NameToUUIDMap
+];
 
 export class ServerMiddleware {
-  public static escapeJuliaIndexes(error: ScheduleError): ScheduleError {
+  public static escapeJuliaIndexes(error: AlgorithmError): AlgorithmError {
     const indexFields = ["day", "week"];
     indexFields.forEach((field) => {
       if (error[field]) {
@@ -34,86 +42,63 @@ export class ServerMiddleware {
     return error;
   }
 
-  public static anonymizeSchedule(originalSchedule: ScheduleDataModel): AnonymizeScheduleReturn {
-    /* eslint-disable @typescript-eslint/camelcase */
-    const nameToUuid: NameUuidMapper = {};
+  public static mapCodeTypeToKind(
+    error: BackendErrorObject
+  ): {
+    [key in keyof AlgorithmError]?: AlgorithmError[key];
+  } {
+    return { ...error, kind: error.code as AlgorithmErrorCode };
+  }
 
-    const schedule = _.cloneDeep(originalSchedule);
-
-    Object.keys(schedule.shifts).map(
-      (shiftName): void => (nameToUuid[shiftName] = uuidv4(shiftName))
-    );
-
-    Object.keys(schedule.shifts).forEach((shiftName) => {
-      schedule.shifts[nameToUuid[shiftName]] = schedule.shifts[shiftName];
-      delete schedule.shifts[shiftName];
-    });
-
-    Object.keys(schedule.employee_info.time).forEach((shiftName) => {
-      schedule.employee_info.time[nameToUuid[shiftName]] = schedule.employee_info.time[shiftName];
-      delete schedule.employee_info.time[shiftName];
-    });
-
-    Object.keys(schedule.employee_info.type).forEach((shiftName) => {
-      schedule.employee_info.type[nameToUuid[shiftName]] = schedule.employee_info.type[shiftName];
-      delete schedule.employee_info.type[shiftName];
-    });
-
-    Object.keys(schedule.employee_info.team).forEach((shiftName) => {
-      schedule.employee_info.team[nameToUuid[shiftName]] = schedule.employee_info.team[shiftName];
-      delete schedule.employee_info.team[shiftName];
-    });
-
-    if (schedule.employee_info.contractType !== undefined) {
-      Object.keys(schedule.employee_info.contractType).forEach((shiftName) => {
-        schedule.employee_info.contractType![
-          nameToUuid[shiftName]
-        ] = schedule.employee_info.contractType![shiftName];
-        delete schedule.employee_info.contractType![shiftName];
+  public static anonymizeSchedule(schedule: ScheduleDataModel): AnonymizeScheduleReturn {
+    const workerNames = getWorkerNames(schedule);
+    const anonymizedSchedule = _.cloneDeep(schedule) as AnonynimizedSchedule;
+    const nameToUUIDMap = {};
+    workerNames.forEach((workerName) => {
+      const workerUID = uuidv4();
+      nameToUUIDMap[workerName] = workerUID;
+      Object.values(SensitiveDataFieldAccessors).forEach((getFieldObjectFunction) => {
+        const objectWithSensitiveData = getFieldObjectFunction(anonymizedSchedule);
+        const workerData = objectWithSensitiveData[workerName];
+        objectWithSensitiveData[workerUID] = workerData;
+        delete objectWithSensitiveData[workerName];
       });
-    }
-
-    return {
-      anonynimizedSchedule: schedule,
-      anonymizationMap: nameToUuid,
-    };
+    });
+    return [anonymizedSchedule, nameToUUIDMap];
   }
 
   public static mapIsWorkingTypeSnakeCase(schedule: ScheduleDataModel): ScheduleDataModel {
     const result = _.cloneDeep(schedule);
     /* eslint-disable @typescript-eslint/no-explicit-any */
     Object.keys(result.shift_types).forEach((shiftCode) => {
+      const isWorkingShift = result.shift_types[shiftCode]?.isWorkingShift;
+      if (_.isNil(isWorkingShift)) {
+        throw Error(`Shift ${shiftCode} is not defined in shift types`);
+      }
       result.shift_types![shiftCode] = {
         ...result.shift_types[shiftCode],
-        is_working_shift: result.shift_types[shiftCode].isWorkingShift,
+        is_working_shift: isWorkingShift,
       } as any;
     });
     return result;
   }
 
   public static remapScheduleErrorUsernames(
-    el: ScheduleError,
-    anonimizationMap: NameUuidMapper
-  ): ScheduleError {
-    if (el["worker"] !== undefined) {
+    error: AlgorithmError,
+    anonimizationMap: NameToUUIDMap
+  ): AlgorithmError {
+    if (!isWorkerRelatedError(error)) {
+      return error;
+    }
+    if (error.worker !== undefined) {
       Object.keys(anonimizationMap).forEach((workerName) => {
-        if (anonimizationMap[workerName] === el["worker"]) el["worker"] = workerName;
+        if (anonimizationMap[workerName] === error.worker) error.worker = workerName as WorkerName;
       });
     }
-
-    if ("workers" in el) {
-      el.workers = el.workers.map((worker) => {
-        const workerName = Object.keys(anonimizationMap).find((workerName) => {
-          return anonimizationMap[workerName] === worker;
-        });
-        return workerName !== undefined ? workerName : worker;
-      });
-    }
-
-    return el;
+    return error;
   }
 
-  public static aggregateWTCErrors(errors: ScheduleError[]): ScheduleError[] {
+  public static aggregateWTCErrors(errors: AlgorithmError[]): AlgorithmError[] {
     const validBackendScheduleErros = errors.filter(
       (err) => err.kind !== AlgorithmErrorCode.WorkerTeamsCollision
     );
@@ -152,8 +137,8 @@ export class ServerMiddleware {
   public static replaceOvertimeAndUndertimeErrors(
     actualSchedule: ScheduleDataModel,
     primaryMonthData: PrimaryMonthRevisionDataModel,
-    scheduleErrors: ScheduleError[]
-  ): ScheduleError[] {
+    scheduleErrors: AlgorithmError[]
+  ): AlgorithmError[] {
     const calculateOvertime = (workerName: string): number =>
       WorkerHourInfo.fromSchedules(workerName, actualSchedule, primaryMonthData).overTime;
 
@@ -169,7 +154,7 @@ export class ServerMiddleware {
         overtimeAndUndetimeErrors.push({
           kind: AlgorithmErrorCode.WorkerUnderTime,
           hours: Math.abs(workHoursDiff),
-          worker: workerName,
+          worker: workerName as WorkerName,
         });
       }
     });

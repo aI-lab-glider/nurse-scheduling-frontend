@@ -39,9 +39,10 @@ function shiftSectionErrorSelector(
   return errors.map((x) => {
     if ("week" in x) {
       if (Math.floor(cellIndex % 7) === 0) return { ...x, className: "left" };
-      else if (Math.floor(cellIndex % 7) === 6) return { ...x, className: "right" };
-      else return { ...x, className: "middle" };
-    } else return x;
+      if (Math.floor(cellIndex % 7) === 6) return { ...x, className: "right" };
+      return { ...x, className: "middle" };
+    }
+    return x;
   });
 }
 

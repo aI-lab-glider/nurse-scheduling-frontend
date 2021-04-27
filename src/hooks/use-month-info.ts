@@ -15,7 +15,6 @@ interface UseMonthInfoReturn {
 }
 
 export function useMonthInfo(): UseMonthInfoReturn {
-  /* eslint-disable @typescript-eslint/camelcase */
   const { dates } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.month_info
   );
@@ -23,14 +22,15 @@ export function useMonthInfo(): UseMonthInfoReturn {
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
   );
 
+  const { verboseDates } = new MonthInfoLogic(month_number, year, dates);
   const [useMonthState, setUseMonthState] = useState<UseMonthInfoReturn>({
-    verboseDates: [],
-    monthNumber: month_number,
+    verboseDates,
     year,
+    monthNumber: month_number,
   });
 
   useEffect(() => {
-    const verboseDates = new MonthInfoLogic(month_number, year, dates).verboseDates;
+    const { verboseDates } = new MonthInfoLogic(month_number, year, dates);
     setUseMonthState({
       verboseDates,
       year,

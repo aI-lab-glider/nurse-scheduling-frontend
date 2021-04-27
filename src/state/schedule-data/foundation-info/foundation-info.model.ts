@@ -1,10 +1,10 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import * as _ from "lodash";
 import { SCHEDULE_CONTAINERS_LENGTH, ScheduleContainerType } from "../schedule-data.model";
 import { MonthHelper } from "../../../helpers/month.helper";
 import { ScheduleKey } from "../../../logic/data-access/persistance-store.model";
-import * as _ from "lodash";
 
 export enum WeekDay {
   MO = "MO",
@@ -64,7 +64,7 @@ export function createDatesForMonth(year: number, month: number): number[] {
     daysMissingFromPrevMonth,
     daysMissingFromNextMonth,
   } = MonthHelper.calculateMissingFullWeekDays(new ScheduleKey(month, year));
-  const prevMonthKey = new ScheduleKey(month, year).prevMonthKey;
+  const { prevMonthKey } = new ScheduleKey(month, year);
   const prevMonthLength = MonthHelper.getMonthLength(prevMonthKey.year, prevMonthKey.month);
   const prevMonthDates = _.range(
     prevMonthLength - daysMissingFromPrevMonth + 1,

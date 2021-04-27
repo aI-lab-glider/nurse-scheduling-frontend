@@ -14,16 +14,12 @@ export interface OvertimeHeaderRowOptions {
 export function OvertimeHeaderRowF({ data }: OvertimeHeaderRowOptions): JSX.Element {
   return (
     <SummaryRow>
-      {data.map((cellData) => {
-        return <OvertimeHeaderCell value={cellData} key={cellData} />;
-      })}
+      {data.map((cellData) => <OvertimeHeaderCell value={cellData} key={cellData} />)}
     </SummaryRow>
   );
 }
 
-export const OvertimeHeaderRow = React.memo(OvertimeHeaderRowF, (prev, next) => {
-  return ArrayHelper.arePrimitiveArraysEqual(prev.data, next.data);
-});
+export const OvertimeHeaderRow = React.memo(OvertimeHeaderRowF, (prev, next) => ArrayHelper.arePrimitiveArraysEqual(prev.data, next.data));
 
 const SummaryRow = styled(SectionRow)`
   height: 40px;

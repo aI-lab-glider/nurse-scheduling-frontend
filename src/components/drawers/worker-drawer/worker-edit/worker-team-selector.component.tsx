@@ -12,6 +12,7 @@ import {
 } from "../../../buttons/dropdown-buttons/dropdown-buttons.component";
 import { FormFieldOptions, useFormFieldStyles } from "./worker-edit.models";
 import { t } from "../../../../helpers/translations.helper";
+
 interface TeamSelectorOptions extends FormFieldOptions {
   setTeam: (team: Team) => void;
   team: Team;

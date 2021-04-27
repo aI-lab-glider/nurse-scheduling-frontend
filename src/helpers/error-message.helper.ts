@@ -14,7 +14,7 @@ import {
   ParseErrorCode,
   ScheduleError,
 } from "../state/schedule-data/schedule-errors/schedule-error.model";
-import { ShiftsTypesDict } from "../state/schedule-data/shifts-types/shift-types.model";
+import { ShiftTypesDict } from "../state/schedule-data/shifts-types/shift-types.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Color, Colors } from "./colors/color.model";
 import { ShiftHelper } from "./shifts.helper";
@@ -25,7 +25,7 @@ type Error = ScheduleErrorLevel;
 export class ErrorMessageHelper {
   public static mapScheduleErrors(
     errors: GroupedScheduleErrors,
-    shiftTypes: ShiftsTypesDict
+    shiftTypes: ShiftTypesDict
   ): ScheduleErrorMessageModel[] {
     const mappedErrors = Object.values(errors).reduce(
       (previous, current) => [
@@ -39,10 +39,10 @@ export class ErrorMessageHelper {
 
   public static getErrorMessage(
     error: ScheduleError,
-    shiftsTypes: ShiftsTypesDict
+    shiftsTypes: ShiftTypesDict
   ): ScheduleErrorMessageModel {
-    const kind = error.kind;
-    let message = ``;
+    const { kind } = error;
+    let message = "";
     let title = "Nie rozpoznano błędu";
     let day = 0;
     let i = 0;
@@ -63,7 +63,7 @@ export class ErrorMessageHelper {
             message += `, <b>${error.segments[i][0]}:00-${error.segments[i][1]}:00</b>`;
           }
         }
-        message += `${newline ? `<br>b` : `B`}rak pielęgniarek`;
+        message += `${newline ? "<br>b" : "B"}rak pielęgniarek`;
         type = ScheduleErrorType.AON;
         title = "date";
         if (error.day) {
@@ -82,7 +82,7 @@ export class ErrorMessageHelper {
             }
           }
         }
-        message += `${newline ? `<br>z` : `Z`}a mało pracowników w trakcie dnia: potrzeba <b>${
+        message += `${newline ? "<br>z" : "Z"}a mało pracowników w trakcie dnia: potrzeba <b>${
           error.required
         }</b>, jest <b>${error.actual}</b>.`;
         type = ScheduleErrorType.WND;
@@ -103,7 +103,7 @@ export class ErrorMessageHelper {
             }
           }
         }
-        message += `${newline ? `<br>z` : `Z`}a mało pracowników w nocy: potrzeba <b>${
+        message += `${newline ? "<br>z" : "Z"}a mało pracowników w nocy: potrzeba <b>${
           error.required
         }</b>, jest <b>${error.actual}</b>.`;
         type = ScheduleErrorType.WNN;
@@ -126,7 +126,7 @@ export class ErrorMessageHelper {
         }</strong>
           (${shiftsTypes[error.preceding].from}-${shiftsTypes[error.preceding].to}).
           Nie może mieć zmiany wcześniej niż o ${earliestPossible}`;
-        if (nextDay) message += ` następnego dnia`;
+        if (nextDay) message += " następnego dnia";
         message += `. Przypisana zmiana <strong>${error.succeeding}</strong> (${
           shiftsTypes[error.succeeding].from
         }-${shiftsTypes[error.succeeding].to}) zaczyna się
@@ -169,7 +169,7 @@ export class ErrorMessageHelper {
         day += error.day! + 1;
         break;
       case InputFileErrorCode.EMPTY_FILE:
-        message = `Błąd podczas wczytywania pliku wejściowego: Pusty plik`;
+        message = "Błąd podczas wczytywania pliku wejściowego: Pusty plik";
         break;
       case InputFileErrorCode.UNHANDLED_FILE_EXTENSION:
         message = `Nieobsługiwane rozszerzenie pliku: .${error.filename}`;

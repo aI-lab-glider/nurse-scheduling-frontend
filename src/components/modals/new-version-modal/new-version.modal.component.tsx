@@ -2,11 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import { t } from "../../../helpers/translations.helper";
 import { Button } from "../../buttons/button-component/button.component";
 import DefaultModal from "../modal.component";
 import { CookiesProvider } from "../../../logic/data-access/cookies-provider";
-import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 
 const useStyles = makeStyles({

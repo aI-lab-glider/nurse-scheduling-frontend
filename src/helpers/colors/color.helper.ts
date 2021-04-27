@@ -25,6 +25,7 @@ export class ColorHelper {
   public static getDefaultColor(): Color {
     return Colors.WHITE;
   }
+
   public static hexToRgb(hex: string): HrgbReturn | null {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result

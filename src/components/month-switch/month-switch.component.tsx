@@ -4,9 +4,9 @@
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { IconButton } from "@material-ui/core";
 import { useActualMonth } from "../../hooks/use-actual-month";
 import { MonthSwitchActionCreator } from "../../state/schedule-data/month-switch.action-creator";
-import { IconButton } from "@material-ui/core";
 import { AppMode, useAppConfig } from "../../state/app-config-context";
 import styled from "styled-components";
 import { colors, fontSizeLg, iconSizeSm } from "../../assets/colors";

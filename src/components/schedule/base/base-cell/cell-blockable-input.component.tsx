@@ -22,7 +22,7 @@ export function CellInput({
   onKeyDown,
   isVisible = true,
 }: CellInputOptions): JSX.Element {
-  function _onKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
+  function handleInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
     if (e.key === CellManagementKeys.Enter) {
       onValueChange?.(e.currentTarget.value);
       return;
@@ -35,7 +35,7 @@ export function CellInput({
       {isVisible && (
         <InputComponent
           onValueChange={(value): void => onValueChange?.(value)}
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => _onKeyDown(e)}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => handleInputKeyDown(e)}
         />
       )}
     </>

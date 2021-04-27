@@ -27,7 +27,6 @@ const aggregateWorkerInfo = (
     workerInfo.team[workerName]
   );
 
-/* eslint-disable @typescript-eslint/camelcase */
 export function groupWorkersByTeam({
   shifts: workerShifts,
   employee_info: workerInfo,

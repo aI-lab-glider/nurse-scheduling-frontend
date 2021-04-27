@@ -2,13 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { StringHelper } from "../helpers/string.helper";
 import { ApplicationStateModel } from "../state/application-state.model";
 import { TranslationHelper } from "../helpers/translations.helper";
-import { useEffect, useState } from "react";
 
 export function useActualMonth(): string {
-  /* eslint-disable @typescript-eslint/camelcase */
   const { month_number, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
   );
@@ -26,5 +25,5 @@ export function useActualMonth(): string {
 
   if (actualMonth === "")
     return `${TranslationHelper.polishMonths[new Date().getMonth()]} ${new Date().getFullYear()}`;
-  else return actualMonth;
+  return actualMonth;
 }

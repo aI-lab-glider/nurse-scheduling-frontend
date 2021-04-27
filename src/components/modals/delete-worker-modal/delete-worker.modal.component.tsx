@@ -2,13 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
+import { useDispatch } from "react-redux";
+import styled from "styled-components";
+import { t } from "../../../helpers/translations.helper";
+import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
+import { WorkerActionCreator } from "../../../state/schedule-data/worker-info/worker.action-creator";
 import { Button } from "../../buttons/button-component/button.component";
 import DefaultModal from "../modal.component";
-import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
-import { useDispatch } from "react-redux";
-import { WorkerActionCreator } from "../../../state/schedule-data/worker-info/worker.action-creator";
-import { t } from "../../../helpers/translations.helper";
-import styled from "styled-components";
 
 interface DeleteWorkerModalOptions {
   setOpen: (open: boolean) => void;
