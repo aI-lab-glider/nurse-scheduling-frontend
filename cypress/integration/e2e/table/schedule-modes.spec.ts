@@ -4,7 +4,7 @@
 import { ShiftCode } from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
 
 const testedCell = {
-  workerGroupIdx: 0,
+  teamIdx: 0,
   workerIdx: 0,
   shiftIdx: 6,
   initialShiftCode: ShiftCode.U,
@@ -30,7 +30,7 @@ describe("Schedule modes spec", () => {
       cy.enterEditMode();
     });
 
-    it("Should be able to change shift", () => {
+    it("changes shift", () => {
       cy.checkWorkerShift({ ...testedCell, desiredShiftCode: testedCell.initialShiftCode });
       cy.changeWorkerShift({ ...testedCell, newShiftCode: testedCell.desiredShiftCode });
       cy.checkWorkerShift({ ...testedCell });

@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect } from "react";
 import { ImportButtonsComponent } from "../../../components/buttons/import-buttons/import-buttons.component";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { useHistory } from "react-router-dom";
 import { Button } from "../../../components/common-components";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +14,8 @@ import {
   RevisionTypeLabels,
 } from "../../../logic/data-access/persistance-store.model";
 import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
+import { AlgorithmErrorCode } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
+import { t } from "../../../helpers/translations.helper";
 import styled from "styled-components";
 import { colors, fontSizeBase } from "../../../assets/colors";
 
@@ -20,8 +23,9 @@ interface ViewOnlyToolbarOptions {
   openEdit: () => void;
 }
 export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Element {
-  const [isEditDisable, setEditDisable] = React.useState<boolean>(false);
-  const [isMonthFromFuture, setIsMonthFromFuture] = React.useState<boolean>(false);
+  const [isEditDisable, setEditDisable] = React.useState(false);
+  const [isMonthFromFuture, setIsMonthFromFuture] = React.useState(false);
+  const [areAlgoErrorsPresent, setAreAlgoErrorsPresent] = React.useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -39,13 +43,19 @@ export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
 
   const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
+  const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
+
   useEffect(() => {
     const isFuture = VerboseDateHelper.isMonthInFuture(month, year);
     setIsMonthFromFuture(isFuture);
 
     const isRevisionEditDisable = revision === "actual" ? false : !isFuture;
     setEditDisable(isRevisionEditDisable || isCorrupted);
-  }, [year, month, revision, isCorrupted]);
+
+    setAreAlgoErrorsPresent(
+      Object.values(AlgorithmErrorCode).some((errorCode) => errorCode in scheduleErrors)
+    );
+  }, [year, month, revision, isCorrupted, scheduleErrors]);
 
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>): void => {
     const currentRev = event.target.value;
@@ -85,6 +95,12 @@ export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
               </form>
             )}
           </RevisionWrapper>
+          {areAlgoErrorsPresent && (
+            <ErrorPresentInfo className="errors-present-info">
+              <ErrorOutlineIcon />
+              <p>{t("scheduleHasErrors")}</p>
+            </ErrorPresentInfo>
+          )}
           <Filler />
           <ImportButtonsComponent />
           <Button
@@ -130,4 +146,13 @@ const RevisionWrapper = styled.div`
 `;
 const Filler = styled.div`
   flex-grow: 1;
+`;
+const ErrorPresentInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: 0;
+  color: ${colors.orange};
+  p {
+    margin: 2px auto auto 10px;
+  }
 `;

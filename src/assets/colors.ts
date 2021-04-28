@@ -39,6 +39,7 @@ export const colors = {
   tableColor: "#14142b",
   otherMonthBackground: "#ecf4ff",
   weekendBackground: "#3c69a8",
+  orange: "#fb6340",
 };
 
 export const fontFamilyPrimary = "Roboto, sans-serif";

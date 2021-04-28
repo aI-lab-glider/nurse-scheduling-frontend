@@ -30,7 +30,7 @@ export const pl = {
     selectWorkerHours: "Wybierz etat pracownika",
     enterWorkerHours: "Wpisz wymiar etatu",
     workerCouldNotBeEmployedMore: "Pracownik nie może być zatrudniony na więcej niż jeden etat",
-    //worker-group-selector.component.tsx
+    //worker-team-selector.component.tsx
     workerTeam: "Zespół pracownika",
     //worker-name-edit-field.component.tsx
     firstAndLastName: "Imię i nazwisko",
@@ -80,6 +80,9 @@ export const pl = {
     downloadScheduleTitle: "Pobierz grafik",
     fileFormat: "Format pliku",
     fileOptions: "Opcje",
+    //new-version.modal.component.tsx
+    update: "Aktualizacja",
+    updateMessage: "Aplikacja została zaktualizowana. Teraz jest w wersji {{version}}",
     //report-issue-modal.component.tsx
     thereWasNetworkingError: "Wystąpił problem sieciowy!",
     send: "Wyślij",
@@ -109,6 +112,8 @@ export const pl = {
     appProbbablyContainedWrongData: "Aplikacja prawdopodbnie zawiera błędne dane.",
     downloadAllSchedulesAndClearAppData: "Pobierz wszystkie grafiki i wyczyść dane aplikacji.",
     downloadScheduleAndClearAppData: "Pobierz grafik i wyczyść aplikację",
+    //read-only-toolbar.tsx
+    scheduleHasErrors: "Plan zawiera błędy. Zobacz je w trybie edycji.",
     //save-changes-modal.component.tsx
     yes: "Tak",
     no: "Nie",

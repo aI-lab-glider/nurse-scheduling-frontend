@@ -6,7 +6,7 @@ import { ScheduleDataModel } from "../schedule-data.model";
 import { WorkersInfoModel } from "./worker-info.model";
 import {
   DEFAULT_CONTRACT_TYPE,
-  DEFAULT_WORKER_GROUP,
+  DEFAULT_TEAM,
 } from "../../../logic/schedule-parser/workers-info.parser";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "../schedule.actions";
@@ -57,6 +57,6 @@ function preprocessWorkerInfoModel(workerInfo: WorkersInfoModel): WorkersInfoMod
   workerInfo = _.cloneDeep(workerInfo);
   const workerNames = Object.keys(workerInfo.type);
   fillWorkerInfoWithDefaultValue(workerInfo, workerNames, "contractType", DEFAULT_CONTRACT_TYPE);
-  fillWorkerInfoWithDefaultValue(workerInfo, workerNames, "workerGroup", DEFAULT_WORKER_GROUP);
+  fillWorkerInfoWithDefaultValue(workerInfo, workerNames, "team", DEFAULT_TEAM);
   return workerInfo;
 }

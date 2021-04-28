@@ -32,7 +32,7 @@ const en: LocalizationResource = {
     selectWorkerHours: "Select worker hours",
     enterWorkerHours: "Enter worker hours",
     workerCouldNotBeEmployedMore: "An worker may not be employed for more than one full-time job",
-    //worker-group-selector.component.tsx
+    //worker-team-selector.component.tsx
     workerTeam: "Worker's team",
     //worker-name-edit-field.component.tsx
     firstAndLastName: "First and last name",
@@ -58,6 +58,7 @@ const en: LocalizationResource = {
     overtime: "Overtime",
     illegalScheduleValue: "Illegal schedule value",
     otherErrors: "Other errors",
+    //span-errors.component.tsx
     errors: "Errors",
     //footer.component.tsx
     realization: "Realization",
@@ -81,6 +82,9 @@ const en: LocalizationResource = {
     downloadScheduleTitle: "Download schedule",
     fileFormat: "File format",
     fileOptions: "Options",
+    //new-version.modal.component.tsx
+    update: "Update",
+    updateMessage: "App has been updated. Current version is {{version}}",
     //report-issue-modal.component.tsx
     thereWasNetworkingError: "There was an networking error!",
     send: "Send",
@@ -109,6 +113,8 @@ const en: LocalizationResource = {
     appProbbablyContainedWrongData: "Aplication probbably contained wrong data.",
     downloadAllSchedulesAndClearAppData: "Download all schedules and clear app data.",
     downloadScheduleAndClearAppData: "Download schedule and clear app data.",
+    //read-only-toolbar.tsx
+    scheduleHasErrors: "The schedule contains errors. See them in the edit mode.",
     //save-changes-modal.component.tsx
     yes: "Yes",
     no: "No",

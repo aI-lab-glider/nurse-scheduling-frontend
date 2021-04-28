@@ -9,6 +9,7 @@ import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
 import { Button } from "../../buttons/button-component/button.component";
 import DefaultModal from "../modal.component";
+import { t } from "../../../helpers/translations.helper";
 
 export interface SaveChangesModalOptions {
   setOpen: (open: boolean) => void;
@@ -19,7 +20,7 @@ export interface SaveChangesModalOptions {
 
 export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.Element {
   const { open, setOpen, handleSave, closeOptions } = options;
-  const title = "Niezapisane zmiany w grafiku";
+  const title = t("unsavedChanges");
   const { persistentSchedule } = useSelector((state: ApplicationStateModel) => state.actualState);
   const persistent = persistentSchedule.present;
 
@@ -43,19 +44,19 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
     handleClose();
   }
 
-  const body = <span>Czy chcesz zapisać wprowadzone zmiany?</span>;
+  const body = <span>{t("wantToSave")}</span>;
 
   const footer = (
     <>
       <Link to="/">
         <Button variant="primary" onClick={onSaveClick}>
-          t("yes")
+          {t("yes")}
         </Button>
       </Link>
 
       <Link to="/">
         <Button variant="secondary" color="secondary" onClick={onNoSaveClick}>
-          t("no")
+          {t("no")}
         </Button>
       </Link>
     </>

@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   ContractType,
-  WorkerGroup,
+  Team,
   WorkerType,
 } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import { WorkerActionCreator } from "../../../../state/schedule-data/worker-info/worker.action-creator";
@@ -16,7 +16,7 @@ import { useWorkerInfo, WorkerInfo } from "../../../../hooks/use-worker-info";
 import { CombinedWorkNormSelector } from "./combined-worknorm-selector.component";
 import { WorkerContractTypeSelector } from "./worker-contract-type-selector.component";
 import { WorkerEditComponentOptions, WorkerEditComponentMode } from "./worker-edit.models";
-import { WorkerGroupSelector } from "./worker-group-selector.component";
+import { TeamSelector } from "./worker-team-selector.component";
 import { WorkerNameEditField } from "./worker-name-edit-field.components";
 import { WorkerWorkerTypeSelector } from "./worker-position-selector.component";
 import { t } from "../../../../helpers/translations.helper";
@@ -64,8 +64,8 @@ export function WorkerEditComponent({
     setWorkerInfo(workerInfo.withNewWorkerType(newWorkerType));
   }
 
-  function handleWorkerWorkerGroupUpdate(newWorkerGroup: WorkerGroup): void {
-    setWorkerInfo(workerInfo.withNewWorkerGroup(newWorkerGroup));
+  function handleWorkerTeamUpdate(newTeam: Team): void {
+    setWorkerInfo(workerInfo.withNewTeam(newTeam));
   }
   //#endregion
 
@@ -115,10 +115,7 @@ export function WorkerEditComponent({
           workerContractType={workerInfo.contractType}
         />
 
-        <WorkerGroupSelector
-          workerGroup={workerInfo.workerGroup}
-          setWorkerGroup={handleWorkerWorkerGroupUpdate}
-        />
+        <TeamSelector team={workerInfo.team} setTeam={handleWorkerTeamUpdate} />
       </Grid>
       <SubmitButton
         disabled={!canSaveWorker()}

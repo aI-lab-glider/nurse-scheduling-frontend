@@ -46,6 +46,7 @@ export class ErrorMessageHelper {
     let title = "Nie rozpoznano błędu";
     let day = 0;
     let i = 0;
+    let workers = [""];
     let type = ScheduleErrorType.OTH;
     let newline = false;
 
@@ -146,6 +147,21 @@ export class ErrorMessageHelper {
         type = ScheduleErrorType.WUH;
         title = `${error.worker}`;
         break;
+      case AlgorithmErrorCode.WorkerTeamsCollision:
+        const sections = findSections(error.hours!);
+        const sectionIntersectionMsg = sections.map(({ start, end }) =>
+          start === end ? `${start}:00` : `${start}:00-${end}:00`
+        );
+        message = `W godzinach: <b>${sectionIntersectionMsg.join(", ")}</b>`;
+        i = 0;
+        message += `<br>Niedozwolone połączenie zespołów: <b>${error.workers.join(", ")}</b>.`;
+        type = ScheduleErrorType.WTC;
+        title = "date";
+        if (error.day) {
+          day += error.day;
+        }
+        workers = error.workers;
+        break;
       case ParseErrorCode.UNKNOWN_VALUE:
         message = `Nieznana wartość zmiany: "<b>${error.actual}</b>". Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub utworzyć nową.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
@@ -172,7 +188,7 @@ export class ErrorMessageHelper {
     const level = AlgorithmErrorCode[kind]
       ? ScheduleErrorLevel.CRITICAL_ERROR
       : ScheduleErrorLevel.WARNING;
-    return { kind, title, day, message, level, type };
+    return { kind, title, day, message, level, type, workers };
   }
 
   public static getErrorColor(error: Error): Color {
@@ -183,4 +199,23 @@ export class ErrorMessageHelper {
       }[error] ?? ColorHelper.getDefaultColor()
     );
   }
+}
+
+function findSections(array: number[]): Array<{ start: number; end: number }> {
+  let i = 0;
+  let resultIndex = -1;
+  const result: Array<{ start: number; end: number }> = [];
+  while (i < array.length) {
+    result.push({ start: array[i], end: array[i] });
+    resultIndex++;
+    while (
+      array[i + 1] &&
+      (array[i + 1] === array[i] + 1 || (array[i + 1] === 1 && array[i] === 24))
+    ) {
+      i++;
+    }
+    result[resultIndex].end = array[i];
+    i++;
+  }
+  return result;
 }
