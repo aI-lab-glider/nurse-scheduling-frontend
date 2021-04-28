@@ -116,10 +116,10 @@ function App(): JSX.Element {
 
   useEffect(() => {
     const checkVersions = async (): Promise<void> => {
-      const latestLocalVersion = CookiesProvider.getCookie("appversion");
+      const latestLocalVersion = CookiesProvider.getAppVersion();
       const latestAppVersion = await getLatestAppVersion;
       if (latestLocalVersion !== latestAppVersion) {
-        CookiesProvider.saveCookie("appversion", latestAppVersion);
+        CookiesProvider.setAppVersion(latestAppVersion);
         latestLocalVersion && setIsModalOpen(true);
       }
     };

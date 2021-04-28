@@ -4,23 +4,28 @@
 
 export class CookiesProvider {
   public static getCookie(key: string): string | undefined {
-    try {
-      const filteredCookie = document.cookie
-        .split(";")
-        .filter((cookie) => cookie.split("=")[0].trim() === key);
-      const cookieValue = filteredCookie[0].split("=")[1];
-      return cookieValue;
-    } catch (err) {
-      return;
-    }
+    const filteredCookie = document.cookie
+      .split(";")
+      .find((cookie) => cookie.split("=")[0]?.trim() === key);
+    const cookieValue = filteredCookie?.split("=")[1];
+    return cookieValue;
   }
 
   public static saveCookie(key: string, value: string): void {
     try {
-      document.cookie = `${key}=${value}`;
+      const dayYearLater = new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toUTCString();
+      document.cookie = `${key}=${value}; expires=${dayYearLater}`;
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);
     }
+  }
+
+  public static getAppVersion(): string | undefined {
+    return this.getCookie("appversion");
+  }
+
+  public static setAppVersion(value: string): void {
+    return this.saveCookie("appversion", value);
   }
 }
