@@ -80,7 +80,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
     btnData.push(button);
   }
 
-  const title = t("downloadSchedule");
+  const title = t("downloadScheduleTitle");
 
   const footer = (
     <>
@@ -105,7 +105,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
   const body = (
     <>
       <FormatWrapper>
-        <Label>{t("downloadSchedule")}: </Label>
+        <Label>{t("fileFormat")}: </Label>
         <DropdownButtons
           buttons={btnData}
           mainLabel={exportMode}

@@ -49,13 +49,13 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
     <>
       <Link to="/">
         <Button variant="primary" onClick={onSaveClick}>
-          Tak
+          t("yes")
         </Button>
       </Link>
 
       <Link to="/">
         <Button variant="secondary" color="secondary" onClick={onNoSaveClick}>
-          Nie
+          t("no")
         </Button>
       </Link>
     </>

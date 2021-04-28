@@ -95,7 +95,7 @@ Cypress.Commands.add("useAutocomplete", (newShiftCode: ShiftCode) => {
 Cypress.Commands.add(
   "changeWorkerShift",
   ({ newShiftCode, ...getWorkerShiftOptions }: ChangeWorkerShiftOptions) => {
-    cy.getWorkerShift(getWorkerShiftOptions).click();
+    cy.getWorkerShift(getWorkerShiftOptions).click({ force: true });
     cy.useAutocomplete(newShiftCode);
   }
 );

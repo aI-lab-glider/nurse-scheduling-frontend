@@ -41,7 +41,6 @@ function getShiftCode(value: string | number): ShiftCode {
 
 interface ShiftCellOptions extends BaseCellOptions {
   keepOn?: boolean;
-  hasNext?: boolean;
   workerName?: string;
 }
 
@@ -67,7 +66,6 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
     onBlur,
     errorSelector = (_): ScheduleError[] => [],
     keepOn,
-    hasNext,
   } = options;
   const cellRef = useRef<HTMLDivElement>(null);
 
@@ -204,7 +202,6 @@ export const ShiftCellComponent = React.memo(ShiftCellComponentF, (prev, next) =
     prev.isSelected === next.isSelected &&
     prev.isBlocked === next.isBlocked &&
     prev.keepOn === next.keepOn &&
-    prev.hasNext === next.hasNext &&
     _.isEqual(prev.verboseDate, next.verboseDate)
   );
 });

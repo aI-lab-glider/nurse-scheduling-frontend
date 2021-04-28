@@ -70,7 +70,6 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
         <>
           <Message>{t("whatErrorOccurred")}</Message>
           <Input
-            // className={classes.textField}
             placeholder={t("provideErrorDescription")}
             value={issueDescription}
             onChange={onIssueDescriptionChange}

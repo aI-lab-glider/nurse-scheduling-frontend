@@ -77,7 +77,8 @@ export const pl = {
     errorsWereEncounteredWhileLoadingFile: "Napotkano błędy podczas wczytywania pliku",
     //export.modal.component.tsx
     dayWorkers: "dzienni pracownicy",
-    downloadSchedule: "Format pliku",
+    downloadScheduleTitle: "Pobierz grafik",
+    fileFormat: "Format pliku",
     fileOptions: "Opcje",
     //report-issue-modal.component.tsx
     thereWasNetworkingError: "Wystąpił problem sieciowy!",
@@ -108,6 +109,11 @@ export const pl = {
     appProbbablyContainedWrongData: "Aplikacja prawdopodbnie zawiera błędne dane.",
     downloadAllSchedulesAndClearAppData: "Pobierz wszystkie grafiki i wyczyść dane aplikacji.",
     downloadScheduleAndClearAppData: "Pobierz grafik i wyczyść aplikację",
+    //save-changes-modal.component.tsx
+    yes: "Tak",
+    no: "Nie",
+    unsavedChanges: "Niezapisane zmiany w grafiku",
+    wantToSave: "Czy chcesz zapisać wprowadzone zmiany?",
   },
 };
 export default pl;

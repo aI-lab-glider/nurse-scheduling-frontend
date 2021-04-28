@@ -118,7 +118,7 @@ export function ErrorPopper({
         {errors.length !== 0 && triangleStyle === "right" && (
           <div>
             <ErrorLine ref={errorTriangle} />
-            <RBErrorTooltip ref={errorTriangle} />
+            <RightBottomErrorTooltip ref={errorTriangle} />
           </div>
         )}
         {errors.length > 1 && <ErrorTriangle ref={errorTriangle} />}
@@ -126,7 +126,7 @@ export function ErrorPopper({
         {errors.length !== 0 && triangleStyle === "left" && (
           <div>
             <ErrorLine ref={errorTriangle} />
-            <LBErrorTooltip ref={errorTriangle} />
+            <LeftBottomErrorTooltip ref={errorTriangle} />
           </div>
         )}
         {children}
@@ -163,14 +163,14 @@ const ErrorTriangle = styled.span`
 
   transform: rotate(45deg);
 `;
-const LBErrorTooltip = styled(ErrorTriangle)`
+const LeftBottomErrorTooltip = styled(ErrorTriangle)`
   transform: rotate(225deg);
   left: -5px;
   bottom: 0;
   top: auto;
 `;
 
-const RBErrorTooltip = styled(ErrorTriangle)`
+const RightBottomErrorTooltip = styled(ErrorTriangle)`
   transform: rotate(135deg);
   top: auto;
   right: -5px;

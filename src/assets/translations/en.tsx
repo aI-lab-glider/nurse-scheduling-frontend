@@ -78,7 +78,8 @@ const en: LocalizationResource = {
     errorsWereEncounteredWhileLoadingFile: "Errors were encountered while loading the file ",
     //export.modal.component.tsx
     dayWorkers: "day workers",
-    downloadSchedule: "File format",
+    downloadScheduleTitle: "Download schedule",
+    fileFormat: "File format",
     fileOptions: "Options",
     //report-issue-modal.component.tsx
     thereWasNetworkingError: "There was an networking error!",
@@ -108,6 +109,11 @@ const en: LocalizationResource = {
     appProbbablyContainedWrongData: "Aplication probbably contained wrong data.",
     downloadAllSchedulesAndClearAppData: "Download all schedules and clear app data.",
     downloadScheduleAndClearAppData: "Download schedule and clear app data.",
+    //save-changes-modal.component.tsx
+    yes: "Yes",
+    no: "No",
+    unsavedChanges: "Unsaved changes in schedule",
+    wantToSave: "Do you want to save changes?",
   },
 };
 export default en;
