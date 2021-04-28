@@ -26,8 +26,10 @@ import { ApplicationStateModel } from "./state/application-state.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
 import { cropScheduleDMToMonthDM } from "./logic/schedule-container-converter/schedule-container-converter";
 import { ImportModalProvider } from "./components/buttons/import-buttons/import-modal-context";
-import { LocalStorageProvider } from "./logic/data-access/local-storage-provider.model";
+import NewVersionModal from "./components/modals/new-version-modal/new-version.modal.component";
+import { CookiesProvider } from "./logic/data-access/cookies-provider";
 import { ScheduleKey } from "./logic/data-access/persistance-store.model";
+import { latestAppVersion } from "./api/latest-github-version";
 import resources from "./assets/translations";
 import { t } from "./helpers/translations.helper";
 
@@ -60,6 +62,7 @@ function App(): JSX.Element {
   const classes = useStyles();
   const scheduleDispatcher = useDispatch();
   const [disableRouteButtons, setDisableRouteButtons] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { setMode } = useAppConfig();
   const { month_number: month, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
@@ -112,7 +115,15 @@ function App(): JSX.Element {
   }, [fetchGlobalState]);
 
   useEffect(() => {
-    new LocalStorageProvider().saveApplicationVersion().then();
+    const checkVersions = async (): Promise<void> => {
+      const localVersion = CookiesProvider.getAppVersion();
+      const githubVersion = await latestAppVersion;
+      if (localVersion !== githubVersion) {
+        CookiesProvider.setAppVersion(githubVersion);
+        localVersion && setIsModalOpen(true);
+      }
+    };
+    checkVersions();
   }, []);
 
   return (
@@ -130,6 +141,7 @@ function App(): JSX.Element {
                 <Box className={classes.drawer}>
                   <PersistentDrawer width={690} />
                 </Box>
+                <NewVersionModal open={isModalOpen} setOpen={setIsModalOpen} />
               </Box>
             </Route>
           </Switch>
