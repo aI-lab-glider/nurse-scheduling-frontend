@@ -29,7 +29,7 @@ import { ImportModalProvider } from "./components/buttons/import-buttons/import-
 import NewVersionModal from "./components/modals/new-version-modal/new-version.modal.component";
 import { CookiesProvider } from "./logic/data-access/cookies-provider";
 import { ScheduleKey } from "./logic/data-access/persistance-store.model";
-import { getLatestAppVersion } from "./api/latest-github-version";
+import { latestAppVersion } from "./api/latest-github-version";
 import resources from "./assets/translations";
 import { t } from "./helpers/translations.helper";
 
@@ -116,11 +116,11 @@ function App(): JSX.Element {
 
   useEffect(() => {
     const checkVersions = async (): Promise<void> => {
-      const latestLocalVersion = CookiesProvider.getAppVersion();
-      const latestAppVersion = await getLatestAppVersion;
-      if (latestLocalVersion !== latestAppVersion) {
-        CookiesProvider.setAppVersion(latestAppVersion);
-        latestLocalVersion && setIsModalOpen(true);
+      const localVersion = CookiesProvider.getAppVersion();
+      const githubVersion = await latestAppVersion;
+      if (localVersion !== githubVersion) {
+        CookiesProvider.setAppVersion(githubVersion);
+        localVersion && setIsModalOpen(true);
       }
     };
     checkVersions();
