@@ -7,8 +7,9 @@ import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
 import TabPanel from "@material-ui/lab/TabPanel";
 import { makeStyles } from "@material-ui/core/styles";
-import ScssVars from "../../../assets/styles/styles/custom/_route-buttons.module.scss";
 import _ from "lodash";
+import styled from "styled-components";
+import { colors } from "../../../assets/colors";
 
 export interface Tabs {
   label: string;
@@ -20,12 +21,11 @@ export interface Tabs {
 interface RouteButtonsOptions {
   tabs: Tabs[];
   disabled?: boolean;
-  id?: string;
 }
 
 const useStyles = makeStyles(() => ({
   indicatorStyle: {
-    backgroundColor: ScssVars.indicatorColor,
+    backgroundColor: colors.primary,
     height: 3,
     outline: "none",
   },
@@ -39,7 +39,6 @@ const useStyles = makeStyles(() => ({
 
 export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.Element {
   const tabs = props.tabs;
-  const id = "" + props.id;
   const [tab, setTab] = React.useState(tabs[0].label);
   const classes = useStyles();
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string): void => {
@@ -54,20 +53,20 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
   const StyledTab: any = withStyles((theme) => ({
     root: {
       textTransform: "none",
-      color: props.disabled ? ScssVars.disabledTextColor : ScssVars.routeTextColor,
+      color: props.disabled ? colors.gray100 : colors.secondaryTextColor,
       outline: "none",
       fontWeight: theme.typography.fontWeightMedium,
       fontSize: "20",
       fontFamily: ["Roboto"].join(","),
 
       "&:hover": {
-        color: props.disabled ? ScssVars.disabledTextColor : ScssVars.indicatorColor,
+        color: props.disabled ? colors.gray100 : colors.primaryTextColor,
         cursor: props.disabled ? "default" : "pointer",
         opacity: 1,
         outline: "none",
       },
       "&$selected": {
-        color: ScssVars.routeTextColor,
+        color: colors.secondaryTextColor,
         outline: "none",
         fontWeight: theme.typography.fontWeightBold,
       },
@@ -79,27 +78,25 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
   }))((props) => <Tab disableRipple {...props} />);
 
   return (
-    <div className={"tabs-and-buttons"}>
+    <Wrapper>
       <TabContext value={tab}>
-        <div className={"tabs-row"} id={id}>
-          <div className={"tabs-and-buttons"}>
-            <TabList
-              classes={{ indicator: classes.indicatorStyle }}
-              onChange={!props.disabled ? handleChange : void 0}
-            >
-              {tabs.map((tab) => (
-                <StyledTab
-                  className={classes.tabStyle}
-                  key={tab.label}
-                  label={tab.label}
-                  value={tab.label}
-                  data-cy={tab.dataCy}
-                />
-              ))}
-            </TabList>
-            <Divider />
-          </div>
-        </div>
+        <HeaderWrapper>
+          <TabList
+            classes={{ indicator: classes.indicatorStyle }}
+            onChange={!props.disabled ? handleChange : void 0}
+          >
+            {tabs.map((tab) => (
+              <StyledTab
+                className={classes.tabStyle}
+                key={tab.label}
+                label={tab.label}
+                value={tab.label}
+                data-cy={tab.dataCy}
+              />
+            ))}
+          </TabList>
+          <Divider />
+        </HeaderWrapper>
 
         {tabs.map((tab) => (
           <TabPanel value={tab.label} key={tab.label} className={classes.tabStyle}>
@@ -107,6 +104,16 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
           </TabPanel>
         ))}
       </TabContext>
-    </div>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  width: 100%;
+  margin-top: 52px;
+`;
+
+const HeaderWrapper = styled.div`
+  width: 100%;
+  padding: 0 20px;
+`;

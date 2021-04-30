@@ -16,9 +16,8 @@ describe("Display schedule", () => {
   context("when schedule is loaded", () => {
     it("presents required functionalities", () => {
       cy.get(`[data-cy=${shiftSectionDataCy(0)}]`, { timeout: 10000 }).should("exist");
-      cy.get("#month-switch > span", { timeout: 100 });
+      cy.get("[data-cy=month-name]", { timeout: 100 });
       cy.contains("Listopad 2020");
-      cy.get("#timetableRow > #weekendHeader").should("have.length", 10);
       shiftCodes.forEach((k, index) => {
         cy.checkWorkerShift({ desiredShiftCode: k as ShiftCode, shiftIdx: index, ...WORKER });
       });

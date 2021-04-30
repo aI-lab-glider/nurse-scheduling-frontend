@@ -8,6 +8,8 @@ import { useMonthInfo } from "../../hooks/use-month-info";
 import { useTeams } from "../../hooks/use-teams";
 import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
 import { ScheduleDataActionCreator } from "../../state/schedule-data/schedule-data.action-creator";
+import styled from "styled-components";
+import { colors } from "../../assets/colors";
 import {
   ScheduleErrorMessageModel,
   ScheduleErrorType,
@@ -18,7 +20,6 @@ interface Options {
   error: ScheduleErrorMessageModel;
   index: number;
   interactable?: boolean;
-  className?: string;
   showTitle?: boolean;
 }
 
@@ -51,7 +52,6 @@ export default function ErrorListItem({
   error,
   interactable = false,
   index,
-  className = "",
   showTitle = true,
 }: Options): JSX.Element {
   const { verboseDates, monthNumber } = useMonthInfo();
@@ -85,33 +85,73 @@ export default function ErrorListItem({
   }
 
   return (
-    <div className={`error-list-item ${className}`}>
-      <div className="red-rectangle" />
-      {showTitle && (
-        <div className="error-title">
-          <p className="error-title-content">
-            {error.title === "date" ? `${errorDay} ` + monthName : `${error.title}`}
-          </p>
-        </div>
-      )}
-      <div
-        className="error-text"
-        data-cy="error-text"
-        dangerouslySetInnerHTML={{ __html: message || "" }}
-      />
+    <Wrapper>
+      <RedBar />
+      <div>
+        {showTitle && (
+          <Title>{error.title === "date" ? `${errorDay} ` + monthName : `${error.title}`}</Title>
+        )}
+        <Message
+          className="error-text"
+          data-cy="error-text"
+          dangerouslySetInnerHTML={{ __html: error.message || "" }}
+        />
+      </div>
       {interactable && (
-        <div className="error-btn">
-          <Button
-            className="submit-button"
-            variant="primary"
-            id="error-buttons"
-            style={{ width: "90px", height: "26px" }}
-            onClick={(): void => handleShow(error)}
-          >
-            {t("show")}
-          </Button>
-        </div>
+        <Button
+          variant="primary"
+          id="error-buttons"
+          style={{ width: "90px", height: "40px", marginRight: "0px" }}
+          onClick={(): void => handleShow(error)}
+        >
+          {t("show")}
+        </Button>
       )}
-    </div>
+    </Wrapper>
   );
 }
+
+// TODO: Simplify that
+const Wrapper = styled.div`
+  flex: 1;
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+
+  text-align: left;
+  border: 1px solid ${colors.errorListItemBorder};
+  border-radius: 2px;
+  margin-bottom: 5px;
+  padding: 10px 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const RedBar = styled.div`
+  position: absolute;
+  border-radius: 4px;
+  width: 4.5px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: ${colors.errorRed};
+`;
+
+const Title = styled.div`
+  color: ${colors.errorDateText};
+  size: 14px;
+`;
+
+const Message = styled.div`
+  color: ${colors.primaryTextColor};
+  size: 13px;
+  text-align: justify;
+  strong {
+    letter-spacing: 1.5px;
+    font-weight: bolder;
+  }
+`;

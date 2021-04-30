@@ -122,7 +122,7 @@ context("Work hours info (summary table)", () => {
       shiftIdx: prevMonthDays - 2,
     };
 
-    cy.getWorkerShift(data).click();
+    cy.getWorkerShift(data).click({ force: true });
     const exampleShiftCode = ShiftCode.D;
     cy.get(`[data-cy=autocomplete-${exampleShiftCode}]`).should("not.exist");
   });

@@ -22,24 +22,18 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
 
   const title = t("errorOccured");
 
-  const body = (
-    <div className={"span-primary error-modal-text"}>
-      <p>{t("errorMessageWasSent")}</p>
-    </div>
-  );
+  const body = <span>{t("errorMessageWasSent")}</span>;
 
   const footer = (
-    <div style={{ display: "flex", justifyContent: "center" }}>
-      <Button
-        onClick={handleClose}
-        size="small"
-        className="submit-button"
-        variant="primary"
-        data-cy="btn-reload-app-error"
-      >
-        OK
-      </Button>
-    </div>
+    <Button
+      onClick={handleClose}
+      size="small"
+      className="submit-button"
+      variant="primary"
+      data-cy="btn-reload-app-error"
+    >
+      OK
+    </Button>
   );
 
   return (

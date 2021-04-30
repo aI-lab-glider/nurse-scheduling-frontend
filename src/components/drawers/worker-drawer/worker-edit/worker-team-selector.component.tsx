@@ -40,7 +40,7 @@ export function TeamSelector({ setTeam, team }: TeamSelectorOptions): JSX.Elemen
         buttons={teamsOptions}
         mainLabel={team}
         buttonVariant="secondary"
-        variant="contract-time-dropdown"
+        width={134}
       />
     </Grid>
   );

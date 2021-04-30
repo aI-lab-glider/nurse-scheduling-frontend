@@ -7,14 +7,12 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
-import classNames from "classnames/bind";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import {
   ContractType,
   WorkerInfoModel,
-  WorkerType,
 } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { ContractTypeHelper } from "../../../helpers/contract-type.helper";
 import { WorkerTypeHelper } from "../../../helpers/worker-type.helper";
@@ -31,6 +29,8 @@ import WorkerDrawerComponent, {
   WorkerDrawerMode,
 } from "../../../components/drawers/worker-drawer/worker-drawer.component";
 import { DEFAULT_CONTRACT_TYPE } from "../../../logic/schedule-parser/workers-info.parser";
+import styled from "styled-components";
+import { colors, fontSizeXs } from "../../../assets/colors";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -117,7 +117,7 @@ export default function WorkersTab(): JSX.Element {
   );
 
   return (
-    <div className="workers-table">
+    <Wrapper>
       <TableContainer className={classes.root}>
         <Table size="small">
           <EnhancedTableHeaderComponent
@@ -137,14 +137,9 @@ export default function WorkersTab(): JSX.Element {
                     {worker.name}
                   </TableCell>
                   <TableCell className={classes.tableCell} align="left">
-                    <span
-                      className={classNames(
-                        "worker-label",
-                        `${workerType.toString().toLowerCase()}-label`
-                      )}
-                    >
+                    <WorkerType className={`${workerType.toString().toLowerCase()}-label`}>
                       {StringHelper.capitalize(WorkerTypeHelper.translate(workerType))}
-                    </span>
+                    </WorkerType>
                   </TableCell>
                   <TableCell className={classes.tableCell} align="left">
                     {getWorkerTimeLabel(worker.name)}
@@ -153,20 +148,18 @@ export default function WorkersTab(): JSX.Element {
                     {worker.team}
                   </TableCell>
                   <TableCell align="right">
-                    <Button
+                    <ActionButton
                       variant="primary"
-                      className="action-button"
                       onClick={(): void => toggleDrawer(true, WorkerDrawerMode.EDIT, worker)}
                     >
                       Edytuj
-                    </Button>
-                    <Button
+                    </ActionButton>
+                    <ActionButton
                       variant="secondary"
-                      className="action-button"
                       onClick={(): void => workerDeleteModal(true, worker)}
                     >
                       Usuń
-                    </Button>
+                    </ActionButton>
                   </TableCell>
                 </TableRow>
               );
@@ -182,6 +175,30 @@ export default function WorkersTab(): JSX.Element {
         setOpen={setIsOpen}
       />
       <DeleteWorkerModalComponent setOpen={setDelModalOpen} open={openDelModal} worker={worker} />
-    </div>
+    </Wrapper>
   );
 }
+const Wrapper = styled.div`
+  margin-top: 45px;
+`;
+
+const WorkerType = styled.span`
+  border-radius: 20px;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+  background-color: ${colors.nurseColor};
+  padding: 6px;
+
+  &.nurse-label {
+    background-color: ${colors.nurseColor};
+  }
+
+  &.other-label {
+    background-color: ${colors.babysitterLabelBackground};
+  }
+`;
+
+const ActionButton = styled(Button)`
+  font-size: ${fontSizeXs};
+  padding: 2px 25px 2px;
+`;

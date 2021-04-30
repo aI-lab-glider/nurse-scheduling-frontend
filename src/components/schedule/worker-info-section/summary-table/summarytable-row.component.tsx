@@ -5,20 +5,27 @@ import React from "react";
 import { useWorkerHoursInfo } from "../../../../hooks/use-worker-hours-info";
 import { SummaryTableCell } from "./summarytable-cell.component";
 import { summaryRowDataCy, SummaryTableRowOptions } from "./summarytable-row.models";
+import { SectionRow } from "../../base/styled";
+import styled from "styled-components";
 
 export function SummaryTableRowF({ workerName, rowIndex }: SummaryTableRowOptions): JSX.Element {
   const workerHours = useWorkerHoursInfo(workerName);
   return (
-    <div className="row" id="summaryRow" data-cy={summaryRowDataCy(rowIndex)}>
+    <SummaryRow id="summaryRow" data-cy={summaryRowDataCy(rowIndex)}>
       {Object.keys(workerHours).map((key, index) => {
         return (
           <SummaryTableCell key={`${key}_${index}`} value={workerHours[key]} cellIndex={index} />
         );
       })}
-    </div>
+    </SummaryRow>
   );
 }
 
 export const SummaryTableRow = React.memo(SummaryTableRowF, (prev, next) => {
   return prev.workerName === next.workerName;
 });
+
+const SummaryRow = styled(SectionRow)`
+  height: 40px;
+  width: 130px;
+`;

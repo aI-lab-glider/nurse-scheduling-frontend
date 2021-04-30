@@ -6,6 +6,8 @@ import { VerboseDate } from "../../../../state/schedule-data/foundation-info/fou
 import { MonthInfoLogic } from "../../../../logic/schedule-logic/month-info.logic";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
 import { TimeTableCell } from "./timetable-cell.component";
+import { SectionRow } from "../../base/styled";
+import styled from "styled-components";
 
 export function TimeTableRow(): JSX.Element {
   let { verboseDates, monthNumber: currMont } = useMonthInfo();
@@ -34,7 +36,7 @@ export function TimeTableRow(): JSX.Element {
   [verboseDates, currMont] = getVerboseDates();
 
   return (
-    <div className="row" id="timetableRow">
+    <Wrapper id="timetableRow">
       {verboseDates.map((verboseDate, cellIndex) => {
         return (
           <TimeTableCell
@@ -45,6 +47,12 @@ export function TimeTableRow(): JSX.Element {
           />
         );
       })}
-    </div>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled(SectionRow)`
+  width: 1350px;
+  height: 70px;
+  cursor: default;
+`;

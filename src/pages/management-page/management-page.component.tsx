@@ -7,6 +7,8 @@ import WorkersTab from "./workers-tab/workers-tab.component";
 import RouteButtonsComponent, {
   Tabs,
 } from "../../components/buttons/route-buttons/route-buttons.component";
+import styled from "styled-components";
+import { colors } from "../../assets/colors";
 
 export default function ManagementPage(): JSX.Element {
   const tabs: Tabs[] = [
@@ -14,9 +16,20 @@ export default function ManagementPage(): JSX.Element {
     { label: "ZMIANY", component: <ShiftTab />, dataCy: "btn-shifts-tab" },
   ];
   return (
-    <div className="management-page">
-      <h1 data-cy={"management-page-title"}>Panel zarządzania</h1>
-      <RouteButtonsComponent id="adjusted-tab-padding" tabs={tabs} />
-    </div>
+    <Wrapper>
+      <Title data-cy={"management-page-title"}>Panel zarządzania</Title>
+      <RouteButtonsComponent tabs={tabs} />
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  overflow: auto;
+  width: 100%;
+  padding: 20px;
+  min-height: 100vh;
+`;
+const Title = styled.h1`
+  color: ${colors.primaryTextColor};
+  margin: 0 10px 10px 10px;
+`;

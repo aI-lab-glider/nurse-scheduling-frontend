@@ -79,8 +79,9 @@ const en: LocalizationResource = {
     errorsWereEncounteredWhileLoadingFile: "Errors were encountered while loading the file ",
     //export.modal.component.tsx
     dayWorkers: "day workers",
-    downloadSchedule: "Download schedule",
-    fileOptions: "File options",
+    downloadScheduleTitle: "Download schedule",
+    fileFormat: "File format",
+    fileOptions: "Options",
     //new-version.modal.component.tsx
     update: "Update",
     updateMessage: "App has been updated. Current version is {{version}}",
@@ -114,6 +115,11 @@ const en: LocalizationResource = {
     downloadScheduleAndClearAppData: "Download schedule and clear app data.",
     //read-only-toolbar.tsx
     scheduleHasErrors: "The schedule contains errors. See them in the edit mode.",
+    //save-changes-modal.component.tsx
+    yes: "Yes",
+    no: "No",
+    unsavedChanges: "Unsaved changes in schedule",
+    wantToSave: "Do you want to save changes?",
   },
 };
 export default en;

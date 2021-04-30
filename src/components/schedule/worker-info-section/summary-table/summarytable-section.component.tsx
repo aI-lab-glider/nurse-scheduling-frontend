@@ -5,6 +5,9 @@ import React from "react";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { SummaryTableRow } from "./summarytable-row.component";
 import { summaryTableSectionDataCy } from "./summarytable-section.models";
+import { SectionWrapper } from "../../base/styled";
+import styled from "styled-components";
+import { colors } from "../../../../assets/colors";
 
 export interface SummaryTableSectionOptions {
   dataRows: DataRow[];
@@ -16,11 +19,7 @@ export function SummaryTableSection({
   sectionIdx,
 }: SummaryTableSectionOptions): JSX.Element {
   return (
-    <div
-      className="table borderContainer"
-      id="summaryTable"
-      data-cy={summaryTableSectionDataCy(sectionIdx)}
-    >
+    <Wrapper id="summaryTable" data-cy={summaryTableSectionDataCy(sectionIdx)}>
       <div>
         {dataRows.map((dataRow, rowIndex) => {
           return (
@@ -28,6 +27,14 @@ export function SummaryTableSection({
           );
         })}
       </div>
-    </div>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled(SectionWrapper)`
+  width: 130px;
+  cursor: default;
+
+  border: 1px solid ${colors.tableBorderGrey};
+  border-radius: 10px;
+`;

@@ -64,7 +64,7 @@ export function WorkerContractTypeSelector({
               : "Typ umowy"
           }
           buttonVariant="secondary"
-          variant="contract"
+          width={workerContractType ? 190 : 154}
         />
 
         <FormFieldErrorLabel

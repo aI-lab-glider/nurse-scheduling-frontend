@@ -20,6 +20,8 @@ import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule
 import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
 import { ShiftsActionCreator } from "../../../state/schedule-data/shifts-types/shifts.action-creator";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
+import styled from "styled-components";
+import { fontSizeXs } from "../../../assets/colors";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -86,7 +88,7 @@ export default function ShiftTab(): JSX.Element {
   };
 
   return (
-    <div className="workers-table">
+    <Wrapper>
       <TableContainer className={classes.root}>
         <Table size="small">
           <EnhancedTableHeaderComponent toggleOpen={toggleOpen} />
@@ -107,22 +109,20 @@ export default function ShiftTab(): JSX.Element {
                     />
                   </TableCell>
                   <TableCell align="right">
-                    <Button
+                    <ActionButton
                       variant="primary"
-                      className="action-button"
                       onClick={(): void => toggleOpen(shift, ShiftDrawerMode.EDIT)}
                       disabled
                     >
                       Edytuj
-                    </Button>
-                    <Button
+                    </ActionButton>
+                    <ActionButton
                       variant="secondary"
-                      className="action-button"
                       onClick={(): void => handleRemoveItem(shift)}
                       disabled
                     >
                       Usuń
-                    </Button>
+                    </ActionButton>
                   </TableCell>
                 </TableRow>
               );
@@ -138,6 +138,15 @@ export default function ShiftTab(): JSX.Element {
         selectedShift={selectedShift}
         saveChangedShift={handleChangeItem}
       />
-    </div>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  margin-top: 45px;
+`;
+
+const ActionButton = styled(Button)`
+  font-size: ${fontSizeXs};
+  padding: 2px 25px 2px;
+`;

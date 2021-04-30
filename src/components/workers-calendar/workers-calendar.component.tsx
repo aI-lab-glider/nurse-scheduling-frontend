@@ -6,11 +6,13 @@ import { VerboseDate } from "../../state/schedule-data/foundation-info/foundatio
 import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { WorkersCalendarCell } from "./worker-calendar-cell.component";
 import { applyScheduleStyling } from "../../hooks/use-schedule-styling/use-schedule-styling";
+import styled from "styled-components";
+import { colors } from "../../assets/colors";
 
 interface CalendarOptions {
   shiftsArr: [VerboseDate, ShiftCode][];
 }
-
+// TODO: Shrink drawer
 export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Element {
   const firstDay = shiftsArr[0][0].dayOfWeek;
   const dayOfWeekNamesEng = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
@@ -31,39 +33,64 @@ export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Ele
   let isLeft = false;
 
   return (
-    <>
-      <div className={"scheduleStyle"}>
-        <div className={"calendarRow"}>
-          {daysToDisplay.map((element) => {
-            return <div className={"dayName"}>{element}</div>;
-          })}
-          {data?.map(({ value, keepOn, hasNext }, index) => {
-            date = shiftsArr[index][0];
-            if (date.date === 1) {
-              notCurrentMonth = !notCurrentMonth;
-            }
-            if (value === "W") {
-              value = "" as ShiftCode;
-            }
+    <Wrapper>
+      <CalendarWrapper>
+        {daysToDisplay.map((element) => {
+          return <DayName>{element}</DayName>;
+        })}
+        {data?.map(({ value, keepOn, hasNext }, index) => {
+          date = shiftsArr[index][0];
+          if (date.date === 1) {
+            notCurrentMonth = !notCurrentMonth;
+          }
+          if (value === "W") {
+            value = "" as ShiftCode;
+          }
 
-            isTop = index < 7;
-            isLeft = index % 7 === 0;
+          isTop = index < 7;
+          isLeft = index % 7 === 0;
 
-            return (
-              <WorkersCalendarCell
-                shift={value}
-                date={date}
-                keepOn={keepOn}
-                workersCalendar={true}
-                hasNext={hasNext}
-                notCurrentMonth={notCurrentMonth}
-                isTop={isTop}
-                isLeft={isLeft}
-              />
-            );
-          })}
-        </div>
-      </div>
-    </>
+          return (
+            <WorkersCalendarCell
+              shift={value}
+              date={date}
+              keepOn={keepOn}
+              workersCalendar={true}
+              hasNext={hasNext}
+              notCurrentMonth={notCurrentMonth}
+              isTop={isTop}
+              isLeft={isLeft}
+            />
+          );
+        })}
+      </CalendarWrapper>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  width: 100%;
+`;
+const CalendarWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  align-content: space-between;
+  justify-content: space-between;
+  border-left: 1px solid ${colors.tableBorderGrey};
+  border-top: 1px solid ${colors.tableBorderGrey};
+`;
+
+const DayName = styled.div`
+  size: 14px;
+  letter-spacing: 0.75px;
+  font-weight: 400;
+  width: 14.2%;
+  height: 30px;
+  padding: 5px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid ${colors.tableBorderGrey};
+  border-right: 1px solid ${colors.tableBorderGrey};
+`;

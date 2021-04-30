@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import classNames from "classnames/bind";
 import React, { ReactNode, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +14,8 @@ import {
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import ErrorListItem from "../../error-list/error-list-item.component";
 import { Popper } from "../popper";
+import styled from "styled-components";
+import { colors } from "../../../assets/colors";
 
 export interface ErrorPopperOptions {
   children: ReactNode;
@@ -22,7 +23,6 @@ export interface ErrorPopperOptions {
   className?: string;
   showErrorTitle?: boolean;
   id?: string;
-  tooltipClassname?: string;
   showTooltip?: boolean;
 }
 
@@ -32,7 +32,6 @@ export function ErrorPopper({
   errorSelector,
   className,
   id,
-  tooltipClassname,
 }: ErrorPopperOptions): JSX.Element {
   const errors = useSelector((state: ApplicationStateModel) =>
     errorSelector(state.actualState.scheduleErrors)
@@ -78,14 +77,14 @@ export function ErrorPopper({
       setIsFixed(false);
     }
   }
+
   const { shift_types: shiftTypes } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
   );
   return (
     <>
-      <Popper
+      <ErrorTooltip
         ref={tooltipRef}
-        className="errorTooltip"
         isOpen={isOpen}
         {...attributes.popper}
         style={{
@@ -100,11 +99,10 @@ export function ErrorPopper({
             key={`${error.kind}_${index}`}
             error={ErrorMessageHelper.getErrorMessage(error, shiftTypes)}
             interactable={false}
-            className="errorTooltip-item"
             showTitle={showErrorTitle}
           />
         ))}
-      </Popper>
+      </ErrorTooltip>
 
       <div
         id={id}
@@ -116,40 +114,19 @@ export function ErrorPopper({
         onMouseEnter={showErrorTooltip}
         onMouseLeave={(): void => hideErrorTooltip(false)}
       >
-        {errors.length !== 0 && triangleStyle === "single" && (
-          <span ref={errorTriangle} className={classNames("error-triangle", tooltipClassname)} />
-        )}
+        {errors.length !== 0 && triangleStyle === "single" && <ErrorTriangle ref={errorTriangle} />}
         {errors.length !== 0 && triangleStyle === "right" && (
           <div>
-            <span
-              ref={errorTriangle}
-              className={classNames("error-triangle bottom", tooltipClassname)}
-            />
-            <span
-              ref={errorTriangle}
-              className={classNames("error-triangle line", tooltipClassname)}
-            />
+            <ErrorLine ref={errorTriangle} />
+            <RightBottomErrorTooltip ref={errorTriangle} />
           </div>
         )}
-        {errors.length > 1 && (
-          <span ref={errorTriangle} className={classNames("error-triangle", tooltipClassname)} />
-        )}
-        {errors.length !== 0 && triangleStyle === "middle" && (
-          <span
-            ref={errorTriangle}
-            className={classNames("error-triangle line", tooltipClassname)}
-          />
-        )}
+        {errors.length > 1 && <ErrorTriangle ref={errorTriangle} />}
+        {errors.length !== 0 && triangleStyle === "middle" && <ErrorLine ref={errorTriangle} />}
         {errors.length !== 0 && triangleStyle === "left" && (
           <div>
-            <span
-              ref={errorTriangle}
-              className={classNames("error-triangle bottom-mirrored", tooltipClassname)}
-            />
-            <span
-              ref={errorTriangle}
-              className={classNames("error-triangle line", tooltipClassname)}
-            />
+            <ErrorLine ref={errorTriangle} />
+            <LeftBottomErrorTooltip ref={errorTriangle} />
           </div>
         )}
         {children}
@@ -157,3 +134,54 @@ export function ErrorPopper({
     </>
   );
 }
+
+const ErrorTooltip = styled(Popper)`
+  position: absolute;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  font-size: 13px;
+  border-radius: 4px;
+  z-index: 3;
+  max-width: 500px;
+`;
+
+const ErrorTriangle = styled.span`
+  --border-width: 7px;
+  position: absolute;
+  top: 0;
+  right: -5px;
+
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: var(--border-width) solid transparent;
+  border-right: var(--border-width) solid transparent;
+
+  border-bottom: var(--border-width) solid ${colors.errorRed};
+  box-shadow: 0 3px 2px -1px rgba(0, 0, 0, 0.25);
+
+  transform: rotate(45deg);
+`;
+const LeftBottomErrorTooltip = styled(ErrorTriangle)`
+  transform: rotate(225deg);
+  left: -5px;
+  bottom: 0;
+  top: auto;
+`;
+
+const RightBottomErrorTooltip = styled(ErrorTriangle)`
+  transform: rotate(135deg);
+  top: auto;
+  right: -5px;
+  bottom: 0;
+`;
+
+const ErrorLine = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: ${colors.errorRed};
+`;

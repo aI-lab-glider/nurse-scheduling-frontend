@@ -68,7 +68,7 @@ export function WorkerEmploymentContractWorkNormSelector({
     setWorkerTime(workerNorm);
     setFirstEditMade(true);
   }
-
+  const inputWidth = 100;
   const employmentTimeAsFraction = toFraction(employmentTime);
   return (
     <>
@@ -78,7 +78,7 @@ export function WorkerEmploymentContractWorkNormSelector({
           buttons={contractTimeDropdownOptions}
           mainLabel={employmentTimeAsFraction ?? t("selectWorkerHours")}
           buttonVariant="secondary"
-          variant="contract-time-dropdown"
+          width={inputWidth}
         />
       </Grid>
       {selectedTimeType === TimeDrawerType.OTHER && (
@@ -91,7 +91,7 @@ export function WorkerEmploymentContractWorkNormSelector({
             onBlur={handleWorkerTimeUpdate}
             data-cy="input-employ-time-other"
             style={{
-              width: 100,
+              width: inputWidth,
             }}
             className={classes.formInput}
             inputComponent={

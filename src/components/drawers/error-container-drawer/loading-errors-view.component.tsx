@@ -15,9 +15,11 @@ import { ActionModel } from "../../../utils/action.model";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { Button } from "../../common-components";
 import ErrorList from "../../error-list/error-list.component";
-import { SpanErrors } from "../../error-list/span-errors.component";
 import { ErrorLoaderState, Props } from "./error-container-drawer.component";
 import { ScheduleErrorActionType } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
+import { t } from "../../../helpers/translations.helper";
+import styled from "styled-components";
+import { colors } from "../../../assets/colors";
 
 interface ErrorLoaderOptions {
   state?: Props;
@@ -67,41 +69,139 @@ export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions):
   return (
     <>
       {(options.state?.state === ErrorLoaderState.CHECKING || spinnerAgain) && (
-        <div className="error-loading-container">
-          <div className="center">
-            <div className="spinner" />
-            <div className="error-loading-text">Trwa sprawdzanie planu</div>
-          </div>
-        </div>
+        <Wrapper>
+          <Content>
+            <Spinner />
+            <ErrorLoadingText>Trwa sprawdzanie planu</ErrorLoadingText>
+          </Content>
+        </Wrapper>
       )}
       {isNetworkError && !spinnerAgain && options.state?.state !== ErrorLoaderState.CHECKING && (
-        <div className="error-loading-container">
-          <div className="center">
-            <img src={warning} alt="" />
-            <div className="error-loading-text">Błąd podczas sprawdzania</div>
-            <Button variant="primary" onClick={reload}>
+        <Wrapper>
+          <Content>
+            <Image src={warning} alt="" />
+            <ErrorLoadingText>Błąd podczas sprawdzania</ErrorLoadingText>
+            <ErrorButton variant="primary" onClick={reload}>
               Spróbuj ponownie
-            </Button>
-          </div>
-        </div>
+            </ErrorButton>
+          </Content>
+        </Wrapper>
       )}
       {options.state?.state === ErrorLoaderState.ERRORS && !isNetworkError && (
         <>
-          <SpanErrors errors={options.errors} />
+          <Title>
+            {t("errors")}: {options.errors?.length}
+          </Title>
           <ErrorList errors={options.errors} />
         </>
       )}
       {options.state?.state === ErrorLoaderState.NOERRORS && (
-        <div className="error-loading-container">
-          <div className="center">
-            <img src={ok} alt="" />
-            <div className="error-loading-text">Plan nie zawiera błędów</div>
-            <Button variant="primary" onClick={closeDrawer}>
+        <Wrapper>
+          <Content>
+            <Image src={ok} alt="" />
+            <ErrorLoadingText>Plan nie zawiera błędów</ErrorLoadingText>
+            <ErrorButton variant="primary" onClick={closeDrawer}>
               Wróć do planu
-            </Button>
-          </div>
-        </div>
+            </ErrorButton>
+          </Content>
+        </Wrapper>
       )}
     </>
   );
 }
+
+const Title = styled.h3`
+  color: ${colors.errorRed};
+`;
+const ErrorLoadingText = styled.div`
+  display: block;
+  margin: auto;
+  text-align: center;
+  font-weight: 500;
+  size: 16px;
+  line-height: 28px;
+  color: ${colors.primary};
+  clear: both;
+  position: relative;
+  top: 27px;
+`;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+const ErrorButton = styled(Button)`
+  display: block;
+  margin: auto;
+  position: relative;
+  top: 41px;
+`;
+const Image = styled.img`
+  display: block;
+  margin: auto;
+  width: 55px;
+  height: 49px;
+`;
+const Spinner = styled.div`
+  display: block;
+  margin: auto;
+  text-indent: -9999em;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: #ffffff;
+  background: linear-gradient(to right, ${colors.primary} 10%, rgba(255, 255, 255, 0) 42%);
+  position: relative;
+  animation: load3 1.4s infinite linear;
+  transform: translateZ(0);
+
+  &:before {
+    width: 50%;
+    height: 50%;
+    background: ${colors.primary};
+    border-radius: 100% 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+  }
+
+  &:after {
+    background: #ffffff;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    content: "";
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+
+  @-webkit-keyframes load3 {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes load3 {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;

@@ -5,7 +5,14 @@ import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Popper from "@material-ui/core/Popper";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React, { useRef, useState } from "react";
-import { Button, ButtonVariant } from "../../common-components";
+import { ButtonVariant } from "../../common-components";
+import {
+  Wrapper,
+  PlaceholderButtonContent,
+  PlaceholderButton,
+  ButtonListWrapper,
+  DropdownButton,
+} from "./styles";
 
 export interface ButtonData {
   label: string;
@@ -17,7 +24,7 @@ interface DropdownOptions {
   buttons: ButtonData[];
   mainLabel: string;
   buttonVariant?: ButtonVariant;
-  variant?: string;
+  width: number;
   dataCy?: string;
   disabled?: boolean;
 }
@@ -26,7 +33,7 @@ export function DropdownButtons({
   buttons,
   mainLabel,
   buttonVariant,
-  variant,
+  width,
   dataCy,
   disabled = false,
 }: DropdownOptions): JSX.Element {
@@ -41,27 +48,31 @@ export function DropdownButtons({
     setOpen(false);
   }
 
+  // TODO: something is wrong here
   const dropdownZIndex = 100;
+
   return (
-    <div className="dropdown-container">
-      <Button
+    <Wrapper>
+      <PlaceholderButton
         variant={buttonVariant}
-        id={variant + "-onTopButton"}
         onClick={handleToggle}
         ref={anchorRef}
         data-cy={dataCy}
         disabled={disabled}
-        style={{
-          zIndex: open ? dropdownZIndex + 1 : "initial",
-        }}
+        style={
+          {
+            zIndex: open ? dropdownZIndex + 1 : "initial",
+            "--width": width,
+          } as React.CSSProperties
+        }
       >
-        <div className="centeredButtonWithArrow">
-          <div>{mainLabel}</div>
+        <PlaceholderButtonContent>
+          <span>{mainLabel}</span>
           <div>
             <ArrowDropDownIcon />
           </div>
-        </div>
-      </Button>
+        </PlaceholderButtonContent>
+      </PlaceholderButton>
       <Popper
         data-cy="openedDropdown"
         open={open}
@@ -70,13 +81,13 @@ export function DropdownButtons({
         disablePortal
         style={{
           zIndex: dropdownZIndex,
+          width: `${width}px`,
         }}
       >
         <ClickAwayListener onClickAway={handleClickAway}>
-          <div className="dropdown-buttons-list" id={variant}>
+          <ButtonListWrapper>
             {buttons.map((item) => (
-              <div
-                className="dropdown-button"
+              <DropdownButton
                 key={item.label}
                 onClick={(): void => {
                   item.action();
@@ -85,11 +96,11 @@ export function DropdownButtons({
                 data-cy={item.dataCy}
               >
                 {item.label}
-              </div>
+              </DropdownButton>
             ))}
-          </div>
+          </ButtonListWrapper>
         </ClickAwayListener>
       </Popper>
-    </div>
+    </Wrapper>
   );
 }

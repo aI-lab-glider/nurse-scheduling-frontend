@@ -9,6 +9,7 @@ import { UndoableHotkeys } from "../../../components/common-components";
 import { ScheduleContainerComponent } from "../schedule-container.component";
 import { ScheduleMode } from "../../../components/schedule/schedule-state.model";
 import { ReadOnlyToolbar } from "./read-only-toolbar";
+import styled from "styled-components";
 
 interface ScheduleViewOnlyPageOptions {
   openEdit: () => void;
@@ -26,9 +27,14 @@ export function ScheduleReadOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.El
     <>
       <UndoableHotkeys config={PERSISTENT_SCHEDULE_UNDOABLE_CONFIG} />
       <ReadOnlyToolbar openEdit={props.openEdit} />
-      <div className={"schedule"}>
+      <ScheduleWrapper>
         <ScheduleContainerComponent mode={mode} />
-      </div>
+      </ScheduleWrapper>
     </>
   );
 }
+
+const ScheduleWrapper = styled.div`
+  margin: auto;
+  min-height: 80vh;
+`;

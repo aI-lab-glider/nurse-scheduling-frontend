@@ -56,7 +56,7 @@ export const pl = {
     overtime: "Nadgodziny",
     illegalScheduleValue: "Niedozwolona wartość zmiany",
     otherErrors: "Pozostałe błędy",
-    //span-errors.component.tsx
+
     errors: "Błędy",
     //footer.component.tsx
     realization: "Wykonanie",
@@ -77,8 +77,9 @@ export const pl = {
     errorsWereEncounteredWhileLoadingFile: "Napotkano błędy podczas wczytywania pliku",
     //export.modal.component.tsx
     dayWorkers: "dzienni pracownicy",
-    downloadSchedule: "Pobierz plan",
-    fileOptions: "Opcje pliku",
+    downloadScheduleTitle: "Pobierz grafik",
+    fileFormat: "Format pliku",
+    fileOptions: "Opcje",
     //new-version.modal.component.tsx
     update: "Aktualizacja",
     updateMessage: "Aplikacja została zaktualizowana. Teraz jest w wersji {{version}}",
@@ -90,7 +91,7 @@ export const pl = {
     provideErrorDescription: "Opisz błąd",
     //shift-drawer.component.tsx
     shiftEdit: "Edycja zmiany",
-    shiftAdd: "Dodaj smianę",
+    shiftAdd: "Dodaj zmianę",
     //shift-edit-drawer.component.tsx
     shiftName: "Nazwa zmiany",
     shiftType: "Typ zmiany",
@@ -113,6 +114,11 @@ export const pl = {
     downloadScheduleAndClearAppData: "Pobierz grafik i wyczyść aplikację",
     //read-only-toolbar.tsx
     scheduleHasErrors: "Plan zawiera błędy. Zobacz je w trybie edycji.",
+    //save-changes-modal.component.tsx
+    yes: "Tak",
+    no: "Nie",
+    unsavedChanges: "Niezapisane zmiany w grafiku",
+    wantToSave: "Czy chcesz zapisać wprowadzone zmiany?",
   },
 };
 export default pl;

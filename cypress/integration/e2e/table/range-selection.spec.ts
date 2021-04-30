@@ -13,11 +13,11 @@ describe("Shift range selection", () => {
 
   workerTestCases.forEach((test) => {
     it(test.title, () => {
-      cy.getWorkerShift(test.startShiftCell).trigger("dragstart");
-      cy.getWorkerShift(test.endShiftCell).trigger("drop");
+      cy.getWorkerShift(test.startShiftCell).trigger("dragstart", { force: true });
+      cy.getWorkerShift(test.endShiftCell).trigger("drop", { force: true });
       cy.useAutocomplete(test.desiredShiftCode);
       const teamIndx = shiftSectionDataCy(test.startShiftCell.teamIdx);
-      cy.get(`[data-cy=${teamIndx}] p[data-cy*="cell"]`)
+      cy.get(`[data-cy=${teamIndx}] div[data-cy*="cell"]`)
         .then(($cell) => {
           return $cell
             .map((i, el) => {

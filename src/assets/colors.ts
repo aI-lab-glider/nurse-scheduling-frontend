@@ -19,10 +19,9 @@ export const colors = {
   nurseLabelBackground: "#c8dfff",
   cellColor: "#4e4b66",
   cellWeekendBackgroundColor: "rgba(60, 105, 168, 0.2)",
-  cellWeekendHeaderBackgroundColor: "rgba(60, 105, 168, 0.3)",
+  weekendHeader: "rgba(60, 105, 168, 0.3)",
   cellOtherMonthBackgroundColor: "#f5f9ff",
-  cellOtherColor: "rgba(78, 75, 102, 0.5)",
-  headerCurrMonthBackgroundColor: "#ecf4ff",
+  currMonthBackground: "#ecf4ff",
   white: "#FFFFFF",
   gray100: "#f6f9fc",
   gray200: "#e9ecef",
@@ -33,18 +32,32 @@ export const colors = {
   gray700: "#525f7f",
   gray800: "#32325d",
   gray900: "#212529",
+  errorRed: "#c60000",
+  errorDateText: "#3c69a8",
+  errorListItemBorder: "#c8dfff",
+  tableBorderGrey: "#d6d8e7",
+  tableColor: "#14142b",
+  otherMonthBackground: "#ecf4ff",
+  weekendBackground: "#3c69a8",
+  orange: "#fb6340",
 };
 
 export const fontFamilyPrimary = "Roboto, sans-serif";
 
-export const fontSizeDash = 0.875;
-export const fontSizeBase = 1; // Assumes the browser default, typically `16px`
-export const fontSizeLg = fontSizeBase * 1.25;
-export const fontSizeXl = fontSizeBase * 1.5;
-export const fontSizeXs = fontSizeBase * 0.75;
+export const fontSizeBase = `${1}rem`;
+export const fontSizeXs = `${0.75}rem`;
+export const fontSizeDash = `${0.875}rem`;
+export const fontSizeLg = `${1.142}rem`;
+export const fontSizeXl = `${1.428}rem`;
 
 export const fontWeightLight = 300;
 export const fontWeightNormal = 400;
 export const fontWeightBold = 600;
 export const fontWeightExtra = "bold";
 export const fontWeightBase = fontWeightNormal;
+
+export const iconSize = "auto";
+export const iconSizeRegular = "2.375rem";
+export const iconSizeSm = "1.5rem";
+export const iconSizeLg = "3.7rem";
+export const iconSizeXl = "5rem";
