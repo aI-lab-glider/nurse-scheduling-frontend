@@ -91,7 +91,11 @@ export default function ErrorListItem({
         {showTitle && (
           <Title>{error.title === "date" ? `${errorDay} ` + monthName : `${error.title}`}</Title>
         )}
-        <Message className="error-text" dangerouslySetInnerHTML={{ __html: error.message || "" }} />
+        <Message
+          className="error-text"
+          data-cy="error-text"
+          dangerouslySetInnerHTML={{ __html: error.message || "" }}
+        />
       </div>
       {interactable && (
         <Button

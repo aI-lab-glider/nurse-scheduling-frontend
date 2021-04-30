@@ -42,7 +42,7 @@ export function MonthSwitchComponent({ isInViewMode }: MonthSwitchComponentOptio
             </IconWrapper>
           )}
 
-          <MonthName>{actualMonth}</MonthName>
+          <MonthName data-cy="month-name">{actualMonth}</MonthName>
 
           {showMonthNavigation && (
             <IconWrapper
