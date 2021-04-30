@@ -13,13 +13,7 @@ describe("Copy schedule from previous month", () => {
         cy.get("[data-cy=switch-next-month]").click();
         cy.get("[data-cy=copy-prev-month]").click();
         cy.get('[data-cy="team0ShiftsTable"] [data-cy="1Row"] div[data-cy*="cell"]')
-          .then(($cell) => {
-            return $cell
-              .map((i, el) => {
-                return Cypress.$(el).text();
-              })
-              .get();
-          })
+          .then(($cell) => $cell.map((i, el) => Cypress.$(el).text()).get())
           .snapshot();
       }
     });

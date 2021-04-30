@@ -103,7 +103,7 @@
     "start": "concurrently \"cross-env BROWSER=none npm run b-start\" \"node scripts/await.js && electron .\"",
     "lint": "eslint src/**/*.ts* cypress/**/*.ts*",
     "lint-fix": "eslint src/**/*.ts* cypress/**/*.ts* --fix",
-    "lint-warn": "eslint src/**/*.ts* --max-warnings=0",
+    "lint-warn": "eslint src/**/*.ts* cypress/**/*.ts* --max-warnings=0",
     "cypress:open": "cypress open"
   },
   "devDependencies": {

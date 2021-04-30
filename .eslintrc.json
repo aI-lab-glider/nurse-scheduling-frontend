@@ -3,7 +3,7 @@
     "browser": true,
     "es2021": true
   },
-  "ignorePatterns": ["snapshots.js", "cypress/**/*"],
+  "ignorePatterns": ["snapshots.js"],
   "extends": [
     "plugin:react/recommended",
     "airbnb",
