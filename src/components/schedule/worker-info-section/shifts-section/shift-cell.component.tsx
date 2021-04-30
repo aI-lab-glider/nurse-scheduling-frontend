@@ -171,17 +171,13 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
         {!showInput && (
           <ErrorWrapper errorSelector={errorSelector} showTooltip={!showInput}>
             <WrapContentDiv>
-              <Content
-                ref={cellRef}
-                style={cellStyle}
-                data-cy={baseCellDataCy(cellIndex, "highlighted-cell")}
-              >
+              <Content ref={cellRef} style={cellStyle}>
                 {!keepOn && !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W" && (
                   <ShiftBar style={{ backgroundColor: `#${getColor(shiftCode, shiftTypes)}` }} />
                 )}
                 <Shift
-                  data-cy={baseCellDataCy(cellIndex, "cell")}
                   style={{ color: `#${getColor(shiftCode, shiftTypes)}` }}
+                  data-cy={baseCellDataCy(cellIndex, "cell")}
                 >
                   {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
                 </Shift>
@@ -228,6 +224,13 @@ const CellWrapper = styled.div`
     background: ${colors.cellOtherMonthBackgroundColor};
     color: ${colors.gray600};
   }
+
+  &.selection {
+    border-left: 1px solid white;
+    background-color: white;
+    outline: white solid 1px;
+    box-shadow: 0 4px 7px rgba(16, 32, 70, 0.2), 0 0 7px rgba(16, 32, 70, 0.2);
+  }
 `;
 
 const ErrorWrapper = styled(ErrorPopper)`
@@ -256,8 +259,11 @@ const ShiftBar = styled.div`
   border-radius: 2px 0 0 2px;
 `;
 
-const Shift = styled.p`
+const Shift = styled.div`
   display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
   flex-direction: row;
   margin: auto;
   font-size: ${fontSizeBase};
