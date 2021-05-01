@@ -13,11 +13,7 @@ const useStyles = makeStyles({
   bodyText: {
     color: ScssVars.secondary,
     fontSize: 16,
-    paddingLeft: 25,
-    paddingRight: 65,
-  },
-  footer: {
-    paddingLeft: 14,
+    paddingRight: 40,
   },
 });
 
@@ -43,7 +39,7 @@ export default function NewVersionModal(options: NewVersionModalOptions): JSX.El
   );
 
   const footer = (
-    <div className={classes.footer}>
+    <div>
       <Button onClick={handleClose} size="small" className="submit-button" variant="primary">
         OK
       </Button>
