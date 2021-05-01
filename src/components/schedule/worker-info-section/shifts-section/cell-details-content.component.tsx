@@ -4,9 +4,9 @@
 import React from "react";
 import { MdClose } from "react-icons/md";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
 import { TranslationHelper } from "../../../../helpers/translations.helper";
 import { getPresentShiftTypes } from "../../../../state/schedule-data/selectors";
+import styled from "styled-components";
 
 export interface CellDetailsOptions {
   index: number;
