@@ -70,6 +70,7 @@ export class ParserHelper {
       case "nie":
         return false;
     }
+    return undefined;
   }
 
   public static translateBooleanToString(key: boolean | undefined, inEnglish = false): string {

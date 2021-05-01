@@ -70,7 +70,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
   const { setTitle, setOpen, setChildrenComponent } = usePersistentDrawer();
 
   function prepareDrawer(): void {
-    setChildrenComponent(<ErrorContainerDrawerComponent setOpen={setOpen} loadingErrors={true} />);
+    setChildrenComponent(<ErrorContainerDrawerComponent setOpen={setOpen} loadingErrors />);
     setTitle("Sprawdź plan");
     setOpen(true);
     updateScheduleErrors().then(() =>
@@ -94,7 +94,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
 
   function anyChanges(): boolean {
     if (persistentShifts && temporaryShifts) return !_.isEqual(persistentShifts, temporaryShifts);
-    else return false;
+    return false;
   }
 
   function onUndoClick(): void {

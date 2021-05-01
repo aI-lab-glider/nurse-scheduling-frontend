@@ -24,7 +24,7 @@ export function BaseCellInputComponent({
 
   return (
     <Input
-      autoFocus={true}
+      autoFocus
       onKeyDown={handleKeyDown}
       onBlur={(e): void => {
         !!e.currentTarget.value && onValueChange(e.currentTarget.value);

@@ -1,19 +1,25 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import _ from "lodash";
 import React from "react";
+import styled from "styled-components";
+import { colors } from "../../assets/colors";
+import { useMonthInfo } from "../../hooks/use-month-info";
+import { applyScheduleStyling } from "../../hooks/use-schedule-styling/use-schedule-styling";
 import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
 import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { WorkersCalendarCell } from "./worker-calendar-cell.component";
-import { applyScheduleStyling } from "../../hooks/use-schedule-styling/use-schedule-styling";
-import styled from "styled-components";
-import { colors } from "../../assets/colors";
 
 interface CalendarOptions {
-  shiftsArr: [VerboseDate, ShiftCode][];
+  id: string;
+  workerShifts: ShiftCode[];
 }
 // TODO: Shrink drawer
-export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Element {
+
+export default function WorkersCalendar({ id, workerShifts }: CalendarOptions): JSX.Element {
+  const { verboseDates } = useMonthInfo();
+  const shiftsArr = _.zip(verboseDates, workerShifts);
   const firstDay = shiftsArr[0][0].dayOfWeek;
   const dayOfWeekNamesEng = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
   const dayOfWeekNames = ["PON", "WT", "ŚR", "CZW", "PT", "SB", "ND"];
@@ -33,18 +39,16 @@ export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Ele
   let isLeft = false;
 
   return (
-    <Wrapper>
+    <Wrapper id={id}>
       <CalendarWrapper>
-        {daysToDisplay.map((element) => {
-          return <DayName>{element}</DayName>;
-        })}
-        {data?.map(({ value, keepOn, hasNext }, index) => {
+        {daysToDisplay.map((element) => <DayName>{element}</DayName>)}
+        {data?.map(({ value: shiftCode, keepOn, hasNext }, index) => {
           date = shiftsArr[index][0];
           if (date.date === 1) {
             notCurrentMonth = !notCurrentMonth;
           }
-          if (value === "W") {
-            value = "" as ShiftCode;
+          if (shiftCode === "W") {
+            shiftCode = "" as ShiftCode;
           }
 
           isTop = index < 7;
@@ -52,10 +56,11 @@ export default function WorkersCalendar({ shiftsArr }: CalendarOptions): JSX.Ele
 
           return (
             <WorkersCalendarCell
-              shift={value}
+              key={`${date.date}_${shiftCode}`}
+              shift={shiftCode}
               date={date}
               keepOn={keepOn}
-              workersCalendar={true}
+              workersCalendar
               hasNext={hasNext}
               notCurrentMonth={notCurrentMonth}
               isTop={isTop}

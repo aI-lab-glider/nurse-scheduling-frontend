@@ -20,7 +20,7 @@ import {
   WorkerTestDataInstance,
 } from "../../../fixtures/worker-data/worker-data-preprocessor";
 
-//todo refactor
+// todo refactor
 describe("Worker hours info", () => {
   workerTestData.forEach((workerInstance) => {
     context(
@@ -134,7 +134,7 @@ describe("Worker hours info", () => {
   });
 });
 
-//#region helper function
+// #region helper function
 interface RequiredTimeForPrimaryAndActualSchedule {
   primaryScheduleWorkerHoursInfo: WorkerHourInfo;
   actualScheduleWorkerHoursInfo: WorkerHourInfo;
@@ -188,4 +188,4 @@ function findFreeShift(shiftType: NotWorkingShiftType): NotWorkingShift {
   ) as NotWorkingShift;
 }
 
-//#endregion
+// #endregion

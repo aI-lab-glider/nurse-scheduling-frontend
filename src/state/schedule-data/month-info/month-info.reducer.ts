@@ -5,9 +5,8 @@ import { ScheduleDataModel } from "../schedule-data.model";
 import { MonthInfoModel } from "./month-info.model";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "../schedule.actions";
-let uuid = 0;
 
-/* eslint-disable @typescript-eslint/camelcase */
+let uuid = 0;
 
 export function scheduleInfoReducerF(name: string) {
   return (

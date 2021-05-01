@@ -5,7 +5,9 @@ import * as _ from "lodash";
 
 export type Opaque<K, T> = T & { __TYPE__: K };
 
-export function isAllObjectPropsDefined<T extends {}>(args: T): args is Required<T> {
+export function isAllObjectPropsDefined<T extends Record<string, unknown> | Array<unknown>>(
+  args: T
+): args is Required<T> {
   return isAllValuesDefined(Object.values(args));
 }
 

@@ -81,9 +81,12 @@ describe("DataRowParser", () => {
 
   describe("createWithProcessedRow", () => {
     const dataRowParser = new DataRowParser(dataRow);
-    const processingFunctionMock = (row: DataRowParser): [string, string, string, string] => {
-      return ["alice", "has", "a", "cat"];
-    };
+    const processingFunctionMock = (row: DataRowParser): [string, string, string, string] => [
+      "alice",
+      "has",
+      "a",
+      "cat",
+    ];
 
     it("should return new DataRowParser with returned value of processing function appended to row key", () => {
       expect(dataRowParser.createWithProcessedRow(processingFunctionMock)).to.be.a("Object");

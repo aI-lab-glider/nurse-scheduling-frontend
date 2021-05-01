@@ -1,8 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { RevisionType, ThunkFunction } from "../../../logic/data-access/persistance-store.model";
 import * as _ from "lodash";
+import { RevisionType, ThunkFunction } from "../../../logic/data-access/persistance-store.model";
 import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
 import { LocalStorageProvider } from "../../../logic/data-access/local-storage-provider.model";
 import { Shift, ShiftCode } from "./shift-types.model";

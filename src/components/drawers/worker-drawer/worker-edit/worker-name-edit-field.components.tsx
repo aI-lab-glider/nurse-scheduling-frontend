@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid, TextField, Typography } from "@material-ui/core";
-import React, { useCallback, useEffect } from "react";
-import { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+
 import { useSelector } from "react-redux";
 import { t } from "../../../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../../../state/application-state.model";
@@ -41,9 +41,7 @@ export function WorkerNameEditField({
     return isWorkerNameInvalid;
   }, [mode, workerName, workerNames]);
 
-  const isWorkerNameEmpty = useCallback((): boolean => {
-    return workerName === "";
-  }, [workerName]);
+  const isWorkerNameEmpty = useCallback((): boolean => workerName === "", [workerName]);
 
   useEffect(() => {
     const isNameValid = !isWorkerNameEmpty() && !isWorkerWithSameNameExists();

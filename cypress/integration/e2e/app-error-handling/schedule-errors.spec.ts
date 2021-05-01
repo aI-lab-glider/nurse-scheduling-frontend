@@ -25,9 +25,7 @@ context("Schedule errors", () => {
   it("Should throw error after adding error user", () => {
     addWorker(Cypress.env("REACT_APP_ERROR_WORKER"), WorkerType.NURSE);
     cy.get('[data-cy="btn-schedule-tab"]').click({ force: true });
-    Cypress.on("uncaught:exception", () => {
-      return false;
-    });
+    Cypress.on("uncaught:exception", () => false);
   });
 
   it("Should restore previous version from corrupted page", () => {

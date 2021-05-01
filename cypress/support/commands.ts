@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+/* eslint-disable import/no-extraneous-dependencies */
 import "cypress-file-upload";
 import {
   baseCellDataCy,
@@ -9,12 +10,14 @@ import {
 import { baseRowDataCy } from "../../src/components/schedule/base/base-row/base-row.models";
 import { shiftSectionDataCy } from "../../src/components/schedule/worker-info-section/worker-info-section.models";
 import { summaryCellDataCy } from "../../src/components/schedule/worker-info-section/summary-table/summarytable-cell.models";
-import { summaryRowDataCy } from "../../src/components//schedule/worker-info-section/summary-table/summarytable-row.models";
-import { summaryTableSectionDataCy } from "../../src/components//schedule/worker-info-section/summary-table/summarytable-section.models";
+import { summaryRowDataCy } from "../../src/components/schedule/worker-info-section/summary-table/summarytable-row.models";
+import { summaryTableSectionDataCy } from "../../src/components/schedule/worker-info-section/summary-table/summarytable-section.models";
 import { LocalStorageProvider } from "../../src/logic/data-access/local-storage-provider.model";
 import { ShiftCode } from "../../src/state/schedule-data/shifts-types/shift-types.model";
 
+/* eslint-disable @typescript-eslint/no-var-requires */
 require("@cypress/snapshot").register();
+
 export type CypressScreenshotOptions = Partial<
   Cypress.Loggable & Cypress.Timeoutable & Cypress.ScreenshotOptions
 >;
@@ -62,7 +65,7 @@ Cypress.Commands.add(
       cy.clock(Date.UTC(year ?? TEST_SCHEDULE_YEAR, month ?? TEST_SCHEDULE_MONTH, 15), ["Date"]);
       cy.visit("/");
       cy.get("[data-cy=file-input]").attachFile(scheduleName);
-      cy.get(`[data-cy=team0ShiftsTable]`, { timeout: 10000 });
+      cy.get("[data-cy=team0ShiftsTable]", { timeout: 10000 });
     });
   }
 );
@@ -88,9 +91,9 @@ Cypress.Commands.add(
   }
 );
 
-Cypress.Commands.add("useAutocomplete", (newShiftCode: ShiftCode) => {
-  return cy.get(`[data-cy=autocomplete-${newShiftCode}]`).click({ force: true });
-});
+Cypress.Commands.add("useAutocomplete", (newShiftCode: ShiftCode) =>
+  cy.get(`[data-cy=autocomplete-${newShiftCode}]`).click({ force: true })
+);
 
 Cypress.Commands.add(
   "changeWorkerShift",
@@ -108,7 +111,7 @@ Cypress.Commands.add(
     Object.keys(HoursInfoCells)
       .filter((key) => isNaN(Number(HoursInfoCells[key])))
       .forEach((key) => {
-        const cell = summaryCellDataCy(parseInt(key));
+        const cell = summaryCellDataCy(parseInt(key, 10));
         cy.get(`[data-cy=${section}] [data-cy=${row}] [data-cy=${cell}]`).should(
           "contain",
           hoursInfo[key]
@@ -117,9 +120,7 @@ Cypress.Commands.add(
   }
 );
 
-Cypress.Commands.add("saveToDatabase", () => {
-  return cy.get("[data-cy=save-schedule-button").click();
-});
+Cypress.Commands.add("saveToDatabase", () => cy.get("[data-cy=save-schedule-button").click());
 
 Cypress.Commands.add("enterEditMode", () => {
   cy.get("[data-cy=edit-mode-button]").click();

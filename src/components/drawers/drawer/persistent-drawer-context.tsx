@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, ReactNode, useContext, useState } from "react";
 
 export interface PersistentDrawerContextValues {
   title: string | undefined;
@@ -14,7 +14,7 @@ export interface PersistentDrawerContextValues {
 
 export const PersistentDrawerContext = createContext<PersistentDrawerContextValues | null>(null);
 
-export function PersistentDrawerProvider({ children }): JSX.Element {
+export function PersistentDrawerProvider({ children }: { children: ReactNode }): JSX.Element {
   const [title, setTitle] = useState<string>();
   const [open, setOpen] = useState<boolean>();
   const [childrenComponent, setChildrenComponent] = useState<JSX.Element>();

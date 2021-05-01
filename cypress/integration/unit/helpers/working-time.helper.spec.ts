@@ -19,9 +19,9 @@ describe("WorkingTimeHelper", () => {
     ];
 
     testCases.forEach((testCase) => {
-      it(`translates (hours: ${testCase["hours"]}, base: ${testCase["base"]}) -> ${testCase["result"]}`, () => {
-        expect(WorkingTimeHelper.fromHoursToFraction(testCase["hours"], testCase["base"])).to.eql(
-          testCase["result"]
+      it(`translates (hours: ${testCase.hours}, base: ${testCase.base}) -> ${testCase.result}`, () => {
+        expect(WorkingTimeHelper.fromHoursToFraction(testCase.hours, testCase.base)).to.eql(
+          testCase.result
         );
       });
     });
@@ -38,10 +38,10 @@ describe("WorkingTimeHelper", () => {
     ];
 
     testCases.forEach((testCase) => {
-      it(`translates (fraction: ${testCase["fraction"]}, base: ${testCase["base"]}) -> ${testCase["result"]}`, () => {
-        expect(
-          WorkingTimeHelper.fromFractionToHours(testCase["fraction"], testCase["base"])
-        ).to.eql(testCase["result"]);
+      it(`translates (fraction: ${testCase.fraction}, base: ${testCase.base}) -> ${testCase.result}`, () => {
+        expect(WorkingTimeHelper.fromFractionToHours(testCase.fraction, testCase.base)).to.eql(
+          testCase.result
+        );
       });
     });
   });
@@ -54,9 +54,9 @@ describe("WorkingTimeHelper", () => {
     ];
 
     testCases.forEach((testCase) => {
-      it(`finds id (search: ${testCase["search"]}, from: ${testCase["from"]}) -> ${testCase["id"]}`, () => {
-        expect(WorkingTimeHelper.findIdOfClosestFrom(testCase["search"], testCase["from"])).to.eql(
-          testCase["id"]
+      it(`finds id (search: ${testCase.search}, from: ${testCase.from}) -> ${testCase.id}`, () => {
+        expect(WorkingTimeHelper.findIdOfClosestFrom(testCase.search, testCase.from)).to.eql(
+          testCase.id
         );
       });
     });

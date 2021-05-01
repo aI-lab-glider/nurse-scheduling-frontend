@@ -2,10 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
+import i18next from "i18next";
 import Drawer, { DrawerOptions } from "../drawers/drawer/drawer.component";
 import ShiftEditDrawer from "./shift-edit-drawer.component";
 import { Shift } from "../../state/schedule-data/shifts-types/shift-types.model";
-import i18next from "i18next";
 
 export enum ShiftDrawerMode {
   EDIT,
@@ -15,7 +15,7 @@ export enum ShiftDrawerMode {
 interface ShiftDrawerOptions extends Omit<DrawerOptions, "title"> {
   mode: ShiftDrawerMode;
   selectedShift: Shift;
-  saveChangedShift: (Shift) => void;
+  saveChangedShift: (shift: Shift) => void;
 }
 
 function getTitle(mode: ShiftDrawerMode): string {
@@ -24,6 +24,8 @@ function getTitle(mode: ShiftDrawerMode): string {
       return i18next.t("shiftEdit");
     case ShiftDrawerMode.ADD_NEW:
       return i18next.t("shiftAdd");
+    default:
+      throw Error(`Invalid drawer mode ${mode}`);
   }
 }
 

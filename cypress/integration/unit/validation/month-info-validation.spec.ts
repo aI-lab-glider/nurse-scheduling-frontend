@@ -10,9 +10,9 @@ import {
   SCHEDULE_CONTAINERS_LENGTH,
   ScheduleContainerType,
 } from "../../../../src/state/schedule-data/schedule-data.model";
+
 describe("Month info validation", () => {
-  //#region Helper functions
-  /* eslint-disable @typescript-eslint/camelcase */
+  // #region Helper functions
   const createFoundationInfoModel = (
     dayCount: number,
     childrenCount?: number,
@@ -22,7 +22,7 @@ describe("Month info validation", () => {
     children_number: !_.isNil(childrenCount) ? _.range(1, childrenCount + 1) : undefined,
     extra_workers: !_.isNil(extraWorkersCount) ? _.range(1, extraWorkersCount) : undefined,
   });
-  //#endregion
+  // #endregion
 
   context(
     "when length of dates in month info model is not allowed length for schedule data model",

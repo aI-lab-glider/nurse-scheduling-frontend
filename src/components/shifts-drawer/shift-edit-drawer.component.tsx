@@ -6,14 +6,14 @@ import React, { useState } from "react";
 import { MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { FormControl, FormControlLabel, Grid, Radio, RadioGroup } from "@material-ui/core";
-import { Shift } from "../../state/schedule-data/shifts-types/shift-types.model";
+import { useSelector } from "react-redux";
+import i18next from "i18next";
+import { Shift, ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
 import { DropdownColors } from "../buttons/dropdown-buttons/dropdown-colors.component";
 import { Button } from "../common-components";
 import { ShiftDrawerMode } from "./shift-drawer.component";
-import { useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../state/application-state.model";
-import i18next from "i18next";
 import { t } from "../../helpers/translations.helper";
 import styled from "styled-components";
 import { colors, fontSizeBase, fontWeightExtra } from "../../assets/colors";
@@ -57,6 +57,8 @@ export default function ShiftEditDrawer({
         return i18next.t("shiftEdit");
       case ShiftDrawerMode.ADD_NEW:
         return i18next.t("shiftAdd");
+      default:
+        throw Error(`Invalid drawer mode ${mode}`);
     }
   }
 
@@ -138,7 +140,7 @@ export default function ShiftEditDrawer({
               ampm={false}
               value={valueTimeStart}
               onChange={onChangeTimeStart}
-              openTo={"hours"}
+              openTo="hours"
               views={["hours"]}
             />
             <Dash>&ndash;</Dash>
@@ -149,7 +151,7 @@ export default function ShiftEditDrawer({
               ampm={false}
               value={valueTimeEnd}
               onChange={onChangeTimeEnd}
-              openTo={"hours"}
+              openTo="hours"
               views={["hours"]}
             />
           </MuiPickersUtilsProvider>
@@ -162,8 +164,8 @@ export default function ShiftEditDrawer({
           placeholder="Skrót"
           value={shiftCode}
           onChange={(event): void => {
-            setShiftCode(event.target.value);
-            checkShiftCode(shiftCodes.includes(event.target.value));
+            setShiftCode(event.target.value as ShiftCode); // TODO: fix typing if possible
+            checkShiftCode(shiftCodes.includes(event.target.value as ShiftCode)); // TODO: fix typing if possible
             setCodeManuallyChanged(true);
           }}
           helperText={isInShiftCodes ? t("shiftWithThatColorExist") : ""}

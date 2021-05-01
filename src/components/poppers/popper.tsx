@@ -12,7 +12,5 @@ export const Popper = React.forwardRef(
   (
     { isOpen, children, ...popperOptions }: PopperArguments,
     ref: Ref<HTMLDivElement>
-  ): JSX.Element => {
-    return <div ref={ref}>{isOpen && <div {...popperOptions}>{children}</div>}</div>;
-  }
+  ): JSX.Element => <div ref={ref}>{isOpen && <div {...popperOptions}>{children}</div>}</div>
 );

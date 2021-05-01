@@ -30,7 +30,7 @@ const useStyles = makeStyles(() =>
       width: "100%",
     },
     tableCell: {
-      color: `black`,
+      color: "black",
       fontWeight: "normal",
       fontSize: ScssVars.fontSizeBase,
       fontFamily: ScssVars.fontFamilyPrimary,
@@ -58,9 +58,9 @@ export default function ShiftTab(): JSX.Element {
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
   );
 
-  function toggleOpen(shift: Shift, mode: ShiftDrawerMode): void {
+  function toggleOpen(shift: Shift, newMode: ShiftDrawerMode): void {
     setShift(shift);
-    setMode(mode);
+    setMode(newMode);
     setIsOpen(true);
   }
 
@@ -93,8 +93,7 @@ export default function ShiftTab(): JSX.Element {
         <Table size="small">
           <EnhancedTableHeaderComponent toggleOpen={toggleOpen} />
           <TableBody>
-            {Object.values(shiftData).map((shift) => {
-              return (
+            {Object.values(shiftData).map((shift) => (
                 <TableRow key={shift.code} className={classes.row}>
                   <TableCell className={classes.tableCell}>{shift.name}</TableCell>
                   <TableCell className={classes.tableCell}>
@@ -125,8 +124,7 @@ export default function ShiftTab(): JSX.Element {
                     </ActionButton>
                   </TableCell>
                 </TableRow>
-              );
-            })}
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

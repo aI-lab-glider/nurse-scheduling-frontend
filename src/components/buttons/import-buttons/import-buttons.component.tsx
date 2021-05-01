@@ -46,7 +46,7 @@ export function ImportButtonsComponent(): JSX.Element {
         mainLabel={t("file")}
         buttonVariant="primary"
         width={100}
-        dataCy={"file-dropdown"}
+        dataCy="file-dropdown"
       />
       <input
         ref={fileUpload}

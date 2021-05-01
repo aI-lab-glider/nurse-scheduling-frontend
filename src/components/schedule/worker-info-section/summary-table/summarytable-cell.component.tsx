@@ -16,9 +16,7 @@ function SummaryTableCellF({ value, cellIndex }: SummaryTableCellOptions): JSX.E
 
 export const SummaryTableCell: React.FC<SummaryTableCellOptions> = React.memo(
   SummaryTableCellF,
-  (prev, next) => {
-    return prev.value === next.value;
-  }
+  (prev, next) => prev.value === next.value
 );
 
 const Wrapper = styled.div`

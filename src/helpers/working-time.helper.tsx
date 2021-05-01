@@ -43,7 +43,7 @@ export class WorkingTimeHelper {
 
   static fromFractionToDecimal(fraction: string): number {
     const result = fraction.split("/");
-    const [dividend, divisor] = result.map((string) => Number.parseInt(string));
+    const [dividend, divisor] = result.map((string) => Number.parseInt(string, 10));
     return dividend / divisor;
   }
 
@@ -54,7 +54,7 @@ export class WorkingTimeHelper {
 
   static isTimeFractionValid(fraction: string): boolean {
     const result = fraction.split("/");
-    const [dividend, divisor] = result.map((string) => Number.parseInt(string));
+    const [dividend, divisor] = result.map((string) => Number.parseInt(string, 10));
     return dividend / divisor <= 1;
   }
 }

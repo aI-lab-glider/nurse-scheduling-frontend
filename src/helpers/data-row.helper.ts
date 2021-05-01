@@ -17,7 +17,7 @@ export class DataRowHelper {
     );
   }
 
-  //Unused
+  // Unused
   public static dataRowsAsDataRowDict<T extends DataRowModel>(dataRows: T[]): { [key: string]: T } {
     return ArrayHelper.arrayToObject(
       dataRows,
@@ -26,14 +26,16 @@ export class DataRowHelper {
     );
   }
 
-  //Unused
+  // Unused
   public static updateDataRowIndices(
     dataRow: DataRow,
     updateIndexes: number[],
     newValue: string
   ): DataRow {
     return dataRow.updateData((data) => {
-      updateIndexes.forEach((ind) => (data[ind] = newValue));
+      updateIndexes.forEach((ind) => {
+        data[ind] = newValue;
+      });
       return data;
     });
   }

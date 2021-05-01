@@ -6,6 +6,8 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Box } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import schedule from "./assets/devMode/schedule";
 import { ScheduleDataModel } from "./state/schedule-data/schedule-data.model";
 import { HeaderComponent } from "./components/common-components";
@@ -17,8 +19,6 @@ import ManagementPage from "./pages/management-page/management-page.component";
 import { ScheduleDataActionCreator } from "./state/schedule-data/schedule-data.action-creator";
 import { NotificationProvider } from "./components/notification/notification.context";
 import { Footer } from "./components/footer/footer.component";
-import { Box } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import PersistentDrawer from "./components/drawers/drawer/persistent-drawer.component";
 import { PersistentDrawerProvider } from "./components/drawers/drawer/persistent-drawer-context";
 import ScssVars from "./assets/styles/styles/custom/_variables.module.scss";
@@ -77,7 +77,13 @@ function App(): JSX.Element {
     () => [
       {
         label: t("schedule"),
-        component: <SchedulePage editModeHandler={setDisableRouteButtons} />,
+        component: (
+          <SchedulePage
+            editModeHandler={(val) => {
+              setDisableRouteButtons(val);
+            }}
+          />
+        ),
         onChange: (): void => setMode(AppMode.SCHEDULE),
         dataCy: "btn-schedule-tab",
       },

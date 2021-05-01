@@ -66,6 +66,8 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
           };
         case ScheduleConverterActionType.UpdateScheduleModel:
           return { ...(action.payload ?? initialConverterState) };
+        default:
+          throw Error(`Unsupported action ${action!.type}`);
       }
     },
     initialConverterState
@@ -141,9 +143,9 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
   }, [fileContent]);
 
   return {
-    monthModel: monthModel,
-    setSrcFile: setSrcFile,
-    scheduleErrors: scheduleErrors,
+    monthModel,
+    setSrcFile,
+    scheduleErrors,
   };
 
   function extractWorkers(workbook): Array<Array<string>> {
@@ -244,7 +246,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
 
       dispatchModelUpdate({
         scheduleErrors: [
-          ...parser._parseErrors,
+          ...parser.parseErrors,
           ...parser.sections.Metadata.errors,
           ...parser.sections.FoundationInfo.errors,
           ...parser.workersInfo.errors,
@@ -254,6 +256,5 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       });
       createNotification({ type: "success", message: "Plan został wczytany!" });
     }
-    return;
   }
 }

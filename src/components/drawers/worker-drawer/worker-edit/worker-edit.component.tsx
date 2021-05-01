@@ -3,8 +3,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import styled from "styled-components";
 import {
   ContractType,
   Team,
@@ -20,7 +21,7 @@ import { TeamSelector } from "./worker-team-selector.component";
 import { WorkerNameEditField } from "./worker-name-edit-field.components";
 import { WorkerWorkerTypeSelector } from "./worker-position-selector.component";
 import { t } from "../../../../helpers/translations.helper";
-import styled from "styled-components";
+import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
 
 const useStyles = makeStyles({
   container: {
@@ -28,26 +29,36 @@ const useStyles = makeStyles({
   },
 });
 
-export function WorkerEditComponent({
-  name,
-  mode,
-  setOpen,
-}: WorkerEditComponentOptions): JSX.Element {
+export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.Element {
+  const { mode, setOpen } = options;
   const classes = useStyles();
 
   const dispatcher = useDispatch();
-  const { workerInfo, setWorkerInfo } = useWorkerInfo(name);
+
+  /**
+   * TODO Rewrite as separate components: one for edit one for add ???
+   * */
+  const getWorkerName = useCallback((options: WorkerEditComponentOptions) => {
+    switch (options.mode) {
+      case WorkerEditComponentMode.EDIT:
+        return options.name;
+      default:
+        return "" as WorkerName;
+    }
+  }, []);
+
+  const { workerInfo, setWorkerInfo } = useWorkerInfo(getWorkerName(options));
   const [isWorkerNameValid, setIsWorkerNameValid] = useState(true);
   const [isWorkerTimeValid, setIsWorkerTimeValid] = useState(true);
   const [isContractTypeValid, setIsContractTypeValid] = useState(true);
   const [isWorkerTypeValid, setIsWorkerTypeValid] = useState(true);
 
   useEffect(() => {
-    if (mode === WorkerEditComponentMode.EDIT) {
-      workerInfo.previousWorkerName = name;
+    if (options.mode === WorkerEditComponentMode.EDIT) {
+      workerInfo.previousWorkerName = options.name;
     }
-  }, [mode, workerInfo, name]);
-  //#region event handlers
+  }, [mode, workerInfo, options]);
+  // #region event handlers
   function handleWorkerNameUpdate(newWorkerName: string): void {
     setWorkerInfo(workerInfo.withNewName(newWorkerName));
   }
@@ -67,7 +78,7 @@ export function WorkerEditComponent({
   function handleWorkerTeamUpdate(newTeam: Team): void {
     setWorkerInfo(workerInfo.withNewTeam(newTeam));
   }
-  //#endregion
+  // #endregion
 
   function canSaveWorker(): boolean {
     return [isWorkerNameValid, isWorkerTimeValid, isContractTypeValid, isWorkerTypeValid].every(
@@ -127,7 +138,7 @@ export function WorkerEditComponent({
       </SubmitButton>
     </Grid>
   );
-  //#endregion
+  // #endregion
 }
 const SubmitButton = styled(Button)`
   position: absolute;

@@ -44,9 +44,9 @@ export function WorkerContractTypeSelector({
     };
   });
 
-  const isContractTypeValid = useCallback((): boolean => {
-    return !!workerContractType;
-  }, [workerContractType]);
+  const isContractTypeValid = useCallback((): boolean => !!workerContractType, [
+    workerContractType,
+  ]);
 
   useEffect(() => {
     setIsFieldValid?.(isContractTypeValid());

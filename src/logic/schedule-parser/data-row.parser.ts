@@ -33,22 +33,22 @@ export class DataRowParser {
       : this.data.filter((c) => includeNulls || !(c === null || c === "")).slice(keyPosition);
   }
 
-  //unused
+  // unused
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public createWithProcessedRow(processingFunction: (row: DataRowParser) => any[]): DataRowParser {
-    const rowKey = this.rowKey;
+    const { rowKey } = this;
     const data = [rowKey, ...processingFunction(this)];
     return new DataRowParser(data);
   }
 
-  //unused
+  // unused
   public createWithCroppedData(from: number, to: number): DataRowParser {
     const key = this.rowKey;
     const data = [key, ...this.rowData(true, false).slice(from, to)];
     return new DataRowParser(data);
   }
 
-  //unused
+  // unused
   public findValue(key: string): string {
     let data = this.data.find((cell) => StringHelper.includesEquivalent(cell, key));
     data = StringHelper.getRawValue(data);
@@ -56,12 +56,12 @@ export class DataRowParser {
     return StringHelper.getRawValue(data.replace(key, ""));
   }
 
-  //unused
+  // unused
   public includes(key: string): boolean {
     return this.data.includes(key);
   }
 
-  //unused
+  // unused
   public findValues(...args: string[]): string[] {
     return args.map((arg) => this.findValue(arg));
   }

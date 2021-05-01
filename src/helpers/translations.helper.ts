@@ -4,16 +4,18 @@
 import i18n from "i18next";
 import { ResourceName } from "../assets/translations/types";
 
-export function t(r: ResourceName, options?: {}): string {
+export function t(r: ResourceName, options?: Record<string, unknown>): string {
   return i18n.t(r, options);
 }
 export class TranslationHelper {
   public static get polishMonths(): string[] {
     return Object.keys(TranslationHelper.monthTranslations);
   }
+
   public static get englishMonths(): string[] {
     return Object.values(TranslationHelper.monthTranslations);
   }
+
   public static get polishMonthsGenetivus(): string[] {
     return Object.values(TranslationHelper.monthsGenetivus);
   }
