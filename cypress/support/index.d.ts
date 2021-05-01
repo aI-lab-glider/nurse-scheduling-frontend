@@ -1,4 +1,3 @@
-
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
@@ -25,8 +24,10 @@ declare namespace Cypress {
     checkHoursInfo(
       ChangeWorkerShiftOptions: import("./commands").CheckHoursInfoOptions
     ): Chainable<Element>;
-    
-    useAutocomplete(newShiftCode: import("../../src/state/schedule-data/shifts-types/shift-types.model").ShiftCode): Chainable<Element>;
+
+    useAutocomplete(
+      newShiftCode: import("../../src/state/schedule-data/shifts-types/shift-types.model").ShiftCode
+    ): Chainable<Element>;
     enterEditMode(): Chainable<Element>;
     saveToDatabase(): Chainable<Element>;
     leaveEditMode(): Chainable<Element>;

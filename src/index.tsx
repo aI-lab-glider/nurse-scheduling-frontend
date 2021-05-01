@@ -1,44 +1,42 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import { createBrowserHistory } from "history";
 import React from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
-import "./assets/styles/styles-all.scss";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import * as Sentry from "@sentry/react";
-import { ReportingObserver } from "@sentry/integrations";
-import { Integrations } from "@sentry/tracing";
 import { applyMiddleware, compose, createStore } from "redux";
-import thunkMiddleware from "redux-thunk";
-import { createBrowserHistory } from "history";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { appReducer } from "./state/app.reducer";
-import { AppConfigProvider } from "./state/app-config-context";
-import * as serviceWorker from "./serviceWorker";
+import thunkMiddleware from "redux-thunk";
 import App from "./app";
+import "./assets/styles/styles-all.scss";
 import { AppErrorBoundary } from "./components/app-error-boundary/app-error-boundary.component";
+import * as serviceWorker from "./serviceWorker";
+import { AppConfigProvider } from "./state/app-config-context";
+import { appReducer } from "./state/app.reducer";
 
 const history = createBrowserHistory();
 
-Sentry.init({
-  dsn: process.env.REACT_APP_SENTRY_DSN,
-  normalizeDepth: 10,
-  integrations: [
-    new ReportingObserver(),
-    new Integrations.BrowserTracing({
-      routingInstrumentation: Sentry.reactRouterV5Instrumentation(history),
-    }),
-  ],
-  tracesSampleRate: 1.0,
-});
+// Sentry.init({
+//   dsn: process.env.REACT_APP_SENTRY_DSN,
+//   normalizeDepth: 10,
+//   integrations: [
+//     new ReportingObserver(),
+//     new Integrations.BrowserTracing({
+//       routingInstrumentation: Sentry.reactRouterV5Instrumentation(history),
+//     }),
+//   ],
+//   tracesSampleRate: 1.0,
+// });
 
-const sentryReduxEnhancer = Sentry.createReduxEnhancer();
+// const sentryReduxEnhancer = Sentry.createReduxEnhancer();
 
 const composedEnhancer = composeWithDevTools(
-  compose(applyMiddleware(thunkMiddleware), sentryReduxEnhancer)
+  compose(applyMiddleware(thunkMiddleware))
+  // sentryReduxEnhancer
 );
 export const appStore = createStore(appReducer, composedEnhancer);
 
