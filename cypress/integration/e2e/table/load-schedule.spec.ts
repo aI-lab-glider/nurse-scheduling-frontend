@@ -5,7 +5,7 @@
 import { shiftSectionDataCy } from "../../../../src/components/schedule/worker-info-section/worker-info-section.models";
 import { ShiftCode } from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
 import { FoundationInfoRowType } from "../../../support/commands";
-//#region Test data
+// #region Test data
 interface CheckFoundationInfoReadCorrectly {
   scheduleName: "childrens_extraworkers.xlsx" | "extraworkers_childrens.xlsx";
   expectedExtraWorkersNumber: number;
@@ -24,11 +24,11 @@ const checkFoundationInfoReadProperlyData: CheckFoundationInfoReadCorrectly[] = 
     expectedExtraWorkersNumber: 240,
   },
 ];
-//#endregion
+// #endregion
 describe("Load schedule", () => {
   it("saves file to database and after that loads new schedule", () => {
     const cell = {
-      workerGroupIdx: 0,
+      teamIdx: 0,
       workerIdx: 0,
       shiftIdx: 6,
     };

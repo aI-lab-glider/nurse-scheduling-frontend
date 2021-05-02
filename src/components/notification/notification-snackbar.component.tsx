@@ -2,9 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { Notification } from "./types";
 import { Box, createStyles, Snackbar, Theme } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { Notification } from "./types";
 import { useNotification } from "./notification.context";
 import { Alert } from "./alert.component";
 
@@ -30,7 +30,7 @@ export function NotificationSnackbar({ notification }: NotificationSnackbarOptio
   const { type, message } = notification;
 
   return (
-    <Snackbar className={classes.snackbar} open={true} autoHideDuration={8000}>
+    <Snackbar className={classes.snackbar} open autoHideDuration={8000}>
       <Alert severity={type}>{message}</Alert>
     </Snackbar>
   );

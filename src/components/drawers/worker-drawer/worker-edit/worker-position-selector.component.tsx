@@ -43,9 +43,7 @@ export function WorkerWorkerTypeSelector({
     };
   });
 
-  const isWorkerPositionValid = useCallback((): boolean => {
-    return !!workerType;
-  }, [workerType]);
+  const isWorkerPositionValid = useCallback((): boolean => !!workerType, [workerType]);
 
   useEffect((): void => {
     setIsFieldValid?.(isWorkerPositionValid());
@@ -58,7 +56,7 @@ export function WorkerWorkerTypeSelector({
         buttons={positionOptions}
         mainLabel={workerType ? translateAndCapitalizeWorkerType(workerType) : t("position")}
         buttonVariant="secondary"
-        variant="position"
+        width={160}
       />
       <FormFieldErrorLabel
         shouldBeVisible={!isWorkerPositionValid() && firstEditMade}

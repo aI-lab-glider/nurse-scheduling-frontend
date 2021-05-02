@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import * as _ from "lodash";
 import { MonthHelper } from "../../helpers/month.helper";
 import { ArrayHelper } from "../../helpers/array.helper";
 import {
@@ -21,11 +22,9 @@ import {
   validateMonthDM,
   validateScheduleDM,
 } from "../../state/schedule-data/schedule-data.model";
-import { RevisionType, ScheduleKey } from "../../logic/data-access/persistance-store.model";
-import * as _ from "lodash";
-import { LocalStorageProvider } from "../../logic/data-access/local-storage-provider.model";
+import { RevisionType, ScheduleKey } from "../data-access/persistance-store.model";
+import { LocalStorageProvider } from "../data-access/local-storage-provider.model";
 
-/* eslint-disable @typescript-eslint/camelcase */
 export function extendMonthDMToScheduleDM(
   prevMonthData: MonthDataModel,
   currentMonthData: MonthDataModel,
@@ -100,7 +99,6 @@ export function cropScheduleDMToMonthDM(schedule: ScheduleDataModel): MonthDataM
   return monthDataModel;
 }
 
-/* eslint-disable @typescript-eslint/camelcase */
 export function cropShiftsToMonth(
   scheduleKey: ScheduleKey,
   shifts: WorkerShiftsModel,

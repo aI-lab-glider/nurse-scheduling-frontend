@@ -4,7 +4,7 @@
 import { ShiftCode } from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
 
 const testedCell = {
-  workerGroupIdx: 0,
+  teamIdx: 0,
   workerIdx: 0,
   shiftIdx: 6,
   initialShiftCode: ShiftCode.U,

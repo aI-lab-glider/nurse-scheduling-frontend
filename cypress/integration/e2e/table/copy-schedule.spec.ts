@@ -12,14 +12,8 @@ describe("Copy schedule from previous month", () => {
       for (let i = 0; i <= NUM_OF_MONTHS_IN_A_YEAR; i++) {
         cy.get("[data-cy=switch-next-month]").click();
         cy.get("[data-cy=copy-prev-month]").click();
-        cy.get('[data-cy="workerGroup0ShiftsTable"] [data-cy="1Row"] p[data-cy*="cell"]')
-          .then(($cell) => {
-            return $cell
-              .map((i, el) => {
-                return Cypress.$(el).text();
-              })
-              .get();
-          })
+        cy.get('[data-cy="team0ShiftsTable"] [data-cy="1Row"] div[data-cy*="cell"]')
+          .then(($cell) => $cell.map((i, el) => Cypress.$(el).text()).get())
           .snapshot();
       }
     });

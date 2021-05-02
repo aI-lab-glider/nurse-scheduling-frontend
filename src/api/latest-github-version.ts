@@ -6,11 +6,6 @@ import axios from "axios";
 const latestReleaseRequest =
   "https://api.github.com/repos/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend/releases/latest";
 
-export const getLatestAppVersion = axios
+export const latestAppVersion = axios
   .get(latestReleaseRequest)
-  .then((res) => {
-    return res.data.name;
-  })
-  .catch(() => {
-    return;
-  });
+  .then((res) => res.data.name.substring(1));

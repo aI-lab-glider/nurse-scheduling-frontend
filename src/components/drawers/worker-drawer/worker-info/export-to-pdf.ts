@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import jsPDF from "jspdf";
+import JsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import {
   bottomCellPartClassName,
@@ -16,10 +16,8 @@ interface ExportToPdfOptions {
 }
 
 export const exportToPdf = (name: string, props: ExportToPdfOptions): void => {
-  const query = document.querySelectorAll(
-    "#" + props.workerInfoExport + ", #" + props.calendarExport
-  );
-  const pdf = new jsPDF("portrait", "mm", "a4");
+  const query = document.querySelectorAll(`#${props.workerInfoExport}, #${props.calendarExport}`);
+  const pdf = new JsPDF("portrait", "mm", "a4");
   const queryLen = query.length;
   const margin = 10;
   const calendarH = 150;
@@ -29,14 +27,14 @@ export const exportToPdf = (name: string, props: ExportToPdfOptions): void => {
   query.forEach((element, index) => {
     html2canvas(element as HTMLElement, {
       scale: 2,
-      onclone: function (document: Document) {
+      onclone(document: Document) {
         const selectorsEveryDay: NodeListOf<HTMLSelectElement> = document.querySelectorAll(
           `div.${bottomCellPartClassName()}`
         );
         selectorsEveryDay.forEach((selector) => {
           const color = selector.style.backgroundColor;
           selector.style.backgroundColor = "white";
-          selector.style.border = "3px solid " + color;
+          selector.style.border = `3px solid ${color}`;
           selector.style.borderRadius = "4px";
         });
 
@@ -80,7 +78,7 @@ export const exportToPdf = (name: string, props: ExportToPdfOptions): void => {
         pdf.addImage(imgData, "PNG", margin, heightToPlaceElement, calendarW, calendarH);
       }
       if (index === queryLen - 1) {
-        pdf.save(name + ".pdf");
+        pdf.save(`${name}.pdf`);
       } else {
         heightToPlaceElement += canvas.height / 4 + margin;
       }

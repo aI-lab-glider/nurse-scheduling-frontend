@@ -9,7 +9,6 @@ import { workerInfoinitialState } from "./worker-info/worker-info.initial-state"
 import { foundationInfoInitialState } from "./foundation-info/foundation-info.initial-state";
 import { monthInfoInitialState } from "./month-info/month-info.initial-state";
 
-/* eslint-disable @typescript-eslint/camelcase */
 export const scheduleDataInitialState: ScheduleDataModel = {
   schedule_info: monthInfoInitialState,
   month_info: foundationInfoInitialState,

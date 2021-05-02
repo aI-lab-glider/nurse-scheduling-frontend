@@ -12,7 +12,9 @@ import {
 
 export class MetaDataParser extends MetadataProvider {
   public monthLogic: MonthInfoLogic;
+
   public offset: number;
+
   private _parseErrors: ScheduleError[] = [];
 
   constructor(month: number, year: number, raw: string[] | undefined) {
@@ -49,7 +51,7 @@ export class MetaDataParser extends MetadataProvider {
   }
 
   private extractMetadata(raw: string[]): number {
-    const startOfMonth = raw.findIndex((a) => a.toString() === `1`);
+    const startOfMonth = raw.findIndex((a) => a.toString() === "1");
 
     if (startOfMonth === -1) {
       this.logLoadFIleError(
@@ -88,7 +90,7 @@ export class MetaDataParser extends MetadataProvider {
   }
 
   public get year(): number {
-    return parseInt(this.monthLogic.year);
+    return parseInt(this.monthLogic.year, 10);
   }
 
   public get daysOfWeek(): WeekDay[] {

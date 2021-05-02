@@ -6,7 +6,7 @@ import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
 import gliderLogo from "../../assets/images/gliderLogo.png";
-import { getLatestAppVersion } from "../../api/latest-github-version";
+import { latestAppVersion } from "../../api/latest-github-version";
 import { t } from "../../helpers/translations.helper";
 
 const useStyles = makeStyles({
@@ -29,7 +29,7 @@ export function Footer(): JSX.Element {
   const [latestVersion, setLatestVersion] = useState("");
   useEffect(() => {
     const awaitVersion = async (): Promise<void> => {
-      const version = await getLatestAppVersion;
+      const version = await latestAppVersion;
       setLatestVersion(version);
     };
     awaitVersion();

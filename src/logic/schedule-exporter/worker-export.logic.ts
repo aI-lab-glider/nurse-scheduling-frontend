@@ -58,9 +58,9 @@ export class WorkerExportLogic {
       workers.push([
         name,
         WorkerTypeHelper.translateToShort(scheduleModel.employee_info?.type[name]),
-        ContractTypeHelper.translateToShort(scheduleModel.employee_info?.contractType!?.[name]),
+        ContractTypeHelper.translateToShort(scheduleModel.employee_info?.contractType?.[name]),
         scheduleModel.employee_info?.time[name],
-        scheduleModel.employee_info?.workerGroup[name],
+        scheduleModel.employee_info?.team[name],
       ])
     );
     return [...workers];

@@ -2,12 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import * as _ from "lodash";
 import {
   MonthDataModel,
   ScheduleDataModel,
   validateScheduleDM,
 } from "../../state/schedule-data/schedule-data.model";
-import * as _ from "lodash";
 import { WorkerShiftsModel } from "../../state/schedule-data/workers-shifts/worker-shifts.model";
 import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { ArrayHelper } from "../../helpers/array.helper";
@@ -15,13 +15,12 @@ import {
   createDatesForMonth,
   FoundationInfoModel,
 } from "../../state/schedule-data/foundation-info/foundation-info.model";
-import { ScheduleKey } from "../../logic/data-access/persistance-store.model";
+import { ScheduleKey } from "../data-access/persistance-store.model";
 import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../../helpers/month.helper";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { DEFAULT_CHILDREN_NUMBER } from "../schedule-parser/children-info.parser";
 import { DEFAULT_EXTRA_WORKERS_NUMBER } from "../schedule-parser/extra-workers.parser";
 
-/* eslint-disable @typescript-eslint/camelcase */
 export function copyMonthDM(
   currentSchedule: MonthDataModel,
   baseMonth: MonthDataModel
@@ -106,16 +105,15 @@ function copyMonthData<T>(
   const isMonthStartInMonday = new Date(monthKey.year, monthKey.month).getDay() === 1;
   if (isMonthStartInMonday) {
     return copiedData;
-  } else {
-    const prevMonthLastWeekData = MonthHelper.getMonthLastWeekData(
-      monthKey.prevMonthKey,
-      baseMonthData,
-      currentMonthData
-    );
-    return prevMonthLastWeekData.concat(copiedData);
   }
+  const prevMonthLastWeekData = MonthHelper.getMonthLastWeekData(
+    monthKey.prevMonthKey,
+    baseMonthData,
+    currentMonthData
+  );
+  return prevMonthLastWeekData.concat(copiedData);
 }
-//returns always 4 or 5 weeks due by the algorithm which operates on whole weeks instead of months
+// returns always 4 or 5 weeks due by the algorithm which operates on whole weeks instead of months
 function getNumberOfDaysToBeCopied(monthKey: ScheduleKey): number {
   return MonthHelper.findFirstMonthMondayIdx(monthKey.year, monthKey.month) +
     4 * NUMBER_OF_DAYS_IN_WEEK >=

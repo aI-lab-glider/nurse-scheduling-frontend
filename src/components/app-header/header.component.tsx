@@ -4,8 +4,11 @@
 import { Button as MaterialButton } from "@material-ui/core";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import SettingsIcon from "@material-ui/icons/Settings";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
+import { colors, fontSizeBase } from "../../assets/colors";
 import { t } from "../../helpers/translations.helper";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../state/app-config-context";
 import { ApplicationStateModel } from "../../state/application-state.model";
@@ -13,10 +16,7 @@ import { MonthSwitchActionCreator } from "../../state/schedule-data/month-switch
 import { Button } from "../buttons/button-component/button.component";
 import ReportIssueModal from "../modals/report-issue-modal/report-issue-modal.component";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
-import styled from "styled-components";
-import { fontSizeBase } from "../../assets/colors";
 import { ScheduleMode } from "../schedule/schedule-state.model";
-import SettingsIcon from "@material-ui/icons/Settings";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -46,6 +46,7 @@ export function HeaderComponent(): JSX.Element {
     const offset = monthDiff(new Date(year, monthNumber), new Date());
     dispatch(MonthSwitchActionCreator.switchToNewMonth(offset));
   }
+
   const isInViewMode = applicationStateModel === ScheduleMode.Readonly;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -60,6 +61,7 @@ export function HeaderComponent(): JSX.Element {
 
     return context;
   }
+
   const [showNowNavigation, setShowNowNavigation] = useState(false);
 
   useEffect(() => {
@@ -72,33 +74,73 @@ export function HeaderComponent(): JSX.Element {
     window.open(process.env.REACT_APP_HELP_PAGE_URL);
   }, []);
   return (
-    <>
-      <div id={"header"}>
-        <AssignmentIndIcon id={"AssignmentIndIcon"} />
-        <ReturnToNowBtn
-          hidden={!isNewMonth || !showNowNavigation}
-          variant="secondary"
-          onClick={returnToCurrentMonth}
-        >
-          {t("returnToNow")}
-        </ReturnToNowBtn>
-        <div className={"filler"} />
-        <MonthSwitchComponent isInViewMode={isInViewMode} />
-        <div className={"filler"} />
-        <MaterialButton className={"reportIssueLink"} onClick={onReportIssueClick}>
-          {t("reportError")}
-        </MaterialButton>
-        <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
-        <SettingsIcon className="header-icon" />
-        <HelpOutlineIcon className="header-icon" onClick={redirectToDocumentation} />
-      </div>
-    </>
+    <Header id="header">
+      <Logo />
+      <ReturnToNowBtn
+        hidden={!isNewMonth || !showNowNavigation}
+        variant="secondary"
+        onClick={returnToCurrentMonth}
+      >
+        {t("returnToNow")}
+      </ReturnToNowBtn>
+      <Filler />
+      <MonthSwitchComponent isInViewMode={isInViewMode} />
+      <Filler />
+      <ReportIssueBtn onClick={onReportIssueClick}>{t("reportError")}</ReportIssueBtn>
+      <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
+      <Settings />
+      <Help onClick={redirectToDocumentation} />
+    </Header>
   );
 }
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 52px;
+  background-color: ${colors.primary};
+  padding: 0 20px 0 20px;
+  align-items: center;
+  justify-content: space-around;
+  position: fixed;
+  top: 0;
+  z-index: 2;
+`;
 
 const ReturnToNowBtn = styled(Button)`
   margin-top: 0;
   font-size: ${fontSizeBase};
   padding: 0 10px;
   margin-bottom: 0;
+`;
+
+const Settings = styled(SettingsIcon)`
+  color: ${colors.white};
+`;
+
+const Help = styled(HelpOutlineIcon)`
+  margin: auto 5px;
+  cursor: pointer;
+  color: ${colors.white};
+`;
+
+const Logo = styled(AssignmentIndIcon)`
+  color: ${colors.white};
+`;
+
+const Filler = styled.div`
+  flex-grow: 1;
+`;
+
+const ReportIssueBtn = styled(MaterialButton)`
+  color: ${colors.white};
+  padding-right: 5px;
+  letter-spacing: 0.75px;
+  outline: none;
+  text-transform: none;
+  &:hover {
+    text-decoration: underline;
+    transform: none;
+  }
 `;

@@ -64,6 +64,11 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
     },
     {
       errorType: ScheduleErrorType.AON,
+      errors: errors.filter((e) => e.type === ScheduleErrorType.WTC),
+      errorDescription: "Pracownicy z różnych zespołów na wspólnej zmianie",
+    },
+    {
+      errorType: ScheduleErrorType.AON,
       errors: errors.filter((e) => e.type === ScheduleErrorType.OTH),
       errorDescription: i18next.t("otherErrors"),
     },
@@ -76,8 +81,8 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
     return 0;
   }
 
-  const renderOneTypeOfErrors = (errorData: ErrorTypes): JSX.Element => {
-    return errorData.errors && errorData.errors.length > 0 ? (
+  const renderOneTypeOfErrors = (errorData: ErrorTypes): JSX.Element =>
+    errorData.errors && errorData.errors.length > 0 ? (
       <FoldingSection name={`${errorData.errorDescription} (${errorData.errors.length})`}>
         {errorData.errors.sort(compareErrors).map(
           (error, index): JSX.Element => (
@@ -85,7 +90,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
               key={`${error.kind ? error.kind : "0"}_${index}`}
               error={error}
               index={index}
-              interactable={true}
+              interactable
             />
           )
         )}
@@ -93,7 +98,6 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
     ) : (
       <></>
     );
-  };
 
   return (
     <>

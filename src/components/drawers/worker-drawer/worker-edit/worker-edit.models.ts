@@ -2,16 +2,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { makeStyles } from "@material-ui/core";
+import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
+import { ContractTypeHelper } from "../../../../helpers/contract-type.helper";
+import { StringHelper } from "../../../../helpers/string.helper";
+import { WorkerTypeHelper } from "../../../../helpers/worker-type.helper";
+import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
 import {
   ContractType,
-  WorkerGroup,
-  WorkerInfoModel,
-  WorkerType,
+  Team,
+  WorkerType
 } from "../../../../state/schedule-data/worker-info/worker-info.model";
-import { ContractTypeHelper } from "../../../../helpers/contract-type.helper";
-import { WorkerTypeHelper } from "../../../../helpers/worker-type.helper";
-import { StringHelper } from "../../../../helpers/string.helper";
-import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
 
 export interface FormFieldOptions {
   setIsFieldValid?: (status: boolean) => void;
@@ -58,14 +58,22 @@ export interface WorkerInfoExtendedInterface {
   workerType?: WorkerType;
   contractType?: ContractType;
   time: number;
-  workerGroup: WorkerGroup;
+  team: Team;
 }
 
 export enum WorkerEditComponentMode {
   EDIT = "edit",
   ADD = "add",
 }
-export interface WorkerEditComponentOptions extends WorkerInfoModel {
-  mode: WorkerEditComponentMode;
-  setOpen: (open: boolean) => void;
+
+export interface WorkerEditOptions {
+  mode: WorkerEditComponentMode.EDIT;
+  name: WorkerName;
 }
+export interface WorkerAddOptions {
+  mode: WorkerEditComponentMode.ADD;
+}
+
+export type WorkerEditComponentOptions = (WorkerEditOptions | WorkerAddOptions) & {
+  setOpen: (open: boolean) => void;
+};

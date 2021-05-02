@@ -10,7 +10,9 @@ import { ExtraWorkersInfoProvider } from "../schedule-providers/extra-workers-in
 
 export class ExtraWorkersInfoParser implements ExtraWorkersInfoProvider {
   private _parseErrors: ScheduleError[] = [];
+
   private dayWorkers: number[];
+
   private DEFAULT_EXTRA_WORKERS_NUMBER = 0;
 
   constructor(private metaData: MetaDataParser, data?: string[]) {
@@ -31,9 +33,7 @@ export class ExtraWorkersInfoParser implements ExtraWorkersInfoProvider {
   private generateExtraWorkers(raw?: string[]): number[] {
     if (!raw) {
       this.logLoadFileError(
-        "Nie znaleziono informacji o <b>liczbie pracowników dziennych</b>. Dla każdego dnia przyjęto wartość " +
-          this.DEFAULT_EXTRA_WORKERS_NUMBER +
-          "."
+        `Nie znaleziono informacji o <b>liczbie pracowników dziennych</b>. Dla każdego dnia przyjęto wartość ${this.DEFAULT_EXTRA_WORKERS_NUMBER}.`
       );
       const N = this.metaData.dayCount;
       const dayWorkers = Array(N);
@@ -56,14 +56,12 @@ export class ExtraWorkersInfoParser implements ExtraWorkersInfoProvider {
 
     const dayWorkers = Array<number>();
     for (let i = 0; i < this.metaData.dayCount; i++) {
-      const numDay = parseInt(slicedChildrenRow[i]);
+      const numDay = parseInt(slicedChildrenRow[i], 10);
       if (isNaN(numDay) || numDay < 0) {
         this.logLoadFileError(
-          "Nieoczekiwana wartość w sekcji <b>pracownicy dzienni</b> w dniu " +
-            (i + 1) +
-            ". Przyjęto, że liczba pracowników dziennych wynosi " +
-            this.DEFAULT_EXTRA_WORKERS_NUMBER +
-            "."
+          `Nieoczekiwana wartość w sekcji <b>pracownicy dzienni</b> w dniu ${
+            i + 1
+          }. Przyjęto, że liczba pracowników dziennych wynosi ${this.DEFAULT_EXTRA_WORKERS_NUMBER}.`
         );
         dayWorkers.push(this.DEFAULT_EXTRA_WORKERS_NUMBER);
       } else {

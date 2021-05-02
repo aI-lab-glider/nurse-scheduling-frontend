@@ -1,9 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import { createStyles, Grid, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import React, { ReactNode } from "react";
 import { ReactComponent as Done } from "../../assets/images/done.svg";
 import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
 
@@ -34,7 +34,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export function Alert({ severity, children }): JSX.Element {
+interface AlertOptions {
+  severity: string;
+  children: ReactNode;
+}
+export function Alert({ severity, children }: AlertOptions): JSX.Element {
   const classes = useStyles();
 
   return (

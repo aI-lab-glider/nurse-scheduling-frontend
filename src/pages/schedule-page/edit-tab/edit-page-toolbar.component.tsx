@@ -4,7 +4,6 @@
 
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import classNames from "classnames/bind";
 import * as _ from "lodash";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,6 +24,8 @@ import SaveChangesModal from "../../../components/modals/save-changes-modal/save
 import { useNotification } from "../../../components/notification/notification.context";
 import ErrorContainerDrawerComponent from "../../../components/drawers/error-container-drawer/error-container-drawer.component";
 import { useTemporarySchedule } from "../../../hooks/use-temporary-schedule";
+import styled, { css } from "styled-components";
+import { colors, fontSizeBase, fontSizeXl } from "../../../assets/colors";
 
 interface EditPageToolbarOptions {
   close: () => void;
@@ -69,7 +70,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
   const { setTitle, setOpen, setChildrenComponent } = usePersistentDrawer();
 
   function prepareDrawer(): void {
-    setChildrenComponent(<ErrorContainerDrawerComponent setOpen={setOpen} loadingErrors={true} />);
+    setChildrenComponent(<ErrorContainerDrawerComponent setOpen={setOpen} loadingErrors />);
     setTitle("Sprawdź plan");
     setOpen(true);
     updateScheduleErrors().then(() =>
@@ -80,6 +81,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
   }
 
   const { saveToPersistent } = useTemporarySchedule();
+
   function handleSaveClick(): void {
     saveToPersistent();
     createNotification({ type: "success", message: "Plan został zapisany!" });
@@ -92,7 +94,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
 
   function anyChanges(): boolean {
     if (persistentShifts && temporaryShifts) return !_.isEqual(persistentShifts, temporaryShifts);
-    else return false;
+    return false;
   }
 
   function onUndoClick(): void {
@@ -106,68 +108,79 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
   }
 
   return (
-    <div className="editing-row">
-      <div className="buttons">
-        <Button
-          onClick={onUndoClick}
-          variant="circle"
-          data-cy="undo-button"
-          disabled={!anyChanges()}
-        >
-          <ArrowBackIcon
-            className={classNames("edit-icons", { "disabled-edit-icon": !anyChanges() })}
-          />
+    <Wrapper>
+      <Button onClick={onUndoClick} variant="circle" data-cy="undo-button" disabled={!anyChanges()}>
+        <UndoIcon />
+      </Button>
+
+      <Button
+        onClick={onRedoClick}
+        data-cy="redo-button"
+        variant="circle"
+        disabled={undoCounter === 0}
+      >
+        <RedoIcon />
+      </Button>
+
+      <EditTextWrapper data-cy="edit-mode-text">Tryb edycji aktywny</EditTextWrapper>
+
+      <Button data-cy="check-schedule-button" variant="primary" onClick={prepareDrawer}>
+        Sprawdź Plan
+      </Button>
+
+      <Filler />
+
+      <ConditionalLink to="/" shouldNavigate={!anyChanges()}>
+        <Button onClick={askForSavingChanges} variant="secondary" data-cy="leave-edit-mode">
+          Wyjdź
         </Button>
+        <SaveChangesModal
+          closeOptions={close}
+          handleSave={handleSaveClick}
+          open={isSaveModalOpen}
+          setOpen={setIsSaveModalOpen}
+        />
+      </ConditionalLink>
 
-        <Button
-          onClick={onRedoClick}
-          data-cy="redo-button"
-          variant="circle"
-          disabled={undoCounter === 0}
-        >
-          <ArrowForwardIcon
-            className={classNames("edit-icons", { "disabled-edit-icon": undoCounter === 0 })}
-          />
-        </Button>
-
-        <div id="edit-panel-text-container" data-cy="edit-mode-text">
-          <p>Tryb edycji aktywny</p>
-        </div>
-
-        <Button
-          data-cy="check-schedule-button"
-          className="submit-button"
-          variant="primary"
-          onClick={prepareDrawer}
-        >
-          Sprawdź Plan
-        </Button>
-
-        <div className="filler" />
-
-        <ConditionalLink to="/" shouldNavigate={!anyChanges()}>
-          <Button onClick={askForSavingChanges} variant="secondary" data-cy="leave-edit-mode">
-            Wyjdź
-          </Button>
-          <SaveChangesModal
-            closeOptions={close}
-            handleSave={handleSaveClick}
-            open={isSaveModalOpen}
-            setOpen={setIsSaveModalOpen}
-          />
-        </ConditionalLink>
-
-        <Button
-          data-cy="save-schedule-button"
-          variant="primary"
-          disabled={!anyChanges()}
-          onClick={(): void => {
-            handleSaveClick();
-          }}
-        >
-          Zapisz
-        </Button>
-      </div>
-    </div>
+      <Button
+        data-cy="save-schedule-button"
+        variant="primary"
+        disabled={!anyChanges()}
+        onClick={(): void => {
+          handleSaveClick();
+        }}
+      >
+        Zapisz
+      </Button>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  margin: 5px;
+`;
+
+const undoRedoIcon = css`
+  color: ${colors.primary};
+  font-size: ${fontSizeXl};
+  margin: auto 10px auto 10px;
+`;
+
+const UndoIcon = styled(ArrowBackIcon)`
+  ${undoRedoIcon}
+`;
+const RedoIcon = styled(ArrowForwardIcon)`
+  ${undoRedoIcon}
+`;
+const Filler = styled.div`
+  flex-grow: 1;
+`;
+const EditTextWrapper = styled.p`
+  color: ${colors.primary};
+  font-size: ${fontSizeBase};
+  margin: auto;
+`;

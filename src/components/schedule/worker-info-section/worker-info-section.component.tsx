@@ -15,13 +15,16 @@ import {
   ShiftsSectionOptions,
 } from "./shifts-section/shifts-section.component";
 import { shiftSectionDataCy } from "./worker-info-section.models";
+import { SectionContainer, SectionWrapper } from "../base/styled";
+import styled from "styled-components";
+import { colors } from "../../../assets/colors";
 
 type SubcomponentsOptions = Omit<NameTableSectionOptions, "isWorker" | "uuid" | "updateData"> &
   ShiftsSectionOptions &
   SummaryTableOptions;
 
 export interface WorkerInfoSectionOptions
-  extends Omit<SubcomponentsOptions, "data" | "workerGroup" | "sectionKey"> {
+  extends Omit<SubcomponentsOptions, "data" | "team" | "sectionKey"> {
   sectionName: string;
   data: WorkerInfo[];
   sectionIndex: number;
@@ -39,18 +42,33 @@ export function WorkerInfoSection({
       new DataRow(workerInfo.workerName, workerInfo.workerShifts, mode === ScheduleMode.Edit)
   );
   return (
-    <div className="sectionContainer">
-      <div className="sectionContainer borderContainer">
+    <Wrapper>
+      <SectionContainer className="borderContainer">
         <div>
-          <NameTableComponent data={dataRows} isWorker={true} {...options} />
+          <NameTableComponent data={dataRows} isWorker {...options} />
         </div>
-        <div className="table leftContainerBorder" data-cy={shiftSectionDataCy(sectionIndex)}>
+        <ShiftSectionWrapper data-cy={shiftSectionDataCy(sectionIndex)}>
           <ShiftsSectionComponent sectionKey={options.sectionName} data={dataRows} {...options} />
-        </div>
-      </div>
-      <div className="summaryContainer">
+        </ShiftSectionWrapper>
+      </SectionContainer>
+      <SummarySectionWrapper>
         <SummaryTableComponent data={dataRows} {...options} sectionIndex={sectionIndex} />
-      </div>
-    </div>
+      </SummarySectionWrapper>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const ShiftSectionWrapper = styled(SectionWrapper)`
+  border: none;
+  border-radius: 0;
+  border-left: 1px solid ${colors.tableBorderGrey};
+`;
+
+const SummarySectionWrapper = styled.div`
+  margin-left: 2%;
+`;

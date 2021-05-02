@@ -6,14 +6,14 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
-import { Button } from "../../../components/common-components";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
-import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import classNames from "classnames/bind";
+import styled from "styled-components";
+import { Button } from "../../../components/common-components";
+import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import { Order } from "../../../helpers/comparator.helper";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { WorkerDrawerMode } from "../../../components/drawers/worker-drawer/worker-drawer.component";
-import styled from "styled-components";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -48,7 +48,7 @@ const headCells: WorkerDataCell[] = [
   { id: "name", numeric: false, label: "Imię i nazwisko" },
   { id: "type", numeric: true, label: "Stanowisko" },
   { id: "time", numeric: true, label: "Wymiar pracy" },
-  { id: "workerGroup", numeric: false, label: "Zespół" },
+  { id: "team", numeric: false, label: "Zespół" },
 ];
 
 export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Element {

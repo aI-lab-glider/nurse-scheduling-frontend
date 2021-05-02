@@ -51,16 +51,5 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
 
   const body = <ModalErrorList errors={mappedErrors} />;
 
-  return (
-    <div>
-      <DefaultModal
-        open={open}
-        setOpen={setOpen}
-        title={title}
-        body={body}
-        footer={footer}
-        height={1400}
-      />
-    </div>
-  );
+  return <DefaultModal open={open} setOpen={setOpen} title={title} body={body} footer={footer} />;
 }

@@ -6,6 +6,7 @@ import { MdClose } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { TranslationHelper } from "../../../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../../../state/application-state.model";
+import styled from "styled-components";
 
 export interface CellDetailsOptions {
   index: number;
@@ -45,24 +46,90 @@ export function CellDetails(props: CellDetailsOptions): JSX.Element {
   const foundShift = shifts[shiftcode];
 
   return (
-    <div className="align-to-the-left">
-      <div className="exit-button" onClick={close}>
+    <Wrapper>
+      <ExitButton onClick={close}>
         <MdClose />
-      </div>
-      <div className="cell-details-date">
+      </ExitButton>
+      <Date>
         {day} {monthName} {displayedYear} r.
-      </div>
+      </Date>
       {workerName && <div>{workerName}</div>}
-      <div className="shift-time-container">
-        <div className="shift-time-rectangle" style={{ backgroundColor: `#${foundShift.color}` }} />
-        <div className="shift-time" style={{ backgroundColor: `#${foundShift.color}` }}>
+      <Content>
+        {/* // TODO: change div to different html tags e.g. spans, introduce css variables */}
+        <ShiftColorBox style={{ backgroundColor: `#${foundShift.color}` }} />
+        <ShiftBoxName style={{ backgroundColor: `#${foundShift.color}` }}>
           {foundShift.name}
-        </div>
-        <div className="black-letters">{foundShift.name}</div>
-        <div className="shift-time-from-to">
+        </ShiftBoxName>
+        <ShiftName>{foundShift.name}</ShiftName>
+        <ShiftDuration className="shift-time-from-to">
           {foundShift.isWorkingShift ? `${foundShift.from}:00 - ${foundShift.to}:00` : ""}
-        </div>
-      </div>
-    </div>
+        </ShiftDuration>
+      </Content>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  text-align: left;
+  line-height: normal;
+`;
+const ExitButton = styled.div`
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding-top: 5px;
+  padding-left: 20px;
+  padding-right: 5px;
+`;
+
+const Date = styled.div`
+  font-weight: lighter;
+  padding-right: 20px;
+`;
+
+const Content = styled.div`
+  width: 100%;
+  margin: auto;
+  height: 40px;
+  align-content: stretch;
+  padding-top: 10px;
+  display: flex;
+`;
+
+const ShiftBoxName = styled.div`
+  color: white;
+  opacity: 0.3;
+  padding: 7px;
+  padding-right: 13px;
+  height: 100%;
+  display: inline-block;
+`;
+
+const ShiftName = styled.div`
+  color: black;
+  opacity: 1;
+  display: inline;
+  position: absolute;
+  top: 57px;
+  left: 22px;
+`;
+
+const ShiftColorBox = styled.div`
+  opacity: 1;
+  width: 5px;
+  height: 100%;
+  border-radius: 5px;
+  display: inline-block;
+`;
+
+const ShiftDuration = styled.div`
+  padding-top: 7px;
+  padding-right: 20px;
+  position: relative;
+  left: 15px;
+  vertical-align: middle;
+  font-weight: lighter;
+`;

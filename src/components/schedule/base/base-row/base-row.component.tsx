@@ -6,6 +6,8 @@ import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/s
 import { useMonthInfo } from "../../../../hooks/use-month-info";
 import { BaseCellComponent } from "../base-cell/base-cell.component";
 import { baseRowDataCy, BaseRowOptions, toCellDataItemArray } from "./base-row.models";
+import { SectionRow } from "../styled";
+import styled from "styled-components";
 
 export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
   const {
@@ -29,9 +31,7 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
   const numberOfDays = verboseDates?.length;
   const firstMonthDayIndex = verboseDates?.findIndex((date) => date.date === 1);
 
-  const isCellFromPrevMonth = (index, firstMonthDayIndex): boolean => {
-    return index < firstMonthDayIndex;
-  };
+  const isCellFromPrevMonth = (index, firstMonthDayIndex): boolean => index < firstMonthDayIndex;
 
   function saveValue(newValue: string): void {
     onSave?.(newValue);
@@ -45,7 +45,7 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
   }
 
   return (
-    <div className="row scheduleStyle" id="mainRow" data-cy={baseRowDataCy(rowIndex)}>
+    <MainRow id="mainRow" data-cy={baseRowDataCy(rowIndex)}>
       {data.map((dataItem = { value: defaultEmpty }, cellIndex) => (
         <CellComponent
           {...{
@@ -70,6 +70,11 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
           monthNumber={currMonthNumber}
         />
       ))}
-    </div>
+    </MainRow>
   );
 }
+
+const MainRow = styled(SectionRow)`
+  width: 1350px;
+  height: 40px;
+`;

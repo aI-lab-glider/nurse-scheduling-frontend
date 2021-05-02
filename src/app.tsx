@@ -6,6 +6,8 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Box } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import schedule from "./assets/devMode/schedule";
 import { ScheduleDataModel } from "./state/schedule-data/schedule-data.model";
 import { HeaderComponent } from "./components/common-components";
@@ -17,8 +19,6 @@ import ManagementPage from "./pages/management-page/management-page.component";
 import { ScheduleDataActionCreator } from "./state/schedule-data/schedule-data.action-creator";
 import { NotificationProvider } from "./components/notification/notification.context";
 import { Footer } from "./components/footer/footer.component";
-import { Box } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import PersistentDrawer from "./components/drawers/drawer/persistent-drawer.component";
 import { PersistentDrawerProvider } from "./components/drawers/drawer/persistent-drawer-context";
 import ScssVars from "./assets/styles/styles/custom/_variables.module.scss";
@@ -26,8 +26,10 @@ import { ApplicationStateModel } from "./state/application-state.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
 import { cropScheduleDMToMonthDM } from "./logic/schedule-container-converter/schedule-container-converter";
 import { ImportModalProvider } from "./components/buttons/import-buttons/import-modal-context";
-import { LocalStorageProvider } from "./logic/data-access/local-storage-provider.model";
+import NewVersionModal from "./components/modals/new-version-modal/new-version.modal.component";
+import { CookiesProvider } from "./logic/data-access/cookies-provider";
 import { ScheduleKey } from "./logic/data-access/persistance-store.model";
+import { latestAppVersion } from "./api/latest-github-version";
 import resources from "./assets/translations";
 import { t } from "./helpers/translations.helper";
 
@@ -60,6 +62,7 @@ function App(): JSX.Element {
   const classes = useStyles();
   const scheduleDispatcher = useDispatch();
   const [disableRouteButtons, setDisableRouteButtons] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { setMode } = useAppConfig();
   const { month_number: month, year } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
@@ -74,7 +77,13 @@ function App(): JSX.Element {
     () => [
       {
         label: t("schedule"),
-        component: <SchedulePage editModeHandler={setDisableRouteButtons} />,
+        component: (
+          <SchedulePage
+            editModeHandler={(val) => {
+              setDisableRouteButtons(val);
+            }}
+          />
+        ),
         onChange: (): void => setMode(AppMode.SCHEDULE),
         dataCy: "btn-schedule-tab",
       },
@@ -112,7 +121,15 @@ function App(): JSX.Element {
   }, [fetchGlobalState]);
 
   useEffect(() => {
-    new LocalStorageProvider().saveApplicationVersion().then();
+    const checkVersions = async (): Promise<void> => {
+      const localVersion = CookiesProvider.getAppVersion();
+      const githubVersion = await latestAppVersion;
+      if (localVersion !== githubVersion) {
+        CookiesProvider.setAppVersion(githubVersion);
+        localVersion && setIsModalOpen(true);
+      }
+    };
+    checkVersions();
   }, []);
 
   return (
@@ -130,6 +147,7 @@ function App(): JSX.Element {
                 <Box className={classes.drawer}>
                   <PersistentDrawer width={690} />
                 </Box>
+                <NewVersionModal open={isModalOpen} setOpen={setIsModalOpen} />
               </Box>
             </Route>
           </Switch>

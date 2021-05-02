@@ -3,14 +3,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ScheduleError } from "../../state/schedule-data/schedule-errors/schedule-error.model";
 import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
-import { WorkerGroup } from "../../state/schedule-data/worker-info/worker-info.model";
+import { Team } from "../../state/schedule-data/worker-info/worker-info.model";
 
 export abstract class ShiftsProvider {
   abstract get errors(): ScheduleError[];
+
   abstract get workerShifts(): { [workerName: string]: ShiftCode[] };
+
   abstract get availableWorkersWorkTime(): { [key: string]: number };
-  abstract get availableWorkersGroup(): { [workerName: string]: WorkerGroup };
+
+  abstract get availableTeam(): { [workerName: string]: Team };
+
   abstract get workersCount(): number;
+
   get workers(): string[] {
     return [];
   }

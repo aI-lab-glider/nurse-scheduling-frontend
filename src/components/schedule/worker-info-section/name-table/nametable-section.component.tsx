@@ -4,24 +4,23 @@
 import classNames from "classnames/bind";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { VerboseDate } from "../../../../state/schedule-data/foundation-info/foundation-info.model";
-import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
-import { ShiftCode } from "../../../../state/schedule-data/shifts-types/shift-types.model";
-import {
-  WorkerInfoModel,
-  WorkerType,
-} from "../../../../state/schedule-data/worker-info/worker-info.model";
-import { ArrayHelper } from "../../../../helpers/array.helper";
+import styled from "styled-components";
+import { colors, fontSizeXs } from "../../../../assets/colors";
+import { WorkerInfo } from "../../../../hooks/use-worker-info";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { ApplicationStateModel } from "../../../../state/application-state.model";
-import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
-import { BaseSectionOptions } from "../../base/base-section/base-section.component";
-import { useMonthInfo } from "../../../../hooks/use-month-info";
+import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
+import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
+import {
+  WorkerInfoModel,
+  WorkerType
+} from "../../../../state/schedule-data/worker-info/worker-info.model";
 import WorkerDrawerComponent, {
   WorkerDrawerMode,
-  WorkerDrawerWorkerInfo,
+  WorkerDrawerWorkerInfo
 } from "../../../drawers/worker-drawer/worker-drawer.component";
-import { WorkerInfo } from "../../../../hooks/use-worker-info";
+import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
+import { BaseSectionOptions } from "../../base/base-section/base-section.component";
 
 export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "errorSelector"> {
   data: DataRow[];
@@ -29,7 +28,11 @@ export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "error
   workerInfo?: WorkerInfo;
 }
 
-const initialWorkerInfo: WorkerInfoModel = { name: "", time: 0 };
+// TODO: Refactor. Name table section should not be used for 2 pupropses"
+// 1. displaying worker info
+// 2. displaying headers
+// There should be two separate components
+const initialWorkerInfo: WorkerInfoModel = { name: "" as WorkerName, time: 0 };
 
 // TODO: refactor function to be responsible only for rendering of names.
 // Code related to worker should not be here
@@ -40,42 +43,33 @@ export function NameTableSection({
 }: NameTableSectionOptions): JSX.Element {
   const [open, setIsOpen] = useState(false);
   const [workerInfo, setWorkerInfo] = useState<WorkerDrawerWorkerInfo>(initialWorkerInfo);
-  const { verboseDates } = useMonthInfo();
-
-  const { shifts } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
 
   const { type } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.employee_info
   );
 
-  function toggleDrawer(open: boolean, name: string): void {
+  function openDrawer(name: WorkerName): void {
     if (isWorker) {
-      setIsOpen(open);
-      if (open) {
-        const workersWithDates = ArrayHelper.zip<NonNullable<VerboseDate>, NonNullable<ShiftCode>>(
-          verboseDates,
-          shifts?.[name]
-        );
-
-        setWorkerInfo({
-          name: name,
-          shifts: workersWithDates,
-        });
-      }
+      setIsOpen(true);
+      setWorkerInfo({
+        name,
+      });
     }
   }
 
-  function getNames(): string[] {
-    return dataRows.map((a) => a.rowKey);
+  function closeDrawer(): void {
+    setIsOpen(false);
+  }
+
+  function getNames(): WorkerName[] {
+    return dataRows.map((a) => a.rowKey) as WorkerName[];
   }
 
   const data = getNames();
 
   return (
-    <React.Fragment>
-      <div className="nametable">
+    <>
+      <Wrapper>
         {data.map((workerName, index) => {
           const isNurse = type[workerName] === WorkerType.NURSE;
           const isLast = index === data.length - 1;
@@ -87,38 +81,77 @@ export function NameTableSection({
               errorSelector={(scheduleErrors): ScheduleError[] =>
                 errorSelector?.(workerName, 0, scheduleErrors) ?? []
               }
-              className={classNames("nametableRow", isWorker ? "pointerCursor" : "defaultCursor")}
-              tooltipClassname="nametableRow-error-tooltip"
               showErrorTitle={false}
             >
-              <div
+              <Row
                 key={workerName}
-                onClick={(): void => toggleDrawer(true, workerName)}
+                onClick={(): void => openDrawer(workerName)}
                 className={classNames(
                   "nametableRow",
                   isNurse && isWorker && "nurseMarker",
-                  !isNurse && isWorker && "otherMarker",
-                  isFirst && "roundTop",
-                  isLast && "roundBottom",
-                  isWorker ? "pointerCursor" : "defaultCursor"
+                  !isNurse && isWorker && "babysitterMarker",
+                  isFirst && "isFirst",
+                  isLast && "isLast"
                 )}
               >
-                <div className="nameContainer">
+                <LabelWrapper>
                   <span>{workerName}</span>
-                  <span className="underline" />
-                </div>
-              </div>
+                </LabelWrapper>
+              </Row>
             </ErrorPopper>
           );
         })}
-      </div>
+      </Wrapper>
       <WorkerDrawerComponent
         open={open}
-        onClose={(): void => toggleDrawer(false, "")}
+        onClose={closeDrawer}
         mode={WorkerDrawerMode.INFO}
         worker={workerInfo}
         setOpen={setIsOpen}
       />
-    </React.Fragment>
+    </>
   );
 }
+
+const Wrapper = styled.div`
+  align-items: center;
+  padding: 0;
+  width: 126px;
+`;
+const Row = styled.div`
+  display: flex;
+  align-items: center;
+  height: 40px;
+  width: 100%;
+
+  font-style: normal;
+  font-weight: 500;
+  font-size: ${fontSizeXs};
+
+  color: ${colors.primaryTextColor};
+  border-bottom: 1px solid ${colors.tableBorderGrey};
+  cursor: default;
+
+  &.babysitterMarker {
+    border-left: 3px solid ${colors.babysitterColor};
+    cursor: pointer;
+  }
+
+  &.nurseMarker {
+    border-left: 3px solid ${colors.nurseColor};
+    cursor: pointer;
+  }
+
+  &.isFirst {
+    border-top-left-radius: 10px;
+  }
+
+  &.isLast {
+    border-bottom-left-radius: 10px;
+    border-bottom: 0;
+  }
+`;
+
+const LabelWrapper = styled.div`
+  padding: 4px;
+`;

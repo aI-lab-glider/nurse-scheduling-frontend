@@ -1,10 +1,11 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import * as _ from "lodash";
 import { VerboseDate } from "../foundation-info/foundation-info.model";
 import { ShiftCode } from "../shifts-types/shift-types.model";
-import * as _ from "lodash";
 import { Opaque } from "../../../utils/type-utils";
+import { WorkerName } from "../schedule-sensitive-data.model";
 
 export enum WorkerType {
   NURSE = "NURSE",
@@ -22,28 +23,28 @@ export enum TimeDrawerType {
   OTHER = "inne",
 }
 
-export type WorkerGroup = Opaque<string, "WorkerGroup">;
+export type Team = Opaque<string, "Team">;
 export interface WorkersInfoModel {
-  time: { [key: string]: number };
+  time: { [workerName: string]: number };
   type: { [workerName: string]: WorkerType };
-  contractType?: { [workerName: string]: ContractType };
-  workerGroup: { [workerName: string]: WorkerGroup };
+  contractType: { [workerName: string]: ContractType };
+  team: { [workerName: string]: Team };
 }
 
 export interface WorkerDescription {
-  name: string;
+  name: WorkerName;
   time: number;
   type: WorkerType;
   contractType: ContractType;
 }
 
 export interface WorkerInfoModel {
-  name: string;
+  name: WorkerName;
   time: number;
   contractType?: ContractType;
   type?: WorkerType;
   shifts?: [VerboseDate, ShiftCode][];
-  workerGroup?: WorkerGroup;
+  team?: Team;
 }
 
 export function validateEmployeeInfo(employeeInfo: WorkersInfoModel): void {

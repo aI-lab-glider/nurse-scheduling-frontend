@@ -2,9 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { VerboseDate } from "../../../../state/schedule-data/foundation-info/foundation-info.model";
-import { MonthInfoLogic } from "../../../../logic/schedule-logic/month-info.logic";
+import styled from "styled-components";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
+import { MonthInfoLogic } from "../../../../logic/schedule-logic/month-info.logic";
+import { VerboseDate } from "../../../../state/schedule-data/foundation-info/foundation-info.model";
+import { SectionRow } from "../../base/styled";
 import { TimeTableCell } from "./timetable-cell.component";
 
 export function TimeTableRow(): JSX.Element {
@@ -18,33 +20,36 @@ export function TimeTableRow(): JSX.Element {
   function getVerboseDates(): [VerboseDate[], number] {
     if (verboseDates && verboseDates.length > 0) {
       return [verboseDates, currMont];
-    } else {
-      const today = new Date();
-
-      const monthLogic = new MonthInfoLogic(
-        today.getMonth(),
-        today.getFullYear().toString(),
-        createActualMonthData()
-      );
-
-      return [monthLogic.verboseDates, monthLogic.monthNumber];
     }
+    const today = new Date();
+
+    const monthLogic = new MonthInfoLogic(
+      today.getMonth(),
+      today.getFullYear().toString(),
+      createActualMonthData()
+    );
+
+    return [monthLogic.verboseDates, monthLogic.monthNumber];
   }
 
   [verboseDates, currMont] = getVerboseDates();
 
   return (
-    <div className="row" id="timetableRow">
-      {verboseDates.map((verboseDate, cellIndex) => {
-        return (
+    <Wrapper id="timetableRow">
+      {verboseDates.map((verboseDate, cellIndex) => (
           <TimeTableCell
             key={`${verboseDate.date}_${cellIndex}`}
             value={verboseDate}
             currMonth={currMont}
             index={cellIndex}
           />
-        );
-      })}
-    </div>
+        ))}
+    </Wrapper>
   );
 }
+
+const Wrapper = styled(SectionRow)`
+  width: 1350px;
+  height: 70px;
+  cursor: default;
+`;

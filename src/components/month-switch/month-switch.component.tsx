@@ -4,10 +4,12 @@
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { IconButton } from "@material-ui/core";
 import { useActualMonth } from "../../hooks/use-actual-month";
 import { MonthSwitchActionCreator } from "../../state/schedule-data/month-switch.action-creator";
-import { IconButton } from "@material-ui/core";
 import { AppMode, useAppConfig } from "../../state/app-config-context";
+import styled from "styled-components";
+import { colors, fontSizeLg, iconSizeSm } from "../../assets/colors";
 
 interface MonthSwitchComponentOptions {
   isInViewMode: boolean;
@@ -26,44 +28,61 @@ export function MonthSwitchComponent({ isInViewMode }: MonthSwitchComponentOptio
   }, [mode, isInViewMode]);
 
   return (
-    <div id="month-switch" className="month-switch-container">
+    <>
       {actualMonth && (
-        <div className="switch-container">
-          {
-            /* https://github.com/mui-org/material-ui/issues/13957 */
-            showMonthNavigation && (
-              <IconButton
-                className="arrow-button"
-                id="month-switch"
-                data-cy="switch-prev-month"
-                onClick={(): void => {
-                  dispatch(MonthSwitchActionCreator.switchToNewMonth(-1));
-                }}
-              >
-                <MdChevronLeft />
-              </IconButton>
-            )
-          }
+        <Wrapper>
+          {showMonthNavigation && (
+            <IconWrapper
+              data-cy="switch-prev-month"
+              onClick={(): void => {
+                dispatch(MonthSwitchActionCreator.switchToNewMonth(-1));
+              }}
+            >
+              <MdChevronLeft />
+            </IconWrapper>
+          )}
 
-          <h2 className="month-tittle">{actualMonth}</h2>
+          <MonthName data-cy="month-name">{actualMonth}</MonthName>
 
-          {
-            /* https://github.com/mui-org/material-ui/issues/13957 */
-            showMonthNavigation && (
-              <IconButton
-                className="arrow-button"
-                id="month-switch"
-                data-cy="switch-next-month"
-                onClick={(): void => {
-                  dispatch(MonthSwitchActionCreator.switchToNewMonth(1));
-                }}
-              >
-                <MdChevronRight />
-              </IconButton>
-            )
-          }
-        </div>
+          {showMonthNavigation && (
+            <IconWrapper
+              data-cy="switch-next-month"
+              onClick={(): void => {
+                dispatch(MonthSwitchActionCreator.switchToNewMonth(1));
+              }}
+            >
+              <MdChevronRight />
+            </IconWrapper>
+          )}
+        </Wrapper>
       )}
-    </div>
+    </>
   );
 }
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  margin: auto;
+
+  * {
+    color: ${colors.white};
+  }
+`;
+
+const IconWrapper = styled(IconButton)`
+  outline: none;
+  font-size: ${iconSizeSm};
+`;
+
+const MonthName = styled.h2`
+  margin: 5px;
+  font-weight: 500;
+  font-size: ${fontSizeLg};
+  letter-spacing: 0.035em;
+  width: 140px;
+  text-align: center;
+`;

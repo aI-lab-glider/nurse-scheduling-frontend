@@ -9,6 +9,7 @@ import { UndoableHotkeys } from "../../../components/common-components";
 import { ScheduleContainerComponent } from "../schedule-container.component";
 import { ScheduleMode } from "../../../components/schedule/schedule-state.model";
 import { EditPageToolbar } from "./edit-page-toolbar.component";
+import styled from "styled-components";
 
 interface ScheduleEditPageOptions {
   close: () => void;
@@ -25,9 +26,14 @@ export function ScheduleEditPage(options: ScheduleEditPageOptions): JSX.Element 
     <>
       <UndoableHotkeys config={TEMPORARY_SCHEDULE_UNDOABLE_CONFIG} />
       <EditPageToolbar close={options.close} />
-      <div className="schedule">
+      <ScheduleWrapper>
         <ScheduleContainerComponent mode={mode} />
-      </div>
+      </ScheduleWrapper>
     </>
   );
 }
+
+const ScheduleWrapper = styled.div`
+  margin: auto;
+  min-height: 80vh;
+`;

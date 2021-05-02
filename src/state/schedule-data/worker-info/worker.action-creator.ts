@@ -2,8 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* eslint-disable @typescript-eslint/camelcase */
-
 import * as _ from "lodash";
 import { LocalStorageProvider } from "../../../logic/data-access/local-storage-provider.model";
 import {
@@ -21,7 +19,7 @@ import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
 import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
 import {
   DEFAULT_CONTRACT_TYPE,
-  DEFAULT_WORKER_GROUP,
+  DEFAULT_TEAM,
   DEFAULT_WORKER_TYPE,
 } from "../../../logic/schedule-parser/workers-info.parser";
 import { ScheduleDataActionCreator } from "../schedule-data.action-creator";
@@ -151,7 +149,7 @@ export class WorkerActionCreator {
     newWorkerShifts: ShiftCode[]
   ): MonthDataModel {
     const updatedSchedule = _.cloneDeep(monthDataModel);
-    const { workerName, workerType, contractType, workerGroup } = worker;
+    const { workerName, workerType, contractType, team } = worker;
 
     updatedSchedule.shifts = {
       ...updatedSchedule.shifts,
@@ -170,9 +168,9 @@ export class WorkerActionCreator {
         ...updatedSchedule.employee_info.contractType,
         [workerName]: contractType ?? DEFAULT_CONTRACT_TYPE,
       },
-      workerGroup: {
-        ...updatedSchedule.employee_info.workerGroup,
-        [workerName]: workerGroup ?? DEFAULT_WORKER_GROUP,
+      team: {
+        ...updatedSchedule.employee_info.team,
+        [workerName]: team ?? DEFAULT_TEAM,
       },
     };
 

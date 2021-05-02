@@ -5,7 +5,7 @@ import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DataRowHelper } from "../../../helpers/data-row.helper";
 import { DataRow } from "../../../logic/schedule-logic/data-row";
-import { FoundationSectionKey } from "../../../logic/section.model";
+import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../../../logic/section.model";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { FoundationInfoActionCreator } from "../../../state/schedule-data/foundation-info/foundation-info.action-creator";
 import { NameTableComponent } from "../worker-info-section/name-table/nametable.component";
@@ -13,6 +13,9 @@ import { ScheduleMode } from "../schedule-state.model";
 import { BaseSectionComponent } from "../base/base-section/base-section.component";
 import { SelectionMatrix } from "../base/base-section/use-selection-matrix";
 import { useFoundationInfo } from "../../../hooks/use-foundation-info";
+import { SectionContainer, SectionWrapper } from "../base/styled";
+import styled from "styled-components";
+import { colors } from "../../../assets/colors";
 
 export function FoundationInfoComponent(): JSX.Element {
   const { childrenNumber, extraWorkers } = useFoundationInfo();
@@ -22,8 +25,8 @@ export function FoundationInfoComponent(): JSX.Element {
   const isEditable = mode === ScheduleMode.Edit;
 
   const sectionData = [
-    new DataRow(FoundationSectionKey.ChildrenCount, childrenNumber, isEditable),
-    new DataRow(FoundationSectionKey.ExtraWorkersCount, extraWorkers, isEditable),
+    new DataRow(ChildrenSectionKey.RegisteredChildrenCount, childrenNumber, isEditable),
+    new DataRow(ExtraWorkersSectionKey.ExtraWorkersCount, extraWorkers, isEditable),
   ];
 
   const dispatch = useDispatch();
@@ -33,12 +36,12 @@ export function FoundationInfoComponent(): JSX.Element {
       const updatedDataRows = DataRowHelper.copyWithReplaced<number>(
         selectionMatrix,
         (oldData as unknown) as DataRow<number>[],
-        parseInt(newValue)
+        parseInt(newValue, 10)
       );
       const updatedFoundationInfo = DataRowHelper.dataRowsAsValueDict<number>(updatedDataRows);
       const action = FoundationInfoActionCreator.updateFoundationInfo(
-        updatedFoundationInfo[FoundationSectionKey.ChildrenCount],
-        updatedFoundationInfo[FoundationSectionKey.ExtraWorkersCount]
+        updatedFoundationInfo[ChildrenSectionKey.RegisteredChildrenCount],
+        updatedFoundationInfo[ExtraWorkersSectionKey.ExtraWorkersCount]
       );
       dispatch(action);
     },
@@ -46,22 +49,28 @@ export function FoundationInfoComponent(): JSX.Element {
   );
   return (
     <div style={{ display: "inline-block" }}>
-      <div className="sectionContainer borderContainer">
+      <SectionContainer className="borderContainer">
         <div>
           <NameTableComponent data={sectionData} isWorker={false} />
         </div>
         <div>
           <div>
-            <div className="table leftContainerBorder" data-cy="foundationInfoSection">
+            <FoundationSectionWrapper data-cy="foundationInfoSection">
               <BaseSectionComponent
                 sectionKey="foundationInfo"
                 data={sectionData}
                 updateData={updateFoundationInfoData}
               />
-            </div>
+            </FoundationSectionWrapper>
           </div>
         </div>
-      </div>
+      </SectionContainer>
     </div>
   );
 }
+
+const FoundationSectionWrapper = styled(SectionWrapper)`
+  border: none;
+  border-radius: 0;
+  border-left: 1px solid ${colors.tableBorderGrey};
+`;

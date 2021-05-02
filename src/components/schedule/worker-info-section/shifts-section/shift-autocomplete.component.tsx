@@ -6,12 +6,6 @@ import _ from "lodash";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useSelector } from "react-redux";
-import {
-  ShiftCode,
-  ShiftsTypesDict,
-} from "../../../../state/schedule-data/shifts-types/shift-types.model";
-import { ApplicationStateModel } from "../../../../state/application-state.model";
-import { BaseCellInputOptions } from "../../base/base-cell/base-cell-input.component";
 import styled from "styled-components";
 import {
   colors,
@@ -20,6 +14,12 @@ import {
   fontWeightNormal,
 } from "../../../../assets/colors";
 import useTimeout from "../../../../hooks/use-timeout";
+import { ApplicationStateModel } from "../../../../state/application-state.model";
+import {
+  ShiftCode,
+  ShiftTypesDict,
+} from "../../../../state/schedule-data/shifts-types/shift-types.model";
+import { BaseCellInputOptions } from "../../base/base-cell/base-cell-input.component";
 
 const MODAL_CLOSE_MS = 4444;
 interface ShiftCodeSelectItem {
@@ -30,21 +30,20 @@ interface ShiftCodeSelectItem {
   isWorkingShift?: boolean;
   code: string;
   color: string;
+  "data-cy": `autocomplete-${keyof typeof ShiftCode}`;
 }
-const ShiftCodeSelectItems = (shifts: ShiftsTypesDict): ShiftCodeSelectItem[] =>
+const ShiftCodeSelectItems = (shifts: ShiftTypesDict): ShiftCodeSelectItem[] =>
   _.sortBy(
-    Object.values(shifts).map((shift) => {
-      return {
-        name: `${shift.name} ${shift.isWorkingShift ? `(${shift.from}-${shift.to})` : ""}`,
-        symbol: shift.code,
-        from: shift.from,
-        to: shift.to,
-        isWorkingShift: shift!.isWorkingShift,
-        code: shift.code,
-        color: shift.color ? shift.color : "$white",
-        "data-cy": `autocomplete-${shift.code}`,
-      };
-    }),
+    Object.values(shifts).map((shift) => ({
+      name: `${shift.name} ${shift.isWorkingShift ? `(${shift.from}-${shift.to})` : ""}`,
+      symbol: shift.code,
+      from: shift.from,
+      to: shift.to,
+      isWorkingShift: shift!.isWorkingShift,
+      code: shift.code,
+      color: shift.color ? shift.color : "$white",
+      "data-cy": `autocomplete-${shift.code}` as const,
+    })),
     ["from", "to", "name"]
   );
 
@@ -63,15 +62,15 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
   const onValueChange = useCallback((option): void => inputOptions.onValueChange(option.code), [
     inputOptions,
   ]);
-  const getOptionLabel = (option): string => option.name;
-  const getOptionColor = (option): string => option.color;
+  const getOptionLabel = (option: ShiftCodeSelectItem): string => option.name;
+  const getOptionColor = (option: ShiftCodeSelectItem): string => option.color;
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => inputOptions.onKeyDown(e);
-  const [value, setValue] = useState();
+  const [selectedShiftCode, setSelectedShiftCode] = useState<ShiftCodeSelectItem>();
   useEffect(() => {
-    if (value) {
-      onValueChange(value);
+    if (selectedShiftCode) {
+      onValueChange(selectedShiftCode);
     }
-  }, [value, onValueChange]);
+  }, [selectedShiftCode, onValueChange]);
 
   const { shift_types: shiftTypes } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
@@ -95,27 +94,32 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
     if (shift.name.trim() !== shiftTypes[ShiftCode.W].name) {
       if (!shift.isWorkingShift) return shift;
     }
+    return undefined;
   };
   const nonWorkingShifts = groupedOptions.filter(getNonWorkingShifts);
   /**
    * @description Small element for rendering shift info & shift color circle
    * @returns JSX.Element
    */
-  const LabelComponent = ({ option, index }): JSX.Element => {
-    return (
-      <div
-        {...getOptionProps({ option, index })}
-        data-cy={option["data-cy"]}
-        onClick={(e: React.MouseEvent): void => {
-          e.stopPropagation();
-          setValue(option);
-        }}
-      >
-        <OptionLabel>{getOptionLabel(option)}</OptionLabel>
-        <OptionColor style={{ backgroundColor: `#${getOptionColor(option)}` }} />
-      </div>
-    );
-  };
+  const LabelComponent = ({
+    option,
+    index,
+  }: {
+    option: ShiftCodeSelectItem;
+    index: number;
+  }): JSX.Element => (
+    <div
+      {...getOptionProps({ option, index })}
+      data-cy={option["data-cy"]}
+      onClick={(e: React.MouseEvent): void => {
+        e.stopPropagation();
+        setSelectedShiftCode(option);
+      }}
+    >
+      <OptionLabel>{getOptionLabel(option)}</OptionLabel>
+      <OptionColor style={{ backgroundColor: `#${getOptionColor(option)}` }} />
+    </div>
+  );
   const pageOffset: number | undefined = document.getElementById("root")?.children[0]?.children[0]
     ?.scrollTop;
   return (
@@ -136,9 +140,8 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
     >
       <div {...getRootProps()}>
         <input
-          className={inputOptions.className}
-          autoFocus={true}
-          value={value && getOptionLabel(value)}
+          autoFocus
+          value={selectedShiftCode && getOptionLabel(selectedShiftCode)}
           {...getInputProps()}
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
             forceUpdate?.();

@@ -2,12 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
+import { useDispatch } from "react-redux";
+import styled from "styled-components";
+import { t } from "../../../helpers/translations.helper";
+import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
+import { WorkerActionCreator } from "../../../state/schedule-data/worker-info/worker.action-creator";
 import { Button } from "../../buttons/button-component/button.component";
 import DefaultModal from "../modal.component";
-import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
-import { useDispatch } from "react-redux";
-import { WorkerActionCreator } from "../../../state/schedule-data/worker-info/worker.action-creator";
-import { t } from "../../../helpers/translations.helper";
 
 interface DeleteWorkerModalOptions {
   setOpen: (open: boolean) => void;
@@ -26,14 +27,10 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
 
   const title = t("confirmAction");
 
-  const body = (
-    <div className={"span-primary workers-table"}>
-      <p>{t("removeEmployeeQuestion", { name: worker?.name })}?</p>
-    </div>
-  );
+  const body = <Message>{t("removeEmployeeQuestion", { name: worker?.name })}?</Message>;
 
   const footer = (
-    <div style={{ display: "flex", justifyContent: "center" }}>
+    <>
       <Button onClick={handleClose} size="small" className="submit-button" variant="secondary">
         {t("cancel")}
       </Button>
@@ -48,7 +45,7 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
       >
         {t("confirm")}
       </Button>
-    </div>
+    </>
   );
   return (
     <div>
@@ -56,3 +53,6 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
     </div>
   );
 }
+const Message = styled.div`
+  margin-bottom: 0;
+`;

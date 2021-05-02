@@ -2,8 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* eslint-disable @typescript-eslint/camelcase */
-
 import _ from "lodash";
 import PouchDB from "pouchdb-browser";
 import { ArrayPositionPointer, ArrayHelper } from "../../helpers/array.helper";
@@ -21,25 +19,21 @@ import { cropScheduleDMToMonthDM } from "../schedule-container-converter/schedul
 import {
   PersistenceStoreProvider,
   MonthRevision,
-  ApplicationVersionRevision,
   RevisionType,
   RevisionKey,
   getRevisionTypeFromKey,
   ScheduleKey,
 } from "./persistance-store.model";
+
 export const DATABASE_NAME = "nurse-scheduling";
-const APPLICATION_VERSION_TAG_DATABASE_KEY = "application_version_tag";
-const APPLICATION_VERSION_DEFAULT_TAG = "1.0.0";
 type MonthDMToRevisionKeyDict = { [revisionKey: string]: MonthDataModel };
 
 export class LocalStorageProvider extends PersistenceStoreProvider {
   private storage: PouchDB.Database<MonthRevision>;
-  private applicationVersionStorage: PouchDB.Database<ApplicationVersionRevision>;
 
   constructor() {
     super();
     this.storage = new PouchDB(DATABASE_NAME);
-    this.applicationVersionStorage = new PouchDB(`${DATABASE_NAME}-application-version`);
   }
 
   async reloadDb(): Promise<void> {
@@ -132,25 +126,6 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
         daysMissingFromNextMonth,
         "HEAD"
       );
-    }
-  }
-
-  async saveApplicationVersion(): Promise<void> {
-    const db = this.applicationVersionStorage;
-    const version = process.env.REACT_APP_VERSION;
-
-    try {
-      const doc = await db.get(APPLICATION_VERSION_TAG_DATABASE_KEY);
-      db.put({
-        _id: APPLICATION_VERSION_TAG_DATABASE_KEY,
-        _rev: doc._rev,
-        version: version ? version : APPLICATION_VERSION_DEFAULT_TAG,
-      });
-    } catch (error) {
-      db.put({
-        _id: APPLICATION_VERSION_TAG_DATABASE_KEY,
-        version: version ? version : APPLICATION_VERSION_DEFAULT_TAG,
-      });
     }
   }
 
@@ -252,7 +227,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
   ): Promise<[MonthDataModel, MonthDataModel]> {
     const scheduleKey = new ScheduleKey(month.scheduleKey.month, month.scheduleKey.year);
 
-    const nextMonthKey = scheduleKey.nextMonthKey;
+    const { nextMonthKey } = scheduleKey;
     const isNextMonthInFuture = VerboseDateHelper.isMonthInFuture(
       nextMonthKey.month,
       nextMonthKey.year

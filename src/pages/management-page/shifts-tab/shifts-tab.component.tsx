@@ -20,6 +20,8 @@ import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule
 import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
 import { ShiftsActionCreator } from "../../../state/schedule-data/shifts-types/shifts.action-creator";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
+import styled from "styled-components";
+import { fontSizeXs } from "../../../assets/colors";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -28,7 +30,7 @@ const useStyles = makeStyles(() =>
       width: "100%",
     },
     tableCell: {
-      color: `black`,
+      color: "black",
       fontWeight: "normal",
       fontSize: ScssVars.fontSizeBase,
       fontFamily: ScssVars.fontFamilyPrimary,
@@ -56,9 +58,9 @@ export default function ShiftTab(): JSX.Element {
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
   );
 
-  function toggleOpen(shift: Shift, mode: ShiftDrawerMode): void {
+  function toggleOpen(shift: Shift, newMode: ShiftDrawerMode): void {
     setShift(shift);
-    setMode(mode);
+    setMode(newMode);
     setIsOpen(true);
   }
 
@@ -86,13 +88,12 @@ export default function ShiftTab(): JSX.Element {
   };
 
   return (
-    <div className="workers-table">
+    <Wrapper>
       <TableContainer className={classes.root}>
         <Table size="small">
           <EnhancedTableHeaderComponent toggleOpen={toggleOpen} />
           <TableBody>
-            {Object.values(shiftData).map((shift) => {
-              return (
+            {Object.values(shiftData).map((shift) => (
                 <TableRow key={shift.code} className={classes.row}>
                   <TableCell className={classes.tableCell}>{shift.name}</TableCell>
                   <TableCell className={classes.tableCell}>
@@ -107,26 +108,23 @@ export default function ShiftTab(): JSX.Element {
                     />
                   </TableCell>
                   <TableCell align="right">
-                    <Button
+                    <ActionButton
                       variant="primary"
-                      className="action-button"
                       onClick={(): void => toggleOpen(shift, ShiftDrawerMode.EDIT)}
                       disabled
                     >
                       Edytuj
-                    </Button>
-                    <Button
+                    </ActionButton>
+                    <ActionButton
                       variant="secondary"
-                      className="action-button"
                       onClick={(): void => handleRemoveItem(shift)}
                       disabled
                     >
                       Usuń
-                    </Button>
+                    </ActionButton>
                   </TableCell>
                 </TableRow>
-              );
-            })}
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -138,6 +136,15 @@ export default function ShiftTab(): JSX.Element {
         selectedShift={selectedShift}
         saveChangedShift={handleChangeItem}
       />
-    </div>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  margin-top: 45px;
+`;
+
+const ActionButton = styled(Button)`
+  font-size: ${fontSizeXs};
+  padding: 2px 25px 2px;
+`;
