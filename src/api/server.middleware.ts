@@ -4,6 +4,7 @@
 import * as _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { WorkerHourInfo } from "../helpers/worker-hours-info.model";
+import { PublicHolidaysLogic } from "../logic/schedule-logic/public-holidays.logic";
 import { PrimaryMonthRevisionDataModel } from "../state/application-state.model";
 import { ScheduleDataModel, ServerDataModel } from "../state/schedule-data/schedule-data.model";
 import {
@@ -84,7 +85,19 @@ export class ServerMiddleware {
   }
 
   public static mapToServerModel(schedule: ScheduleDataModel): ServerDataModel {
-    return _.cloneDeep(schedule) as ServerDataModel;
+    const month_number = schedule.schedule_info.month_number;
+    const publicHolidaysLogic = new PublicHolidaysLogic(schedule.schedule_info.year.toString());
+    const result = _.cloneDeep(schedule) as ServerDataModel;
+
+    const holidays = schedule.month_info.dates.filter((d) =>
+      publicHolidaysLogic.isPublicHoliday(d, month_number)
+    );
+    const indexedDays = schedule.month_info.dates.map((d, index) => [d, index]);
+    const indexedHolidays = holidays
+      .map((h) => indexedDays.filter((d) => d[0] === h).map((d) => d[1]))
+      .map((h) => h[0]);
+    result.month_info.holidays = indexedHolidays;
+    return result;
   }
 
   public static remapScheduleErrorUsernames(
