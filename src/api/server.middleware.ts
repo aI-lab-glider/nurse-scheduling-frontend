@@ -5,7 +5,7 @@ import * as _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { WorkerHourInfo } from "../helpers/worker-hours-info.model";
 import { PrimaryMonthRevisionDataModel } from "../state/application-state.model";
-import { ScheduleDataModel } from "../state/schedule-data/schedule-data.model";
+import { ScheduleDataModel, ServerDataModel } from "../state/schedule-data/schedule-data.model";
 import {
   AlgorithmError,
   AlgorithmErrorCode,
@@ -81,6 +81,10 @@ export class ServerMiddleware {
       } as any;
     });
     return result;
+  }
+
+  public static mapToServerModel(schedule: ScheduleDataModel): ServerDataModel {
+    return _.cloneDeep(schedule) as ServerDataModel;
   }
 
   public static remapScheduleErrorUsernames(
