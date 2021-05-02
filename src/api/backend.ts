@@ -32,7 +32,10 @@ class Backend {
     schedule: ScheduleDataModel,
     baseScheduleRevision: PrimaryMonthRevisionDataModel
   ): Promise<ScheduleError[]> {
-    const { anonynimizedSchedule, anonymizationMap } = ServerMiddleware.anonymizeSchedule(schedule);
+    const serverSchedule = ServerMiddleware.mapToServerModel(schedule);
+    const { anonynimizedSchedule, anonymizationMap } = ServerMiddleware.anonymizeSchedule(
+      serverSchedule
+    );
     const validRequestSchedule = ServerMiddleware.mapIsWorkingTypeSnakeCase(anonynimizedSchedule);
 
     return this.sleep(1000).then(() =>

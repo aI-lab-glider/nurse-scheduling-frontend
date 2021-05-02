@@ -24,11 +24,7 @@ export class MonthInfoLogic {
   }
 
   public get holidays(): number[] {
-    const holidays: number[] = [];
-    this._verboseDates.forEach((d) => {
-      d.isPublicHoliday && holidays.push(d.date);
-    });
-    return holidays;
+    return this._verboseDates.filter((d) => d.isPublicHoliday).map((d, index) => index);
   }
 
   public get dayCount(): number {

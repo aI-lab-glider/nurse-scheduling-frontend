@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
-import { ScheduleDataModel } from "../state/schedule-data/schedule-data.model";
+import { ScheduleDataModel, ServerDataModel } from "../state/schedule-data/schedule-data.model";
 import {
   AlgorithmErrorCode,
   ScheduleError,
@@ -89,6 +89,11 @@ export class ServerMiddleware {
       } as any;
     });
     return result;
+  }
+
+  public static mapToServerModel(schedule: ScheduleDataModel): ServerDataModel {
+    const s = _.cloneDeep(schedule) as ServerDataModel;
+    return s;
   }
 
   public static remapScheduleErrorUsernames(

@@ -32,6 +32,14 @@ export interface FoundationInfoModel {
   holidays: number[];
 }
 
+export interface ServerInfoModel {
+  children_number?: number[];
+  extra_workers?: number[];
+  frozen_shifts?: [number | string, number][];
+  dates: number[];
+  holidays: number[];
+}
+
 export function validateFoundationInfo(
   foundationInfo: FoundationInfoModel,
   containerType: ScheduleContainerType
