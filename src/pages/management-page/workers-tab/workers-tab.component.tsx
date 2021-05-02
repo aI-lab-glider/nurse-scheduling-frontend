@@ -149,6 +149,7 @@ export default function WorkersTab(): JSX.Element {
                   </TableCell>
                   <TableCell align="right">
                     <ActionButton
+                      data-cy={`edit-worker-${worker.name}`}
                       variant="primary"
                       onClick={(): void => toggleDrawer(true, WorkerDrawerMode.EDIT, worker)}
                     >

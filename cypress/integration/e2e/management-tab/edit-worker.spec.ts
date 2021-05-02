@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import { HoursInfoCells } from "../../../support/commands";
 describe("Tab management", () => {
   beforeEach(() => {
     cy.loadScheduleToMonth();
@@ -49,6 +50,27 @@ describe("Tab management", () => {
       cy.get('[data-cy="civil_contract"]').click();
       cy.get('[data-cy="input-civil-time"]').click();
       cy.get('[data-cy="input-civil-time"] input').clear({ force: true }).type("123");
+    });
+  });
+
+  const testWorker = "Pielęgniarka 2";
+  describe("Editing workers time", () => {
+    it("properly handles worker hours edition", () => {
+      cy.get('[data-cy="exit-drawer"]').click();
+      cy.get(`[data-cy="edit-worker-${testWorker}"]`).click();
+      cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="half"]').click();
+      cy.get(`[data-cy="btn-save-worker"]`).click();
+      cy.contains("umowa o pracę 1/2");
+      cy.get('[data-cy="btn-schedule-tab"]').click();
+      cy.checkHoursInfo({
+        teamIdx: 0,
+        workerIdx: 1,
+        hoursInfo: {
+          [HoursInfoCells.required]: 80,
+          [HoursInfoCells.actual]: 240,
+          [HoursInfoCells.overtime]: 160,
+        },
+      });
     });
   });
 });
