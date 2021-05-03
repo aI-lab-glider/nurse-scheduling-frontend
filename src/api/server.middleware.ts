@@ -23,7 +23,7 @@ import {
 } from "../state/schedule-data/schedule-sensitive-data.model";
 import { Opaque } from "../utils/type-utils";
 import { BackendErrorObject } from "./backend";
-import { ServerScheduleDataModel } from "./server-schedule-data.model";
+import { ServerScheduleDataModel } from "./models/server-schedule-data.model";
 
 type NameToUUIDMap = {
   [name: string]: string;
