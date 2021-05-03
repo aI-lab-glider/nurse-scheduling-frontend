@@ -24,7 +24,7 @@
   "plugins": ["react", "@typescript-eslint", "cypress", "header"],
   "rules": {
     "no-debugger": "off",
-    "quotes": ["error", "double"],
+    "quotes": ["error", "double", { "avoidEscape": true }],
     "header/header": [2, "config/license-header.js"],
     "no-underscore-dangle": ["error", { "allowAfterThis": true, "allow": ["_rev", "_id"] }],
     "camelcase": [

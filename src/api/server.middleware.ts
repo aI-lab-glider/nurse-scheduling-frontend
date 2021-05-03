@@ -4,7 +4,9 @@
 import * as _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { WorkerHourInfo } from "../helpers/worker-hours-info.model";
+import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
 import { PrimaryMonthRevisionDataModel } from "../state/application-state.model";
+import { VerboseDate } from "../state/schedule-data/foundation-info/foundation-info.model";
 import { ScheduleDataModel } from "../state/schedule-data/schedule-data.model";
 import {
   AlgorithmError,
@@ -21,6 +23,7 @@ import {
 } from "../state/schedule-data/schedule-sensitive-data.model";
 import { Opaque } from "../utils/type-utils";
 import { BackendErrorObject } from "./backend";
+import { ServerScheduleDataModel } from "./models/server-schedule-data.model";
 
 type NameToUUIDMap = {
   [name: string]: string;
@@ -80,6 +83,20 @@ export class ServerMiddleware {
         is_working_shift: isWorkingShift,
       } as any;
     });
+    return result;
+  }
+
+  public static mapToServerModel(schedule: ScheduleDataModel): ServerScheduleDataModel {
+    const month_number = schedule.schedule_info.month_number;
+    const result = _.cloneDeep(schedule) as ServerScheduleDataModel;
+
+    const monthLogic = new MonthInfoLogic(month_number, schedule.schedule_info.year);
+    const holidays = monthLogic.verboseDates
+      .map((d, i) => [d, i])
+      .filter((dayIndPair) => (dayIndPair[0] as VerboseDate).isPublicHoliday)
+      .map((d) => d[1] as number);
+    result.month_info.holidays = holidays;
+
     return result;
   }
 
