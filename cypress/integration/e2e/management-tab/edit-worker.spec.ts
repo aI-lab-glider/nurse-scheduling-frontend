@@ -60,7 +60,7 @@ describe("Tab management", () => {
       cy.get(`[data-cy="edit-worker-${testWorker}"]`).click();
       cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="half"]').click();
       cy.get(`[data-cy="btn-save-worker"]`).click();
-      cy.contains("umowa o pracę 1/2");
+      cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1/2");
       cy.get('[data-cy="btn-schedule-tab"]').click();
       cy.checkHoursInfo({
         teamIdx: 0,
