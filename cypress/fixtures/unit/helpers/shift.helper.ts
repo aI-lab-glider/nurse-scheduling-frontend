@@ -5,8 +5,6 @@
 import { ShiftCode } from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
 import { WorkerShiftsModel } from "../../../../src/state/schedule-data/workers-shifts/worker-shifts.model";
 
-export type GetWorkersCountTestCase = { arr: WorkerShiftsModel; exp: Array<number> };
-
 export const testData1: WorkerShiftsModel = {
   "0": ["R", "DN", "W"].map((d) => ShiftCode[d]),
   "1": ["P", "D", "W"].map((d) => ShiftCode[d]),
@@ -37,29 +35,6 @@ export const testData5: WorkerShiftsModel = {
   "3": ["R", "W", "P", "R"].map((d) => ShiftCode[d]),
   "4": ["D", "W", "R", "R"].map((d) => ShiftCode[d]),
 };
-
-export const GetWorkersCountTestCases: GetWorkersCountTestCase[] = [
-  {
-    arr: testData1,
-    exp: [3, 2, 0],
-  },
-  {
-    arr: testData2,
-    exp: [0, 0, 0],
-  },
-  {
-    arr: testData3,
-    exp: [3, 3, 3],
-  },
-  {
-    arr: testData4,
-    exp: [3, 1, 3, 1],
-  },
-  {
-    arr: testData5,
-    exp: [5, 2, 5, 3],
-  },
-];
 
 export const expectedHours = {
   [ShiftCode.RP]: 12,

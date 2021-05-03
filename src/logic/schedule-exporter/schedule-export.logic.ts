@@ -11,7 +11,7 @@ import {
   EMPTY_ROW_SIZE,
   SHIFTS_WORKSHEET_NAME,
   WORKERS_WORKSHEET_NAME,
-  WORKSHEET_NAME,
+  SCHEDULE_WORKSHEET_NAME,
 } from "../../helpers/parser.helper";
 import { WorkerExportLogic } from "./worker-export.logic";
 import { ShiftExportLogic } from "./shift-export.logic";
@@ -84,7 +84,7 @@ export class ScheduleExportLogic {
     const workbook = new xlsx.Workbook();
     return [
       workbook,
-      workbook.addWorksheet(WORKSHEET_NAME, {
+      workbook.addWorksheet(SCHEDULE_WORKSHEET_NAME, {
         pageSetup: { paperSize: 9, orientation: "landscape" },
         properties: { defaultColWidth: 5 },
       }),

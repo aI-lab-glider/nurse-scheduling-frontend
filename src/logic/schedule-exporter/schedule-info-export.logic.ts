@@ -9,7 +9,6 @@ import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.mo
 import { ColorHelper } from "../../helpers/colors/color.helper";
 import { ShiftHelper } from "../../helpers/shifts.helper";
 import { TranslationHelper } from "../../helpers/translations.helper";
-import { WorkerHourInfo } from "../../helpers/worker-hours-info.model";
 import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
 import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
 import {
@@ -23,6 +22,7 @@ import { groupWorkersByTeam } from "../../hooks/use-teams";
 import { WorkerInfo } from "../../hooks/use-worker-info";
 import { MonthHelper } from "../../helpers/month.helper";
 import { ScheduleExportLogic } from "./schedule-export.logic";
+import { WorkerHourInfo } from "../schedule-logic/worker-hours-info.logic";
 
 export interface ScheduleExportLogicOptions {
   scheduleModel: MonthDataModel;

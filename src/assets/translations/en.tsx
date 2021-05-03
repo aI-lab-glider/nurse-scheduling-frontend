@@ -120,6 +120,21 @@ const en: LocalizationResource = {
     no: "No",
     unsavedChanges: "Unsaved changes in schedule",
     wantToSave: "Do you want to save changes?",
+    // export and import
+    nameSurnameExportHeader: "Name and surname",
+    workerTypeExportHeader: "Worker position",
+    contractTypeExportHeader: "Contract type",
+    worktimeNormExportHeader: "Worktime norm",
+    workerTeamExportHeader: "Worker team",
+    shiftNameExportHeader: "Worker shift",
+    abbreviationExportHeader: "Shift abbreviation",
+    fromExportHeader: "From",
+    toExportHeader: "To",
+    isWorkingShiftExportHeader: "Is working shift",
+    colorExportHeader: "Color",
+    scheduleworksheetName: "schedule",
+    workersWorksheetName: "workers",
+    shiftsWorksheetName: "shifts",
   },
 };
 export default en;

@@ -118,6 +118,21 @@ export const pl = {
     no: "Nie",
     unsavedChanges: "Niezapisane zmiany w grafiku",
     wantToSave: "Czy chcesz zapisać wprowadzone zmiany?",
+    // export and import
+    nameSurnameExportHeader: "Imię i nazwisko",
+    workerTypeExportHeader: "Stanowisko/funkcja",
+    contractTypeExportHeader: "Rodzaj umowy",
+    worktimeNormExportHeader: "Wymiar czasu pracy",
+    workerTeamExportHeader: "Zespół",
+    shiftNameExportHeader: "Nazwa zmiany",
+    abbreviationExportHeader: "Skrót",
+    fromExportHeader: "Od",
+    toExportHeader: "Do",
+    isWorkingShiftExportHeader: "Zmiana pracująca",
+    colorExportHeader: "Kolor",
+    scheduleworksheetName: "grafik",
+    workersWorksheetName: "pracownicy",
+    shiftsWorksheetName: "zmiany",
   },
 };
 export default pl;

@@ -2,22 +2,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { VerboseDate } from "../state/schedule-data/foundation-info/foundation-info.model";
-import { WorkerType } from "../state/schedule-data/worker-info/worker-info.model";
-import { WorkerShiftsModel } from "../state/schedule-data/workers-shifts/worker-shifts.model";
+import {
+  NotWorkingShift,
+  NotWorkingShiftType,
+  Shift,
+  ShiftCode,
+  ShiftTypesDict,
+} from "../state/schedule-data/shifts-types/shift-types.model";
 import { Opaque } from "../utils/type-utils";
-import { ArrayHelper } from "./array.helper";
 import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Color, Colors } from "./colors/color.model";
 import { VerboseDateHelper } from "./verbose-date.helper";
-import {
-  ShiftTypesDict,
-  Shift,
-  ShiftCode,
-  FREE_SHIFTS_CODES,
-  NotWorkingShift,
-  NotWorkingShiftType,
-} from "../state/schedule-data/shifts-types/shift-types.model";
 
 export const WORK_HOURS_PER_DAY = 8;
 export type MonthDataArray<T> = Opaque<"MonthData", T[]>;
@@ -25,24 +21,6 @@ export type MonthDataArray<T> = Opaque<"MonthData", T[]>;
 export type WorkHourInfoArray = Opaque<"WorkHourInfoArray", [number, number, number]>;
 
 export class ShiftHelper {
-  public static getWorkersCount(
-    shifts: WorkerShiftsModel,
-    shiftTypes: ShiftTypesDict
-  ): Array<number> {
-    const shiftsArray = Object.values(shifts);
-    const workersPerDays: Array<number> = [];
-    if (shiftsArray.length === 0) return [];
-    for (let i = 0; i < shiftsArray[0].length; i++) {
-      workersPerDays.push(
-        shiftsArray.reduce((a, b) => {
-          const shift = shiftTypes[b[i]];
-          return a + (this.shiftToWorkTime(shift) ? 1 : 0);
-        }, 0)
-      );
-    }
-    return workersPerDays;
-  }
-
   public static isNotWorkingShift(shift?: Shift): shift is NotWorkingShift {
     return shift?.isWorkingShift === false && shift?.type !== NotWorkingShiftType.Util;
   }
@@ -72,28 +50,6 @@ export class ShiftHelper {
       return [(shift.to + this.requiredFreeTimeAfterShift(shift)) % 24, true];
     }
     return [sum, false];
-  }
-
-  public static groupShiftsByWorkerType(
-    shifts: WorkerShiftsModel = {},
-    workerTypes: { [workerName: string]: WorkerType } = {}
-  ): { [key: string]: WorkerShiftsModel } {
-    const grouped = ArrayHelper.arrayToObject<WorkerType, WorkerShiftsModel>(
-      Object.values(WorkerType),
-      (wt) => wt
-    );
-    const shiftEntries = Object.entries(shifts).map((a) => ({
-      workerName: a[0],
-      shifts: a[1],
-    }));
-    const sortedShifts = shiftEntries.sort(({ workerName: wn1 }, { workerName: wn2 }) =>
-      wn1 > wn2 ? 1 : wn1 < wn2 ? -1 : 0
-    );
-    sortedShifts.forEach(({ workerName, shifts }) => {
-      const category = workerTypes[workerName] ?? "";
-      grouped[category][workerName] = shifts;
-    });
-    return grouped;
   }
 
   private static createRGBFromHex(hexCode: string): Color {
@@ -159,10 +115,14 @@ export class ShiftHelper {
     };
   }
 
-  static replaceFreeShiftsWithFreeDay(shifts: ShiftCode[], startIndex = 0): ShiftCode[] {
+  static replaceFreeShiftsWithFreeDay(
+    shifts: ShiftCode[],
+    startIndex = 0,
+    freeShiftCodes: ShiftCode[]
+  ): ShiftCode[] {
     return shifts.map((shift, idx) => {
       const isIndexValid = idx >= startIndex;
-      const shouldReplace = FREE_SHIFTS_CODES.includes(shift);
+      const shouldReplace = freeShiftCodes.includes(shift);
       return isIndexValid && shouldReplace ? ShiftCode.W : shift;
     });
   }
