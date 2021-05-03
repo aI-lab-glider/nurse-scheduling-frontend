@@ -4,9 +4,10 @@
 import * as _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { WorkerHourInfo } from "../helpers/worker-hours-info.model";
-import { PublicHolidaysLogic } from "../logic/schedule-logic/public-holidays.logic";
+import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
 import { PrimaryMonthRevisionDataModel } from "../state/application-state.model";
-import { ScheduleDataModel, ServerDataModel } from "../state/schedule-data/schedule-data.model";
+import { VerboseDate } from "../state/schedule-data/foundation-info/foundation-info.model";
+import { ScheduleDataModel } from "../state/schedule-data/schedule-data.model";
 import {
   AlgorithmError,
   AlgorithmErrorCode,
@@ -22,6 +23,7 @@ import {
 } from "../state/schedule-data/schedule-sensitive-data.model";
 import { Opaque } from "../utils/type-utils";
 import { BackendErrorObject } from "./backend";
+import { ServerScheduleDataModel } from "./server-schedule-data.model";
 
 type NameToUUIDMap = {
   [name: string]: string;
@@ -84,19 +86,17 @@ export class ServerMiddleware {
     return result;
   }
 
-  public static mapToServerModel(schedule: ScheduleDataModel): ServerDataModel {
+  public static mapToServerModel(schedule: ScheduleDataModel): ServerScheduleDataModel {
     const month_number = schedule.schedule_info.month_number;
-    const publicHolidaysLogic = new PublicHolidaysLogic(schedule.schedule_info.year.toString());
-    const result = _.cloneDeep(schedule) as ServerDataModel;
+    const result = _.cloneDeep(schedule) as ServerScheduleDataModel;
 
-    const holidays = schedule.month_info.dates.filter((d) =>
-      publicHolidaysLogic.isPublicHoliday(d, month_number)
-    );
-    const indexedDays = schedule.month_info.dates.map((d, index) => [d, index]);
-    const indexedHolidays = holidays
-      .map((h) => indexedDays.filter((d) => d[0] === h).map((d) => d[1]))
-      .map((h) => h[0]);
-    result.month_info.holidays = indexedHolidays;
+    const monthLogic = new MonthInfoLogic(month_number, schedule.schedule_info.year);
+    const holidays = monthLogic.verboseDates
+      .map((d, i) => [d, i])
+      .filter((dayIndPair) => (dayIndPair[0] as VerboseDate).isPublicHoliday)
+      .map((d) => d[1] as number);
+    result.month_info.holidays = holidays;
+
     return result;
   }
 

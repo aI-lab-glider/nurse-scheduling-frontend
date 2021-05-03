@@ -31,7 +31,7 @@ export interface FoundationInfoModel {
   dates: number[];
 }
 
-export interface ServerInfoModel {
+export interface ServerFoundationInfoModel {
   children_number?: number[];
   extra_workers?: number[];
   frozen_shifts?: [number | string, number][];
