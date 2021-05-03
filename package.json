@@ -66,10 +66,12 @@
     "html2canvas": "^1.0.0-rc.7",
     "i18next": "^20.2.1",
     "immutable": "^4.0.0-rc.12",
+    "istanbul-lib-coverage": "^3.0.0",
     "jspdf": "^2.3.1",
     "jszip": "^3.6.0",
     "node-sass": "^4.14.1",
     "npm": "^7.5.3",
+    "nyc": "^15.1.0",
     "pouchdb-browser": "^7.2.2",
     "react": "^16.13.1",
     "react-datasheet": "^1.4.8",
@@ -94,7 +96,7 @@
     "wait-on": "^5.2.1"
   },
   "scripts": {
-    "b-start": "react-scripts start",
+    "b-start": "react-scripts -r @cypress/instrument-cra start",
     "b-build": "react-scripts build",
     "eject": "react-scripts eject",
     "electron-build": "electron-builder",
@@ -104,9 +106,18 @@
     "lint": "eslint src/**/*.ts* cypress/**/*.ts*",
     "lint-fix": "eslint src/**/*.ts* cypress/**/*.ts* --fix",
     "lint-warn": "eslint src/**/*.ts* cypress/**/*.ts* --max-warnings=0",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "test": "cypress run"
+  },
+  "nyc": {
+    "reporter": ["text", "json", "html"],
+    "include": "src",
+    "exclude": ["src/assets/**"],
+    "all": true
   },
   "devDependencies": {
+    "@cypress/code-coverage": "^3.9.5",
+    "@cypress/instrument-cra": "^1.4.0",
     "@cypress/snapshot": "^2.1.7",
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/git": "^9.0.0",
