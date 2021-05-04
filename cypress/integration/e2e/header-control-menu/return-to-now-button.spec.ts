@@ -6,12 +6,13 @@ describe("'Come back to now' button", () => {
   context("when schedule is loaded", () => {
     before(() => {
       cy.loadScheduleToMonth();
+      cy.get("[data-cy=switch-next-month]").click();
     });
 
-    context("month is switched to next", () => {
-      cy.get("[data-cy=switch-next-month]").click();
-      it("should display 'return to now' button", () => {
+    context("when month is switched to next", () => {
+      it("should get you back to current month after clicking 'return to now' button", () => {
         cy.get("[data-cy=return-to-now]").click();
+        cy.get("[data-cy=month-name]").contains("Listopad 2020");
       });
     });
   });
