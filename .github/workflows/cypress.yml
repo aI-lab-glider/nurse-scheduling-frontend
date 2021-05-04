@@ -45,8 +45,8 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           APPLICATION_URL: ${{ fromJson(steps.read_config.outputs.cypressConfig).env.baseUrl }}
-jobs:
 
+  coverage:
     # Only run the coverage once
     name: Get Coverage for badge
     run: |
