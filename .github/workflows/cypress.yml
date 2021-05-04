@@ -46,22 +46,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           APPLICATION_URL: ${{ fromJson(steps.read_config.outputs.cypressConfig).env.baseUrl }}
 
-  coverage:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node-version: [14.x]
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Get Coverage for badge
+      - name: Get Coverage for badge
       run: |
         SUMMARY="$(npm test; npm run coverage | tail -2 | head -1)"
         TOKENS=($SUMMARY)
@@ -84,3 +69,19 @@ jobs:
         message: ${{ env.COVERAGE }}
         color: green
         namedLogo: jest
+  # coverage:
+  #   runs-on: ${{ matrix.os }}
+
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest]
+  #       node-version: [14.x]
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Use Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
+
+    
