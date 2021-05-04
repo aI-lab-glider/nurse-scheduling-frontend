@@ -79,7 +79,7 @@ export const pl = {
     downloadScheduleTitle: "Pobierz grafik",
     fileFormat: "Format pliku",
     fileOptions: "Opcje",
-    //new-version.modal.component.tsx
+    // new-version.modal.component.tsx
     update: "Aktualizacja",
     updateMessage: "Aplikacja została zaktualizowana. Teraz jest w wersji {{version}}",
     // report-issue-modal.component.tsx
@@ -91,7 +91,7 @@ export const pl = {
     // shift-drawer.component.tsx
     shiftEdit: "Edycja zmiany",
     shiftAdd: "Dodaj zmianę",
-    //shift-edit-drawer.component.tsx
+    // shift-edit-drawer.component.tsx
     shiftName: "Nazwa zmiany",
     shiftType: "Typ zmiany",
     shiftAlreadyExists: "Zmiana z taką nazwą już istnieje",
@@ -113,7 +113,7 @@ export const pl = {
     downloadScheduleAndClearAppData: "Pobierz grafik i wyczyść aplikację",
     // read-only-toolbar.tsx
     scheduleHasErrors: "Plan zawiera błędy. Zobacz je w trybie edycji.",
-    //save-changes-modal.component.tsx
+    // save-changes-modal.component.tsx
     yes: "Tak",
     no: "Nie",
     unsavedChanges: "Niezapisane zmiany w grafiku",

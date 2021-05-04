@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 import { WorkerHourInfo } from "../../helpers/worker-hours-info.model";
 import { useTeams } from "../../hooks/use-teams";
 import { ApplicationStateModel } from "../../state/application-state.model";
@@ -11,7 +12,6 @@ import { ScheduleFoldingSection } from "./schedule-folding-section.component";
 import { OvertimeHeaderComponent } from "./schedule-header/overtime-header-table/overtime-header.component";
 import { TimeTableComponent } from "./schedule-header/timetable/timetable.component";
 import { WorkerInfoSection } from "./worker-info-section/worker-info-section.component";
-import styled from "styled-components";
 
 export function ScheduleComponent(): JSX.Element {
   const teams = useTeams();

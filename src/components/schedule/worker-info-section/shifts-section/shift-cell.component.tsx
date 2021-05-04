@@ -14,6 +14,7 @@ import React, {
 } from "react";
 import mergeRefs from "react-merge-refs";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import {
   ShiftCode,
@@ -30,7 +31,6 @@ import { ErrorPopper } from "../../../poppers/error-popper/error-popper.componen
 import { useCellBackgroundHighlight } from "../../hooks/use-cell-highlight";
 import { useCellSelection } from "../../hooks/use-cell-selection";
 import { ShiftAutocompleteComponent } from "./shift-autocomplete.component";
-import styled from "styled-components";
 import { colors, fontSizeBase, fontWeightBold } from "../../../../assets/colors";
 
 const MODAL_CLOSE_MS = 4444;

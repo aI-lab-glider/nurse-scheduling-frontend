@@ -12,6 +12,7 @@ import {
 import { blue } from "@material-ui/core/colors";
 import React from "react";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 import { Button } from "../../common-components";
 import { ScheduleDataModel } from "../../../state/schedule-data/schedule-data.model";
 import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
@@ -23,7 +24,6 @@ import {
 } from "../../buttons/dropdown-buttons/dropdown-buttons.component";
 import DefaultModal from "../modal.component";
 import { t } from "../../../helpers/translations.helper";
-import styled from "styled-components";
 import { colors, fontSizeBase } from "../../../assets/colors";
 
 export interface ExportModalComponent {
