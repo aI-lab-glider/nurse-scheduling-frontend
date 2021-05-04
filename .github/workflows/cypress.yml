@@ -63,7 +63,7 @@ jobs:
 
     - name: Get Coverage for badge
       run: |
-        SUMMARY="$(npm test && npm run coverage' | tail -2 | head -1)"
+        SUMMARY="$(npm test; npm run coverage | tail -2 | head -1)"
         TOKENS=($SUMMARY)
         echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
 
