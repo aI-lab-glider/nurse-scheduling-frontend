@@ -4,17 +4,17 @@
 import { Grid, Input, Typography } from "@material-ui/core";
 import * as _ from "lodash";
 import React, { useState } from "react";
+import { t } from "../../../../helpers/translations.helper";
+import { WorkingTimeHelper } from "../../../../helpers/working-time.helper";
 import { TimeDrawerType } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import {
   ButtonData,
   DropdownButtons,
 } from "../../../buttons/dropdown-buttons/dropdown-buttons.component";
 import { TextMaskCustom } from "../../../common-components/text-mask-custom/text-mask-custom.component";
-import { WorkingTimeHelper } from "../../../../helpers/working-time.helper";
 import { WorkNormSelectorOptions } from "./combined-worknorm-selector.component";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
 import { useFormFieldStyles } from "./worker-edit.models";
-import { t } from "../../../../helpers/translations.helper";
 
 export function WorkerEmploymentContractWorkNormSelector({
   employmentTime,

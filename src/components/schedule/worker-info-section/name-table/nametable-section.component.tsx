@@ -4,26 +4,23 @@
 import classNames from "classnames/bind";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { VerboseDate } from "../../../../state/schedule-data/foundation-info/foundation-info.model";
+import styled from "styled-components";
+import { colors, fontSizeXs } from "../../../../assets/colors";
+import { WorkerInfo } from "../../../../hooks/use-worker-info";
+import { DataRow } from "../../../../logic/schedule-logic/data-row";
+import { ApplicationStateModel } from "../../../../state/application-state.model";
 import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
-import { ShiftCode } from "../../../../state/schedule-data/shifts-types/shift-types.model";
+import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
 import {
   WorkerInfoModel,
   WorkerType,
 } from "../../../../state/schedule-data/worker-info/worker-info.model";
-import { ArrayHelper } from "../../../../helpers/array.helper";
-import { DataRow } from "../../../../logic/schedule-logic/data-row";
-import { ApplicationStateModel } from "../../../../state/application-state.model";
-import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
-import { BaseSectionOptions } from "../../base/base-section/base-section.component";
-import { useMonthInfo } from "../../../../hooks/use-month-info";
 import WorkerDrawerComponent, {
   WorkerDrawerMode,
   WorkerDrawerWorkerInfo,
 } from "../../../drawers/worker-drawer/worker-drawer.component";
-import { WorkerInfo } from "../../../../hooks/use-worker-info";
-import styled from "styled-components";
-import { colors, fontSizeXs } from "../../../../assets/colors";
+import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
+import { BaseSectionOptions } from "../../base/base-section/base-section.component";
 
 export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "errorSelector"> {
   data: DataRow[];
@@ -31,7 +28,11 @@ export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "error
   workerInfo?: WorkerInfo;
 }
 
-const initialWorkerInfo: WorkerInfoModel = { name: "", time: 0 };
+// TODO: Refactor. Name table section should not be used for 2 pupropses"
+// 1. displaying worker info
+// 2. displaying headers
+// There should be two separate components
+const initialWorkerInfo: WorkerInfoModel = { name: "" as WorkerName, time: 0 };
 
 // TODO: refactor function to be responsible only for rendering of names.
 // Code related to worker should not be here
@@ -42,35 +43,26 @@ export function NameTableSection({
 }: NameTableSectionOptions): JSX.Element {
   const [open, setIsOpen] = useState(false);
   const [workerInfo, setWorkerInfo] = useState<WorkerDrawerWorkerInfo>(initialWorkerInfo);
-  const { verboseDates } = useMonthInfo();
-
-  const { shifts } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
 
   const { type } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.employee_info
   );
 
-  function toggleDrawer(open: boolean, name: string): void {
+  function openDrawer(name: WorkerName): void {
     if (isWorker) {
-      setIsOpen(open);
-      if (open) {
-        const workersWithDates = ArrayHelper.zip<NonNullable<VerboseDate>, NonNullable<ShiftCode>>(
-          verboseDates,
-          shifts?.[name]
-        );
-
-        setWorkerInfo({
-          name: name,
-          shifts: workersWithDates,
-        });
-      }
+      setIsOpen(true);
+      setWorkerInfo({
+        name,
+      });
     }
   }
 
-  function getNames(): string[] {
-    return dataRows.map((a) => a.rowKey);
+  function closeDrawer(): void {
+    setIsOpen(false);
+  }
+
+  function getNames(): WorkerName[] {
+    return dataRows.map((a) => a.rowKey) as WorkerName[];
   }
 
   const data = getNames();
@@ -93,7 +85,7 @@ export function NameTableSection({
             >
               <Row
                 key={workerName}
-                onClick={(): void => toggleDrawer(true, workerName)}
+                onClick={(): void => openDrawer(workerName)}
                 className={classNames(
                   "nametableRow",
                   isNurse && isWorker && "nurseMarker",
@@ -112,7 +104,7 @@ export function NameTableSection({
       </Wrapper>
       <WorkerDrawerComponent
         open={open}
-        onClose={(): void => toggleDrawer(false, "")}
+        onClose={closeDrawer}
         mode={WorkerDrawerMode.INFO}
         worker={workerInfo}
         setOpen={setIsOpen}

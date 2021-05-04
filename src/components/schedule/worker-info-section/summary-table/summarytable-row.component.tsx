@@ -12,18 +12,17 @@ export function SummaryTableRowF({ workerName, rowIndex }: SummaryTableRowOption
   const workerHours = useWorkerHoursInfo(workerName);
   return (
     <SummaryRow id="summaryRow" data-cy={summaryRowDataCy(rowIndex)}>
-      {Object.keys(workerHours).map((key, index) => {
-        return (
-          <SummaryTableCell key={`${key}_${index}`} value={workerHours[key]} cellIndex={index} />
-        );
-      })}
+      {Object.keys(workerHours).map((key, index) => (
+        <SummaryTableCell key={`${key}_${index}`} value={workerHours[key]} cellIndex={index} />
+      ))}
     </SummaryRow>
   );
 }
 
-export const SummaryTableRow = React.memo(SummaryTableRowF, (prev, next) => {
-  return prev.workerName === next.workerName;
-});
+export const SummaryTableRow = React.memo(
+  SummaryTableRowF,
+  (prev, next) => prev.workerName === next.workerName
+);
 
 const SummaryRow = styled(SectionRow)`
   height: 40px;

@@ -25,6 +25,9 @@ declare namespace Cypress {
       ChangeWorkerShiftOptions: import("./commands").CheckHoursInfoOptions
     ): Chainable<Element>;
 
+    useAutocomplete(
+      newShiftCode: import("../../src/state/schedule-data/shifts-types/shift-types.model").ShiftCode
+    ): Chainable<Element>;
     enterEditMode(): Chainable<Element>;
     saveToDatabase(): Chainable<Element>;
     leaveEditMode(): Chainable<Element>;

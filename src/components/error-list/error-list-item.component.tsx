@@ -3,13 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useDispatch } from "react-redux";
+import styled from "styled-components";
+import { colors } from "../../assets/colors";
 import { t, TranslationHelper } from "../../helpers/translations.helper";
 import { useMonthInfo } from "../../hooks/use-month-info";
 import { useTeams } from "../../hooks/use-teams";
 import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
 import { ScheduleDataActionCreator } from "../../state/schedule-data/schedule-data.action-creator";
-import styled from "styled-components";
-import { colors } from "../../assets/colors";
 import {
   ScheduleErrorMessageModel,
   ScheduleErrorType,
@@ -19,8 +19,8 @@ import { Button } from "../buttons/button-component/button.component";
 interface Options {
   error: ScheduleErrorMessageModel;
   index: number;
-  interactable?: boolean;
   showTitle?: boolean;
+  interactable?: boolean;
 }
 
 function prepareMonthName(index: number, day: number, month: number): string {
@@ -44,8 +44,8 @@ function insertTeam(a: string, b: string, at: string): string {
   }
   position += at.length;
   return a[position] === ","
-    ? a.substr(0, position) + "</b> (" + b + "), <b>" + a.substr(position + 2)
-    : a.substr(0, a.indexOf(".")) + " (" + b + ").";
+    ? `${a.substr(0, position)}</b> (${b}), <b>${a.substr(position + 2)}`
+    : `${a.substr(0, a.indexOf("."))} (${b}).`;
 }
 
 export default function ErrorListItem({
@@ -60,7 +60,7 @@ export default function ErrorListItem({
   let message = error.message;
 
   if (typeof error.day === "undefined" || typeof mappedDays === "undefined") {
-    throw Error(`Error undefined or mappedDays undefined`);
+    throw Error("Error undefined or mappedDays undefined");
   }
   error.index = index;
   const errorDayIndex = error.day;
@@ -89,7 +89,7 @@ export default function ErrorListItem({
       <RedBar />
       <div>
         {showTitle && (
-          <Title>{error.title === "date" ? `${errorDay} ` + monthName : `${error.title}`}</Title>
+          <Title>{error.title === "date" ? `${errorDay} ${monthName}` : `${error.title}`}</Title>
         )}
         <Message
           className="error-text"

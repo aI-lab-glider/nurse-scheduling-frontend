@@ -50,8 +50,8 @@ export function useCellSelection({
   const [, drag, preview] = useDrag({
     item: {
       type: dragAnDropType,
-      rowIndex: rowIndex,
-      cellIndex: cellIndex,
+      rowIndex,
+      cellIndex,
     } as PivotCell,
     end: (item, monitor) => {
       if (!monitor.didDrop()) onDragEnd?.();

@@ -10,6 +10,8 @@ export class WorkerTypeHelper {
         return pluralize ? "pielęgniarki" : "pielęgniarka";
       case WorkerType.OTHER:
         return pluralize ? "opiekunki" : "opiekunka";
+      default:
+        throw Error(`Not recognized worker type ${type}`);
     }
   }
 
@@ -19,6 +21,8 @@ export class WorkerTypeHelper {
         return "P";
       case WorkerType.OTHER:
         return "O";
+      default:
+        throw Error(`Not recognized worker type ${type}`);
     }
   }
 }

@@ -11,7 +11,7 @@ import { ColorHelper } from "./colors/color.helper";
 import { Color, Colors } from "./colors/color.model";
 import { VerboseDateHelper } from "./verbose-date.helper";
 import {
-  ShiftsTypesDict,
+  ShiftTypesDict,
   Shift,
   ShiftCode,
   FREE_SHIFTS_CODES,
@@ -27,7 +27,7 @@ export type WorkHourInfoArray = Opaque<"WorkHourInfoArray", [number, number, num
 export class ShiftHelper {
   public static getWorkersCount(
     shifts: WorkerShiftsModel,
-    shiftTypes: ShiftsTypesDict
+    shiftTypes: ShiftTypesDict
   ): Array<number> {
     const shiftsArray = Object.values(shifts);
     const workersPerDays: Array<number> = [];
@@ -111,7 +111,7 @@ export class ShiftHelper {
 
   static getShiftColor(
     shift: ShiftCode,
-    shiftTypes: ShiftsTypesDict,
+    shiftTypes: ShiftTypesDict,
     day?: VerboseDate,
     isFrozen?: boolean,
     ignoreFrozenState = false
@@ -126,13 +126,12 @@ export class ShiftHelper {
           ...colorSet,
           ...VerboseDateHelper.getDayColor(day, colorSet, isFrozen, ignoreFrozenState),
         };
-      } else {
-        colorSet.backgroundColor = this.createRGBFromHex(shiftFromSHIFTS.color!);
-        return {
-          ...VerboseDateHelper.getDayColor(day, colorSet, isFrozen, ignoreFrozenState),
-          ...colorSet,
-        };
       }
+      colorSet.backgroundColor = this.createRGBFromHex(shiftFromSHIFTS.color!);
+      return {
+        ...VerboseDateHelper.getDayColor(day, colorSet, isFrozen, ignoreFrozenState),
+        ...colorSet,
+      };
     }
 
     switch (shift) {

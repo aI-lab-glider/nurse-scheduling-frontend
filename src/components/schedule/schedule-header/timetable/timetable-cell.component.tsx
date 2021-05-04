@@ -60,7 +60,7 @@ function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.
     <Wrapper className={getHeaderClass()}>
       <Popper errorSelector={errorSelector}>
         <DayName>{TranslationHelper.weekDaysTranslations[value.dayOfWeek]}</DayName>
-        <DayMarker className={classNames({ today: today })}>
+        <DayMarker className={classNames({ today })}>
           <span>{value.date}</span>
         </DayMarker>
       </Popper>
@@ -70,9 +70,7 @@ function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.
 
 export const TimeTableCell: React.FC<TimeTableCellOptions> = React.memo(
   TimeTableCellF,
-  (prev, next) => {
-    return prev.value === next.value;
-  }
+  (prev, next) => prev.value === next.value
 );
 
 const Wrapper = styled.div`

@@ -16,13 +16,13 @@ export function applyScheduleStyling(data: ShiftCode[]): UseScheduleStylingRetur
   let keepOn: boolean;
   let hasNext: boolean;
   const result: UseScheduleStylingReturn[] = [];
-
   data.map((value: ShiftCode, cellIndex) => {
     if (cellIndex < data.length - 1) {
       nextShift = data[cellIndex + 1];
     } else {
       nextShift = null;
     }
+    // TODO: should depend on global shifts
     keepOn = prevShift === value && !SHIFTS[value].isWorkingShift;
     hasNext = nextShift === value && !SHIFTS[value].isWorkingShift;
     prevShift = value;

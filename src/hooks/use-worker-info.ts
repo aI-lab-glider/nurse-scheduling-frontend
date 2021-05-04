@@ -14,18 +14,22 @@ import {
 import { DEFAULT_TEAM } from "../logic/schedule-parser/workers-info.parser";
 import { ApplicationStateModel } from "../state/application-state.model";
 import { WorkerInfoExtendedInterface } from "../components/drawers/worker-drawer/worker-edit";
+import { WorkerName } from "../state/schedule-data/schedule-sensitive-data.model";
 
 interface UseWorkerInfoReturn {
   workerInfo: WorkerInfo;
   setWorkerInfo: (workerInfo: WorkerInfo) => void;
 }
-export function useWorkerInfo(workerName: string): UseWorkerInfoReturn {
-  const [workerInfo, setWorkerInfo] = useState<WorkerInfo>(new WorkerInfo());
+
+export function useWorkerInfo(workerName: WorkerName): UseWorkerInfoReturn {
   const getWorkerInfo = <T>(
     state: ApplicationStateModel,
     key: keyof WorkersInfoModel
   ): T | undefined =>
-    state.actualState.persistentSchedule.present.employee_info[key]?.[workerName] as T | undefined;
+    (state.actualState.persistentSchedule.present.employee_info[key]?.[workerName] as unknown) as
+      | T
+      | undefined;
+
   const workerTime = useSelector((state: ApplicationStateModel) =>
     getWorkerInfo<number>(state, "time")
   );
@@ -43,6 +47,9 @@ export function useWorkerInfo(workerName: string): UseWorkerInfoReturn {
       state.actualState.persistentSchedule.present.shifts[workerName]
   );
 
+  const [workerInfo, setWorkerInfo] = useState<WorkerInfo>(
+    new WorkerInfo(workerName, workerContractType, workerTime, workerType, workerShifts, team)
+  );
   useEffect(() => {
     const newWorkerInfo = new WorkerInfo(
       workerName,
@@ -62,6 +69,7 @@ export function useWorkerInfo(workerName: string): UseWorkerInfoReturn {
 
 export class WorkerInfo {
   public previousWorkerName: string;
+
   constructor(
     public workerName: string = "",
     public contractType?: ContractType,

@@ -13,6 +13,7 @@ import { ShiftsProvider } from "../schedule-providers/shifts-provider.model";
 import { DataRowParser } from "./data-row.parser";
 import { MetaDataParser } from "./metadata.parser";
 import { TEAM_PREFIX } from "./workers-info.parser";
+import { WorkerName } from "../../state/schedule-data/schedule-sensitive-data.model";
 
 export class ShiftsInfoParser extends ShiftsProvider {
   get availableTeam(): { [workerName: string]: Team } {
@@ -24,6 +25,7 @@ export class ShiftsInfoParser extends ShiftsProvider {
   }
 
   private _sectionRows: { [key: string]: DataRowParser } = {};
+
   private _parseErrors: ScheduleError[] = [];
 
   constructor(private metaData: MetaDataParser, private teamNumber: number, data?: string[][]) {
@@ -56,19 +58,17 @@ export class ShiftsInfoParser extends ShiftsProvider {
 
         const personel = Array<string>();
 
-        const name = StringHelper.capitalizeEach(personelRow[0].toLowerCase(), " ");
+        const name = StringHelper.capitalizeEach(personelRow[0].toLowerCase(), " ") as WorkerName;
         personel.push(name);
         for (let i = 0; i < this.metaData.dayCount; i++) {
           const b = slicedPersonelRow[i]?.trim();
           if (b === " " || b === "") {
             personel.push("W");
+          } else if (typeof b !== "string" || !(b in ShiftCode)) {
+            this.logUnknownValue(i, name, b);
+            personel.push("W");
           } else {
-            if (typeof b !== "string" || !(b in ShiftCode)) {
-              this.logUnknownValue(i, name, b);
-              personel.push("W");
-            } else {
-              personel.push(b);
-            }
+            personel.push(b);
           }
         }
 
@@ -84,7 +84,9 @@ export class ShiftsInfoParser extends ShiftsProvider {
 
   private mockAvailableWorkersWorkTime(): { [key: string]: number } {
     const workerDict = {};
-    Object.keys(this.workerShifts).forEach((key) => (workerDict[key] = 1.0));
+    Object.keys(this.workerShifts).forEach((key) => {
+      workerDict[key] = 1.0;
+    });
     return workerDict;
   }
 
@@ -104,23 +106,20 @@ export class ShiftsInfoParser extends ShiftsProvider {
           [row.rowKey]: this.fillRowWithShifts(row),
         }))
         .reduce((prev, curr) => ({ ...prev, ...curr }));
-    } else {
-      return {};
     }
+    return {};
   }
 
   private fillRowWithShifts(row: DataRowParser): ShiftCode[] {
-    return row.rowData(true, false).map((cellValue, cellInd) => {
-      return ShiftCode[cellValue];
-    });
+    return row.rowData(true, false).map((cellValue, cellInd) => ShiftCode[cellValue]);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private logUnknownValue(date: number, worker: string, value: any): void {
+  private logUnknownValue(date: number, worker: WorkerName, value: any): void {
     this._parseErrors.push({
       kind: ParseErrorCode.UNKNOWN_VALUE,
       day: date,
-      worker: worker,
+      worker,
       actual: value,
     });
   }

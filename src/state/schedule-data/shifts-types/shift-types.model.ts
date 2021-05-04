@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 interface BaseShift {
-  code: string;
+  code: ShiftCode;
   name: string;
   from: number;
   to: number;
@@ -120,7 +120,14 @@ export const SHIFTS: {
     isWorkingShift: true,
   },
 
-  R: { code: ShiftCode.R, name: "rano", from: 7, to: 15, color: "a82758", isWorkingShift: true },
+  R: {
+    code: ShiftCode.R,
+    name: "rano",
+    from: 7,
+    to: 15,
+    color: "a82758",
+    isWorkingShift: true,
+  },
   P: {
     code: ShiftCode.P,
     name: "popołudnie",
@@ -129,8 +136,22 @@ export const SHIFTS: {
     color: "00A3FF",
     isWorkingShift: true,
   },
-  D: { code: ShiftCode.D, name: "dzień", from: 7, to: 19, color: "73B471", isWorkingShift: true },
-  N: { code: ShiftCode.N, name: "noc", from: 19, to: 7, color: "1D3557", isWorkingShift: true },
+  D: {
+    code: ShiftCode.D,
+    name: "dzień",
+    from: 7,
+    to: 19,
+    color: "73B471",
+    isWorkingShift: true,
+  },
+  N: {
+    code: ShiftCode.N,
+    name: "noc",
+    from: 19,
+    to: 7,
+    color: "1D3557",
+    isWorkingShift: true,
+  },
   DN: {
     code: ShiftCode.DN,
     name: "dzień, noc",
@@ -232,6 +253,6 @@ export const WORKING_SHIFTS_CODES = Object.values(SHIFTS)
   .filter((shift) => shift.isWorkingShift)
   .map((shift) => shift.code);
 
-export interface ShiftsTypesDict {
+export interface ShiftTypesDict extends Record<keyof typeof SHIFTS, Shift> {
   [shiftCode: string]: Shift;
 }

@@ -3,37 +3,39 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Divider } from "@material-ui/core";
 import React from "react";
-import {
-  WorkerInfoModel,
-  WorkerType,
-} from "../../../../state/schedule-data/worker-info/worker-info.model";
-import { ContractTypeHelper } from "../../../../helpers/contract-type.helper";
-import { WorkerTypeHelper } from "../../../../helpers/worker-type.helper";
-import { StringHelper } from "../../../../helpers/string.helper";
-import { useWorkerHoursInfo } from "../../../../hooks/use-worker-hours-info";
-import WorkersCalendar from "../../../workers-calendar/workers-calendar.component";
-import { Button } from "../../../common-components";
-import { exportToPdf } from "./export-to-pdf";
-import { useWorkerInfo } from "../../../../hooks/use-worker-info";
 import styled from "styled-components";
 import { colors, fontSizeBase, fontSizeLg } from "../../../../assets/colors";
+import { ContractTypeHelper } from "../../../../helpers/contract-type.helper";
+import { StringHelper } from "../../../../helpers/string.helper";
+import { WorkerTypeHelper } from "../../../../helpers/worker-type.helper";
+import { useWorkerHoursInfo } from "../../../../hooks/use-worker-hours-info";
+import { useWorkerInfo } from "../../../../hooks/use-worker-info";
+import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
+import { WorkerType } from "../../../../state/schedule-data/worker-info/worker-info.model";
+import { Button } from "../../../common-components";
+import WorkersCalendar from "../../../workers-calendar/workers-calendar.component";
+import { exportToPdf } from "./export-to-pdf";
 
-export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
-  const workerHoursInfo = useWorkerHoursInfo(info.name);
+interface WorkerInfoComponentOptions {
+  workerName: WorkerName;
+}
+
+export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions): JSX.Element {
+  const { workerInfo } = useWorkerInfo(workerName);
+  const workerHoursInfo = useWorkerHoursInfo(workerName);
   const workerInfoExport = "worker-info-export";
   const calendarExport = "calendar-export";
 
   const handleExport = (): void => {
-    exportToPdf(info.name, { calendarExport, workerInfoExport });
+    exportToPdf(workerInfo.workerName, { calendarExport, workerInfoExport });
   };
-  const { workerInfo } = useWorkerInfo(info.name);
 
   const workerLabelColor =
     workerInfo.workerType === WorkerType.NURSE ? colors.nurseColor : colors.babysitterColor;
   return (
     <>
-      <Wrapper>
-        <WorkerName>{StringHelper.capitalizeEach(info.name)}</WorkerName>
+      <Wrapper id={workerInfoExport}>
+        <WorkerNameLabel>{StringHelper.capitalizeEach(workerInfo.workerName)}</WorkerNameLabel>
         {workerInfo.workerType && (
           <WorkerTypeLabel color={workerLabelColor}>
             {StringHelper.capitalize(WorkerTypeHelper.translate(workerInfo.workerType))}
@@ -47,13 +49,13 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
           )}
           <WorkerInfo>Liczba godzin: {workerHoursInfo.workerHourNorm}</WorkerInfo>
           <WorkerInfo>Liczba nadgodzin: {workerHoursInfo.overTime}</WorkerInfo>
-          <WorkerInfo>Suma godzin: {info.time}</WorkerInfo>
-          <CalendarDivider />
-          <ShiftsLabel>ZMIANY</ShiftsLabel>
+          <WorkerInfo>Suma godzin: {workerInfo.workerName}</WorkerInfo>
+          <CalendarDivider data-html2canvas-ignore="true" />
+          <ShiftsLabel id="shiftsWord">ZMIANY</ShiftsLabel>
         </div>
-        <WorkersCalendar shiftsArr={info.shifts!} />
+        <WorkersCalendar id={calendarExport} workerShifts={workerInfo.workerShifts} />
       </Wrapper>
-      <DownloadButton variant={"primary"} onClick={handleExport}>
+      <DownloadButton variant="primary" onClick={handleExport}>
         Pobierz
       </DownloadButton>
     </>
@@ -62,7 +64,7 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
 
 const Wrapper = styled.div``;
 
-const WorkerName = styled.h2`
+const WorkerNameLabel = styled.h2`
   font-size: ${fontSizeLg};
   font-weight: 700;
 `;

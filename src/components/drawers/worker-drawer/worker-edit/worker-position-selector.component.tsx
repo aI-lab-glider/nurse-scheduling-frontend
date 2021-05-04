@@ -43,9 +43,7 @@ export function WorkerWorkerTypeSelector({
     };
   });
 
-  const isWorkerPositionValid = useCallback((): boolean => {
-    return !!workerType;
-  }, [workerType]);
+  const isWorkerPositionValid = useCallback((): boolean => !!workerType, [workerType]);
 
   useEffect((): void => {
     setIsFieldValid?.(isWorkerPositionValid());

@@ -6,7 +6,7 @@ import { WorkerHourInfo } from "../../../../src/helpers/worker-hours-info.model"
 import {
   expectedHours,
   GetWorkersCountTestCases,
-} from "../../../../cypress/fixtures/unit/helpers/shift.helper";
+} from "../../../fixtures/unit/helpers/shift.helper";
 import { SHIFTS } from "../../../../src/state/schedule-data/shifts-types/shift-types.model";
 
 describe("ShiftHelper", () => {

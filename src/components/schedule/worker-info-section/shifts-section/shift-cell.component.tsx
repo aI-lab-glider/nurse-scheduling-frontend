@@ -18,7 +18,7 @@ import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/s
 import {
   ShiftCode,
   SHIFTS,
-  ShiftsTypesDict as ShiftTypesDict,
+  ShiftTypesDict,
 } from "../../../../state/schedule-data/shifts-types/shift-types.model";
 import { ColorHelper } from "../../../../helpers/colors/color.helper";
 import { ApplicationStateModel } from "../../../../state/application-state.model";
@@ -79,7 +79,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
 
   const shiftCode = getShiftCode(value);
 
-  function _onValueChange(inputValue: string): void {
+  function onCellInputValueChanged(inputValue: string): void {
     onValueChange?.(getShiftCode(inputValue));
   }
 
@@ -110,16 +110,18 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   const color = `rgba(${theColor?.r},${theColor?.g},${theColor?.b},0.3)`;
   const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
 
-  const cellStyle: CSSProperties = useMemo(() => {
-    return !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W"
-      ? {
-          boxShadow: !keepOn ? `-1px 0 0 0 ${color}` : "",
-          margin: "0 0 4px 0px",
-          backgroundColor: color,
-          color,
-        }
-      : {};
-  }, [shiftCode, keepOn, color]);
+  const cellStyle: CSSProperties = useMemo(
+    () =>
+      !SHIFTS[shiftCode].isWorkingShift && shiftCode !== "W"
+        ? {
+            boxShadow: !keepOn ? `-1px 0 0 0 ${color}` : "",
+            margin: "0 0 4px 0px",
+            backgroundColor: color,
+            color,
+          }
+        : {},
+    [shiftCode, keepOn, color]
+  );
 
   return (
     <>
@@ -163,7 +165,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
             <CellInput
               input={ShiftAutocompleteComponent}
               onKeyDown={onKeyDown}
-              onValueChange={_onValueChange}
+              onValueChange={onCellInputValueChanged}
               {...options}
             />
           </WrapContentDiv>
@@ -191,16 +193,16 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   );
 }
 
-export const ShiftCellComponent = React.memo(ShiftCellComponentF, (prev, next) => {
-  return (
+export const ShiftCellComponent = React.memo(
+  ShiftCellComponentF,
+  (prev, next) =>
     prev.value === next.value &&
     prev.isPointerOn === next.isPointerOn &&
     prev.isSelected === next.isSelected &&
     prev.isBlocked === next.isBlocked &&
     prev.keepOn === next.keepOn &&
     _.isEqual(prev.verboseDate, next.verboseDate)
-  );
-});
+);
 
 const CellWrapper = styled.div`
   flex: 1 1 auto;

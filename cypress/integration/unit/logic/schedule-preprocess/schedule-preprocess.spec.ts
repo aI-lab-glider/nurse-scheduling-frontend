@@ -65,7 +65,7 @@ describe("Schedule preprocessor functions", () => {
     });
   });
 
-  it(`calculates proper weeks number for different months`, () => {
+  it("calculates proper weeks number for different months", () => {
     expect(MonthHelper.numberOfWeeksInMonth(0, 2021)).eql(5);
     expect(MonthHelper.numberOfWeeksInMonth(1, 2021)).eql(4);
     expect(MonthHelper.numberOfWeeksInMonth(2, 2021)).eql(5);

@@ -38,10 +38,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.Element {
-  const tabs = props.tabs;
-  const [tab, setTab] = React.useState(tabs[0].label);
+  const { tabs } = props;
+  if (tabs.length === 0) {
+    throw Error("Component cannot be called without tabs");
+  }
+  const [tab, setTab] = React.useState(tabs[0]!.label);
   const classes = useStyles();
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: string): void => {
+  const handleChange = (event: React.ChangeEvent<unknown>, newValue: string): void => {
     setTab(newValue);
     const tabObj = _.find(tabs, (tab) => tab.label === newValue);
     if (tabObj && tabObj.onChange) {

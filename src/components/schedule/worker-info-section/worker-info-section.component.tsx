@@ -45,7 +45,7 @@ export function WorkerInfoSection({
     <Wrapper>
       <SectionContainer className="borderContainer">
         <div>
-          <NameTableComponent data={dataRows} isWorker={true} {...options} />
+          <NameTableComponent data={dataRows} isWorker {...options} />
         </div>
         <ShiftSectionWrapper data-cy={shiftSectionDataCy(sectionIndex)}>
           <ShiftsSectionComponent sectionKey={options.sectionName} data={dataRows} {...options} />
