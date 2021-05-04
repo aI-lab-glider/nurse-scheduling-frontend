@@ -8,6 +8,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { FormControl, FormControlLabel, Grid, Radio, RadioGroup } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import i18next from "i18next";
+import styled from "styled-components";
 import { Shift, ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
 import { DropdownColors } from "../buttons/dropdown-buttons/dropdown-colors.component";
@@ -15,7 +16,6 @@ import { Button } from "../common-components";
 import { ShiftDrawerMode } from "./shift-drawer.component";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { t } from "../../helpers/translations.helper";
-import styled from "styled-components";
 import { colors, fontSizeBase, fontWeightExtra } from "../../assets/colors";
 
 interface ShiftEditDrawerOptions {
