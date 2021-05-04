@@ -9,10 +9,14 @@ import { ButtonData, DropdownButtons } from "../dropdown-buttons/dropdown-button
 import ExportModal from "../../modals/export-modal/export.modal.component";
 import { useImportModal } from "./import-modal-context";
 import { t } from "../../../helpers/translations.helper";
+import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
+import { AbsenceExportLogic } from "../../../logic/schedule-exporter/absence-export.logic";
 
 export function ImportButtonsComponent(): JSX.Element {
   const { handleImport } = useImportModal();
   const fileUpload = useRef<HTMLInputElement>(null);
+  const { primaryRevision } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
 
   const stateScheduleModel = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule?.present
@@ -28,13 +32,24 @@ export function ImportButtonsComponent(): JSX.Element {
     action: (): void => handleExport(),
     dataCy: "export-schedule-button",
   };
+  const btnData3: ButtonData = {
+    label: "Zwolnienia",
+    action: (): void => handleAbsenceExport(),
+  };
 
-  const btnData = [btnData1, btnData2];
+  const btnData = [btnData1, btnData2, btnData3];
 
   function handleExport(): void {
     if (stateScheduleModel) {
       setExportModalOpen(true);
     }
+  }
+
+  function handleAbsenceExport(): void {
+    new AbsenceExportLogic({
+      scheduleModel: cropScheduleDMToMonthDM(stateScheduleModel),
+      primaryScheduleModel: primaryRevision,
+    }).formatAndSave(revision);
   }
 
   const [exportModalOpen, setExportModalOpen] = React.useState(false);

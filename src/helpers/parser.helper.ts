@@ -11,6 +11,7 @@ export const EMPTY_ROW = Array(EMPTY_ROW_SIZE).fill("");
 export const WORKSHEET_NAME = "grafik";
 export const WORKERS_WORKSHEET_NAME = "pracownicy";
 export const SHIFTS_WORKSHEET_NAME = "zmiany";
+export const LEAVES_WORKSHEET_NAME = "zwolnienia";
 
 const NAZWA_ZMIANY = "Nazwa zmiany";
 const SKROT = "Skrót";
@@ -40,6 +41,8 @@ const CELLS_TO_AVOID = [
   RODZAJ_UMOWY,
   WYMIAR_CZASU_PRACY,
 ];
+
+export const ABSENCE_HEADERS = [IMIE_I_NAZWISKO, "Typ", "Od", "Do", "Ile dni", "Ile godzin"];
 
 export class ParserHelper {
   public static isEmptyRow(rowValues: Array<string>): boolean {
