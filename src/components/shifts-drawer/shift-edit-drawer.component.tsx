@@ -37,14 +37,14 @@ export default function ShiftEditDrawer({
   const [shiftName, setShiftName] = useState(selectedShift.name);
   const [shiftCode, setShiftCode] = useState(selectedShift.code);
 
-  const [isInShiftNames, checkShiftName] = useState(false);
-  const [isInShiftCodes, checkShiftCode] = useState(false);
+  const [isInShiftNames, setIsInShiftNames] = useState(false);
+  const [isInShiftCodes, setIsInShiftCodes] = useState(false);
   const [isCodeManuallyChanged, setCodeManuallyChanged] = useState(false);
 
   const shiftNameTextFieldOnChange = (shiftNameActual: string): void => {
     setShiftName(shiftNameActual);
     !isCodeManuallyChanged && setShiftCode(AcronymGenerator.generate(shiftNameActual, shifts));
-    checkShiftName(shiftNames.includes(shiftNameActual));
+    setIsInShiftNames(shiftNames.includes(shiftNameActual));
   };
 
   const [shiftType, setShiftType] = useState(
@@ -165,7 +165,7 @@ export default function ShiftEditDrawer({
           value={shiftCode}
           onChange={(event): void => {
             setShiftCode(event.target.value as ShiftCode); // TODO: fix typing if possible
-            checkShiftCode(shiftCodes.includes(event.target.value as ShiftCode)); // TODO: fix typing if possible
+            setIsInShiftCodes(shiftCodes.includes(event.target.value as ShiftCode)); // TODO: fix typing if possible
             setCodeManuallyChanged(true);
           }}
           helperText={isInShiftCodes ? t("shiftWithThatColorExist") : ""}

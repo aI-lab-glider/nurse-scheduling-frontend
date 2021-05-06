@@ -6,7 +6,8 @@ import { ShiftHelper, MonthDataArray } from "../../../../src/helpers/shifts.help
 import {
   DEFAULT_NORM_SUBTRACTION,
   WorkerHourInfo,
-} from "../../../../src/helpers/worker-hours-info.model";
+} from "../../../../src/logic/schedule-logic/worker-hours-info.logic";
+
 import {
   SHIFTS,
   ShiftCode,

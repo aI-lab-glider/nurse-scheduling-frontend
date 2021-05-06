@@ -6,10 +6,13 @@ import { useSelector } from "react-redux";
 import { ShiftCode } from "../state/schedule-data/shifts-types/shift-types.model";
 import { isAllValuesDefined } from "../utils/type-utils";
 import { MonthDataArray } from "../helpers/shifts.helper";
-import { WorkerHourInfo, WorkerHourInfoSummary } from "../helpers/worker-hours-info.model";
 import { ApplicationStateModel, ScheduleStateModel } from "../state/application-state.model";
 import { ScheduleMode } from "../components/schedule/schedule-state.model";
 import { ContractType } from "../state/schedule-data/worker-info/worker-info.model";
+import {
+  WorkerHourInfo,
+  WorkerHourInfoSummary,
+} from "../logic/schedule-logic/worker-hours-info.logic";
 
 export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
   const isEditMode = useSelector(
