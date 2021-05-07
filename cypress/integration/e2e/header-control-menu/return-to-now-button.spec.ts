@@ -17,7 +17,7 @@ describe("'Come back to now' button", () => {
 
     it("returns to current month from previous month", () => {
       cy.get("[data-cy=switch-prev-month]").click();
-      cy.get("[data-cy=return-to-now]").click();
+      cy.get("[data-cy=return-to-now-button]").click();
       cy.get("[data-cy=month-name]").contains(monthName);
       cy.get('[data-cy="team0ShiftsTable"] [data-cy="1Row"] div[data-cy*="cell"]')
         .then(($cell) => $cell.map((i, el) => Cypress.$(el).text()).get())
@@ -26,7 +26,7 @@ describe("'Come back to now' button", () => {
 
     it("returns to current month from next month", () => {
       cy.get("[data-cy=switch-next-month]").click();
-      cy.get("[data-cy=return-to-now]").click();
+      cy.get("[data-cy=return-to-now-button]").click();
       cy.get("[data-cy=month-name]").contains(monthName);
       cy.get('[data-cy="team0ShiftsTable"] [data-cy="1Row"] div[data-cy*="cell"]')
         .then(($cell) => $cell.map((i, el) => Cypress.$(el).text()).get())
@@ -42,13 +42,13 @@ describe("'Come back to now' button", () => {
 
     it("returns to current month from previous month", () => {
       cy.get("[data-cy=switch-prev-month]").click();
-      cy.get("[data-cy=return-to-now]").click();
+      cy.get("[data-cy=return-to-now-button]").click();
       cy.get("[data-cy=month-name]").contains(monthName);
     });
 
     it("returns to current month from next month", () => {
       cy.get("[data-cy=switch-next-month]").click();
-      cy.get("[data-cy=return-to-now]").click();
+      cy.get("[data-cy=return-to-now-button]").click();
       cy.get("[data-cy=month-name]").contains(monthName);
     });
   });
