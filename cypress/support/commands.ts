@@ -55,8 +55,8 @@ export type ScheduleName =
   | "childrens_extraworkers.xlsx"
   | "extraworkers_childrens.xlsx"
   | "small_test_schedule.xlsx";
-const TEST_SCHEDULE_MONTH = 10;
-const TEST_SCHEDULE_YEAR = 2020;
+export const TEST_SCHEDULE_MONTH = 10;
+export const TEST_SCHEDULE_YEAR = 2020;
 
 Cypress.Commands.add(
   "loadScheduleToMonth",
