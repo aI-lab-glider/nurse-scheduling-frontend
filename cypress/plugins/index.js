@@ -18,19 +18,12 @@
 /**
  * @type {Cypress.PluginConfig}
  */
-
 module.exports = (on, config) => {
   require("@cypress/code-coverage/task")(on, config);
-
+  config.browsers = config.browsers.filter((b) => b.name === "electron");
   // add other tasks to be registered here
 
   // IMPORTANT to return the config object
   // with the any changed environment variables
   return config;
 };
-module.exports = (on, config) =>
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
-  ({
-    browsers: config.browsers.filter((b) => b.name === "electron"),
-  });

@@ -54,6 +54,8 @@
     "classnames": "^2.2.6",
     "cross-env": "^7.0.2",
     "date-fns": "^2.15.0",
+    "dotenv": "^8.2.0",
+    "electron": "^10.1.5",
     "electron-is-dev": "^1.2.0",
     "emailjs-com": "^2.6.4",
     "exceljs": "^4.1.1",
@@ -91,10 +93,8 @@
     "redux-undo": "^1.0.1",
     "styled-components": "^5.2.3",
     "typescript": "^4.2.4",
-    "wait-on": "^5.2.1",
-    "electron": "^10.1.5",
-    "dotenv": "^8.2.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "wait-on": "^5.2.1"
   },
   "scripts": {
     "b-start": "react-scripts -r @cypress/instrument-cra start",
