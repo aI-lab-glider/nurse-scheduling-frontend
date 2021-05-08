@@ -6,23 +6,12 @@ import { MonthDataModel } from "../../state/schedule-data/schedule-data.model";
 import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
 import { EMPTY_ROW, ABSENCE_HEADERS } from "../../helpers/parser.helper";
 import { CELL_MARGIN } from "./schedule-export.logic";
-// import { ShiftCode, SHIFTS } from "../../state/schedule-data/shifts-types/shift-types.model";
+import { ShiftCode, SHIFTS } from "../../state/schedule-data/shifts-types/shift-types.model";
 
 export interface WorkersAbsenceExportLogicOptions {
   scheduleModel: MonthDataModel;
   primaryScheduleModel?: PrimaryMonthRevisionDataModel;
 }
-
-/*
-interface WorkersAbsenceData {
-  name: string;
-  shift: string;
-  from: string;
-  to: string;
-  daysNo: string;
-  hoursNp: string;
-}
-*/
 
 export class WorkersAbsenceExportLogic {
   private scheduleModel: MonthDataModel;
@@ -61,23 +50,26 @@ export class WorkersAbsenceExportLogic {
 
   private static createWorkersInfoSection(scheduleModel: MonthDataModel): (string | number)[][] {
     const names = Object.keys(scheduleModel.employee_info?.type);
-    // const workerShifts = names.map((name) => [name, Object.keys(scheduleModel.shifts[name] as ShiftCode[])]);
 
     const workers: (string | number)[][] = [];
 
     workers.push(ABSENCE_HEADERS);
     workers.push(EMPTY_ROW);
-    names.forEach((name) =>
-      workers.push([
-        name,
-        // Object.keys(scheduleModel.shifts[name] as ShiftCode[]).join(),
-        // typ
-        // od
-        // do
-        // ile dni
-        // ile godzin
-      ])
-    );
+    names.forEach((name) => {
+      const workerShifts = scheduleModel.shifts[name] as ShiftCode[];
+      workerShifts.forEach((shift) => {
+        if (shift !== ShiftCode.W && !SHIFTS[shift].isWorkingShift) {
+          workers.push([
+            name,
+            SHIFTS[shift].name,
+            // od
+            // do
+            // ile dni
+            // ile godzin
+          ]);
+        }
+      });
+    });
     return [...workers];
   }
 }
