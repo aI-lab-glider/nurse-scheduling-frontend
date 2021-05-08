@@ -76,12 +76,12 @@ describe("Tab management", () => {
         cy.get(`[data-cy="edit-worker-${testWorker}"]`).click();
       });
       context("properly handles worker hours edition from 1 to 1/2", () => {
-        testWorkerData.hoursInfo = {
-          [HoursInfoCells.required]: 80,
-          [HoursInfoCells.actual]: 240,
-          [HoursInfoCells.overtime]: 160,
-        };
         it("properly handles worker hours edition", () => {
+          testWorkerData.hoursInfo = {
+            [HoursInfoCells.required]: 80,
+            [HoursInfoCells.actual]: 240,
+            [HoursInfoCells.overtime]: 160,
+          };
           cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="half"]').click();
           cy.get(`[data-cy="btn-save-worker"]`).click();
           cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1/2");
@@ -91,12 +91,12 @@ describe("Tab management", () => {
       });
 
       context("properly handles worker hours edition from 1/2 to 1", () => {
-        testWorkerData.hoursInfo = {
-          [HoursInfoCells.required]: 160,
-          [HoursInfoCells.actual]: 240,
-          [HoursInfoCells.overtime]: 80,
-        };
         it("properly handles worker hours edition", () => {
+          testWorkerData.hoursInfo = {
+            [HoursInfoCells.required]: 160,
+            [HoursInfoCells.actual]: 240,
+            [HoursInfoCells.overtime]: 80,
+          };
           cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="full"]').click();
           cy.get(`[data-cy="btn-save-worker"]`).click();
           cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1");
@@ -105,12 +105,12 @@ describe("Tab management", () => {
         });
       });
       context("properly handles worker hours edition from 1 to 1/8", () => {
-        testWorkerData.hoursInfo = {
-          [HoursInfoCells.required]: 20,
-          [HoursInfoCells.actual]: 240,
-          [HoursInfoCells.overtime]: 220,
-        };
         it("properly handles worker hours edition", () => {
+          testWorkerData.hoursInfo = {
+            [HoursInfoCells.required]: 20,
+            [HoursInfoCells.actual]: 240,
+            [HoursInfoCells.overtime]: 220,
+          };
           cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="other"]').click();
           cy.get('[data-cy="input-employ-time-other"] input')
             .click()
