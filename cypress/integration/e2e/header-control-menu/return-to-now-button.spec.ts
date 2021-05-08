@@ -11,8 +11,8 @@ const monthName = `${month} ${TEST_SCHEDULE_YEAR}`;
 describe("'Come back to now' button", () => {
   context("when schedule is not loaded", () => {
     beforeEach(() => {
-      cy.visit("/");
       cy.clock(Date.UTC(TEST_SCHEDULE_YEAR, TEST_SCHEDULE_MONTH), ["Date"]);
+      cy.visit("/");
     });
 
     it("returns to current month from previous month", () => {
@@ -30,8 +30,8 @@ describe("'Come back to now' button", () => {
 
   context("when schedule is loaded", () => {
     beforeEach(() => {
-      cy.loadScheduleToMonth();
       cy.clock(Date.UTC(TEST_SCHEDULE_YEAR, TEST_SCHEDULE_MONTH), ["Date"]);
+      cy.loadScheduleToMonth();
     });
 
     it("returns to current month from previous month", () => {
