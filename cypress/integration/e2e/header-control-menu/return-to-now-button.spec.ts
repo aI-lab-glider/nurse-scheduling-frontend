@@ -9,6 +9,25 @@ const month = StringHelper.capitalize(TranslationHelper.polishMonths[TEST_SCHEDU
 const monthName = `${month} ${TEST_SCHEDULE_YEAR}`;
 
 describe("'Come back to now' button", () => {
+  context("when schedule is not loaded", () => {
+    beforeEach(() => {
+      cy.visit("/");
+      cy.clock(Date.UTC(TEST_SCHEDULE_YEAR, TEST_SCHEDULE_MONTH), ["Date"]);
+    });
+
+    it("returns to current month from previous month", () => {
+      cy.get("[data-cy=switch-prev-month]").click();
+      cy.get("[data-cy=return-to-now-button]").click();
+      cy.get("[data-cy=month-name]").contains(monthName);
+    });
+
+    it("returns to current month from next month", () => {
+      cy.get("[data-cy=switch-next-month]").click();
+      cy.get("[data-cy=return-to-now-button]").click();
+      cy.get("[data-cy=month-name]").contains(monthName);
+    });
+  });
+
   context("when schedule is loaded", () => {
     beforeEach(() => {
       cy.loadScheduleToMonth();
@@ -31,25 +50,6 @@ describe("'Come back to now' button", () => {
       cy.get('[data-cy="team0ShiftsTable"] [data-cy="1Row"] div[data-cy*="cell"]')
         .then(($cell) => $cell.map((i, el) => Cypress.$(el).text()).get())
         .snapshot();
-    });
-  });
-
-  context("when schedule is not loaded", () => {
-    beforeEach(() => {
-      cy.visit("/");
-      cy.clock(Date.UTC(TEST_SCHEDULE_YEAR, TEST_SCHEDULE_MONTH), ["Date"]);
-    });
-
-    it("returns to current month from previous month", () => {
-      cy.get("[data-cy=switch-prev-month]").click();
-      cy.get("[data-cy=return-to-now-button]").click();
-      cy.get("[data-cy=month-name]").contains(monthName);
-    });
-
-    it("returns to current month from next month", () => {
-      cy.get("[data-cy=switch-next-month]").click();
-      cy.get("[data-cy=return-to-now-button]").click();
-      cy.get("[data-cy=month-name]").contains(monthName);
     });
   });
 });
