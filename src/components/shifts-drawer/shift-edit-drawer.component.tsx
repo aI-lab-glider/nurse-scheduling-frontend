@@ -1,22 +1,22 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import TextField from "@material-ui/core/TextField";
-import React, { useState } from "react";
-import { MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { FormControl, FormControlLabel, Grid, Radio, RadioGroup } from "@material-ui/core";
-import { useSelector } from "react-redux";
+import TextField from "@material-ui/core/TextField";
+import { MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import i18next from "i18next";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { Shift, ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
+import { colors, fontSizeBase, fontWeightExtra } from "../../assets/colors";
 import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
+import { t } from "../../helpers/translations.helper";
+import { ApplicationStateModel } from "../../state/application-state.model";
+import { Shift, ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { DropdownColors } from "../buttons/dropdown-buttons/dropdown-colors.component";
 import { Button } from "../common-components";
 import { ShiftDrawerMode } from "./shift-drawer.component";
-import { ApplicationStateModel } from "../../state/application-state.model";
-import { t } from "../../helpers/translations.helper";
-import { colors, fontSizeBase, fontWeightExtra } from "../../assets/colors";
 
 interface ShiftEditDrawerOptions {
   selectedShift: Shift;
