@@ -160,6 +160,28 @@ export class ShiftHelper {
     };
   }
 
+  static getShiftColorForWorkersCalendar(
+    shift: ShiftCode,
+    shiftTypes: ShiftsTypesDict,
+    day?: VerboseDate,
+    isFrozen?: boolean,
+    ignoreFrozenState = false
+  ): CellColorSet {
+    const colorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET;
+    const shiftFromSHIFTS = shiftTypes[shift];
+    if (shiftFromSHIFTS && shift !== "W") {
+      colorSet.backgroundColor = this.createRGBFromHex(shiftFromSHIFTS.color!);
+      return {
+        ...colorSet,
+        ...VerboseDateHelper.getDayColor(day, colorSet, isFrozen, ignoreFrozenState),
+      };
+    }
+    return {
+      ...colorSet,
+      ...VerboseDateHelper.getDayColor(day, colorSet, isFrozen, ignoreFrozenState),
+    };
+  }
+
   static replaceFreeShiftsWithFreeDay(shifts: ShiftCode[], startIndex = 0): ShiftCode[] {
     return shifts.map((shift, idx) => {
       const isIndexValid = idx >= startIndex;

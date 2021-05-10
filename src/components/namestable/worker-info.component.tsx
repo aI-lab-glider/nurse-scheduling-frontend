@@ -12,17 +12,23 @@ import {
 import { StringHelper } from "../../helpers/string.helper";
 import { useWorkerHoursInfo } from "../schedule-page/table/schedule/use-worker-hours-info";
 import WorkersCalendar from "../workers-page/workers-calendar/workers-calendar.component";
-import { Button } from "../common-components";
-import { exportToPdf } from "./export-to-pdf";
 import { useWorkerInfo } from "./use-worker-info";
+import { exportToXlsx } from "./export-to-xlsx";
+import { Button } from "../common-components";
 
 export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
   const workerHoursInfo = useWorkerHoursInfo(info.name);
   const workerInfoExport = "worker-info-export";
   const calendarExport = "calendar-export";
 
-  const handleExport = (): void => {
-    exportToPdf(info.name, { calendarExport, workerInfoExport });
+  const handleExportAsXlsx = (workerInfo, workerHoursInfo, info): void => {
+    const infoSection = {
+      "Typ umowy": ContractTypeHelper.translate(workerInfo.contractType),
+      "Liczba godzin": workerHoursInfo.workerHourNorm,
+      "Liczba nadgodzin": workerHoursInfo.overTime,
+      "Suma godzin": info.time,
+    };
+    exportToXlsx(info.name, infoSection, info.shifts!);
   };
   const { workerInfo } = useWorkerInfo(info.name);
 
@@ -74,7 +80,11 @@ export function WorkerInfoComponent(info: WorkerInfoModel): JSX.Element {
           <WorkersCalendar shiftsArr={info.shifts!} />
         </div>
       </div>
-      <Button variant={"primary"} onClick={handleExport} className="drawer-bottom-button">
+      <Button
+        variant={"primary"}
+        onClick={(): void => handleExportAsXlsx(workerInfo, workerHoursInfo, info)}
+        className="drawer-bottom-button"
+      >
         Pobierz
       </Button>
     </>
