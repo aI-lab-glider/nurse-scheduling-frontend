@@ -18,11 +18,7 @@ const NAME_ROW_HEIGHT = 2;
 const INFO_SEC_ROW_LEN = 3;
 const WEEKDAY_HEIGHT = 2;
 
-export const exportToXlsx = (
-  name: string,
-  info: { string: number | string },
-  schedule: { string: string }
-): void => {
+export const exportToXlsx = (name: string, info, schedule: { string: string }): void => {
   const xlsx = new WorkerCalendarXlsxExport({ name, info, schedule });
   xlsx.formatAndSave();
 };
