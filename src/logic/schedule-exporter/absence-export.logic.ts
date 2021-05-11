@@ -3,19 +3,20 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import xlsx from "exceljs";
 import { RevisionType } from "../data-access/persistance-store.model";
-import { MonthDataModel } from "../../state/schedule-data/schedule-data.model";
+import { ScheduleDataModel } from "../../state/schedule-data/schedule-data.model";
 import { FileHelper } from "../../helpers/file.helper";
 import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
 import { EMPTY_ROW_SIZE, LEAVES_WORKSHEET_NAME } from "../../helpers/parser.helper";
 import { WorkersAbsenceExportLogic } from "./workers-absence-export.logic";
+import { cropScheduleDMToMonthDM } from "../schedule-container-converter/schedule-container-converter";
 
 export interface AbsenceExportLogicOptions {
-  scheduleModel: MonthDataModel;
+  scheduleModel: ScheduleDataModel;
   primaryScheduleModel?: PrimaryMonthRevisionDataModel;
 }
 
 export class AbsenceExportLogic {
-  private scheduleModel: MonthDataModel;
+  private scheduleModel: ScheduleDataModel;
 
   private workerExportLogic: WorkersAbsenceExportLogic;
 
@@ -37,7 +38,10 @@ export class AbsenceExportLogic {
 
     this.workerExportLogic.setWorkersWorkSheet(workersWorkSheet);
 
-    const workbookName = FileHelper.createMonthFilename(this.scheduleModel, revisionType);
+    const workbookName = FileHelper.createMonthFilename(
+      cropScheduleDMToMonthDM(this.scheduleModel),
+      revisionType
+    );
     return [workbookName, workbook];
   }
 

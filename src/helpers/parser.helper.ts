@@ -42,7 +42,7 @@ const CELLS_TO_AVOID = [
   WYMIAR_CZASU_PRACY,
 ];
 
-export const ABSENCE_HEADERS = [IMIE_I_NAZWISKO, "Typ", "Od", "Do", "Ile dni", "Ile godzin"];
+export const ABSENCE_HEADERS = [IMIE_I_NAZWISKO, "Typ", "Od", "Do", "Ile dni", "Ile godzin", "Rok"];
 
 export class ParserHelper {
   public static isEmptyRow(rowValues: Array<string>): boolean {

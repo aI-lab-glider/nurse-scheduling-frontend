@@ -9,7 +9,6 @@ import { ButtonData, DropdownButtons } from "../dropdown-buttons/dropdown-button
 import ExportModal from "../../modals/export-modal/export.modal.component";
 import { useImportModal } from "./import-modal-context";
 import { t } from "../../../helpers/translations.helper";
-import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
 import { AbsenceExportLogic } from "../../../logic/schedule-exporter/absence-export.logic";
 
 export function ImportButtonsComponent(): JSX.Element {
@@ -47,7 +46,7 @@ export function ImportButtonsComponent(): JSX.Element {
 
   function handleAbsenceExport(): void {
     new AbsenceExportLogic({
-      scheduleModel: cropScheduleDMToMonthDM(stateScheduleModel),
+      scheduleModel: stateScheduleModel,
       primaryScheduleModel: primaryRevision,
     }).formatAndSave(revision);
   }
