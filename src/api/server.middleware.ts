@@ -3,8 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
-import { WorkerHourInfo } from "../helpers/worker-hours-info.model";
 import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
+import { WorkerHourInfo } from "../logic/schedule-logic/worker-hours-info.logic";
 import { PrimaryMonthRevisionDataModel } from "../state/application-state.model";
 import { VerboseDate } from "../state/schedule-data/foundation-info/foundation-info.model";
 import { ScheduleDataModel } from "../state/schedule-data/schedule-data.model";

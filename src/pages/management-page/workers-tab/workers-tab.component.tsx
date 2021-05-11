@@ -14,22 +14,22 @@ import { colors, fontSizeXs } from "../../../assets/colors";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import { Button } from "../../../components/common-components";
 import WorkerDrawerComponent, {
-  WorkerDrawerMode
+  WorkerDrawerMode,
 } from "../../../components/drawers/worker-drawer/worker-drawer.component";
 import DeleteWorkerModalComponent from "../../../components/modals/delete-worker-modal/delete-worker.modal.component";
 import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
 import { ContractTypeHelper } from "../../../helpers/contract-type.helper";
 import { StringHelper } from "../../../helpers/string.helper";
-import { WorkerHourInfo } from "../../../helpers/worker-hours-info.model";
 import { WorkerTypeHelper } from "../../../helpers/worker-type.helper";
 import { WorkingTimeHelper } from "../../../helpers/working-time.helper";
 import { useMonthInfo } from "../../../hooks/use-month-info";
+import { WorkerHourInfo } from "../../../logic/schedule-logic/worker-hours-info.logic";
 import { DEFAULT_CONTRACT_TYPE } from "../../../logic/schedule-parser/workers-info.parser";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { WorkerName } from "../../../state/schedule-data/schedule-sensitive-data.model";
 import {
   ContractType,
-  WorkerInfoModel
+  WorkerInfoModel,
 } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
 
@@ -69,7 +69,12 @@ export default function WorkersTab(): JSX.Element {
 
   useEffect(() => {
     const newWorkerData = Object.keys(type).map(
-      (key): WorkerInfoModel => ({ name: key as WorkerName, type: type[key], time: time[key], team: team[key] })
+      (key): WorkerInfoModel => ({
+        name: key as WorkerName,
+        type: type[key],
+        time: time[key],
+        team: team[key],
+      })
     );
     setWorkerData(newWorkerData);
   }, [type, time, setWorkerData, team]);
@@ -107,9 +112,9 @@ export default function WorkersTab(): JSX.Element {
         workerContractType === ContractType.CIVIL_CONTRACT
           ? `${time[workerName] * workHourNormInMonth} godz.`
           : WorkingTimeHelper.fromHoursToFraction(
-            time[workerName] * workHourNormInMonth,
-            workHourNormInMonth
-          );
+              time[workerName] * workHourNormInMonth,
+              workHourNormInMonth
+            );
       return `${contractTypeLabel} ${workerTimeLabel}`;
     },
     [year, monthNumber, time, contractType]

@@ -10,7 +10,7 @@ import {
   ParserHelper,
   SHIFTS_WORKSHEET_NAME,
   SHIFT_HEADERS,
-  WORKSHEET_NAME,
+  SCHEDULE_WORKSHEET_NAME,
 } from "../../../../helpers/parser.helper";
 import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-converter/schedule-container-converter";
 import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
@@ -195,7 +195,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
   }
 
   function extractSchedule(workbook): Array<Array<Array<string>>> {
-    const scheduleWorkSheet = workbook.getWorksheet(WORKSHEET_NAME);
+    const scheduleWorkSheet = workbook.getWorksheet(SCHEDULE_WORKSHEET_NAME);
     if (scheduleWorkSheet.rowCount === 0) {
       throw new Error(InputFileErrorCode.EMPTY_FILE);
     }

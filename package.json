@@ -101,9 +101,9 @@
     "release": "npm build && electron-builder --publish=always",
     "build": "npm build && npm electron-build",
     "start": "concurrently \"cross-env BROWSER=none npm run b-start\" \"node scripts/await.js && electron .\"",
-    "lint": "eslint src/**/*.ts* cypress/**/*.ts*",
-    "lint-fix": "eslint src/**/*.ts* cypress/**/*.ts* --fix",
-    "lint-warn": "eslint src/**/*.ts* cypress/**/*.ts* --max-warnings=0",
+    "lint": "eslint .",
+    "lint-fix": "eslint . -c .eslintrc.pre-push.json --fix",
+    "lint-warn": "eslint . -c .eslintrc.pre-push.json --max-warnings=0",
     "cypress:open": "cypress open"
   },
   "devDependencies": {
@@ -159,7 +159,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "npm run lint-warn"
+      "pre-push": "npm run lint-fix && npm run lint-warn"
     }
   },
   "lint-staged": {

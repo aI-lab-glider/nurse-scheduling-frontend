@@ -82,7 +82,7 @@ const en: LocalizationResource = {
     downloadScheduleTitle: "Download schedule",
     fileFormat: "File format",
     fileOptions: "Options",
-    //new-version.modal.component.tsx
+    // new-version.modal.component.tsx
     update: "Update",
     updateMessage: "App has been updated. Current version is {{version}}",
     // report-issue-modal.component.tsx
@@ -115,11 +115,26 @@ const en: LocalizationResource = {
     downloadScheduleAndClearAppData: "Download schedule and clear app data.",
     // read-only-toolbar.tsx
     scheduleHasErrors: "The schedule contains errors. See them in the edit mode.",
-    //save-changes-modal.component.tsx
+    // save-changes-modal.component.tsx
     yes: "Yes",
     no: "No",
     unsavedChanges: "Unsaved changes in schedule",
     wantToSave: "Do you want to save changes?",
+    // export and import
+    nameSurnameExportHeader: "Name and surname",
+    workerTypeExportHeader: "Worker position",
+    contractTypeExportHeader: "Contract type",
+    worktimeNormExportHeader: "Worktime norm",
+    workerTeamExportHeader: "Worker team",
+    shiftNameExportHeader: "Worker shift",
+    abbreviationExportHeader: "Shift abbreviation",
+    fromExportHeader: "From",
+    toExportHeader: "To",
+    isWorkingShiftExportHeader: "Is working shift",
+    colorExportHeader: "Color",
+    scheduleworksheetName: "schedule",
+    workersWorksheetName: "workers",
+    shiftsWorksheetName: "shifts",
   },
 };
 export default en;

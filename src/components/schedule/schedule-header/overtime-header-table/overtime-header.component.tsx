@@ -2,9 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
+import styled from "styled-components";
 import { OvertimeHeaderRow } from "./overtime-header-row.component";
 import { SectionWrapper } from "../../base/styled";
-import styled from "styled-components";
 
 interface OvertimeHeaderTableOptions {
   data: string[];

@@ -8,6 +8,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { FormControl, FormControlLabel, Grid, Radio, RadioGroup } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import i18next from "i18next";
+import styled from "styled-components";
 import { Shift, ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
 import { DropdownColors } from "../buttons/dropdown-buttons/dropdown-colors.component";
@@ -15,7 +16,6 @@ import { Button } from "../common-components";
 import { ShiftDrawerMode } from "./shift-drawer.component";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { t } from "../../helpers/translations.helper";
-import styled from "styled-components";
 import { colors, fontSizeBase, fontWeightExtra } from "../../assets/colors";
 
 interface ShiftEditDrawerOptions {
@@ -37,14 +37,14 @@ export default function ShiftEditDrawer({
   const [shiftName, setShiftName] = useState(selectedShift.name);
   const [shiftCode, setShiftCode] = useState(selectedShift.code);
 
-  const [isInShiftNames, checkShiftName] = useState(false);
-  const [isInShiftCodes, checkShiftCode] = useState(false);
+  const [isInShiftNames, setIsInShiftNames] = useState(false);
+  const [isInShiftCodes, setIsInShiftCodes] = useState(false);
   const [isCodeManuallyChanged, setCodeManuallyChanged] = useState(false);
 
   const shiftNameTextFieldOnChange = (shiftNameActual: string): void => {
     setShiftName(shiftNameActual);
     !isCodeManuallyChanged && setShiftCode(AcronymGenerator.generate(shiftNameActual, shifts));
-    checkShiftName(shiftNames.includes(shiftNameActual));
+    setIsInShiftNames(shiftNames.includes(shiftNameActual));
   };
 
   const [shiftType, setShiftType] = useState(
@@ -165,7 +165,7 @@ export default function ShiftEditDrawer({
           value={shiftCode}
           onChange={(event): void => {
             setShiftCode(event.target.value as ShiftCode); // TODO: fix typing if possible
-            checkShiftCode(shiftCodes.includes(event.target.value as ShiftCode)); // TODO: fix typing if possible
+            setIsInShiftCodes(shiftCodes.includes(event.target.value as ShiftCode)); // TODO: fix typing if possible
             setCodeManuallyChanged(true);
           }}
           helperText={isInShiftCodes ? t("shiftWithThatColorExist") : ""}

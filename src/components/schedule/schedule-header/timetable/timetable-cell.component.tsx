@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback, useEffect } from "react";
+import styled from "styled-components";
+import classNames from "classnames/bind";
 import {
   VerboseDate,
   WeekDay,
@@ -13,9 +15,7 @@ import {
 } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { TranslationHelper } from "../../../../helpers/translations.helper";
 import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
-import styled from "styled-components";
 import { colors, fontSizeBase, fontWeightBase, fontWeightBold } from "../../../../assets/colors";
-import classNames from "classnames/bind";
 
 export interface TimeTableCellOptions {
   value: VerboseDate;

@@ -3,23 +3,23 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import * as _ from "lodash";
-import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
-import { PrimaryMonthRevisionDataModel } from "../state/application-state.model";
-import { VerboseDate } from "../state/schedule-data/foundation-info/foundation-info.model";
-import { MonthDataModel, ScheduleDataModel } from "../state/schedule-data/schedule-data.model";
+import { MonthInfoLogic } from "./month-info.logic";
+import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
+import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
+import { MonthDataModel, ScheduleDataModel } from "../../state/schedule-data/schedule-data.model";
 import {
   NotWorkingShift,
   NotWorkingShiftType,
   Shift,
   ShiftCode,
   ShiftTypesDict,
-} from "../state/schedule-data/shifts-types/shift-types.model";
-import { ContractType } from "../state/schedule-data/worker-info/worker-info.model";
-import { isAllValuesDefined, Opaque } from "../utils/type-utils";
-import { nameOf } from "../utils/utils";
-import { MonthDataArray, ShiftHelper, WORK_HOURS_PER_DAY } from "./shifts.helper";
-import { TranslationHelper } from "./translations.helper";
-import { VerboseDateHelper } from "./verbose-date.helper";
+} from "../../state/schedule-data/shifts-types/shift-types.model";
+import { ContractType } from "../../state/schedule-data/worker-info/worker-info.model";
+import { isAllValuesDefined, Opaque } from "../../utils/type-utils";
+import { nameOf } from "../../utils/utils";
+import { WORK_HOURS_PER_DAY, MonthDataArray, ShiftHelper } from "../../helpers/shifts.helper";
+import { TranslationHelper } from "../../helpers/translations.helper";
+import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 
 export const DEFAULT_NORM_SUBTRACTION = WORK_HOURS_PER_DAY;
 
