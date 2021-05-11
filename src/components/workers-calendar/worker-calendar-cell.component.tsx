@@ -1,15 +1,15 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
-import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
-import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
-import { getColor } from "../schedule/worker-info-section/shifts-section/shift-cell.component";
 import { fade } from "@material-ui/core";
+import React from "react";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../state/application-state.model";
 import styled from "styled-components";
 import { colors } from "../../assets/colors";
+import { ApplicationStateModel } from "../../state/application-state.model";
+import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
+import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
+import { DEFAULT_SHIFT_HEX } from "../schedule/worker-info-section/shifts-section/shift-cell/shift-cell.component";
 
 interface CellOptions {
   keepOn: boolean;
@@ -23,17 +23,17 @@ interface CellOptions {
 }
 
 export function WorkersCalendarCell(params: CellOptions): JSX.Element {
-  const date = params.date;
-  const shift = params.shift;
-  const notCurrentMonth = "notCurrentMonth" + params.notCurrentMonth;
-  let shiftColor, background;
+  const { date, shift: shiftCode } = params;
+  const notCurrentMonth = `notCurrentMonth${params.notCurrentMonth}`;
+  let shiftColor: string;
+  let background: string;
 
   const { shift_types: shiftTypes } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
   );
 
-  if (shift) {
-    shiftColor = `#${getColor(shift, shiftTypes)}`;
+  if (shiftCode) {
+    shiftColor = `#${shiftTypes[shiftCode].color ?? DEFAULT_SHIFT_HEX}`;
     background = fade(shiftColor, 0.3);
   } else {
     shiftColor = fade("#FFFFFF", 0);
@@ -41,10 +41,10 @@ export function WorkersCalendarCell(params: CellOptions): JSX.Element {
   }
   return (
     <ShiftCell>
-      <ShiftTop className={notCurrentMonth}>{date!["date"]}</ShiftTop>
+      <ShiftTop className={notCurrentMonth}>{date!.date}</ShiftTop>
       <ShiftBottom style={{ color: shiftColor, backgroundColor: background }}>
         <ShiftBar style={{ backgroundColor: shiftColor }} />
-        <ShiftSymbol>{params.keepOn ? void 0 : shift}</ShiftSymbol>
+        <ShiftSymbol>{params.keepOn ? void 0 : shiftCode}</ShiftSymbol>
       </ShiftBottom>
     </ShiftCell>
   );

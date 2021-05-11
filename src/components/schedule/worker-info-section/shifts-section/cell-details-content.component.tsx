@@ -4,9 +4,9 @@
 import React from "react";
 import { MdClose } from "react-icons/md";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 import { TranslationHelper } from "../../../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../../../state/application-state.model";
-import styled from "styled-components";
 
 export interface CellDetailsOptions {
   index: number;
@@ -55,7 +55,7 @@ export function CellDetails(props: CellDetailsOptions): JSX.Element {
       </Date>
       {workerName && <div>{workerName}</div>}
       <Content>
-        // TODO: change div to different html tags e.g. spans, introduce css variables
+        {/* // TODO: change div to different html tags e.g. spans, introduce css variables */}
         <ShiftColorBox style={{ backgroundColor: `#${foundShift.color}` }} />
         <ShiftBoxName style={{ backgroundColor: `#${foundShift.color}` }}>
           {foundShift.name}

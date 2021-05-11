@@ -56,18 +56,16 @@ export default function ErrorContainerDrawerComponent(
     }
     if (loadingErrors) {
       setLoadingState(spinner);
-    } else {
-      if (Object.keys(scheduleErrors).length > 0) {
-        const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors, shiftTypes);
-        if (errors.length > 0) {
-          setMappedErrors(errors);
-          setLoadingState(errorsFound);
-        } else {
-          setLoadingState(spinner);
-        }
+    } else if (Object.keys(scheduleErrors).length > 0) {
+      const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors, shiftTypes);
+      if (errors.length > 0) {
+        setMappedErrors(errors);
+        setLoadingState(errorsFound);
       } else {
-        setLoadingState(noErrors);
+        setLoadingState(spinner);
       }
+    } else {
+      setLoadingState(noErrors);
     }
   }, [scheduleErrors, loadingErrors, shiftTypes]);
 

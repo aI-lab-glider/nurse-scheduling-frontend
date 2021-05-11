@@ -5,7 +5,7 @@ on: [push]
 jobs:
   cypress:
     name: Run checks on ${{ matrix.browser }}
-    runs-on: [self-hosted, '${{ matrix.browser }}']
+    runs-on: [self-hosted, "${{ matrix.browser }}"]
     strategy:
       fail-fast: false
       matrix:

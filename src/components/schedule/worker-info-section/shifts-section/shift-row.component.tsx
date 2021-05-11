@@ -8,7 +8,7 @@ import { applyScheduleStyling } from "../../../../hooks/use-schedule-styling/use
 import { BaseCellOptions } from "../../base/base-cell/base-cell.models";
 import { BaseRowComponent } from "../../base/base-row/base-row.component";
 import { BaseRowOptions } from "../../base/base-row/base-row.models";
-import { ShiftCellComponent } from "./shift-cell.component";
+import { ShiftCellComponent } from "./shift-cell/shift-cell.component";
 
 export interface ShiftRowOptions extends BaseRowOptions {
   dataRow: DataRow;

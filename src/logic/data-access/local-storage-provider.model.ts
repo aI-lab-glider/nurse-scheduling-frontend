@@ -2,8 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* eslint-disable @typescript-eslint/camelcase */
-
 import _ from "lodash";
 import PouchDB from "pouchdb-browser";
 import { ArrayPositionPointer, ArrayHelper } from "../../helpers/array.helper";
@@ -26,6 +24,7 @@ import {
   getRevisionTypeFromKey,
   ScheduleKey,
 } from "./persistance-store.model";
+
 export const DATABASE_NAME = "nurse-scheduling";
 type MonthDMToRevisionKeyDict = { [revisionKey: string]: MonthDataModel };
 
@@ -228,7 +227,7 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
   ): Promise<[MonthDataModel, MonthDataModel]> {
     const scheduleKey = new ScheduleKey(month.scheduleKey.month, month.scheduleKey.year);
 
-    const nextMonthKey = scheduleKey.nextMonthKey;
+    const { nextMonthKey } = scheduleKey;
     const isNextMonthInFuture = VerboseDateHelper.isMonthInFuture(
       nextMonthKey.month,
       nextMonthKey.year

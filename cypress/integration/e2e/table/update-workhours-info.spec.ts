@@ -50,7 +50,7 @@ function testWorkHoursInfoUpdate({
 }: TestCase): void {
   const workerData = {
     teamIdx,
-    workerIdx: workerIdx,
+    workerIdx,
     shiftIdx,
   };
   cy.changeWorkerShift({ ...workerData, newShiftCode: desiredShiftCode });

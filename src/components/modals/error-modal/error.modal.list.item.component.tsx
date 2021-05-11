@@ -3,12 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import React from "react";
-import { VerboseDate } from "../../../state/schedule-data/foundation-info/foundation-info.model";
-import { ScheduleErrorMessageModel } from "../../../state/schedule-data/schedule-errors/schedule-error-message.model";
-import { TranslationHelper } from "../../../helpers/translations.helper";
-import { useMonthInfo } from "../../../hooks/use-month-info";
 import styled from "styled-components";
 import { colors } from "../../../assets/colors";
+import { TranslationHelper } from "../../../helpers/translations.helper";
+import { useMonthInfo } from "../../../hooks/use-month-info";
+import { VerboseDate } from "../../../state/schedule-data/foundation-info/foundation-info.model";
+import { ScheduleErrorMessageModel } from "../../../state/schedule-data/schedule-errors/schedule-error-message.model";
 
 interface Options {
   error: ScheduleErrorMessageModel;
@@ -40,8 +40,8 @@ export default function ModalErrorListItem({ error }: Options): JSX.Element {
       <div>
         {displayTitle && (
           <Title>
-            {error.title === "date" ? `${errorDay} ` + monthName : `${error.title}`}
-            {errorDayIndex > -1 && error.title !== "date" ? `, ${errorDay} ` + monthName : ``}
+            {error.title === "date" ? `${errorDay} ${  monthName}` : `${error.title}`}
+            {errorDayIndex > -1 && error.title !== "date" ? `, ${errorDay} ${  monthName}` : ""}
           </Title>
         )}
         <Content dangerouslySetInnerHTML={{ __html: error.message || "" }} />

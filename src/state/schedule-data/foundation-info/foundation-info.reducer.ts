@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import * as _ from "lodash";
 import { FoundationInfoModel } from "./foundation-info.model";
 import { FoundationInfoAction, FoundationInfoActionType } from "./foundation-info.action-creator";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
@@ -11,7 +12,6 @@ import {
   ScheduleActionModel,
   ScheduleActionType,
 } from "../schedule.actions";
-import * as _ from "lodash";
 
 export function foundationInfoReducerF(name: string) {
   return (
@@ -35,7 +35,7 @@ export function foundationInfoReducerF(name: string) {
           return state;
         }
         const { extraWorkers, childrenNumber } = data;
-        /* eslint-disable @typescript-eslint/camelcase */
+
         return {
           ...state,
           extra_workers: [...extraWorkers],

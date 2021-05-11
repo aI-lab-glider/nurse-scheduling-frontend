@@ -4,8 +4,11 @@
 import { Button as MaterialButton } from "@material-ui/core";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import SettingsIcon from "@material-ui/icons/Settings";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
+import { colors, fontSizeBase } from "../../assets/colors";
 import { t } from "../../helpers/translations.helper";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../state/app-config-context";
 import { ApplicationStateModel } from "../../state/application-state.model";
@@ -13,10 +16,7 @@ import { MonthSwitchActionCreator } from "../../state/schedule-data/month-switch
 import { Button } from "../buttons/button-component/button.component";
 import ReportIssueModal from "../modals/report-issue-modal/report-issue-modal.component";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
-import styled from "styled-components";
-import { colors, fontSizeBase } from "../../assets/colors";
 import { ScheduleMode } from "../schedule/schedule-state.model";
-import SettingsIcon from "@material-ui/icons/Settings";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;

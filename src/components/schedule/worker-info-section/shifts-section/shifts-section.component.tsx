@@ -17,7 +17,7 @@ import {
   BaseSectionOptions,
 } from "../../base/base-section/base-section.component";
 import { SelectionMatrix } from "../../base/base-section/use-selection-matrix";
-import { ShiftCellComponent } from "./shift-cell.component";
+import { ShiftCellComponent } from "./shift-cell/shift-cell.component";
 import { ShiftRowComponent } from "./shift-row.component";
 
 export type ShiftsSectionOptions = Omit<BaseSectionOptions, "updateData">;
@@ -39,9 +39,10 @@ function shiftSectionErrorSelector(
   return errors.map((x) => {
     if ("week" in x) {
       if (Math.floor(cellIndex % 7) === 0) return { ...x, className: "left" };
-      else if (Math.floor(cellIndex % 7) === 6) return { ...x, className: "right" };
-      else return { ...x, className: "middle" };
-    } else return x;
+      if (Math.floor(cellIndex % 7) === 6) return { ...x, className: "right" };
+      return { ...x, className: "middle" };
+    }
+    return x;
   });
 }
 

@@ -1,4 +1,4 @@
-# Nurse Scheduling Problem 
+# Nurse Scheduling Problem
 
 The algorithm implementation is a part of solution created for [Fundacja Rodzin Adopcyjnych](https://adopcja.org.pl), the adoption foundation in Warsaw (Poland) during Project Summer [AILab](http://www.ailab.agh.edu.pl) & [Glider](http://www.glider.agh.edu.pl) 2020 event. The aim of the system is to improve the operation of the foundation by easily and quickly creating work schedules for its employees and volunteers. So far, this has been done manually in spreadsheets, which is a cumbersome and tedious job.
 
@@ -21,7 +21,9 @@ git checkout develop
 npm install
 npm start
 ```
+
 ## Electron
+
 ```
 npm run e-start
 ```

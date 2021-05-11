@@ -6,7 +6,8 @@ import { ShiftHelper, MonthDataArray } from "../../../../src/helpers/shifts.help
 import {
   DEFAULT_NORM_SUBTRACTION,
   WorkerHourInfo,
-} from "../../../../src/helpers/worker-hours-info.model";
+} from "../../../../src/logic/schedule-logic/worker-hours-info.logic";
+
 import {
   SHIFTS,
   ShiftCode,
@@ -20,7 +21,7 @@ import {
   WorkerTestDataInstance,
 } from "../../../fixtures/worker-data/worker-data-preprocessor";
 
-//todo refactor
+// todo refactor
 describe("Worker hours info", () => {
   workerTestData.forEach((workerInstance) => {
     context(
@@ -134,7 +135,7 @@ describe("Worker hours info", () => {
   });
 });
 
-//#region helper function
+// #region helper function
 interface RequiredTimeForPrimaryAndActualSchedule {
   primaryScheduleWorkerHoursInfo: WorkerHourInfo;
   actualScheduleWorkerHoursInfo: WorkerHourInfo;
@@ -188,4 +189,4 @@ function findFreeShift(shiftType: NotWorkingShiftType): NotWorkingShift {
   ) as NotWorkingShift;
 }
 
-//#endregion
+// #endregion

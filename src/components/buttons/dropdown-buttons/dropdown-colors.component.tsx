@@ -5,9 +5,9 @@ import React, { useEffect, useRef, useState } from "react";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Popper from "@material-ui/core/Popper";
+import styled from "styled-components";
 import { ButtonVariant } from "../../common-components";
 import { Wrapper, PlaceholderButtonContent, PlaceholderButton, ButtonListWrapper } from "./styles";
-import styled from "styled-components";
 
 interface DropdownColorsOptions {
   shiftType: string;
@@ -56,7 +56,8 @@ export function DropdownColors({
 
   function getChunckedColors(colorArrays: string[], chunkLen: number): string[][] {
     const result: string[][] = [];
-    let i, j;
+    let i;
+    let j;
 
     for (i = 0, j = colorArrays.length; i < j; i += chunkLen) {
       result.push(colorArrays.slice(i, i + chunkLen));
@@ -112,24 +113,20 @@ export function DropdownColors({
               {getChunckedColors(
                 shiftType === "working" ? worksShiftsColors : notWorksShiftsColors,
                 6
-              ).map((colorRow) => {
-                return (
-                  <ColorSampleRow>
-                    {colorRow.map((color) => {
-                      return (
-                        <ColorSample
-                          onClick={(): void => {
-                            colorClicker(color);
-                            setLocalColor(color);
-                            handleClickAway();
-                          }}
-                          style={{ backgroundColor: `#${color}` }}
-                        />
-                      );
-                    })}
-                  </ColorSampleRow>
-                );
-              })}
+              ).map((colorRow) => (
+                <ColorSampleRow>
+                  {colorRow.map((color) => (
+                    <ColorSample
+                      onClick={(): void => {
+                        colorClicker(color);
+                        setLocalColor(color);
+                        handleClickAway();
+                      }}
+                      style={{ backgroundColor: `#${color}` }}
+                    />
+                  ))}
+                </ColorSampleRow>
+              ))}
             </ColorSampleWrapper>
           </ButtonListWrapper>
         </ClickAwayListener>

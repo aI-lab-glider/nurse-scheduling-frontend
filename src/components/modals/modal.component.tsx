@@ -2,11 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import React from "react";
-import Modal from "@material-ui/core/Modal";
+import { Box, Divider, IconButton, Paper } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import { Box, Divider, IconButton, Paper } from "@material-ui/core";
+import Modal from "@material-ui/core/Modal";
+import React from "react";
 import { MdClose } from "react-icons/md";
 import styled from "styled-components";
 import { colors, fontSizeBase, fontSizeLg } from "../../assets/colors";

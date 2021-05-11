@@ -5,8 +5,8 @@ import { Grid, TextField, Typography } from "@material-ui/core";
 import * as _ from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { t } from "../../../../helpers/translations.helper";
-import { WorkerHourInfo } from "../../../../helpers/worker-hours-info.model";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
+import { WorkerHourInfo } from "../../../../logic/schedule-logic/worker-hours-info.logic";
 import { WorkNormSelectorOptions } from "./combined-worknorm-selector.component";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
 import { useFormFieldStyles } from "./worker-edit.models";
@@ -22,9 +22,7 @@ export function WorkerCivilContractWorkNormSelector({
   const requiredHours = WorkerHourInfo.calculateWorkNormForMonth(monthNumber, year);
 
   const convertToNormalHours = useCallback(
-    (workNorm: number): number => {
-      return Math.floor(workNorm * requiredHours);
-    },
+    (workNorm: number): number => Math.floor(workNorm * requiredHours),
     [requiredHours]
   );
 
@@ -40,7 +38,7 @@ export function WorkerCivilContractWorkNormSelector({
 
   const maximumWorkHoursForMonth = requiredHours * 2;
   function isTimeValid(): boolean {
-    const workerTimeCivilTimeAsNumber = parseInt(workerCivilTime);
+    const workerTimeCivilTimeAsNumber = parseInt(workerCivilTime, 10);
     const isTimeValid =
       !_.isNaN(workerTimeCivilTimeAsNumber) &&
       workerTimeCivilTimeAsNumber <= maximumWorkHoursForMonth;
@@ -49,7 +47,7 @@ export function WorkerCivilContractWorkNormSelector({
   }
 
   function toWorkerNorm(workerHours: string | number): number {
-    const workerHoursAsNumber = parseInt(workerHours.toString());
+    const workerHoursAsNumber = parseInt(workerHours.toString(), 10);
     if (_.isNaN(workerHoursAsNumber)) {
       return 1;
     }

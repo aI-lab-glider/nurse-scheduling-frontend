@@ -7,16 +7,23 @@ import { ScheduleError } from "../../state/schedule-data/schedule-errors/schedul
 
 export abstract class MetadataProvider {
   abstract get monthNumber(): number;
+
   abstract get year(): number;
+
   abstract get frozenDates(): [number | string, number][];
+
   abstract get dates(): number[];
+
   abstract get monthLogic(): MonthInfoLogic;
+
   get verboseDates(): VerboseDate[] {
     return [];
   }
+
   get errors(): ScheduleError[] {
     return [];
   }
+
   changeShiftFrozenState(rowind: number, shiftIndex: number): [number, number][] {
     return [];
   }

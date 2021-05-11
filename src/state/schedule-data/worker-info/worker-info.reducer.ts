@@ -11,7 +11,6 @@ import {
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "../schedule.actions";
 
-/* eslint-disable @typescript-eslint/camelcase */
 export function employeeInfoReducerF(name: string) {
   return (
     state: WorkersInfoModel = scheduleDataInitialState.employee_info,

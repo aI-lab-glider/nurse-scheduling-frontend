@@ -7,6 +7,7 @@ import {
   MOVEABLE_HOLIDAYS,
   NON_HOLIDAYS,
 } from "../../../../fixtures/unit/logic/schedule-logic/public-holidays";
+
 type CustomDate = { day: number; month: number };
 
 describe("PublicHolidayLogic", () => {

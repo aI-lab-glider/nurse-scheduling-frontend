@@ -1,14 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-/* eslint-disable @typescript-eslint/camelcase */
 /// <reference types="cypress" />
 import { ScheduleParser } from "../../../../../src/logic/schedule-parser/schedule.parser";
 import {
   babysitterSection,
   exampleData,
   nurseSection,
-} from "../../../../../cypress/fixtures/unit/logic/schedule-parser/schedule.parser";
+} from "../../../../fixtures/unit/logic/schedule-parser/schedule.parser";
 import {
   WorkersInfoModel,
   WorkerType,
@@ -16,8 +15,8 @@ import {
 import { WorkerShiftsModel } from "../../../../../src/state/schedule-data/workers-shifts/worker-shifts.model";
 import { ShiftCode } from "../../../../../src/state/schedule-data/shifts-types/shift-types.model";
 
-//#region data declaration
-//const emptyRow = [""];
+// #region data declaration
+// const emptyRow = [""];
 
 // const expectedSchedule: ScheduleDataModel = {
 //   schedule_info: { month_number: 10, year: 2020 },
@@ -33,7 +32,7 @@ import { ShiftCode } from "../../../../../src/state/schedule-data/shifts-types/s
 //   isCorrupted: false,
 // };
 
-//#endregion
+// #endregion
 
 describe("Schedule parser", () => {
   before(() => {
@@ -45,7 +44,7 @@ describe("Schedule parser", () => {
   const employee_info: WorkersInfoModel = { type: {}, time: {}, team: {} };
   const scheduleParser = new ScheduleParser(10, 2020, exampleData, [], []);
   const result = scheduleParser.schedule.getDataModel();
-  //todo update test
+  // todo update test
   // it("check if workerTyp
   it("length of days must be was parsed correctly ", () => {
     //   for (const [key, value] of Object.entries(result.employee_info.type)) {
@@ -57,7 +56,7 @@ describe("Schedule parser", () => {
     }
   });
 
-  //todo update test
+  // todo update test
   // it("should check if input and output shifts are equal", () => {
   //   for (const [key, value] of Object.entries(result.shifts)) {
   //     expect(value).to.eql(expectedSchedule.shifts[key]);

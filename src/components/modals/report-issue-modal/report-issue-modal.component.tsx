@@ -3,13 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { TextField } from "@material-ui/core";
-import React, { useState } from "react";
-import { Button } from "../../buttons/button-component/button.component";
-import DefaultModal from "../modal.component";
 import { send } from "emailjs-com";
-import { useNotification } from "../../notification/notification.context";
-import { t } from "../../../helpers/translations.helper";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { t } from "../../../helpers/translations.helper";
+import { Button } from "../../buttons/button-component/button.component";
+import { useNotification } from "../../notification/notification.context";
+import DefaultModal from "../modal.component";
 
 export interface ReportIssueModalOptions {
   setOpen: (open: boolean) => void;
@@ -73,7 +73,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
             placeholder={t("provideErrorDescription")}
             value={issueDescription}
             onChange={onIssueDescriptionChange}
-            fullWidth={true}
+            fullWidth
             multiline
             helperText={
               issueDescription.length > 19
@@ -81,7 +81,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
                 : `Treść wiadomości jest za krótka! Wprowadź jeszcze min. ${
                     19 - issueDescription.length + 1
                   } znak${
-                    issueDescription.length < 16 ? `ów` : issueDescription.length < 19 ? `i` : ``
+                    issueDescription.length < 16 ? "ów" : issueDescription.length < 19 ? "i" : ""
                   }.`
             }
           />

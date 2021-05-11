@@ -70,9 +70,8 @@ export const RevisionTypeLabels: { [key: string]: string } = {
   actual: "wersja aktualna",
 };
 
-export const getRevisionTypeFromKey = (revisionKey: RevisionKey): RevisionType => {
-  return revisionKey.split("_")[RevisionKeyIndexes.REVISION_TYPE] as RevisionType;
-};
+export const getRevisionTypeFromKey = (revisionKey: RevisionKey): RevisionType =>
+  revisionKey.split("_")[RevisionKeyIndexes.REVISION_TYPE] as RevisionType;
 
 export interface MonthRevision {
   _id: RevisionKey;
@@ -82,6 +81,7 @@ export interface MonthRevision {
 
 export abstract class PersistenceStoreProvider {
   abstract getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined>;
+
   abstract saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void>;
 
   abstract saveBothMonthRevisionsIfNeeded(

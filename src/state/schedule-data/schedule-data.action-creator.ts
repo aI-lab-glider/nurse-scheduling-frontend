@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-/* eslint-disable @typescript-eslint/camelcase */
 import _ from "lodash";
 import { LocalStorageProvider } from "../../logic/data-access/local-storage-provider.model";
 import {
@@ -28,7 +27,7 @@ import { createActionName, ScheduleActionModel, ScheduleActionType } from "./sch
 import { Shift } from "./shifts-types/shift-types.model";
 
 export class ScheduleDataActionCreator {
-  //#region Update state
+  // #region Update state
   private static setCurrentAndPrimaryScheduleState(
     currentSchedule: ScheduleDataModel,
     baseSchedule: PrimaryMonthRevisionDataModel
@@ -99,9 +98,9 @@ export class ScheduleDataActionCreator {
       }
     };
   }
-  //#endregion
+  // #endregion
 
-  //#region Update state and save to DB
+  // #region Update state and save to DB
   static setScheduleStateAndSaveToDb(
     newSchedule: ScheduleDataModel,
     revision?: RevisionType
@@ -131,7 +130,7 @@ export class ScheduleDataActionCreator {
     };
   }
 
-  //#endregion
+  // #endregion
 
   private static async getMonthPrimaryRevisionDM(
     monthDataModel: MonthDataModel
@@ -179,9 +178,11 @@ export class ScheduleDataActionCreator {
       dispatch(action);
     };
   }
+
   static hideErrors(): ActionModel<unknown> {
     return this.showError(undefined);
   }
+
   static showError(error: ScheduleErrorMessageModel | undefined): ActionModel<unknown> {
     const action = {
       type: ScheduleActionType.SHOW_ERROR,
@@ -189,6 +190,7 @@ export class ScheduleDataActionCreator {
     };
     return action;
   }
+
   static cleanErrors(): ActionModel<unknown> {
     const action = {
       type: ScheduleActionType.CLEAN_ERRORS,
