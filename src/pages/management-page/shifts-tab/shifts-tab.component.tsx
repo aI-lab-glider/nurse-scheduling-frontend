@@ -9,6 +9,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import { Button } from "../../../components/common-components";
 import ShiftDrawerComponent, {
@@ -20,7 +21,6 @@ import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule
 import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
 import { ShiftsActionCreator } from "../../../state/schedule-data/shifts-types/shifts.action-creator";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
-import styled from "styled-components";
 import { fontSizeXs } from "../../../assets/colors";
 
 const useStyles = makeStyles(() =>
@@ -94,37 +94,37 @@ export default function ShiftTab(): JSX.Element {
           <EnhancedTableHeaderComponent toggleOpen={toggleOpen} />
           <TableBody>
             {Object.values(shiftData).map((shift) => (
-                <TableRow key={shift.code} className={classes.row}>
-                  <TableCell className={classes.tableCell}>{shift.name}</TableCell>
-                  <TableCell className={classes.tableCell}>
-                    {shift.isWorkingShift ? `${shift.from}:00 ` : ""}-
-                    {shift.isWorkingShift ? ` ${shift.to}:00` : ""}
-                  </TableCell>
-                  <TableCell className={classes.tableCell}>{shift.code}</TableCell>
-                  <TableCell className={classes.tableCell}>
-                    <div
-                      className={classes.colorSample}
-                      style={{ backgroundColor: `#${shift.color}` }}
-                    />
-                  </TableCell>
-                  <TableCell align="right">
-                    <ActionButton
-                      variant="primary"
-                      onClick={(): void => toggleOpen(shift, ShiftDrawerMode.EDIT)}
-                      disabled
-                    >
-                      Edytuj
-                    </ActionButton>
-                    <ActionButton
-                      variant="secondary"
-                      onClick={(): void => handleRemoveItem(shift)}
-                      disabled
-                    >
-                      Usuń
-                    </ActionButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+              <TableRow key={shift.code} className={classes.row}>
+                <TableCell className={classes.tableCell}>{shift.name}</TableCell>
+                <TableCell className={classes.tableCell}>
+                  {shift.isWorkingShift ? `${shift.from}:00 ` : ""}-
+                  {shift.isWorkingShift ? ` ${shift.to}:00` : ""}
+                </TableCell>
+                <TableCell className={classes.tableCell}>{shift.code}</TableCell>
+                <TableCell className={classes.tableCell}>
+                  <div
+                    className={classes.colorSample}
+                    style={{ backgroundColor: `#${shift.color}` }}
+                  />
+                </TableCell>
+                <TableCell align="right">
+                  <ActionButton
+                    variant="primary"
+                    onClick={(): void => toggleOpen(shift, ShiftDrawerMode.EDIT)}
+                    disabled
+                  >
+                    Edytuj
+                  </ActionButton>
+                  <ActionButton
+                    variant="secondary"
+                    onClick={(): void => handleRemoveItem(shift)}
+                    disabled
+                  >
+                    Usuń
+                  </ActionButton>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

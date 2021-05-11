@@ -2,8 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Box } from "@material-ui/core";
@@ -30,7 +28,6 @@ import NewVersionModal from "./components/modals/new-version-modal/new-version.m
 import { CookiesProvider } from "./logic/data-access/cookies-provider";
 import { ScheduleKey } from "./logic/data-access/persistance-store.model";
 import { latestAppVersion } from "./api/latest-github-version";
-import resources from "./assets/translations";
 import { t } from "./helpers/translations.helper";
 
 const useStyles = makeStyles(() => ({
@@ -54,10 +51,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-i18n.use(initReactI18next).init({
-  fallbackLng: "pl",
-  resources,
-});
 function App(): JSX.Element {
   const classes = useStyles();
   const scheduleDispatcher = useDispatch();

@@ -17,7 +17,7 @@ import {
   BaseSectionOptions,
 } from "../../base/base-section/base-section.component";
 import { SelectionMatrix } from "../../base/base-section/use-selection-matrix";
-import { ShiftCellComponent } from "./shift-cell.component";
+import { ShiftCellComponent } from "./shift-cell/shift-cell.component";
 import { ShiftRowComponent } from "./shift-row.component";
 
 export type ShiftsSectionOptions = Omit<BaseSectionOptions, "updateData">;

@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 import { DataRowHelper } from "../../../helpers/data-row.helper";
 import { DataRow } from "../../../logic/schedule-logic/data-row";
 import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../../../logic/section.model";
@@ -14,7 +15,6 @@ import { BaseSectionComponent } from "../base/base-section/base-section.componen
 import { SelectionMatrix } from "../base/base-section/use-selection-matrix";
 import { useFoundationInfo } from "../../../hooks/use-foundation-info";
 import { SectionContainer, SectionWrapper } from "../base/styled";
-import styled from "styled-components";
 import { colors } from "../../../assets/colors";
 
 export function FoundationInfoComponent(): JSX.Element {

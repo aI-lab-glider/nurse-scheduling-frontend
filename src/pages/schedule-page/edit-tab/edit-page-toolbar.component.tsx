@@ -7,6 +7,7 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import * as _ from "lodash";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import styled, { css } from "styled-components";
 import backend from "../../../api/backend";
 import {
   NetworkErrorCode,
@@ -24,7 +25,6 @@ import SaveChangesModal from "../../../components/modals/save-changes-modal/save
 import { useNotification } from "../../../components/notification/notification.context";
 import ErrorContainerDrawerComponent from "../../../components/drawers/error-container-drawer/error-container-drawer.component";
 import { useTemporarySchedule } from "../../../hooks/use-temporary-schedule";
-import styled, { css } from "styled-components";
 import { colors, fontSizeBase, fontSizeXl } from "../../../assets/colors";
 
 interface EditPageToolbarOptions {
