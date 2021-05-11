@@ -3,21 +3,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import xlsx from "exceljs";
 import { ScheduleDataModel } from "../../state/schedule-data/schedule-data.model";
-import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
 import { EMPTY_ROW, ABSENCE_HEADERS } from "../../helpers/parser.helper";
 import { CELL_MARGIN } from "./schedule-export.logic";
 import { ShiftCode, SHIFTS } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { TranslationHelper } from "../../helpers/translations.helper";
 
-export interface WorkersAbsenceExportLogicOptions {
-  scheduleModel: ScheduleDataModel;
-  primaryScheduleModel?: PrimaryMonthRevisionDataModel;
-}
-
 export class WorkersAbsenceExportLogic {
   private scheduleModel: ScheduleDataModel;
 
-  constructor({ scheduleModel }: WorkersAbsenceExportLogicOptions) {
+  constructor(scheduleModel: ScheduleDataModel) {
     this.scheduleModel = scheduleModel;
   }
 

@@ -5,27 +5,18 @@ import xlsx from "exceljs";
 import { RevisionType } from "../data-access/persistance-store.model";
 import { ScheduleDataModel } from "../../state/schedule-data/schedule-data.model";
 import { FileHelper } from "../../helpers/file.helper";
-import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
-import { EMPTY_ROW_SIZE, LEAVES_WORKSHEET_NAME } from "../../helpers/parser.helper";
+import { LEAVES_WORKSHEET_NAME } from "../../helpers/parser.helper";
 import { WorkersAbsenceExportLogic } from "./workers-absence-export.logic";
 import { cropScheduleDMToMonthDM } from "../schedule-container-converter/schedule-container-converter";
-
-export interface AbsenceExportLogicOptions {
-  scheduleModel: ScheduleDataModel;
-  primaryScheduleModel?: PrimaryMonthRevisionDataModel;
-}
 
 export class AbsenceExportLogic {
   private scheduleModel: ScheduleDataModel;
 
   private workerExportLogic: WorkersAbsenceExportLogic;
 
-  constructor({ scheduleModel, primaryScheduleModel }: AbsenceExportLogicOptions) {
+  constructor(scheduleModel: ScheduleDataModel) {
     this.scheduleModel = scheduleModel;
-    this.workerExportLogic = new WorkersAbsenceExportLogic({
-      scheduleModel,
-      primaryScheduleModel,
-    });
+    this.workerExportLogic = new WorkersAbsenceExportLogic(scheduleModel);
   }
 
   public formatAndSave(revisionType: RevisionType): void {
@@ -54,14 +45,5 @@ export class AbsenceExportLogic {
         properties: { defaultColWidth: 5 },
       }),
     ];
-  }
-
-  public static isEmptyRow(row: xlsx.Row): boolean {
-    for (let i = 1; i < EMPTY_ROW_SIZE + 1; i++) {
-      if (row.getCell(i).value !== "") {
-        return false;
-      }
-    }
-    return true;
   }
 }
