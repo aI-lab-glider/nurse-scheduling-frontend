@@ -70,6 +70,10 @@ Cypress.Commands.add(
   }
 );
 
+Cypress.Commands.add("unloadSchedule", () => {
+  cy.wrap(new LocalStorageProvider().reloadDb()).then(() => cy.visit("/"));
+});
+
 Cypress.Commands.add(
   "getWorkerShift",
   ({ teamIdx, workerIdx, shiftIdx, selector = "cell" }: GetWorkerShiftOptions) => {
