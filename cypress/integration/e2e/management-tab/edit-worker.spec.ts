@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { HoursInfoCells } from "../../../support/commands";
+
 describe("Tab management", () => {
   beforeEach(() => {
     cy.loadScheduleToMonth();
@@ -32,28 +33,6 @@ describe("Tab management", () => {
           cy.get('[data-cy="btn-schedule-tab"]').click();
           cy.contains(newWorker);
         });
-      });
-    });
-
-    describe("Editing the time", () => {
-      beforeEach(() => {
-        cy.get('[data-cy="contract"]').click();
-      });
-
-      it("properly handles employment contract", () => {
-        cy.get('[data-cy="employment_contract"]').click();
-        cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="full"]').click();
-        cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="half"]').click();
-        cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="other"]').click();
-        cy.get('[data-cy="input-employ-time-other"] input')
-          .click()
-          .clear({ force: true })
-          .type("123");
-      });
-      it("properly handles civil contract", () => {
-        cy.get('[data-cy="civil_contract"]').click();
-        cy.get('[data-cy="input-civil-time"]').click();
-        cy.get('[data-cy="input-civil-time"] input').clear({ force: true }).type("123");
       });
     });
   });
