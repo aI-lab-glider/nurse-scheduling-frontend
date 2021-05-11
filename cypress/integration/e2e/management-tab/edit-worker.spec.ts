@@ -52,25 +52,4 @@ describe("Tab management", () => {
       cy.get('[data-cy="input-civil-time"] input').clear({ force: true }).type("123");
     });
   });
-
-  const testWorker = "Pielęgniarka 2";
-  describe("Editing workers time", () => {
-    it("properly handles worker hours edition", () => {
-      cy.get('[data-cy="exit-drawer"]').click();
-      cy.get(`[data-cy="edit-worker-${testWorker}"]`).click();
-      cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="half"]').click();
-      cy.get(`[data-cy="btn-save-worker"]`).click();
-      cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1/2");
-      cy.get('[data-cy="btn-schedule-tab"]').click();
-      cy.checkHoursInfo({
-        teamIdx: 0,
-        workerIdx: 1,
-        hoursInfo: {
-          [HoursInfoCells.required]: 80,
-          [HoursInfoCells.actual]: 240,
-          [HoursInfoCells.overtime]: 160,
-        },
-      });
-    });
-  });
 });
