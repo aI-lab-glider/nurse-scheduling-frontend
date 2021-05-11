@@ -32,7 +32,7 @@ export function ImportButtonsComponent(): JSX.Element {
     dataCy: "export-schedule-button",
   };
   const btnData3: ButtonData = {
-    label: "Zwolnienia",
+    label: "Urlopy",
     action: (): void => handleAbsenceExport(),
   };
 

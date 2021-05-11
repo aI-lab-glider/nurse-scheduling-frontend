@@ -59,29 +59,30 @@ export class WorkersAbsenceExportLogic {
     workers.push(EMPTY_ROW);
     names.forEach((name) => {
       const workerShifts = scheduleModel.shifts[name] as ShiftCode[];
-      let to = 0;
-      let daysNo = 1;
-      for (let index = 0; index < workerShifts.length; index++) {
-        const shift = workerShifts[index];
+      workerShifts.forEach((shift, index) => {
+        let daysNo = 1;
         if (shift !== ShiftCode.W && !SHIFTS[shift].isWorkingShift) {
           const from = scheduleModel.month_info.dates[index];
-          while (index < workerShifts.length && workerShifts[index + 1] === workerShifts[index]) {
+          while (
+            index + 1 < workerShifts.length &&
+            workerShifts[index + 1] === workerShifts[index]
+          ) {
             index++;
             daysNo++;
+            workerShifts[index - 1] = ShiftCode.W;
           }
-          to = scheduleModel.month_info.dates[index];
+          workerShifts[index] = ShiftCode.W;
           workers.push([
             name,
             SHIFTS[shift].name,
             `${from} ${TranslationHelper.polishMonthsGenetivus[month]}`,
-            `${to} ${TranslationHelper.polishMonthsGenetivus[month]}`,
+            `${scheduleModel.month_info.dates[index]} ${TranslationHelper.polishMonthsGenetivus[month]}`,
             daysNo,
             daysNo * 8,
             year,
           ]);
-          workerShifts[index] = ShiftCode.W;
         }
-      }
+      });
     });
     return [...workers];
   }

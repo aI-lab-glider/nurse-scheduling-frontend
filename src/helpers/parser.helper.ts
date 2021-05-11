@@ -11,7 +11,7 @@ export const EMPTY_ROW = Array(EMPTY_ROW_SIZE).fill("");
 export const WORKSHEET_NAME = "grafik";
 export const WORKERS_WORKSHEET_NAME = "pracownicy";
 export const SHIFTS_WORKSHEET_NAME = "zmiany";
-export const LEAVES_WORKSHEET_NAME = "zwolnienia";
+export const LEAVES_WORKSHEET_NAME = "urlopy";
 
 const NAZWA_ZMIANY = "Nazwa zmiany";
 const SKROT = "Skrót";
