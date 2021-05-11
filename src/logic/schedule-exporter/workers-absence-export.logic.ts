@@ -99,7 +99,7 @@ export class WorkersAbsenceExportLogic {
             `${scheduleModel.month_info.dates[index]} ${TranslationHelper.polishMonthsGenetivus[month]}`,
             daysNo,
             Math.round(
-              (daysNo * workerHours.workerHourNorm) / scheduleModel.month_info.dates.length
+              (daysNo * workerHours.workerHourNorm) / Math.max(...scheduleModel.month_info.dates)
             ),
             year,
           ]);
