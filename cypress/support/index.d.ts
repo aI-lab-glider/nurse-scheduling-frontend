@@ -8,6 +8,7 @@ declare namespace Cypress {
       month?: number,
       year?: number
     ): Chainable<Element>;
+    unloadSchedule(): Chainable<Element>;
 
     getWorkerShift(
       GetWorkerShiftOptions: import("./commands").GetWorkerShiftOptions
