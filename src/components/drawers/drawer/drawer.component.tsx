@@ -25,7 +25,7 @@ export default function Drawer(options: DrawerOptions): JSX.Element {
   const { title, setOpen, children, ...otherOptions } = options;
 
   return (
-    <MaterialDrawer classes={{ paper: classes.drawer }} {...otherOptions} anchor={"right"}>
+    <MaterialDrawer classes={{ paper: classes.drawer }} {...otherOptions} anchor="right">
       <DrawerHeader title={title} setOpen={setOpen}>
         {children}
       </DrawerHeader>

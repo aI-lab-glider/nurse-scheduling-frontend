@@ -4,61 +4,6 @@
 import { StringHelper } from "../../../../src/helpers/string.helper";
 
 describe("StringHelper", () => {
-  describe("areEquivalent", () => {
-    context("when two strings are equal", () => {
-      it("returns true", () => {
-        expect(StringHelper.areEquivalent("str", "str")).to.equal(true);
-      });
-    });
-
-    context("when two strings differ with case and leading/trailing whitespaces", () => {
-      it("returns true", () => {
-        expect(StringHelper.areEquivalent("   str", "STR   ")).to.equal(true);
-      });
-    });
-
-    context("when two strings are different", () => {
-      it("returns false", () => {
-        expect(StringHelper.areEquivalent("int", "str")).to.equal(false);
-      });
-    });
-
-    context("when one of the values is null", () => {
-      it("returns false", () => {
-        expect(StringHelper.areEquivalent(null, "str")).to.equal(false);
-        expect(StringHelper.areEquivalent("str", null)).to.equal(false);
-      });
-    });
-
-    context("when both values are null", () => {
-      it("returns false", () => {
-        expect(StringHelper.areEquivalent(null, null)).to.equal(false);
-      });
-    });
-
-    context("when one of the values is empty string", () => {
-      it("compares values properly", () => {
-        expect(StringHelper.areEquivalent("", "str")).to.equal(false);
-        expect(StringHelper.areEquivalent("str", "")).to.equal(false);
-        expect(StringHelper.areEquivalent("", "")).to.equal(false);
-      });
-    });
-  });
-
-  describe("includesEquivalent", () => {
-    context("when string contains value", () => {
-      it("recognizes it correctly", () => {
-        expect(StringHelper.includesEquivalent("  AliCE  ", "  lice ")).to.equal(true);
-      });
-    });
-
-    context("when string does not contain value", () => {
-      it("recognizes it correctly", () => {
-        expect(StringHelper.includesEquivalent("  AliC E  ", "  lice ")).to.equal(false);
-      });
-    });
-  });
-
   describe("getRawValue", () => {
     context("when letters are present in both upper and lower cases", () => {
       it("tuns input into lowercase", () => {

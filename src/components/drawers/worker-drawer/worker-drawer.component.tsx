@@ -1,13 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import i18next from "i18next";
 import React from "react";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
 import Drawer, { DrawerOptions } from "../drawer/drawer.component";
 import { WorkerEditComponent, WorkerEditComponentMode } from "./worker-edit";
 import { WorkerInfoComponent } from "./worker-info/worker-info.component";
-import { useWorkerHoursInfo } from "../../../hooks/use-worker-hours-info";
-import i18next from "i18next";
 
 export enum WorkerDrawerMode {
   EDIT,
@@ -16,10 +15,20 @@ export enum WorkerDrawerMode {
 }
 
 export type WorkerDrawerWorkerInfo = Omit<WorkerInfoModel, "time">;
-interface WorkerDrawerOptions extends Omit<DrawerOptions, "title"> {
-  mode: WorkerDrawerMode;
-  worker?: WorkerDrawerWorkerInfo;
+
+interface WorkerAddDrawerOptions {
+  mode: WorkerDrawerMode.ADD_NEW;
 }
+interface WorkerEditDrawerOptions {
+  mode: WorkerDrawerMode.EDIT;
+  worker: WorkerDrawerWorkerInfo;
+}
+interface WorkerInfoDrawerOptions {
+  mode: WorkerDrawerMode.INFO;
+  worker: WorkerDrawerWorkerInfo;
+}
+type WorkerDrawerOptions = Omit<DrawerOptions, "title"> &
+  (WorkerAddDrawerOptions | WorkerEditDrawerOptions | WorkerInfoDrawerOptions);
 
 function getTitle(mode: WorkerDrawerMode): string {
   return {
@@ -30,33 +39,31 @@ function getTitle(mode: WorkerDrawerMode): string {
 }
 
 export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX.Element {
-  const { mode, worker, setOpen, ...otherOptions } = options;
-  const workerRequiredHours = useWorkerHoursInfo(worker?.name ?? "");
+  const { mode, setOpen, ...otherOptions } = options;
   const title = getTitle(mode);
+
+  const RenderSwitch = (): JSX.Element => {
+    switch (options.mode) {
+      case WorkerDrawerMode.ADD_NEW:
+        return <WorkerEditComponent setOpen={setOpen} mode={WorkerEditComponentMode.ADD} />;
+      case WorkerDrawerMode.EDIT:
+        return (
+          <WorkerEditComponent
+            setOpen={setOpen}
+            {...options.worker}
+            mode={WorkerEditComponentMode.EDIT}
+          />
+        );
+      case WorkerDrawerMode.INFO:
+        return <WorkerInfoComponent workerName={options.worker.name} />;
+      default:
+        throw new Error(`Cannot return component for mode ${options!.mode}`);
+    }
+  };
+
   return (
     <Drawer setOpen={setOpen} title={title} {...otherOptions} data-cy="worker-drawer">
-      {
-        {
-          [WorkerDrawerMode.EDIT]: worker && (
-            <WorkerEditComponent
-              setOpen={setOpen}
-              {...worker}
-              time={workerRequiredHours.workerTime}
-              mode={WorkerEditComponentMode.EDIT}
-            />
-          ),
-          [WorkerDrawerMode.ADD_NEW]: (
-            <WorkerEditComponent
-              setOpen={setOpen}
-              {...{ name: "", time: 0 }}
-              mode={WorkerEditComponentMode.ADD}
-            />
-          ),
-          [WorkerDrawerMode.INFO]: worker && (
-            <WorkerInfoComponent {...worker} time={workerRequiredHours.workerTime} />
-          ),
-        }[mode]
-      }
+      <RenderSwitch />
     </Drawer>
   );
 }

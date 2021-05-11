@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { summaryCellDataCy, SummaryTableCellOptions } from "./summarytable-cell.models";
 import styled from "styled-components";
+import { summaryCellDataCy, SummaryTableCellOptions } from "./summarytable-cell.models";
 import { colors } from "../../../../assets/colors";
 
 function SummaryTableCellF({ value, cellIndex }: SummaryTableCellOptions): JSX.Element {
@@ -16,9 +16,7 @@ function SummaryTableCellF({ value, cellIndex }: SummaryTableCellOptions): JSX.E
 
 export const SummaryTableCell: React.FC<SummaryTableCellOptions> = React.memo(
   SummaryTableCellF,
-  (prev, next) => {
-    return prev.value === next.value;
-  }
+  (prev, next) => prev.value === next.value
 );
 
 const Wrapper = styled.div`

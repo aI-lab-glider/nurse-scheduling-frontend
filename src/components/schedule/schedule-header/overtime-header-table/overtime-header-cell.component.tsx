@@ -19,9 +19,7 @@ function OvertimeHeaderCellF({ value }: OvertimeHeaderCellOptions): JSX.Element 
 
 export const OvertimeHeaderCell: React.FC<OvertimeHeaderCellOptions> = React.memo(
   OvertimeHeaderCellF,
-  (prev, next) => {
-    return prev.value === next.value;
-  }
+  (prev, next) => prev.value === next.value
 );
 
 const Wrapper = styled.div`

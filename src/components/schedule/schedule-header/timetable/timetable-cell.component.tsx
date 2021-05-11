@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback, useEffect } from "react";
+import styled from "styled-components";
+import classNames from "classnames/bind";
 import {
   VerboseDate,
   WeekDay,
@@ -13,9 +15,7 @@ import {
 } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { TranslationHelper } from "../../../../helpers/translations.helper";
 import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
-import styled from "styled-components";
 import { colors, fontSizeBase, fontWeightBase, fontWeightBold } from "../../../../assets/colors";
-import classNames from "classnames/bind";
 
 export interface TimeTableCellOptions {
   value: VerboseDate;
@@ -60,7 +60,7 @@ function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.
     <Wrapper className={getHeaderClass()}>
       <Popper errorSelector={errorSelector}>
         <DayName>{TranslationHelper.weekDaysTranslations[value.dayOfWeek]}</DayName>
-        <DayMarker className={classNames({ today: today })}>
+        <DayMarker className={classNames({ today })}>
           <span>{value.date}</span>
         </DayMarker>
       </Popper>
@@ -70,9 +70,7 @@ function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.
 
 export const TimeTableCell: React.FC<TimeTableCellOptions> = React.memo(
   TimeTableCellF,
-  (prev, next) => {
-    return prev.value === next.value;
-  }
+  (prev, next) => prev.value === next.value
 );
 
 const Wrapper = styled.div`

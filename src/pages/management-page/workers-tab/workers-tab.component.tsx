@@ -9,28 +9,29 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
+import { colors, fontSizeXs } from "../../../assets/colors";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import { Button } from "../../../components/common-components";
+import WorkerDrawerComponent, {
+  WorkerDrawerMode,
+} from "../../../components/drawers/worker-drawer/worker-drawer.component";
+import DeleteWorkerModalComponent from "../../../components/modals/delete-worker-modal/delete-worker.modal.component";
+import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
+import { ContractTypeHelper } from "../../../helpers/contract-type.helper";
+import { StringHelper } from "../../../helpers/string.helper";
+import { WorkerTypeHelper } from "../../../helpers/worker-type.helper";
+import { WorkingTimeHelper } from "../../../helpers/working-time.helper";
+import { useMonthInfo } from "../../../hooks/use-month-info";
+import { WorkerHourInfo } from "../../../logic/schedule-logic/worker-hours-info.logic";
+import { DEFAULT_CONTRACT_TYPE } from "../../../logic/schedule-parser/workers-info.parser";
+import { ApplicationStateModel } from "../../../state/application-state.model";
+import { WorkerName } from "../../../state/schedule-data/schedule-sensitive-data.model";
 import {
   ContractType,
   WorkerInfoModel,
 } from "../../../state/schedule-data/worker-info/worker-info.model";
-import { ContractTypeHelper } from "../../../helpers/contract-type.helper";
-import { WorkerTypeHelper } from "../../../helpers/worker-type.helper";
-import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
-import { WorkerHourInfo } from "../../../helpers/worker-hours-info.model";
-import { StringHelper } from "../../../helpers/string.helper";
-import { ApplicationStateModel } from "../../../state/application-state.model";
-import { Button } from "../../../components/common-components";
-import DeleteWorkerModalComponent from "../../../components/modals/delete-worker-modal/delete-worker.modal.component";
-import { WorkingTimeHelper } from "../../../helpers/working-time.helper";
-import { useMonthInfo } from "../../../hooks/use-month-info";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
-import WorkerDrawerComponent, {
-  WorkerDrawerMode,
-} from "../../../components/drawers/worker-drawer/worker-drawer.component";
-import { DEFAULT_CONTRACT_TYPE } from "../../../logic/schedule-parser/workers-info.parser";
-import styled from "styled-components";
-import { colors, fontSizeXs } from "../../../assets/colors";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -68,9 +69,12 @@ export default function WorkersTab(): JSX.Element {
 
   useEffect(() => {
     const newWorkerData = Object.keys(type).map(
-      (key): WorkerInfoModel => {
-        return { name: key, type: type[key], time: time[key], team: team[key] };
-      }
+      (key): WorkerInfoModel => ({
+        name: key as WorkerName,
+        type: type[key],
+        time: time[key],
+        team: team[key],
+      })
     );
     setWorkerData(newWorkerData);
   }, [type, time, setWorkerData, team]);
@@ -106,7 +110,7 @@ export default function WorkersTab(): JSX.Element {
       const contractTypeLabel = ContractTypeHelper.translate(workerContractType);
       const workerTimeLabel =
         workerContractType === ContractType.CIVIL_CONTRACT
-          ? time[workerName] * workHourNormInMonth + " godz."
+          ? `${time[workerName] * workHourNormInMonth} godz.`
           : WorkingTimeHelper.fromHoursToFraction(
               time[workerName] * workHourNormInMonth,
               workHourNormInMonth

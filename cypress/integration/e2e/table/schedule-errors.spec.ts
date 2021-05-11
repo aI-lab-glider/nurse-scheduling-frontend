@@ -21,13 +21,7 @@ describe("Schedule errors", () => {
       cy.get("[data-cy=check-schedule-button]").click();
       cy.get("[data-cy=open-folding-section]").click({ multiple: true });
       cy.get("[data-cy=error-text]")
-        .then(($cell) => {
-          return $cell
-            .map((i, el) => {
-              return Cypress.$(el).text();
-            })
-            .get();
-        })
+        .then(($cell) => $cell.map((i, el) => Cypress.$(el).text()).get())
         .snapshot();
     });
   });

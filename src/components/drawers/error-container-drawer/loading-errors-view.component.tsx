@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 import backend from "../../../api/backend";
 import ok from "../../../assets/images/ok.svg";
 import warning from "../../../assets/images/warning.svg";
@@ -18,7 +19,6 @@ import ErrorList from "../../error-list/error-list.component";
 import { ErrorLoaderState, Props } from "./error-container-drawer.component";
 import { ScheduleErrorActionType } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 import { t } from "../../../helpers/translations.helper";
-import styled from "styled-components";
 import { colors } from "../../../assets/colors";
 
 interface ErrorLoaderOptions {

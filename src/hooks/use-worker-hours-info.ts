@@ -6,10 +6,13 @@ import { useSelector } from "react-redux";
 import { ShiftCode } from "../state/schedule-data/shifts-types/shift-types.model";
 import { isAllValuesDefined } from "../utils/type-utils";
 import { MonthDataArray } from "../helpers/shifts.helper";
-import { WorkerHourInfo, WorkerHourInfoSummary } from "../helpers/worker-hours-info.model";
 import { ApplicationStateModel, ScheduleStateModel } from "../state/application-state.model";
 import { ScheduleMode } from "../components/schedule/schedule-state.model";
 import { ContractType } from "../state/schedule-data/worker-info/worker-info.model";
+import {
+  WorkerHourInfo,
+  WorkerHourInfoSummary,
+} from "../logic/schedule-logic/worker-hours-info.logic";
 
 export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
   const isEditMode = useSelector(
@@ -55,24 +58,26 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
 
   const [workHoursInfo, setWorkHoursInfo] = useState<WorkerHourInfo>(new WorkerHourInfo(0, 0, 0));
 
-  useEffect(() => {
-    if (primaryRevisionMonth === month) {
-      if (!isAllValuesDefined([workerTime, workerShifts, workerContractType])) {
-        return setWorkHoursInfo(new WorkerHourInfo(0, 0, 0));
-      }
-      setWorkHoursInfo(
-        WorkerHourInfo.fromWorkerInfo(
-          workerShifts,
-          primaryWorkerShifts as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
-          workerTime,
-          workerContractType,
-          month,
-          year,
-          dates,
-          shiftTypes
-        )
-      );
+  useEffect((): void => {
+    if (primaryRevisionMonth !== month) {
+      return;
     }
+    if (!isAllValuesDefined([workerTime, workerShifts, workerContractType])) {
+      setWorkHoursInfo(new WorkerHourInfo(0, 0, 0));
+      return;
+    }
+    setWorkHoursInfo(
+      WorkerHourInfo.fromWorkerInfo(
+        workerShifts,
+        primaryWorkerShifts as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
+        workerTime,
+        workerContractType,
+        month,
+        year,
+        dates,
+        shiftTypes
+      )
+    );
   }, [
     shiftTypes,
     workerShifts,

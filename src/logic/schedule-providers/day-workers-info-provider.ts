@@ -5,5 +5,6 @@ import { ScheduleError } from "../../state/schedule-data/schedule-errors/schedul
 
 export abstract class DayWorkersInfoProvider {
   abstract get registeredDayWorkersNumber(): number[];
+
   abstract get errors(): ScheduleError[];
 }

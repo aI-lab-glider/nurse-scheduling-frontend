@@ -6,6 +6,7 @@ import { ScheduleError } from "../../state/schedule-data/schedule-errors/schedul
 import { ChildrenInfoProvider } from "./children-info-provider.model";
 import { ExtraWorkersInfoProvider } from "./extra-workers-info-provider.model";
 import { Sections } from "./schedule-provider.model";
+
 export interface FoundationInfoOptions extends Pick<Sections, "Teams"> {
   ChildrenInfo: ChildrenInfoProvider;
   ExtraWorkersInfo: ExtraWorkersInfoProvider;
@@ -15,6 +16,7 @@ export abstract class FoundationInfoProvider {
   get errors(): ScheduleError[] {
     return _.flatten(this.sections.Teams.map((team) => team.errors));
   }
+
   get childrenInfo(): number[] {
     return this.sections.ChildrenInfo.registeredChildrenNumber;
   }

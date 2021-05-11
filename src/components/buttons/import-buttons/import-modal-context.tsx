@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import React, { ChangeEvent, createContext, useContext, useEffect } from "react";
+import React, { ChangeEvent, createContext, ReactNode, useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useScheduleConverter } from "./hooks/use-schedule-converter";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
@@ -17,7 +17,7 @@ export interface ImportModalContextValues {
 
 export const ImportModalContext = createContext<ImportModalContextValues | null>(null);
 
-export function ImportModalProvider({ children }): JSX.Element {
+export function ImportModalProvider({ children }: { children: ReactNode }): JSX.Element {
   const [open, setParserModalOpen] = React.useState(false);
   const scheduleDipatcher = useDispatch();
   const { monthModel, setSrcFile, scheduleErrors } = useScheduleConverter();

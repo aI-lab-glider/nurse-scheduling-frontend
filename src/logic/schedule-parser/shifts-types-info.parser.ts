@@ -5,7 +5,7 @@ import {
   InputFileErrorCode,
   ScheduleError,
 } from "../../state/schedule-data/schedule-errors/schedule-error.model";
-import { Shift, SHIFTS } from "../../state/schedule-data/shifts-types/shift-types.model";
+import { Shift, ShiftCode, SHIFTS } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
 import { ParserHelper } from "../../helpers/parser.helper";
 
@@ -19,7 +19,9 @@ const DEFAULT_COLOR = { name: "czerwony", value: "FF0000" };
 
 export class ShiftsTypesInfoParser {
   private namelessShifts: number;
+
   private _shiftsInfoRows: { [key: string]: Shift } = {};
+
   private _parseErrors: ScheduleError[] = [];
 
   constructor(data: string[][]) {
@@ -29,7 +31,7 @@ export class ShiftsTypesInfoParser {
       if (!ParserHelper.shiftPassesDayStart(shift)) {
         this._shiftsInfoRows[shift.code] = shift;
       } else {
-        this.logLoadFileError("Nie dodano zmiany " + shift.name + ". Przecina godzinę 7:00.");
+        this.logLoadFileError(`Nie dodano zmiany ${shift.name}. Przecina godzinę 7:00.`);
       }
     });
   }
@@ -65,19 +67,16 @@ export class ShiftsTypesInfoParser {
     return `${DEFAULT_SHIFT_NAME} ${++this.namelessShifts}`;
   }
 
-  private parseShiftCode(shiftRow: string[], name: string): string {
+  private parseShiftCode(shiftRow: string[], name: string): ShiftCode {
     const index = ParserHelper.getShiftCodeHeaderIndex();
 
     if (index >= 0 && shiftRow[index]) {
-      return shiftRow[index];
-    } else {
-      const generatedCode = AcronymGenerator.generate(name, SHIFTS);
-
-      this.logLoadFileError(
-        "Nie ustawiono skrótu dla zmiany: " + name + ". Ustawiono: " + generatedCode
-      );
-      return generatedCode;
+      return shiftRow[index] as ShiftCode;
     }
+    const generatedCode = AcronymGenerator.generate(name, SHIFTS);
+
+    this.logLoadFileError(`Nie ustawiono skrótu dla zmiany: ${name}. Ustawiono: ${generatedCode}`);
+    return generatedCode;
   }
 
   private parseShiftFrom(shiftRow: string[], name: string, isWorkingShift: boolean): number {
@@ -88,26 +87,22 @@ export class ShiftsTypesInfoParser {
         const from = shiftRow[index].trim();
         if (from !== "" && from !== "-") {
           this.logLoadFileError(
-            "Nieoczekiwana wartość dla początku dla niepracującej zmiany: " + name
+            `Nieoczekiwana wartość dla początku dla niepracującej zmiany: ${name}`
           );
         }
         return DEFAULT_NON_WORKING_FROM;
       }
 
-      const number = parseInt(shiftRow[index].trim());
+      const number = parseInt(shiftRow[index].trim(), 10);
       if (isNaN(number) || number < 0 || number > 24) {
         this.logLoadFileError(
-          "Nieoczekiwana wartość dla początku zmiany: " + name + ". Ustawiono: " + DEFAULT_FROM
+          `Nieoczekiwana wartość dla początku zmiany: ${name}. Ustawiono: ${DEFAULT_FROM}`
         );
       } else {
         return number;
       }
-    } else {
-      if (isWorkingShift) {
-        this.logLoadFileError(
-          "Nie ustawiono początku zmiany: " + name + ". Ustawiono: " + DEFAULT_FROM
-        );
-      }
+    } else if (isWorkingShift) {
+      this.logLoadFileError(`Nie ustawiono początku zmiany: ${name}. Ustawiono: ${DEFAULT_FROM}`);
     }
     return isWorkingShift ? DEFAULT_FROM : DEFAULT_NON_WORKING_FROM;
   }
@@ -120,23 +115,21 @@ export class ShiftsTypesInfoParser {
         const to = shiftRow[index].trim();
         if (to !== "" && to !== "-") {
           this.logLoadFileError(
-            "Nieoczekiwana wartość dla końca dla niepracującej zmiany: " + name
+            `Nieoczekiwana wartość dla końca dla niepracującej zmiany: ${name}`
           );
         }
         return DEFAULT_NON_WORKING_TO;
       }
-      const number = parseInt(shiftRow[index].trim());
+      const number = parseInt(shiftRow[index].trim(), 10);
       if (isNaN(number) || number < 0 || number > 24) {
         this.logLoadFileError(
-          "Nieoczekiwana wartość dla końca zmiany: " + name + ". Ustawiono: " + DEFAULT_TO
+          `Nieoczekiwana wartość dla końca zmiany: ${name}. Ustawiono: ${DEFAULT_TO}`
         );
       } else {
         return number;
       }
-    } else {
-      if (isWorkingShift) {
-        this.logLoadFileError("Nie ustawiono końca zmiany: " + name + ". Ustawiono: " + DEFAULT_TO);
-      }
+    } else if (isWorkingShift) {
+      this.logLoadFileError(`Nie ustawiono końca zmiany: ${name}. Ustawiono: ${DEFAULT_TO}`);
     }
     return isWorkingShift ? DEFAULT_TO : DEFAULT_NON_WORKING_TO;
   }
@@ -150,17 +143,15 @@ export class ShiftsTypesInfoParser {
         return isWorkingShift;
       }
       this.logLoadFileError(
-        "Nieoczekiwana wartość dla rodzaju zmiany: " +
-          name +
-          ". Ustawiono: " +
-          ParserHelper.translateBooleanToString(DEFAULT_IS_WORKING).toUpperCase()
+        `Nieoczekiwana wartość dla rodzaju zmiany: ${name}. Ustawiono: ${ParserHelper.translateBooleanToString(
+          DEFAULT_IS_WORKING
+        ).toUpperCase()}`
       );
     } else {
       this.logLoadFileError(
-        "Nie ustawiono czy zmiana: " +
-          name +
-          " jest pracująca. Ustawiono: " +
-          ParserHelper.translateBooleanToString(DEFAULT_IS_WORKING).toUpperCase()
+        `Nie ustawiono czy zmiana: ${name} jest pracująca. Ustawiono: ${ParserHelper.translateBooleanToString(
+          DEFAULT_IS_WORKING
+        ).toUpperCase()}`
       );
     }
     return DEFAULT_IS_WORKING;
@@ -171,12 +162,11 @@ export class ShiftsTypesInfoParser {
 
     if (index >= 0 && shiftRow[index]) {
       return shiftRow[index];
-    } else {
-      // this.logLoadFileError(
-      //   "Nie ustawiono koloru dla zmiany: " + name + ". Ustawiono: " + DEFAULT_COLOR.name
-      // );
-      return DEFAULT_COLOR.value;
     }
+    // this.logLoadFileError(
+    //   "Nie ustawiono koloru dla zmiany: " + name + ". Ustawiono: " + DEFAULT_COLOR.name
+    // );
+    return DEFAULT_COLOR.value;
   }
 
   private mapShift(row: string[]): Shift {
@@ -188,12 +178,12 @@ export class ShiftsTypesInfoParser {
     const color = this.parseShiftColor(row, name);
 
     return {
-      name: name,
-      code: code,
-      from: from,
-      to: to,
-      isWorkingShift: isWorkingShift,
-      color: color,
+      name,
+      code,
+      from,
+      to,
+      isWorkingShift,
+      color,
     };
   }
 }

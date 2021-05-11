@@ -5,6 +5,7 @@
 import React, { ReactNode, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
@@ -14,9 +15,9 @@ import {
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import ErrorListItem from "../../error-list/error-list-item.component";
 import { Popper } from "../popper";
-import styled from "styled-components";
 import { colors } from "../../../assets/colors";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface ErrorPopperOptions {
   children: ReactNode;
   errorSelector: (scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
@@ -42,8 +43,9 @@ export function ErrorPopper({
     dispatch(ScheduleDataActionCreator.hideErrors());
   };
   let triangleStyle = "single";
-  errors.forEach((element) => {
-    triangleStyle = element["className"] || triangleStyle;
+  errors.forEach((error) => {
+    // TODO: fix any
+    triangleStyle = (error as any).className || triangleStyle;
   });
   const errorTriangle = useRef<HTMLDivElement>(null);
   const container = useRef<HTMLDivElement>(null);
@@ -52,10 +54,12 @@ export function ErrorPopper({
   const [isToolTipOpen, setToolTipOpen] = useState(false);
   let isOpen = isToolTipOpen;
   const manuallySelectedErrors = errors.filter((error) => error.isVisible);
-  if (manuallySelectedErrors.length !== 0)
+  if (manuallySelectedErrors.length !== 0) {
     isOpen =
-      manuallySelectedErrors.some((e) => e["className"] === "right") ||
-      manuallySelectedErrors.every((e) => e["className"] === undefined);
+      // TODO: fix any
+      manuallySelectedErrors.some((e) => (e as any).className === "right") ||
+      manuallySelectedErrors.every((e) => (e as any).className === undefined);
+  }
 
   const { styles, attributes } = usePopper(
     container.current,

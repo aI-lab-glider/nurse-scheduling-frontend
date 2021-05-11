@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import * as _ from "lodash";
 import { ScheduleDataModel } from "../schedule-data.model";
 import { WorkerShiftsModel } from "./worker-shifts.model";
 import { Shift, ShiftCode } from "../shifts-types/shift-types.model";
@@ -8,7 +9,6 @@ import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "../schedule.actions";
 import { ActionModel } from "../../../utils/action.model";
 import { WorkerActionPayload } from "../worker-info/worker.action-creator";
-import * as _ from "lodash";
 
 export function workerShiftsReducerF(name: string) {
   return (

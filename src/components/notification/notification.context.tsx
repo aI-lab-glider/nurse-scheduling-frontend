@@ -1,14 +1,22 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  ReactNode,
+} from "react";
 
 import { Notification, NotificationContextValues, NotificationTimeout } from "./types";
 import { NotificationList } from "./notification-snackbar.component";
 
 export const NotificationContext = createContext<NotificationContextValues | null>(null);
 
-export function NotificationProvider({ children }): JSX.Element {
+export function NotificationProvider({ children }: { children: ReactNode }): JSX.Element {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const timeoutList = useRef<NotificationTimeout[]>([]);
   const defaultDuration = 5000;
@@ -36,12 +44,13 @@ export function NotificationProvider({ children }): JSX.Element {
     [deleteNotification]
   );
 
-  useEffect(() => {
-    return (): void => {
+  useEffect(
+    () => (): void => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       timeoutList.current.forEach(({ timeout }) => clearTimeout(timeout));
-    };
-  }, []);
+    },
+    []
+  );
 
   return (
     <NotificationContext.Provider value={{ notifications, createNotification, deleteNotification }}>

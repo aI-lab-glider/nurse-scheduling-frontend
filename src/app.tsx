@@ -2,10 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Box } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import schedule from "./assets/devMode/schedule";
 import { ScheduleDataModel } from "./state/schedule-data/schedule-data.model";
 import { HeaderComponent } from "./components/common-components";
@@ -17,8 +17,6 @@ import ManagementPage from "./pages/management-page/management-page.component";
 import { ScheduleDataActionCreator } from "./state/schedule-data/schedule-data.action-creator";
 import { NotificationProvider } from "./components/notification/notification.context";
 import { Footer } from "./components/footer/footer.component";
-import { Box } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import PersistentDrawer from "./components/drawers/drawer/persistent-drawer.component";
 import { PersistentDrawerProvider } from "./components/drawers/drawer/persistent-drawer-context";
 import ScssVars from "./assets/styles/styles/custom/_variables.module.scss";
@@ -30,7 +28,6 @@ import NewVersionModal from "./components/modals/new-version-modal/new-version.m
 import { CookiesProvider } from "./logic/data-access/cookies-provider";
 import { ScheduleKey } from "./logic/data-access/persistance-store.model";
 import { latestAppVersion } from "./api/latest-github-version";
-import resources from "./assets/translations";
 import { t } from "./helpers/translations.helper";
 
 const useStyles = makeStyles(() => ({
@@ -54,10 +51,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-i18n.use(initReactI18next).init({
-  fallbackLng: "pl",
-  resources,
-});
 function App(): JSX.Element {
   const classes = useStyles();
   const scheduleDispatcher = useDispatch();
@@ -77,7 +70,13 @@ function App(): JSX.Element {
     () => [
       {
         label: t("schedule"),
-        component: <SchedulePage editModeHandler={setDisableRouteButtons} />,
+        component: (
+          <SchedulePage
+            editModeHandler={(val) => {
+              setDisableRouteButtons(val);
+            }}
+          />
+        ),
         onChange: (): void => setMode(AppMode.SCHEDULE),
         dataCy: "btn-schedule-tab",
       },

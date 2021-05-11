@@ -10,7 +10,7 @@ import {
   ParserHelper,
   SHIFTS_WORKSHEET_NAME,
   SHIFT_HEADERS,
-  WORKSHEET_NAME,
+  SCHEDULE_WORKSHEET_NAME,
 } from "../../../../helpers/parser.helper";
 import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-converter/schedule-container-converter";
 import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
@@ -66,6 +66,8 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
           };
         case ScheduleConverterActionType.UpdateScheduleModel:
           return { ...(action.payload ?? initialConverterState) };
+        default:
+          throw Error(`Unsupported action ${action!.type}`);
       }
     },
     initialConverterState
@@ -141,9 +143,9 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
   }, [fileContent]);
 
   return {
-    monthModel: monthModel,
-    setSrcFile: setSrcFile,
-    scheduleErrors: scheduleErrors,
+    monthModel,
+    setSrcFile,
+    scheduleErrors,
   };
 
   function extractWorkers(workbook): Array<Array<string>> {
@@ -193,7 +195,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
   }
 
   function extractSchedule(workbook): Array<Array<Array<string>>> {
-    const scheduleWorkSheet = workbook.getWorksheet(WORKSHEET_NAME);
+    const scheduleWorkSheet = workbook.getWorksheet(SCHEDULE_WORKSHEET_NAME);
     if (scheduleWorkSheet.rowCount === 0) {
       throw new Error(InputFileErrorCode.EMPTY_FILE);
     }
@@ -244,7 +246,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
 
       dispatchModelUpdate({
         scheduleErrors: [
-          ...parser._parseErrors,
+          ...parser.parseErrors,
           ...parser.sections.Metadata.errors,
           ...parser.sections.FoundationInfo.errors,
           ...parser.workersInfo.errors,
@@ -254,6 +256,5 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
       });
       createNotification({ type: "success", message: "Plan został wczytany!" });
     }
-    return;
   }
 }

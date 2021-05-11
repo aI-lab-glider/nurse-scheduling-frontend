@@ -10,6 +10,8 @@ export class ContractTypeHelper {
         return "umowa o pracę";
       case ContractType.CIVIL_CONTRACT:
         return "umowa zlecenie";
+      default:
+        throw Error(`Unsupported contract type ${type}`);
     }
   }
 
@@ -19,6 +21,8 @@ export class ContractTypeHelper {
         return "UoP";
       case ContractType.CIVIL_CONTRACT:
         return "UZ";
+      default:
+        throw Error(`Unsupported contract type ${type}`);
     }
   }
 }

@@ -3,11 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { ComparatorHelper } from "../../../../src/helpers/comparator.helper";
 
-interface ComplexType {
-  string: string;
-  number: number;
-}
-
 describe("ComparatorHelper", () => {
   let array = [];
   beforeEach(() => {

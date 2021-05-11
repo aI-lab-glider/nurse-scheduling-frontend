@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import _ from "lodash";
+import { WorkerName } from "../schedule-sensitive-data.model";
 import { ShiftCode } from "../shifts-types/shift-types.model";
 
 // TODO: merge with schedule-error-message.model
@@ -33,10 +35,9 @@ export enum NetworkErrorCode {
 interface UnknownValueError {
   kind: ParseErrorCode.UNKNOWN_VALUE;
   isVisible?: boolean;
-
   actual: string;
   day?: number;
-  worker?: string;
+  worker?: WorkerName;
 }
 
 interface InputFileError {
@@ -53,7 +54,7 @@ export interface NetworkError {
   kind: NetworkErrorCode;
 }
 
-//#region  alghorithm error-list
+// #region  alghorithm error-list
 
 export type DayTime = "MORNING" | "AFTERNOON" | "NIGHT";
 
@@ -97,21 +98,21 @@ export interface LackingLongBreak {
   isVisible?: boolean;
 
   week: number;
-  worker: string;
+  worker: WorkerName;
 }
 export interface WorkerUnderTime {
   kind: AlgorithmErrorCode.WorkerUnderTime;
   isVisible?: boolean;
 
   hours: number;
-  worker: string;
+  worker: WorkerName;
 }
 export interface WorkerOvertime {
   kind: AlgorithmErrorCode.WorkerOvertime;
   isVisible?: boolean;
 
   hours: number;
-  worker: string;
+  worker: WorkerName;
 }
 export interface WorkerTeamsCollision {
   kind: AlgorithmErrorCode.WorkerTeamsCollision;
@@ -123,8 +124,13 @@ export interface WorkerTeamsCollision {
   workers: string[];
 }
 
-//#endregion
+// #endregion
 
+// #endregion
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const isWorkerRelatedError = (
+  error: AlgorithmError
+): error is AlgorithmError & { worker: WorkerName } => !_.isNil((error as any).worker);
 export type AlgorithmError =
   | AlwaysAtLeastOneNurse
   | WorkerNumberDuringDay

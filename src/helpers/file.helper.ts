@@ -83,8 +83,9 @@ export class FileHelper {
     revisionType: RevisionType
   ): string {
     return (
-      TranslationHelper.polishMonths[monthDataModel.scheduleKey.month] +
-      `_${monthDataModel.scheduleKey.year}` +
+      `${TranslationHelper.polishMonths[monthDataModel.scheduleKey.month]}_${
+        monthDataModel.scheduleKey.year
+      }` +
       `_${RevisionTypeLabels[revisionType].replace(" ", "_")}` +
       ".xlsx"
     );

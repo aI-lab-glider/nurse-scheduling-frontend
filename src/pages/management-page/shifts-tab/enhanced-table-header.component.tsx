@@ -5,12 +5,12 @@ import React from "react";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
 import { Button } from "../../../components/common-components";
 import { ShiftDrawerMode } from "../../../components/shifts-drawer/shift-drawer.component";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
-import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
-import styled from "styled-components";
+import { Shift, ShiftCode } from "../../../state/schedule-data/shifts-types/shift-types.model";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -45,13 +45,11 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => {
-          return (
-            <TableCell className={classes.tableCellH} key={headCell.id}>
-              {headCell.label}
-            </TableCell>
-          );
-        })}
+        {headCells.map((headCell) => (
+          <TableCell className={classes.tableCellH} key={headCell.id}>
+            {headCell.label}
+          </TableCell>
+        ))}
         <TableCell align="right">
           <HeaderButton
             variant="primary"
@@ -59,7 +57,7 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
             onClick={(): void => {
               toggleOpen(
                 {
-                  code: "",
+                  code: "" as ShiftCode, // TODO: fix typing
                   name: "Nowa zmiana",
                   from: 0,
                   to: 0,

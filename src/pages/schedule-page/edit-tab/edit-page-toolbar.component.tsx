@@ -7,6 +7,7 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import * as _ from "lodash";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import styled, { css } from "styled-components";
 import backend from "../../../api/backend";
 import {
   NetworkErrorCode,
@@ -24,7 +25,6 @@ import SaveChangesModal from "../../../components/modals/save-changes-modal/save
 import { useNotification } from "../../../components/notification/notification.context";
 import ErrorContainerDrawerComponent from "../../../components/drawers/error-container-drawer/error-container-drawer.component";
 import { useTemporarySchedule } from "../../../hooks/use-temporary-schedule";
-import styled, { css } from "styled-components";
 import { colors, fontSizeBase, fontSizeXl } from "../../../assets/colors";
 
 interface EditPageToolbarOptions {
@@ -70,7 +70,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
   const { setTitle, setOpen, setChildrenComponent } = usePersistentDrawer();
 
   function prepareDrawer(): void {
-    setChildrenComponent(<ErrorContainerDrawerComponent setOpen={setOpen} loadingErrors={true} />);
+    setChildrenComponent(<ErrorContainerDrawerComponent setOpen={setOpen} loadingErrors />);
     setTitle("Sprawdź plan");
     setOpen(true);
     updateScheduleErrors().then(() =>
@@ -94,7 +94,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
 
   function anyChanges(): boolean {
     if (persistentShifts && temporaryShifts) return !_.isEqual(persistentShifts, temporaryShifts);
-    else return false;
+    return false;
   }
 
   function onUndoClick(): void {

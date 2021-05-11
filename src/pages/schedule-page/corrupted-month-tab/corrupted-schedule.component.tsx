@@ -2,15 +2,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 import { EmptyMonthButtons } from "../../../components/buttons/empty-month-buttons/empty-month-buttons";
 import sadEmoji from "../../../assets/images/sadEmoji.svg";
-import { useDispatch, useSelector } from "react-redux";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { UndoActionCreator } from "../../../state/schedule-data/undoable.action-creator";
 import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-data/schedule.actions";
 import { Button } from "../../../components/common-components";
 import { ScheduleDataModel } from "../../../state/schedule-data/schedule-data.model";
-import styled from "styled-components";
 import { colors, fontSizeBase, fontWeightBold } from "../../../assets/colors";
 
 const MINIMUM_UNDO_COUNT_TO_REVERT_NORMAL_SCHEDULE = 2; // schedule which caused corruption and the same schedule with isCorrupted=true
@@ -29,13 +29,10 @@ export function CorruptedScheduleComponent(): JSX.Element {
   );
 
   const isCurrentNotCorruptedSchedule = useCallback(
-    (schedule: ScheduleDataModel): boolean => {
-      return (
-        !schedule.isCorrupted &&
-        schedule.schedule_info.month_number === month &&
-        schedule.schedule_info.year === year
-      );
-    },
+    (schedule: ScheduleDataModel): boolean =>
+      !schedule.isCorrupted &&
+      schedule.schedule_info.month_number === month &&
+      schedule.schedule_info.year === year,
     [month, year]
   );
 

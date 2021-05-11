@@ -1,23 +1,23 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useEffect } from "react";
-import { ImportButtonsComponent } from "../../../components/buttons/import-buttons/import-buttons.component";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
-import { useHistory } from "react-router-dom";
-import { Button } from "../../../components/common-components";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../state/application-state.model";
-import { RevisionReducerActionCreator } from "../../../state/schedule-data/schedule-condition/revision-info.reducer";
-import {
-  isRevisionType,
-  RevisionTypeLabels,
-} from "../../../logic/data-access/persistance-store.model";
-import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
-import { AlgorithmErrorCode } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
-import { t } from "../../../helpers/translations.helper";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { colors, fontSizeBase } from "../../../assets/colors";
+import { ImportButtonsComponent } from "../../../components/buttons/import-buttons/import-buttons.component";
+import { Button } from "../../../components/common-components";
+import { t } from "../../../helpers/translations.helper";
+import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
+import {
+  isRevisionType,
+  RevisionTypeLabels
+} from "../../../logic/data-access/persistance-store.model";
+import { ApplicationStateModel } from "../../../state/application-state.model";
+import { RevisionReducerActionCreator } from "../../../state/schedule-data/schedule-condition/revision-info.reducer";
+import { AlgorithmErrorCode } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 
 interface ViewOnlyToolbarOptions {
   openEdit: () => void;
@@ -86,10 +86,10 @@ export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
                   data-cy="revision-select"
                 >
                   <option value="primary" data-cy="primary-revision">
-                    {RevisionTypeLabels["primary"]}
+                    {RevisionTypeLabels.primary}
                   </option>
                   <option value="actual" data-cy="actual-revision">
-                    {RevisionTypeLabels["actual"]}
+                    {RevisionTypeLabels.actual}
                   </option>
                 </select>
               </form>
