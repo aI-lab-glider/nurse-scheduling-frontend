@@ -14,7 +14,9 @@ import { AbsenceExportLogic } from "../../../logic/schedule-exporter/absence-exp
 export function ImportButtonsComponent(): JSX.Element {
   const { handleImport } = useImportModal();
   const fileUpload = useRef<HTMLInputElement>(null);
-  const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const { revision, primaryRevision } = useSelector(
+    (state: ApplicationStateModel) => state.actualState
+  );
 
   const stateScheduleModel = useSelector(
     (state: ApplicationStateModel) => state.actualState.temporarySchedule?.present
@@ -44,7 +46,7 @@ export function ImportButtonsComponent(): JSX.Element {
   }
 
   function handleAbsenceExport(): void {
-    new AbsenceExportLogic(stateScheduleModel).formatAndSave(revision);
+    new AbsenceExportLogic(stateScheduleModel, primaryRevision).formatAndSave(revision);
   }
 
   const [exportModalOpen, setExportModalOpen] = React.useState(false);

@@ -8,15 +8,16 @@ import { FileHelper } from "../../helpers/file.helper";
 import { LEAVES_WORKSHEET_NAME } from "../../helpers/parser.helper";
 import { WorkersAbsenceExportLogic } from "./workers-absence-export.logic";
 import { cropScheduleDMToMonthDM } from "../schedule-container-converter/schedule-container-converter";
+import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
 
 export class AbsenceExportLogic {
   private scheduleModel: ScheduleDataModel;
 
   private workerExportLogic: WorkersAbsenceExportLogic;
 
-  constructor(scheduleModel: ScheduleDataModel) {
+  constructor(scheduleModel: ScheduleDataModel, revision: PrimaryMonthRevisionDataModel) {
     this.scheduleModel = scheduleModel;
-    this.workerExportLogic = new WorkersAbsenceExportLogic(scheduleModel);
+    this.workerExportLogic = new WorkersAbsenceExportLogic(scheduleModel, revision);
   }
 
   public formatAndSave(revisionType: RevisionType): void {

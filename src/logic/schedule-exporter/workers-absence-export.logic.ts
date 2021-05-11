@@ -7,12 +7,18 @@ import { EMPTY_ROW, ABSENCE_HEADERS } from "../../helpers/parser.helper";
 import { CELL_MARGIN } from "./schedule-export.logic";
 import { ShiftCode, SHIFTS } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { TranslationHelper } from "../../helpers/translations.helper";
+import { WorkerHourInfo } from "../schedule-logic/worker-hours-info.logic";
+import { MonthDataArray } from "../../helpers/shifts.helper";
+import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
 
 export class WorkersAbsenceExportLogic {
   private scheduleModel: ScheduleDataModel;
 
-  constructor(scheduleModel: ScheduleDataModel) {
+  private revision: PrimaryMonthRevisionDataModel;
+
+  constructor(scheduleModel: ScheduleDataModel, revision: PrimaryMonthRevisionDataModel) {
     this.scheduleModel = scheduleModel;
+    this.revision = revision;
   }
 
   public setWorkersWorkSheet(workSheet: xlsx.Worksheet): void {
@@ -22,7 +28,10 @@ export class WorkersAbsenceExportLogic {
     workSheet.pageSetup.fitToWidth = 1;
     workSheet.pageSetup.horizontalCentered = true;
 
-    const workersInfoArray = WorkersAbsenceExportLogic.createWorkersInfoSection(this.scheduleModel);
+    const workersInfoArray = WorkersAbsenceExportLogic.createWorkersInfoSection(
+      this.scheduleModel,
+      this.revision
+    );
 
     const colLens = workersInfoArray[0].map((_, colIndex) =>
       Math.max(...workersInfoArray.map((row) => row[colIndex]?.toString().length ?? 0))
@@ -43,16 +52,33 @@ export class WorkersAbsenceExportLogic {
     workSheet.getRow(1).font = { bold: true };
   }
 
-  private static createWorkersInfoSection(scheduleModel: ScheduleDataModel): (string | number)[][] {
+  private static createWorkersInfoSection(
+    scheduleModel: ScheduleDataModel,
+    revision: PrimaryMonthRevisionDataModel
+  ): (string | number)[][] {
     const names = Object.keys(scheduleModel.employee_info?.type);
     const month = scheduleModel.schedule_info.month_number;
     const year = scheduleModel.schedule_info.year;
     const workers: (string | number)[][] = [];
 
+    const time = scheduleModel.employee_info.time;
+
     workers.push(ABSENCE_HEADERS);
     workers.push(EMPTY_ROW);
     names.forEach((name) => {
       const workerShifts = scheduleModel.shifts[name] as ShiftCode[];
+
+      const workerHours = WorkerHourInfo.fromWorkerInfo(
+        workerShifts,
+        revision.shifts[name] as MonthDataArray<ShiftCode>,
+        time[name],
+        scheduleModel.employee_info.contractType[name],
+        month,
+        year,
+        scheduleModel.month_info.dates,
+        scheduleModel.shift_types
+      );
+
       workerShifts.forEach((shift, index) => {
         let daysNo = 1;
         if (shift !== ShiftCode.W && !SHIFTS[shift].isWorkingShift) {
@@ -72,7 +98,9 @@ export class WorkersAbsenceExportLogic {
             `${from} ${TranslationHelper.polishMonthsGenetivus[month]}`,
             `${scheduleModel.month_info.dates[index]} ${TranslationHelper.polishMonthsGenetivus[month]}`,
             daysNo,
-            daysNo * 8,
+            Math.round(
+              (daysNo * workerHours.workerHourNorm) / scheduleModel.month_info.dates.length
+            ),
             year,
           ]);
         }
