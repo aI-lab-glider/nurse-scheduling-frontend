@@ -6,13 +6,13 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
-import * as S from "./styled";
+import * as S from "./enhanced-table-header.styled";
 import classNames from "classnames/bind";
-import { Button } from "../../../components/common-components";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import { Order } from "../../../helpers/comparator.helper";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { WorkerDrawerMode } from "../../../components/drawers/worker-drawer/worker-drawer.component";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -82,7 +82,7 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
           );
         })}
         <TableCell align="right">
-          <HeaderButton
+          <S.HeaderButton
             variant="primary"
             data-cy="btn-add-worker"
             onClick={(): void => {
@@ -90,13 +90,9 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
             }}
           >
             Dodaj pracownika
-          </HeaderButton>
+          </S.HeaderButton>
         </TableCell>
       </TableRow>
     </TableHead>
   );
 }
-
-const HeaderButton = styled(Button)`
-  width: 187px;
-`;

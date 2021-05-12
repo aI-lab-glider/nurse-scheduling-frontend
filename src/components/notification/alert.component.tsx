@@ -6,6 +6,7 @@ import * as S from "./styled";
 import React, { ReactNode } from "react";
 import { ReactComponent as Done } from "../../assets/images/done.svg";
 import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

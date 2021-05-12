@@ -3,8 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useDispatch } from "react-redux";
-import * as S from "./styled";
-import { colors } from "../../assets/colors";
+import * as S from "./error-list-item.styled";
 import { t, TranslationHelper } from "../../helpers/translations.helper";
 import { useMonthInfo } from "../../hooks/use-month-info";
 import { useTeams } from "../../hooks/use-teams";
@@ -85,13 +84,15 @@ export default function ErrorListItem({
   }
 
   return (
-    <Wrapper>
-      <RedBar />
+    <S.Wrapper>
+      <S.RedBar />
       <div>
         {showTitle && (
-          <Title>{error.title === "date" ? `${errorDay} ${monthName}` : `${error.title}`}</Title>
+          <S.Title>
+            {error.title === "date" ? `${errorDay} ${monthName}` : `${error.title}`}
+          </S.Title>
         )}
-        <Message
+        <S.Message
           className="error-text"
           data-cy="error-text"
           dangerouslySetInnerHTML={{ __html: error.message || "" }}
@@ -107,51 +108,6 @@ export default function ErrorListItem({
           {t("show")}
         </Button>
       )}
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-
-// TODO: Simplify that
-const Wrapper = styled.div`
-  flex: 1;
-  flex-direction: row;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-
-  text-align: left;
-  border: 1px solid ${colors.errorListItemBorder};
-  border-radius: 2px;
-  margin-bottom: 5px;
-  padding: 10px 20px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-const RedBar = styled.div`
-  position: absolute;
-  border-radius: 4px;
-  width: 4.5px;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  background-color: ${colors.errorRed};
-`;
-
-const Title = styled.div`
-  color: ${colors.errorDateText};
-  size: 14px;
-`;
-
-const Message = styled.div`
-  color: ${colors.primaryTextColor};
-  size: 13px;
-  text-align: justify;
-  strong {
-    letter-spacing: 1.5px;
-    font-weight: bolder;
-  }
-`;

@@ -4,14 +4,13 @@
 import { Grid } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import * as S from "./styled";
+import * as S from "./worker-edit.styled";
 import {
   ContractType,
   Team,
   WorkerType,
 } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import { WorkerActionCreator } from "../../../../state/schedule-data/worker-info/worker.action-creator";
-import { Button } from "../../../common-components";
 import { useWorkerInfo, WorkerInfo } from "../../../../hooks/use-worker-info";
 import { CombinedWorkNormSelector } from "./combined-worknorm-selector.component";
 import { WorkerContractTypeSelector } from "./worker-contract-type-selector.component";
@@ -21,6 +20,7 @@ import { WorkerNameEditField } from "./worker-name-edit-field.components";
 import { WorkerWorkerTypeSelector } from "./worker-position-selector.component";
 import { t } from "../../../../helpers/translations.helper";
 import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   container: {
@@ -127,20 +127,15 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
 
         <TeamSelector team={workerInfo.team} setTeam={handleWorkerTeamUpdate} />
       </Grid>
-      <SubmitButton
+      <S.SubmitButton
         disabled={!canSaveWorker()}
         variant="primary"
         data-cy="btn-save-worker"
         onClick={handleClose}
       >
         {t("saveWorker")}
-      </SubmitButton>
+      </S.SubmitButton>
     </Grid>
   );
   // #endregion
 }
-const SubmitButton = styled(Button)`
-  position: absolute;
-  bottom: 74px;
-  left: 23px;
-`;

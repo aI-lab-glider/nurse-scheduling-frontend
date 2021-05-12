@@ -10,6 +10,7 @@ import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleMode } from "../../schedule/schedule-state.model";
 import DrawerHeader from "./drawer-header.component";
 import { usePersistentDrawer } from "./persistent-drawer-context";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 
 export interface StyleProps {
   width: number;

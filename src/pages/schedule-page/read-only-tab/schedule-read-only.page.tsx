@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import * as S from "./styled";
+import * as S from "./schedule-read-only.styled";
 import { UndoableHotkeys } from "../../../components/common-components";
 import { ScheduleMode } from "../../../components/schedule/schedule-state.model";
 import { ModeInfoActionCreator } from "../../../state/app-condition/mode-info-reducer";
@@ -27,14 +27,9 @@ export function ScheduleReadOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.El
     <>
       <UndoableHotkeys config={PERSISTENT_SCHEDULE_UNDOABLE_CONFIG} />
       <ReadOnlyToolbar openEdit={props.openEdit} />
-      <ScheduleWrapper>
+      <S.ScheduleWrapper>
         <ScheduleContainerComponent mode={mode} />
-      </ScheduleWrapper>
+      </S.ScheduleWrapper>
     </>
   );
 }
-
-const ScheduleWrapper = styled.div`
-  margin: auto;
-  min-height: 80vh;
-`;

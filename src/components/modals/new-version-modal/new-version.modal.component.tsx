@@ -8,6 +8,7 @@ import { Button } from "../../buttons/button-component/button.component";
 import DefaultModal from "../modal.component";
 import { CookiesProvider } from "../../../logic/data-access/cookies-provider";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   bodyText: {

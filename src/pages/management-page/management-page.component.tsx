@@ -2,8 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import * as S from "./styled";
-import { colors } from "../../assets/colors";
+import * as S from "./management-page.styled";
 import RouteButtonsComponent, {
   Tabs,
 } from "../../components/buttons/route-buttons/route-buttons.component";
@@ -16,20 +15,9 @@ export default function ManagementPage(): JSX.Element {
     { label: "ZMIANY", component: <ShiftTab />, dataCy: "btn-shifts-tab" },
   ];
   return (
-    <Wrapper>
-      <Title data-cy="management-page-title">Panel zarządzania</Title>
+    <S.Wrapper>
+      <S.Title data-cy="management-page-title">Panel zarządzania</S.Title>
       <RouteButtonsComponent tabs={tabs} />
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  overflow: auto;
-  width: 100%;
-  padding: 20px;
-  min-height: 100vh;
-`;
-const Title = styled.h1`
-  color: ${colors.primaryTextColor};
-  margin: 0 10px 10px 10px;
-`;

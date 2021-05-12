@@ -8,6 +8,7 @@ import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
 import gliderLogo from "../../assets/images/gliderLogo.png";
 import { latestAppVersion } from "../../api/latest-github-version";
 import { t } from "../../helpers/translations.helper";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   footer: {

@@ -6,6 +6,7 @@ import React from "react";
 import * as S from "./styled";
 import DrawerHeader from "./drawer-header.component";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   drawer: {

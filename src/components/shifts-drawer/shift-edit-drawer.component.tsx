@@ -2,14 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import DateFnsUtils from "@date-io/date-fns";
-import { FormControl, FormControlLabel, Grid, Radio, RadioGroup } from "@material-ui/core";
+import { FormControl, FormControlLabel, Grid } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import { MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import i18next from "i18next";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import * as S from "./styled";
-import { colors, fontSizeBase, fontWeightExtra } from "../../assets/colors";
+import * as S from "./shift-edit-drawer.styled";
 import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
 import { t } from "../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../state/application-state.model";
@@ -100,7 +99,7 @@ export default function ShiftEditDrawer({
   return (
     <Grid container direction="column" justify="space-between">
       <Grid item>
-        <FormLabel>{t("shiftName")}</FormLabel>
+        <S.FormLabel>{t("shiftName")}</S.FormLabel>
         <TextField
           type="text"
           placeholder={selectedShift.name}
@@ -111,27 +110,31 @@ export default function ShiftEditDrawer({
 
         <br />
 
-        <FormLabel>{t("shiftType")}</FormLabel>
+        <S.FormLabel>{t("shiftType")}</S.FormLabel>
         <FormControl component="fieldset">
-          <RadioGroupStyled
+          <S.RadioGroupStyled
             row
             aria-label="shiftType"
             name="shiftType"
             value={shiftType}
             onChange={(event): void => changeShiftType(event.target.value)}
           >
-            <FormControlLabel value="working" control={<StyledRadio />} label={t("workingShift")} />
+            <FormControlLabel
+              value="working"
+              control={<S.StyledRadio />}
+              label={t("workingShift")}
+            />
             <FormControlLabel
               value="not_working"
-              control={<StyledRadio />}
+              control={<S.StyledRadio />}
               label={t("notWorkingShift")}
             />
-          </RadioGroupStyled>
+          </S.RadioGroupStyled>
         </FormControl>
         <br />
 
-        <FormLabel>{t("shiftHours")}</FormLabel>
-        <TimeRange>
+        <S.FormLabel>{t("shiftHours")}</S.FormLabel>
+        <S.TimeRange>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <TimePicker
               disabled={shiftType === "not_working"}
@@ -143,7 +146,7 @@ export default function ShiftEditDrawer({
               openTo="hours"
               views={["hours"]}
             />
-            <Dash>&ndash;</Dash>
+            <S.Dash>&ndash;</S.Dash>
             <TimePicker
               disabled={shiftType === "not_working"}
               label=""
@@ -155,10 +158,10 @@ export default function ShiftEditDrawer({
               views={["hours"]}
             />
           </MuiPickersUtilsProvider>
-        </TimeRange>
+        </S.TimeRange>
         <br />
 
-        <FormLabel>{t("shiftShort")}</FormLabel>
+        <S.FormLabel>{t("shiftShort")}</S.FormLabel>
         <TextField
           type="text"
           placeholder="Skrót"
@@ -173,9 +176,9 @@ export default function ShiftEditDrawer({
         />
         <br />
 
-        <FormLabel>{t("shiftColor")}</FormLabel>
+        <S.FormLabel>{t("shiftColor")}</S.FormLabel>
 
-        <DropdownWrapper>
+        <S.DropdownWrapper>
           <DropdownColors
             shiftType={shiftType}
             mainLabel={t("selectColor")}
@@ -184,7 +187,7 @@ export default function ShiftEditDrawer({
             selectedColor={colorPicked}
             width={200}
           />
-        </DropdownWrapper>
+        </S.DropdownWrapper>
       </Grid>
       <Grid item>
         <Button
@@ -207,40 +210,3 @@ export default function ShiftEditDrawer({
     </Grid>
   );
 }
-
-const FormLabel = styled.h4`
-  font-weight: 700;
-  font-size: ${fontSizeBase};
-  color: ${colors.primary};
-`;
-
-const TimeRange = styled.div`
-  * {
-    display: inline-flex;
-  }
-`;
-
-const Dash = styled.p`
-  font-weight: ${fontWeightExtra};
-  font-size: ${fontSizeBase};
-  color: ${colors.gray700};
-  margin-left: 10px;
-  margin-right: 10px;
-`;
-
-const RadioGroupStyled = styled(RadioGroup)`
-  color: ${colors.primary};
-  fill: ${colors.primary};
-
-  &:hover {
-    background-color: ${colors.gray100};
-  }
-`;
-
-const StyledRadio = styled(Radio)`
-  color: ${colors.primary};
-`;
-
-const DropdownWrapper = styled.div`
-  margin-left: -10px;
-`;

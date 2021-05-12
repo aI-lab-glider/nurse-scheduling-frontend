@@ -8,9 +8,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import * as S from "./styled";
+import * as S from "./shifts-tab.styled";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
-import { Button } from "../../../components/common-components";
 import ShiftDrawerComponent, {
   ShiftDrawerMode,
 } from "../../../components/shifts-drawer/shift-drawer.component";
@@ -20,7 +19,7 @@ import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule
 import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
 import { ShiftsActionCreator } from "../../../state/schedule-data/shifts-types/shifts.action-creator";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
-import { fontSizeXs } from "../../../assets/colors";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -87,7 +86,7 @@ export default function ShiftTab(): JSX.Element {
   };
 
   return (
-    <Wrapper>
+    <S.Wrapper>
       <TableContainer className={classes.root}>
         <Table size="small">
           <EnhancedTableHeaderComponent toggleOpen={toggleOpen} />
@@ -107,20 +106,20 @@ export default function ShiftTab(): JSX.Element {
                   />
                 </TableCell>
                 <TableCell align="right">
-                  <ActionButton
+                  <S.ActionButton
                     variant="primary"
                     onClick={(): void => toggleOpen(shift, ShiftDrawerMode.EDIT)}
                     disabled
                   >
                     Edytuj
-                  </ActionButton>
-                  <ActionButton
+                  </S.ActionButton>
+                  <S.ActionButton
                     variant="secondary"
                     onClick={(): void => handleRemoveItem(shift)}
                     disabled
                   >
                     Usuń
-                  </ActionButton>
+                  </S.ActionButton>
                 </TableCell>
               </TableRow>
             ))}
@@ -135,15 +134,6 @@ export default function ShiftTab(): JSX.Element {
         selectedShift={selectedShift}
         saveChangedShift={handleChangeItem}
       />
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  margin-top: 45px;
-`;
-
-const ActionButton = styled(Button)`
-  font-size: ${fontSizeXs};
-  padding: 2px 25px 2px;
-`;

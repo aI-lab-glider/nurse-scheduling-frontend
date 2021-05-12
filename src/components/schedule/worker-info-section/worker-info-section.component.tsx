@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useSelector } from "react-redux";
-import * as S from "./styled";
+import * as S from "./worker-info-section.styled";
 import { DataRow } from "../../../logic/schedule-logic/data-row";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { NameTableSectionOptions } from "./name-table/nametable-section.component";
@@ -16,8 +16,6 @@ import {
   ShiftsSectionOptions,
 } from "./shifts-section/shifts-section.component";
 import { shiftSectionDataCy } from "./worker-info-section.models";
-import { SectionContainer, SectionWrapper } from "../base/styled";
-import { colors } from "../../../assets/colors";
 
 type SubcomponentsOptions = Omit<NameTableSectionOptions, "isWorker" | "uuid" | "updateData"> &
   ShiftsSectionOptions &
@@ -42,33 +40,18 @@ export function WorkerInfoSection({
       new DataRow(workerInfo.workerName, workerInfo.workerShifts, mode === ScheduleMode.Edit)
   );
   return (
-    <Wrapper>
-      <SectionContainer className="borderContainer">
+    <S.Wrapper>
+      <S.SectionContainer className="borderContainer">
         <div>
           <NameTableComponent data={dataRows} isWorker {...options} />
         </div>
-        <ShiftSectionWrapper data-cy={shiftSectionDataCy(sectionIndex)}>
+        <S.ShiftSectionWrapper data-cy={shiftSectionDataCy(sectionIndex)}>
           <ShiftsSectionComponent sectionKey={options.sectionName} data={dataRows} {...options} />
-        </ShiftSectionWrapper>
-      </SectionContainer>
-      <SummarySectionWrapper>
+        </S.ShiftSectionWrapper>
+      </S.SectionContainer>
+      <S.SummarySectionWrapper>
         <SummaryTableComponent data={dataRows} {...options} sectionIndex={sectionIndex} />
-      </SummarySectionWrapper>
-    </Wrapper>
+      </S.SummarySectionWrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const ShiftSectionWrapper = styled(SectionWrapper)`
-  border: none;
-  border-radius: 0;
-  border-left: 1px solid ${colors.tableBorderGrey};
-`;
-
-const SummarySectionWrapper = styled.div`
-  margin-left: 2%;
-`;

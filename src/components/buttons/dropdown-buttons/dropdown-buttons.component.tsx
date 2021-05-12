@@ -12,7 +12,7 @@ import {
   PlaceholderButton,
   ButtonListWrapper,
   DropdownButton,
-} from "./styles";
+} from "./dropdown-buttons.styled";
 
 export interface ButtonData {
   label: string;

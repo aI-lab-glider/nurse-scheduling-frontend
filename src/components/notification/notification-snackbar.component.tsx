@@ -7,6 +7,7 @@ import * as S from "./styled";
 import { Notification } from "./types";
 import { useNotification } from "./notification.context";
 import { Alert } from "./alert.component";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

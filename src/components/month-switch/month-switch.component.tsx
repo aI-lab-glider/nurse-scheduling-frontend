@@ -4,12 +4,10 @@
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { IconButton } from "@material-ui/core";
-import * as S from "./styled";
+import * as S from "./month-switch.styled";
 import { useActualMonth } from "../../hooks/use-actual-month";
 import { MonthSwitchActionCreator } from "../../state/schedule-data/month-switch.action-creator";
 import { AppMode, useAppConfig } from "../../state/app-config-context";
-import { colors, fontSizeLg, iconSizeSm } from "../../assets/colors";
 
 interface MonthSwitchComponentOptions {
   isInViewMode: boolean;
@@ -30,59 +28,32 @@ export function MonthSwitchComponent({ isInViewMode }: MonthSwitchComponentOptio
   return (
     <>
       {actualMonth && (
-        <Wrapper>
+        <S.Wrapper>
           {showMonthNavigation && (
-            <IconWrapper
+            <S.IconWrapper
               data-cy="switch-prev-month"
               onClick={(): void => {
                 dispatch(MonthSwitchActionCreator.switchToNewMonth(-1));
               }}
             >
               <MdChevronLeft />
-            </IconWrapper>
+            </S.IconWrapper>
           )}
 
-          <MonthName data-cy="month-name">{actualMonth}</MonthName>
+          <S.MonthName data-cy="month-name">{actualMonth}</S.MonthName>
 
           {showMonthNavigation && (
-            <IconWrapper
+            <S.IconWrapper
               data-cy="switch-next-month"
               onClick={(): void => {
                 dispatch(MonthSwitchActionCreator.switchToNewMonth(1));
               }}
             >
               <MdChevronRight />
-            </IconWrapper>
+            </S.IconWrapper>
           )}
-        </Wrapper>
+        </S.Wrapper>
       )}
     </>
   );
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  position: absolute;
-  margin: auto;
-
-  * {
-    color: ${colors.white};
-  }
-`;
-
-const IconWrapper = styled(IconButton)`
-  outline: none;
-  font-size: ${iconSizeSm};
-`;
-
-const MonthName = styled.h2`
-  margin: 5px;
-  font-weight: 500;
-  font-size: ${fontSizeLg};
-  letter-spacing: 0.035em;
-  width: 140px;
-  text-align: center;
-`;
