@@ -7,7 +7,7 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import * as _ from "lodash";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled, { css } from "styled-components";
+import * as S from "./styled";
 import backend from "../../../api/backend";
 import {
   NetworkErrorCode,

@@ -5,7 +5,7 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import styled from "styled-components";
+import * as S from "./styled";
 import { colors, fontSizeBase } from "../../../assets/colors";
 import { ImportButtonsComponent } from "../../../components/buttons/import-buttons/import-buttons.component";
 import { Button } from "../../../components/common-components";
@@ -13,7 +13,7 @@ import { t } from "../../../helpers/translations.helper";
 import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
 import {
   isRevisionType,
-  RevisionTypeLabels
+  RevisionTypeLabels,
 } from "../../../logic/data-access/persistance-store.model";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { RevisionReducerActionCreator } from "../../../state/schedule-data/schedule-condition/revision-info.reducer";

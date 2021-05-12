@@ -7,7 +7,7 @@ import { ColorHelper } from "../../../../../helpers/colors/color.helper";
 import { ApplicationStateModel } from "../../../../../state/application-state.model";
 import { ShiftCode } from "../../../../../state/schedule-data/shifts-types/shift-types.model";
 import { baseCellDataCy } from "../../../base/base-cell/base-cell.models";
-import { Content, ContentWrapper, Shift, ShiftBar, StyledErrorPopper } from "../shit-cell.styles";
+import { Content, ContentWrapper, Shift, ShiftBar, StyledErrorPopper } from "./shift-cell.styles";
 import { ShiftCellOptions, DEFAULT_SHIFT_HEX } from "./shift-cell.component";
 
 interface ShiftCellContentOptions extends Pick<ShiftCellOptions, "onClick" | "errorSelector"> {

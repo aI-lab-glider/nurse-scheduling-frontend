@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import backend from "../../../api/backend";
 import ok from "../../../assets/images/ok.svg";
 import warning from "../../../assets/images/warning.svg";

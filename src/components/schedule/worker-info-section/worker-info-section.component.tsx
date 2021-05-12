@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import { DataRow } from "../../../logic/schedule-logic/data-row";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { NameTableSectionOptions } from "./name-table/nametable-section.component";

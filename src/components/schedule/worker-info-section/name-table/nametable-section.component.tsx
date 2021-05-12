@@ -4,7 +4,7 @@
 import classNames from "classnames/bind";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import { colors, fontSizeXs } from "../../../../assets/colors";
 import { WorkerInfo } from "../../../../hooks/use-worker-info";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
@@ -13,11 +13,11 @@ import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/s
 import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
 import {
   WorkerInfoModel,
-  WorkerType
+  WorkerType,
 } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import WorkerDrawerComponent, {
   WorkerDrawerMode,
-  WorkerDrawerWorkerInfo
+  WorkerDrawerWorkerInfo,
 } from "../../../drawers/worker-drawer/worker-drawer.component";
 import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
 import { BaseSectionOptions } from "../../base/base-section/base-section.component";

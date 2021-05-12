@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Box } from "@material-ui/core";
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import * as S from "./styled";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";

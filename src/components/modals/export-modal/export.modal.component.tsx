@@ -12,7 +12,7 @@ import {
 import { blue } from "@material-ui/core/colors";
 import React from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import { Button } from "../../common-components";
 import { ScheduleDataModel } from "../../../state/schedule-data/schedule-data.model";
 import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";

@@ -1,14 +1,37 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-
 import styled from "styled-components";
 import { Button } from "../button-component/button.component";
 import { colors } from "../../../assets/colors";
 
+export const ColorSample = styled.div`
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-top: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+export const ColorSampleRow = styled.div`
+  display: flex;
+  position: relative;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+export const ColorSampleWrapper = styled.div`
+  margin-top: 20px;
+  padding: 10px 20px 20px;
+`;
+
 export const Wrapper = styled.div`
   display: flex;
 `;
+
 export const ButtonListWrapper = styled.div`
   width: 100%;
   overflow: hidden;
@@ -20,6 +43,7 @@ export const ButtonListWrapper = styled.div`
   background-color: ${colors.white};
   white-space: nowrap;
 `;
+
 export const DropdownButton = styled.div`
   width: var(--width) px;
   position: relative;
@@ -40,10 +64,12 @@ export const DropdownButton = styled.div`
     padding-top: 25px;
   }
 `;
+
 export const PlaceholderButton = styled(Button)`
   position: relative;
   width: var(--width) px;
 `;
+
 export const PlaceholderButtonContent = styled.div`
   width: calc(100% + 40px);
   margin-left: -15px;

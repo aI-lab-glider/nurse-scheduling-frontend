@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import styled from "styled-components";
+import * as S from "./styled";
 import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
 import { BaseCellComponent } from "../base-cell/base-cell.component";

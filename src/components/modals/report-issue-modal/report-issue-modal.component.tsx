@@ -5,7 +5,7 @@
 import { TextField } from "@material-ui/core";
 import { send } from "emailjs-com";
 import React, { useState } from "react";
-import styled from "styled-components";
+import * as S from "./styled";
 import { t } from "../../../helpers/translations.helper";
 import { Button } from "../../buttons/button-component/button.component";
 import { useNotification } from "../../notification/notification.context";

@@ -5,7 +5,7 @@ import React, { useCallback, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import * as Sentry from "@sentry/react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import { ScheduleEditPage } from "./edit-tab/schedule-edit.page";
 import { ScheduleReadOnlyPage } from "./read-only-tab/schedule-read-only.page";
 import { usePersistentDrawer } from "../../components/drawers/drawer/persistent-drawer-context";

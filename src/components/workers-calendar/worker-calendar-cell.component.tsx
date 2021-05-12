@@ -4,7 +4,7 @@
 import { fade } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import { colors } from "../../assets/colors";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";

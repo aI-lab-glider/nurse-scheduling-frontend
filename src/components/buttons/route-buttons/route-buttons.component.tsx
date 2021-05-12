@@ -7,8 +7,8 @@ import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
 import TabPanel from "@material-ui/lab/TabPanel";
 import { makeStyles } from "@material-ui/core/styles";
+import * as S from "./route-buttons.styled";
 import _ from "lodash";
-import styled from "styled-components";
 import { colors } from "../../../assets/colors";
 
 export interface Tabs {
@@ -81,9 +81,9 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
   }))((props) => <Tab disableRipple {...props} />);
 
   return (
-    <Wrapper>
+    <S.Wrapper>
       <TabContext value={tab}>
-        <HeaderWrapper>
+        <S.HeaderWrapper>
           <TabList
             classes={{ indicator: classes.indicatorStyle }}
             onChange={!props.disabled ? handleChange : void 0}
@@ -99,7 +99,7 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
             ))}
           </TabList>
           <Divider />
-        </HeaderWrapper>
+        </S.HeaderWrapper>
 
         {tabs.map((tab) => (
           <TabPanel value={tab.label} key={tab.label} className={classes.tabStyle}>
@@ -107,16 +107,6 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
           </TabPanel>
         ))}
       </TabContext>
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  width: 100%;
-  margin-top: 52px;
-`;
-
-const HeaderWrapper = styled.div`
-  width: 100%;
-  padding: 0 20px;
-`;

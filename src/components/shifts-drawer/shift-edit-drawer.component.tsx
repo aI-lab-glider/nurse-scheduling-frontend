@@ -8,7 +8,7 @@ import { MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import i18next from "i18next";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import { colors, fontSizeBase, fontWeightExtra } from "../../assets/colors";
 import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
 import { t } from "../../helpers/translations.helper";

@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Divider } from "@material-ui/core";
 import React from "react";
-import styled from "styled-components";
+import * as S from "./styled";
 import { colors, fontSizeBase, fontSizeLg } from "../../../../assets/colors";
 import { ContractTypeHelper } from "../../../../helpers/contract-type.helper";
 import { StringHelper } from "../../../../helpers/string.helper";
@@ -11,9 +11,7 @@ import { WorkerTypeHelper } from "../../../../helpers/worker-type.helper";
 import { useWorkerHoursInfo } from "../../../../hooks/use-worker-hours-info";
 import { useWorkerInfo } from "../../../../hooks/use-worker-info";
 import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
-import {
-  WorkerType
-} from "../../../../state/schedule-data/worker-info/worker-info.model";
+import { WorkerType } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import { Button } from "../../../common-components";
 import WorkersCalendar from "../../../workers-calendar/workers-calendar.component";
 import { exportToPdf } from "./export-to-pdf";
@@ -34,7 +32,8 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
 
   const workerLabelColor =
     workerInfo.workerType === WorkerType.NURSE ? colors.nurseColor : colors.babysitterColor;
-  return <>
+  return (
+    <>
       <Wrapper id={workerInfoExport}>
         <WorkerNameLabel>{StringHelper.capitalizeEach(workerInfo.workerName)}</WorkerNameLabel>
         {workerInfo.workerType && (
@@ -51,7 +50,7 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
           <WorkerInfo>Liczba godzin: {workerHoursInfo.workerHourNorm}</WorkerInfo>
           <WorkerInfo>Liczba nadgodzin: {workerHoursInfo.overTime}</WorkerInfo>
           <WorkerInfo>Suma godzin: {workerInfo.workerName}</WorkerInfo>
-          <CalendarDivider data-html2canvas-ignore="true"/>
+          <CalendarDivider data-html2canvas-ignore="true" />
           <ShiftsLabel id="shiftsWord">ZMIANY</ShiftsLabel>
         </div>
         <WorkersCalendar id={calendarExport} workerShifts={workerInfo.workerShifts} />
@@ -60,6 +59,7 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
         Pobierz
       </DownloadButton>
     </>
+  );
 }
 
 const Wrapper = styled.div``;

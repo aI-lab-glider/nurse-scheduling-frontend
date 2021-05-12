@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import styled from "styled-components";
+import * as S from "./styled";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
 import { MonthInfoLogic } from "../../../../logic/schedule-logic/month-info.logic";
 import { VerboseDate } from "../../../../state/schedule-data/foundation-info/foundation-info.model";
@@ -37,13 +37,13 @@ export function TimeTableRow(): JSX.Element {
   return (
     <Wrapper id="timetableRow">
       {verboseDates.map((verboseDate, cellIndex) => (
-          <TimeTableCell
-            key={`${verboseDate.date}_${cellIndex}`}
-            value={verboseDate}
-            currMonth={currMont}
-            index={cellIndex}
-          />
-        ))}
+        <TimeTableCell
+          key={`${verboseDate.date}_${cellIndex}`}
+          value={verboseDate}
+          currMonth={currMont}
+          index={cellIndex}
+        />
+      ))}
     </Wrapper>
   );
 }

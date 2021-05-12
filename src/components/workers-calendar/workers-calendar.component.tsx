@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import _ from "lodash";
 import React from "react";
-import styled from "styled-components";
+import * as S from "./styled";
 import { colors } from "../../assets/colors";
 import { useMonthInfo } from "../../hooks/use-month-info";
 import { applyScheduleStyling } from "../../hooks/use-schedule-styling/use-schedule-styling";
@@ -41,7 +41,9 @@ export default function WorkersCalendar({ id, workerShifts }: CalendarOptions): 
   return (
     <Wrapper id={id}>
       <CalendarWrapper>
-        {daysToDisplay.map((element) => <DayName>{element}</DayName>)}
+        {daysToDisplay.map((element) => (
+          <DayName>{element}</DayName>
+        ))}
         {data?.map(({ value: shiftCode, keepOn, hasNext }, index) => {
           date = shiftsArr[index][0];
           if (date.date === 1) {

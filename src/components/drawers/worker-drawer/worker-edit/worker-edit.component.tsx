@@ -2,10 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import {
   ContractType,
   Team,

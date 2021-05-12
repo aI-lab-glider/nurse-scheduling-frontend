@@ -6,7 +6,7 @@ import _ from "lodash";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import {
   colors,
   fontFamilyPrimary,

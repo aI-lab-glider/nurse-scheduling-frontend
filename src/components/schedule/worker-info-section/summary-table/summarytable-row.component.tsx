@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import styled from "styled-components";
+import * as S from "./styled";
 import { useWorkerHoursInfo } from "../../../../hooks/use-worker-hours-info";
 import { SummaryTableCell } from "./summarytable-cell.component";
 import { summaryRowDataCy, SummaryTableRowOptions } from "./summarytable-row.models";

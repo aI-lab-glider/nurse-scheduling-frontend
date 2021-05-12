@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import { UndoableHotkeys } from "../../../components/common-components";
 import { ScheduleMode } from "../../../components/schedule/schedule-state.model";
 import { ModeInfoActionCreator } from "../../../state/app-condition/mode-info-reducer";

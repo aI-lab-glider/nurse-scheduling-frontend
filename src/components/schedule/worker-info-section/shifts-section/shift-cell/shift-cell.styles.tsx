@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
-import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
-import { colors, fontSizeBase, fontWeightBold } from "../../../../assets/colors";
+import { ErrorPopper } from "../../../../poppers/error-popper/error-popper.component";
+import { colors, fontSizeBase, fontWeightBold } from "../../../../../assets/colors";
 
 export const CellWrapper = styled.div`
   flex: 1 1 auto;

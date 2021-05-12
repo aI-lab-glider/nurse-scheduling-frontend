@@ -8,7 +8,7 @@ import Fade from "@material-ui/core/Fade";
 import Modal from "@material-ui/core/Modal";
 import React from "react";
 import { MdClose } from "react-icons/md";
-import styled from "styled-components";
+import * as S from "./styled";
 import { colors, fontSizeBase, fontSizeLg } from "../../assets/colors";
 
 export interface ModalOptions {

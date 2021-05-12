@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import React from "react";
-import styled from "styled-components";
+import * as S from "./styled";
 import { colors } from "../../../assets/colors";
 import { TranslationHelper } from "../../../helpers/translations.helper";
 import { useMonthInfo } from "../../../hooks/use-month-info";
@@ -40,8 +40,8 @@ export default function ModalErrorListItem({ error }: Options): JSX.Element {
       <div>
         {displayTitle && (
           <Title>
-            {error.title === "date" ? `${errorDay} ${  monthName}` : `${error.title}`}
-            {errorDayIndex > -1 && error.title !== "date" ? `, ${errorDay} ${  monthName}` : ""}
+            {error.title === "date" ? `${errorDay} ${monthName}` : `${error.title}`}
+            {errorDayIndex > -1 && error.title !== "date" ? `, ${errorDay} ${monthName}` : ""}
           </Title>
         )}
         <Content dangerouslySetInnerHTML={{ __html: error.message || "" }} />

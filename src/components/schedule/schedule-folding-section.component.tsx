@@ -4,7 +4,7 @@
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React, { ReactNode, useState } from "react";
-import styled from "styled-components";
+import * as S from "./styled";
 import { colors, fontSizeBase } from "../../assets/colors";
 
 interface ScheduleFoldingSectionOptions {

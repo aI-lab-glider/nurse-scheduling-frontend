@@ -4,7 +4,7 @@
 import { Box, Divider, DrawerProps, Grid, IconButton } from "@material-ui/core";
 import { MdClose } from "react-icons/md";
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import * as S from "./styled";
 import classNames from "classnames";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 

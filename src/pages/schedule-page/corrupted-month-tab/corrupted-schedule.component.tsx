@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import { EmptyMonthButtons } from "../../../components/buttons/empty-month-buttons/empty-month-buttons";
 import sadEmoji from "../../../assets/images/sadEmoji.svg";
 import { ApplicationStateModel } from "../../../state/application-state.model";

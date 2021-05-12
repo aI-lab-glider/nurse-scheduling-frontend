@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useDispatch } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import { t } from "../../../helpers/translations.helper";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { WorkerActionCreator } from "../../../state/schedule-data/worker-info/worker.action-creator";

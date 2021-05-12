@@ -5,7 +5,7 @@
 import React, { ReactNode, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";

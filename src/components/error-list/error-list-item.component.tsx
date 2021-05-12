@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useDispatch } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import { colors } from "../../assets/colors";
 import { t, TranslationHelper } from "../../helpers/translations.helper";
 import { useMonthInfo } from "../../hooks/use-month-info";
@@ -12,7 +12,7 @@ import { VerboseDate } from "../../state/schedule-data/foundation-info/foundatio
 import { ScheduleDataActionCreator } from "../../state/schedule-data/schedule-data.action-creator";
 import {
   ScheduleErrorMessageModel,
-  ScheduleErrorType
+  ScheduleErrorType,
 } from "../../state/schedule-data/schedule-errors/schedule-error-message.model";
 import { Button } from "../buttons/button-component/button.component";
 
@@ -44,8 +44,8 @@ function insertTeam(a: string, b: string, at: string): string {
   }
   position += at.length;
   return a[position] === ","
-    ? `${a.substr(0, position)  }</b> (${  b  }), <b>${  a.substr(position + 2)}`
-    : `${a.substr(0, a.indexOf("."))  } (${  b  }).`;
+    ? `${a.substr(0, position)}</b> (${b}), <b>${a.substr(position + 2)}`
+    : `${a.substr(0, a.indexOf("."))} (${b}).`;
 }
 
 export default function ErrorListItem({
@@ -89,7 +89,7 @@ export default function ErrorListItem({
       <RedBar />
       <div>
         {showTitle && (
-          <Title>{error.title === "date" ? `${errorDay} ${  monthName}` : `${error.title}`}</Title>
+          <Title>{error.title === "date" ? `${errorDay} ${monthName}` : `${error.title}`}</Title>
         )}
         <Message
           className="error-text"

@@ -4,7 +4,7 @@
 import React from "react";
 import { MdClose } from "react-icons/md";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./styled";
 import { TranslationHelper } from "../../../../helpers/translations.helper";
 import { ApplicationStateModel } from "../../../../state/application-state.model";
 

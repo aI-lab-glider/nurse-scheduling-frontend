@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import * as S from "./styled";
 import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
 import gliderLogo from "../../assets/images/gliderLogo.png";
 import { latestAppVersion } from "../../api/latest-github-version";
