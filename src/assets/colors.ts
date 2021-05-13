@@ -50,6 +50,13 @@ export const fontSizeDash = `${0.875}rem`;
 export const fontSizeLg = `${1.142}rem`;
 export const fontSizeXl = `${1.428}rem`;
 
+export const fontSizeH1 = `${2.1875}rem`;
+export const fontSizeH2 = `${1.685}rem`;
+export const fontSizeH3 = `${1.438}rem`;
+export const fontSizeH4 = `${1.0625}rem`;
+export const fontSizeH5 = `${0.8125}rem`;
+export const fontSizeH6 = `${0.75}rem`;
+
 export const fontWeightLight = 300;
 export const fontWeightNormal = 400;
 export const fontWeightBold = 600;
@@ -61,3 +68,7 @@ export const iconSizeRegular = "2.375rem";
 export const iconSizeSm = "1.5rem";
 export const iconSizeLg = "3.7rem";
 export const iconSizeXl = "5rem";
+
+export const headerHeight = "52px";
+export const drawerHeaderHeight = "67px";
+export const footerHeight = "72px";

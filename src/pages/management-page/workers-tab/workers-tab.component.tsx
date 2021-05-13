@@ -8,6 +8,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 import * as S from "./workers-tab.styled";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import WorkerDrawerComponent, {
@@ -29,7 +30,6 @@ import {
   WorkerInfoModel,
 } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() =>
   createStyles({

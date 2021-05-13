@@ -3,30 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
-import * as S from "./styled";
-import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
+import * as S from "./footer.styled";
 import gliderLogo from "../../assets/images/gliderLogo.png";
 import { latestAppVersion } from "../../api/latest-github-version";
 import { t } from "../../helpers/translations.helper";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles({
-  footer: {
-    background: ScssVars.white,
-    padding: 10,
-    borderTop: "1px solid #E9EEF9",
-    color: ScssVars.primary,
-    height: ScssVars.footerHeight,
-    marginTop: 40,
-  },
-  logo: {
-    height: 46,
-    margin: "0px 10px",
-  },
-});
 
 export function Footer(): JSX.Element {
-  const classes = useStyles();
   const [latestVersion, setLatestVersion] = useState("");
   useEffect(() => {
     const awaitVersion = async (): Promise<void> => {
@@ -37,12 +19,12 @@ export function Footer(): JSX.Element {
   }, []);
 
   return (
-    <Grid container className={classes.footer} justify="space-between" alignItems="center">
+    <S.Container container justify="space-between" alignItems="center">
       <Grid item>{latestVersion && `${t("version")}: ${latestVersion}`}</Grid>
       <Grid item>
         {t("realization")}
         <a href="http://www.glider.agh.edu.pl/" target="_blank" rel="noopener noreferrer">
-          <img className={classes.logo} src={gliderLogo} alt="Logo koła naukowego Glider" />
+          <S.Logo src={gliderLogo} alt="Logo koła naukowego Glider" />
           Glider
         </a>
       </Grid>
@@ -54,6 +36,6 @@ export function Footer(): JSX.Element {
           />
         </a>
       </Grid>
-    </Grid>
+    </S.Container>
   );
 }

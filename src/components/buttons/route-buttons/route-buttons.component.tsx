@@ -7,8 +7,8 @@ import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
 import TabPanel from "@material-ui/lab/TabPanel";
 import { makeStyles } from "@material-ui/core/styles";
-import * as S from "./route-buttons.styled";
 import _ from "lodash";
+import * as S from "./route-buttons.styled";
 import { colors } from "../../../assets/colors";
 
 export interface Tabs {

@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
-import { fontSizeBase, fontSizeLg } from "../../../../assets/colors";
 import { Divider } from "@material-ui/core";
+import { fontSizeBase, fontSizeLg } from "../../../../assets/colors";
 import { Button } from "../../../common-components";
 
 export const WorkerNameLabel = styled.h2`

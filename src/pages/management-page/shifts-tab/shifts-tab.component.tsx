@@ -8,6 +8,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 import * as S from "./shifts-tab.styled";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import ShiftDrawerComponent, {
@@ -19,7 +20,6 @@ import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule
 import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
 import { ShiftsActionCreator } from "../../../state/schedule-data/shifts-types/shifts.action-creator";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() =>
   createStyles({

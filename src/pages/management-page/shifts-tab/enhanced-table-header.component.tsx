@@ -5,22 +5,9 @@ import React from "react";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import styled from "styled-components";
-import { Button } from "../../../components/common-components";
+import * as S from "./enhanced-table-header.styled";
 import { ShiftDrawerMode } from "../../../components/shifts-drawer/shift-drawer.component";
-import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import { Shift, ShiftCode } from "../../../state/schedule-data/shifts-types/shift-types.model";
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    tableCellH: {
-      fontWeight: "bolder",
-      color: ScssVars.primary,
-      padding: "0px",
-    },
-  })
-);
 
 interface EnhancedTableProps {
   toggleOpen: (shift: Shift, mode: ShiftDrawerMode) => void;
@@ -40,18 +27,15 @@ const headCells: ShiftDataCell[] = [
 
 export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Element {
   const { toggleOpen } = props;
-  const classes = useStyles();
 
   return (
     <TableHead>
       <TableRow>
         {headCells.map((headCell) => (
-          <TableCell className={classes.tableCellH} key={headCell.id}>
-            {headCell.label}
-          </TableCell>
+          <S.StyledTableCell key={headCell.id}>{headCell.label}</S.StyledTableCell>
         ))}
         <TableCell align="right">
-          <HeaderButton
+          <S.HeaderButton
             variant="primary"
             disabled
             onClick={(): void => {
@@ -69,13 +53,9 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
             }}
           >
             Dodaj zmianę
-          </HeaderButton>
+          </S.HeaderButton>
         </TableCell>
       </TableRow>
     </TableHead>
   );
 }
-
-const HeaderButton = styled(Button)`
-  width: 187px;
-`;

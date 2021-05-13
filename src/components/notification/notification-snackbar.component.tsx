@@ -3,11 +3,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { Box, createStyles, Snackbar, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import * as S from "./styled";
 import { Notification } from "./types";
 import { useNotification } from "./notification.context";
 import { Alert } from "./alert.component";
-import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

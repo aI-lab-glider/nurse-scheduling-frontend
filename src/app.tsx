@@ -4,8 +4,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Box } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import schedule from "./assets/devMode/schedule";
 import { ScheduleDataModel } from "./state/schedule-data/schedule-data.model";
 import { HeaderComponent } from "./components/common-components";
@@ -19,7 +17,6 @@ import { NotificationProvider } from "./components/notification/notification.con
 import { Footer } from "./components/footer/footer.component";
 import PersistentDrawer from "./components/drawers/drawer/persistent-drawer.component";
 import { PersistentDrawerProvider } from "./components/drawers/drawer/persistent-drawer-context";
-import ScssVars from "./assets/styles/styles/custom/_variables.module.scss";
 import { ApplicationStateModel } from "./state/application-state.model";
 import { AppMode, useAppConfig } from "./state/app-config-context";
 import { cropScheduleDMToMonthDM } from "./logic/schedule-container-converter/schedule-container-converter";
@@ -29,30 +26,9 @@ import { CookiesProvider } from "./logic/data-access/cookies-provider";
 import { ScheduleKey } from "./logic/data-access/persistance-store.model";
 import { latestAppVersion } from "./api/latest-github-version";
 import { t } from "./helpers/translations.helper";
-
-const useStyles = makeStyles(() => ({
-  root: {
-    display: "flex",
-  },
-  content: {
-    display: "block",
-    overflowX: "auto",
-    overflowY: "auto",
-    height: "100vh",
-    flexGrow: 1,
-  },
-  drawer: {
-    marginTop: ScssVars.headerHeight,
-    background: ScssVars.white,
-    borderLeft: "1px solid #EFF0F6",
-    boxShadow: "0px 0px 5px 0px #00000015",
-    position: "relative",
-    zIndex: 80,
-  },
-}));
+import * as S from "./app.styled";
 
 function App(): JSX.Element {
-  const classes = useStyles();
   const scheduleDispatcher = useDispatch();
   const [disableRouteButtons, setDisableRouteButtons] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -131,17 +107,17 @@ function App(): JSX.Element {
         <ImportModalProvider>
           <Switch>
             <Route path="/">
-              <Box className={classes.root}>
-                <Box className={classes.content}>
+              <S.Root>
+                <S.Content>
                   <HeaderComponent />
                   <RouteButtonsComponent tabs={tabs} disabled={disableRouteButtons} />
                   <Footer />
-                </Box>
-                <Box className={classes.drawer}>
+                </S.Content>
+                <S.Drawer>
                   <PersistentDrawer width={690} />
-                </Box>
+                </S.Drawer>
                 <NewVersionModal open={isModalOpen} setOpen={setIsModalOpen} />
-              </Box>
+              </S.Root>
             </Route>
           </Switch>
         </ImportModalProvider>

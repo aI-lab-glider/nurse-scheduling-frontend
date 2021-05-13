@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import { makeStyles } from "@material-ui/core/styles";
 import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
 import { ContractTypeHelper } from "../../../../helpers/contract-type.helper";
 import { StringHelper } from "../../../../helpers/string.helper";
@@ -11,7 +12,6 @@ import {
   Team,
   WorkerType,
 } from "../../../../state/schedule-data/worker-info/worker-info.model";
-import { makeStyles } from "@material-ui/core/styles";
 
 export interface FormFieldOptions {
   setIsFieldValid?: (status: boolean) => void;

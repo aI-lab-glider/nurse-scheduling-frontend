@@ -2,9 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled, { css } from "styled-components";
-import { colors, fontSizeBase, fontSizeXl } from "../../../assets/colors";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import { colors, fontSizeBase, fontSizeXl } from "../../../assets/colors";
 
 export const Wrapper = styled.div`
   display: flex;

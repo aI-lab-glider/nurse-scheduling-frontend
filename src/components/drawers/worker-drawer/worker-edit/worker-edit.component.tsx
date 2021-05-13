@@ -20,17 +20,9 @@ import { WorkerNameEditField } from "./worker-name-edit-field.components";
 import { WorkerWorkerTypeSelector } from "./worker-position-selector.component";
 import { t } from "../../../../helpers/translations.helper";
 import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles({
-  container: {
-    minHeight: "80%",
-  },
-});
 
 export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.Element {
   const { mode, setOpen } = options;
-  const classes = useStyles();
 
   const dispatcher = useDispatch();
 
@@ -98,7 +90,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
   // #region view
   return (
     <Grid container direction="column" justify="space-between">
-      <Grid container className={classes.container} direction="column">
+      <S.OptionsContainer container direction="column">
         <WorkerNameEditField
           workerName={workerInfo.workerName}
           setWorkerName={handleWorkerNameUpdate}
@@ -126,7 +118,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
         />
 
         <TeamSelector team={workerInfo.team} setTeam={handleWorkerTeamUpdate} />
-      </Grid>
+      </S.OptionsContainer>
       <S.SubmitButton
         disabled={!canSaveWorker()}
         variant="primary"
