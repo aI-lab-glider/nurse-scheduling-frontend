@@ -5,7 +5,7 @@ import { Box } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import { drawerHeaderHeight, headerHeight } from "../../../assets/colors";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleMode } from "../../schedule/schedule-state.model";
 import DrawerHeader from "./drawer-header.component";
@@ -20,9 +20,7 @@ const useStyles = makeStyles<Theme, StyleProps>({
   drawer: {
     width: ({ width }): number => width,
     height: `calc(100vh - ${
-      parseInt(ScssVars.headerHeight!.slice(0, -2), 10) +
-      parseInt(ScssVars.drawerHeaderHeight!.slice(0, -2), 10) +
-      1
+      parseInt(headerHeight!.slice(0, -2), 10) + parseInt(drawerHeaderHeight!.slice(0, -2), 10) + 1
     }px)`,
   },
 });

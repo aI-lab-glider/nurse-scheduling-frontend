@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import * as S from "./shifts-tab.styled";
-import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import { fontFamilyPrimary, fontSizeBase, headingLetterSpacing } from "../../../assets/colors";
 import ShiftDrawerComponent, {
   ShiftDrawerMode,
 } from "../../../components/shifts-drawer/shift-drawer.component";
@@ -30,14 +30,11 @@ const useStyles = makeStyles(() =>
     tableCell: {
       color: "black",
       fontWeight: "normal",
-      fontSize: ScssVars.fontSizeBase,
-      fontFamily: ScssVars.fontFamilyPrimary,
-      letterSpacing: ScssVars.headingLetterSpacing,
+      fontSize: fontSizeBase,
+      fontFamily: fontFamilyPrimary,
+      letterSpacing: headingLetterSpacing,
       textAlign: "left",
       padding: "0 0 0 0",
-    },
-    row: {
-      borderTop: `2px solid ${ScssVars.workerTableBorderColor}`,
     },
     colorSample: {
       width: "18px",
@@ -92,7 +89,7 @@ export default function ShiftTab(): JSX.Element {
           <EnhancedTableHeaderComponent toggleOpen={toggleOpen} />
           <TableBody>
             {Object.values(shiftData).map((shift) => (
-              <TableRow key={shift.code} className={classes.row}>
+              <TableRow key={shift.code}>
                 <TableCell className={classes.tableCell}>{shift.name}</TableCell>
                 <TableCell className={classes.tableCell}>
                   {shift.isWorkingShift ? `${shift.from}:00 ` : ""}-

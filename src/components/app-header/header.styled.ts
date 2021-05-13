@@ -47,15 +47,17 @@ export const Logo = styled(AssignmentIndIcon)`
 export const Filler = styled.div`
   flex-grow: 1;
 `;
-
+// "&& {" pomaga nadpisac css'a MaterialUI
 export const ReportIssueBtn = styled(MaterialButton)`
-  color: ${colors.white};
-  padding-right: 5px;
-  letter-spacing: 0.75px;
-  outline: none;
-  text-transform: none;
-  &:hover {
-    text-decoration: underline;
-    transform: none;
+  && {
+    color: ${colors.white};
+    padding-right: 5px;
+    letter-spacing: 0.75px;
+    outline: none;
+    text-transform: none;
+    &:hover {
+      text-decoration: underline;
+      transform: none;
+    }
   }
 `;

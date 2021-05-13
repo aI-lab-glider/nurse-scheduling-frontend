@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { makeStyles } from "@material-ui/core/styles";
-import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
+import { fontSizeBase, fontSizeXs, lineHeightXl } from "../../../../assets/colors";
 import { ContractTypeHelper } from "../../../../helpers/contract-type.helper";
 import { StringHelper } from "../../../../helpers/string.helper";
 import { WorkerTypeHelper } from "../../../../helpers/worker-type.helper";
@@ -35,16 +35,16 @@ export function translateAndCapitalize<T>(
 
 export const useFormFieldStyles = makeStyles({
   label: {
-    fontSize: ScssVars.fontSizeBase,
+    fontSize: fontSizeBase,
     fontWeight: 700,
-    lineHeight: ScssVars.lineHeightXl,
+    lineHeight: lineHeightXl,
     marginLeft: "4%",
   },
   formInput: {
     marginLeft: "4%",
   },
   errorLabel: {
-    fontSize: ScssVars.fontSizeSm,
+    fontSize: fontSizeXs,
     fontWeight: 100,
     marginLeft: "4%",
     color: "red",

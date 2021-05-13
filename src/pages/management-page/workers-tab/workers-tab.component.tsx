@@ -10,7 +10,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import * as S from "./workers-tab.styled";
-import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import {
+  colors,
+  fontFamilyPrimary,
+  fontSizeBase,
+  headingLetterSpacing,
+} from "../../../assets/colors";
 import WorkerDrawerComponent, {
   WorkerDrawerMode,
 } from "../../../components/drawers/worker-drawer/worker-drawer.component";
@@ -38,14 +43,11 @@ const useStyles = makeStyles(() =>
       width: "100%",
     },
     tableCell: {
-      color: ScssVars.primary,
+      color: colors.primary,
       fontWeight: "normal",
-      fontSize: ScssVars.fontSizeBase,
-      fontFamily: ScssVars.fontFamilyPrimary,
-      letterSpacing: ScssVars.headingLetterSpacing,
-    },
-    row: {
-      borderTop: `2px solid ${ScssVars.workerTableBorderColor}`,
+      fontSize: fontSizeBase,
+      fontFamily: fontFamilyPrimary,
+      letterSpacing: headingLetterSpacing,
     },
   })
 );
@@ -134,7 +136,7 @@ export default function WorkersTab(): JSX.Element {
               const workerType = worker.type ?? S.WorkerType.NURSE;
 
               return (
-                <TableRow key={worker.name} className={classes.row}>
+                <TableRow key={worker.name}>
                   <TableCell className={classes.tableCell} data-cy="workerName">
                     {worker.name}
                   </TableCell>

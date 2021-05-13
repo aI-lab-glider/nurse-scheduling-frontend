@@ -6,31 +6,31 @@ import React, { ReactNode } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import * as S from "./styled";
 import { ReactComponent as Done } from "../../assets/images/done.svg";
-import ScssVars from "../../assets/styles/styles/custom/_variables.module.scss";
+import { colors, alertHeight, fontSizeBase } from "../../assets/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     alertContainer: {
-      height: ScssVars.alertHeight,
-      borderRadius: ScssVars.alertHeight,
-      backgroundColor: ScssVars.secondary,
+      height: alertHeight,
+      borderRadius: alertHeight,
+      backgroundColor: colors.secondary,
       opacity: 0.8,
       padding: "15px 22px",
       textAlign: "center",
     },
     shadowContainer: {
-      height: ScssVars.alertHeight,
-      borderRadius: ScssVars.alertHeight,
-      backgroundColor: ScssVars.white,
+      height: alertHeight,
+      borderRadius: alertHeight,
+      backgroundColor: colors.white,
       boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
     },
     doneIcon: {
       marginRight: 9,
     },
     text: {
-      fontSize: ScssVars.fontSizeBase,
+      fontSize: fontSizeBase,
       letterSpacing: 0.75,
-      color: ScssVars.white,
+      color: colors.white,
     },
   })
 );

@@ -9,7 +9,12 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import classNames from "classnames/bind";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import * as S from "./enhanced-table-header.styled";
-import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import {
+  colors,
+  fontFamilyPrimary,
+  fontSizeBase,
+  headingLetterSpacing,
+} from "../../../assets/colors";
 import { Order } from "../../../helpers/comparator.helper";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { WorkerDrawerMode } from "../../../components/drawers/worker-drawer/worker-drawer.component";
@@ -17,11 +22,11 @@ import { WorkerDrawerMode } from "../../../components/drawers/worker-drawer/work
 const useStyles = makeStyles(() =>
   createStyles({
     label: {
-      color: ScssVars.primary,
+      color: colors.primary,
       fontWeight: "normal",
-      fontSize: ScssVars.fontSizeBase,
-      fontFamily: ScssVars.fontFamilyPrimary,
-      letterSpacing: ScssVars.headingLetterSpacing,
+      fontSize: fontSizeBase,
+      fontFamily: fontFamilyPrimary,
+      letterSpacing: headingLetterSpacing,
     },
     activeLabel: {
       fontWeight: "bold",
