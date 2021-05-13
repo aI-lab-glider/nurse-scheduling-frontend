@@ -7,18 +7,25 @@ import { EMPTY_ROW, ABSENCE_HEADERS } from "../../helpers/parser.helper";
 import { CELL_MARGIN } from "./schedule-export.logic";
 import { ShiftCode, SHIFTS } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { TranslationHelper } from "../../helpers/translations.helper";
-import { WorkerHourInfo } from "../schedule-logic/worker-hours-info.logic";
-import { MonthDataArray } from "../../helpers/shifts.helper";
+import {
+  DateInformationForWorkInfoCalculation,
+  WorkerHourInfo,
+} from "../schedule-logic/worker-hours-info.logic";
 import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
+import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
+import { WeekDay } from "../../state/schedule-data/foundation-info/foundation-info.model";
 
 export class WorkersAbsenceExportLogic {
   private scheduleModel: ScheduleDataModel;
 
   private revision: PrimaryMonthRevisionDataModel;
 
+  private cellsToMerge: number[][];
+
   constructor(scheduleModel: ScheduleDataModel, revision: PrimaryMonthRevisionDataModel) {
     this.scheduleModel = scheduleModel;
     this.revision = revision;
+    this.cellsToMerge = [];
   }
 
   public setWorkersWorkSheet(workSheet: xlsx.Worksheet): void {
@@ -28,16 +35,31 @@ export class WorkersAbsenceExportLogic {
     workSheet.pageSetup.fitToWidth = 1;
     workSheet.pageSetup.horizontalCentered = true;
 
-    const workersInfoArray = WorkersAbsenceExportLogic.createWorkersInfoSection(
-      this.scheduleModel,
-      this.revision
-    );
+    const workersInfoArray = this.createWorkersInfoSection(this.scheduleModel, this.revision);
 
     const colLens = workersInfoArray[0].map((_, colIndex) =>
       Math.max(...workersInfoArray.map((row) => row[colIndex]?.toString().length ?? 0))
     );
 
     workSheet.addRows(workersInfoArray);
+
+    this.cellsToMerge.forEach((pair, index) => {
+      if (this.cellsToMerge[index][0] > 0) {
+        const top = pair[0];
+        let bottom = pair[1];
+        let i = index;
+
+        while (this.cellsToMerge[i + 1] !== undefined && this.cellsToMerge[i + 1][0] === bottom) {
+          this.cellsToMerge[i + 1][0] = -1;
+          bottom = this.cellsToMerge[i + 1][1];
+          i++;
+        }
+
+        workSheet.mergeCells(top, 1, bottom, 1);
+        workSheet.mergeCells(top, 6, bottom, 6);
+        workSheet.mergeCells(top, 7, bottom, 7);
+      }
+    });
 
     colLens.forEach((len, id) => {
       workSheet.getColumn(id + 1).width = len + CELL_MARGIN;
@@ -52,57 +74,86 @@ export class WorkersAbsenceExportLogic {
     workSheet.getRow(1).font = { bold: true };
   }
 
-  private static createWorkersInfoSection(
+  private createWorkersInfoSection(
     scheduleModel: ScheduleDataModel,
     revision: PrimaryMonthRevisionDataModel
   ): (string | number)[][] {
     const names = Object.keys(scheduleModel.employee_info?.type);
     const month = scheduleModel.schedule_info.month_number;
     const year = scheduleModel.schedule_info.year;
+    const dates = scheduleModel.month_info.dates;
     const workers: (string | number)[][] = [];
 
-    const time = scheduleModel.employee_info.time;
+    const shiftTypes = scheduleModel.shift_types;
+
+    let employeeRowIndex = 2;
 
     workers.push(ABSENCE_HEADERS);
     workers.push(EMPTY_ROW);
     names.forEach((name) => {
       const workerShifts = scheduleModel.shifts[name] as ShiftCode[];
+      const workerContractType = scheduleModel.employee_info.contractType[name];
+      const { verboseDates } = new MonthInfoLogic(month, year, dates);
 
-      const workerHours = WorkerHourInfo.fromWorkerInfo(
-        workerShifts,
-        revision.shifts[name] as MonthDataArray<ShiftCode>,
-        time[name],
-        scheduleModel.employee_info.contractType[name],
-        month,
-        year,
-        scheduleModel.month_info.dates,
-        scheduleModel.shift_types
-      );
-
+      let moreThanOneRow = false;
       workerShifts.forEach((shift, index) => {
-        let daysNo = 1;
-        if (shift !== ShiftCode.W && !SHIFTS[shift].isWorkingShift) {
+        let daysNo = 0;
+        if (
+          !(
+            verboseDates[index].isPublicHoliday ||
+            verboseDates[index].dayOfWeek === WeekDay.SA ||
+            verboseDates[index].dayOfWeek === WeekDay.SU
+          )
+        )
+          daysNo++;
+        if (shift !== ShiftCode.W && shift !== ShiftCode.NZ && !SHIFTS[shift].isWorkingShift) {
+          employeeRowIndex++;
           const from = scheduleModel.month_info.dates[index];
           while (
             index + 1 < workerShifts.length &&
             workerShifts[index + 1] === workerShifts[index]
           ) {
+            workerShifts[index] = ShiftCode.W;
             index++;
-            daysNo++;
-            workerShifts[index - 1] = ShiftCode.W;
+            if (
+              !(
+                verboseDates[index].isPublicHoliday ||
+                verboseDates[index].dayOfWeek === WeekDay.SA ||
+                verboseDates[index].dayOfWeek === WeekDay.SU
+              )
+            )
+              daysNo++;
           }
           workerShifts[index] = ShiftCode.W;
-          workers.push([
-            name,
-            SHIFTS[shift].name,
-            `${from} ${TranslationHelper.polishMonthsGenetivus[month]}`,
-            `${scheduleModel.month_info.dates[index]} ${TranslationHelper.polishMonthsGenetivus[month]}`,
-            daysNo,
-            Math.round(
-              (daysNo * workerHours.workerHourNorm) / Math.max(...scheduleModel.month_info.dates)
-            ),
-            year,
-          ]);
+          if (!moreThanOneRow) {
+            workers.push([
+              name,
+              SHIFTS[shift].name,
+              `${from} ${TranslationHelper.polishMonthsGenetivus[month]}`,
+              `${scheduleModel.month_info.dates[index]} ${TranslationHelper.polishMonthsGenetivus[month]}`,
+              daysNo,
+              WorkerHourInfo.calculateFreeHoursForContractType(
+                workerContractType,
+                scheduleModel.shifts[name] as ShiftCode[],
+                revision.shifts[name],
+                verboseDates as DateInformationForWorkInfoCalculation[],
+                shiftTypes
+              ),
+            ]);
+            moreThanOneRow = true;
+          } else {
+            const toMerge: number[] = [];
+            workers.push([
+              "",
+              SHIFTS[shift].name,
+              `${from} ${TranslationHelper.polishMonthsGenetivus[month]}`,
+              `${scheduleModel.month_info.dates[index]} ${TranslationHelper.polishMonthsGenetivus[month]}`,
+              daysNo,
+            ]);
+            toMerge.push(employeeRowIndex - 1);
+            toMerge.push(employeeRowIndex);
+            this.cellsToMerge.push(toMerge);
+          }
         }
       });
     });

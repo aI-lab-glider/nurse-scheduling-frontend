@@ -52,7 +52,7 @@ interface WorkerInfoForCalculateWorkerHoursInfo extends DataForOvertimeCalculati
   workerContractType: ContractType;
 }
 
-type DateInformationForWorkInfoCalculation = Pick<
+export type DateInformationForWorkInfoCalculation = Pick<
   VerboseDate,
   "isPublicHoliday" | "dayOfWeek" | "month"
 >;
@@ -281,7 +281,7 @@ export class WorkerHourInfo {
     return WORK_HOURS_PER_DAY * (weekDaysCount - holidayDayOffs);
   }
 
-  private static calculateFreeHoursForContractType(
+  public static calculateFreeHoursForContractType(
     workerContractType: ContractType,
     actualShiftsFromCurrentMonth: ShiftCode[],
     primaryScheduleWorkerShifts: ShiftCode[],

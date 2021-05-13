@@ -44,7 +44,7 @@ const CELLS_TO_AVOID = [
   WORKTIME_NORM,
 ];
 
-export const ABSENCE_HEADERS = [NAME_SURNAME, "Typ", FROM, TO, "Ile dni", "Ile godzin", "Rok"];
+export const ABSENCE_HEADERS = [NAME_SURNAME, "Typ", FROM, TO, "Ile dni", "Ile godzin", "Za rok"];
 
 export class ParserHelper {
   public static isEmptyRow(rowValues: Array<string>): boolean {
