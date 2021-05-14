@@ -34,12 +34,29 @@ export class WorkersAbsenceExportLogic {
     this.revision = revision;
   }
 
-  public setAbsenceWorkSheet(workSheet: xlsx.Worksheet): void {
+  private pageSetup(workSheet: xlsx.Worksheet): void {
     workSheet.pageSetup.showGridLines = true;
     workSheet.pageSetup.fitToPage = true;
     workSheet.pageSetup.fitToHeight = 1;
     workSheet.pageSetup.fitToWidth = 1;
     workSheet.pageSetup.horizontalCentered = true;
+  }
+
+  private styleWorkSheet(workSheet: xlsx.Worksheet, colLens: number[]): void {
+    colLens.forEach((len, id) => {
+      workSheet.getColumn(id + 1).width = len + CELL_MARGIN;
+    });
+
+    for (let i = 1; i <= ABSENCE_HEADERS.length; i++) {
+      workSheet.getColumn(i).alignment = { vertical: "middle", horizontal: "center" };
+    }
+
+    workSheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
+    workSheet.getRow(1).font = { bold: true };
+  }
+
+  public setAbsenceWorkSheet(workSheet: xlsx.Worksheet): void {
+    this.pageSetup(workSheet);
 
     const { workersAbsenceInfoArray, cellsToMerge } = this.createAbsenceInfoSection(
       this.scheduleModel
@@ -67,16 +84,7 @@ export class WorkersAbsenceExportLogic {
       }
     });
 
-    colLens.forEach((len, id) => {
-      workSheet.getColumn(id + 1).width = len + CELL_MARGIN;
-    });
-
-    for (let i = 1; i <= ABSENCE_HEADERS.length; i++) {
-      workSheet.getColumn(i).alignment = { vertical: "middle", horizontal: "center" };
-    }
-
-    workSheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
-    workSheet.getRow(1).font = { bold: true };
+    this.styleWorkSheet(workSheet, colLens);
   }
 
   private isNonHolidayWeekDay(verboseDate: VerboseDate): boolean {
@@ -85,6 +93,10 @@ export class WorkersAbsenceExportLogic {
       verboseDate.dayOfWeek === WeekDay.SA ||
       verboseDate.dayOfWeek === WeekDay.SU
     );
+  }
+
+  private isExcludedShift(shift: ShiftCode): boolean {
+    return shift === ShiftCode.W || shift === ShiftCode.NZ || SHIFTS[shift].isWorkingShift;
   }
 
   private pushWorkersRow(
@@ -149,7 +161,7 @@ export class WorkersAbsenceExportLogic {
       workerShifts.forEach((shift, index) => {
         let daysNo = 0;
         if (this.isNonHolidayWeekDay(verboseDates[index])) daysNo++;
-        if (shift !== ShiftCode.W && shift !== ShiftCode.NZ && !SHIFTS[shift].isWorkingShift) {
+        if (!this.isExcludedShift(shift)) {
           employeeRowIndex++;
           const from = scheduleModel.month_info.dates[index];
           const [totalDaysNo, endIndex] = this.setDaysNoAndIndex(
@@ -161,36 +173,26 @@ export class WorkersAbsenceExportLogic {
           const to = scheduleModel.month_info.dates[endIndex];
 
           workerShifts[endIndex] = ShiftCode.W;
+          const workerName = moreThanOneRow ? "" : name;
           if (!moreThanOneRow) {
-            this.pushWorkersRow(
-              name,
-              workers,
-              shift,
-              from,
-              to,
-              month,
-              totalDaysNo,
-              workerContractType,
-              verboseDates
-            );
             moreThanOneRow = true;
           } else {
             const toMerge: number[] = [];
-            this.pushWorkersRow(
-              "",
-              workers,
-              shift,
-              from,
-              to,
-              month,
-              totalDaysNo,
-              workerContractType,
-              verboseDates
-            );
             toMerge.push(employeeRowIndex - 1);
             toMerge.push(employeeRowIndex);
             cellsToMerge.push(toMerge);
           }
+          this.pushWorkersRow(
+            workerName,
+            workers,
+            shift,
+            from,
+            to,
+            month,
+            totalDaysNo,
+            workerContractType,
+            verboseDates
+          );
         }
       });
     });
