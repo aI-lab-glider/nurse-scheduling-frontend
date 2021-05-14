@@ -130,9 +130,14 @@ export const pl = {
     toExportHeader: "Do",
     isWorkingShiftExportHeader: "Zmiana pracująca",
     colorExportHeader: "Kolor",
+    leaveTypeExportHeader: "Typ",
+    daysNoExportHeader: "Ile dni",
+    hoursNoExportHeader: "Ile godzin",
+    forYearExportHeader: "Za rok",
     scheduleworksheetName: "grafik",
     workersWorksheetName: "pracownicy",
     shiftsWorksheetName: "zmiany",
+    absenceWorksheetName: "urlopy",
   },
 };
 export default pl;

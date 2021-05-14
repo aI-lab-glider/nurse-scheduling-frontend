@@ -5,7 +5,7 @@ import xlsx from "exceljs";
 import { RevisionType } from "../data-access/persistance-store.model";
 import { ScheduleDataModel } from "../../state/schedule-data/schedule-data.model";
 import { FileHelper } from "../../helpers/file.helper";
-import { LEAVES_WORKSHEET_NAME } from "../../helpers/parser.helper";
+import { ABSENCE_WORKSHEET_NAME } from "../../helpers/parser.helper";
 import { WorkersAbsenceExportLogic } from "./workers-absence-export.logic";
 import { cropScheduleDMToMonthDM } from "../schedule-container-converter/schedule-container-converter";
 import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
@@ -28,7 +28,7 @@ export class AbsenceExportLogic {
   public createWorkbook(revisionType: RevisionType): [string, xlsx.Workbook] {
     const [workbook, workersWorkSheet] = AbsenceExportLogic.createWorkArea();
 
-    this.workerExportLogic.setWorkersWorkSheet(workersWorkSheet);
+    this.workerExportLogic.setAbsenceWorkSheet(workersWorkSheet);
 
     const workbookName = FileHelper.createMonthFilename(
       cropScheduleDMToMonthDM(this.scheduleModel),
@@ -41,7 +41,7 @@ export class AbsenceExportLogic {
     const workbook = new xlsx.Workbook();
     return [
       workbook,
-      workbook.addWorksheet(LEAVES_WORKSHEET_NAME, {
+      workbook.addWorksheet(ABSENCE_WORKSHEET_NAME, {
         pageSetup: { paperSize: 9, orientation: "landscape" },
         properties: { defaultColWidth: 5 },
       }),
