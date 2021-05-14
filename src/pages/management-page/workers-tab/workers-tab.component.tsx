@@ -145,7 +145,11 @@ export default function WorkersTab(): JSX.Element {
                       {StringHelper.capitalize(WorkerTypeHelper.translate(workerType))}
                     </WorkerType>
                   </TableCell>
-                  <TableCell className={classes.tableCell} align="left">
+                  <TableCell
+                    className={classes.tableCell}
+                    align="left"
+                    data-cy={`worker-hours-${worker.name}`}
+                  >
                     {getWorkerTimeLabel(worker.name)}
                   </TableCell>
                   <TableCell className={classes.tableCell} align="left">
@@ -153,6 +157,7 @@ export default function WorkersTab(): JSX.Element {
                   </TableCell>
                   <TableCell align="right">
                     <ActionButton
+                      data-cy={`edit-worker-${worker.name}`}
                       variant="primary"
                       onClick={(): void => toggleDrawer(true, WorkerDrawerMode.EDIT, worker)}
                     >
