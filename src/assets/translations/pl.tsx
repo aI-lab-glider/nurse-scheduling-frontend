@@ -16,6 +16,7 @@ export const pl = {
     // import-buttons.component.tsx
     load: "Wczytaj",
     saveAs: "Zapisz jako...",
+    absenceSummary: "Urlopy",
     file: "Plik",
     // worker-civil-contract-work-norm-selector.component.tsx
     hourAmmount: "Liczba godzin",

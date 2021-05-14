@@ -18,6 +18,7 @@ const en: LocalizationResource = {
     // import-buttons.component.tsx
     load: "Load",
     saveAs: "Save as...",
+    absenceSummary: "Absences",
     file: "File",
     // worker-civil-contract-work-norm-selector.component.tsx
     hourAmmount: "Liczba godzin",

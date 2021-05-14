@@ -33,7 +33,7 @@ export function ImportButtonsComponent(): JSX.Element {
     dataCy: "export-schedule-button",
   };
   const btnData3: ButtonData = {
-    label: "Urlopy",
+    label: t("absenceSummary"),
     action: (): void => handleAbsenceExport(),
   };
 
