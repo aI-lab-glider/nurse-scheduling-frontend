@@ -49,7 +49,7 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: parallel-job-${CI_JOB_ID}.json
+          name: parallel-job-${{ CI_JOB_ID }}.json
           path: coverage/coverage-final.json
 
 
@@ -85,7 +85,6 @@ jobs:
       - name: Get Coverage for badge
         run: |
           ls reports
-          ls .nyc_output
           npx nyc merge reports .nyc_output/out.json
           ls reports
           ls .nyc_output
