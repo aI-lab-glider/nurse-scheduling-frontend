@@ -49,7 +49,7 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: coverage-part/parallel-job-${CI_JOB_ID}.json
+          name: parallel-job-${CI_JOB_ID}.json
           path: coverage/coverage-final.json
 
 
@@ -80,9 +80,13 @@ jobs:
 
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v2
+        with:
+          path: reports
       - name: Get Coverage for badge
         run: |
-          npx nyc merge reports && mv coverage.json .nyc_output/out.json
+          ls
+          npx nyc merge reports .nyc_output/out.json
+          ls
           SUMMARY="$(npx nyc report --reporter=text-summary | tail -2 | head -1)" 
           TOKENS=($SUMMARY)
           echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
