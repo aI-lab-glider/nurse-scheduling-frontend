@@ -12,6 +12,9 @@ jobs:
         browser: [google-chrome]
         containers: [1, 2, 3, 4, 5]
     timeout-minutes: 10
+    artifacts:
+      paths:
+        - coverage-part/
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
@@ -58,7 +61,12 @@ jobs:
           BRANCH_NAME="${PATHS[1]}_${PATHS[2]}"
           echo $BRANCH_NAME
           echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
-
+      - name: kappa
+        run: |
+          (mkdir coverage-part || true) && cp coverage/coverage-final.json coverage-part/parallel-job-${CI_JOB_ID}.json
+      - name: log
+        run: |
+          echo "nurse-scheduling-problem-frontend__${ env.BRANCH }"
       - name: Create the Badge
         uses: schneegans/dynamic-badges-action@v1.0.0
         with:
