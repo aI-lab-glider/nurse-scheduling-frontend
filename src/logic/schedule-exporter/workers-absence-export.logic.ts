@@ -71,7 +71,6 @@ export class WorkersAbsenceExportLogic {
       workSheet.getColumn(id + 1).width = len + CELL_MARGIN;
     });
 
-    workSheet.getColumn(1).alignment = { vertical: "middle", horizontal: "left" };
     for (let i = 1; i <= ABSENCE_HEADERS.length; i++) {
       workSheet.getColumn(i).alignment = { vertical: "middle", horizontal: "center" };
     }
