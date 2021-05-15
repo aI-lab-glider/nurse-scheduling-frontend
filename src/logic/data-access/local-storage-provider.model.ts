@@ -196,17 +196,6 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
     }
   }
 
-  async getAllSchedules(): Promise<MonthDMToRevisionKeyDict> {
-    const revisions = await this.storage.allDocs({ include_docs: true });
-    const validRevisions = _.compact(revisions.rows.map((r) => r.doc));
-
-    const docs: { [revisionKey: string]: MonthDataModel } = {};
-    validRevisions.forEach((revision) => {
-      docs[revision._id] = revision.data;
-    });
-    return docs;
-  }
-
   async fetchOrCreateMonthRevision(
     monthKey: ScheduleKey,
     revision: RevisionType,
