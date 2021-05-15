@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         browser: [google-chrome]
-        containers: [1, 2, 3, 4, 5]
+        containers: [1, 2]
     timeout-minutes: 10
 
     steps:
@@ -93,9 +93,9 @@ jobs:
         run: |
           mv reports/parallel-job-1/coverage-final-1.json reports
           mv reports/parallel-job-2/coverage-final-2.json reports
-          mv reports/parallel-job-3/coverage-final-3.json reports
-          mv reports/parallel-job-4/coverage-final-4.json reports
-          mv reports/parallel-job-5/coverage-final-5.json reports
+          # mv reports/parallel-job-3/coverage-final-3.json reports
+          # mv reports/parallel-job-4/coverage-final-4.json reports
+          # mv reports/parallel-job-5/coverage-final-5.json reports
 
           npx nyc merge reports ./coverage.json
           head ./coverage.json
