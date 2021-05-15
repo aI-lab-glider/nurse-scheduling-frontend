@@ -195,37 +195,4 @@ export class LocalStorageProvider extends PersistenceStoreProvider {
       return undefined;
     }
   }
-
-  async fetchOrCreateMonthRevision(
-    monthKey: ScheduleKey,
-    revision: RevisionType,
-    baseMonth: MonthDataModel
-  ): Promise<MonthDataModel> {
-    let monthDataModel = await this.getMonthRevision(monthKey.getRevisionKey(revision));
-
-    if (_.isNil(monthDataModel)) {
-      monthDataModel = createEmptyMonthDataModel(monthKey, baseMonth);
-      await this.saveBothMonthRevisionsIfNeeded(revision, monthDataModel);
-    }
-    return monthDataModel;
-  }
-
-  async fetchOrCreateMonthNeighbours(
-    month: MonthDataModel,
-    revision: RevisionType
-  ): Promise<[MonthDataModel, MonthDataModel]> {
-    const scheduleKey = new ScheduleKey(month.scheduleKey.month, month.scheduleKey.year);
-
-    const { nextMonthKey } = scheduleKey;
-    const isNextMonthInFuture = VerboseDateHelper.isMonthInFuture(
-      nextMonthKey.month,
-      nextMonthKey.year
-    );
-    const nextMonthRevision = isNextMonthInFuture ? "primary" : "actual";
-
-    return [
-      await this.fetchOrCreateMonthRevision(scheduleKey.prevMonthKey, "actual", month),
-      await this.fetchOrCreateMonthRevision(nextMonthKey, nextMonthRevision, month),
-    ];
-  }
 }

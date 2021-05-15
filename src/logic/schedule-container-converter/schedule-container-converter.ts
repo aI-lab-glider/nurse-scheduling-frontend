@@ -6,8 +6,8 @@ import * as _ from "lodash";
 import { MonthHelper } from "../../helpers/month.helper";
 import { ArrayHelper } from "../../helpers/array.helper";
 import {
-  WorkerShiftsModel,
   validateWorkerShiftsModel,
+  WorkerShiftsModel,
 } from "../../state/schedule-data/workers-shifts/worker-shifts.model";
 import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import {
@@ -23,7 +23,7 @@ import {
   validateScheduleDM,
 } from "../../state/schedule-data/schedule-data.model";
 import { RevisionType, ScheduleKey } from "../data-access/persistance-store.model";
-import { LocalStorageProvider } from "../data-access/local-storage-provider.model";
+import { LocalMonthRevisionManager } from "../data-access/month-revision-manager";
 
 export function extendMonthDMToScheduleDM(
   prevMonthData: MonthDataModel,
@@ -147,7 +147,7 @@ export async function extendMonthDMRevisionToScheduleDM(
   currentMonthData: MonthDataModel,
   revision: RevisionType
 ): Promise<ScheduleDataModel> {
-  const [prevMonth, nextMonth] = await new LocalStorageProvider().fetchOrCreateMonthNeighbours(
+  const [prevMonth, nextMonth] = await new LocalMonthRevisionManager().fetchOrCreateMonthNeighbours(
     currentMonthData,
     revision
   );

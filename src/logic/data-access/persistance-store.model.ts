@@ -96,16 +96,5 @@ export abstract class PersistenceStoreProvider {
     updatePosition: ArrayPositionPointer
   ): Promise<void>;
 
-  abstract fetchOrCreateMonthNeighbours(
-    month: MonthDataModel,
-    revision: RevisionType
-  ): Promise<[MonthDataModel, MonthDataModel]>;
-
-  abstract fetchOrCreateMonthRevision(
-    monthKey: ScheduleKey,
-    revision: RevisionType,
-    baseMonth: MonthDataModel
-  ): Promise<MonthDataModel>;
-
   abstract reloadDb(): Promise<void>;
 }

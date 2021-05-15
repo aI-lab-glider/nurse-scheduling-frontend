@@ -72,7 +72,7 @@ export class ScheduleDataActionCreator {
     revision: RevisionType
   ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
-      const monthDataModel = await new LocalStorageProvider().fetchOrCreateMonthRevision(
+      const monthDataModel = await new LocalMonthRevisionManager().fetchOrCreateMonthRevision(
         monthKey,
         revision,
         baseMonthModel
