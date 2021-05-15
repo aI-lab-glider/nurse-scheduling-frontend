@@ -16,6 +16,7 @@ export const pl = {
     // import-buttons.component.tsx
     load: "Wczytaj",
     saveAs: "Zapisz jako...",
+    absenceSummary: "Urlopy",
     file: "Plik",
     // worker-civil-contract-work-norm-selector.component.tsx
     hourAmmount: "Liczba godzin",
@@ -130,9 +131,14 @@ export const pl = {
     toExportHeader: "Do",
     isWorkingShiftExportHeader: "Zmiana pracująca",
     colorExportHeader: "Kolor",
+    leaveTypeExportHeader: "Typ",
+    daysNoExportHeader: "Ile dni",
+    hoursNoExportHeader: "Ile godzin",
+    forYearExportHeader: "Za rok",
     scheduleworksheetName: "grafik",
     workersWorksheetName: "pracownicy",
     shiftsWorksheetName: "zmiany",
+    absenceWorksheetName: "urlopy",
   },
 };
 export default pl;
