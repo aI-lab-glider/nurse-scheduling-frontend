@@ -12,6 +12,7 @@ export const EMPTY_ROW = Array(EMPTY_ROW_SIZE).fill("");
 export const SCHEDULE_WORKSHEET_NAME = t("scheduleworksheetName");
 export const WORKERS_WORKSHEET_NAME = t("workersWorksheetName");
 export const SHIFTS_WORKSHEET_NAME = t("shiftsWorksheetName");
+export const ABSENCE_WORKSHEET_NAME = t("absenceWorksheetName");
 
 const SHIFT_NAME = t("shiftNameExportHeader");
 const ABBREVIATION = t("abbreviationExportHeader");
@@ -26,6 +27,11 @@ const WORKER_TYPE = t("workerTypeExportHeader");
 const CONTRACT_TYPE = t("contractTypeExportHeader");
 const WORKTIME_NORM = t("worktimeNormExportHeader");
 const WORKER_TEAM = t("workerTeamExportHeader");
+const TYPE = t("leaveTypeExportHeader");
+const DAYSNO = t("daysNoExportHeader");
+const HOURSNO = t("hoursNoExportHeader");
+const FORYEAR = t("forYearExportHeader");
+
 export const WORKER_HEADERS = [
   NAME_SURNAME,
   WORKER_TYPE,
@@ -41,6 +47,8 @@ const CELLS_TO_AVOID = [
   CONTRACT_TYPE,
   WORKTIME_NORM,
 ];
+
+export const ABSENCE_HEADERS = [NAME_SURNAME, TYPE, FROM, TO, DAYSNO, HOURSNO, FORYEAR];
 
 export class ParserHelper {
   public static isEmptyRow(rowValues: Array<string>): boolean {

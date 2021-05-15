@@ -24,12 +24,16 @@ describe("Schedule modes spec", () => {
       );
     });
   });
-
   context("when in edit mode", () => {
     beforeEach(() => {
       cy.enterEditMode();
     });
-
+    it("does not show changes in preview when changes are not saved", () => {
+      cy.changeWorkerShift({ ...testedCell, newShiftCode: testedCell.desiredShiftCode });
+      cy.get("[data-cy=leave-edit-mode]").click();
+      cy.get("[data-cy=bt-leave-edit-save-no]").click();
+      cy.checkWorkerShift({ ...testedCell, desiredShiftCode: testedCell.initialShiftCode });
+    });
     it("changes shift", () => {
       cy.checkWorkerShift({ ...testedCell, desiredShiftCode: testedCell.initialShiftCode });
       cy.changeWorkerShift({ ...testedCell, newShiftCode: testedCell.desiredShiftCode });

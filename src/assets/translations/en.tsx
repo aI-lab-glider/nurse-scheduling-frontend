@@ -18,6 +18,7 @@ const en: LocalizationResource = {
     // import-buttons.component.tsx
     load: "Load",
     saveAs: "Save as...",
+    absenceSummary: "Absences",
     file: "File",
     // worker-civil-contract-work-norm-selector.component.tsx
     hourAmmount: "Liczba godzin",
@@ -132,9 +133,14 @@ const en: LocalizationResource = {
     toExportHeader: "To",
     isWorkingShiftExportHeader: "Is working shift",
     colorExportHeader: "Color",
+    leaveTypeExportHeader: "Type",
+    daysNoExportHeader: "Days no",
+    hoursNoExportHeader: "Hours no",
+    forYearExportHeader: "For year",
     scheduleworksheetName: "schedule",
     workersWorksheetName: "workers",
     shiftsWorksheetName: "shifts",
+    absenceWorksheetName: "leaves",
   },
 };
 export default en;
