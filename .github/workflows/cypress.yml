@@ -97,12 +97,11 @@ jobs:
           # mv reports/parallel-job-4/coverage-final-4.json reports
           # mv reports/parallel-job-5/coverage-final-5.json reports
 
-          npx nyc merge reports ./coverage.json
+          npx nyc merge reports ./.nyc_output/out.json
           head ./coverage.json
-          npx nyc report --reporter=text-summary -t ./coverage.json
           # sed -i -e 's/\/tmp\/runner\/work\/nurse-scheduling-problem-frontend/\./' ./coverage.json
-          npx nyc report --reporter=text-summary -t coverage.json
-          SUMMARY="$(npx nyc report --reporter=text-summary -t coverage.json | tail -2 | head -1)" 
+          npx nyc report --reporter=text-summary -t ./.nyc_output
+          SUMMARY="$(npx nyc report --reporter=text-summary -t ./.nyc_output | tail -2 | head -1)" 
           TOKENS=($SUMMARY)
           echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
 
