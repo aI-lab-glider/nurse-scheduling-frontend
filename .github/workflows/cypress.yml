@@ -60,7 +60,6 @@ jobs:
           name: parallel-job
           path: coverage/coverage-final-${{ matrix.containers }}.json
 
-
   badge:
     needs: cypress
     runs-on: [self-hosted]
