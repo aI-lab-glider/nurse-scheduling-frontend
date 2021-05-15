@@ -32,7 +32,8 @@ jobs:
           echo "::set-output name=cypressConfig::$content"
           echo ${{ github.job }}
           echo ${{ github.run_id }}
-          echo ${{ github.workflow }}
+          echo ${{ github.action }}
+          echo ${{ github.action_id }}
 
       # - name: Run Cypress
       #   uses: cypress-io/github-action@v2
