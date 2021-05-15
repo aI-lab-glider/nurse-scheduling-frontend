@@ -31,23 +31,24 @@ jobs:
           content="${content//$'\r'/'%0D'}"
           echo "::set-output name=cypressConfig::$content"
           echo ${{ job.container.id }}
-          echo ${{ job.matrix }}
+          echo ${{ matrix }}
+          echo ${{ job }}
 
-      - name: Run Cypress
-        uses: cypress-io/github-action@v2
-        with:
-          wait-on: ${{ env.APPLICATION_URL }}
-          group: Nurse project workers
-          record: true
-          parallel: true
-          start: npm start
-          browser: /usr/bin/${{ matrix.browser }}
-          tag: ${{ matrix.browser }}
-          headless: false
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          APPLICATION_URL: ${{ fromJson(steps.read_config.outputs.cypressConfig).env.baseUrl }}
+      # - name: Run Cypress
+      #   uses: cypress-io/github-action@v2
+      #   with:
+      #     wait-on: ${{ env.APPLICATION_URL }}
+      #     group: Nurse project workers
+      #     record: true
+      #     parallel: true
+      #     start: npm start
+      #     browser: /usr/bin/${{ matrix.browser }}
+      #     tag: ${{ matrix.browser }}
+      #     headless: false
+      #   env:
+      #     CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     APPLICATION_URL: ${{ fromJson(steps.read_config.outputs.cypressConfig).env.baseUrl }}
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
