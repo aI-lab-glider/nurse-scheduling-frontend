@@ -82,14 +82,5 @@ export interface MonthRevision {
 export abstract class PersistenceStoreProvider {
   abstract getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined>;
 
-  abstract saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void>;
-
-  abstract updateMonthPartBasedOnScheduleDM(
-    revisionKey: RevisionKey,
-    scheduleDataModel: ScheduleDataModel,
-    missingDays: number,
-    updatePosition: ArrayPositionPointer
-  ): Promise<void>;
-
   abstract reloadDb(): Promise<void>;
 }

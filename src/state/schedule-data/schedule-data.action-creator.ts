@@ -26,6 +26,8 @@ import { ScheduleErrorMessageModel } from "./schedule-errors/schedule-error-mess
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 import { Shift } from "./shifts-types/shift-types.model";
 import { cleanScheduleErrors } from "./schedule-errors/schedule-errors.reducer";
+import { LocalMonthRevisionManager } from "../../logic/data-access/month-revision-manager";
+import { LocalSchedulePersistProvider } from "../../logic/data-access/schedule-persistance-provider";
 
 export class ScheduleDataActionCreator {
   // #region Update state
@@ -110,7 +112,7 @@ export class ScheduleDataActionCreator {
       if (_.isNil(revision)) {
         revision = getState().actualState.revision;
       }
-      await new LocalStorageProvider().saveSchedule(revision, newSchedule);
+      await new LocalSchedulePersistProvider().saveSchedule(revision, newSchedule);
       const primaryMonthDM = await this.getMonthPrimaryRevisionDM(
         cropScheduleDMToMonthDM(newSchedule)
       );
