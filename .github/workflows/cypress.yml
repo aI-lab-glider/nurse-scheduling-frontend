@@ -84,10 +84,9 @@ jobs:
           path: reports
       - name: Get Coverage for badge
         run: |
-          ls reports
           npx nyc merge reports .nyc_output/out.json
-          ls reports
-          ls .nyc_output
+          sed -i -e 's/nurse-scheduling-problem-frontend\/nurse-scheduling-problem-frontend/nurse-scheduling-problem-frontend/' ./.nyc_output/out.json
+          head ./.nyc_output/out.json
           SUMMARY="$(npx nyc report --reporter=text-summary | tail -2 | head -1)" 
           TOKENS=($SUMMARY)
           echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
