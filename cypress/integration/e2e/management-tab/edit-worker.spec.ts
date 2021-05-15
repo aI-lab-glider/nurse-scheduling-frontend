@@ -52,9 +52,23 @@ describe("Tab management", () => {
           .type("123");
       });
       it("properly handles civil contract", () => {
+        const newWorker = "Ala makota";
         cy.get('[data-cy="civil_contract"]').click();
         cy.get('[data-cy="input-civil-time"]').click();
         cy.get('[data-cy="input-civil-time"] input').clear({ force: true }).type("123");
+        it("creates the worker", () => {
+          cy.get('[data-cy="name"]').type(newWorker);
+          cy.get(`[value="${newWorker}"]`).should("be.visible");
+          cy.get('[data-cy="position"]').click().get('[data-cy="other"]').click();
+          cy.get('[data-cy="contract"]').click().get('[data-cy="employment_contract"]').click();
+          cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="other"]').click();
+          cy.get('[data-cy="input-employ-time-other"]').click().type("{backspace}{backspace}13");
+          cy.get('[data-cy="btn-save-worker"]').click();
+          cy.get('[data-cy="btn-add-worker"]').should("be.visible");
+          cy.contains(newWorker);
+          cy.get('[data-cy="btn-schedule-tab"]').click();
+          cy.contains(newWorker);
+        });
       });
     });
   });
@@ -106,6 +120,59 @@ describe("Tab management", () => {
           });
         }
       );
+    });
+    describe("Editing workers time ", () => {
+      beforeEach(() => {
+        cy.get('[data-cy="btn-management-tab"]').click();
+        cy.get(`[data-cy="edit-worker-${testWorker}"]`).click();
+      });
+      context("properly handles worker hours edition from 1 to 1/2", () => {
+        it("properly handles worker hours edition", () => {
+          testWorkerData.hoursInfo = {
+            [HoursInfoCells.required]: 80,
+            [HoursInfoCells.actual]: 240,
+            [HoursInfoCells.overtime]: 160,
+          };
+          cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="half"]').click();
+          cy.get(`[data-cy="btn-save-worker"]`).click();
+          cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1/2");
+          cy.get('[data-cy="btn-schedule-tab"]').click();
+          cy.checkHoursInfo(testWorkerData);
+        });
+      });
+
+      context("properly handles worker hours edition from 1/2 to 1", () => {
+        it("properly handles worker hours edition", () => {
+          testWorkerData.hoursInfo = {
+            [HoursInfoCells.required]: 160,
+            [HoursInfoCells.actual]: 240,
+            [HoursInfoCells.overtime]: 80,
+          };
+          cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="full"]').click();
+          cy.get(`[data-cy="btn-save-worker"]`).click();
+          cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1");
+          cy.get('[data-cy="btn-schedule-tab"]').click();
+          cy.checkHoursInfo(testWorkerData);
+        });
+      });
+      context("properly handles worker hours edition from 1 to 1/8", () => {
+        it("properly handles worker hours edition", () => {
+          testWorkerData.hoursInfo = {
+            [HoursInfoCells.required]: 20,
+            [HoursInfoCells.actual]: 240,
+            [HoursInfoCells.overtime]: 220,
+          };
+          cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="other"]').click();
+          cy.get('[data-cy="input-employ-time-other"] input')
+            .click()
+            .clear({ force: true })
+            .type("18");
+          cy.get(`[data-cy="btn-save-worker"]`).click();
+          cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1/8");
+          cy.get('[data-cy="btn-schedule-tab"]').click();
+          cy.checkHoursInfo(testWorkerData);
+        });
+      });
     });
   });
 });
