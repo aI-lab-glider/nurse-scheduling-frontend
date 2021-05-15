@@ -49,7 +49,7 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: parallel-job-${{ $CI_JOB_ID }}.json
+          name: parallel-job-${{ job.container.id }}.json
           path: coverage/coverage-final.json
 
 
