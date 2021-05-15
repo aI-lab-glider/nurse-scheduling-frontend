@@ -92,22 +92,16 @@ jobs:
           path: reports
       - name: Get Coverage for badge
         run: |
-          pwd
-          ls reports
           mv reports/parallel-job-1/coverage-final-1.json reports
           mv reports/parallel-job-2/coverage-final-2.json reports
           mv reports/parallel-job-3/coverage-final-3.json reports
           mv reports/parallel-job-4/coverage-final-4.json reports
           mv reports/parallel-job-5/coverage-final-5.json reports
-          
+
           npx nyc merge reports ./coverage.json
-          ls
           head ./coverage.json
           npx nyc report --reporter=text-summary -t ./coverage.json
-          sed -i -e 's/\/tmp\/runner\/work\/nurse-scheduling-problem-frontend/\./' ./coverage.json
-          pwd
-          ls -ali
-          head coverage.json
+          # sed -i -e 's/\/tmp\/runner\/work\/nurse-scheduling-problem-frontend/\./' ./coverage.json
           npx nyc report --reporter=text-summary -t coverage.json
           SUMMARY="$(npx nyc report --reporter=text-summary -t coverage.json | tail -2 | head -1)" 
           TOKENS=($SUMMARY)
