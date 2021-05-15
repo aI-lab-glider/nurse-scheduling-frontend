@@ -84,11 +84,14 @@ jobs:
           path: reports
       - name: Get Coverage for badge
         run: |
+          pwd
           ls reports
-          npx nyc merge reports
-          head coverage.json
-          npx nyc report --reporter=text-summary -t coverage.json
-          sed -i -e 's/\/tmp\/runner\/work\/nurse-scheduling-problem-frontend/\./' coverage.json
+          head reports/parallel-job-1.json
+          npx nyc merge reports ./coverage.json
+          ls
+          head ./coverage.json
+          npx nyc report --reporter=text-summary -t ./coverage.json
+          sed -i -e 's/\/tmp\/runner\/work\/nurse-scheduling-problem-frontend/\./' ./coverage.json
           pwd
           ls -ali
           head coverage.json
