@@ -98,8 +98,7 @@ jobs:
           # mv reports/parallel-job-5/coverage-final-5.json reports
 
           npx nyc merge reports ./.nyc_output/out.json
-          head ./coverage.json
-          # sed -i -e 's/\/tmp\/runner\/work\/nurse-scheduling-problem-frontend/\./' ./coverage.json
+          head ./.nyc_output/out.json
           npx nyc report --reporter=text-summary -t ./.nyc_output
           SUMMARY="$(npx nyc report --reporter=text-summary -t ./.nyc_output | tail -2 | head -1)" 
           TOKENS=($SUMMARY)
