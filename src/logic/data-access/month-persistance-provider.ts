@@ -2,7 +2,7 @@ import PouchDB from "pouchdb-browser";
 import { DATABASE_NAME, MonthDMToRevisionKeyDict } from "./local-storage-provider.model";
 import { MonthDataModel, validateMonthDM } from "../../state/schedule-data/schedule-data.model";
 import _ from "lodash";
-import { MonthRevision, RevisionKey, ScheduleKey } from "./persistance-store.model";
+import { MonthRevision, RevisionKey, RevisionType, ScheduleKey } from "./persistance-store.model";
 
 export abstract class MonthPersistProvider {
   abstract saveMonth(revisionKey: RevisionKey, monthDataModel: MonthDataModel): Promise<void>;
@@ -22,7 +22,8 @@ export class LocalMonthPersistProvider extends MonthPersistProvider {
     this.storage = new PouchDB(DATABASE_NAME);
   }
 
-  async saveMonth(revisionKey: RevisionKey, monthDataModel: MonthDataModel): Promise<void> {
+  async saveMonth(revisionType: RevisionType, monthDataModel: MonthDataModel): Promise<void> {
+    const revisionKey = monthDataModel.scheduleKey.getRevisionKey(revisionType);
     let revision: string | undefined;
     try {
       const document = await this.storage.get(revisionKey);

@@ -45,7 +45,7 @@ export class LocalSchedulePersistProvider extends SchedulePersistProvider {
     }
   }
 
-  private async updateMonthPartBasedOnScheduleDM(
+  async updateMonthPartBasedOnScheduleDM(
     revisionKey: RevisionKey,
     scheduleDataModel: ScheduleDataModel,
     missingDays: number,

@@ -84,11 +84,6 @@ export abstract class PersistenceStoreProvider {
 
   abstract saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void>;
 
-  abstract saveBothMonthRevisionsIfNeeded(
-    type: RevisionType,
-    monthDataModel: MonthDataModel
-  ): Promise<void>;
-
   abstract updateMonthPartBasedOnScheduleDM(
     revisionKey: RevisionKey,
     scheduleDataModel: ScheduleDataModel,
