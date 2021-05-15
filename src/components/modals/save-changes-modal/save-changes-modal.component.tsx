@@ -49,13 +49,18 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
   const footer = (
     <>
       <Link to="/">
-        <Button variant="primary" onClick={onSaveClick}>
+        <Button variant="primary" onClick={onSaveClick} data-cy="bt-leave-edit-save-yes">
           {t("yes")}
         </Button>
       </Link>
 
       <Link to="/">
-        <Button variant="secondary" color="secondary" onClick={onNoSaveClick}>
+        <Button
+          variant="secondary"
+          color="secondary"
+          onClick={onNoSaveClick}
+          data-cy="bt-leave-edit-save-no"
+        >
           {t("no")}
         </Button>
       </Link>

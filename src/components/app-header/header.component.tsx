@@ -77,6 +77,7 @@ export function HeaderComponent(): JSX.Element {
     <Header id="header">
       <Logo />
       <ReturnToNowBtn
+        data-cy="return-to-now-button"
         hidden={!isNewMonth || !showNowNavigation}
         variant="secondary"
         onClick={returnToCurrentMonth}
