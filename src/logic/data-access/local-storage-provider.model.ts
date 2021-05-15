@@ -26,7 +26,7 @@ import {
 } from "./persistance-store.model";
 
 export const DATABASE_NAME = "nurse-scheduling";
-type MonthDMToRevisionKeyDict = { [revisionKey: string]: MonthDataModel };
+export type MonthDMToRevisionKeyDict = { [revisionKey: string]: MonthDataModel };
 
 export class LocalStorageProvider extends PersistenceStoreProvider {
   private storage: PouchDB.Database<MonthRevision>;
