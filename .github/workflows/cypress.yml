@@ -86,6 +86,9 @@ jobs:
         run: |
           npx nyc merge reports .nyc_output/out.json
           sed -i -e 's/nurse-scheduling-problem-frontend\/nurse-scheduling-problem-frontend/nurse-scheduling-problem-frontend/' ./.nyc_output/out.json
+          pwd
+          ls -ali
+          find nurse-scheduling-problem-frontend
           head ./.nyc_output/out.json
           SUMMARY="$(npx nyc report --reporter=text-summary | tail -2 | head -1)" 
           TOKENS=($SUMMARY)
