@@ -31,7 +31,7 @@ jobs:
           content="${content//$'\r'/'%0D'}"
           echo "::set-output name=cypressConfig::$content"
           echo ${{ matrix.container }}
-          echo ${{ job.container }}
+          echo ${{ github.job }}
 
       # - name: Run Cypress
       #   uses: cypress-io/github-action@v2
