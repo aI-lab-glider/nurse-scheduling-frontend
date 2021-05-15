@@ -30,6 +30,8 @@ jobs:
           content="${content//$'\n'/'%0A'}"
           content="${content//$'\r'/'%0D'}"
           echo "::set-output name=cypressConfig::$content"
+          echo ${{ job.container.id }}
+          echo ${{ job.matrix }}
 
       - name: Run Cypress
         uses: cypress-io/github-action@v2
@@ -49,7 +51,7 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: parallel-job-${{ job.id }}.json
+          name: parallel-job-${{ job.container.id }}.json
           path: coverage/coverage-final.json
 
 
