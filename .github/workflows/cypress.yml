@@ -86,7 +86,7 @@ jobs:
         run: |
           pwd
           ls reports
-          head reports/parallel-job-1.json
+          ls reports/parallel-job-1.json
           npx nyc merge reports ./coverage.json
           ls
           head ./coverage.json
