@@ -46,11 +46,19 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           APPLICATION_URL: ${{ fromJson(steps.read_config.outputs.cypressConfig).env.baseUrl }}
+      - name: Rename coverage
+        run: |
+          mv coverage/coverage-final.json coverage/coverage-final-${{ matrix.containers }}.json
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: parallel-job-${{ matrix.containers }}.json
-          path: coverage/coverage-final.json
+          name: parallel-job-${{ matrix.containers }}
+          path: coverage/coverage-final-${{ matrix.containers }}.json
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v2
+        with:
+          name: parallel-job
+          path: coverage/coverage-final-${{ matrix.containers }}.json
 
 
   badge:
@@ -86,7 +94,12 @@ jobs:
         run: |
           pwd
           ls reports
-          ls reports/parallel-job-1.json
+          mv reports/parallel-job-1/coverage-final-1.json reports
+          mv reports/parallel-job-2/coverage-final-2.json reports
+          mv reports/parallel-job-3/coverage-final-3.json reports
+          mv reports/parallel-job-4/coverage-final-4.json reports
+          mv reports/parallel-job-5/coverage-final-5.json reports
+          
           npx nyc merge reports ./coverage.json
           ls
           head ./coverage.json
