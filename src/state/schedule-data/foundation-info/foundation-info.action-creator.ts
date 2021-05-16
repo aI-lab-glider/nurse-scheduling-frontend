@@ -2,9 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { TEMPORARY_SCHEDULE_NAME } from "../../app.reducer";
+// import { TEMPORARY_SCHEDULE_NAME } from "../../app.reducer";
 import { ActionModel } from "../../../utils/action.model";
-import { createActionName } from "../schedule.actions";
+// import { createActionName } from "../schedule.actions";
+import { createAction } from "@reduxjs/toolkit";
 
 export enum FoundationInfoActionType {
   UPDATE_CHILDREN_AND_EXTRAWORKERS = "UPDATE_CHILDREN_AND_EXTRAWORKERS",
@@ -16,20 +17,24 @@ interface UpdateChildrenAndExtraworkersPayload {
   extraWorkers: number[];
   childrenNumber: number[];
 }
-export class FoundationInfoActionCreator {
-  public static updateFoundationInfo(
-    childrenNumber: number[],
-    extraWorkers: number[]
-  ): FoundationInfoAction {
-    return {
-      type: createActionName(
-        TEMPORARY_SCHEDULE_NAME,
-        FoundationInfoActionType.UPDATE_CHILDREN_AND_EXTRAWORKERS
-      ),
-      payload: {
-        extraWorkers,
-        childrenNumber,
-      },
-    };
-  }
-}
+
+export const updateChildrenAndExtraworkers = createAction<UpdateChildrenAndExtraworkersPayload>(
+  "schedule/updateChildrenAndExtraworkers"
+);
+// export class FoundationInfoActionCreator {
+//   public static updateFoundationInfo(
+//     childrenNumber: number[],
+//     extraWorkers: number[]
+//   ): FoundationInfoAction {
+//     return {
+//       type: createActionName(
+//         TEMPORARY_SCHEDULE_NAME,
+//         FoundationInfoActionType.UPDATE_CHILDREN_AND_EXTRAWORKERS
+//       ),
+//       payload: {
+//         extraWorkers,
+//         childrenNumber,
+//       },
+//     };
+//   }
+// }

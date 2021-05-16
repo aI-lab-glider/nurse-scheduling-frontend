@@ -8,7 +8,7 @@ import { DataRowHelper } from "../../../helpers/data-row.helper";
 import { DataRow } from "../../../logic/schedule-logic/data-row";
 import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../../../logic/section.model";
 import { ApplicationStateModel } from "../../../state/application-state.model";
-import { FoundationInfoActionCreator } from "../../../state/schedule-data/foundation-info/foundation-info.action-creator";
+import { updateChildrenAndExtraworkers } from "../../../state/schedule-data/foundation-info/foundation-info.action-creator";
 import { NameTableComponent } from "../worker-info-section/name-table/nametable.component";
 import { ScheduleMode } from "../schedule-state.model";
 import { BaseSectionComponent } from "../base/base-section/base-section.component";
@@ -39,10 +39,10 @@ export function FoundationInfoComponent(): JSX.Element {
         parseInt(newValue, 10)
       );
       const updatedFoundationInfo = DataRowHelper.dataRowsAsValueDict<number>(updatedDataRows);
-      const action = FoundationInfoActionCreator.updateFoundationInfo(
-        updatedFoundationInfo[ChildrenSectionKey.RegisteredChildrenCount],
-        updatedFoundationInfo[ExtraWorkersSectionKey.ExtraWorkersCount]
-      );
+      const action = updateChildrenAndExtraworkers({
+        childrenNumber: updatedFoundationInfo[ChildrenSectionKey.RegisteredChildrenCount],
+        extraWorkers: updatedFoundationInfo[ExtraWorkersSectionKey.ExtraWorkersCount],
+      });
       dispatch(action);
     },
     [dispatch]

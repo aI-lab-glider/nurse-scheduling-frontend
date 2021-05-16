@@ -2,35 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { ActionModel } from "../../utils/action.model";
+// import { ActionModel } from "../../utils/action.model";
 import { ScheduleMode } from "../../components/schedule/schedule-state.model";
+import { createAction, createReducer } from "@reduxjs/toolkit";
 
-export enum ModeInfoReducer {
-  SET_MODE = "SET_MODE",
-}
-
-export type ModeInfoActionModel = ActionModel<ScheduleMode>;
-
-export class ModeInfoActionCreator {
-  static setMode(mode: ScheduleMode): ActionModel<ScheduleMode> {
-    return {
-      type: ModeInfoReducer.SET_MODE,
-      payload: mode,
-    };
-  }
-}
-
-export function modeInfoReducer(
-  state: ScheduleMode = ScheduleMode.Readonly,
-  action: ModeInfoActionModel
-): ScheduleMode {
-  switch (action.type) {
-    case ModeInfoReducer.SET_MODE:
-      if (!action.payload) {
-        return state;
-      }
+export const setMode = createAction<ScheduleMode>("schedule/setMode");
+const modeInfoReducer = createReducer(ScheduleMode.Readonly, (builder) => {
+  builder
+    .addCase(setMode, (state, action) => {
+      if (!action.payload) return state;
       return action.payload;
-    default:
-      return state;
-  }
-}
+    })
+    .addDefaultCase((state) => state);
+});
+export default modeInfoReducer;
