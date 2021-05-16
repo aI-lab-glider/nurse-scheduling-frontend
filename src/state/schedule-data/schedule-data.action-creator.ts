@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import _ from "lodash";
-import { LocalStorageProvider } from "../../logic/data-access/local-storage-provider.model";
 import {
   RevisionType,
   ScheduleKey,
@@ -92,7 +91,7 @@ export class ScheduleDataActionCreator {
         revision = getState().actualState.revision;
       }
 
-      const monthDataModel = await new LocalStorageProvider().getMonthRevision(
+      const monthDataModel = await new LocalMonthRevisionManager().getMonthRevision(
         monthKey.getRevisionKey(revision)
       );
 
@@ -138,7 +137,7 @@ export class ScheduleDataActionCreator {
   private static async getMonthPrimaryRevisionDM(
     monthDataModel: MonthDataModel
   ): Promise<PrimaryMonthRevisionDataModel> {
-    const primaryMonthDM = await new LocalStorageProvider().getMonthRevision(
+    const primaryMonthDM = await new LocalMonthRevisionManager().getMonthRevision(
       monthDataModel.scheduleKey.getRevisionKey("primary")
     );
     return (primaryMonthDM ?? monthDataModel) as PrimaryMonthRevisionDataModel;

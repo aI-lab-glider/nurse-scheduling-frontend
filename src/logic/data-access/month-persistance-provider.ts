@@ -1,8 +1,13 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import PouchDB from "pouchdb-browser";
-import { DATABASE_NAME, MonthDMToRevisionKeyDict } from "./local-storage-provider.model";
-import { MonthDataModel, validateMonthDM } from "../../state/schedule-data/schedule-data.model";
 import _ from "lodash";
+import { MonthDataModel, validateMonthDM } from "../../state/schedule-data/schedule-data.model";
 import { MonthRevision, RevisionKey, RevisionType, ScheduleKey } from "./persistance-store.model";
+
+export const DATABASE_NAME = "nurse-scheduling";
+export type MonthDMToRevisionKeyDict = { [revisionKey: string]: MonthDataModel };
 
 export abstract class MonthPersistProvider {
   abstract saveMonth(revisionKey: RevisionKey, monthDataModel: MonthDataModel): Promise<void>;

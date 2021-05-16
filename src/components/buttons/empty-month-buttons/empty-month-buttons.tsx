@@ -7,11 +7,11 @@ import { t, TranslationHelper } from "../../../helpers/translations.helper";
 import { Button } from "../../common-components";
 import { ScheduleKey } from "../../../logic/data-access/persistance-store.model";
 import { MonthSwitchActionCreator } from "../../../state/schedule-data/month-switch.action-creator";
-import { LocalStorageProvider } from "../../../logic/data-access/local-storage-provider.model";
 import { MonthDataModel } from "../../../state/schedule-data/schedule-data.model";
 import { MonthHelper } from "../../../helpers/month.helper";
 import { useImportModal } from "../import-buttons/import-modal-context";
 import { getActualRevision, getPresentScheduleInfo } from "../../../state/schedule-data/selectors";
+import { LocalMonthRevisionManager } from "../../../logic/data-access/month-revision-manager";
 
 export function EmptyMonthButtons(): JSX.Element {
   const { month_number: currentMonth, year: currentYear } = useSelector(getPresentScheduleInfo);
@@ -31,7 +31,7 @@ export function EmptyMonthButtons(): JSX.Element {
     // https://www.debuggr.io/react-update-unmounted-component/
     let mounted = true;
     const setPrevMonth = async (): Promise<void> => {
-      const storageProvider = new LocalStorageProvider();
+      const storageProvider = new LocalMonthRevisionManager();
       const prevMonth = await storageProvider.getMonthRevision(
         new ScheduleKey(prevDate.getMonth(), prevDate.getFullYear()).getRevisionKey(revision)
       );

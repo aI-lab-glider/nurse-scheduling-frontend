@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import _ from "lodash";
 import {
   getScheduleKey,
   ScheduleDataModel,
@@ -6,14 +10,13 @@ import {
 import { cropScheduleDMToMonthDM } from "../schedule-container-converter/schedule-container-converter";
 import { MonthHelper } from "../../helpers/month.helper";
 import { ArrayHelper, ArrayPositionPointer } from "../../helpers/array.helper";
-import _ from "lodash";
 import { getRevisionTypeFromKey, RevisionKey, RevisionType } from "./persistance-store.model";
 import { LocalMonthRevisionManager } from "./month-revision-manager";
 
 export abstract class SchedulePersistProvider {
   abstract saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void>;
 
-  //abstract getSchedule(revisionKey: RevisionKey): Promise<MonthDataModel | undefined>;
+  // abstract getSchedule(revisionKey: RevisionKey): Promise<MonthDataModel | undefined>;
 }
 
 export class LocalSchedulePersistProvider extends SchedulePersistProvider {

@@ -4,7 +4,6 @@
 
 import { ScheduleKey, ThunkFunction } from "../../logic/data-access/persistance-store.model";
 import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
-import { LocalStorageProvider } from "../../logic/data-access/local-storage-provider.model";
 import { changeRevision } from "./schedule-condition/revision-info.reducer";
 import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 import { copyMonthDM } from "../../logic/month-copy/month-copy.logic";
@@ -15,6 +14,7 @@ import {
   PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
   TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
 } from "./schedule.actions";
+import { LocalMonthRevisionManager } from "../../logic/data-access/month-revision-manager";
 
 const PREV_MONTH_OFFSET = -1;
 
@@ -57,10 +57,10 @@ export class MonthSwitchActionCreator {
       } = getState().actualState.persistentSchedule.present.schedule_info;
       const fromDate = MonthHelper.getDateWithMonthOffset(month, year, PREV_MONTH_OFFSET);
 
-      const baseSchedule = await new LocalStorageProvider().getMonthRevision(
+      const baseSchedule = await new LocalMonthRevisionManager().getMonthRevision(
         new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).getRevisionKey("actual")
       );
-      const newSchedule = await new LocalStorageProvider().getMonthRevision(
+      const newSchedule = await new LocalMonthRevisionManager().getMonthRevision(
         new ScheduleKey(month, year).getRevisionKey("actual")
       );
 

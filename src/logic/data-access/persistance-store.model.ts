@@ -3,9 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { ThunkDispatch } from "redux-thunk";
-import { ArrayPositionPointer } from "../../helpers/array.helper";
 import { ApplicationStateModel } from "../../state/application-state.model";
-import { MonthDataModel, ScheduleDataModel } from "../../state/schedule-data/schedule-data.model";
+import { MonthDataModel } from "../../state/schedule-data/schedule-data.model";
 import { ActionModel } from "../../utils/action.model";
 
 export type ThunkFunction<TDispatchedActionPayload> = (
@@ -78,9 +77,9 @@ export interface MonthRevision {
   data: MonthDataModel;
   _rev?: Revision;
 }
-
-export abstract class PersistenceStoreProvider {
-  abstract getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined>;
-
-  abstract reloadDb(): Promise<void>;
-}
+// TODO:
+// 1. Ujednolicić argumenty
+// 2. Zmienic update next month
+// 3. Dodać getMonth
+// 4. Może jakieś testy?
+// 5. Poprawic MonthRevisionManager

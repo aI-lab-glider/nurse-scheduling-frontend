@@ -1,10 +1,13 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import _ from "lodash";
 import {
   createEmptyMonthDataModel,
   isMonthModelEmpty,
   MonthDataModel,
 } from "../../state/schedule-data/schedule-data.model";
 import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
-import _ from "lodash";
 import { RevisionKey, RevisionType, ScheduleKey } from "./persistance-store.model";
 import { LocalMonthPersistProvider } from "./month-persistance-provider";
 

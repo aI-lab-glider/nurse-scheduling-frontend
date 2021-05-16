@@ -4,7 +4,6 @@
 import * as _ from "lodash";
 import { RevisionType, ThunkFunction } from "../../../logic/data-access/persistance-store.model";
 import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
-import { LocalStorageProvider } from "../../../logic/data-access/local-storage-provider.model";
 import { Shift, ShiftCode } from "./shift-types.model";
 import { MonthDataModel, ScheduleDataModel } from "../schedule-data.model";
 import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
@@ -24,7 +23,7 @@ export class ShiftsActionCreator {
 
       dispatch(this.createUpdateAction(updatedMonth));
 
-      const nextMonthDM = await new LocalStorageProvider().getMonthRevision(
+      const nextMonthDM = await new LocalMonthRevisionManager().getMonthRevision(
         actualMonth.scheduleKey.nextMonthKey.getRevisionKey("primary")
       );
 
