@@ -13,10 +13,9 @@ import {
   NetworkErrorCode,
   ScheduleError,
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
-import { ActionModel } from "../../../utils/action.model";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-data/schedule.actions";
-import { ScheduleErrorActionType } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
+import { updateScheduleErrors } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 import { UndoActionCreator } from "../../../state/schedule-data/undoable.action-creator";
 import { Button } from "../../../components/common-components";
 import ConditionalLink from "../../../components/common-components/conditional-link/conditional-link.component";
@@ -48,7 +47,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
   );
   const [undoCounter, setUndoCounter] = useState(0);
 
-  async function updateScheduleErrors(): Promise<void> {
+  async function updateScheduleError(): Promise<void> {
     if (schedule) {
       let response: ScheduleError[];
       try {
@@ -60,10 +59,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
           },
         ];
       }
-      dispatcher({
-        type: ScheduleErrorActionType.UPDATE,
-        payload: response,
-      } as ActionModel<ScheduleError[]>);
+      dispatcher(updateScheduleErrors(response));
     }
   }
 
@@ -73,7 +69,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
     setChildrenComponent(<ErrorContainerDrawerComponent setOpen={setOpen} loadingErrors />);
     setTitle("Sprawdź plan");
     setOpen(true);
-    updateScheduleErrors().then(() =>
+    updateScheduleError().then(() =>
       setChildrenComponent(
         <ErrorContainerDrawerComponent setOpen={setOpen} loadingErrors={false} />
       )

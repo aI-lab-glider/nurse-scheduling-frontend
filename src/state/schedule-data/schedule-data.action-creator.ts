@@ -25,6 +25,7 @@ import {
 import { ScheduleErrorMessageModel } from "./schedule-errors/schedule-error-message.model";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 import { Shift } from "./shifts-types/shift-types.model";
+import { cleanScheduleErrors } from "./schedule-errors/schedule-errors.reducer";
 
 export class ScheduleDataActionCreator {
   // #region Update state
@@ -191,10 +192,5 @@ export class ScheduleDataActionCreator {
     return action;
   }
 
-  static cleanErrors(): ActionModel<unknown> {
-    const action = {
-      type: ScheduleActionType.CLEAN_ERRORS,
-    };
-    return action;
-  }
+  static cleanErrors = () => cleanScheduleErrors();
 }

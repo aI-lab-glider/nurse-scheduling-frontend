@@ -9,32 +9,27 @@ import {
   DEFAULT_TEAM,
 } from "../../../logic/schedule-parser/workers-info.parser";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
-import { createActionName, ScheduleActionModel, ScheduleActionType } from "../schedule.actions";
+import { addNewSchedule, updateSchedule } from "../schedule.actions";
+import { createReducer } from "@reduxjs/toolkit";
 
-export function employeeInfoReducerF(name: string) {
-  return (
-    state: WorkersInfoModel = scheduleDataInitialState.employee_info,
-    action: ScheduleActionModel
-  ): WorkersInfoModel => {
+export const employeeInfoReducerF = (name: string) =>
+  createReducer(scheduleDataInitialState.employee_info, (builder) => {
     let monthEmployeeInfo: WorkersInfoModel;
-    switch (action.type) {
-      case createActionName(name, ScheduleActionType.ADD_NEW):
+    builder
+      .addCase(addNewSchedule(name), (state, action) => {
         monthEmployeeInfo = (action.payload as ScheduleDataModel)?.employee_info;
         if (!monthEmployeeInfo) return state;
         monthEmployeeInfo = preprocessWorkerInfoModel(monthEmployeeInfo);
         return { ...monthEmployeeInfo };
-
-      case createActionName(name, ScheduleActionType.UPDATE):
+      })
+      .addCase(updateSchedule(name), (state, action) => {
         monthEmployeeInfo = (action.payload as ScheduleDataModel)?.employee_info;
         if (!monthEmployeeInfo) return state;
         monthEmployeeInfo = preprocessWorkerInfoModel(monthEmployeeInfo);
         return { ...state, ...monthEmployeeInfo };
-      default:
-        return state;
-    }
-  };
-}
-
+      })
+      .addDefaultCase((state) => state);
+  });
 /* eslint-disable @typescript-eslint/no-explicit-any */
 function fillWorkerInfoWithDefaultValue(
   workerInfo: WorkersInfoModel,

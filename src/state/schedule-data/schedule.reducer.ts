@@ -10,8 +10,8 @@ import { foundationInfoReducerF } from "./foundation-info/foundation-info.reduce
 import { scheduleInfoReducerF } from "./month-info/month-info.reducer";
 import { workerShiftsReducerF } from "./workers-shifts/worker-shifts.reducer";
 import { generationInfoReducerF } from "./schedule-condition/generation-info.reducer";
-import { shiftsModelReducer } from "./shifts-types/shifts-model.reducer";
 import { corruptedInfoReducerF } from "./schedule-condition/corrupted-info.reducer";
+import { shiftsModelReducer } from "./shifts-types/shifts-model.reducer";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function scheduleReducerF(name: string) {

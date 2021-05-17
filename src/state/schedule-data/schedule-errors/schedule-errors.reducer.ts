@@ -3,27 +3,21 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import _ from "lodash";
 import { GroupedScheduleErrors, ScheduleError } from "./schedule-error.model";
-import { ActionModel } from "../../../utils/action.model";
-import { ScheduleActionType } from "../schedule.actions";
+
+import { createAction, createReducer } from "@reduxjs/toolkit";
 
 export enum ScheduleErrorActionType {
   UPDATE = "updateScheduleError",
 }
-
-export function scheduleErrorsReducer(
-  state: GroupedScheduleErrors = {},
-  action: ActionModel<ScheduleError[]>
-): GroupedScheduleErrors {
-  switch (action.type) {
-    case ScheduleErrorActionType.UPDATE:
+export const updateScheduleErrors = createAction<ScheduleError[]>("schedule/updateErrors");
+export const cleanScheduleErrors = createAction("schedule/cleanErrors");
+export const scheduleErrorsReducer = createReducer({} as GroupedScheduleErrors, (builder) => {
+  builder
+    .addCase(updateScheduleErrors, (state, action) => {
       if (!action.payload) action.payload = [];
       const errors = _.groupBy(action.payload, (item) => item.kind);
       return errors;
-
-    case ScheduleActionType.CLEAN_ERRORS:
-      // In case if new schedule is added we should remove error-list, that previously existed
-      return {};
-    default:
-      return state;
-  }
-}
+    })
+    .addCase(cleanScheduleErrors, (state, action) => null)
+    .addDefaultCase((state) => state);
+});
