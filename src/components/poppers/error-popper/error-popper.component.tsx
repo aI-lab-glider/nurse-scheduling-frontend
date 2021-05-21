@@ -16,6 +16,7 @@ import {
 import ErrorListItem from "../../error-list/error-list-item.component";
 import { Popper } from "../popper";
 import { colors } from "../../../assets/colors";
+import { getPresentSchedule } from "../../../state/schedule-data/selectors";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface ErrorPopperOptions {
@@ -82,9 +83,7 @@ export function ErrorPopper({
     }
   }
 
-  const { shift_types: shiftTypes } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
+  const { shift_types: shiftTypes } = useSelector(getPresentSchedule);
   return (
     <>
       <ErrorTooltip

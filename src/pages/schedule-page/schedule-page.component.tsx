@@ -10,9 +10,9 @@ import { ScheduleEditPage } from "./edit-tab/schedule-edit.page";
 import { ScheduleReadOnlyPage } from "./read-only-tab/schedule-read-only.page";
 import { usePersistentDrawer } from "../../components/drawers/drawer/persistent-drawer-context";
 import AppErrorModal from "../../components/modals/app-error-modal/app-error.modal.component";
-import { ApplicationStateModel } from "../../state/application-state.model";
 import { CorruptedScheduleComponent } from "./corrupted-month-tab/corrupted-schedule.component";
 import { setScheduleCorrupted } from "../../state/schedule-data/schedule-condition/corrupted-info.reducer";
+import { getPresentSchedule } from "../../state/schedule-data/selectors";
 
 interface SchedulePageOptions {
   editModeHandler: (editMode: boolean) => void;
@@ -23,9 +23,7 @@ export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Elem
   const dispatch = useDispatch();
 
   const [isOpenAppError, setIsAppErrorOpen] = useState(false);
-  const { isCorrupted } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
+  const { isCorrupted } = useSelector(getPresentSchedule);
 
   const fallback = useCallback(
     ({ resetError }): JSX.Element => (

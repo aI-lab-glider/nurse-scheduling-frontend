@@ -4,23 +4,22 @@
 
 import React, { useRef } from "react";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ButtonData, DropdownButtons } from "../dropdown-buttons/dropdown-buttons.component";
 import ExportModal from "../../modals/export-modal/export.modal.component";
 import { useImportModal } from "./import-modal-context";
 import { t } from "../../../helpers/translations.helper";
 import { AbsenceExportLogic } from "../../../logic/schedule-exporter/absence-export.logic";
+import {
+  getActualState,
+  getPresentTemporarySchedule,
+} from "../../../state/schedule-data/selectors";
 
 export function ImportButtonsComponent(): JSX.Element {
   const { handleImport } = useImportModal();
   const fileUpload = useRef<HTMLInputElement>(null);
-  const { revision, primaryRevision } = useSelector(
-    (state: ApplicationStateModel) => state.actualState
-  );
+  const { revision, primaryRevision } = useSelector(getActualState);
 
-  const stateScheduleModel = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule?.present
-  );
+  const stateScheduleModel = useSelector(getPresentTemporarySchedule);
 
   const btnData1: ButtonData = {
     label: t("load"),

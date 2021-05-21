@@ -13,7 +13,7 @@ import {
   NetworkErrorCode,
   ScheduleError,
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
-import { ApplicationStateModel } from "../../../state/application-state.model";
+
 import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-data/schedule.actions";
 import { updateScheduleErrors } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 import { UndoActionCreator } from "../../../state/schedule-data/undoable.action-creator";
@@ -25,26 +25,25 @@ import { useNotification } from "../../../components/notification/notification.c
 import ErrorContainerDrawerComponent from "../../../components/drawers/error-container-drawer/error-container-drawer.component";
 import { useTemporarySchedule } from "../../../hooks/use-temporary-schedule";
 import { colors, fontSizeBase, fontSizeXl } from "../../../assets/colors";
+import {
+  getActualState,
+  getPresentSchedule,
+  getPresentTemporarySchedule,
+} from "../../../state/schedule-data/selectors";
 
 interface EditPageToolbarOptions {
   close: () => void;
 }
 
 export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element {
-  const schedule = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present
-  );
+  const schedule = useSelector(getPresentTemporarySchedule);
 
-  const { primaryRevision } = useSelector((app: ApplicationStateModel) => app.actualState);
+  const { primaryRevision } = useSelector(getActualState);
   const { createNotification } = useNotification();
   const dispatcher = useDispatch();
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
-  const { shifts: persistentShifts } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
-  const { shifts: temporaryShifts } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present
-  );
+  const { shifts: persistentShifts } = useSelector(getPresentSchedule);
+  const { shifts: temporaryShifts } = useSelector(getPresentTemporarySchedule);
   const [undoCounter, setUndoCounter] = useState(0);
 
   async function updateScheduleError(): Promise<void> {

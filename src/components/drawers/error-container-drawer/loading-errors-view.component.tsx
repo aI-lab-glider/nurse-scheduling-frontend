@@ -13,13 +13,16 @@ import {
   ScheduleError,
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { ActionModel } from "../../../utils/action.model";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import { Button } from "../../common-components";
 import ErrorList from "../../error-list/error-list.component";
 import { ErrorLoaderState, Props } from "./error-container-drawer.component";
 import { ScheduleErrorActionType } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 import { t } from "../../../helpers/translations.helper";
 import { colors } from "../../../assets/colors";
+import {
+  getActualState,
+  getPresentTemporarySchedule,
+} from "../../../state/schedule-data/selectors";
 
 interface ErrorLoaderOptions {
   state?: Props;
@@ -31,7 +34,7 @@ interface ErrorLoaderOptions {
 export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions): JSX.Element {
   const { setOpen, isNetworkError } = options;
   const [spinnerAgain, setSpinnerAgain] = useState(false);
-  const { primaryRevision } = useSelector((app: ApplicationStateModel) => app.actualState);
+  const { primaryRevision } = useSelector(getActualState);
 
   const dispatcher = useDispatch();
 
@@ -39,9 +42,7 @@ export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions):
     setOpen(false);
   }
 
-  const schedule = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present
-  );
+  const schedule = useSelector(getPresentTemporarySchedule);
   const reload = React.useCallback(() => {
     async function updateScheduleErrors(): Promise<void> {
       if (schedule) {

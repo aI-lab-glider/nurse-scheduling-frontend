@@ -12,6 +12,7 @@ import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-dat
 import { Button } from "../../../components/common-components";
 import { ScheduleDataModel } from "../../../state/schedule-data/schedule-data.model";
 import { colors, fontSizeBase, fontWeightBold } from "../../../assets/colors";
+import { getPresentScheduleInfo } from "../../../state/schedule-data/selectors";
 
 const MINIMUM_UNDO_COUNT_TO_REVERT_NORMAL_SCHEDULE = 2; // schedule which caused corruption and the same schedule with isCorrupted=true
 const MSG_UNABLE_TO_LOAD_SCHEDULE = "Nie można wyświetlić zapisanego grafiku";
@@ -24,9 +25,7 @@ export function CorruptedScheduleComponent(): JSX.Element {
   const { past } = useSelector(
     (state: ApplicationStateModel) => state.actualState.persistentSchedule
   );
-  const { month_number: month, year } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
-  );
+  const { month_number: month, year } = useSelector(getPresentScheduleInfo);
 
   const isCurrentNotCorruptedSchedule = useCallback(
     (schedule: ScheduleDataModel): boolean =>

@@ -2,9 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+import { createAction, createReducer } from "@reduxjs/toolkit";
 import { Shift } from "./shift-types.model";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
-import { createAction, createReducer } from "@reduxjs/toolkit";
 
 export const deleteShift = createAction<Shift>("schedule/deleteShift");
 export const addNewShift = createAction<Shift>("schedule/addNewShift");

@@ -25,8 +25,8 @@ import { WorkingTimeHelper } from "../../../helpers/working-time.helper";
 import { useMonthInfo } from "../../../hooks/use-month-info";
 import { WorkerHourInfo } from "../../../logic/schedule-logic/worker-hours-info.logic";
 import { DEFAULT_CONTRACT_TYPE } from "../../../logic/schedule-parser/workers-info.parser";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import { WorkerName } from "../../../state/schedule-data/schedule-sensitive-data.model";
+import { getPresentEmployeeInfo } from "../../../state/schedule-data/selectors";
 import {
   ContractType,
   WorkerInfoModel,
@@ -56,9 +56,7 @@ export default function WorkersTab(): JSX.Element {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof WorkerInfoModel>("name");
-  const { type, time, contractType, team } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.employee_info
-  );
+  const { type, time, contractType, team } = useSelector(getPresentEmployeeInfo);
   const { year, monthNumber } = useMonthInfo();
 
   const [workerData, setWorkerData] = useState([] as WorkerInfoModel[]);

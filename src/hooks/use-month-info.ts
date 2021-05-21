@@ -6,7 +6,10 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { VerboseDate } from "../state/schedule-data/foundation-info/foundation-info.model";
 import { MonthInfoLogic } from "../logic/schedule-logic/month-info.logic";
-import { ApplicationStateModel } from "../state/application-state.model";
+import {
+  getPresentScheduleInfo,
+  getPresentScheduleMonthInfo,
+} from "../state/schedule-data/selectors";
 
 interface UseMonthInfoReturn {
   verboseDates: VerboseDate[];
@@ -15,12 +18,8 @@ interface UseMonthInfoReturn {
 }
 
 export function useMonthInfo(): UseMonthInfoReturn {
-  const { dates } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.month_info
-  );
-  const { year, month_number } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
-  );
+  const { dates } = useSelector(getPresentScheduleMonthInfo);
+  const { year, month_number } = useSelector(getPresentScheduleInfo);
 
   const { verboseDates } = new MonthInfoLogic(month_number, year, dates);
   const [useMonthState, setUseMonthState] = useState<UseMonthInfoReturn>({

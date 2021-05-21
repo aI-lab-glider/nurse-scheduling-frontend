@@ -2,9 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import _ from "lodash";
-import { GroupedScheduleErrors, ScheduleError } from "./schedule-error.model";
-
 import { createAction, createReducer } from "@reduxjs/toolkit";
+import { GroupedScheduleErrors, ScheduleError } from "./schedule-error.model";
 
 export enum ScheduleErrorActionType {
   UPDATE = "updateScheduleError",

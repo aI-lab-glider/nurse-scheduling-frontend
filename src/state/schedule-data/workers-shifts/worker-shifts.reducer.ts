@@ -2,11 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
+import { createReducer } from "@reduxjs/toolkit";
 import { ScheduleDataModel } from "../schedule-data.model";
 import { Shift, ShiftCode } from "../shifts-types/shift-types.model";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import { addNewSchedule, updateSchedule } from "../schedule.actions";
-import { createReducer } from "@reduxjs/toolkit";
 import { deleteShift, modifyShift } from "../shifts-types/shifts-model.reducer";
 
 export const workerShiftsReducerF = (name: string) =>

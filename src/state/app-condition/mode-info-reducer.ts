@@ -3,8 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 // import { ActionModel } from "../../utils/action.model";
-import { ScheduleMode } from "../../components/schedule/schedule-state.model";
 import { createAction, createReducer } from "@reduxjs/toolkit";
+import { ScheduleMode } from "../../components/schedule/schedule-state.model";
 
 export const setMode = createAction<ScheduleMode>("schedule/setMode");
 const modeInfoReducer = createReducer(ScheduleMode.Readonly, (builder) => {

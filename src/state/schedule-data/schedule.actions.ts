@@ -4,12 +4,12 @@
 
 import * as _ from "lodash";
 import { ThunkDispatch } from "redux-thunk";
+import { createAction } from "@reduxjs/toolkit";
 import { ScheduleDataModel } from "./schedule-data.model";
 import { ActionModel } from "../../utils/action.model";
 import { ApplicationStateModel } from "../application-state.model";
 import { UndoableConfig } from "./undoable.action-creator";
 import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
-import { createAction } from "@reduxjs/toolkit";
 import { FoundationInfoActionType } from "./foundation-info/foundation-info.action-creator";
 
 export function isScheduleAction(action: ActionModel<unknown>): action is ScheduleActionModel {

@@ -7,7 +7,6 @@ import styled from "styled-components";
 import { DataRowHelper } from "../../../helpers/data-row.helper";
 import { DataRow } from "../../../logic/schedule-logic/data-row";
 import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../../../logic/section.model";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import { updateChildrenAndExtraworkers } from "../../../state/schedule-data/foundation-info/foundation-info.action-creator";
 import { NameTableComponent } from "../worker-info-section/name-table/nametable.component";
 import { ScheduleMode } from "../schedule-state.model";
@@ -16,11 +15,12 @@ import { SelectionMatrix } from "../base/base-section/use-selection-matrix";
 import { useFoundationInfo } from "../../../hooks/use-foundation-info";
 import { SectionContainer, SectionWrapper } from "../base/styled";
 import { colors } from "../../../assets/colors";
+import { getActualState } from "../../../state/schedule-data/selectors";
 
 export function FoundationInfoComponent(): JSX.Element {
   const { childrenNumber, extraWorkers } = useFoundationInfo();
 
-  const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const { mode } = useSelector(getActualState);
 
   const isEditable = mode === ScheduleMode.Edit;
 

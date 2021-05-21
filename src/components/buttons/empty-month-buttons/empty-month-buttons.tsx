@@ -12,12 +12,11 @@ import { LocalStorageProvider } from "../../../logic/data-access/local-storage-p
 import { MonthDataModel } from "../../../state/schedule-data/schedule-data.model";
 import { MonthHelper } from "../../../helpers/month.helper";
 import { useImportModal } from "../import-buttons/import-modal-context";
+import { getActualState, getPresentScheduleInfo } from "../../../state/schedule-data/selectors";
 
 export function EmptyMonthButtons(): JSX.Element {
-  const { month_number: currentMonth, year: currentYear } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
-  );
-  const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const { month_number: currentMonth, year: currentYear } = useSelector(getPresentScheduleInfo);
+  const { revision } = useSelector(getActualState);
 
   const prevDate = MonthHelper.getDateWithMonthOffset(currentMonth, currentYear, -1);
 

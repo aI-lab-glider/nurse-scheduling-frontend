@@ -4,7 +4,7 @@
 import React, { CSSProperties, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { ColorHelper } from "../../../../../helpers/colors/color.helper";
-import { ApplicationStateModel } from "../../../../../state/application-state.model";
+import { getPresentSchedule } from "../../../../../state/schedule-data/selectors";
 import { ShiftCode } from "../../../../../state/schedule-data/shifts-types/shift-types.model";
 import { baseCellDataCy } from "../../../base/base-cell/base-cell.models";
 import { Content, ContentWrapper, Shift, ShiftBar, StyledErrorPopper } from "../shit-cell.styles";
@@ -24,9 +24,7 @@ export function ShiftCellContent({
   cellIndex,
   errorSelector,
 }: ShiftCellContentOptions): JSX.Element {
-  const { shift_types: shiftTypes } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
+  const { shift_types: shiftTypes } = useSelector(getPresentSchedule);
   function conditionalClick() {
     if (!isBlocked) onClick?.();
   }

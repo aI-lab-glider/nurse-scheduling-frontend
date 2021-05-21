@@ -5,12 +5,13 @@
 import { useSelector } from "react-redux";
 import { ApplicationStateModel, ScheduleStateModel } from "../state/application-state.model";
 import { ScheduleMode } from "../components/schedule/schedule-state.model";
+import { getActualState } from "../state/schedule-data/selectors";
 
 export function useFoundationInfo(): {
   childrenNumber: number[];
   extraWorkers: number[];
 } {
-  const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const { mode } = useSelector(getActualState);
   const key: keyof ScheduleStateModel =
     mode === ScheduleMode.Edit ? "temporarySchedule" : "persistentSchedule";
   const { children_number: childrenNumber = [], extra_workers: extraWorkers = [] } = useSelector(

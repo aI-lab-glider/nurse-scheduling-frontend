@@ -3,12 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import * as _ from "lodash";
+import { createReducer } from "@reduxjs/toolkit";
 import {
   FoundationInfoAction,
   updateChildrenAndExtraworkers,
 } from "./foundation-info.action-creator";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
-import { createReducer } from "@reduxjs/toolkit";
 import { addNewSchedule, isScheduleAction, updateSchedule } from "../schedule.actions";
 
 export const foundationInfoReducerF = (name: string) =>
