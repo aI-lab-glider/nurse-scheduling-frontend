@@ -4,7 +4,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { t, TranslationHelper } from "../../../helpers/translations.helper";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import { Button } from "../../common-components";
 import { ScheduleKey } from "../../../logic/data-access/persistance-store.model";
 import { MonthSwitchActionCreator } from "../../../state/schedule-data/month-switch.action-creator";
