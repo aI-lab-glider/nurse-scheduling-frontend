@@ -15,12 +15,12 @@ import { SelectionMatrix } from "../base/base-section/use-selection-matrix";
 import { useFoundationInfo } from "../../../hooks/use-foundation-info";
 import { SectionContainer, SectionWrapper } from "../base/styled";
 import { colors } from "../../../assets/colors";
-import { getActualState } from "../../../state/schedule-data/selectors";
+import { getActualMode } from "../../../state/schedule-data/selectors";
 
 export function FoundationInfoComponent(): JSX.Element {
   const { childrenNumber, extraWorkers } = useFoundationInfo();
 
-  const { mode } = useSelector(getActualState);
+  const mode = useSelector(getActualMode);
 
   const isEditable = mode === ScheduleMode.Edit;
 

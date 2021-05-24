@@ -12,7 +12,7 @@ import { colors, fontSizeBase } from "../../assets/colors";
 import { t } from "../../helpers/translations.helper";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../state/app-config-context";
 import { MonthSwitchActionCreator } from "../../state/schedule-data/month-switch.action-creator";
-import { getActualState, getPresentScheduleInfo } from "../../state/schedule-data/selectors";
+import { getActualMode, getPresentScheduleInfo } from "../../state/schedule-data/selectors";
 import { Button } from "../buttons/button-component/button.component";
 import ReportIssueModal from "../modals/report-issue-modal/report-issue-modal.component";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
@@ -27,7 +27,7 @@ function monthDiff(d1: Date, d2: Date): number {
 }
 
 export function HeaderComponent(): JSX.Element {
-  const applicationStateModel = useSelector(getActualState).mode;
+  const applicationStateModel = useSelector(getActualMode);
   const appConfigContext = useAppConfig().mode;
 
   const dispatch = useDispatch();

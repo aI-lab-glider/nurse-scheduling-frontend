@@ -8,7 +8,7 @@ import { ScheduleErrorMessageModel } from "../../../state/schedule-data/schedule
 import ErrorLoader from "./loading-errors-view.component";
 import { NetworkErrorCode } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
-import { getActualState, getPresentSchedule } from "../../../state/schedule-data/selectors";
+import { getPresentShiftTypes, getScheduleErrors } from "../../../state/schedule-data/selectors";
 
 export interface ErrorContainerDrawerComponentOptions {
   setOpen: (boolean) => void;
@@ -33,9 +33,9 @@ export default function ErrorContainerDrawerComponent(
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
   const [loadingState, setLoadingState] = useState<Props>();
   const [isNetworkError, setIsNetworkError] = useState(false);
-  const { scheduleErrors } = useSelector(getActualState);
+  const scheduleErrors = useSelector(getScheduleErrors);
   const { setOpen, loadingErrors } = options;
-  const { shift_types: shiftTypes } = useSelector(getPresentSchedule);
+  const shiftTypes = useSelector(getPresentShiftTypes);
 
   useEffect(() => {
     const spinner = {

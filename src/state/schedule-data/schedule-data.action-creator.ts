@@ -192,5 +192,5 @@ export class ScheduleDataActionCreator {
     return action;
   }
 
-  static cleanErrors = () => cleanScheduleErrors();
+  static cleanErrors = cleanScheduleErrors;
 }

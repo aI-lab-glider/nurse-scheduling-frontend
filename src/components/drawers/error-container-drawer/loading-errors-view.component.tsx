@@ -12,17 +12,16 @@ import {
   NetworkErrorCode,
   ScheduleError,
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
-import { ActionModel } from "../../../utils/action.model";
 import { Button } from "../../common-components";
 import ErrorList from "../../error-list/error-list.component";
 import { ErrorLoaderState, Props } from "./error-container-drawer.component";
-import { ScheduleErrorActionType } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 import { t } from "../../../helpers/translations.helper";
 import { colors } from "../../../assets/colors";
 import {
-  getActualState,
   getPresentTemporarySchedule,
+  getPrimaryRevision,
 } from "../../../state/schedule-data/selectors";
+import { updateScheduleErrors } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 
 interface ErrorLoaderOptions {
   state?: Props;
@@ -34,7 +33,7 @@ interface ErrorLoaderOptions {
 export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions): JSX.Element {
   const { setOpen, isNetworkError } = options;
   const [spinnerAgain, setSpinnerAgain] = useState(false);
-  const { primaryRevision } = useSelector(getActualState);
+  const primaryRevision = useSelector(getPrimaryRevision);
 
   const dispatcher = useDispatch();
 
@@ -44,7 +43,7 @@ export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions):
 
   const schedule = useSelector(getPresentTemporarySchedule);
   const reload = React.useCallback(() => {
-    async function updateScheduleErrors(): Promise<void> {
+    async function updateScheduleErrorss(): Promise<void> {
       if (schedule) {
         let response: ScheduleError[];
         try {
@@ -56,14 +55,11 @@ export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions):
             },
           ];
         }
-        dispatcher({
-          type: ScheduleErrorActionType.UPDATE,
-          payload: response,
-        } as ActionModel<ScheduleError[]>);
+        dispatcher(updateScheduleErrors(response));
       }
     }
     setSpinnerAgain(true);
-    updateScheduleErrors();
+    updateScheduleErrorss();
     setTimeout(() => setSpinnerAgain(false), 4000);
   }, [dispatcher, primaryRevision, schedule]);
 

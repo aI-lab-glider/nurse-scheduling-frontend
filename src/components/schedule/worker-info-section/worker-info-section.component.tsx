@@ -17,7 +17,7 @@ import {
 import { shiftSectionDataCy } from "./worker-info-section.models";
 import { SectionContainer, SectionWrapper } from "../base/styled";
 import { colors } from "../../../assets/colors";
-import { getActualState } from "../../../state/schedule-data/selectors";
+import { getActualMode } from "../../../state/schedule-data/selectors";
 
 type SubcomponentsOptions = Omit<NameTableSectionOptions, "isWorker" | "uuid" | "updateData"> &
   ShiftsSectionOptions &
@@ -35,7 +35,7 @@ export function WorkerInfoSection({
   sectionIndex,
   ...options
 }: WorkerInfoSectionOptions): JSX.Element {
-  const { mode } = useSelector(getActualState);
+  const mode = useSelector(getActualMode);
 
   const dataRows = data.map(
     (workerInfo) =>

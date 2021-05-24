@@ -26,9 +26,9 @@ import ErrorContainerDrawerComponent from "../../../components/drawers/error-con
 import { useTemporarySchedule } from "../../../hooks/use-temporary-schedule";
 import { colors, fontSizeBase, fontSizeXl } from "../../../assets/colors";
 import {
-  getActualState,
-  getPresentSchedule,
+  getPresentScheduleShifts,
   getPresentTemporarySchedule,
+  getPrimaryRevision,
 } from "../../../state/schedule-data/selectors";
 
 interface EditPageToolbarOptions {
@@ -38,12 +38,12 @@ interface EditPageToolbarOptions {
 export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element {
   const schedule = useSelector(getPresentTemporarySchedule);
 
-  const { primaryRevision } = useSelector(getActualState);
+  const primaryRevision = useSelector(getPrimaryRevision);
   const { createNotification } = useNotification();
   const dispatcher = useDispatch();
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
-  const { shifts: persistentShifts } = useSelector(getPresentSchedule);
-  const { shifts: temporaryShifts } = useSelector(getPresentTemporarySchedule);
+  const persistentShifts = useSelector(getPresentScheduleShifts);
+  const temporaryShifts = useSelector(getPresentTemporarySchedule);
   const [undoCounter, setUndoCounter] = useState(0);
 
   async function updateScheduleError(): Promise<void> {

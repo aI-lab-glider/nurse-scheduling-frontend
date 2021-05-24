@@ -5,9 +5,6 @@ import _ from "lodash";
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import { GroupedScheduleErrors, ScheduleError } from "./schedule-error.model";
 
-export enum ScheduleErrorActionType {
-  UPDATE = "updateScheduleError",
-}
 export const updateScheduleErrors = createAction<ScheduleError[]>("schedule/updateErrors");
 export const cleanScheduleErrors = createAction("schedule/cleanErrors");
 export const scheduleErrorsReducer = createReducer({} as GroupedScheduleErrors, (builder) => {

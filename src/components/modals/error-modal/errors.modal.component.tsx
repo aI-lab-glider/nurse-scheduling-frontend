@@ -11,7 +11,7 @@ import DefaultModal from "../modal.component";
 import ModalErrorList from "./error.modal.list.component";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
 import { t } from "../../../helpers/translations.helper";
-import { getActualState, getPresentSchedule } from "../../../state/schedule-data/selectors";
+import { getPresentShiftTypes, getScheduleErrors } from "../../../state/schedule-data/selectors";
 
 export interface ErrorsModalComponent {
   setOpen: (open: boolean) => void;
@@ -20,7 +20,7 @@ export interface ErrorsModalComponent {
 
 export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Element {
   const { setOpen, open } = options;
-  const { scheduleErrors } = useSelector(getActualState);
+  const scheduleErrors = useSelector(getScheduleErrors);
   const dispach = useDispatch();
 
   const handleClose = (): void => {
@@ -29,7 +29,7 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
   };
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
 
-  const { shift_types: shiftTypes } = useSelector(getPresentSchedule);
+  const shiftTypes = useSelector(getPresentShiftTypes);
   useEffect(() => {
     const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors, shiftTypes);
     if (errors) {

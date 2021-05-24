@@ -10,14 +10,16 @@ import { useImportModal } from "./import-modal-context";
 import { t } from "../../../helpers/translations.helper";
 import { AbsenceExportLogic } from "../../../logic/schedule-exporter/absence-export.logic";
 import {
-  getActualState,
+  getActualRevision,
   getPresentTemporarySchedule,
+  getPrimaryRevision,
 } from "../../../state/schedule-data/selectors";
 
 export function ImportButtonsComponent(): JSX.Element {
   const { handleImport } = useImportModal();
   const fileUpload = useRef<HTMLInputElement>(null);
-  const { revision, primaryRevision } = useSelector(getActualState);
+  const revision = useSelector(getActualRevision);
+  const primaryRevision = useSelector(getPrimaryRevision);
 
   const stateScheduleModel = useSelector(getPresentTemporarySchedule);
 

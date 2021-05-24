@@ -24,7 +24,7 @@ import {
 import DefaultModal from "../modal.component";
 import { t } from "../../../helpers/translations.helper";
 import { colors, fontSizeBase } from "../../../assets/colors";
-import { getActualState } from "../../../state/schedule-data/selectors";
+import { getActualRevision, getPrimaryRevision } from "../../../state/schedule-data/selectors";
 
 export interface ExportModalComponent {
   setOpen: (open: boolean) => void;
@@ -52,7 +52,8 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
     extraWorkers: { value: true, label: t("dayWorkers") },
     overtime: { value: true, label: t("overtime").toLowerCase() },
   });
-  const { primaryRevision, revision } = useSelector(getActualState);
+  const revision = useSelector(getActualRevision);
+  const primaryRevision = useSelector(getPrimaryRevision);
 
   const exportExtensions = {
     xlsx: (): void => {

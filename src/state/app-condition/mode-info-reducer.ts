@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-// import { ActionModel } from "../../utils/action.model";
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import { ScheduleMode } from "../../components/schedule/schedule-state.model";
 

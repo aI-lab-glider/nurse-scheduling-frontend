@@ -11,11 +11,11 @@ import { LocalStorageProvider } from "../../../logic/data-access/local-storage-p
 import { MonthDataModel } from "../../../state/schedule-data/schedule-data.model";
 import { MonthHelper } from "../../../helpers/month.helper";
 import { useImportModal } from "../import-buttons/import-modal-context";
-import { getActualState, getPresentScheduleInfo } from "../../../state/schedule-data/selectors";
+import { getActualRevision, getPresentScheduleInfo } from "../../../state/schedule-data/selectors";
 
 export function EmptyMonthButtons(): JSX.Element {
   const { month_number: currentMonth, year: currentYear } = useSelector(getPresentScheduleInfo);
-  const { revision } = useSelector(getActualState);
+  const revision = useSelector(getActualRevision);
 
   const prevDate = MonthHelper.getDateWithMonthOffset(currentMonth, currentYear, -1);
 
