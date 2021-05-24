@@ -9,27 +9,27 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled, { css } from "styled-components";
 import backend from "../../../api/backend";
+import { colors, fontSizeBase, fontSizeXl } from "../../../assets/colors";
+import { Button } from "../../../components/common-components";
+import ConditionalLink from "../../../components/common-components/conditional-link/conditional-link.component";
+import { usePersistentDrawer } from "../../../components/drawers/drawer/persistent-drawer-context";
+import ErrorContainerDrawerComponent from "../../../components/drawers/error-container-drawer/error-container-drawer.component";
+import SaveChangesModal from "../../../components/modals/save-changes-modal/save-changes-modal.component";
+import { useNotification } from "../../../components/notification/notification.context";
+import { useTemporarySchedule } from "../../../hooks/use-temporary-schedule";
 import {
   NetworkErrorCode,
   ScheduleError,
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
-
-import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-data/schedule.actions";
 import { updateScheduleErrors } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
-import { UndoActionCreator } from "../../../state/schedule-data/undoable.action-creator";
-import { Button } from "../../../components/common-components";
-import ConditionalLink from "../../../components/common-components/conditional-link/conditional-link.component";
-import { usePersistentDrawer } from "../../../components/drawers/drawer/persistent-drawer-context";
-import SaveChangesModal from "../../../components/modals/save-changes-modal/save-changes-modal.component";
-import { useNotification } from "../../../components/notification/notification.context";
-import ErrorContainerDrawerComponent from "../../../components/drawers/error-container-drawer/error-container-drawer.component";
-import { useTemporarySchedule } from "../../../hooks/use-temporary-schedule";
-import { colors, fontSizeBase, fontSizeXl } from "../../../assets/colors";
+import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-data/schedule.actions";
 import {
   getPresentScheduleShifts,
   getPresentTemporarySchedule,
+  getPresentTemporaryScheduleShifts,
   getPrimaryRevision,
 } from "../../../state/schedule-data/selectors";
+import { UndoActionCreator } from "../../../state/schedule-data/undoable.action-creator";
 
 interface EditPageToolbarOptions {
   close: () => void;
@@ -43,7 +43,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
   const dispatcher = useDispatch();
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const persistentShifts = useSelector(getPresentScheduleShifts);
-  const temporaryShifts = useSelector(getPresentTemporarySchedule);
+  const temporaryShifts = useSelector(getPresentTemporaryScheduleShifts);
   const [undoCounter, setUndoCounter] = useState(0);
 
   async function updateScheduleError(): Promise<void> {
@@ -120,6 +120,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
       <EditTextWrapper data-cy="edit-mode-text">Tryb edycji aktywny</EditTextWrapper>
 
       <Button data-cy="check-schedule-button" variant="primary" onClick={prepareDrawer}>
+        {/* TODO: move to translations */}
         Sprawdź Plan
       </Button>
 
@@ -127,6 +128,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
 
       <ConditionalLink to="/" shouldNavigate={!anyChanges()}>
         <Button onClick={askForSavingChanges} variant="secondary" data-cy="leave-edit-mode">
+          {/* TODO: move to translations */}
           Wyjdź
         </Button>
         <SaveChangesModal
@@ -145,6 +147,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
           handleSaveClick();
         }}
       >
+        {/* TODO: move to translations */}
         Zapisz
       </Button>
     </Wrapper>
