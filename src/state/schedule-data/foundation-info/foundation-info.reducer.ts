@@ -14,7 +14,7 @@ import { addNewSchedule, isScheduleAction, updateSchedule } from "../schedule.ac
 export const foundationInfoReducerF = (name: string) =>
   createReducer(scheduleDataInitialState.month_info, (builder) => {
     builder
-      .addCase(updateChildrenAndExtraworkers, (state, action) => {
+      .addCase(updateChildrenAndExtraworkers(name), (state, action) => {
         const data = (action as FoundationInfoAction).payload;
         if (_.isNil(data)) {
           return state;

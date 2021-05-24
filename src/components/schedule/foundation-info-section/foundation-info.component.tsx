@@ -39,13 +39,13 @@ export function FoundationInfoComponent(): JSX.Element {
         parseInt(newValue, 10)
       );
       const updatedFoundationInfo = DataRowHelper.dataRowsAsValueDict<number>(updatedDataRows);
-      const action = updateChildrenAndExtraworkers({
+      const action = {
         childrenNumber: updatedFoundationInfo[ChildrenSectionKey.RegisteredChildrenCount],
         extraWorkers: updatedFoundationInfo[ExtraWorkersSectionKey.ExtraWorkersCount],
-      });
-      dispatch(action);
+      };
+      dispatch(updateChildrenAndExtraworkers(isEditable ? "TEMPORARY" : "PERSISTANT")(action));
     },
-    [dispatch]
+    [dispatch, isEditable]
   );
   return (
     <div style={{ display: "inline-block" }}>
