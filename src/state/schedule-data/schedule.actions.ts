@@ -11,6 +11,7 @@ import { ApplicationStateModel } from "../application-state.model";
 import { UndoableConfig } from "./undoable.action-creator";
 import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
 import { FoundationInfoActionType } from "./foundation-info/foundation-info.action-creator";
+import { ScheduleActionDestination } from "../app.reducer";
 
 export function isScheduleAction(action: ActionModel<unknown>): action is ScheduleActionModel {
   return !_.isNil((action.payload as ScheduleDataModel)?.schedule_info);
@@ -28,12 +29,14 @@ export enum ScheduleActionType {
   DELETE_SHIFT = "DELETE_SHIFT",
   SET_SCHEDULE_CORRUPTED = "SET_SCHEDULE_CORRUPTED",
 }
-export const addNewSchedule = (name: string) =>
+export const addNewSchedule = (name: ScheduleActionDestination) =>
   createAction<ScheduleDataModel>(createActionName(name, ScheduleActionType.ADD_NEW));
-export const updateSchedule = (name: string) =>
+
+export const updateSchedule = (name: ScheduleActionDestination) =>
   createAction<ScheduleDataModel>(createActionName(name, ScheduleActionType.UPDATE));
+
 export function createActionName(
-  name: string,
+  name: ScheduleActionDestination,
   action: ScheduleActionType | FoundationInfoActionType
 ): string {
   return `${name}/${action}`;

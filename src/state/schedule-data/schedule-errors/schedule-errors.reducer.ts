@@ -14,9 +14,6 @@ export const scheduleErrorsReducer = createReducer({} as GroupedScheduleErrors, 
       const errors = _.groupBy(action.payload, (item) => item.kind);
       return errors;
     })
-    .addCase(cleanScheduleErrors, (state, action) => {
-      const a = {};
-      return a;
-    })
+    .addCase(cleanScheduleErrors, (state, action) => ({}))
     .addDefaultCase((state) => state);
 });

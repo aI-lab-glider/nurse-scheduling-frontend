@@ -30,6 +30,7 @@ import {
   getPrimaryRevision,
 } from "../../../state/schedule-data/selectors";
 import { UndoActionCreator } from "../../../state/schedule-data/undoable.action-creator";
+import { WorkerShiftsModel } from "../../../state/schedule-data/workers-shifts/worker-shifts.model";
 
 interface EditPageToolbarOptions {
   close: () => void;
@@ -42,8 +43,8 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
   const { createNotification } = useNotification();
   const dispatcher = useDispatch();
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
-  const persistentShifts = useSelector(getPresentScheduleShifts);
-  const temporaryShifts = useSelector(getPresentTemporaryScheduleShifts);
+  const persistentShifts: WorkerShiftsModel = useSelector(getPresentScheduleShifts);
+  const temporaryShifts: WorkerShiftsModel = useSelector(getPresentTemporaryScheduleShifts);
   const [undoCounter, setUndoCounter] = useState(0);
 
   async function updateScheduleError(): Promise<void> {

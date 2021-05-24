@@ -11,8 +11,9 @@ import {
 } from "../../../logic/schedule-parser/workers-info.parser";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import { addNewSchedule, updateSchedule } from "../schedule.actions";
+import { ScheduleActionDestination } from "../../app.reducer";
 
-export const employeeInfoReducerF = (name: string) =>
+export const employeeInfoReducerF = (name: ScheduleActionDestination) =>
   createReducer(scheduleDataInitialState.employee_info, (builder) => {
     let monthEmployeeInfo: WorkersInfoModel;
     builder

@@ -21,7 +21,7 @@ import {
   getPresentTemporarySchedule,
   getPrimaryRevision,
 } from "../../../state/schedule-data/selectors";
-import { updateScheduleErrors } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
+import { updateScheduleErrors as updateScheduleErrorsInState } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 
 interface ErrorLoaderOptions {
   state?: Props;
@@ -43,7 +43,7 @@ export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions):
 
   const schedule = useSelector(getPresentTemporarySchedule);
   const reload = React.useCallback(() => {
-    async function updateScheduleErrorss(): Promise<void> {
+    const checkScheduleForErrors = async (): Promise<void> => {
       if (schedule) {
         let response: ScheduleError[];
         try {
@@ -55,11 +55,12 @@ export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions):
             },
           ];
         }
-        dispatcher(updateScheduleErrors(response));
+        dispatcher(updateScheduleErrorsInState(response));
       }
-    }
+    };
+
     setSpinnerAgain(true);
-    updateScheduleErrorss();
+    checkScheduleForErrors();
     setTimeout(() => setSpinnerAgain(false), 4000);
   }, [dispatcher, primaryRevision, schedule]);
 

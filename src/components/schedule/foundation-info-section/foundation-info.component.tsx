@@ -16,17 +16,18 @@ import { useFoundationInfo } from "../../../hooks/use-foundation-info";
 import { SectionContainer, SectionWrapper } from "../base/styled";
 import { colors } from "../../../assets/colors";
 import { getActualMode } from "../../../state/schedule-data/selectors";
+import { TEMPORARY_SCHEDULE_NAME, PERSISTENT_SCHEDULE_NAME } from "../../../state/app.reducer";
 
 export function FoundationInfoComponent(): JSX.Element {
   const { childrenNumber, extraWorkers } = useFoundationInfo();
 
   const mode = useSelector(getActualMode);
 
-  const isEditable = mode === ScheduleMode.Edit;
+  const isEditMode = mode === ScheduleMode.Edit;
 
   const sectionData = [
-    new DataRow(ChildrenSectionKey.RegisteredChildrenCount, childrenNumber, isEditable),
-    new DataRow(ExtraWorkersSectionKey.ExtraWorkersCount, extraWorkers, isEditable),
+    new DataRow(ChildrenSectionKey.RegisteredChildrenCount, childrenNumber, isEditMode),
+    new DataRow(ExtraWorkersSectionKey.ExtraWorkersCount, extraWorkers, isEditMode),
   ];
 
   const dispatch = useDispatch();
@@ -43,9 +44,14 @@ export function FoundationInfoComponent(): JSX.Element {
         childrenNumber: updatedFoundationInfo[ChildrenSectionKey.RegisteredChildrenCount],
         extraWorkers: updatedFoundationInfo[ExtraWorkersSectionKey.ExtraWorkersCount],
       };
-      dispatch(updateChildrenAndExtraworkers(isEditable ? "TEMPORARY" : "PERSISTANT")(action));
+
+      dispatch(
+        updateChildrenAndExtraworkers(
+          isEditMode ? TEMPORARY_SCHEDULE_NAME : PERSISTENT_SCHEDULE_NAME
+        )(action)
+      );
     },
-    [dispatch, isEditable]
+    [dispatch, isEditMode]
   );
   return (
     <div style={{ display: "inline-block" }}>

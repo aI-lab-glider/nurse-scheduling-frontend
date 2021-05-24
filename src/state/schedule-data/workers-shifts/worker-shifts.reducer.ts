@@ -8,8 +8,9 @@ import { Shift, ShiftCode } from "../shifts-types/shift-types.model";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import { addNewSchedule, updateSchedule } from "../schedule.actions";
 import { deleteShift, modifyShift } from "../shifts-types/shifts-model.reducer";
+import { ScheduleActionDestination } from "../../app.reducer";
 
-export const workerShiftsReducerF = (name: string) =>
+export const workerShiftsReducerF = (name: ScheduleActionDestination) =>
   createReducer(scheduleDataInitialState.shifts, (builder) => {
     builder
       .addCase(addNewSchedule(name), (state, action) => {

@@ -10,8 +10,9 @@ import {
 } from "./foundation-info.action-creator";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import { addNewSchedule, isScheduleAction, updateSchedule } from "../schedule.actions";
+import { ScheduleActionDestination } from "../../app.reducer";
 
-export const foundationInfoReducerF = (name: string) =>
+export const foundationInfoReducerF = (name: ScheduleActionDestination) =>
   createReducer(scheduleDataInitialState.month_info, (builder) => {
     builder
       .addCase(updateChildrenAndExtraworkers(name), (state, action) => {

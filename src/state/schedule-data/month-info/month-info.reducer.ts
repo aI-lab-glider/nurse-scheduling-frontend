@@ -5,9 +5,10 @@ import { createReducer } from "@reduxjs/toolkit";
 import { ScheduleDataModel } from "../schedule-data.model";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import { addNewSchedule, updateSchedule } from "../schedule.actions";
+import { ScheduleActionDestination } from "../../app.reducer";
 
 let uuid = 0;
-export const scheduleInfoReducerF = (name: string) =>
+export const scheduleInfoReducerF = (name: ScheduleActionDestination) =>
   createReducer(scheduleDataInitialState.schedule_info, (builder) => {
     builder
       .addCase(addNewSchedule(name), (state, action) => {

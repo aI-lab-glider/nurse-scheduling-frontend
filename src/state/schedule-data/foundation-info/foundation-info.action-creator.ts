@@ -4,6 +4,7 @@
 
 import { createAction } from "@reduxjs/toolkit";
 import { ActionModel } from "../../../utils/action.model";
+import { ScheduleActionDestination } from "../../app.reducer";
 import { createActionName } from "../schedule.actions";
 
 export enum FoundationInfoActionType {
@@ -17,7 +18,7 @@ interface UpdateChildrenAndExtraworkersPayload {
   childrenNumber: number[];
 }
 
-export const updateChildrenAndExtraworkers = (name: string) =>
+export const updateChildrenAndExtraworkers = (name: ScheduleActionDestination) =>
   createAction<UpdateChildrenAndExtraworkersPayload>(
     createActionName(name, FoundationInfoActionType.UPDATE_CHILDREN_AND_EXTRAWORKERS)
   );

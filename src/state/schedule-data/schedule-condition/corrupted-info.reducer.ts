@@ -4,9 +4,10 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import { addNewSchedule, isScheduleAction, updateSchedule } from "../schedule.actions";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
+import { ScheduleActionDestination } from "../../app.reducer";
 
 export const setScheduleCorrupted = createAction("schedule/setIsCorrupted");
-export const corruptedInfoReducerF = (name: string) =>
+export const corruptedInfoReducerF = (name: ScheduleActionDestination) =>
   createReducer(scheduleDataInitialState.isCorrupted, (builder) => {
     builder
       .addCase(addNewSchedule(name), (state, action) => {

@@ -11,7 +11,7 @@ export const getPresentSchedule = createSelector(selectPresentSchedule, (state) 
 
 const selectPastSchedule = (state: ApplicationStateModel) =>
   state.actualState.persistentSchedule.past;
-export const getPastSchedule = createSelector(selectPastSchedule, (state) => state);
+export const getPastSchedules = createSelector(selectPastSchedule, (state) => state);
 
 const selectPresentScheduleInfo = (state: ApplicationStateModel) =>
   state.actualState.persistentSchedule.present.schedule_info;

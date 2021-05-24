@@ -11,7 +11,7 @@ import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-dat
 import { Button } from "../../../components/common-components";
 import { ScheduleDataModel } from "../../../state/schedule-data/schedule-data.model";
 import { colors, fontSizeBase, fontWeightBold } from "../../../assets/colors";
-import { getPastSchedule, getPresentScheduleInfo } from "../../../state/schedule-data/selectors";
+import { getPastSchedules, getPresentScheduleInfo } from "../../../state/schedule-data/selectors";
 
 const MINIMUM_UNDO_COUNT_TO_REVERT_NORMAL_SCHEDULE = 2; // schedule which caused corruption and the same schedule with isCorrupted=true
 const MSG_UNABLE_TO_LOAD_SCHEDULE = "Nie można wyświetlić zapisanego grafiku";
@@ -21,7 +21,7 @@ const MSG_LOAD_AGAIN_TOO = "Możesz też wczytać grafik ponownie";
 
 export function CorruptedScheduleComponent(): JSX.Element {
   const dispatch = useDispatch();
-  const past = useSelector(getPastSchedule);
+  const past = useSelector(getPastSchedules);
   const { month_number: month, year } = useSelector(getPresentScheduleInfo);
 
   const isCurrentNotCorruptedSchedule = useCallback(
