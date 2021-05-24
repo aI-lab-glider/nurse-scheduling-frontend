@@ -5,11 +5,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
 import { Button } from "../../buttons/button-component/button.component";
 import DefaultModal from "../modal.component";
 import { t } from "../../../helpers/translations.helper";
+import { getPresentSchedule } from "../../../state/schedule-data/selectors";
 
 export interface SaveChangesModalOptions {
   setOpen: (open: boolean) => void;
@@ -21,8 +21,7 @@ export interface SaveChangesModalOptions {
 export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.Element {
   const { open, setOpen, handleSave, closeOptions } = options;
   const title = t("unsavedChanges");
-  const { persistentSchedule } = useSelector((state: ApplicationStateModel) => state.actualState);
-  const persistent = persistentSchedule.present;
+  const persistent = useSelector(getPresentSchedule);
 
   const dispatch = useDispatch();
   const fetchPrevScheduleVersion = (): void => {

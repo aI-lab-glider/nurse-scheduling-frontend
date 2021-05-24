@@ -12,14 +12,16 @@ import {
   NetworkErrorCode,
   ScheduleError,
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
-import { ActionModel } from "../../../utils/action.model";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import { Button } from "../../common-components";
 import ErrorList from "../../error-list/error-list.component";
 import { ErrorLoaderState, Props } from "./error-container-drawer.component";
-import { ScheduleErrorActionType } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 import { t } from "../../../helpers/translations.helper";
 import { colors } from "../../../assets/colors";
+import {
+  getPresentTemporarySchedule,
+  getPrimaryRevision,
+} from "../../../state/schedule-data/selectors";
+import { updateScheduleErrors as updateScheduleErrorsInState } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 
 interface ErrorLoaderOptions {
   state?: Props;
@@ -31,7 +33,7 @@ interface ErrorLoaderOptions {
 export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions): JSX.Element {
   const { setOpen, isNetworkError } = options;
   const [spinnerAgain, setSpinnerAgain] = useState(false);
-  const { primaryRevision } = useSelector((app: ApplicationStateModel) => app.actualState);
+  const primaryRevision = useSelector(getPrimaryRevision);
 
   const dispatcher = useDispatch();
 
@@ -39,11 +41,9 @@ export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions):
     setOpen(false);
   }
 
-  const schedule = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present
-  );
+  const schedule = useSelector(getPresentTemporarySchedule);
   const reload = React.useCallback(() => {
-    async function updateScheduleErrors(): Promise<void> {
+    const checkScheduleForErrors = async (): Promise<void> => {
       if (schedule) {
         let response: ScheduleError[];
         try {
@@ -55,14 +55,12 @@ export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions):
             },
           ];
         }
-        dispatcher({
-          type: ScheduleErrorActionType.UPDATE,
-          payload: response,
-        } as ActionModel<ScheduleError[]>);
+        dispatcher(updateScheduleErrorsInState(response));
       }
-    }
+    };
+
     setSpinnerAgain(true);
-    updateScheduleErrors();
+    checkScheduleForErrors();
     setTimeout(() => setSpinnerAgain(false), 4000);
   }, [dispatcher, primaryRevision, schedule]);
 

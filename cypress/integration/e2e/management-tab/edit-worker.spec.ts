@@ -62,7 +62,7 @@ describe("Tab management", () => {
             [HoursInfoCells.overtime]: 160,
           };
           cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="half"]').click();
-          cy.get(`[data-cy="btn-save-worker"]`).click();
+          cy.get('[data-cy="btn-save-worker"]').click();
           cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1/2");
           cy.get('[data-cy="btn-schedule-tab"]').click();
           cy.checkHoursInfo(testWorkerData);
@@ -77,7 +77,7 @@ describe("Tab management", () => {
             [HoursInfoCells.overtime]: 80,
           };
           cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="full"]').click();
-          cy.get(`[data-cy="btn-save-worker"]`).click();
+          cy.get('[data-cy="btn-save-worker"]').click();
           cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1");
           cy.get('[data-cy="btn-schedule-tab"]').click();
           cy.checkHoursInfo(testWorkerData);
@@ -95,7 +95,7 @@ describe("Tab management", () => {
             .click()
             .clear({ force: true })
             .type("18");
-          cy.get(`[data-cy="btn-save-worker"]`).click();
+          cy.get('[data-cy="btn-save-worker"]').click();
           cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1/8");
           cy.get('[data-cy="btn-schedule-tab"]').click();
           cy.checkHoursInfo(testWorkerData);

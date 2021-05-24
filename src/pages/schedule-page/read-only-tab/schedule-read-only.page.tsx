@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { UndoableHotkeys } from "../../../components/common-components";
 import { ScheduleMode } from "../../../components/schedule/schedule-state.model";
-import { ModeInfoActionCreator } from "../../../state/app-condition/mode-info-reducer";
+import { setMode } from "../../../state/app-condition/mode-info-reducer";
 import { PERSISTENT_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-data/schedule.actions";
 import { ScheduleContainerComponent } from "../schedule-container.component";
 import { ReadOnlyToolbar } from "./read-only-toolbar";
@@ -19,8 +19,7 @@ export function ScheduleReadOnlyPage(props: ScheduleViewOnlyPageOptions): JSX.El
   const mode = ScheduleMode.Readonly;
   const dispatch = useDispatch();
   useEffect(() => {
-    const action = ModeInfoActionCreator.setMode(mode);
-    dispatch(action);
+    dispatch(setMode(mode));
   }, [dispatch, mode]);
 
   return (
