@@ -30,6 +30,7 @@ jobs:
           content="${content//$'\n'/'%0A'}"
           content="${content//$'\r'/'%0D'}"
           echo "::set-output name=cypressConfig::$content"
+          touch coverage/coverage-final.json
 
       - name: Run Cypress
         uses: cypress-io/github-action@v2
@@ -93,9 +94,9 @@ jobs:
         run: |
           mv reports/parallel-job-1/coverage-final-1.json reports
           mv reports/parallel-job-2/coverage-final-2.json reports
-          # mv reports/parallel-job-3/coverage-final-3.json reports
-          # mv reports/parallel-job-4/coverage-final-4.json reports
-          # mv reports/parallel-job-5/coverage-final-5.json reports
+          mv reports/parallel-job-3/coverage-final-3.json reports
+          mv reports/parallel-job-4/coverage-final-4.json reports
+          mv reports/parallel-job-5/coverage-final-5.json reports
 
           npx nyc merge reports ./.nyc_output/out.json
           head ./.nyc_output/out.json
