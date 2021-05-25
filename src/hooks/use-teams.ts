@@ -10,6 +10,7 @@ import { ApplicationStateModel, ScheduleStateModel } from "../state/application-
 import { WorkerInfo } from "./use-worker-info";
 import { ScheduleMode } from "../components/schedule/schedule-state.model";
 import { ScheduleDataModel } from "../state/schedule-data/schedule-data.model";
+import { getActualState } from "../state/schedule-data/selectors";
 
 export type WorkersByTeam = Map<string, WorkerInfo[]>;
 
@@ -46,7 +47,7 @@ export function groupWorkersByTeam({
 }
 
 export function useTeams(): WorkersByTeam {
-  const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const { mode } = useSelector(getActualState);
   const targetSchedule: keyof ScheduleStateModel =
     mode === ScheduleMode.Edit ? "temporarySchedule" : "persistentSchedule";
 

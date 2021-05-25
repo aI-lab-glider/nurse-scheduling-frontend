@@ -17,7 +17,6 @@ import { Button } from "../../common-components";
 import { ScheduleDataModel } from "../../../state/schedule-data/schedule-data.model";
 import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
 import { ScheduleExportLogic } from "../../../logic/schedule-exporter/schedule-export.logic";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import {
   ButtonData,
   DropdownButtons,
@@ -25,6 +24,7 @@ import {
 import DefaultModal from "../modal.component";
 import { t } from "../../../helpers/translations.helper";
 import { colors, fontSizeBase } from "../../../assets/colors";
+import { getActualRevision, getPrimaryRevision } from "../../../state/schedule-data/selectors";
 
 export interface ExportModalComponent {
   setOpen: (open: boolean) => void;
@@ -52,9 +52,8 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
     extraWorkers: { value: true, label: t("dayWorkers") },
     overtime: { value: true, label: t("overtime").toLowerCase() },
   });
-  const { primaryRevision } = useSelector((state: ApplicationStateModel) => state.actualState);
-
-  const { revision } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const revision = useSelector(getActualRevision);
+  const primaryRevision = useSelector(getPrimaryRevision);
 
   const exportExtensions = {
     xlsx: (): void => {

@@ -16,12 +16,12 @@ import ShiftDrawerComponent, {
   ShiftDrawerMode,
 } from "../../../components/shifts-drawer/shift-drawer.component";
 import { ParserHelper } from "../../../helpers/parser.helper";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
 import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
 import { ShiftsActionCreator } from "../../../state/schedule-data/shifts-types/shifts.action-creator";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
 import { fontSizeXs } from "../../../assets/colors";
+import { getPresentShiftTypes } from "../../../state/schedule-data/selectors";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -54,9 +54,7 @@ export default function ShiftTab(): JSX.Element {
   const [open, setIsOpen] = useState(false);
   const [mode, setMode] = useState(ShiftDrawerMode.ADD_NEW);
   const [selectedShift, setShift] = useState(Object);
-  const shiftData = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
-  );
+  const shiftData = useSelector(getPresentShiftTypes);
 
   function toggleOpen(shift: Shift, newMode: ShiftDrawerMode): void {
     setShift(shift);

@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import { createAction, createReducer } from "@reduxjs/toolkit";
 import * as _ from "lodash";
 import { ActionModel } from "../../../utils/action.model";
 import { PrimaryMonthRevisionDataModel } from "../../application-state.model";
@@ -13,19 +14,17 @@ export enum PrimaryRevisionAction {
 export interface AddMonthRevisionAction extends ActionModel<PrimaryMonthRevisionDataModel> {
   type: PrimaryRevisionAction.ADD_MONTH_PRIMARY_REVISION;
 }
-
-export function primaryRevisionReducer(
-  state: PrimaryMonthRevisionDataModel = primaryRevisionInitialState,
-  action: AddMonthRevisionAction
-): PrimaryMonthRevisionDataModel {
-  switch (action.type) {
-    case PrimaryRevisionAction.ADD_MONTH_PRIMARY_REVISION:
+export const addMonthPrimaryRevision = createAction<PrimaryMonthRevisionDataModel>(
+  "schedule/addMonthPrimaryRevision"
+);
+export const primaryRevisionReducer = createReducer(primaryRevisionInitialState, (builder) => {
+  builder
+    .addCase(addMonthPrimaryRevision, (state, action) => {
       const monthDataModel = action.payload;
       if (!monthDataModel) {
         return state;
       }
       return _.cloneDeep(monthDataModel);
-    default:
-      return state;
-  }
-}
+    })
+    .addDefaultCase((state) => state);
+});
