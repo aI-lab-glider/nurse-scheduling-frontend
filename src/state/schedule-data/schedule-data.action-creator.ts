@@ -25,8 +25,8 @@ import { ScheduleErrorMessageModel } from "./schedule-errors/schedule-error-mess
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 import { Shift } from "./shifts-types/shift-types.model";
 import { cleanScheduleErrors } from "./schedule-errors/schedule-errors.reducer";
-import { LocalMonthRevisionManager } from "../../logic/data-access/month-revision-manager";
-import { LocalSchedulePersistProvider } from "../../logic/data-access/schedule-persistance-provider";
+import { MonthRevisionManager } from "../../logic/data-access/month-revision-manager";
+import { SchedulePersistenceProvider } from "../../logic/data-access/schedule-persistance-provider";
 
 export class ScheduleDataActionCreator {
   // #region Update state
@@ -73,7 +73,7 @@ export class ScheduleDataActionCreator {
     revision: RevisionType
   ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
-      const monthDataModel = await new LocalMonthRevisionManager().fetchOrCreateMonthRevision(
+      const monthDataModel = await new MonthRevisionManager().fetchOrCreateMonthRevision(
         monthKey,
         revision,
         baseMonthModel
@@ -91,7 +91,7 @@ export class ScheduleDataActionCreator {
         revision = getState().actualState.revision;
       }
 
-      const monthDataModel = await new LocalMonthRevisionManager().getMonthRevision(
+      const monthDataModel = await new MonthRevisionManager().getMonthRevision(
         monthKey.getRevisionKey(revision)
       );
 
@@ -111,7 +111,7 @@ export class ScheduleDataActionCreator {
       if (_.isNil(revision)) {
         revision = getState().actualState.revision;
       }
-      await new LocalSchedulePersistProvider().saveSchedule(revision, newSchedule);
+      await new SchedulePersistenceProvider().saveSchedule(revision, newSchedule);
       const primaryMonthDM = await this.getMonthPrimaryRevisionDM(
         cropScheduleDMToMonthDM(newSchedule)
       );
@@ -137,7 +137,7 @@ export class ScheduleDataActionCreator {
   private static async getMonthPrimaryRevisionDM(
     monthDataModel: MonthDataModel
   ): Promise<PrimaryMonthRevisionDataModel> {
-    const primaryMonthDM = await new LocalMonthRevisionManager().getMonthRevision(
+    const primaryMonthDM = await new MonthRevisionManager().getMonthRevision(
       monthDataModel.scheduleKey.getRevisionKey("primary")
     );
     return (primaryMonthDM ?? monthDataModel) as PrimaryMonthRevisionDataModel;

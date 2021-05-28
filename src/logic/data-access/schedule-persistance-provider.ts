@@ -11,25 +11,18 @@ import { cropScheduleDMToMonthDM } from "../schedule-container-converter/schedul
 import { MonthHelper } from "../../helpers/month.helper";
 import { ArrayHelper, ArrayPositionPointer } from "../../helpers/array.helper";
 import { getRevisionTypeFromKey, RevisionKey, RevisionType } from "./persistance-store.model";
-import { LocalMonthRevisionManager } from "./month-revision-manager";
+import { MonthRevisionManager } from "./month-revision-manager";
 
-export abstract class SchedulePersistProvider {
-  abstract saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void>;
-
-  // abstract getSchedule(revisionKey: RevisionKey): Promise<MonthDataModel | undefined>;
-}
-
-export class LocalSchedulePersistProvider extends SchedulePersistProvider {
-  private localMonthRevisionManager: LocalMonthRevisionManager;
+export class SchedulePersistenceProvider {
+  private monthRevisionManager: MonthRevisionManager;
 
   constructor() {
-    super();
-    this.localMonthRevisionManager = new LocalMonthRevisionManager();
+    this.monthRevisionManager = new MonthRevisionManager();
   }
 
   async saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void> {
     const monthDataModel = cropScheduleDMToMonthDM(scheduleDataModel);
-    await this.localMonthRevisionManager.saveMonthRevision(type, monthDataModel);
+    await this.monthRevisionManager.saveMonthRevision(type, monthDataModel);
 
     const { daysMissingFromNextMonth } = MonthHelper.calculateMissingFullWeekDays(
       monthDataModel.scheduleKey
@@ -39,6 +32,7 @@ export class LocalSchedulePersistProvider extends SchedulePersistProvider {
       const nextMonthRevisionKey = getScheduleKey(scheduleDataModel).nextMonthKey.getRevisionKey(
         type
       );
+
       await this.updateMonthPartBasedOnScheduleDM(
         nextMonthRevisionKey,
         scheduleDataModel,
@@ -55,9 +49,7 @@ export class LocalSchedulePersistProvider extends SchedulePersistProvider {
     updatePosition: ArrayPositionPointer
   ): Promise<void> {
     try {
-      const updatedMonthDataModel = await this.localMonthRevisionManager.getMonthRevision(
-        revisionKey
-      );
+      const updatedMonthDataModel = await this.monthRevisionManager.getMonthRevision(revisionKey);
       if (_.isNil(updatedMonthDataModel)) return;
 
       const newShifts = _.cloneDeep(updatedMonthDataModel.shifts);
@@ -92,7 +84,7 @@ export class LocalSchedulePersistProvider extends SchedulePersistProvider {
       };
 
       validateMonthDM(updatedMonthDataModel);
-      await this.localMonthRevisionManager.saveMonthRevision(
+      await this.monthRevisionManager.saveMonthRevision(
         getRevisionTypeFromKey(revisionKey),
         updatedMonthDataModel
       );

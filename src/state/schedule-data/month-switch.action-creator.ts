@@ -14,7 +14,7 @@ import {
   PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
   TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
 } from "./schedule.actions";
-import { LocalMonthRevisionManager } from "../../logic/data-access/month-revision-manager";
+import { MonthRevisionManager } from "../../logic/data-access/month-revision-manager";
 
 const PREV_MONTH_OFFSET = -1;
 
@@ -57,10 +57,10 @@ export class MonthSwitchActionCreator {
       } = getState().actualState.persistentSchedule.present.schedule_info;
       const fromDate = MonthHelper.getDateWithMonthOffset(month, year, PREV_MONTH_OFFSET);
 
-      const baseSchedule = await new LocalMonthRevisionManager().getMonthRevision(
+      const baseSchedule = await new MonthRevisionManager().getMonthRevision(
         new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).getRevisionKey("actual")
       );
-      const newSchedule = await new LocalMonthRevisionManager().getMonthRevision(
+      const newSchedule = await new MonthRevisionManager().getMonthRevision(
         new ScheduleKey(month, year).getRevisionKey("actual")
       );
 

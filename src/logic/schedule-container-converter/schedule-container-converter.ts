@@ -23,7 +23,7 @@ import {
   validateScheduleDM,
 } from "../../state/schedule-data/schedule-data.model";
 import { RevisionType, ScheduleKey } from "../data-access/persistance-store.model";
-import { LocalMonthRevisionManager } from "../data-access/month-revision-manager";
+import { MonthRevisionManager } from "../data-access/month-revision-manager";
 
 export function extendMonthDMToScheduleDM(
   prevMonthData: MonthDataModel,
@@ -147,7 +147,7 @@ export async function extendMonthDMRevisionToScheduleDM(
   currentMonthData: MonthDataModel,
   revision: RevisionType
 ): Promise<ScheduleDataModel> {
-  const [prevMonth, nextMonth] = await new LocalMonthRevisionManager().fetchOrCreateMonthNeighbours(
+  const [prevMonth, nextMonth] = await new MonthRevisionManager().fetchOrCreateMonthNeighbours(
     currentMonthData,
     revision
   );

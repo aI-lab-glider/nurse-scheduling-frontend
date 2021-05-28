@@ -11,7 +11,7 @@ import { MonthDataModel } from "../../../state/schedule-data/schedule-data.model
 import { MonthHelper } from "../../../helpers/month.helper";
 import { useImportModal } from "../import-buttons/import-modal-context";
 import { getActualRevision, getPresentScheduleInfo } from "../../../state/schedule-data/selectors";
-import { LocalMonthRevisionManager } from "../../../logic/data-access/month-revision-manager";
+import { MonthRevisionManager } from "../../../logic/data-access/month-revision-manager";
 
 export function EmptyMonthButtons(): JSX.Element {
   const { month_number: currentMonth, year: currentYear } = useSelector(getPresentScheduleInfo);
@@ -31,7 +31,7 @@ export function EmptyMonthButtons(): JSX.Element {
     // https://www.debuggr.io/react-update-unmounted-component/
     let mounted = true;
     const setPrevMonth = async (): Promise<void> => {
-      const storageProvider = new LocalMonthRevisionManager();
+      const storageProvider = new MonthRevisionManager();
       const prevMonth = await storageProvider.getMonthRevision(
         new ScheduleKey(prevDate.getMonth(), prevDate.getFullYear()).getRevisionKey(revision)
       );

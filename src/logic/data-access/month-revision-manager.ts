@@ -11,20 +11,10 @@ import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 import { RevisionKey, RevisionType, ScheduleKey } from "./persistance-store.model";
 import { LocalMonthPersistProvider } from "./month-persistance-provider";
 
-export abstract class MonthRevisionManager {
-  abstract saveMonthRevision(
-    revisionKey: RevisionKey,
-    monthDataModel: MonthDataModel
-  ): Promise<void>;
-
-  abstract getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined>;
-}
-
-export class LocalMonthRevisionManager extends MonthRevisionManager {
+export class MonthRevisionManager {
   private localMonthPersistProvider: LocalMonthPersistProvider;
 
   constructor() {
-    super();
     this.localMonthPersistProvider = new LocalMonthPersistProvider();
   }
 
