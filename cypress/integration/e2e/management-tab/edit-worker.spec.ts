@@ -49,7 +49,7 @@ describe("Tab management", () => {
       },
     };
 
-    describe("Changing workers shift type ", () => {
+    describe("Changing workers contract type ", () => {
       testWorkerData.hoursInfo[2] = 80;
       beforeEach(() => {
         cy.get('[data-cy="btn-management-tab"]').click();
@@ -57,9 +57,9 @@ describe("Tab management", () => {
         cy.get('[data-cy="contract"]').click();
       });
       context(
-        "when changing worker's shift type from employment contract to civil contract",
+        "when changing worker's contract type from employment contract to civil contract",
         () => {
-          it("properly handles worker shift type change", () => {
+          it("properly handles worker contract type change", () => {
             cy.get('[data-cy="civil_contract"]').click();
             cy.get(`[data-cy="btn-save-worker"]`).click();
             cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa zlecenie 160 godz.");
@@ -69,9 +69,9 @@ describe("Tab management", () => {
         }
       );
       context(
-        "when changing worker's shift type from civil contract to employment contract",
+        "when changing worker's contract type from civil contract to employment contract",
         () => {
-          it("properly handles worker shift type change", () => {
+          it("properly handles worker contract type change", () => {
             cy.get('[data-cy="employment_contract"]').click();
             cy.get(`[data-cy="btn-save-worker"]`).click();
             cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1/1");
