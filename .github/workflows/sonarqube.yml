@@ -1,10 +1,12 @@
-name: SonarQube
-on:
-  push:
-    branches:
-      - next # or the name of your main branch
-  pull_request:
-    types: [ opened, synchronize, reopened ]
+- name: sonar-scanner
+  uses: Warchant/setup-sonar-scanner@v3
+- name: SonarQube
+  on:
+    push:
+      branches:
+        - next # or the name of your main branch
+    pull_request:
+      types: [ opened, synchronize, reopened ]
 jobs:
   build:
     name: SonarQube
