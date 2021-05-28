@@ -41,6 +41,7 @@ jobs:
           browser: /usr/bin/${{ matrix.browser }}
           tag: ${{ matrix.browser }}
           headless: false
+          spec: cypress/integration/e2e/management-tab/edit-worker.spec.ts
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
