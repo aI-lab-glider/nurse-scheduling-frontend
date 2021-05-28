@@ -2,7 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { ScheduleKey, ThunkFunction } from "../../logic/data-access/persistance-store.model";
+import {
+  PersistStorageManager,
+  ScheduleKey,
+  ThunkFunction,
+} from "../../logic/data-access/persistance-store.model";
 import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
 import { changeRevision } from "./schedule-condition/revision-info.reducer";
 import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
@@ -14,7 +18,7 @@ import {
   PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
   TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
 } from "./schedule.actions";
-import { MonthRevisionManager } from "../../logic/data-access/month-revision-manager";
+import { getMonthRevision } from "../../logic/data-access/month-revision-manager";
 
 const PREV_MONTH_OFFSET = -1;
 
@@ -57,11 +61,13 @@ export class MonthSwitchActionCreator {
       } = getState().actualState.persistentSchedule.present.schedule_info;
       const fromDate = MonthHelper.getDateWithMonthOffset(month, year, PREV_MONTH_OFFSET);
 
-      const baseSchedule = await new MonthRevisionManager().getMonthRevision(
-        new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).getRevisionKey("actual")
+      const baseSchedule = await getMonthRevision(
+        new ScheduleKey(fromDate.getMonth(), fromDate.getFullYear()).getRevisionKey("actual"),
+        PersistStorageManager.getInstance().actualPersistProvider
       );
-      const newSchedule = await new MonthRevisionManager().getMonthRevision(
-        new ScheduleKey(month, year).getRevisionKey("actual")
+      const newSchedule = await getMonthRevision(
+        new ScheduleKey(month, year).getRevisionKey("actual"),
+        PersistStorageManager.getInstance().actualPersistProvider
       );
 
       if (baseSchedule && newSchedule) {

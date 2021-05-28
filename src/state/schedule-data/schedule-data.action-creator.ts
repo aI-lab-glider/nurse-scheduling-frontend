@@ -4,6 +4,7 @@
 
 import _ from "lodash";
 import {
+  PersistStorageManager,
   RevisionType,
   ScheduleKey,
   ThunkFunction,
@@ -25,8 +26,11 @@ import { ScheduleErrorMessageModel } from "./schedule-errors/schedule-error-mess
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 import { Shift } from "./shifts-types/shift-types.model";
 import { cleanScheduleErrors } from "./schedule-errors/schedule-errors.reducer";
-import { MonthRevisionManager } from "../../logic/data-access/month-revision-manager";
-import { SchedulePersistenceProvider } from "../../logic/data-access/schedule-persistance-provider";
+import {
+  getMonthRevision,
+  getOrGenerateMonthRevision,
+} from "../../logic/data-access/month-revision-manager";
+import { saveSchedule } from "../../logic/data-access/schedule-persistance-manager";
 
 export class ScheduleDataActionCreator {
   // #region Update state
@@ -69,10 +73,11 @@ export class ScheduleDataActionCreator {
     revision: RevisionType
   ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
-      const monthDataModel = await new MonthRevisionManager().getOrGenerateMonthRevision(
+      const monthDataModel = await getOrGenerateMonthRevision(
         monthKey,
         revision,
-        baseMonthModel
+        baseMonthModel,
+        PersistStorageManager.getInstance().actualPersistProvider
       );
       dispatch(this.setScheduleFromMonthDM(monthDataModel));
     };
@@ -87,8 +92,9 @@ export class ScheduleDataActionCreator {
         revision = getState().actualState.revision;
       }
 
-      const monthDataModel = await new MonthRevisionManager().getMonthRevision(
-        monthKey.getRevisionKey(revision)
+      const monthDataModel = await getMonthRevision(
+        monthKey.getRevisionKey(revision),
+        PersistStorageManager.getInstance().actualPersistProvider
       );
 
       if (!_.isNil(monthDataModel)) {
@@ -107,7 +113,7 @@ export class ScheduleDataActionCreator {
       if (_.isNil(revision)) {
         revision = getState().actualState.revision;
       }
-      await new SchedulePersistenceProvider().saveSchedule(revision, newSchedule);
+      await saveSchedule(revision, newSchedule);
       const primaryMonthDM = await this.getMonthPrimaryRevisionDM(
         cropScheduleDMToMonthDM(newSchedule)
       );
@@ -133,8 +139,9 @@ export class ScheduleDataActionCreator {
   private static async getMonthPrimaryRevisionDM(
     monthDataModel: MonthDataModel
   ): Promise<PrimaryMonthRevisionDataModel> {
-    const primaryMonthDM = await new MonthRevisionManager().getMonthRevision(
-      monthDataModel.scheduleKey.getRevisionKey("primary")
+    const primaryMonthDM = await getMonthRevision(
+      monthDataModel.scheduleKey.getRevisionKey("primary"),
+      PersistStorageManager.getInstance().actualPersistProvider
     );
     return (primaryMonthDM ?? monthDataModel) as PrimaryMonthRevisionDataModel;
   }

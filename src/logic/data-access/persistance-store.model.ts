@@ -6,6 +6,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { MonthDataModel } from "../../state/schedule-data/schedule-data.model";
 import { ActionModel } from "../../utils/action.model";
+import { LocalMonthPersistProvider, MonthPersistProvider } from "./month-persistance-provider";
 
 export type ThunkFunction<TDispatchedActionPayload> = (
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<TDispatchedActionPayload>>,
@@ -77,9 +78,25 @@ export interface MonthRevision {
   data: MonthDataModel;
   _rev?: Revision;
 }
-// TODO:
-// 1. Ujednolicić argumenty
-// 2. Zmienic update next month
-// 3. Dodać getMonth
-// 4. Może jakieś testy?
-// 5. Poprawic MonthRevisionManager
+
+export class PersistStorageManager {
+  private static instance: PersistStorageManager;
+
+  private readonly monthPersistProvider: MonthPersistProvider;
+
+  private constructor() {
+    this.monthPersistProvider = new LocalMonthPersistProvider();
+  }
+
+  public static getInstance(): PersistStorageManager {
+    if (!PersistStorageManager.instance) {
+      PersistStorageManager.instance = new PersistStorageManager();
+    }
+
+    return PersistStorageManager.instance;
+  }
+
+  get actualPersistProvider() {
+    return this.monthPersistProvider;
+  }
+}

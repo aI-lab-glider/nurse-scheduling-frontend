@@ -22,8 +22,8 @@ import {
   validateMonthDM,
   validateScheduleDM,
 } from "../../state/schedule-data/schedule-data.model";
-import { ScheduleKey } from "../data-access/persistance-store.model";
-import { MonthRevisionManager } from "../data-access/month-revision-manager";
+import { PersistStorageManager, ScheduleKey } from "../data-access/persistance-store.model";
+import { getOrGenerateMonthNeighbours } from "../data-access/month-revision-manager";
 
 export function extendMonthDMToScheduleDM(
   prevMonthData: MonthDataModel,
@@ -146,8 +146,9 @@ export function cropMonthInfoToMonth(
 export async function extendMonthDMRevisionToScheduleDM(
   currentMonthData: MonthDataModel
 ): Promise<ScheduleDataModel> {
-  const [prevMonth, nextMonth] = await new MonthRevisionManager().getOrGenerateMonthNeighbours(
-    currentMonthData
+  const [prevMonth, nextMonth] = await getOrGenerateMonthNeighbours(
+    currentMonthData,
+    PersistStorageManager.getInstance().actualPersistProvider
   );
   return extendMonthDMToScheduleDM(prevMonth, currentMonthData, nextMonth);
 }
