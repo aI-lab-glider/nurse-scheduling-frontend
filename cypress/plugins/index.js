@@ -19,6 +19,7 @@
  * @type {Cypress.PluginConfig}
  */
 module.exports = (on, config) => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires,global-require
   require("@cypress/code-coverage/task")(on, config);
   config.browsers = config.browsers.filter((b) => b.name === "electron");
   // add other tasks to be registered here

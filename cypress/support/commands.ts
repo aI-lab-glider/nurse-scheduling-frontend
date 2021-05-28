@@ -71,7 +71,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("unloadSchedule", () => {
-  cy.wrap(new LocalStorageProvider().reloadDb()).then(() => cy.visit("/"));
+  cy.wrap(new LocalMonthPersistProvider().reloadDb()).then(() => cy.visit("/"));
 });
 
 Cypress.Commands.add(
