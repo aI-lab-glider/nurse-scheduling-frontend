@@ -53,14 +53,10 @@ export class ScheduleDataActionCreator {
   }
 
   private static setScheduleFromMonthDM(
-    monthDataModel: MonthDataModel,
-    revision?: RevisionType
+    monthDataModel: MonthDataModel
   ): ThunkFunction<ScheduleDataModel> {
-    return async (dispatch, getState): Promise<void> => {
-      if (_.isNil(revision)) {
-        revision = getState().actualState.revision;
-      }
-      const newSchedule = await extendMonthDMRevisionToScheduleDM(monthDataModel, revision);
+    return async (dispatch): Promise<void> => {
+      const newSchedule = await extendMonthDMRevisionToScheduleDM(monthDataModel);
       const primaryMonthDM = await this.getMonthPrimaryRevisionDM(monthDataModel);
 
       dispatch(this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM));
@@ -73,7 +69,7 @@ export class ScheduleDataActionCreator {
     revision: RevisionType
   ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
-      const monthDataModel = await new MonthRevisionManager().fetchOrCreateMonthRevision(
+      const monthDataModel = await new MonthRevisionManager().getOrGenerateMonthRevision(
         monthKey,
         revision,
         baseMonthModel
@@ -127,7 +123,7 @@ export class ScheduleDataActionCreator {
       if (_.isNil(revision)) {
         revision = getState().actualState.revision;
       }
-      const newSchedule = await extendMonthDMRevisionToScheduleDM(newMonth, revision);
+      const newSchedule = await extendMonthDMRevisionToScheduleDM(newMonth);
       dispatch(this.setScheduleStateAndSaveToDb(newSchedule, revision));
     };
   }
