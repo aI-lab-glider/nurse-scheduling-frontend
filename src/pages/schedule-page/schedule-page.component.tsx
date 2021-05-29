@@ -5,14 +5,14 @@ import React, { useCallback, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import * as Sentry from "@sentry/react";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 import { ScheduleEditPage } from "./edit-tab/schedule-edit.page";
 import { ScheduleReadOnlyPage } from "./read-only-tab/schedule-read-only.page";
 import { usePersistentDrawer } from "../../components/drawers/drawer/persistent-drawer-context";
 import AppErrorModal from "../../components/modals/app-error-modal/app-error.modal.component";
-import { ScheduleActionType } from "../../state/schedule-data/schedule.actions";
-import { ApplicationStateModel } from "../../state/application-state.model";
 import { CorruptedScheduleComponent } from "./corrupted-month-tab/corrupted-schedule.component";
-import styled from "styled-components";
+import { setScheduleCorrupted } from "../../state/schedule-data/schedule-condition/corrupted-info.reducer";
+import { getPresentScheduleIsCorrupted } from "../../state/schedule-data/selectors";
 
 interface SchedulePageOptions {
   editModeHandler: (editMode: boolean) => void;
@@ -23,9 +23,7 @@ export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Elem
   const dispatch = useDispatch();
 
   const [isOpenAppError, setIsAppErrorOpen] = useState(false);
-  const { isCorrupted } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
+  const isCorrupted = useSelector(getPresentScheduleIsCorrupted);
 
   const fallback = useCallback(
     ({ resetError }): JSX.Element => (
@@ -36,9 +34,7 @@ export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Elem
 
   const onError = (): void => {
     setIsAppErrorOpen(true);
-    dispatch({
-      type: ScheduleActionType.SET_SCHEDULE_CORRUPTED,
-    });
+    dispatch(setScheduleCorrupted);
   };
 
   const ViewOnly = useCallback(

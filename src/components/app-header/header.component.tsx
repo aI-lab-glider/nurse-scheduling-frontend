@@ -11,8 +11,8 @@ import styled from "styled-components";
 import { colors, fontSizeBase } from "../../assets/colors";
 import { t } from "../../helpers/translations.helper";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../state/app-config-context";
-import { ApplicationStateModel } from "../../state/application-state.model";
 import { MonthSwitchActionCreator } from "../../state/schedule-data/month-switch.action-creator";
+import { getActualMode, getPresentScheduleInfo } from "../../state/schedule-data/selectors";
 import { Button } from "../buttons/button-component/button.component";
 import ReportIssueModal from "../modals/report-issue-modal/report-issue-modal.component";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
@@ -27,14 +27,11 @@ function monthDiff(d1: Date, d2: Date): number {
 }
 
 export function HeaderComponent(): JSX.Element {
-  const applicationStateModel = useSelector((state: ApplicationStateModel) => state.actualState)
-    .mode;
+  const applicationStateModel = useSelector(getActualMode);
   const appConfigContext = useAppConfig().mode;
 
   const dispatch = useDispatch();
-  const { month_number: monthNumber, year } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.schedule_info
-  );
+  const { month_number: monthNumber, year } = useSelector(getPresentScheduleInfo);
 
   const [isNewMonth, setIsNewMonth] = useState(false);
   useEffect(() => {
@@ -77,6 +74,7 @@ export function HeaderComponent(): JSX.Element {
     <Header id="header">
       <Logo />
       <ReturnToNowBtn
+        data-cy="return-to-now-button"
         hidden={!isNewMonth || !showNowNavigation}
         variant="secondary"
         onClick={returnToCurrentMonth}

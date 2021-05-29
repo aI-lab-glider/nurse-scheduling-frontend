@@ -4,17 +4,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import * as _ from "lodash";
 import { ScheduleDataModel } from "../state/schedule-data/schedule-data.model";
-import { ApplicationStateModel } from "../state/application-state.model";
 import { ScheduleDataActionCreator } from "../state/schedule-data/schedule-data.action-creator";
+import { getPresentTemporarySchedule } from "../state/schedule-data/selectors";
 
 export function useTemporarySchedule(): {
   temporarySchedule: ScheduleDataModel;
   saveToPersistent: () => void;
 } {
   const dispatch = useDispatch();
-  const temporarySchedule = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present
-  );
+  const temporarySchedule = useSelector(getPresentTemporarySchedule);
 
   const saveToPersistent = (): void => {
     dispatch(ScheduleDataActionCreator.setScheduleStateAndSaveToDb(temporarySchedule));

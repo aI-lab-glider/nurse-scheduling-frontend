@@ -1,31 +1,27 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import {
-  createActionName,
-  isScheduleAction,
-  ScheduleActionModel,
-  ScheduleActionType,
-} from "../schedule.actions";
-import { ActionModel } from "../../../utils/action.model";
+import { createAction, createReducer } from "@reduxjs/toolkit";
+import { addNewSchedule, isScheduleAction, updateSchedule } from "../schedule.actions";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
+import { ScheduleActionDestination } from "../../app.reducer";
 
-export function corruptedInfoReducerF(name: string) {
-  return (
-    state: boolean = scheduleDataInitialState.isCorrupted,
-    action: ActionModel<boolean> | ScheduleActionModel
-  ): boolean => {
-    switch (action.type) {
-      case createActionName(name, ScheduleActionType.ADD_NEW):
-      case createActionName(name, ScheduleActionType.UPDATE):
+export const setScheduleCorrupted = createAction("schedule/setIsCorrupted");
+export const corruptedInfoReducerF = (name: ScheduleActionDestination) =>
+  createReducer(scheduleDataInitialState.isCorrupted, (builder) => {
+    builder
+      .addCase(addNewSchedule(name), (state, action) => {
         if (!isScheduleAction(action)) {
           return state;
         }
         return action.payload?.isCorrupted ?? false;
-      case ScheduleActionType.SET_SCHEDULE_CORRUPTED:
-        return true;
-      default:
-        return state;
-    }
-  };
-}
+      })
+      .addCase(setScheduleCorrupted, () => true)
+      .addCase(updateSchedule(name), (state, action) => {
+        if (!isScheduleAction(action)) {
+          return state;
+        }
+        return action.payload?.isCorrupted ?? false;
+      })
+      .addDefaultCase((state) => state);
+  });

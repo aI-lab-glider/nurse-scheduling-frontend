@@ -5,9 +5,9 @@ import React, { useEffect, useRef, useState } from "react";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Popper from "@material-ui/core/Popper";
+import styled from "styled-components";
 import { ButtonVariant } from "../../common-components";
 import { Wrapper, PlaceholderButtonContent, PlaceholderButton, ButtonListWrapper } from "./styles";
-import styled from "styled-components";
 
 interface DropdownColorsOptions {
   shiftType: string;

@@ -6,15 +6,16 @@ import { useSelector } from "react-redux";
 import { ShiftCode } from "../state/schedule-data/shifts-types/shift-types.model";
 import { isAllValuesDefined } from "../utils/type-utils";
 import { MonthDataArray } from "../helpers/shifts.helper";
-import { WorkerHourInfo, WorkerHourInfoSummary } from "../helpers/worker-hours-info.model";
 import { ApplicationStateModel, ScheduleStateModel } from "../state/application-state.model";
-import { ScheduleMode } from "../components/schedule/schedule-state.model";
 import { ContractType } from "../state/schedule-data/worker-info/worker-info.model";
+import {
+  WorkerHourInfo,
+  WorkerHourInfoSummary,
+} from "../logic/schedule-logic/worker-hours-info.logic";
+import { getIsEditMode, getPresentSchedule } from "../state/schedule-data/selectors";
 
 export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
-  const isEditMode = useSelector(
-    (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
-  );
+  const isEditMode = useSelector(getIsEditMode);
   const scheduleKey: keyof ScheduleStateModel = isEditMode
     ? "temporarySchedule"
     : "persistentSchedule";
@@ -49,9 +50,7 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
   const { dates } = useSelector(
     (state: ApplicationStateModel) => state.actualState[scheduleKey].present.month_info
   );
-  const { shift_types: shiftTypes } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
+  const { shift_types: shiftTypes } = useSelector(getPresentSchedule);
 
   const [workHoursInfo, setWorkHoursInfo] = useState<WorkerHourInfo>(new WorkerHourInfo(0, 0, 0));
 

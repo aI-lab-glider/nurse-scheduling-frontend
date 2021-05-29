@@ -3,13 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { ModeInfoActionCreator } from "../../../state/app-condition/mode-info-reducer";
+import styled from "styled-components";
 import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-data/schedule.actions";
 import { UndoableHotkeys } from "../../../components/common-components";
 import { ScheduleContainerComponent } from "../schedule-container.component";
 import { ScheduleMode } from "../../../components/schedule/schedule-state.model";
 import { EditPageToolbar } from "./edit-page-toolbar.component";
-import styled from "styled-components";
+import { setMode } from "../../../state/app-condition/mode-info-reducer";
 
 interface ScheduleEditPageOptions {
   close: () => void;
@@ -19,8 +19,7 @@ export function ScheduleEditPage(options: ScheduleEditPageOptions): JSX.Element 
   const mode = useMemo(() => ScheduleMode.Edit, []);
   const dispatch = useDispatch();
   useEffect(() => {
-    const action = ModeInfoActionCreator.setMode(mode);
-    dispatch(action);
+    dispatch(setMode(mode));
   }, [dispatch, mode]);
   return (
     <>

@@ -6,8 +6,7 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
-import { ApplicationStateModel } from "../../../state/application-state.model";
-import { ScheduleMode } from "../../schedule/schedule-state.model";
+import { getIsEditMode } from "../../../state/schedule-data/selectors";
 import DrawerHeader from "./drawer-header.component";
 import { usePersistentDrawer } from "./persistent-drawer-context";
 
@@ -28,9 +27,7 @@ const useStyles = makeStyles<Theme, StyleProps>({
 });
 
 export default function PersistentDrawer(width: StyleProps): JSX.Element {
-  const isEditMode = useSelector(
-    (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
-  );
+  const isEditMode = useSelector(getIsEditMode);
   const classes = useStyles(width);
   const { title, open, setOpen, childrenComponent } = usePersistentDrawer();
 

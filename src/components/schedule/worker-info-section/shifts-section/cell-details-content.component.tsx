@@ -4,9 +4,9 @@
 import React from "react";
 import { MdClose } from "react-icons/md";
 import { useSelector } from "react-redux";
-import { TranslationHelper } from "../../../../helpers/translations.helper";
-import { ApplicationStateModel } from "../../../../state/application-state.model";
 import styled from "styled-components";
+import { TranslationHelper } from "../../../../helpers/translations.helper";
+import { getPresentShiftTypes } from "../../../../state/schedule-data/selectors";
 
 export interface CellDetailsOptions {
   index: number;
@@ -40,9 +40,7 @@ function prepareYearAndMonth(
 export function CellDetails(props: CellDetailsOptions): JSX.Element {
   const { index, day, month, year, shiftcode, close, workerName } = props;
   const [displayedYear, monthName] = prepareYearAndMonth(index, day, month, year);
-  const shifts = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
-  );
+  const shifts = useSelector(getPresentShiftTypes);
   const foundShift = shifts[shiftcode];
 
   return (

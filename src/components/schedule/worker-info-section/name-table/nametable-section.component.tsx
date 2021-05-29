@@ -8,9 +8,9 @@ import styled from "styled-components";
 import { colors, fontSizeXs } from "../../../../assets/colors";
 import { WorkerInfo } from "../../../../hooks/use-worker-info";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
-import { ApplicationStateModel } from "../../../../state/application-state.model";
 import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
+import { getPresentEmployeeInfo } from "../../../../state/schedule-data/selectors";
 import {
   WorkerInfoModel,
   WorkerType,
@@ -44,9 +44,7 @@ export function NameTableSection({
   const [open, setIsOpen] = useState(false);
   const [workerInfo, setWorkerInfo] = useState<WorkerDrawerWorkerInfo>(initialWorkerInfo);
 
-  const { type } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.employee_info
-  );
+  const { type } = useSelector(getPresentEmployeeInfo);
 
   function openDrawer(name: WorkerName): void {
     if (isWorker) {

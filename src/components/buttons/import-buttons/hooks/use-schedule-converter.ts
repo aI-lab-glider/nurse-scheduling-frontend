@@ -10,16 +10,16 @@ import {
   ParserHelper,
   SHIFTS_WORKSHEET_NAME,
   SHIFT_HEADERS,
-  WORKSHEET_NAME,
+  SCHEDULE_WORKSHEET_NAME,
 } from "../../../../helpers/parser.helper";
 import { cropScheduleDMToMonthDM } from "../../../../logic/schedule-container-converter/schedule-container-converter";
 import { ScheduleParser } from "../../../../logic/schedule-parser/schedule.parser";
-import { ApplicationStateModel } from "../../../../state/application-state.model";
 import { MonthDataModel } from "../../../../state/schedule-data/schedule-data.model";
 import {
   ScheduleError,
   InputFileErrorCode,
 } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
+import { getPresentTemporaryScheduleInfo } from "../../../../state/schedule-data/selectors";
 import { useNotification } from "../../../notification/notification.context";
 import { useFileReader } from "./use-file-reader";
 
@@ -93,9 +93,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
     [dispatch]
   );
 
-  const { month_number: month, year } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.schedule_info
-  );
+  const { month_number: month, year } = useSelector(getPresentTemporaryScheduleInfo);
   const { createNotification } = useNotification();
   const isFileMetaCorrect = async (fileContent: ArrayBuffer): Promise<boolean> => {
     const ext = await fromBuffer(fileContent);
@@ -195,7 +193,7 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
   }
 
   function extractSchedule(workbook): Array<Array<Array<string>>> {
-    const scheduleWorkSheet = workbook.getWorksheet(WORKSHEET_NAME);
+    const scheduleWorkSheet = workbook.getWorksheet(SCHEDULE_WORKSHEET_NAME);
     if (scheduleWorkSheet.rowCount === 0) {
       throw new Error(InputFileErrorCode.EMPTY_FILE);
     }

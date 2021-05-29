@@ -5,6 +5,7 @@
 import React, { ReactNode, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
@@ -14,8 +15,8 @@ import {
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import ErrorListItem from "../../error-list/error-list-item.component";
 import { Popper } from "../popper";
-import styled from "styled-components";
 import { colors } from "../../../assets/colors";
+import { getPresentSchedule } from "../../../state/schedule-data/selectors";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface ErrorPopperOptions {
@@ -82,9 +83,7 @@ export function ErrorPopper({
     }
   }
 
-  const { shift_types: shiftTypes } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
+  const { shift_types: shiftTypes } = useSelector(getPresentSchedule);
   return (
     <>
       <ErrorTooltip

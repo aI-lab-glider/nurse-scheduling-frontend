@@ -16,6 +16,7 @@ export const pl = {
     // import-buttons.component.tsx
     load: "Wczytaj",
     saveAs: "Zapisz jako...",
+    absenceSummary: "Urlopy",
     file: "Plik",
     // worker-civil-contract-work-norm-selector.component.tsx
     hourAmmount: "Liczba godzin",
@@ -79,7 +80,7 @@ export const pl = {
     downloadScheduleTitle: "Pobierz grafik",
     fileFormat: "Format pliku",
     fileOptions: "Opcje",
-    //new-version.modal.component.tsx
+    // new-version.modal.component.tsx
     update: "Aktualizacja",
     updateMessage: "Aplikacja została zaktualizowana. Teraz jest w wersji {{version}}",
     // report-issue-modal.component.tsx
@@ -91,7 +92,7 @@ export const pl = {
     // shift-drawer.component.tsx
     shiftEdit: "Edycja zmiany",
     shiftAdd: "Dodaj zmianę",
-    //shift-edit-drawer.component.tsx
+    // shift-edit-drawer.component.tsx
     shiftName: "Nazwa zmiany",
     shiftType: "Typ zmiany",
     shiftAlreadyExists: "Zmiana z taką nazwą już istnieje",
@@ -113,11 +114,31 @@ export const pl = {
     downloadScheduleAndClearAppData: "Pobierz grafik i wyczyść aplikację",
     // read-only-toolbar.tsx
     scheduleHasErrors: "Plan zawiera błędy. Zobacz je w trybie edycji.",
-    //save-changes-modal.component.tsx
+    // save-changes-modal.component.tsx
     yes: "Tak",
     no: "Nie",
     unsavedChanges: "Niezapisane zmiany w grafiku",
     wantToSave: "Czy chcesz zapisać wprowadzone zmiany?",
+    // export and import
+    nameSurnameExportHeader: "Imię i nazwisko",
+    workerTypeExportHeader: "Stanowisko/funkcja",
+    contractTypeExportHeader: "Rodzaj umowy",
+    worktimeNormExportHeader: "Wymiar czasu pracy",
+    workerTeamExportHeader: "Zespół",
+    shiftNameExportHeader: "Nazwa zmiany",
+    abbreviationExportHeader: "Skrót",
+    fromExportHeader: "Od",
+    toExportHeader: "Do",
+    isWorkingShiftExportHeader: "Zmiana pracująca",
+    colorExportHeader: "Kolor",
+    leaveTypeExportHeader: "Typ",
+    daysNoExportHeader: "Ile dni",
+    hoursNoExportHeader: "Ile godzin",
+    forYearExportHeader: "Za rok",
+    scheduleworksheetName: "grafik",
+    workersWorksheetName: "pracownicy",
+    shiftsWorksheetName: "zmiany",
+    absenceWorksheetName: "urlopy",
   },
 };
 export default pl;

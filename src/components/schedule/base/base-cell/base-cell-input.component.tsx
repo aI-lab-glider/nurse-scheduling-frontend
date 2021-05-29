@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { CellManagementKeys } from "./cell-blockable-input.component";
 import styled from "styled-components";
+import { CellManagementKeys } from "./cell-blockable-input.component";
 
 export interface BaseCellInputOptions {
   onValueChange: (value: string) => void;

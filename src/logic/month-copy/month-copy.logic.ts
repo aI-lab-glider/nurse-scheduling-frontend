@@ -9,7 +9,10 @@ import {
   validateScheduleDM,
 } from "../../state/schedule-data/schedule-data.model";
 import { WorkerShiftsModel } from "../../state/schedule-data/workers-shifts/worker-shifts.model";
-import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
+import {
+  FREE_SHIFTS_CODES,
+  ShiftCode,
+} from "../../state/schedule-data/shifts-types/shift-types.model";
 import { ArrayHelper } from "../../helpers/array.helper";
 import {
   createDatesForMonth,
@@ -59,7 +62,8 @@ export function copyShifts(
     );
     newMonthWorkersShifts[workerKey] = ShiftHelper.replaceFreeShiftsWithFreeDay(
       copiedShifts,
-      replacementStart
+      replacementStart,
+      FREE_SHIFTS_CODES
     );
   });
   return newMonthWorkersShifts;

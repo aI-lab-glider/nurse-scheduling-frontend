@@ -3,22 +3,20 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useSelector } from "react-redux";
-import { WorkerHourInfo } from "../../helpers/worker-hours-info.model";
+import styled from "styled-components";
 import { useTeams } from "../../hooks/use-teams";
-import { ApplicationStateModel } from "../../state/application-state.model";
+import { WorkerHourInfo } from "../../logic/schedule-logic/worker-hours-info.logic";
+import { getPresentEmployeeInfo } from "../../state/schedule-data/selectors";
 import { FoundationInfoComponent } from "./foundation-info-section/foundation-info.component";
 import { ScheduleFoldingSection } from "./schedule-folding-section.component";
 import { OvertimeHeaderComponent } from "./schedule-header/overtime-header-table/overtime-header.component";
 import { TimeTableComponent } from "./schedule-header/timetable/timetable.component";
 import { WorkerInfoSection } from "./worker-info-section/worker-info-section.component";
-import styled from "styled-components";
 
 export function ScheduleComponent(): JSX.Element {
   const teams = useTeams();
 
-  const { time } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.employee_info
-  );
+  const { time } = useSelector(getPresentEmployeeInfo);
 
   // Only for testing purposes
   if (

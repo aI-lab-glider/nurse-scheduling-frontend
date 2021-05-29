@@ -2,11 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
+import styled from "styled-components";
 import { useWorkerHoursInfo } from "../../../../hooks/use-worker-hours-info";
 import { SummaryTableCell } from "./summarytable-cell.component";
 import { summaryRowDataCy, SummaryTableRowOptions } from "./summarytable-row.models";
 import { SectionRow } from "../../base/styled";
-import styled from "styled-components";
 
 export function SummaryTableRowF({ workerName, rowIndex }: SummaryTableRowOptions): JSX.Element {
   const workerHours = useWorkerHoursInfo(workerName);

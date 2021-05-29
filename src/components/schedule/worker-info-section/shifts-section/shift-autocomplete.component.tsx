@@ -14,7 +14,7 @@ import {
   fontWeightNormal,
 } from "../../../../assets/colors";
 import useTimeout from "../../../../hooks/use-timeout";
-import { ApplicationStateModel } from "../../../../state/application-state.model";
+import { getPresentShiftTypes } from "../../../../state/schedule-data/selectors";
 import {
   ShiftCode,
   ShiftTypesDict,
@@ -72,9 +72,7 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
     }
   }, [selectedShiftCode, onValueChange]);
 
-  const { shift_types: shiftTypes } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
+  const shiftTypes = useSelector(getPresentShiftTypes);
   const {
     getRootProps,
     getInputProps,

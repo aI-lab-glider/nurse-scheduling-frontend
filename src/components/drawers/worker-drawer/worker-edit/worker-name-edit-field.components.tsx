@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
 import { t } from "../../../../helpers/translations.helper";
-import { ApplicationStateModel } from "../../../../state/application-state.model";
+import { getPresentWorkerNames } from "../../../../state/schedule-data/selectors";
 import {
   FormFieldErrorLabelOptions,
   FormFieldErrorLabelStack,
@@ -31,9 +31,7 @@ export function WorkerNameEditField({
 }: WorkerNameEditFieldOptions): JSX.Element {
   const classes = useFormFieldStyles();
   const [firstEditMade, setFirstEditMade] = useState(false);
-  const workerNames = useSelector((state: ApplicationStateModel) =>
-    Object.keys(state.actualState.persistentSchedule.present.employee_info.type)
-  );
+  const workerNames = useSelector(getPresentWorkerNames);
 
   const isWorkerWithSameNameExists = useCallback((): boolean => {
     const isWorkerNameInvalid =

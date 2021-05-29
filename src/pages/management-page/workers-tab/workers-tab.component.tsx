@@ -20,13 +20,13 @@ import DeleteWorkerModalComponent from "../../../components/modals/delete-worker
 import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
 import { ContractTypeHelper } from "../../../helpers/contract-type.helper";
 import { StringHelper } from "../../../helpers/string.helper";
-import { WorkerHourInfo } from "../../../helpers/worker-hours-info.model";
 import { WorkerTypeHelper } from "../../../helpers/worker-type.helper";
 import { WorkingTimeHelper } from "../../../helpers/working-time.helper";
 import { useMonthInfo } from "../../../hooks/use-month-info";
+import { WorkerHourInfo } from "../../../logic/schedule-logic/worker-hours-info.logic";
 import { DEFAULT_CONTRACT_TYPE } from "../../../logic/schedule-parser/workers-info.parser";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import { WorkerName } from "../../../state/schedule-data/schedule-sensitive-data.model";
+import { getPresentEmployeeInfo } from "../../../state/schedule-data/selectors";
 import {
   ContractType,
   WorkerInfoModel,
@@ -56,9 +56,7 @@ export default function WorkersTab(): JSX.Element {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof WorkerInfoModel>("name");
-  const { type, time, contractType, team } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present.employee_info
-  );
+  const { type, time, contractType, team } = useSelector(getPresentEmployeeInfo);
   const { year, monthNumber } = useMonthInfo();
 
   const [workerData, setWorkerData] = useState([] as WorkerInfoModel[]);
@@ -145,7 +143,11 @@ export default function WorkersTab(): JSX.Element {
                       {StringHelper.capitalize(WorkerTypeHelper.translate(workerType))}
                     </WorkerType>
                   </TableCell>
-                  <TableCell className={classes.tableCell} align="left">
+                  <TableCell
+                    className={classes.tableCell}
+                    align="left"
+                    data-cy={`worker-hours-${worker.name}`}
+                  >
                     {getWorkerTimeLabel(worker.name)}
                   </TableCell>
                   <TableCell className={classes.tableCell} align="left">
@@ -153,6 +155,7 @@ export default function WorkersTab(): JSX.Element {
                   </TableCell>
                   <TableCell align="right">
                     <ActionButton
+                      data-cy={`edit-worker-${worker.name}`}
                       variant="primary"
                       onClick={(): void => toggleDrawer(true, WorkerDrawerMode.EDIT, worker)}
                     >

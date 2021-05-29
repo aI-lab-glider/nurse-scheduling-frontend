@@ -79,7 +79,7 @@ export class MonthHelper {
     };
   }
 
-  private static numberOfWeeksInMonth(month: number, year: number): number {
+  public static numberOfWeeksInMonth(month: number, year: number): number {
     const {
       daysMissingFromPrevMonth,
       daysMissingFromNextMonth,

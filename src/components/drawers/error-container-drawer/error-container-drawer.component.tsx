@@ -4,11 +4,11 @@
 
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleErrorMessageModel } from "../../../state/schedule-data/schedule-errors/schedule-error-message.model";
 import ErrorLoader from "./loading-errors-view.component";
 import { NetworkErrorCode } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
+import { getPresentShiftTypes, getScheduleErrors } from "../../../state/schedule-data/selectors";
 
 export interface ErrorContainerDrawerComponentOptions {
   setOpen: (boolean) => void;
@@ -33,11 +33,9 @@ export default function ErrorContainerDrawerComponent(
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
   const [loadingState, setLoadingState] = useState<Props>();
   const [isNetworkError, setIsNetworkError] = useState(false);
-  const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const scheduleErrors = useSelector(getScheduleErrors);
   const { setOpen, loadingErrors } = options;
-  const { shift_types: shiftTypes } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
+  const shiftTypes = useSelector(getPresentShiftTypes);
 
   useEffect(() => {
     const spinner = {

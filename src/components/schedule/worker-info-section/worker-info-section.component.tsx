@@ -3,8 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 import { DataRow } from "../../../logic/schedule-logic/data-row";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import { NameTableSectionOptions } from "./name-table/nametable-section.component";
 import { NameTableComponent } from "./name-table/nametable.component";
 import { WorkerInfo } from "../../../hooks/use-worker-info";
@@ -16,8 +16,8 @@ import {
 } from "./shifts-section/shifts-section.component";
 import { shiftSectionDataCy } from "./worker-info-section.models";
 import { SectionContainer, SectionWrapper } from "../base/styled";
-import styled from "styled-components";
 import { colors } from "../../../assets/colors";
+import { getActualMode } from "../../../state/schedule-data/selectors";
 
 type SubcomponentsOptions = Omit<NameTableSectionOptions, "isWorker" | "uuid" | "updateData"> &
   ShiftsSectionOptions &
@@ -35,7 +35,7 @@ export function WorkerInfoSection({
   sectionIndex,
   ...options
 }: WorkerInfoSectionOptions): JSX.Element {
-  const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const mode = useSelector(getActualMode);
 
   const dataRows = data.map(
     (workerInfo) =>

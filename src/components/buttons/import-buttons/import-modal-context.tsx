@@ -6,10 +6,8 @@ import React, { ChangeEvent, createContext, ReactNode, useContext, useEffect } f
 import { useDispatch } from "react-redux";
 import { useScheduleConverter } from "./hooks/use-schedule-converter";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
-import { ActionModel } from "../../../utils/action.model";
-import { ScheduleError } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import ParseErrorModal from "../../modals/error-modal/errors.modal.component";
-import { ScheduleErrorActionType } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
+import { updateScheduleErrors } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 
 export interface ImportModalContextValues {
   handleImport: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -31,10 +29,7 @@ export function ImportModalProvider({ children }: { children: ReactNode }): JSX.
       setParserModalOpen(true);
     }
 
-    scheduleDipatcher({
-      type: ScheduleErrorActionType.UPDATE,
-      payload: scheduleErrors,
-    } as ActionModel<ScheduleError[]>);
+    scheduleDipatcher(updateScheduleErrors(scheduleErrors));
   }, [monthModel, scheduleErrors, scheduleDipatcher]);
 
   function handleImport(event: ChangeEvent<HTMLInputElement>): void {

@@ -2,30 +2,26 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
+import { createReducer } from "@reduxjs/toolkit";
 import { ScheduleDataModel } from "../schedule-data.model";
-import { WorkerShiftsModel } from "./worker-shifts.model";
 import { Shift, ShiftCode } from "../shifts-types/shift-types.model";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
-import { createActionName, ScheduleActionModel, ScheduleActionType } from "../schedule.actions";
-import { ActionModel } from "../../../utils/action.model";
-import { WorkerActionPayload } from "../worker-info/worker.action-creator";
+import { addNewSchedule, updateSchedule } from "../schedule.actions";
+import { deleteShift, modifyShift } from "../shifts-types/shifts-model.reducer";
+import { ScheduleActionDestination } from "../../app.reducer";
 
-export function workerShiftsReducerF(name: string) {
-  return (
-    state: WorkerShiftsModel = scheduleDataInitialState.shifts,
-    action:
-      | ScheduleActionModel
-      | ActionModel<WorkerActionPayload>
-      | ActionModel<Shift>
-      | ActionModel<Array<Shift>>
-  ): WorkerShiftsModel => {
-    switch (action.type) {
-      case createActionName(name, ScheduleActionType.ADD_NEW):
-      case createActionName(name, ScheduleActionType.UPDATE):
+export const workerShiftsReducerF = (name: ScheduleActionDestination) =>
+  createReducer(scheduleDataInitialState.shifts, (builder) => {
+    builder
+      .addCase(addNewSchedule(name), (state, action) => {
         const data = (action.payload as ScheduleDataModel)?.shifts;
         return _.cloneDeep(data);
-
-      case ScheduleActionType.DELETE_SHIFT:
+      })
+      .addCase(updateSchedule(name), (state, action) => {
+        const data = (action.payload as ScheduleDataModel)?.shifts;
+        return _.cloneDeep(data);
+      })
+      .addCase(deleteShift, (state, action) => {
         const { code } = action.payload as Shift;
         Object.entries(state).forEach(([workerName, workersShifts]) => {
           state[workerName] = workersShifts.map((shiftCodeInArray) =>
@@ -33,7 +29,8 @@ export function workerShiftsReducerF(name: string) {
           );
         });
         return state;
-      case ScheduleActionType.MODIFY_SHIFT:
+      })
+      .addCase(modifyShift, (state, action) => {
         const shiftArray = action.payload as Array<Shift>;
 
         const newShift = shiftArray[0];
@@ -47,9 +44,6 @@ export function workerShiftsReducerF(name: string) {
           );
         });
         return state;
-
-      default:
-        return state;
-    }
-  };
-}
+      })
+      .addDefaultCase((state) => state);
+  });
