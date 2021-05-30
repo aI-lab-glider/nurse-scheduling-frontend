@@ -2,26 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { createAction, createReducer } from "@reduxjs/toolkit";
-import { addNewSchedule, isScheduleAction, updateSchedule } from "../schedule.actions";
+import { addNewSchedule, updateSchedule } from "../schedule.actions";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import { ScheduleActionDestination } from "../../app.reducer";
+import { a } from "./generation-info.reducer";
 
 export const setScheduleCorrupted = createAction("schedule/setIsCorrupted");
 export const corruptedInfoReducerF = (name: ScheduleActionDestination) =>
   createReducer(scheduleDataInitialState.isCorrupted, (builder) => {
     builder
-      .addCase(addNewSchedule(name), (state, action) => {
-        if (!isScheduleAction(action)) {
-          return state;
-        }
-        return action.payload?.isCorrupted ?? false;
-      })
+      .addCase(addNewSchedule(name), a)
       .addCase(setScheduleCorrupted, () => true)
-      .addCase(updateSchedule(name), (state, action) => {
-        if (!isScheduleAction(action)) {
-          return state;
-        }
-        return action.payload?.isCorrupted ?? false;
-      })
+      .addCase(updateSchedule(name), a)
       .addDefaultCase((state) => state);
   });

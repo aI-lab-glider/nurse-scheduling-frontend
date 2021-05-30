@@ -29,16 +29,16 @@ export function WorkerWorkerTypeSelector({
   const classes = useFormFieldStyles();
   const [firstEditMade, setFirstEditMade] = useState(false);
 
-  function handleWorkerTypeUpdate(workerType: WorkerType): void {
-    setActualWorkerType(workerType);
+  function handleWorkerTypeUpdate(type: WorkerType): void {
+    setActualWorkerType(type);
     setFirstEditMade(true);
   }
 
   const positionOptions: ButtonData[] = Object.keys(WorkerType).map((workerTypeName) => {
-    const workerType = WorkerType[workerTypeName];
+    const type = WorkerType[workerTypeName];
     return {
-      label: translateAndCapitalizeWorkerType(workerType),
-      action: (): void => handleWorkerTypeUpdate(workerType),
+      label: translateAndCapitalizeWorkerType(type),
+      action: (): void => handleWorkerTypeUpdate(type),
       dataCy: workerTypeName.toLowerCase(),
     };
   });

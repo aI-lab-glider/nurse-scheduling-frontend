@@ -185,11 +185,10 @@ export class ScheduleDataActionCreator {
   }
 
   static showError(error: ScheduleErrorMessageModel | undefined): ActionModel<unknown> {
-    const action = {
+    return {
       type: ScheduleActionType.SHOW_ERROR,
       payload: error,
     };
-    return action;
   }
 
   static cleanErrors = cleanScheduleErrors;

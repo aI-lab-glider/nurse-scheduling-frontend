@@ -16,7 +16,8 @@ export function applyScheduleStyling(data: ShiftCode[]): UseScheduleStylingRetur
   let keepOn: boolean;
   let hasNext: boolean;
   const result: UseScheduleStylingReturn[] = [];
-  data.map((value: ShiftCode, cellIndex) => {
+
+  data.forEach((value: ShiftCode, cellIndex) => {
     if (cellIndex < data.length - 1) {
       nextShift = data[cellIndex + 1];
     } else {

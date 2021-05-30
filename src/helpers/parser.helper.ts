@@ -121,10 +121,13 @@ export class ParserHelper {
   }
 
   public static shiftPassesDayStart(shift: Shift): boolean {
-    return shift.isWorkingShift
-      ? shift.from <= shift.to
-        ? shift.from < DEFAULT_FROM && DEFAULT_FROM < shift.to
-        : DEFAULT_FROM < shift.to || shift.from < DEFAULT_FROM
-      : false;
+    if (shift.isWorkingShift) {
+      if (shift.from <= shift.to) {
+        return shift.from < DEFAULT_FROM && DEFAULT_FROM < shift.to;
+      } else {
+        return DEFAULT_FROM < shift.to || shift.from < DEFAULT_FROM;
+      }
+    }
+    return false;
   }
 }

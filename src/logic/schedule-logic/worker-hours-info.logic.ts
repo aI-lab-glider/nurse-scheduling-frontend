@@ -288,17 +288,15 @@ export class WorkerHourInfo {
     currentMonthDates: DateInformationForWorkInfoCalculation[],
     shiftTypes: ShiftTypesDict
   ): number {
-    switch (workerContractType) {
-      case ContractType.EMPLOYMENT_CONTRACT:
-        return this.calculateFreeHoursForEmplContract(
-          actualShiftsFromCurrentMonth,
-          primaryScheduleWorkerShifts,
-          currentMonthDates,
-          shiftTypes
-        );
-      default:
-        return 0;
+    if (workerContractType === ContractType.EMPLOYMENT_CONTRACT) {
+      return this.calculateFreeHoursForEmplContract(
+        actualShiftsFromCurrentMonth,
+        primaryScheduleWorkerShifts,
+        currentMonthDates,
+        shiftTypes
+      );
     }
+    return 0;
   }
 
   private static calculateFreeHoursForEmplContract(
@@ -375,7 +373,7 @@ export class WorkerHourInfo {
     shiftTypes: ShiftTypesDict
   ): number {
     return actualShiftsFromCurrentMonth.reduce(
-      (acc, shift) => acc + ShiftHelper.shiftToWorkTime(shiftTypes[shift!]),
+      (acc, shift) => acc + ShiftHelper.shiftToWorkTime(shiftTypes[shift]),
       0
     );
   }

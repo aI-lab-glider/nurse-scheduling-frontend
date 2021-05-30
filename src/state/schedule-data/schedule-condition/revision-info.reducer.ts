@@ -36,13 +36,10 @@ export function revisionInfoReducer(
   state: RevisionType = "actual",
   action: ActionModel<RevisionType>
 ): RevisionType {
-  switch (action.type) {
-    case RevisionReducerAction.CHANGE_REVISION:
-      if (!action.payload) {
-        return state;
-      }
-      return action.payload;
-    default:
+  if (action.type === RevisionReducerAction.CHANGE_REVISION) {
+    if (!action.payload) {
       return state;
+    }
   }
+  return state;
 }

@@ -137,7 +137,6 @@ export class WorkerActionCreator {
     const monthDataModelCopy = _.cloneDeep(monthDataModel);
     delete monthDataModelCopy.employee_info.time[workerName];
     delete monthDataModelCopy.employee_info.type[workerName];
-    delete monthDataModelCopy.employee_info.contractType?.[workerName];
     delete monthDataModelCopy.shifts[workerName];
 
     return monthDataModelCopy;

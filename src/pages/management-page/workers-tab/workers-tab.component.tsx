@@ -52,6 +52,28 @@ const useStyles = makeStyles(() =>
   })
 );
 
+function toggleDrawer(
+  open: boolean,
+  setIsOpen: (value: React.SetStateAction<boolean>) => void,
+  setMode: (value: React.SetStateAction<WorkerDrawerMode>) => void,
+  setWorker: (value: React.SetStateAction<WorkerInfoModel>) => void,
+  mode?: WorkerDrawerMode,
+  workerData?: WorkerInfoModel
+): void {
+  setIsOpen(open);
+  mode !== undefined && setMode(mode);
+  setWorker(workerData);
+}
+function workerDeleteModal(
+  open: boolean,
+  setDelModalOpen: (value: React.SetStateAction<boolean>) => void,
+  setWorker: (value: React.SetStateAction<WorkerInfoModel>) => void,
+  workerData?: WorkerInfoModel
+): void {
+  setDelModalOpen(open);
+  setWorker(workerData);
+}
+
 export default function WorkersTab(): JSX.Element {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
@@ -86,21 +108,6 @@ export default function WorkersTab(): JSX.Element {
     setOrderBy(property);
   }
 
-  function toggleDrawer(
-    open: boolean,
-    mode?: WorkerDrawerMode,
-    workerData?: WorkerInfoModel
-  ): void {
-    setIsOpen(open);
-    mode !== undefined && setMode(mode);
-    setWorker(workerData);
-  }
-
-  function workerDeleteModal(open: boolean, workerData?: WorkerInfoModel): void {
-    setDelModalOpen(open);
-    setWorker(workerData);
-  }
-
   const getWorkerTimeLabel = useCallback(
     (workerName: string) => {
       const workHourNormInMonth = WorkerHourInfo.calculateWorkNormForMonth(monthNumber, year);
@@ -127,7 +134,9 @@ export default function WorkersTab(): JSX.Element {
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
             rowCount={workerData.length}
-            toggleDrawer={toggleDrawer}
+            toggleDrawer={() =>
+              toggleDrawer(true, setIsOpen, setMode, setWorker, WorkerDrawerMode.ADD_NEW, undefined)
+            }
           />
           <TableBody>
             {ComparatorHelper.stableSort(workerData, order, orderBy).map((worker) => {
@@ -157,13 +166,24 @@ export default function WorkersTab(): JSX.Element {
                     <ActionButton
                       data-cy={`edit-worker-${worker.name}`}
                       variant="primary"
-                      onClick={(): void => toggleDrawer(true, WorkerDrawerMode.EDIT, worker)}
+                      onClick={(): void =>
+                        toggleDrawer(
+                          true,
+                          setIsOpen,
+                          setMode,
+                          setWorker,
+                          WorkerDrawerMode.EDIT,
+                          worker
+                        )
+                      }
                     >
                       Edytuj
                     </ActionButton>
                     <ActionButton
                       variant="secondary"
-                      onClick={(): void => workerDeleteModal(true, worker)}
+                      onClick={(): void =>
+                        workerDeleteModal(true, setDelModalOpen, setWorker, worker)
+                      }
                     >
                       Usuń
                     </ActionButton>
@@ -176,7 +196,7 @@ export default function WorkersTab(): JSX.Element {
       </TableContainer>
       <WorkerDrawerComponent
         open={open}
-        onClose={(): void => toggleDrawer(false)}
+        onClose={(): void => toggleDrawer(false, setIsOpen, setMode, setWorker)}
         mode={mode}
         worker={worker}
         setOpen={setIsOpen}

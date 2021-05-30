@@ -62,8 +62,8 @@ export function copyShifts(
     );
     newMonthWorkersShifts[workerKey] = ShiftHelper.replaceFreeShiftsWithFreeDay(
       copiedShifts,
-      replacementStart,
-      FREE_SHIFTS_CODES
+      FREE_SHIFTS_CODES,
+      replacementStart
     );
   });
   return newMonthWorkersShifts;

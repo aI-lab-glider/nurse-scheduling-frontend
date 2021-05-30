@@ -42,7 +42,7 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
   if (tabs.length === 0) {
     throw Error("Component cannot be called without tabs");
   }
-  const [tab, setTab] = React.useState(tabs[0]!.label);
+  const [tabInfo, setTab] = React.useState(tabs[0]!.label);
 
   const classes = useStyles();
 
@@ -92,7 +92,7 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
 
   return (
     <Wrapper>
-      <TabContext value={tab}>
+      <TabContext value={tabInfo}>
         <HeaderWrapper>
           <TabList classes={tabListClasses} onChange={handleChange}>
             {tabTitles}

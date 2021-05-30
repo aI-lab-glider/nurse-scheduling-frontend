@@ -36,10 +36,10 @@ function TimeTableCellF({ value, currMonth, index }: TimeTableCellOptions): JSX.
   const [today, setToday] = React.useState<boolean>(false);
 
   useEffect(() => {
-    const today = new Date();
+    const now = new Date();
     setToday(
-      value.month === TranslationHelper.englishMonths[today.getMonth()] &&
-        value.date === today.getDate()
+      value.month === TranslationHelper.englishMonths[now.getMonth()] &&
+        value.date === now.getDate()
     );
   }, [value]);
 

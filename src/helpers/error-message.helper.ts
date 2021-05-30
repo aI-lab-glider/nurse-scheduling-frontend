@@ -148,12 +148,11 @@ export class ErrorMessageHelper {
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WorkerTeamsCollision:
-        const sections = findSections(error.hours!);
+        const sections = findSections(error.hours);
         const sectionIntersectionMsg = sections.map(({ start, end }) =>
           start === end ? `${start}:00` : `${start}:00-${end}:00`
         );
         message = `W godzinach: <b>${sectionIntersectionMsg.join(", ")}</b>`;
-        i = 0;
         message += `<br>Niedozwolone połączenie zespołów: <b>${error.workers.join(", ")}</b>.`;
         type = ScheduleErrorType.WTC;
         title = "date";

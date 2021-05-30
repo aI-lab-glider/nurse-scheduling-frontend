@@ -40,7 +40,7 @@ export const workerShiftsReducerF = (name: ScheduleActionDestination) =>
         }
         Object.entries(state).forEach(([key, value]) => {
           state[key] = value.map((shiftCodeInArray) =>
-            shiftCodeInArray === oldShift.code ? (newShift.code as ShiftCode) : shiftCodeInArray
+            shiftCodeInArray === oldShift.code ? newShift.code : shiftCodeInArray
           );
         });
         return state;

@@ -16,6 +16,7 @@ import {
 import useTimeout from "../../../../hooks/use-timeout";
 import { getPresentShiftTypes } from "../../../../state/schedule-data/selectors";
 import {
+  Shift,
   ShiftCode,
   ShiftTypesDict,
 } from "../../../../state/schedule-data/shifts-types/shift-types.model";
@@ -32,14 +33,19 @@ interface ShiftCodeSelectItem {
   color: string;
   "data-cy": `autocomplete-${keyof typeof ShiftCode}`;
 }
+const nameString = (shift: Shift): string => {
+  let string = shift.name;
+  if (shift.isWorkingShift) string += `(${shift.from}-${shift.to})`;
+  return string;
+};
 const ShiftCodeSelectItems = (shifts: ShiftTypesDict): ShiftCodeSelectItem[] =>
   _.sortBy(
     Object.values(shifts).map((shift) => ({
-      name: `${shift.name} ${shift.isWorkingShift ? `(${shift.from}-${shift.to})` : ""}`,
+      name: nameString(shift),
       symbol: shift.code,
       from: shift.from,
       to: shift.to,
-      isWorkingShift: shift!.isWorkingShift,
+      isWorkingShift: shift.isWorkingShift,
       code: shift.code,
       color: shift.color ? shift.color : "$white",
       "data-cy": `autocomplete-${shift.code}` as const,
@@ -52,6 +58,18 @@ const ShiftCodeSelectItems = (shifts: ShiftTypesDict): ShiftCodeSelectItem[] =>
  * @param inputOptions : BaseCellInputOptions
  * @returns JSX.Element
  */
+
+const getNonWorkingShifts = (
+  shift: ShiftCodeSelectItem,
+  shiftTypes: ShiftTypesDict
+): ShiftCodeSelectItem | undefined => {
+  if (shift.name.trim() !== shiftTypes[ShiftCode.W].name && !shift.isWorkingShift) {
+    return shift;
+  }
+  return undefined;
+};
+const getWorkingShifts = (shift: ShiftCodeSelectItem): ShiftCodeSelectItem =>
+  shift.isWorkingShift && shift;
 export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): JSX.Element {
   const inputRef = useRef(null);
   const tooltipRef = useRef(null);
@@ -88,13 +106,8 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
   const [isComponentVisible, setIsComponentVisible] = useState(true);
   const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
 
-  const getNonWorkingShifts = (shift: ShiftCodeSelectItem): ShiftCodeSelectItem | undefined => {
-    if (shift.name.trim() !== shiftTypes[ShiftCode.W].name) {
-      if (!shift.isWorkingShift) return shift;
-    }
-    return undefined;
-  };
-  const nonWorkingShifts = groupedOptions.filter(getNonWorkingShifts);
+  const nonWorkingShifts = groupedOptions.filter((shift) => getNonWorkingShifts(shift, shiftTypes));
+  const workingShifts = groupedOptions.filter(getWorkingShifts);
   /**
    * @description Small element for rendering shift info & shift color circle
    * @returns JSX.Element
@@ -162,15 +175,10 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
             }
             return null;
           })}
-          {groupedOptions.map((option, index) => {
-            if (option.isWorkingShift) {
-              return (
-                <LabelComponent option={option} index={index} key={option.name + option.symbol} />
-              );
-            }
-            return null;
-          })}
-          {nonWorkingShifts.length > 0 && <AutoSeparator />}
+          {workingShifts.map((option, index) => (
+            <LabelComponent option={option} index={index} key={option.name + option.symbol} />
+          ))}
+          {nonWorkingShifts.length > 0 && workingShifts.length > 0 && <AutoSeparator />}
           {nonWorkingShifts.map((option, index) => (
             <LabelComponent option={option} index={index} key={option.name + option.symbol} />
           ))}

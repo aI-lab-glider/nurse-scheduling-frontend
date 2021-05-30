@@ -20,24 +20,7 @@ import { appReducer } from "./state/app.reducer";
 
 const history = createBrowserHistory();
 
-// Sentry.init({
-//   dsn: process.env.REACT_APP_SENTRY_DSN,
-//   normalizeDepth: 10,
-//   integrations: [
-//     new ReportingObserver(),
-//     new Integrations.BrowserTracing({
-//       routingInstrumentation: Sentry.reactRouterV5Instrumentation(history),
-//     }),
-//   ],
-//   tracesSampleRate: 1.0,
-// });
-
-// const sentryReduxEnhancer = Sentry.createReduxEnhancer();
-
-const composedEnhancer = composeWithDevTools(
-  compose(applyMiddleware(thunkMiddleware))
-  // sentryReduxEnhancer
-);
+const composedEnhancer = composeWithDevTools(compose(applyMiddleware(thunkMiddleware)));
 export const appStore = createStore(appReducer, composedEnhancer);
 
 ReactDOM.render(

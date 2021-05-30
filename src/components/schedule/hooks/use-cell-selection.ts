@@ -61,7 +61,5 @@ export function useCellSelection({
   useEffect(() => {
     preview(getEmptyImage());
   }, [preview]);
-
-  const selectableItemRef = mergeRefs([drop, drag]);
-  return selectableItemRef;
+  return mergeRefs([drop, drag]);
 }
