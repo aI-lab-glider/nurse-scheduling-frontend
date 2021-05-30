@@ -155,7 +155,7 @@ export default function WorkersTab(): JSX.Element {
                   <TableCell
                     className={classes.tableCell}
                     align="left"
-                    data-cy={`w-hours-${w.name}`}
+                    data-cy={`worker-hours-${w.name}`}
                   >
                     {getWorkerTimeLabel(w.name)}
                   </TableCell>
