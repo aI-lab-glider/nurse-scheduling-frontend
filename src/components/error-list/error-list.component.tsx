@@ -87,7 +87,7 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
 
       return (
         <FoldingSection name={`${errorData.errorDescription} (${errorData.errors.length})`}>
-          {sortedErrors.sort(compareErrors).map(
+          {sortedErrors.map(
             (error, index): JSX.Element => (
               <ErrorListItem
                 key={`${error.kind ? error.kind : "0"}_${index}`}

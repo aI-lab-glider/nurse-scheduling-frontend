@@ -40,6 +40,7 @@ export function revisionInfoReducer(
     if (!action.payload) {
       return state;
     }
+    return action.payload;
   }
   return state;
 }

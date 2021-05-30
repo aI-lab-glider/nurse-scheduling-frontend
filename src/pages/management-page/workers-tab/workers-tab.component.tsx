@@ -135,17 +135,17 @@ export default function WorkersTab(): JSX.Element {
             onRequestSort={handleRequestSort}
             rowCount={workerData.length}
             toggleDrawer={() =>
-              toggleDrawer(true, setIsOpen, setMode, setWorker, WorkerDrawerMode.ADD_NEW, undefined)
+              toggleDrawer(true, setIsOpen, setMode, setWorker, WorkerDrawerMode.ADD_NEW)
             }
           />
           <TableBody>
-            {ComparatorHelper.stableSort(workerData, order, orderBy).map((worker) => {
-              const workerType = worker.type ?? WorkerType.NURSE;
+            {ComparatorHelper.stableSort(workerData, order, orderBy).map((w) => {
+              const workerType = w.type ?? WorkerType.NURSE;
 
               return (
-                <TableRow key={worker.name} className={classes.row}>
+                <TableRow key={w.name} className={classes.row}>
                   <TableCell className={classes.tableCell} data-cy="workerName">
-                    {worker.name}
+                    {w.name}
                   </TableCell>
                   <TableCell className={classes.tableCell} align="left">
                     <WorkerType className={`${workerType.toString().toLowerCase()}-label`}>
@@ -155,35 +155,26 @@ export default function WorkersTab(): JSX.Element {
                   <TableCell
                     className={classes.tableCell}
                     align="left"
-                    data-cy={`worker-hours-${worker.name}`}
+                    data-cy={`w-hours-${w.name}`}
                   >
-                    {getWorkerTimeLabel(worker.name)}
+                    {getWorkerTimeLabel(w.name)}
                   </TableCell>
                   <TableCell className={classes.tableCell} align="left">
-                    {worker.team}
+                    {w.team}
                   </TableCell>
                   <TableCell align="right">
                     <ActionButton
-                      data-cy={`edit-worker-${worker.name}`}
+                      data-cy={`edit-w-${w.name}`}
                       variant="primary"
                       onClick={(): void =>
-                        toggleDrawer(
-                          true,
-                          setIsOpen,
-                          setMode,
-                          setWorker,
-                          WorkerDrawerMode.EDIT,
-                          worker
-                        )
+                        toggleDrawer(true, setIsOpen, setMode, setWorker, WorkerDrawerMode.EDIT, w)
                       }
                     >
                       Edytuj
                     </ActionButton>
                     <ActionButton
                       variant="secondary"
-                      onClick={(): void =>
-                        workerDeleteModal(true, setDelModalOpen, setWorker, worker)
-                      }
+                      onClick={(): void => workerDeleteModal(true, setDelModalOpen, setWorker, w)}
                     >
                       Usuń
                     </ActionButton>
