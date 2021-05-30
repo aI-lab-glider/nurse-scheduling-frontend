@@ -16,6 +16,7 @@ import { usePersistentDrawer } from "../../../components/drawers/drawer/persiste
 import ErrorContainerDrawerComponent from "../../../components/drawers/error-container-drawer/error-container-drawer.component";
 import SaveChangesModal from "../../../components/modals/save-changes-modal/save-changes-modal.component";
 import { useNotification } from "../../../components/notification/notification.context";
+import { t } from "../../../helpers/translations.helper";
 import { useTemporarySchedule } from "../../../hooks/use-temporary-schedule";
 import {
   NetworkErrorCode,
@@ -121,16 +122,14 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
       <EditTextWrapper data-cy="edit-mode-text">Tryb edycji aktywny</EditTextWrapper>
 
       <Button data-cy="check-schedule-button" variant="primary" onClick={prepareDrawer}>
-        {/* TODO: move to translations */}
-        Sprawdź Plan
+        {t("editPageToolbar_checkPlan")}
       </Button>
 
       <Filler />
 
       <ConditionalLink to="/" shouldNavigate={!anyChanges()}>
         <Button onClick={askForSavingChanges} variant="secondary" data-cy="leave-edit-mode">
-          {/* TODO: move to translations */}
-          Wyjdź
+          {t("editPageToolbar_exit")}
         </Button>
         <SaveChangesModal
           closeOptions={close}
@@ -148,8 +147,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
           handleSaveClick();
         }}
       >
-        {/* TODO: move to translations */}
-        Zapisz
+        {t("editPageToolbar_savePlan")}
       </Button>
     </Wrapper>
   );

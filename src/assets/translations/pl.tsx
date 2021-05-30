@@ -138,6 +138,10 @@ export const pl = {
     workersWorksheetName: "pracownicy",
     shiftsWorksheetName: "zmiany",
     absenceWorksheetName: "urlopy",
+    // edit-page toolbar
+    editPageToolbar_checkPlan: "Sprawdź Plan",
+    editPageToolbar_exit: "Wyjdź",
+    editPageToolbar_savePlan: "Zapisz"
   },
 };
 export default pl;
