@@ -19,6 +19,9 @@ const NAME_ROW_HEIGHT = 2;
 const INFO_SEC_ROW_LEN = 3;
 const WEEKDAY_HEIGHT = 2;
 
+const HEIGTH = 36;
+const WIDTH = 16;
+
 export const exportToXlsx = (name: string, info, schedule: { string: string }): void => {
   const xlsx = new WorkerCalendarXlsxExport({ name, info, schedule });
   xlsx.formatAndSave();
@@ -67,7 +70,7 @@ export class WorkerCalendarXlsxExport {
           verticalCentered: true,
         },
 
-        properties: { defaultColWidth: 5 },
+        properties: { defaultColWidth: 10 },
       }),
     ];
   }
@@ -272,23 +275,23 @@ export class WorkerCalendarXlsxExport {
 
     const regexNum = /[0-9]+/;
     workSheet.eachRow((row, index) => {
-      row.height = 18;
+      row.height = HEIGTH;
 
       row.eachCell((cell, colNumber) => {
-        workSheet.getColumn(colNumber).width = 8;
+        workSheet.getColumn(colNumber).width = WIDTH;
         const cellValue = cell.value?.toString() || "";
         cell.style = WorkerCalendarXlsxExport.getCellStyle(ShiftCode[cellValue] || ShiftCode.W);
       });
 
       if (index > 12) {
         row.eachCell({ includeEmpty: false }, (cell, colNumber) => {
-          workSheet.getColumn(colNumber).width = 8;
+          workSheet.getColumn(colNumber).width = WIDTH;
           const cellValue = cell.value?.toString() || "";
 
           cell.style = WorkerCalendarXlsxExport.getShiftStyle(ShiftCode[cellValue] || ShiftCode.W);
 
           if (cellValue.match(regexNum)) {
-            row.height = 14;
+            row.height = HEIGTH * (2 / 3);
             cell.border = {
               top: { style: "thin" },
               left: { style: "thin" },
