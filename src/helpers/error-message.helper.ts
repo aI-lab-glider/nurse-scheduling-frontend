@@ -165,7 +165,7 @@ export class ErrorMessageHelper {
         message = `Nieznana wartość zmiany: "<b>${error.actual}</b>". Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub utworzyć nową.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
         title = `${error.worker}`;
-        day += error.day! + 1;
+        day += error.day + 1;
         break;
       case InputFileErrorCode.EMPTY_FILE:
         message = "Błąd podczas wczytywania pliku wejściowego: Pusty plik";
