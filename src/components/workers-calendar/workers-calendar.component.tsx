@@ -41,7 +41,9 @@ export default function WorkersCalendar({ id, workerShifts }: CalendarOptions): 
   return (
     <Wrapper id={id}>
       <CalendarWrapper>
-        {daysToDisplay.map((element) => <DayName>{element}</DayName>)}
+        {daysToDisplay.map((element) => (
+          <DayName>{element}</DayName>
+        ))}
         {data?.map(({ value: shiftCode, keepOn, hasNext }, index) => {
           date = shiftsArr[index][0];
           if (date.date === 1) {
