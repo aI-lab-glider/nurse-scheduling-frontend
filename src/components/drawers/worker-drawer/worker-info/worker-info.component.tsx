@@ -11,12 +11,10 @@ import { WorkerTypeHelper } from "../../../../helpers/worker-type.helper";
 import { useWorkerHoursInfo } from "../../../../hooks/use-worker-hours-info";
 import { useWorkerInfo } from "../../../../hooks/use-worker-info";
 import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
-import {
-  WorkerType
-} from "../../../../state/schedule-data/worker-info/worker-info.model";
+import { WorkerType } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import { Button } from "../../../common-components";
 import WorkersCalendar from "../../../workers-calendar/workers-calendar.component";
-import { exportToPdf } from "./export-to-pdf";
+import { exportToXlsx } from "./export-to-xlsx";
 
 interface WorkerInfoComponentOptions {
   workerName: WorkerName;
@@ -28,13 +26,20 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
   const workerInfoExport = "worker-info-export";
   const calendarExport = "calendar-export";
 
-  const handleExport = (): void => {
-    exportToPdf(workerInfo.workerName, { calendarExport, workerInfoExport });
+  const handleExportAsXlsx = (workerInfo, workerHoursInfo): void => {
+    const infoSection = {
+      "Typ umowy": ContractTypeHelper.translate(workerInfo.contractType),
+      "Liczba godzin": workerHoursInfo.workerHourNorm,
+      "Liczba nadgodzin": workerHoursInfo.overTime,
+      "Suma godzin": workerInfo.workerName,
+    };
+    exportToXlsx(workerInfo.workerName, infoSection, workerInfo.workerShifts!);
   };
 
   const workerLabelColor =
     workerInfo.workerType === WorkerType.NURSE ? colors.nurseColor : colors.babysitterColor;
-  return <>
+  return (
+    <>
       <Wrapper id={workerInfoExport}>
         <WorkerNameLabel>{StringHelper.capitalizeEach(workerInfo.workerName)}</WorkerNameLabel>
         {workerInfo.workerType && (
@@ -51,15 +56,19 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
           <WorkerInfo>Liczba godzin: {workerHoursInfo.workerHourNorm}</WorkerInfo>
           <WorkerInfo>Liczba nadgodzin: {workerHoursInfo.overTime}</WorkerInfo>
           <WorkerInfo>Suma godzin: {workerInfo.workerName}</WorkerInfo>
-          <CalendarDivider data-html2canvas-ignore="true"/>
+          <CalendarDivider data-html2canvas-ignore="true" />
           <ShiftsLabel id="shiftsWord">ZMIANY</ShiftsLabel>
         </div>
         <WorkersCalendar id={calendarExport} workerShifts={workerInfo.workerShifts} />
       </Wrapper>
-      <DownloadButton variant="primary" onClick={handleExport}>
+      <DownloadButton
+        variant="primary"
+        onClick={(): void => handleExportAsXlsx(workerInfo, workerHoursInfo)}
+      >
         Pobierz
       </DownloadButton>
     </>
+  );
 }
 
 const Wrapper = styled.div``;
