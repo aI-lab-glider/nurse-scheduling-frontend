@@ -5,7 +5,7 @@
 import { ScheduleKey, ThunkFunction } from "../../logic/data-access/persistance-store.model";
 import { ScheduleDataActionCreator } from "./schedule-data.action-creator";
 import { LocalStorageProvider } from "../../logic/data-access/local-storage-provider.model";
-import { RevisionReducerAction } from "./schedule-condition/revision-info.reducer";
+import { changeRevision } from "./schedule-condition/revision-info.reducer";
 import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 import { copyMonthDM } from "../../logic/month-copy/month-copy.logic";
 import { MonthHelper } from "../../helpers/month.helper";
@@ -35,10 +35,7 @@ export class MonthSwitchActionCreator {
       const isFuture = VerboseDateHelper.isMonthInFuture(newMonth, newYear);
       const newRevisionType = isFuture ? "primary" : "actual";
       if (revision !== newRevisionType) {
-        dispatch({
-          type: RevisionReducerAction.CHANGE_REVISION,
-          payload: newRevisionType,
-        });
+        dispatch(changeRevision(newRevisionType));
       }
 
       const addNewScheduleAction = ScheduleDataActionCreator.setScheduleStateAndCreateIfNeeded(

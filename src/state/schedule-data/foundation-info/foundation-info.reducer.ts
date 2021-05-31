@@ -14,7 +14,10 @@ import { ScheduleActionDestination } from "../../app.reducer";
 import { FoundationInfoModel } from "./foundation-info.model";
 import { ScheduleDataModel } from "../schedule-data.model";
 
-const m = (state: FoundationInfoModel, action: { payload: ScheduleDataModel; type: string }) => {
+const replaceStateWithPayload = (
+  state: FoundationInfoModel,
+  action: { payload: ScheduleDataModel; type: string }
+) => {
   if (!isScheduleAction(action)) {
     return state;
   }
@@ -41,7 +44,7 @@ export const foundationInfoReducerF = (name: ScheduleActionDestination) =>
           children_number: [...childrenNumber],
         };
       })
-      .addCase(updateSchedule(name), m)
-      .addCase(addNewSchedule(name), m)
+      .addCase(updateSchedule(name), replaceStateWithPayload)
+      .addCase(addNewSchedule(name), replaceStateWithPayload)
       .addDefaultCase((state) => state);
   });

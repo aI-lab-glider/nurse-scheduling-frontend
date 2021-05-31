@@ -42,7 +42,7 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
   if (tabs.length === 0) {
     throw Error("Component cannot be called without tabs");
   }
-  const [tabInfo, setTab] = React.useState(tabs[0]!.label);
+  const [tabLabel, setTabLabel] = React.useState(tabs[0]!.label);
 
   const classes = useStyles();
 
@@ -51,13 +51,13 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
       if (disabled) {
         return;
       }
-      setTab(newValue);
+      setTabLabel(newValue);
       const tabObj = _.find(tabs, (tab) => tab.label === newValue);
       if (tabObj && tabObj.onChange) {
         tabObj.onChange();
       }
     },
-    [disabled, setTab, tabs]
+    [disabled, setTabLabel, tabs]
   );
 
   const tabListClasses = useMemo(() => ({ indicator: classes.indicatorStyle }), [
@@ -92,7 +92,7 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
 
   return (
     <Wrapper>
-      <TabContext value={tabInfo}>
+      <TabContext value={tabLabel}>
         <HeaderWrapper>
           <TabList classes={tabListClasses} onChange={handleChange}>
             {tabTitles}

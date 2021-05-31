@@ -83,7 +83,8 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
 
   const renderOneTypeOfErrors = (errorData: ErrorTypes): JSX.Element => {
     if (errorData.errors && errorData.errors.length > 0) {
-      const sortedErrors = errorData.errors.sort(compareErrors);
+      const sortedErrors = [...errorData.errors];
+      sortedErrors.sort(compareErrors);
 
       return (
         <FoldingSection name={`${errorData.errorDescription} (${errorData.errors.length})`}>

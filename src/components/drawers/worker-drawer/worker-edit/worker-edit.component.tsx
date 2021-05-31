@@ -39,8 +39,8 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
    * TODO Rewrite as separate components: one for edit one for add ???
    * */
   const getWorkerName = useCallback(
-    (o: WorkerEditComponentOptions) =>
-      o.mode === WorkerEditComponentMode.EDIT ? o.name : ("" as WorkerName),
+    (workerOptions: WorkerEditComponentOptions) =>
+      workerOptions.mode === WorkerEditComponentMode.EDIT ? workerOptions.name : ("" as WorkerName),
     []
   );
 

@@ -27,10 +27,10 @@ export function TeamSelector({ setTeam, team }: TeamSelectorOptions): JSX.Elemen
 
   const defaultTeams = _.range(1, 6).map((i) => `${TEAM_PREFIX} ${i}` as Team);
 
-  const teamsOptions: ButtonData[] = defaultTeams.map((te) => ({
-    label: te,
-    action: (): void => handleTeamUpdate(te),
-    dataCy: te.toLowerCase(),
+  const teamsOptions: ButtonData[] = defaultTeams.map((teamName) => ({
+    label: teamName,
+    action: (): void => handleTeamUpdate(teamName),
+    dataCy: teamName.toLowerCase(),
   }));
 
   return (

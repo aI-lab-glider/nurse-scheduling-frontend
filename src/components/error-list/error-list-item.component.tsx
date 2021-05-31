@@ -76,7 +76,7 @@ export default function ErrorListItem({
     Object.entries(workersByTeam).forEach(([teamName, workers]) => {
       workers.forEach((worker) => {
         const isInError =
-          error.workers.find((workerName) => workerName === worker.workerName) !== undefined;
+          error.workers?.find((workerName) => workerName === worker.workerName) !== undefined;
         if (isInError) {
           message = insertTeam(message, `${teamName}`, worker.workerName);
         }
