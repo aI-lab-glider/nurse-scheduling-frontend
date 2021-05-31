@@ -15,7 +15,7 @@ import {
   isRevisionType,
   RevisionTypeLabels,
 } from "../../../logic/data-access/persistance-store.model";
-import { RevisionReducerActionCreator } from "../../../state/schedule-data/schedule-condition/revision-info.reducer";
+import { changeRevision } from "../../../state/schedule-data/schedule-condition/revision-info.reducer";
 import { AlgorithmErrorCode } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import {
   getActualRevision,
@@ -60,7 +60,7 @@ export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
   const handleChange = (event: React.ChangeEvent<{ name?: string; value: string }>): void => {
     const currentRev = event.target.value;
     if (isRevisionType(currentRev)) {
-      dispatch(RevisionReducerActionCreator.changeRevision(currentRev));
+      dispatch(changeRevision(currentRev));
     }
   };
 
