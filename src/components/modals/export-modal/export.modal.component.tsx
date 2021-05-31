@@ -21,7 +21,7 @@ import {
   ButtonData,
   DropdownButtons,
 } from "../../buttons/dropdown-buttons/dropdown-buttons.component";
-import DefaultModal from "../modal.component";
+import DefaultModal, { modalFooterButtonMarginString } from "../modal.component";
 import { t } from "../../../helpers/translations.helper";
 import { colors, fontSizeBase } from "../../../assets/colors";
 import { getActualRevision, getPrimaryRevision } from "../../../state/schedule-data/selectors";
@@ -83,10 +83,21 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
 
   const footer = (
     <>
-      <Button onClick={handleExport} size="small" variant="primary" data-cy="confirm-export-button">
+      <Button
+        onClick={handleExport}
+        size="small"
+        variant="primary"
+        data-cy="confirm-export-button"
+        marginString={modalFooterButtonMarginString}
+      >
         {t("confirm")}
       </Button>
-      <Button onClick={handleClose} size="small" variant="secondary">
+      <Button
+        onClick={handleClose}
+        size="small"
+        variant="secondary"
+        marginString={modalFooterButtonMarginString}
+      >
         {t("cancel")}
       </Button>
     </>

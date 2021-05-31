@@ -139,9 +139,11 @@ export const pl = {
     shiftsWorksheetName: "zmiany",
     absenceWorksheetName: "urlopy",
     // edit-page toolbar
-    editPageToolbar_checkPlan: "Sprawdź Plan",
-    editPageToolbar_exit: "Wyjdź",
-    editPageToolbar_savePlan: "Zapisz"
+    editPageToolbarCheckPlan: "Sprawdź Plan",
+    editPageToolbarExit: "Wyjdź",
+    editPageToolbarSavePlan: "Zapisz",
+    //
+    scheduleSectionNameInformation: "Informacje",
   },
 };
 export default pl;

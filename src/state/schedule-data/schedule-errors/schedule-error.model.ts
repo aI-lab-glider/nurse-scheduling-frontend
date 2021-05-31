@@ -5,8 +5,6 @@ import _ from "lodash";
 import { WorkerName } from "../schedule-sensitive-data.model";
 import { ShiftCode } from "../shifts-types/shift-types.model";
 
-// TODO: merge with schedule-error-message.model
-
 export enum AlgorithmErrorCode {
   AlwaysAtLeastOneNurse = "AON",
   WorkerNumberDuringDay = "WND",

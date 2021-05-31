@@ -111,7 +111,6 @@ export default function ErrorListItem({
   );
 }
 
-// TODO: Simplify that
 const Wrapper = styled.div`
   flex: 1;
   flex-direction: row;

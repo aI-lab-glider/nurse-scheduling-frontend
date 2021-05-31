@@ -4,11 +4,13 @@
 import React, { useMemo } from "react";
 import { ShiftCode } from "../../../../state/schedule-data/shifts-types/shift-types.model";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
-import { applyScheduleStyling } from "../../../../hooks/use-schedule-styling/use-schedule-styling";
+import { applyScheduleStyling } from "../../../../hooks/apply-schedule-styling/apply-schedule-styling";
 import { BaseCellOptions } from "../../base/base-cell/base-cell.models";
 import { BaseRowComponent } from "../../base/base-row/base-row.component";
 import { BaseRowOptions } from "../../base/base-row/base-row.models";
 import { ShiftCellComponent } from "./shift-cell/shift-cell.component";
+import { useSelector } from "react-redux";
+import { getPresentShiftTypes } from "../../../../state/schedule-data/selectors";
 
 export interface ShiftRowOptions extends BaseRowOptions {
   dataRow: DataRow;
@@ -18,14 +20,15 @@ export interface ShiftRowOptions extends BaseRowOptions {
 
 export function ShiftRowComponent(options: ShiftRowOptions): JSX.Element {
   const { dataRow } = options;
+  const shiftTypes = useSelector(getPresentShiftTypes);
   const styledDataRow = useMemo(() => {
     const data = dataRow.rowData(false) as ShiftCode[];
-    const styles = applyScheduleStyling(data).map((styledItem) => ({
+    const styles = applyScheduleStyling(data, shiftTypes).map((styledItem) => ({
       ...styledItem,
       workerName: dataRow.rowKey,
     }));
     return new DataRow(dataRow.rowKey, styles, dataRow.isEditable);
-  }, [dataRow]);
+  }, [dataRow, shiftTypes]);
   return (
     <BaseRowComponent
       {...options}

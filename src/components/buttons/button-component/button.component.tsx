@@ -6,8 +6,17 @@ import React, { Ref } from "react";
 import styled from "styled-components";
 import { fontFamilyPrimary, colors } from "../../../assets/colors";
 
+export type MarginString =
+  | `${number}px`
+  | `${number}px ${number}px`
+  | `${number}px ${number}px ${number}px ${number}px`;
+
+export interface ButtonBaseProps extends Omit<ButtonProps, "variant"> {
+  marginString?: MarginString;
+}
+
 export type ButtonVariant = "primary" | "secondary" | "circle";
-export type ButtonOptions = Omit<ButtonProps, "variant"> & {
+export type ButtonOptions = ButtonBaseProps & {
   variant?: ButtonVariant;
 };
 
@@ -16,7 +25,7 @@ export const Button = React.forwardRef(
     { variant = "primary", disabled = false, ...rest }: ButtonOptions,
     ref?: Ref<HTMLButtonElement>
   ) => {
-    let Component;
+    let Component: typeof ButtonBase;
     if (variant === "primary") {
       Component = ButtonPrimary;
     } else if (variant === "secondary") {
@@ -31,12 +40,11 @@ export const Button = React.forwardRef(
   }
 );
 
-// TODO: Get rid of padding, margin, border radius
-const ButtonBase = styled.button`
+const ButtonBase = styled.button<ButtonBaseProps>`
   background: none;
   border: none;
   padding: 6px 20px 6px 20px;
-  margin: 5px 10px 5px 10px;
+  margin: ${(props) => props.marginString ?? "5px 10px 5px 10px"};
   white-space: nowrap;
   border-radius: 40px;
   font-family: ${fontFamilyPrimary};
@@ -55,7 +63,6 @@ const ButtonBase = styled.button`
   &:focus {
     outline: none;
   }
-}
 `;
 
 const ButtonPrimary = styled(ButtonBase)`
@@ -114,4 +121,5 @@ const ButtonCircle = styled(ButtonBase)`
       box-shadow: none;
       background: none;
     }
+  }
 `;

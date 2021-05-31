@@ -147,7 +147,6 @@ export class ScheduleDataActionCreator {
   }
 
   static updateSchedule(newScheduleModel: ScheduleDataModel): ScheduleActionModel {
-    // TODO: make separate action creator for Tmp
     return {
       type: createActionName(TEMPORARY_SCHEDULE_NAME, ScheduleActionType.UPDATE),
       payload: newScheduleModel,

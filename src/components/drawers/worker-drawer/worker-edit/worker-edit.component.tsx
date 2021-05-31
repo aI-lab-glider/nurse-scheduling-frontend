@@ -35,9 +35,6 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
 
   const dispatcher = useDispatch();
 
-  /**
-   * TODO Rewrite as separate components: one for edit one for add ???
-   * */
   const getWorkerName = useCallback(
     (workerOptions: WorkerEditComponentOptions) =>
       workerOptions.mode === WorkerEditComponentMode.EDIT ? workerOptions.name : ("" as WorkerName),

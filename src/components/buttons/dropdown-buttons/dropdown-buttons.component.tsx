@@ -48,7 +48,6 @@ export function DropdownButtons({
     setOpen(false);
   }
 
-  // TODO: something is wrong here
   const dropdownZIndex = 100;
 
   return (

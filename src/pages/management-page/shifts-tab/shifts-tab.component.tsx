@@ -76,7 +76,7 @@ export default function ShiftTab(): JSX.Element {
 
       toggleClose();
     } else {
-      // TODO. Handle unappropriately created shift
+      throw Error("Shift cannot pass day start");
     }
   };
 

@@ -3,11 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import _ from "lodash";
 import React from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { colors } from "../../assets/colors";
 import { useMonthInfo } from "../../hooks/use-month-info";
-import { applyScheduleStyling } from "../../hooks/use-schedule-styling/use-schedule-styling";
+import { applyScheduleStyling } from "../../hooks/apply-schedule-styling/apply-schedule-styling";
 import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
+import { getPresentShiftTypes } from "../../state/schedule-data/selectors";
 import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { WorkersCalendarCell } from "./worker-calendar-cell.component";
 
@@ -15,11 +17,11 @@ interface CalendarOptions {
   id: string;
   workerShifts: ShiftCode[];
 }
-// TODO: Shrink drawer
 
 export default function WorkersCalendar({ id, workerShifts }: CalendarOptions): JSX.Element {
   const { verboseDates } = useMonthInfo();
   const shiftsArr = _.zip(verboseDates, workerShifts);
+  const shiftTypes = useSelector(getPresentShiftTypes);
   const firstDay = shiftsArr[0][0].dayOfWeek;
   const dayOfWeekNamesEng = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
   const dayOfWeekNames = ["PON", "WT", "ŚR", "CZW", "PT", "SB", "ND"];
@@ -33,7 +35,10 @@ export default function WorkersCalendar({ id, workerShifts }: CalendarOptions): 
     daysToDisplay.push(dayOfWeekNames[i]);
   }
 
-  const data = applyScheduleStyling(shiftsArr.map((x) => x[1]));
+  const data = applyScheduleStyling(
+    shiftsArr.map((x) => x[1]),
+    shiftTypes
+  );
 
   let isTop = false;
   let isLeft = false;

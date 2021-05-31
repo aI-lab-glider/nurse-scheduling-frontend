@@ -141,10 +141,10 @@ const en: LocalizationResource = {
     shiftsWorksheetName: "shifts",
     absenceWorksheetName: "leaves",
     // edit-page toolbar
-    editPageToolbar_checkPlan: "Check plan",
-    editPageToolbar_exit: "Exit",
-    editPageToolbar_savePlan: "Save plan"
-
+    editPageToolbarCheckPlan: "Check plan",
+    editPageToolbarExit: "Exit",
+    editPageToolbarSavePlan: "Save plan",
+    scheduleSectionNameInformation: "Informations",
   },
 };
 export default en;

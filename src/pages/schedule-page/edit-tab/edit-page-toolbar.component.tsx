@@ -122,14 +122,14 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
       <EditTextWrapper data-cy="edit-mode-text">Tryb edycji aktywny</EditTextWrapper>
 
       <Button data-cy="check-schedule-button" variant="primary" onClick={prepareDrawer}>
-        {t("editPageToolbar_checkPlan")}
+        {t("editPageToolbarCheckPlan")}
       </Button>
 
       <Filler />
 
       <ConditionalLink to="/" shouldNavigate={!anyChanges()}>
         <Button onClick={askForSavingChanges} variant="secondary" data-cy="leave-edit-mode">
-          {t("editPageToolbar_exit")}
+          {t("editPageToolbarExit")}
         </Button>
         <SaveChangesModal
           closeOptions={close}
@@ -147,7 +147,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
           handleSaveClick();
         }}
       >
-        {t("editPageToolbar_savePlan")}
+        {t("editPageToolbarSavePlan")}
       </Button>
     </Wrapper>
   );
