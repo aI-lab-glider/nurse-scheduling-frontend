@@ -4,25 +4,18 @@
 import React from "react";
 import i18next from "i18next";
 import Drawer, { DrawerOptions } from "../drawers/drawer/drawer.component";
-import ShiftEditDrawer from "./shift-edit-drawer.component";
-import { Shift } from "../../state/schedule-data/shifts-types/shift-types.model";
+import ShiftEditComponent, {
+  ShiftEditComponentMode,
+  ShiftEditComponentOptions,
+} from "./shift-edit-drawer.component";
 
-export enum ShiftDrawerMode {
-  EDIT,
-  ADD_NEW,
-}
+type ShiftDrawerOptions = Omit<DrawerOptions, "title"> & ShiftEditComponentOptions;
 
-interface ShiftDrawerOptions extends Omit<DrawerOptions, "title"> {
-  mode: ShiftDrawerMode;
-  selectedShift: Shift;
-  saveChangedShift: (shift: Shift) => void;
-}
-
-function getTitle(mode: ShiftDrawerMode): string {
+function getTitle(mode: ShiftEditComponentMode): string {
   switch (mode) {
-    case ShiftDrawerMode.EDIT:
+    case ShiftEditComponentMode.EDIT:
       return i18next.t("shiftEdit");
-    case ShiftDrawerMode.ADD_NEW:
+    case ShiftEditComponentMode.ADD_NEW:
       return i18next.t("shiftAdd");
     default:
       throw Error(`Invalid drawer mode ${mode}`);
@@ -34,7 +27,7 @@ export default function ShiftDrawerComponent(options: ShiftDrawerOptions): JSX.E
   const title = getTitle(mode);
   return (
     <Drawer setOpen={setOpen} title={title} {...otherOptions}>
-      <ShiftEditDrawer
+      <ShiftEditComponent
         selectedShift={selectedShift}
         saveChangedShift={saveChangedShift}
         mode={mode}
