@@ -2,7 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
-import { ShiftHelper, MonthDataArray } from "../../../../src/helpers/shifts.helper";
+import { MonthDataArray } from "../../../../src/helpers/month-data-array.model";
+import { ShiftHelper } from "../../../../src/helpers/shifts.helper";
 import {
   DEFAULT_NORM_SUBTRACTION,
   WorkerHourInfo,

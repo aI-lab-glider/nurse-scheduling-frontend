@@ -8,7 +8,7 @@ import { t } from "../../../helpers/translations.helper";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { WorkerActionCreator } from "../../../state/schedule-data/worker-info/worker.action-creator";
 import { Button } from "../../buttons/button-component/button.component";
-import DefaultModal, { modalFooterButtonMarginString } from "../modal.component";
+import DefaultModal from "../modal.component";
 
 interface DeleteWorkerModalOptions {
   setOpen: (open: boolean) => void;
@@ -36,7 +36,7 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
         size="small"
         className="submit-button"
         variant="secondary"
-        marginString={modalFooterButtonMarginString}
+        marginString="5px 10px 5px 0px"
       >
         {t("cancel")}
       </Button>
@@ -48,7 +48,7 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
         size="small"
         className="submit-button"
         variant="primary"
-        marginString={modalFooterButtonMarginString}
+        marginString="5px 10px 5px 0px"
       >
         {t("confirm")}
       </Button>

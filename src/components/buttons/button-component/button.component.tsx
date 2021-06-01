@@ -82,9 +82,9 @@ const ButtonPrimary = styled(ButtonBase)`
 `;
 
 const ButtonSecondary = styled(ButtonBase)`
-  border: 1px solid rgba(29, 53, 87, 1);
+  border: 1px solid ${colors.primary};
   background-color: rgba(255, 255, 255, 1);
-  color: rgba(29, 53, 87, 1);
+  color: ${colors.primary};
 
   &:disabled {
     border: 1px solid rgba(141, 153, 170, 255);

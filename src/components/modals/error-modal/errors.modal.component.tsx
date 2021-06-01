@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../common-components";
 import { ScheduleErrorMessageModel } from "../../../state/schedule-data/schedule-errors/schedule-error-message.model";
 import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
-import DefaultModal, { modalFooterButtonMarginString } from "../modal.component";
+import DefaultModal from "../modal.component";
 import ModalErrorList from "./error.modal.list.component";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
 import { t } from "../../../helpers/translations.helper";
@@ -41,7 +41,7 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
 
   const footer = (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Button onClick={handleClose} variant="primary" marginString={modalFooterButtonMarginString}>
+      <Button onClick={handleClose} variant="primary" marginString="5px 10px 5px 0px">
         OK
       </Button>
     </div>

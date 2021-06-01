@@ -16,9 +16,7 @@ import { Color, Colors } from "./colors/color.model";
 import { VerboseDateHelper } from "./verbose-date.helper";
 
 export const WORK_HOURS_PER_DAY = 8;
-export type MonthDataArray<T> = Opaque<"MonthData", T[]>;
-
-export type WorkHourInfoArray = Opaque<"WorkHourInfoArray", [number, number, number]>;
+export type WorkHourInfoTuple = Opaque<"WorkHourInfoArray", [number, number, number]>;
 
 export class ShiftHelper {
   public static isNotWorkingShift(shift?: Shift): shift is NotWorkingShift {

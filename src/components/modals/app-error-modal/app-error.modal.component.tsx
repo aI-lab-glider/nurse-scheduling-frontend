@@ -4,7 +4,7 @@
 import React from "react";
 import { t } from "../../../helpers/translations.helper";
 import { Button } from "../../buttons/button-component/button.component";
-import DefaultModal, { modalFooterButtonMarginString } from "../modal.component";
+import DefaultModal from "../modal.component";
 
 interface AppErrorModalOptions {
   onClick: () => void;
@@ -31,7 +31,7 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
       className="submit-button"
       variant="primary"
       data-cy="btn-reload-app-error"
-      marginString={modalFooterButtonMarginString}
+      marginString="5px 10px 5px 0px"
     >
       OK
     </Button>

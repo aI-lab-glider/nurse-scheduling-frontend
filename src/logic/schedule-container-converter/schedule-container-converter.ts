@@ -17,6 +17,8 @@ import {
 import {
   getScheduleKey,
   MonthDataModel,
+  MonthFoundationInfoModel,
+  MonthWorkerShiftsModel,
   ScheduleContainerType,
   ScheduleDataModel,
   validateMonthDM,
@@ -84,13 +86,13 @@ export function cropScheduleDMToMonthDM(schedule: ScheduleDataModel): MonthDataM
   const { dates } = schedule.month_info;
   const monthStart = dates.findIndex((v) => v === 1);
   const monthKey = getScheduleKey(schedule);
-  const shift = cropShiftsToMonth(monthKey, schedule.shifts, monthStart);
+  const shifts = cropShiftsToMonth(monthKey, schedule.shifts, monthStart);
   const month = cropMonthInfoToMonth(monthKey, schedule.month_info, monthStart);
 
   const monthDataModel: MonthDataModel = {
     ...schedule,
     scheduleKey: monthKey,
-    shifts: shift,
+    shifts,
     month_info: month,
   };
 
@@ -102,7 +104,7 @@ export function cropShiftsToMonth(
   scheduleKey: ScheduleKey,
   shifts: WorkerShiftsModel,
   startFromIndex = 0
-): WorkerShiftsModel {
+): MonthWorkerShiftsModel {
   const { month, year } = scheduleKey;
   const days = MonthHelper.daysInMonth(month, year).length;
   const copiedShifts = _.cloneDeep(shifts);
@@ -111,14 +113,14 @@ export function cropShiftsToMonth(
   });
 
   validateWorkerShiftsModel(copiedShifts, ScheduleContainerType.MONTH_DM);
-  return copiedShifts;
+  return copiedShifts as MonthWorkerShiftsModel;
 }
 
 export function cropMonthInfoToMonth(
   scheduleKey: ScheduleKey,
   monthInfo: FoundationInfoModel,
   startFromIndex = 0
-): FoundationInfoModel {
+): MonthFoundationInfoModel {
   const { month, year } = scheduleKey;
   const days = MonthHelper.daysInMonth(month, year);
 
@@ -140,7 +142,7 @@ export function cropMonthInfoToMonth(
   };
 
   validateFoundationInfo(monthInfoModel, ScheduleContainerType.MONTH_DM);
-  return monthInfoModel;
+  return monthInfoModel as MonthFoundationInfoModel;
 }
 
 export async function extendMonthDMRevisionToScheduleDM(

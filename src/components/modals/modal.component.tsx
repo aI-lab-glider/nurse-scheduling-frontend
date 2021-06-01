@@ -10,9 +10,7 @@ import React from "react";
 import { MdClose } from "react-icons/md";
 import styled from "styled-components";
 import { colors, fontSizeBase, fontSizeLg } from "../../assets/colors";
-import { MarginString } from "../common-components";
 
-export const modalFooterButtonMarginString: MarginString = "5px 10px 5px 0px";
 export interface ModalOptions {
   setOpen: (open: boolean) => void;
   open: boolean;

@@ -164,11 +164,11 @@ export default function ShiftEditComponent({
         <FormLabel>{t("shiftShort")}</FormLabel>
         <TextField
           type="text"
-          placeholder="Skrót"
+          placeholder={t("shiftShort")}
           value={shiftCode}
           onChange={(event): void => {
-            setShiftCode(event.target.value as ShiftCode); // TODO: fix typing if possible
-            setIsInShiftCodes(shiftCodes.includes(event.target.value as ShiftCode)); // TODO: fix typing if possible
+            setShiftCode(event.target.value as ShiftCode);
+            setIsInShiftCodes(shiftCodes.includes(event.target.value as ShiftCode));
             setCodeManuallyChanged(true);
           }}
           helperText={isInShiftCodes ? t("shiftWithThatColorExist") : ""}

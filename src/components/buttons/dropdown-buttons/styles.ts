@@ -33,7 +33,8 @@ export const DropdownButton = styled.div`
   &:hover {
     cursor: pointer;
     box-shadow: 0 0;
-    background-color: rgba(29, 53, 87, 0.1);
+    background-color: ${colors.primary};
+    opacity: 0.1;
   }
   &:first-child {
     padding-top: 25px;

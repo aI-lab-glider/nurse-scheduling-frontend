@@ -21,7 +21,7 @@ import {
   ButtonData,
   DropdownButtons,
 } from "../../buttons/dropdown-buttons/dropdown-buttons.component";
-import DefaultModal, { modalFooterButtonMarginString } from "../modal.component";
+import DefaultModal  from "../modal.component";
 import { t } from "../../../helpers/translations.helper";
 import { colors, fontSizeBase } from "../../../assets/colors";
 import { getActualRevision, getPrimaryRevision } from "../../../state/schedule-data/selectors";
@@ -88,7 +88,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
         size="small"
         variant="primary"
         data-cy="confirm-export-button"
-        marginString={modalFooterButtonMarginString}
+        marginString="5px 10px 5px 0px"
       >
         {t("confirm")}
       </Button>
@@ -96,7 +96,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
         onClick={handleClose}
         size="small"
         variant="secondary"
-        marginString={modalFooterButtonMarginString}
+        marginString="5px 10px 5px 0px"
       >
         {t("cancel")}
       </Button>
