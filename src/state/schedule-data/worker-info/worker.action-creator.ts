@@ -138,6 +138,7 @@ export class WorkerActionCreator {
     delete monthDataModelCopy.employee_info.time[workerName];
     delete monthDataModelCopy.employee_info.type[workerName];
     if (monthDataModelCopy.employee_info.contractType) {
+      //ignore
       delete monthDataModelCopy.employee_info.contractType?.[workerName];
     }
     delete monthDataModelCopy.shifts[workerName];
