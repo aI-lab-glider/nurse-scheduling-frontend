@@ -83,12 +83,12 @@ const ButtonPrimary = styled(ButtonBase)`
 
 const ButtonSecondary = styled(ButtonBase)`
   border: 1px solid ${colors.primary};
-  background-color: rgba(255, 255, 255, 1);
+  background-color: ${colors.white};
   color: ${colors.primary};
 
   &:disabled {
-    border: 1px solid rgba(141, 153, 170, 255);
-    color: rgba(141, 153, 170, 255);
+    border: 1px solid ${colors.secondaryButtonDisabledColor};
+    color: ${colors.secondaryButtonDisabledColor};
 
     &:hover {
       cursor: default;
@@ -109,11 +109,11 @@ const ButtonCircle = styled(ButtonBase)`
   &:hover {
     cursor: pointer;
     box-shadow: none;
-    background-color: rgba(233, 235, 239, 255);
+    background-color: ${colors.circleButtonHoverColor};
   }
 
   &:disabled {
-    color: rgba(141, 153, 170, 255);
+    color: ${colors.circleButtonDisabledColor};
     opacity: 0.65;
 
     &:hover {

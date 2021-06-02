@@ -19,15 +19,13 @@ export function SummaryTableSection({
   sectionIndex,
 }: SummaryTableSectionOptions): JSX.Element {
   return (
-    <div>
-      <Wrapper id="summaryTable" data-cy={summaryTableSectionDataCy(sectionIndex)}>
-        <div>
-          {data.map((dataRow, rowIndex) => (
-            <SummaryTableRow key={dataRow.rowKey} workerName={dataRow.rowKey} rowIndex={rowIndex} />
-          ))}
-        </div>
-      </Wrapper>
-    </div>
+    <Wrapper id="summaryTable" data-cy={summaryTableSectionDataCy(sectionIndex)}>
+      <div>
+        {data.map((dataRow, rowIndex) => (
+          <SummaryTableRow key={dataRow.rowKey} workerName={dataRow.rowKey} rowIndex={rowIndex} />
+        ))}
+      </div>
+    </Wrapper>
   );
 }
 

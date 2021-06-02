@@ -40,7 +40,10 @@ export const colors = {
   otherMonthBackground: "#ecf4ff",
   weekendBackground: "#3c69a8",
   orange: "#fb6340",
-  buttonBackround: ""
+  secondaryButtonDisabledColor: "#8d99aa",
+  circleButtonDisabledColor: "#8d99aa",
+  circleButtonHoverColor: "#e9ebe",
+  black: "#000000",
 };
 
 export const fontFamilyPrimary = "Roboto, sans-serif";
