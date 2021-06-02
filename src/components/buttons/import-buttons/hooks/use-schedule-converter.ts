@@ -95,8 +95,8 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
 
   const { month_number: month, year } = useSelector(getPresentTemporaryScheduleInfo);
   const { createNotification } = useNotification();
-  const isFileMetaCorrect = async (fileContent: ArrayBuffer): Promise<boolean> => {
-    const ext = await fromBuffer(fileContent);
+  const isFileMetaCorrect = async (content: ArrayBuffer): Promise<boolean> => {
+    const ext = await fromBuffer(content);
     if (
       !ext ||
       ext.ext !== "xlsx" ||

@@ -11,6 +11,22 @@ import {
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import { addNewSchedule, isScheduleAction, updateSchedule } from "../schedule.actions";
 import { ScheduleActionDestination } from "../../app.reducer";
+import { FoundationInfoModel } from "./foundation-info.model";
+import { ScheduleDataModel } from "../schedule-data.model";
+
+const replaceStateWithPayload = (
+  state: FoundationInfoModel,
+  action: { payload: ScheduleDataModel; type: string }
+) => {
+  if (!isScheduleAction(action)) {
+    return state;
+  }
+  const monthInfo = action.payload?.month_info;
+  if (!monthInfo) {
+    return state;
+  }
+  return { ...monthInfo };
+};
 
 export const foundationInfoReducerF = (name: ScheduleActionDestination) =>
   createReducer(scheduleDataInitialState.month_info, (builder) => {
@@ -28,25 +44,7 @@ export const foundationInfoReducerF = (name: ScheduleActionDestination) =>
           children_number: [...childrenNumber],
         };
       })
-      .addCase(updateSchedule(name), (state, action) => {
-        if (!isScheduleAction(action)) {
-          return state;
-        }
-        const monthInfo = action.payload?.month_info;
-        if (!monthInfo) {
-          return state;
-        }
-        return { ...monthInfo };
-      })
-      .addCase(addNewSchedule(name), (state, action) => {
-        if (!isScheduleAction(action)) {
-          return state;
-        }
-        const monthInfo = action.payload?.month_info;
-        if (!monthInfo) {
-          return state;
-        }
-        return { ...monthInfo };
-      })
+      .addCase(updateSchedule(name), replaceStateWithPayload)
+      .addCase(addNewSchedule(name), replaceStateWithPayload)
       .addDefaultCase((state) => state);
   });

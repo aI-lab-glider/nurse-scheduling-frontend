@@ -33,11 +33,11 @@ export function WorkerNameEditField({
   const [firstEditMade, setFirstEditMade] = useState(false);
   const workerNames = useSelector(getPresentWorkerNames);
 
-  const isWorkerWithSameNameExists = useCallback((): boolean => {
-    const isWorkerNameInvalid =
-      workerNames.includes((workerName ?? "").trim()) && mode !== WorkerEditComponentMode.EDIT;
-    return isWorkerNameInvalid;
-  }, [mode, workerName, workerNames]);
+  const isWorkerWithSameNameExists = useCallback(
+    (): boolean =>
+      workerNames.includes((workerName ?? "").trim()) && mode !== WorkerEditComponentMode.EDIT,
+    [mode, workerName, workerNames]
+  );
 
   const isWorkerNameEmpty = useCallback((): boolean => workerName === "", [workerName]);
 

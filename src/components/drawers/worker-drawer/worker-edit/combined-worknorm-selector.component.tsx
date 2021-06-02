@@ -9,7 +9,7 @@ import { WorkerCivilContractWorkNormSelector } from "./worker-civil-contract-wor
 
 export interface WorkNormSelectorOptions extends FormFieldOptions {
   workerContractType?: ContractType;
-  employmentTime: number;
+  workerTime: number;
   setWorkerTime: (newWorkerTime: number) => void;
 }
 

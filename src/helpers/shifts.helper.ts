@@ -117,8 +117,8 @@ export class ShiftHelper {
 
   static replaceFreeShiftsWithFreeDay(
     shifts: ShiftCode[],
-    startIndex = 0,
-    freeShiftCodes: ShiftCode[]
+    freeShiftCodes: ShiftCode[],
+    startIndex = 0
   ): ShiftCode[] {
     return shifts.map((shift, idx) => {
       const isIndexValid = idx >= startIndex;

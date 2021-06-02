@@ -15,8 +15,8 @@ import {
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import ErrorListItem from "../../error-list/error-list-item.component";
 import { Popper } from "../popper";
-import { colors } from "../../../assets/colors";
 import { getPresentSchedule } from "../../../state/schedule-data/selectors";
+import { ErrorSwitch, ErrorTriangle } from "./error-switch.component";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface ErrorPopperOptions {
@@ -82,7 +82,6 @@ export function ErrorPopper({
       setIsFixed(false);
     }
   }
-
   const { shift_types: shiftTypes } = useSelector(getPresentSchedule);
   return (
     <>
@@ -117,21 +116,12 @@ export function ErrorPopper({
         onMouseEnter={showErrorTooltip}
         onMouseLeave={(): void => hideErrorTooltip(false)}
       >
-        {errors.length !== 0 && triangleStyle === "single" && <ErrorTriangle ref={errorTriangle} />}
-        {errors.length !== 0 && triangleStyle === "right" && (
-          <div>
-            <ErrorLine ref={errorTriangle} />
-            <RightBottomErrorTooltip ref={errorTriangle} />
-          </div>
-        )}
+        <ErrorSwitch
+          errorRef={errorTriangle}
+          errorStyle={triangleStyle}
+          errorsLength={errors.length}
+        />
         {errors.length > 1 && <ErrorTriangle ref={errorTriangle} />}
-        {errors.length !== 0 && triangleStyle === "middle" && <ErrorLine ref={errorTriangle} />}
-        {errors.length !== 0 && triangleStyle === "left" && (
-          <div>
-            <ErrorLine ref={errorTriangle} />
-            <LeftBottomErrorTooltip ref={errorTriangle} />
-          </div>
-        )}
         {children}
       </div>
     </>
@@ -147,44 +137,4 @@ const ErrorTooltip = styled(Popper)`
   border-radius: 4px;
   z-index: 3;
   max-width: 500px;
-`;
-
-const ErrorTriangle = styled.span`
-  --border-width: 7px;
-  position: absolute;
-  top: 0;
-  right: -5px;
-
-  display: block;
-  width: 0;
-  height: 0;
-  border-left: var(--border-width) solid transparent;
-  border-right: var(--border-width) solid transparent;
-
-  border-bottom: var(--border-width) solid ${colors.errorRed};
-  box-shadow: 0 3px 2px -1px rgba(0, 0, 0, 0.25);
-
-  transform: rotate(45deg);
-`;
-const LeftBottomErrorTooltip = styled(ErrorTriangle)`
-  transform: rotate(225deg);
-  left: -5px;
-  bottom: 0;
-  top: auto;
-`;
-
-const RightBottomErrorTooltip = styled(ErrorTriangle)`
-  transform: rotate(135deg);
-  top: auto;
-  right: -5px;
-  bottom: 0;
-`;
-
-const ErrorLine = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: ${colors.errorRed};
 `;

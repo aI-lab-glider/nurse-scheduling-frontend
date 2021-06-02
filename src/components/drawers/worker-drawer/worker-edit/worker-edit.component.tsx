@@ -38,14 +38,11 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
   /**
    * TODO Rewrite as separate components: one for edit one for add ???
    * */
-  const getWorkerName = useCallback((options: WorkerEditComponentOptions) => {
-    switch (options.mode) {
-      case WorkerEditComponentMode.EDIT:
-        return options.name;
-      default:
-        return "" as WorkerName;
-    }
-  }, []);
+  const getWorkerName = useCallback(
+    (workerOptions: WorkerEditComponentOptions) =>
+      workerOptions.mode === WorkerEditComponentMode.EDIT ? workerOptions.name : ("" as WorkerName),
+    []
+  );
 
   const { workerInfo, setWorkerInfo } = useWorkerInfo(getWorkerName(options));
   const [isWorkerNameValid, setIsWorkerNameValid] = useState(true);
@@ -120,7 +117,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
         />
 
         <CombinedWorkNormSelector
-          employmentTime={workerInfo.workerTime}
+          workerTime={workerInfo.workerTime}
           setWorkerTime={handleWorkerTimeUpdate}
           setIsFieldValid={setIsWorkerTimeValid}
           workerContractType={workerInfo.contractType}
