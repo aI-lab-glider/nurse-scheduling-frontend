@@ -61,7 +61,7 @@ describe("Tab management", () => {
         () => {
           it("properly handles worker contract type change", () => {
             cy.get('[data-cy="civil_contract"]').click();
-            cy.get(`[data-cy="btn-save-worker"]`).click();
+            cy.get('[data-cy="btn-save-worker"]').click();
             cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa zlecenie 160 godz.");
             cy.get('[data-cy="btn-schedule-tab"]').click();
             cy.checkHoursInfo(testWorkerData);
@@ -73,7 +73,7 @@ describe("Tab management", () => {
         () => {
           it("properly handles worker contract type change", () => {
             cy.get('[data-cy="employment_contract"]').click();
-            cy.get(`[data-cy="btn-save-worker"]`).click();
+            cy.get('[data-cy="btn-save-worker"]').click();
             cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1/1");
             cy.get('[data-cy="btn-schedule-tab"]').click();
             cy.checkHoursInfo(testWorkerData);

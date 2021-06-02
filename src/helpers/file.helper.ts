@@ -12,8 +12,8 @@ import {
   RevisionTypeLabels,
 } from "../logic/data-access/persistance-store.model";
 import { MonthDataModel } from "../state/schedule-data/schedule-data.model";
-import { LocalStorageProvider } from "../logic/data-access/local-storage-provider.model";
 import { ScheduleExportLogic } from "../logic/schedule-exporter/schedule-export.logic";
+import { LocalMonthPersistProvider } from "../logic/data-access/month-persistance-provider";
 
 type FilenamesToDirnameDict = { [dirName: string]: string[] };
 export type WorkbookToFilename = { [name: string]: xlsx.Workbook };
@@ -92,7 +92,7 @@ export class FileHelper {
   }
 
   public static handleDbDump = async (): Promise<void> => {
-    const docs = await new LocalStorageProvider().getAllSchedules();
+    const docs = await new LocalMonthPersistProvider().getAllMonths();
 
     const workbooks: WorkbookToFilename = {};
     Object.keys(docs)

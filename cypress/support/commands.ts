@@ -12,8 +12,8 @@ import { shiftSectionDataCy } from "../../src/components/schedule/worker-info-se
 import { summaryCellDataCy } from "../../src/components/schedule/worker-info-section/summary-table/summarytable-cell.models";
 import { summaryRowDataCy } from "../../src/components/schedule/worker-info-section/summary-table/summarytable-row.models";
 import { summaryTableSectionDataCy } from "../../src/components/schedule/worker-info-section/summary-table/summarytable-section.models";
-import { LocalStorageProvider } from "../../src/logic/data-access/local-storage-provider.model";
 import { ShiftCode } from "../../src/state/schedule-data/shifts-types/shift-types.model";
+import { LocalMonthPersistProvider } from "../../src/logic/data-access/month-persistance-provider";
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 require("@cypress/snapshot").register();
@@ -61,7 +61,7 @@ export const TEST_SCHEDULE_YEAR = 2020;
 Cypress.Commands.add(
   "loadScheduleToMonth",
   (scheduleName: ScheduleName = "example.xlsx", month: number, year: number) => {
-    cy.wrap(new LocalStorageProvider().reloadDb()).then(() => {
+    cy.wrap(new LocalMonthPersistProvider().reloadDb()).then(() => {
       cy.clock(Date.UTC(year ?? TEST_SCHEDULE_YEAR, month ?? TEST_SCHEDULE_MONTH, 15), ["Date"]);
       cy.visit("/");
       cy.get("[data-cy=file-input]").attachFile(scheduleName);
@@ -71,7 +71,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("unloadSchedule", () => {
-  cy.wrap(new LocalStorageProvider().reloadDb()).then(() => cy.visit("/"));
+  cy.wrap(new LocalMonthPersistProvider().reloadDb()).then(() => cy.visit("/"));
 });
 
 Cypress.Commands.add(
