@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { Grid, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { t } from "../../../../helpers/translations.helper";
 import { WorkerType } from "../../../../state/schedule-data/worker-info/worker-info.model";
@@ -10,11 +10,8 @@ import {
   DropdownButtons,
 } from "../../../buttons/dropdown-buttons/dropdown-buttons.component";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
-import {
-  FormFieldOptions,
-  translateAndCapitalizeWorkerType,
-  useFormFieldStyles,
-} from "./worker-edit.models";
+import { FormFieldOptions, translateAndCapitalizeWorkerType } from "./worker-edit.models";
+import * as S from "./worker.styled";
 
 interface WorkerPositionSelectorOptions extends FormFieldOptions {
   workerType?: WorkerType;
@@ -26,7 +23,6 @@ export function WorkerWorkerTypeSelector({
   setActualWorkerType,
   setIsFieldValid,
 }: WorkerPositionSelectorOptions): JSX.Element {
-  const classes = useFormFieldStyles();
   const [firstEditMade, setFirstEditMade] = useState(false);
 
   function handleWorkerTypeUpdate(type: WorkerType): void {
@@ -50,7 +46,7 @@ export function WorkerWorkerTypeSelector({
   }, [workerType, setIsFieldValid, isWorkerPositionValid]);
   return (
     <Grid item xs={6}>
-      <Typography className={classes.label}>{t("position")}</Typography>
+      <S.Label>{t("position")}</S.Label>
       <DropdownButtons
         dataCy="position"
         buttons={positionOptions}

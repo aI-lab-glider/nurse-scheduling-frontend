@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { Grid, TextField, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
@@ -11,11 +11,8 @@ import {
   FormFieldErrorLabelOptions,
   FormFieldErrorLabelStack,
 } from "./form-field-error-label.component";
-import {
-  FormFieldOptions,
-  useFormFieldStyles,
-  WorkerEditComponentMode,
-} from "./worker-edit.models";
+import { FormFieldOptions, WorkerEditComponentMode } from "./worker-edit.models";
+import * as S from "./worker.styled";
 
 export interface WorkerNameEditFieldOptions extends FormFieldOptions {
   workerName: string;
@@ -29,7 +26,6 @@ export function WorkerNameEditField({
   setIsFieldValid,
   mode,
 }: WorkerNameEditFieldOptions): JSX.Element {
-  const classes = useFormFieldStyles();
   const [firstEditMade, setFirstEditMade] = useState(false);
   const workerNames = useSelector(getPresentWorkerNames);
 
@@ -67,11 +63,10 @@ export function WorkerNameEditField({
   return (
     <>
       <Grid item xs={6}>
-        <Typography className={classes.label}>{t("firstAndLastName")}</Typography>
-        <TextField
+        <S.Label>{t("firstAndLastName")}</S.Label>
+        <S.TextField
           fullWidth
           name="workerName"
-          className={classes.formInput}
           style={{
             marginBottom: 5,
           }}

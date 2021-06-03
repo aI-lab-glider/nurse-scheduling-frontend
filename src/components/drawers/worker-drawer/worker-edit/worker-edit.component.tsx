@@ -4,7 +4,7 @@
 import { Grid } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import * as S from "./worker-edit.styled";
+import * as S from "./worker.styled";
 import {
   ContractType,
   Team,
