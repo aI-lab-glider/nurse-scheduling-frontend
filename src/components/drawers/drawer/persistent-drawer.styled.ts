@@ -1,12 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { Drawer as MaterialDrawer } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import styled from "styled-components";
 import { drawerHeaderHeight, headerHeight } from "../../../assets/colors";
 import { StyleProps } from "./persistent-drawer.component";
 
-export const Drawer = styled(MaterialDrawer)<StyleProps>`
+export const Drawer = styled(Box)<StyleProps>`
   width: ${({ width }) => `${width}px`};
   height: calc(
     100vh -
