@@ -2,14 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { Divider, Tab, withStyles } from "@material-ui/core";
+import { Divider } from "@material-ui/core";
 import TabContext from "@material-ui/lab/TabContext";
-import TabList from "@material-ui/lab/TabList";
-import TabPanel from "@material-ui/lab/TabPanel";
-import { makeStyles } from "@material-ui/core/styles";
 import _ from "lodash";
 import * as S from "./route-buttons.styled";
-import { colors } from "../../../assets/colors";
 
 export interface Tabs {
   label: string;
@@ -23,27 +19,12 @@ interface RouteButtonsOptions {
   disabled?: boolean;
 }
 
-const useStyles = makeStyles(() => ({
-  indicatorStyle: {
-    backgroundColor: colors.primary,
-    height: 3,
-    outline: "none",
-  },
-  tabStyle: {
-    minWidth: 0,
-    outline: "none",
-    margin: "0 20px 0 0",
-    padding: 0,
-  },
-}));
-
 export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.Element {
-  const { tabs } = props;
+  const { tabs, disabled } = props;
   if (tabs.length === 0) {
     throw Error("Component cannot be called without tabs");
   }
   const [tab, setTab] = React.useState(tabs[0]!.label);
-  const classes = useStyles();
   const handleChange = (event: React.ChangeEvent<unknown>, newValue: string): void => {
     setTab(newValue);
     const tabObj = _.find(tabs, (tab) => tab.label === newValue);
@@ -52,59 +33,29 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
     }
   };
 
-  // eslint-disable-next-line
-  const StyledTab: any = withStyles((theme) => ({
-    root: {
-      textTransform: "none",
-      color: props.disabled ? colors.gray100 : colors.secondaryTextColor,
-      outline: "none",
-      fontWeight: theme.typography.fontWeightMedium,
-      fontSize: "20",
-      fontFamily: ["Roboto"].join(","),
-
-      "&:hover": {
-        color: props.disabled ? colors.gray100 : colors.primaryTextColor,
-        cursor: props.disabled ? "default" : "pointer",
-        opacity: 1,
-        outline: "none",
-      },
-      "&$selected": {
-        color: colors.secondaryTextColor,
-        outline: "none",
-        fontWeight: theme.typography.fontWeightBold,
-      },
-    },
-
-    selected: {
-      outline: "none",
-    },
-  }))((props) => <Tab disableRipple {...props} />);
-
   return (
     <S.Wrapper>
       <TabContext value={tab}>
         <S.HeaderWrapper>
-          <TabList
-            classes={{ indicator: classes.indicatorStyle }}
-            onChange={!props.disabled ? handleChange : void 0}
-          >
+          <S.TabList onChange={!disabled ? handleChange : void 0}>
             {tabs.map((tab) => (
-              <StyledTab
-                className={classes.tabStyle}
+              <S.Tab
+                disableRipple
                 key={tab.label}
                 label={tab.label}
                 value={tab.label}
                 data-cy={tab.dataCy}
+                disabled={disabled}
               />
             ))}
-          </TabList>
+          </S.TabList>
           <Divider />
         </S.HeaderWrapper>
 
         {tabs.map((tab) => (
-          <TabPanel value={tab.label} key={tab.label} className={classes.tabStyle}>
+          <S.TabPanel value={tab.label} key={tab.label}>
             {tab.component}
-          </TabPanel>
+          </S.TabPanel>
         ))}
       </TabContext>
     </S.Wrapper>

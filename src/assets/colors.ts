@@ -59,6 +59,7 @@ export const fontSizeH6 = `${0.75}rem`;
 
 export const fontWeightLight = 300;
 export const fontWeightNormal = 400;
+export const fontWeightMedium = 500;
 export const fontWeightBold = 600;
 export const fontWeightExtra = "bold";
 export const fontWeightBase = fontWeightNormal;

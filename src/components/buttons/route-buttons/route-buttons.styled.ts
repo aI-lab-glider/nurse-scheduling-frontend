@@ -2,6 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
+import { TabList as MaterialTabList, TabPanel as MaterialTabPanel } from "@material-ui/lab";
+import { Tab as MaterialTab } from "@material-ui/core";
+import { fontWeightMedium, fontWeightBold, colors } from "../../../assets/colors";
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -11,4 +14,47 @@ export const Wrapper = styled.div`
 export const HeaderWrapper = styled.div`
   width: 100%;
   padding: 0 20px;
+`;
+
+export const TabList = styled(MaterialTabList)`
+  & span[class*="indicator"] {
+    background-color: ${colors.primary};
+    height: 3px;
+    outline: none;
+  }
+`;
+
+export const Tab = styled(MaterialTab)`
+  && {
+    text-transform: none;
+    color: ${({ disabled }) => (disabled ? colors.gray100 : colors.secondaryTextColor)};
+    outline: none;
+    font-weight: ${fontWeightMedium};
+    font-size: 20px;
+    font-family: "Roboto";
+    min-width: 0;
+    outline: none;
+    margin: 0 20px 0 0;
+    padding: 0;
+  }
+  &:hover {
+    color: ${({ disabled }) => (disabled ? colors.gray100 : colors.primaryTextColor)};
+    cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
+    opacity: 1;
+    outline: none;
+  }
+  &[class*="selected"] {
+    color: ${colors.secondaryTextColor};
+    outline: none;
+    fontweight: ${fontWeightBold};
+  }
+`;
+
+export const TabPanel = styled(MaterialTabPanel)`
+  && {
+    min-width: 0;
+    outline: none;
+    margin: 0 20px 0 0;
+    padding: 0;
+  }
 `;
