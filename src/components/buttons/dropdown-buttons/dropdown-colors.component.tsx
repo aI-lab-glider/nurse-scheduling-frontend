@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Popper from "@material-ui/core/Popper";
-import * as S from "./dropdown-colors.styled";
+import * as S from "./dropdown.styled";
 import { ButtonVariant } from "../../common-components";
 
 interface DropdownColorsOptions {
