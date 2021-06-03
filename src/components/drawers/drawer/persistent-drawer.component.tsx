@@ -4,29 +4,17 @@
 import React, { useEffect } from "react";
 import { Box } from "@material-ui/core";
 import { useSelector } from "react-redux";
-import { makeStyles, Theme } from "@material-ui/core/styles";
-import { drawerHeaderHeight, headerHeight } from "../../../assets/colors";
 import { getIsEditMode } from "../../../state/schedule-data/selectors";
 import DrawerHeader from "./drawer-header.component";
 import { usePersistentDrawer } from "./persistent-drawer-context";
+import * as S from "./persistent-drawer.styled";
 
 export interface StyleProps {
   width: number;
 }
 
-// TODO: add types declaration
-const useStyles = makeStyles<Theme, StyleProps>({
-  drawer: {
-    width: ({ width }): number => width,
-    height: `calc(100vh - ${
-      parseInt(headerHeight!.slice(0, -2), 10) + parseInt(drawerHeaderHeight!.slice(0, -2), 10) + 1
-    }px)`,
-  },
-});
-
-export default function PersistentDrawer(width: StyleProps): JSX.Element {
+export default function PersistentDrawer({ width }: StyleProps): JSX.Element {
   const isEditMode = useSelector(getIsEditMode);
-  const classes = useStyles(width);
   const { title, open, setOpen, childrenComponent } = usePersistentDrawer();
 
   useEffect(() => {
@@ -36,11 +24,11 @@ export default function PersistentDrawer(width: StyleProps): JSX.Element {
   return (
     <Box>
       {title && open && setOpen && childrenComponent && isEditMode && (
-        <Box className={classes.drawer}>
+        <S.Drawer width={width}>
           <DrawerHeader title={title} setOpen={setOpen}>
             {childrenComponent}
           </DrawerHeader>
-        </Box>
+        </S.Drawer>
       )}
     </Box>
   );

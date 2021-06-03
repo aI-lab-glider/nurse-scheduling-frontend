@@ -46,7 +46,7 @@ export const Tab = styled(MaterialTab)`
   &[class*="selected"] {
     color: ${colors.secondaryTextColor};
     outline: none;
-    fontweight: ${fontWeightBold};
+    font-weight: ${fontWeightBold};
   }
 `;
 
