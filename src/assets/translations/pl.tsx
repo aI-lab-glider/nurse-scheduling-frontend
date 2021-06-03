@@ -47,7 +47,6 @@ export const pl = {
     // error-list-item.component.tsx
     show: "Pokaż",
     // error-list.component.tsx
-    //! Errors
     noNurses: "Brak pielęgniarek",
     notEnoughWorkersDuringDay: "Za mało pracowników w trakcie dnia",
     notEnoughWorkersDuringNight: "Za mało pracowników w nocy",

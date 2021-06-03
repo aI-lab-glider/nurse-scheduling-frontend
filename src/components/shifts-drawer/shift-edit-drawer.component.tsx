@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import * as S from "./shift-edit-drawer.styled";
 import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
 import { t } from "../../helpers/translations.helper";
-import { ApplicationStateModel } from "../../state/application-state.model";
+import { getPresentShiftTypes } from "../../state/schedule-data/selectors";
 import { Shift, ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { DropdownColors } from "../buttons/dropdown-buttons/dropdown-colors.component";
 import { Button } from "../common-components";
@@ -28,9 +28,7 @@ export default function ShiftEditDrawer({
   saveChangedShift,
   mode,
 }: ShiftEditDrawerOptions): JSX.Element {
-  const shifts = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present.shift_types
-  );
+  const shifts = useSelector(getPresentShiftTypes);
   const shiftNames = Object.values(shifts).map((shift) => shift.name);
   const shiftCodes = Object.values(shifts).map((shift) => shift.code);
   const [shiftName, setShiftName] = useState(selectedShift.name);

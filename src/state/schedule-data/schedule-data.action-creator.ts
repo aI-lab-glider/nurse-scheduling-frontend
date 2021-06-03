@@ -3,8 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import _ from "lodash";
-import { LocalStorageProvider } from "../../logic/data-access/local-storage-provider.model";
 import {
+  PersistStorageManager,
   RevisionType,
   ScheduleKey,
   ThunkFunction,
@@ -25,6 +25,12 @@ import {
 import { ScheduleErrorMessageModel } from "./schedule-errors/schedule-error-message.model";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 import { Shift } from "./shifts-types/shift-types.model";
+import { cleanScheduleErrors } from "./schedule-errors/schedule-errors.reducer";
+import {
+  getMonthRevision,
+  getOrGenerateMonthRevision,
+} from "../../logic/data-access/month-revision-manager";
+import { saveSchedule } from "../../logic/data-access/schedule-persistance-manager";
 
 export class ScheduleDataActionCreator {
   // #region Update state
@@ -51,14 +57,10 @@ export class ScheduleDataActionCreator {
   }
 
   private static setScheduleFromMonthDM(
-    monthDataModel: MonthDataModel,
-    revision?: RevisionType
+    monthDataModel: MonthDataModel
   ): ThunkFunction<ScheduleDataModel> {
-    return async (dispatch, getState): Promise<void> => {
-      if (_.isNil(revision)) {
-        revision = getState().actualState.revision;
-      }
-      const newSchedule = await extendMonthDMRevisionToScheduleDM(monthDataModel, revision);
+    return async (dispatch): Promise<void> => {
+      const newSchedule = await extendMonthDMRevisionToScheduleDM(monthDataModel);
       const primaryMonthDM = await this.getMonthPrimaryRevisionDM(monthDataModel);
 
       dispatch(this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM));
@@ -71,10 +73,11 @@ export class ScheduleDataActionCreator {
     revision: RevisionType
   ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
-      const monthDataModel = await new LocalStorageProvider().fetchOrCreateMonthRevision(
+      const monthDataModel = await getOrGenerateMonthRevision(
         monthKey,
         revision,
-        baseMonthModel
+        baseMonthModel,
+        PersistStorageManager.getInstance().actualPersistProvider
       );
       dispatch(this.setScheduleFromMonthDM(monthDataModel));
     };
@@ -89,8 +92,9 @@ export class ScheduleDataActionCreator {
         revision = getState().actualState.revision;
       }
 
-      const monthDataModel = await new LocalStorageProvider().getMonthRevision(
-        monthKey.getRevisionKey(revision)
+      const monthDataModel = await getMonthRevision(
+        monthKey.getRevisionKey(revision),
+        PersistStorageManager.getInstance().actualPersistProvider
       );
 
       if (!_.isNil(monthDataModel)) {
@@ -109,7 +113,7 @@ export class ScheduleDataActionCreator {
       if (_.isNil(revision)) {
         revision = getState().actualState.revision;
       }
-      await new LocalStorageProvider().saveSchedule(revision, newSchedule);
+      await saveSchedule(revision, newSchedule);
       const primaryMonthDM = await this.getMonthPrimaryRevisionDM(
         cropScheduleDMToMonthDM(newSchedule)
       );
@@ -125,7 +129,7 @@ export class ScheduleDataActionCreator {
       if (_.isNil(revision)) {
         revision = getState().actualState.revision;
       }
-      const newSchedule = await extendMonthDMRevisionToScheduleDM(newMonth, revision);
+      const newSchedule = await extendMonthDMRevisionToScheduleDM(newMonth);
       dispatch(this.setScheduleStateAndSaveToDb(newSchedule, revision));
     };
   }
@@ -135,8 +139,9 @@ export class ScheduleDataActionCreator {
   private static async getMonthPrimaryRevisionDM(
     monthDataModel: MonthDataModel
   ): Promise<PrimaryMonthRevisionDataModel> {
-    const primaryMonthDM = await new LocalStorageProvider().getMonthRevision(
-      monthDataModel.scheduleKey.getRevisionKey("primary")
+    const primaryMonthDM = await getMonthRevision(
+      monthDataModel.scheduleKey.getRevisionKey("primary"),
+      PersistStorageManager.getInstance().actualPersistProvider
     );
     return (primaryMonthDM ?? monthDataModel) as PrimaryMonthRevisionDataModel;
   }
@@ -184,17 +189,11 @@ export class ScheduleDataActionCreator {
   }
 
   static showError(error: ScheduleErrorMessageModel | undefined): ActionModel<unknown> {
-    const action = {
+    return {
       type: ScheduleActionType.SHOW_ERROR,
       payload: error,
     };
-    return action;
   }
 
-  static cleanErrors(): ActionModel<unknown> {
-    const action = {
-      type: ScheduleActionType.CLEAN_ERRORS,
-    };
-    return action;
-  }
+  static cleanErrors = cleanScheduleErrors;
 }

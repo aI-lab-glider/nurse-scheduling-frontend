@@ -8,6 +8,9 @@ import { useMonthInfo } from "../../../../hooks/use-month-info";
 import { BaseCellComponent } from "../base-cell/base-cell.component";
 import { baseRowDataCy, BaseRowOptions, toCellDataItemArray } from "./base-row.models";
 
+const isCellFromPrevMonth = (index: number, firstDayOfTheMonth): boolean =>
+  index < firstDayOfTheMonth;
+
 export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
   const {
     rowIndex,
@@ -29,8 +32,6 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
   const { verboseDates, monthNumber: currMonthNumber } = useMonthInfo();
   const numberOfDays = verboseDates?.length;
   const firstMonthDayIndex = verboseDates?.findIndex((date) => date.date === 1);
-
-  const isCellFromPrevMonth = (index, firstMonthDayIndex): boolean => index < firstMonthDayIndex;
 
   function saveValue(newValue: string): void {
     onSave?.(newValue);

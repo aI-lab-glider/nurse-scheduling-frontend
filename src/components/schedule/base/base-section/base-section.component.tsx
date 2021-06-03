@@ -141,7 +141,6 @@ function BaseSectionComponentF({
   );
 }
 
-export const BaseSectionComponent = React.memo(BaseSectionComponentF, (prev, next) => {
-  const areEqual = DataRowHelper.areDataRowArraysEqual(prev.data, next.data);
-  return areEqual;
-});
+export const BaseSectionComponent = React.memo(BaseSectionComponentF, (prev, next) =>
+  DataRowHelper.areDataRowArraysEqual(prev.data, next.data)
+);

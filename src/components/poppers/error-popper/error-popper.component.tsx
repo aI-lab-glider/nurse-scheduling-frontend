@@ -14,6 +14,8 @@ import {
   ScheduleError,
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import ErrorListItem from "../../error-list/error-list-item.component";
+import { getPresentSchedule } from "../../../state/schedule-data/selectors";
+import { ErrorSwitch, ErrorTriangle } from "./error-switch.component";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface ErrorPopperOptions {
@@ -79,10 +81,7 @@ export function ErrorPopper({
       setIsFixed(false);
     }
   }
-
-  const { shift_types: shiftTypes } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
+  const { shift_types: shiftTypes } = useSelector(getPresentSchedule);
   return (
     <>
       <S.ErrorTooltip
@@ -116,23 +115,12 @@ export function ErrorPopper({
         onMouseEnter={showErrorTooltip}
         onMouseLeave={(): void => hideErrorTooltip(false)}
       >
-        {errors.length !== 0 && triangleStyle === "single" && (
-          <S.ErrorTriangle ref={errorTriangle} />
-        )}
-        {errors.length !== 0 && triangleStyle === "right" && (
-          <div>
-            <S.ErrorLine ref={errorTriangle} />
-            <S.RightBottomErrorTooltip ref={errorTriangle} />
-          </div>
-        )}
-        {errors.length > 1 && <S.ErrorTriangle ref={errorTriangle} />}
-        {errors.length !== 0 && triangleStyle === "middle" && <S.ErrorLine ref={errorTriangle} />}
-        {errors.length !== 0 && triangleStyle === "left" && (
-          <div>
-            <S.ErrorLine ref={errorTriangle} />
-            <S.LeftBottomErrorTooltip ref={errorTriangle} />
-          </div>
-        )}
+        <ErrorSwitch
+          errorRef={errorTriangle}
+          errorStyle={triangleStyle}
+          errorsLength={errors.length}
+        />
+        {errors.length > 1 && <ErrorTriangle ref={errorTriangle} />}
         {children}
       </div>
     </>

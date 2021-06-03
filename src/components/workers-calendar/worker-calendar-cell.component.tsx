@@ -5,8 +5,8 @@ import { fade } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import * as S from "./worker-calendar-cell.styled";
-import { ApplicationStateModel } from "../../state/application-state.model";
 import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
+import { getPresentShiftTypes } from "../../state/schedule-data/selectors";
 import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { DEFAULT_SHIFT_HEX } from "../schedule/worker-info-section/shifts-section/shift-cell/shift-cell.component";
 
@@ -27,9 +27,7 @@ export function WorkersCalendarCell(params: CellOptions): JSX.Element {
   let shiftColor: string;
   let background: string;
 
-  const { shift_types: shiftTypes } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
+  const shiftTypes = useSelector(getPresentShiftTypes);
 
   if (shiftCode) {
     shiftColor = `#${shiftTypes[shiftCode].color ?? DEFAULT_SHIFT_HEX}`;

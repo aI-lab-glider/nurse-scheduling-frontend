@@ -12,7 +12,7 @@ import { FormFieldErrorLabel } from "./form-field-error-label.component";
 import { useFormFieldStyles } from "./worker-edit.models";
 
 export function WorkerCivilContractWorkNormSelector({
-  employmentTime,
+  workerTime,
   setWorkerTime,
   setIsFieldValid: setIsFormValid,
 }: WorkNormSelectorOptions): JSX.Element {
@@ -27,12 +27,12 @@ export function WorkerCivilContractWorkNormSelector({
   );
 
   const [workerCivilTime, setWorkerCivilTime] = useState(
-    convertToNormalHours(employmentTime).toString()
+    convertToNormalHours(workerTime).toString()
   );
 
   useEffect(() => {
-    setWorkerCivilTime(convertToNormalHours(employmentTime).toString());
-  }, [employmentTime, setWorkerCivilTime, convertToNormalHours]);
+    setWorkerCivilTime(convertToNormalHours(workerTime).toString());
+  }, [workerTime, setWorkerCivilTime, convertToNormalHours]);
 
   const classes = useFormFieldStyles();
 

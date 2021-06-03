@@ -1,7 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
+
+import React, { useCallback, useMemo } from "react";
 import { Divider } from "@material-ui/core";
 import TabContext from "@material-ui/lab/TabContext";
 import _ from "lodash";
@@ -24,39 +25,54 @@ export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.E
   if (tabs.length === 0) {
     throw Error("Component cannot be called without tabs");
   }
-  const [tab, setTab] = React.useState(tabs[0]!.label);
-  const handleChange = (event: React.ChangeEvent<unknown>, newValue: string): void => {
-    setTab(newValue);
-    const tabObj = _.find(tabs, (tab) => tab.label === newValue);
-    if (tabObj && tabObj.onChange) {
-      tabObj.onChange();
-    }
-  };
+  const [tabLabel, setTabLabel] = React.useState(tabs[0]!.label);
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<unknown>, newValue: string): void => {
+      if (disabled) {
+        return;
+      }
+      setTabLabel(newValue);
+      const tabObj = _.find(tabs, (tab) => tab.label === newValue);
+      if (tabObj && tabObj.onChange) {
+        tabObj.onChange();
+      }
+    },
+    [disabled, setTabLabel, tabs]
+  );
+
+  const tabTitles = useMemo(
+    () =>
+      tabs.map((tab) => (
+        <S.Tab
+          disableRipple
+          disabled={disabled}
+          key={tab.label}
+          label={tab.label}
+          value={tab.label}
+          data-cy={tab.dataCy}
+        />
+      )),
+    [tabs, disabled]
+  );
+
+  const tabContents = useMemo(
+    () =>
+      tabs.map((tab) => (
+        <S.TabPanel value={tab.label} key={tab.label}>
+          {tab.component}
+        </S.TabPanel>
+      )),
+    [tabs]
+  );
 
   return (
     <S.Wrapper>
-      <TabContext value={tab}>
+      <TabContext value={tabLabel}>
         <S.HeaderWrapper>
-          <S.TabList onChange={!disabled ? handleChange : void 0}>
-            {tabs.map((tab) => (
-              <S.Tab
-                disableRipple
-                key={tab.label}
-                label={tab.label}
-                value={tab.label}
-                data-cy={tab.dataCy}
-                disabled={disabled}
-              />
-            ))}
-          </S.TabList>
+          <S.TabList onChange={!disabled ? handleChange : void 0}>{tabTitles}</S.TabList>
           <Divider />
         </S.HeaderWrapper>
-
-        {tabs.map((tab) => (
-          <S.TabPanel value={tab.label} key={tab.label}>
-            {tab.component}
-          </S.TabPanel>
-        ))}
+        {tabContents}
       </TabContext>
     </S.Wrapper>
   );

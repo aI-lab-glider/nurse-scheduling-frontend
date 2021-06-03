@@ -48,14 +48,7 @@ export function useWorkerInfo(workerName: WorkerName): UseWorkerInfoReturn {
   );
 
   const [workerInfo, setWorkerInfo] = useState<WorkerInfo>(
-    new WorkerInfo(
-      workerName,
-      workerContractType,
-      workerTime,
-      workerType,
-      workerShifts,
-      team
-    )
+    new WorkerInfo(workerName, workerContractType, workerTime, workerType, workerShifts, team)
   );
   useEffect(() => {
     const newWorkerInfo = new WorkerInfo(

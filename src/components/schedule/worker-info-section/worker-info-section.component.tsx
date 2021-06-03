@@ -5,7 +5,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import * as S from "./worker-info-section.styled";
 import { DataRow } from "../../../logic/schedule-logic/data-row";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import { NameTableSectionOptions } from "./name-table/nametable-section.component";
 import { NameTableComponent } from "./name-table/nametable.component";
 import { WorkerInfo } from "../../../hooks/use-worker-info";
@@ -16,6 +15,7 @@ import {
   ShiftsSectionOptions,
 } from "./shifts-section/shifts-section.component";
 import { shiftSectionDataCy } from "./worker-info-section.models";
+import { getActualMode } from "../../../state/schedule-data/selectors";
 
 type SubcomponentsOptions = Omit<NameTableSectionOptions, "isWorker" | "uuid" | "updateData"> &
   ShiftsSectionOptions &
@@ -33,7 +33,7 @@ export function WorkerInfoSection({
   sectionIndex,
   ...options
 }: WorkerInfoSectionOptions): JSX.Element {
-  const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const mode = useSelector(getActualMode);
 
   const dataRows = data.map(
     (workerInfo) =>

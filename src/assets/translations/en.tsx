@@ -49,7 +49,6 @@ const en: LocalizationResource = {
     // error-list-item.component.tsx
     show: "Show",
     // error-list.component.tsx
-    //! Errors
     noNurses: "No nurses",
     notEnoughWorkersDuringDay: "Not enough workers during day",
     notEnoughWorkersDuringNight: "Not enough workers during night",

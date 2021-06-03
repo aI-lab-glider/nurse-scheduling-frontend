@@ -21,7 +21,7 @@ export class UndoActionCreator {
       dispatch({
         type: undoType,
       });
-      await afterUndo?.(dispatch, getState);
+      afterUndo?.(dispatch, getState);
     };
   }
 
@@ -30,7 +30,7 @@ export class UndoActionCreator {
       dispatch({
         type: redoType,
       });
-      await afterRedo?.(dispatch, getState);
+      afterRedo?.(dispatch, getState);
     };
   }
 

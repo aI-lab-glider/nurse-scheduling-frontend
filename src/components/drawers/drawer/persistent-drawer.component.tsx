@@ -1,13 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { Box } from "@material-ui/core";
 import React, { useEffect } from "react";
+import { Box } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { drawerHeaderHeight, headerHeight } from "../../../assets/colors";
-import { ApplicationStateModel } from "../../../state/application-state.model";
-import { ScheduleMode } from "../../schedule/schedule-state.model";
+import { getIsEditMode } from "../../../state/schedule-data/selectors";
 import DrawerHeader from "./drawer-header.component";
 import { usePersistentDrawer } from "./persistent-drawer-context";
 
@@ -26,9 +25,7 @@ const useStyles = makeStyles<Theme, StyleProps>({
 });
 
 export default function PersistentDrawer(width: StyleProps): JSX.Element {
-  const isEditMode = useSelector(
-    (state: ApplicationStateModel) => state.actualState.mode === ScheduleMode.Edit
-  );
+  const isEditMode = useSelector(getIsEditMode);
   const classes = useStyles(width);
   const { title, open, setOpen, childrenComponent } = usePersistentDrawer();
 

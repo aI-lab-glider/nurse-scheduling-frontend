@@ -60,11 +60,26 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   ) {
     throw new Error("[TEST MODE] Error message was entered");
   }
-
+  const addSuffix = (length: number): string => {
+    if (length < 5) {
+      if (length === 1) return "";
+      return "i";
+    }
+    return "ów";
+  };
+  const helperText = (length: number): string => {
+    if (length < 19) {
+      return `Treść wiadomości jest za krótka! Wprowadź jeszcze min. ${
+        19 - length + 1
+      } znak${addSuffix(length)}.`;
+    }
+    return " ";
+  };
   const body = (
     <div>
-      {isSent && <S.Message>{t("errorMessageWasSent")}</S.Message>}
-      {!isSent && (
+      {isSent ? (
+        <S.Message>{t("errorMessageWasSent")}</S.Message>
+      ) : (
         <>
           <S.Message>{t("whatErrorOccurred")}</S.Message>
           <S.Input
@@ -73,15 +88,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
             onChange={onIssueDescriptionChange}
             fullWidth
             multiline
-            helperText={
-              issueDescription.length > 19
-                ? " "
-                : `Treść wiadomości jest za krótka! Wprowadź jeszcze min. ${
-                    19 - issueDescription.length + 1
-                  } znak${
-                    issueDescription.length < 16 ? "ów" : issueDescription.length < 19 ? "i" : ""
-                  }.`
-            }
+            helperText={helperText(issueDescription.length)}
           />
         </>
       )}
