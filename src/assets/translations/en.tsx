@@ -140,6 +140,11 @@ const en: LocalizationResource = {
     workersWorksheetName: "workers",
     shiftsWorksheetName: "shifts",
     absenceWorksheetName: "leaves",
+    // edit-page toolbar
+    editPageToolbarCheckPlan: "Check plan",
+    editPageToolbarExit: "Exit",
+    editPageToolbarSavePlan: "Save plan",
+    scheduleSectionNameInformation: "Informations",
   },
 };
 export default en;

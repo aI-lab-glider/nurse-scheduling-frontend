@@ -40,3 +40,17 @@ export const SummaryRow = styled.div`
     cursor: default;
   }
 `;
+
+export const SectionWrapper = styled.div`
+  height: 71px;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  background: ${colors.white};
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid ${colors.tableBorderGrey};
+  border-radius: 10px;
+`;

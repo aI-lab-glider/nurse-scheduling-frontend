@@ -69,6 +69,7 @@
     "import/no-duplicates": "off",
     "no-else-return": "off",
     "react/no-danger": "off",
+    "import/newline-after-import": "off",
     // accessibility
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-static-element-interactions": "off",

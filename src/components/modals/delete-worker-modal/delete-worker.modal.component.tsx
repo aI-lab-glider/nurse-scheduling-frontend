@@ -31,7 +31,13 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
 
   const footer = (
     <>
-      <Button onClick={handleClose} size="small" className="submit-button" variant="secondary">
+      <Button
+        onClick={handleClose}
+        size="small"
+        className="submit-button"
+        variant="secondary"
+        marginString="5px 10px 5px 0px"
+      >
         {t("cancel")}
       </Button>
       <Button
@@ -42,6 +48,7 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
         size="small"
         className="submit-button"
         variant="primary"
+        marginString="5px 10px 5px 0px"
       >
         {t("confirm")}
       </Button>

@@ -8,7 +8,6 @@ import { DataRow } from "../../../logic/schedule-logic/data-row";
 import { NameTableSectionOptions } from "./name-table/nametable-section.component";
 import { NameTableComponent } from "./name-table/nametable.component";
 import { WorkerInfo } from "../../../hooks/use-worker-info";
-import { SummaryTableComponent, SummaryTableOptions } from "./summary-table/summarytable.component";
 import { ScheduleMode } from "../schedule-state.model";
 import {
   ShiftsSectionComponent,
@@ -16,10 +15,14 @@ import {
 } from "./shifts-section/shifts-section.component";
 import { shiftSectionDataCy } from "./worker-info-section.models";
 import { getActualMode } from "../../../state/schedule-data/selectors";
+import {
+  SummaryTableSection,
+  SummaryTableSectionOptions,
+} from "./summary-table/summarytable-section.component";
 
 type SubcomponentsOptions = Omit<NameTableSectionOptions, "isWorker" | "uuid" | "updateData"> &
   ShiftsSectionOptions &
-  SummaryTableOptions;
+  SummaryTableSectionOptions;
 
 export interface WorkerInfoSectionOptions
   extends Omit<SubcomponentsOptions, "data" | "team" | "sectionKey"> {
@@ -50,7 +53,7 @@ export function WorkerInfoSection({
         </S.ShiftSectionWrapper>
       </S.SectionContainer>
       <S.SummarySectionWrapper>
-        <SummaryTableComponent data={dataRows} {...options} sectionIndex={sectionIndex} />
+        <SummaryTableSection data={dataRows} {...options} sectionIndex={sectionIndex} />
       </S.SummarySectionWrapper>
     </S.Wrapper>
   );

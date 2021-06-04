@@ -5,8 +5,17 @@ import { ButtonProps } from "@material-ui/core";
 import React, { Ref } from "react";
 import * as S from "./button.styled";
 
+export type MarginString =
+  | `${number}px`
+  | `${number}px ${number}px`
+  | `${number}px ${number}px ${number}px ${number}px`;
+
+export interface ButtonBaseProps extends Omit<ButtonProps, "variant"> {
+  marginString?: MarginString;
+}
+
 export type ButtonVariant = "primary" | "secondary" | "circle";
-export type ButtonOptions = Omit<ButtonProps, "variant"> & {
+export type ButtonOptions = ButtonBaseProps & {
   variant?: ButtonVariant;
 };
 
@@ -15,7 +24,7 @@ export const Button = React.forwardRef(
     { variant = "primary", disabled = false, ...rest }: ButtonOptions,
     ref?: Ref<HTMLButtonElement>
   ) => {
-    let Component;
+    let Component: typeof S.ButtonBase;
     if (variant === "primary") {
       Component = S.ButtonPrimary;
     } else if (variant === "secondary") {

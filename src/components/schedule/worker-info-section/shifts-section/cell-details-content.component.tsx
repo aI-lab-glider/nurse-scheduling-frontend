@@ -53,7 +53,6 @@ export function CellDetails(props: CellDetailsOptions): JSX.Element {
       </S.Date>
       {workerName && <div>{workerName}</div>}
       <S.Content>
-        {/* // TODO: change div to different html tags e.g. spans, introduce css variables */}
         <S.ShiftColorBox style={{ backgroundColor: `#${foundShift.color}` }} />
         <S.ShiftBoxName style={{ backgroundColor: `#${foundShift.color}` }}>
           {foundShift.name}

@@ -2,7 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
-import { SCHEDULE_CONTAINERS_LENGTH, ScheduleContainerType } from "../schedule-data.model";
+import {
+  SCHEDULE_CONTAINERS_LENGTH,
+  ScheduleContainerType,
+  MonthFoundationInfoModel,
+} from "../schedule-data.model";
 import { MonthHelper } from "../../../helpers/month.helper";
 import { ScheduleKey } from "../../../logic/data-access/persistance-store.model";
 
@@ -32,7 +36,7 @@ export interface FoundationInfoModel {
 }
 
 export function validateFoundationInfo(
-  foundationInfo: FoundationInfoModel,
+  foundationInfo: FoundationInfoModel | MonthFoundationInfoModel,
   containerType: ScheduleContainerType
 ): void {
   const scheduleLen = foundationInfo.dates.length;

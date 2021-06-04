@@ -31,10 +31,9 @@ export function FoundationInfoComponent(): JSX.Element {
   const dispatch = useDispatch();
   const updateFoundationInfoData = useCallback(
     (selectionMatrix: SelectionMatrix, oldData: DataRow<string>[], newValue: string) => {
-      // TODO: Fix unkonw
       const updatedDataRows = DataRowHelper.copyWithReplaced<number>(
         selectionMatrix,
-        (oldData as unknown) as DataRow<number>[],
+        oldData.map((row) => new DataRow(row.rowKey, row.rowData(true, false))),
         parseInt(newValue, 10)
       );
       const updatedFoundationInfo = DataRowHelper.dataRowsAsValueDict<number>(updatedDataRows);

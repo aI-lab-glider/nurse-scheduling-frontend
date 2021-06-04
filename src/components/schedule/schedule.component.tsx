@@ -4,13 +4,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import * as S from "./schedule.styled";
+import { t } from "../../helpers/translations.helper";
 import { useTeams } from "../../hooks/use-teams";
 import { WorkerHourInfo } from "../../logic/schedule-logic/worker-hours-info.logic";
 import { getPresentEmployeeInfo } from "../../state/schedule-data/selectors";
 import { FoundationInfoComponent } from "./foundation-info-section/foundation-info.component";
 import { ScheduleFoldingSection } from "./schedule-folding-section.component";
-import { OvertimeHeaderComponent } from "./schedule-header/overtime-header-table/overtime-header.component";
-import { TimeTableComponent } from "./schedule-header/timetable/timetable.component";
+import { OvertimeHeaderRow } from "./schedule-header/overtime-header-table/overtime-header-row.component";
+import { TimeTableRow } from "./schedule-header/timetable/timetable-row.component";
 import { WorkerInfoSection } from "./worker-info-section/worker-info-section.component";
 
 export function ScheduleComponent(): JSX.Element {
@@ -33,10 +34,10 @@ export function ScheduleComponent(): JSX.Element {
       <div>
         <S.TimeHeader>
           <S.TimeTableContainer>
-            <TimeTableComponent />
+            <TimeTableRow />
           </S.TimeTableContainer>
           <S.SummaryContainer>
-            <OvertimeHeaderComponent data={Object.values(WorkerHourInfo.summaryTranslations)} />
+            <OvertimeHeaderRow data={Object.values(WorkerHourInfo.summaryTranslations)} />
           </S.SummaryContainer>
         </S.TimeHeader>
 
@@ -46,7 +47,7 @@ export function ScheduleComponent(): JSX.Element {
           </ScheduleFoldingSection>
         ))}
 
-        <ScheduleFoldingSection name="Informacje">
+        <ScheduleFoldingSection name={t("scheduleSectionNameInformation")}>
           <FoundationInfoComponent />
         </ScheduleFoldingSection>
       </div>

@@ -2,17 +2,19 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import _ from "lodash";
+import { MonthModelHelper } from "../../helpers/month-model.helper";
+import { MonthHelper } from "../../helpers/month.helper";
 import {
   getScheduleKey,
   MonthDataModel,
+  MonthFoundationInfoModel,
+  MonthWorkerShiftsModel,
   ScheduleDataModel,
   validateMonthDM,
 } from "../../state/schedule-data/schedule-data.model";
 import { cropScheduleDMToMonthDM } from "../schedule-container-converter/schedule-container-converter";
-import { MonthHelper } from "../../helpers/month.helper";
-import { ArrayHelper } from "../../helpers/array.helper";
-import { PersistStorageManager, RevisionType } from "./persistance-store.model";
 import { getMonthRevision, saveMonthRevision } from "./month-revision-manager";
+import { PersistStorageManager, RevisionType } from "./persistance-store.model";
 
 export async function saveSchedule(
   revisionType: RevisionType,
@@ -70,14 +72,14 @@ function updateNextMonthShifts(
   nextMonthDM: MonthDataModel,
   scheduleDataModel: ScheduleDataModel,
   missingDays: number
-) {
+): MonthWorkerShiftsModel {
   const newShifts = _.cloneDeep(nextMonthDM.shifts);
 
   Object.keys(nextMonthDM.shifts).forEach((key) => {
     newShifts[key] =
       _.isNil(scheduleDataModel.shifts[key]) || scheduleDataModel.shifts[key]?.length === 0
         ? nextMonthDM.shifts[key]
-        : ArrayHelper.update(
+        : MonthModelHelper.updateArray(
             nextMonthDM.shifts[key],
             "HEAD",
             scheduleDataModel.shifts[key],
@@ -92,16 +94,16 @@ function updateNextMonthMonthInfo(
   nextMonthDM: MonthDataModel,
   scheduleDataModel: ScheduleDataModel,
   missingDays: number
-) {
+): MonthFoundationInfoModel {
   return {
     ...nextMonthDM.month_info,
-    children_number: ArrayHelper.update(
+    children_number: MonthModelHelper.updateArray(
       nextMonthDM.month_info.children_number ?? [],
       "HEAD",
       scheduleDataModel.month_info.children_number ?? [],
       missingDays
     ),
-    extra_workers: ArrayHelper.update(
+    extra_workers: MonthModelHelper.updateArray(
       nextMonthDM.month_info.extra_workers ?? [],
       "HEAD",
       scheduleDataModel.month_info.extra_workers ?? [],

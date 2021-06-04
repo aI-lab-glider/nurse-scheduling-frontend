@@ -27,14 +27,8 @@ export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "error
   workerInfo?: WorkerInfo;
 }
 
-// TODO: Refactor. Name table section should not be used for 2 pupropses"
-// 1. displaying worker info
-// 2. displaying headers
-// There should be two separate components
 const initialWorkerInfo: WorkerInfoModel = { name: "" as WorkerName, time: 0 };
 
-// TODO: refactor function to be responsible only for rendering of names.
-// Code related to worker should not be here
 export function NameTableSection({
   data: dataRows,
   errorSelector,

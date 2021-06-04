@@ -72,7 +72,6 @@ export function DropdownColors({
     setOpen(false);
   }
 
-  // TODO: something is wrong here
   const dropdownZIndex = 100;
   return (
     <S.Wrapper>

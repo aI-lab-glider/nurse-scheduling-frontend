@@ -4,7 +4,7 @@
 import styled from "styled-components";
 import { colors } from "../../../../assets/colors";
 
-export const Wrapper = styled.div`
+export const TimetableRow = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -40,4 +40,18 @@ export const Wrapper = styled.div`
   &.blocked {
     cursor: default;
   }
+`;
+
+export const SectionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+
+  background: ${colors.white};
+  box-sizing: border-box;
+
+  overflow: hidden;
+  border: 1px solid ${colors.tableBorderGrey};
+  border-radius: 10px;
 `;

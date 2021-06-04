@@ -110,7 +110,6 @@ export class MonthInfoLogic {
         dayOfWeek: weekDays[date.getDay()],
         isPublicHoliday,
         isFrozen: false,
-        // TODO: handle automatic frozen state
         month: monthName,
       });
     }

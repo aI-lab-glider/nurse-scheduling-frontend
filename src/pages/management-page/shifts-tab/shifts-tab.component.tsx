@@ -7,23 +7,25 @@ import TableRow from "@material-ui/core/TableRow";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as S from "./shifts-tab.styled";
-import ShiftDrawerComponent, {
-  ShiftDrawerMode,
-} from "../../../components/shifts-drawer/shift-drawer.component";
+import ShiftDrawerComponent from "../../../components/shifts-drawer/shift-drawer.component";
 import { ParserHelper } from "../../../helpers/parser.helper";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
 import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
 import { ShiftsActionCreator } from "../../../state/schedule-data/shifts-types/shifts.action-creator";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
 import { getPresentShiftTypes } from "../../../state/schedule-data/selectors";
+import {
+  NewShiftTemplate,
+  ShiftEditComponentMode,
+} from "../../../components/shifts-drawer/shift-edit-drawer.component";
 
 export default function ShiftTab(): JSX.Element {
   const [open, setIsOpen] = useState(false);
-  const [mode, setMode] = useState(ShiftDrawerMode.ADD_NEW);
-  const [selectedShift, setShift] = useState(Object);
+  const [mode, setMode] = useState(ShiftEditComponentMode.ADD_NEW);
+  const [selectedShift, setShift] = useState<Shift | NewShiftTemplate>({});
   const shiftData = useSelector(getPresentShiftTypes);
 
-  function toggleOpen(shift: Shift, newMode: ShiftDrawerMode): void {
+  function toggleOpen(shift: Shift | NewShiftTemplate, newMode: ShiftEditComponentMode): void {
     setShift(shift);
     setMode(newMode);
     setIsOpen(true);
@@ -35,7 +37,7 @@ export default function ShiftTab(): JSX.Element {
   const dispatcher = useDispatch();
   const handleChangeItem = (createdShift: Shift): void => {
     if (!ParserHelper.shiftPassesDayStart(createdShift)) {
-      if (mode === ShiftDrawerMode.ADD_NEW) {
+      if (mode === ShiftEditComponentMode.ADD_NEW) {
         dispatcher(ScheduleDataActionCreator.addNewShift(createdShift));
       } else {
         dispatcher(ScheduleDataActionCreator.modifyShift(createdShift, selectedShift));
@@ -43,7 +45,7 @@ export default function ShiftTab(): JSX.Element {
 
       toggleClose();
     } else {
-      // TODO. Handle unappropriately created shift
+      throw Error("Shift cannot pass day start");
     }
   };
 
@@ -72,7 +74,7 @@ export default function ShiftTab(): JSX.Element {
                 <S.TableCell align="right">
                   <S.ActionButton
                     variant="primary"
-                    onClick={(): void => toggleOpen(shift, ShiftDrawerMode.EDIT)}
+                    onClick={(): void => toggleOpen(shift, ShiftEditComponentMode.EDIT)}
                     disabled
                   >
                     Edytuj

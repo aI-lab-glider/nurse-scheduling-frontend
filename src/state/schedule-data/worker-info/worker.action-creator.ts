@@ -3,19 +3,20 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import * as _ from "lodash";
+import { WorkerInfoExtendedInterface } from "../../../components/drawers/worker-drawer/worker-edit";
+import { MonthDataArray } from "../../../helpers/month-data-array.model";
+import { MonthModelHelper } from "../../../helpers/month-model.helper";
+import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
+import {
+  getMonthRevision,
+  saveMonthRevision,
+} from "../../../logic/data-access/month-revision-manager";
 import {
   PersistStorageManager,
   RevisionType,
   ScheduleKey,
   ThunkFunction,
 } from "../../../logic/data-access/persistance-store.model";
-import { MonthDataModel, ScheduleDataModel } from "../schedule-data.model";
-import { WorkerShiftsModel } from "../workers-shifts/worker-shifts.model";
-import { ShiftCode } from "../shifts-types/shift-types.model";
-import { WorkerInfoModel, WorkersInfoModel } from "./worker-info.model";
-import { WorkerInfoExtendedInterface } from "../../../components/drawers/worker-drawer/worker-edit";
-import { MonthHelper } from "../../../helpers/month.helper";
-import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
 import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
 import {
   DEFAULT_CONTRACT_TYPE,
@@ -23,10 +24,10 @@ import {
   DEFAULT_WORKER_TYPE,
 } from "../../../logic/schedule-parser/workers-info.parser";
 import { ScheduleDataActionCreator } from "../schedule-data.action-creator";
-import {
-  getMonthRevision,
-  saveMonthRevision,
-} from "../../../logic/data-access/month-revision-manager";
+import { MonthDataModel, ScheduleDataModel } from "../schedule-data.model";
+import { ShiftCode } from "../shifts-types/shift-types.model";
+import { WorkerShiftsModel } from "../workers-shifts/worker-shifts.model";
+import { WorkerInfoModel, WorkersInfoModel } from "./worker-info.model";
 
 export interface WorkerActionPayload {
   updatedShifts: WorkerShiftsModel;
@@ -167,7 +168,7 @@ export class WorkerActionCreator {
   private static addWorkerInfoToMonthDM(
     monthDataModel: MonthDataModel,
     worker: WorkerInfoExtendedInterface,
-    newWorkerShifts: ShiftCode[]
+    newWorkerShifts: MonthDataArray<ShiftCode>
   ): MonthDataModel {
     const updatedSchedule = _.cloneDeep(monthDataModel);
     const { workerName, workerType, contractType, team } = worker;
@@ -198,9 +199,9 @@ export class WorkerActionCreator {
     return updatedSchedule;
   }
 
-  private static createNewWorkerShifts({ year, month }: ScheduleKey): ShiftCode[] {
+  private static createNewWorkerShifts({ year, month }: ScheduleKey): MonthDataArray<ShiftCode> {
     const today = new Date();
-    const newWorkerShifts = new Array(MonthHelper.getMonthLength(year, month)).fill(ShiftCode.W);
+    const newWorkerShifts = MonthModelHelper.createMonthArray(year, month, ShiftCode.W);
     if (today.getMonth() === month && today.getFullYear() === year) {
       newWorkerShifts.splice(
         0,

@@ -10,13 +10,15 @@ export interface OvertimeHeaderRowOptions {
   data: string[];
 }
 
-export function OvertimeHeaderRowF({ data }: OvertimeHeaderRowOptions): JSX.Element {
+function OvertimeHeaderRowF({ data }: OvertimeHeaderRowOptions): JSX.Element {
   return (
-    <S.SummaryRow>
-      {data.map((cellData) => (
-        <OvertimeHeaderCell value={cellData} key={cellData} />
-      ))}
-    </S.SummaryRow>
+    <S.SectionWrapper>
+      <S.SummaryRow>
+        {data.map((cellData) => (
+          <OvertimeHeaderCell value={cellData} key={cellData} />
+        ))}
+      </S.SummaryRow>
+    </S.SectionWrapper>
   );
 }
 

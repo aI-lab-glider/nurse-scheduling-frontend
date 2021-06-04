@@ -3,13 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
 import { fontFamilyPrimary, colors } from "../../../assets/colors";
+import { ButtonBaseProps } from "./button.component";
 
-// TODO: Get rid of padding, margin, border radius
-export const ButtonBase = styled.button`
+export const ButtonBase = styled.button<ButtonBaseProps>`
   background: none;
   border: none;
   padding: 6px 20px 6px 20px;
-  margin: 5px 10px 5px 10px;
+  margin: ${({ marginString }) => marginString ?? "5px 10px 5px 10px"};
   white-space: nowrap;
   border-radius: 40px;
   font-family: ${fontFamilyPrimary};
@@ -48,13 +48,13 @@ export const ButtonPrimary = styled(ButtonBase)`
 `;
 
 export const ButtonSecondary = styled(ButtonBase)`
-  border: 1px solid rgba(29, 53, 87, 1);
-  background-color: rgba(255, 255, 255, 1);
-  color: rgba(29, 53, 87, 1);
+  border: 1px solid ${colors.primary};
+  background-color: ${colors.white};
+  color: ${colors.primary};
 
   &:disabled {
-    border: 1px solid rgba(141, 153, 170, 255);
-    color: rgba(141, 153, 170, 255);
+    border: 1px solid ${colors.secondaryButtonDisabledColor};
+    color: ${colors.secondaryButtonDisabledColor};
 
     &:hover {
       cursor: default;
@@ -75,11 +75,11 @@ export const ButtonCircle = styled(ButtonBase)`
   &:hover {
     cursor: pointer;
     box-shadow: none;
-    background-color: rgba(233, 235, 239, 255);
+    background-color: ${colors.circleButtonHoverColor};
   }
 
   &:disabled {
-    color: rgba(141, 153, 170, 255);
+    color: ${colors.circleButtonHoverColor};
     opacity: 0.65;
 
     &:hover {

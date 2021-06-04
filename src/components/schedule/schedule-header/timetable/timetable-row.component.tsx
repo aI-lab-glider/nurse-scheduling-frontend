@@ -34,15 +34,17 @@ export function TimeTableRow(): JSX.Element {
   [verboseDates, currMont] = getVerboseDates();
 
   return (
-    <S.Wrapper id="timetableRow">
-      {verboseDates.map((verboseDate, cellIndex) => (
-        <TimeTableCell
-          key={`${verboseDate.date}_${cellIndex}`}
-          value={verboseDate}
-          currMonth={currMont}
-          index={cellIndex}
-        />
-      ))}
-    </S.Wrapper>
+    <S.SectionWrapper>
+      <S.TimetableRow data-cy="timetable-row">
+        {verboseDates.map((verboseDate, cellIndex) => (
+          <TimeTableCell
+            key={`${verboseDate.date}_${cellIndex}`}
+            value={verboseDate}
+            currMonth={currMont}
+            index={cellIndex}
+          />
+        ))}
+      </S.TimetableRow>
+    </S.SectionWrapper>
   );
 }

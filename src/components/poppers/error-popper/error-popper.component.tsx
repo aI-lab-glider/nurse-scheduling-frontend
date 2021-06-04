@@ -17,10 +17,13 @@ import ErrorListItem from "../../error-list/error-list-item.component";
 import { getPresentSchedule } from "../../../state/schedule-data/selectors";
 import { ErrorSwitch, ErrorTriangle } from "./error-switch.component";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+export type TrianglePlacement = "single" | "right" | "middle" | "left";
+export type StyledScheduleError = ScheduleError & {
+  className?: TrianglePlacement;
+};
 export interface ErrorPopperOptions {
   children: ReactNode;
-  errorSelector: (scheduleErrors: GroupedScheduleErrors) => ScheduleError[];
+  errorSelector: (scheduleErrors: GroupedScheduleErrors) => StyledScheduleError[];
   className?: string;
   showErrorTitle?: boolean;
   id?: string;
@@ -42,10 +45,9 @@ export function ErrorPopper({
   const handleShow = (): void => {
     dispatch(ScheduleDataActionCreator.hideErrors());
   };
-  let triangleStyle = "single";
+  let triangleStyle: TrianglePlacement = "single" as TrianglePlacement;
   errors.forEach((error) => {
-    // TODO: fix any
-    triangleStyle = (error as any).className || triangleStyle;
+    triangleStyle = error.className ?? triangleStyle;
   });
   const errorTriangle = useRef<HTMLDivElement>(null);
   const container = useRef<HTMLDivElement>(null);
@@ -56,9 +58,8 @@ export function ErrorPopper({
   const manuallySelectedErrors = errors.filter((error) => error.isVisible);
   if (manuallySelectedErrors.length !== 0) {
     isOpen =
-      // TODO: fix any
-      manuallySelectedErrors.some((e) => (e as any).className === "right") ||
-      manuallySelectedErrors.every((e) => (e as any).className === undefined);
+      manuallySelectedErrors.some((e) => e.className === "right") ??
+      manuallySelectedErrors.every((e) => e.className === undefined);
   }
 
   const { styles, attributes } = usePopper(
