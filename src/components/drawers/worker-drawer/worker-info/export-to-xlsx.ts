@@ -97,7 +97,9 @@ export class WorkerCalendarXlsxExport {
     const infoSection: string[][] = [];
 
     Object.keys(info).forEach((key) => {
-      const infoRow = [key];
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const infoRow = [t(key)];
       for (let i = 0; i < INFO_SEC_ROW_LEN; i++) {
         infoRow.push(" ");
       }

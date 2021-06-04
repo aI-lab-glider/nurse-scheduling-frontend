@@ -148,6 +148,9 @@ const en: LocalizationResource = {
     fridayShort: "FRI",
     saturdayShort: "SAT",
     sundayShort: "SUN",
+    workerHourNorm: "WorkerHourNorm",
+    overTime: "Overtime",
+    workerTime: "Total Hours",
   },
 };
 export default en;

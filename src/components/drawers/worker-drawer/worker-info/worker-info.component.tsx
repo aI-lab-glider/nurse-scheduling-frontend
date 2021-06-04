@@ -28,10 +28,10 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
 
   const handleExportAsXlsx = (workerInfo, workerHoursInfo): void => {
     const infoSection = {
-      "Typ umowy": ContractTypeHelper.translate(workerInfo.contractType),
-      "Liczba godzin": workerHoursInfo.workerHourNorm,
-      "Liczba nadgodzin": workerHoursInfo.overTime,
-      "Suma godzin": workerHoursInfo.workerTime,
+      contractType: ContractTypeHelper.translate(workerInfo.contractType),
+      workerHourNorm: workerHoursInfo.workerHourNorm,
+      overTime: workerHoursInfo.overTime,
+      workerTime: workerHoursInfo.workerTime,
     };
     exportToXlsx(workerInfo.workerName, infoSection, workerInfo.workerShifts!);
   };

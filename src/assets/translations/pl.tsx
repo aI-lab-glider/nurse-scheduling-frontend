@@ -146,6 +146,9 @@ export const pl = {
     fridayShort: "PT",
     saturdayShort: "SB",
     sundayShort: "ND",
+    workerHourNorm: "Liczba Godzin",
+    overTime: "Liczba Nadgodzin",
+    workerTime: "Suma Godzin",
   },
 };
 export default pl;
