@@ -152,7 +152,7 @@ export class WorkerCalendarXlsxExport {
     schedule.push(EMPTY_ROW);
     schedule.push(...infoSection);
     schedule.push(EMPTY_ROW);
-    schedule.push([" ", " ", t("shiftsWorksheetName")]);
+    schedule.push([t("shiftsWorksheetName")]);
     schedule.push([
       t("mondayShort"),
       t("tuesdayShort"),
@@ -270,9 +270,9 @@ export class WorkerCalendarXlsxExport {
 
     workSheet.mergeCells(
       TOP_OFFSET + NAME_ROW_HEIGHT + 7,
-      LEFT_OFFSET + 3,
+      LEFT_OFFSET + 1,
       TOP_OFFSET + NAME_ROW_HEIGHT + 7,
-      LEFT_OFFSET + 5
+      LEFT_OFFSET + 7
     );
 
     for (let i = 0; i < 7; i++) {

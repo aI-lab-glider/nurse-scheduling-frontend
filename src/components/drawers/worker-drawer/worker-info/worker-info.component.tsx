@@ -31,7 +31,7 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
       "Typ umowy": ContractTypeHelper.translate(workerInfo.contractType),
       "Liczba godzin": workerHoursInfo.workerHourNorm,
       "Liczba nadgodzin": workerHoursInfo.overTime,
-      "Suma godzin": workerInfo.workerName,
+      "Suma godzin": workerHoursInfo.workerTime,
     };
     exportToXlsx(workerInfo.workerName, infoSection, workerInfo.workerShifts!);
   };
