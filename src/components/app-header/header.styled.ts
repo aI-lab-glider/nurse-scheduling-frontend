@@ -47,7 +47,7 @@ export const Logo = styled(AssignmentIndIcon)`
 export const Filler = styled.div`
   flex-grow: 1;
 `;
-// "&& {" pomaga nadpisac css'a MaterialUI
+
 export const ReportIssueBtn = styled(MaterialButton)`
   && {
     color: ${colors.white};

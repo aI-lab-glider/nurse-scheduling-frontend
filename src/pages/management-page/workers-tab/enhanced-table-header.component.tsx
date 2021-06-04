@@ -5,33 +5,9 @@ import React from "react";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import classNames from "classnames/bind";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
 import * as S from "./enhanced-table-header.styled";
-import {
-  colors,
-  fontFamilyPrimary,
-  fontSizeBase,
-  headingLetterSpacing,
-} from "../../../assets/colors";
 import { Order } from "../../../helpers/comparator.helper";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    label: {
-      color: colors.primary,
-      fontWeight: "normal",
-      fontSize: fontSizeBase,
-      fontFamily: fontFamilyPrimary,
-      letterSpacing: headingLetterSpacing,
-    },
-    activeLabel: {
-      fontWeight: "bold",
-    },
-  })
-);
 
 interface EnhancedTableProps {
   onRequestSort: (event: React.MouseEvent<unknown>, property: keyof WorkerInfoModel) => void;
@@ -55,7 +31,6 @@ const headCells: WorkerDataCell[] = [
 ];
 
 export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Element {
-  const classes = useStyles();
   const { order, orderBy, onRequestSort, toggleDrawer } = props;
 
   function createSortHandler(
@@ -72,16 +47,15 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
           const isActive = orderBy === headCell.id;
           return (
             <TableCell key={headCell.id} sortDirection={isActive ? order : false}>
-              <TableSortLabel
+              <S.TableSortLabel
                 active={isActive}
                 direction={isActive ? order : "asc"}
                 onClick={(event: React.MouseEvent<unknown>): void =>
                   createSortHandler(headCell.id, event)
                 }
-                className={classNames(classes.label, { [classes.activeLabel]: isActive })}
               >
                 {headCell.label}
-              </TableSortLabel>
+              </S.TableSortLabel>
             </TableCell>
           );
         })}

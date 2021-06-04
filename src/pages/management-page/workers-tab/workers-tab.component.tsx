@@ -4,18 +4,10 @@
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
 import * as S from "./workers-tab.styled";
-import {
-  colors,
-  fontFamilyPrimary,
-  fontSizeBase,
-  headingLetterSpacing,
-} from "../../../assets/colors";
 import WorkerDrawerComponent, {
   WorkerDrawerMode,
 } from "../../../components/drawers/worker-drawer/worker-drawer.component";
@@ -35,22 +27,6 @@ import {
   WorkerInfoModel,
 } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      paddingTop: 0,
-      width: "100%",
-    },
-    tableCell: {
-      color: colors.primary,
-      fontWeight: "normal",
-      fontSize: fontSizeBase,
-      fontFamily: fontFamilyPrimary,
-      letterSpacing: headingLetterSpacing,
-    },
-  })
-);
 
 function toggleDrawer(
   open: boolean,
@@ -75,7 +51,6 @@ function workerDeleteModal(
 }
 
 export default function WorkersTab(): JSX.Element {
-  const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof WorkerInfoModel>("name");
   const { type, time, contractType, team } = useSelector(getPresentEmployeeInfo);
@@ -127,7 +102,7 @@ export default function WorkersTab(): JSX.Element {
 
   return (
     <S.Wrapper>
-      <TableContainer className={classes.root}>
+      <S.TableContainer>
         <Table size="small">
           <EnhancedTableHeaderComponent
             order={order}
@@ -144,24 +119,16 @@ export default function WorkersTab(): JSX.Element {
 
               return (
                 <TableRow key={w.name}>
-                  <TableCell className={classes.tableCell} data-cy="workerName">
-                    {w.name}
-                  </TableCell>
-                  <TableCell className={classes.tableCell} align="left">
+                  <S.TableCell data-cy="workerName">{w.name}</S.TableCell>
+                  <S.TableCell align="left">
                     <S.WorkerType className={`${workerType.toString().toLowerCase()}-label`}>
                       {StringHelper.capitalize(WorkerTypeHelper.translate(workerType))}
                     </S.WorkerType>
-                  </TableCell>
-                  <TableCell
-                    className={classes.tableCell}
-                    align="left"
-                    data-cy={`worker-hours-${w.name}`}
-                  >
+                  </S.TableCell>
+                  <S.TableCell align="left" data-cy={`worker-hours-${w.name}`}>
                     {getWorkerTimeLabel(w.name)}
-                  </TableCell>
-                  <TableCell className={classes.tableCell} align="left">
-                    {w.team}
-                  </TableCell>
+                  </S.TableCell>
+                  <S.TableCell align="left">{w.team}</S.TableCell>
                   <TableCell align="right">
                     <S.ActionButton
                       data-cy={`edit-worker-${w.name}`}
@@ -184,7 +151,7 @@ export default function WorkersTab(): JSX.Element {
             })}
           </TableBody>
         </Table>
-      </TableContainer>
+      </S.TableContainer>
       <WorkerDrawerComponent
         open={open}
         onClose={(): void => toggleDrawer(false, setIsOpen, setMode, setWorker)}
