@@ -54,7 +54,7 @@ export function validateEmployeeInfo(employeeInfo: WorkersInfoModel): void {
   if (!_.isEqual(workersWithType, workersWithContractType)) {
     throw new Error(
       `Contract type cannot be defined for workers without defined type. Workers without defined contract type are
-         ${workersWithType.filter((w) => !workersWithContractType.includes(w)).join(", ")}`
+        ${workersWithType.filter((w) => !workersWithContractType.includes(w)).join(", ")}`
     );
   }
   if (!_.isEqual(workersWithType, workersWithTime)) {

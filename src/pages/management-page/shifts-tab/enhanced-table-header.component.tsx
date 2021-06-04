@@ -4,8 +4,8 @@
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import * as S from "./enhanced-table-header.styled";
 import React from "react";
+import * as S from "./enhanced-table-header.styled";
 import {
   NewShiftTemplate,
   ShiftEditComponentMode,
