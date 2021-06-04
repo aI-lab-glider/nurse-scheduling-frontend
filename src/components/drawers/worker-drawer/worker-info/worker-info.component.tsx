@@ -55,7 +55,7 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
           )}
           <WorkerInfo>Liczba godzin: {workerHoursInfo.workerHourNorm}</WorkerInfo>
           <WorkerInfo>Liczba nadgodzin: {workerHoursInfo.overTime}</WorkerInfo>
-          <WorkerInfo>Suma godzin: {workerInfo.workerName}</WorkerInfo>
+          <WorkerInfo>Suma godzin: {workerHoursInfo.workerTime}</WorkerInfo>
           <CalendarDivider data-html2canvas-ignore="true" />
           <ShiftsLabel id="shiftsWord">ZMIANY</ShiftsLabel>
         </div>
