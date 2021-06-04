@@ -16,19 +16,24 @@ import { getPresentShiftTypes } from "../../state/schedule-data/selectors";
 import { Shift, ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { DropdownColors } from "../buttons/dropdown-buttons/dropdown-colors.component";
 import { Button } from "../common-components";
-import { ShiftDrawerMode } from "./shift-drawer.component";
 
-interface ShiftEditDrawerOptions {
-  selectedShift: Shift;
-  saveChangedShift: (Shift) => void;
-  mode: ShiftDrawerMode;
+export enum ShiftEditComponentMode {
+  EDIT,
+  ADD_NEW,
 }
 
-export default function ShiftEditDrawer({
+export type NewShiftTemplate = Partial<Shift>;
+export interface ShiftEditComponentOptions {
+  selectedShift: Shift | NewShiftTemplate;
+  saveChangedShift: (shift: Shift) => void;
+  mode: ShiftEditComponentMode;
+}
+
+export default function ShiftEditComponent({
   selectedShift,
   saveChangedShift,
   mode,
-}: ShiftEditDrawerOptions): JSX.Element {
+}: ShiftEditComponentOptions): JSX.Element {
   const shifts = useSelector(getPresentShiftTypes);
   const shiftNames = Object.values(shifts).map((shift) => shift.name);
   const shiftCodes = Object.values(shifts).map((shift) => shift.code);
@@ -49,11 +54,11 @@ export default function ShiftEditDrawer({
     selectedShift.isWorkingShift ? "working" : "not_working"
   );
 
-  function getButtonLabel(mode: ShiftDrawerMode): string {
+  function getButtonLabel(mode: ShiftEditComponentMode): string {
     switch (mode) {
-      case ShiftDrawerMode.EDIT:
+      case ShiftEditComponentMode.EDIT:
         return i18next.t("shiftEdit");
-      case ShiftDrawerMode.ADD_NEW:
+      case ShiftEditComponentMode.ADD_NEW:
         return i18next.t("shiftAdd");
       default:
         throw Error(`Invalid drawer mode ${mode}`);
@@ -159,11 +164,11 @@ export default function ShiftEditDrawer({
         <FormLabel>{t("shiftShort")}</FormLabel>
         <TextField
           type="text"
-          placeholder="Skrót"
+          placeholder={t("shiftShort")}
           value={shiftCode}
           onChange={(event): void => {
-            setShiftCode(event.target.value as ShiftCode); // TODO: fix typing if possible
-            setIsInShiftCodes(shiftCodes.includes(event.target.value as ShiftCode)); // TODO: fix typing if possible
+            setShiftCode(event.target.value as ShiftCode);
+            setIsInShiftCodes(shiftCodes.includes(event.target.value as ShiftCode));
             setCodeManuallyChanged(true);
           }}
           helperText={isInShiftCodes ? t("shiftWithThatColorExist") : ""}

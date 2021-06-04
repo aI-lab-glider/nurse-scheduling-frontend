@@ -21,7 +21,6 @@ export enum NotWorkingShiftType {
 export interface NotWorkingShift extends BaseShift {
   isWorkingShift: false;
   normSubtraction?: number;
-  // TODO: remove optionality after migration
   type?: NotWorkingShiftType;
 }
 
@@ -52,9 +51,10 @@ export enum ShiftCode {
   P2 = "P2",
 }
 
-export const SHIFTS: {
+export type ShiftsDictionary = {
   [code in ShiftCode]: Shift;
-} = {
+};
+export const SHIFTS: ShiftsDictionary = {
   P2: {
     code: ShiftCode.P2,
     name: "popołudnie 2",

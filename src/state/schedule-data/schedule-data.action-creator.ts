@@ -3,34 +3,34 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import _ from "lodash";
+import { NewShiftTemplate } from "../../components/shifts-drawer/shift-edit-drawer.component";
+import {
+  getMonthRevision,
+  getOrGenerateMonthRevision
+} from "../../logic/data-access/month-revision-manager";
 import {
   PersistStorageManager,
   RevisionType,
   ScheduleKey,
-  ThunkFunction,
+  ThunkFunction
 } from "../../logic/data-access/persistance-store.model";
-
+import { saveSchedule } from "../../logic/data-access/schedule-persistance-manager";
+import {
+  cropScheduleDMToMonthDM, extendMonthDMRevisionToScheduleDM
+} from "../../logic/schedule-container-converter/schedule-container-converter";
 import { ActionModel } from "../../utils/action.model";
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../app.reducer";
-import {
-  AddMonthRevisionAction,
-  PrimaryRevisionAction,
-} from "./primary-revision/primary-revision.reducer";
-import { MonthDataModel, ScheduleDataModel } from "./schedule-data.model";
 import { PrimaryMonthRevisionDataModel } from "../application-state.model";
 import {
-  extendMonthDMRevisionToScheduleDM,
-  cropScheduleDMToMonthDM,
-} from "../../logic/schedule-container-converter/schedule-container-converter";
+  AddMonthRevisionAction,
+  PrimaryRevisionAction
+} from "./primary-revision/primary-revision.reducer";
+import { MonthDataModel, ScheduleDataModel } from "./schedule-data.model";
 import { ScheduleErrorMessageModel } from "./schedule-errors/schedule-error-message.model";
+import { cleanScheduleErrors } from "./schedule-errors/schedule-errors.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 import { Shift } from "./shifts-types/shift-types.model";
-import { cleanScheduleErrors } from "./schedule-errors/schedule-errors.reducer";
-import {
-  getMonthRevision,
-  getOrGenerateMonthRevision,
-} from "../../logic/data-access/month-revision-manager";
-import { saveSchedule } from "../../logic/data-access/schedule-persistance-manager";
+
 
 export class ScheduleDataActionCreator {
   // #region Update state
@@ -147,41 +147,22 @@ export class ScheduleDataActionCreator {
   }
 
   static updateSchedule(newScheduleModel: ScheduleDataModel): ScheduleActionModel {
-    // TODO: make separate action creator for Tmp
     return {
       type: createActionName(TEMPORARY_SCHEDULE_NAME, ScheduleActionType.UPDATE),
       payload: newScheduleModel,
     };
   }
 
-  static addNewShift(shift: Shift): (dispatch) => Promise<void> {
-    return async (dispatch): Promise<void> => {
-      const action = {
-        type: ScheduleActionType.ADD_NEW_SHIFT,
-        payload: { ...shift },
-      };
-      dispatch(action);
-    };
+  static addNewShift(shift: Shift) {
+    throw Error("Not implemented");
   }
 
-  static modifyShift(shift: Shift, oldShift: Shift): (dispatch) => Promise<void> {
-    return async (dispatch): Promise<void> => {
-      const action = {
-        type: ScheduleActionType.MODIFY_SHIFT,
-        payload: Array<Shift>(shift, oldShift),
-      };
-      dispatch(action);
-    };
+  static modifyShift(shift: Shift, oldShift: Shift | NewShiftTemplate) {
+    throw Error("Not implemented");
   }
 
-  static deleteShift(shift: Shift): (dispatch) => Promise<void> {
-    return async (dispatch): Promise<void> => {
-      const action = {
-        type: ScheduleActionType.DELETE_SHIFT,
-        payload: shift,
-      };
-      dispatch(action);
-    };
+  static deleteShift(shift: Shift) {
+    throw Error("Not implemented");
   }
 
   static hideErrors(): ActionModel<unknown> {
@@ -189,10 +170,7 @@ export class ScheduleDataActionCreator {
   }
 
   static showError(error: ScheduleErrorMessageModel | undefined): ActionModel<unknown> {
-    return {
-      type: ScheduleActionType.SHOW_ERROR,
-      payload: error,
-    };
+    throw Error("Not implemented");
   }
 
   static cleanErrors = cleanScheduleErrors;

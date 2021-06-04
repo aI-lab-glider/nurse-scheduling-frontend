@@ -24,7 +24,7 @@ export enum DirectionKey {
 
 type PointerPosition = { row: number; cell: number };
 export interface BaseSectionOptions {
-  data?: DataRow[];
+  data: DataRow[];
   cellComponent?: React.FC<BaseCellOptions>;
   sectionKey: string;
   rowComponent?: React.FC<ShiftRowOptions>;

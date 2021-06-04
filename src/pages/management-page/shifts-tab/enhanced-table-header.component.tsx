@@ -1,16 +1,19 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
+import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
+import React from "react";
 import styled from "styled-components";
-import { Button } from "../../../components/common-components";
-import { ShiftDrawerMode } from "../../../components/shifts-drawer/shift-drawer.component";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
-import { Shift, ShiftCode } from "../../../state/schedule-data/shifts-types/shift-types.model";
+import { Button } from "../../../components/common-components";
+import {
+  NewShiftTemplate,
+  ShiftEditComponentMode,
+} from "../../../components/shifts-drawer/shift-edit-drawer.component";
+import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -23,7 +26,7 @@ const useStyles = makeStyles(() =>
 );
 
 interface EnhancedTableProps {
-  toggleOpen: (shift: Shift, mode: ShiftDrawerMode) => void;
+  toggleOpen: (shift: NewShiftTemplate, mode: ShiftEditComponentMode) => void;
 }
 
 interface ShiftDataCell {
@@ -57,14 +60,13 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
             onClick={(): void => {
               toggleOpen(
                 {
-                  code: "" as ShiftCode, // TODO: fix typing
                   name: "Nowa zmiana",
                   from: 0,
                   to: 0,
                   color: "FFD100",
                   isWorkingShift: true,
                 },
-                ShiftDrawerMode.ADD_NEW
+                ShiftEditComponentMode.ADD_NEW
               );
             }}
           >

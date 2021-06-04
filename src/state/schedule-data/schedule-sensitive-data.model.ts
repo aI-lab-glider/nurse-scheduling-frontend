@@ -32,7 +32,6 @@ export function getWorkerNames(schedule: ScheduleDataModel): WorkerName[] {
  * Check if all worker names from schedule exists in workerNames and
  * if all names from workerNames appears in every object with sensitive data in schedule
  */
-// TODO: test
 function validateWorkerNamesConsistency(schedule: ScheduleDataModel, workerNames: string[]): void {
   Object.values(SensitiveDataFieldAccessors).forEach((getFieldFunction) => {
     const field = getFieldFunction(schedule);

@@ -14,7 +14,6 @@ export interface StyleProps {
   width: number;
 }
 
-// TODO: add types declaration
 const useStyles = makeStyles<Theme, StyleProps>({
   drawer: {
     width: ({ width }): number => width,

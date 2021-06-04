@@ -91,7 +91,6 @@ export class ShiftsInfoParser extends ShiftsProvider {
   }
 
   public get availableWorkersWorkTime(): { [key: string]: number } {
-    // TODO: implement actual parsing of worker work time
     return this.mockAvailableWorkersWorkTime();
   }
 

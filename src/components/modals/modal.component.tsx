@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import { Box, Divider, IconButton, Paper } from "@material-ui/core";
+import { Box, Divider, fade, IconButton, Paper } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import Modal from "@material-ui/core/Modal";
@@ -72,7 +72,7 @@ const ModalWrapper = styled(Modal)`
 `;
 const ContentWrapper = styled(Paper)`
   background-color: ${colors.white};
-  box-shadow: -3px 4px 20px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: -3px 4px 20px 4px ${fade(colors.black, 0.15)};
   max-height: 40%;
   max-width: 35%;
   min-width: 350px;
@@ -107,7 +107,7 @@ const BodyWrapper = styled(Box)`
 `;
 
 const FooterWrapper = styled(Box)`
-  margin-left: -10px; // TODO: Button has 10px margin, change to 0 after update
+  margin-left: 0px;
   margin-top: -5px;
 `;
 

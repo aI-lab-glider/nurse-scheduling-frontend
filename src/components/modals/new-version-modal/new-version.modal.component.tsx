@@ -5,7 +5,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { t } from "../../../helpers/translations.helper";
 import { Button } from "../../buttons/button-component/button.component";
-import DefaultModal from "../modal.component";
+import DefaultModal  from "../modal.component";
 import { CookiesProvider } from "../../../logic/data-access/cookies-provider";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 
@@ -40,7 +40,13 @@ export default function NewVersionModal(options: NewVersionModalOptions): JSX.El
 
   const footer = (
     <div>
-      <Button onClick={handleClose} size="small" className="submit-button" variant="primary">
+      <Button
+        onClick={handleClose}
+        size="small"
+        className="submit-button"
+        variant="primary"
+        marginString="5px 10px 5px 0px"
+      >
         OK
       </Button>
     </div>

@@ -31,6 +31,7 @@ export default function AppErrorModal(options: AppErrorModalOptions): JSX.Elemen
       className="submit-button"
       variant="primary"
       data-cy="btn-reload-app-error"
+      marginString="5px 10px 5px 0px"
     >
       OK
     </Button>
