@@ -141,6 +141,13 @@ const en: LocalizationResource = {
     workersWorksheetName: "workers",
     shiftsWorksheetName: "shifts",
     absenceWorksheetName: "leaves",
+    mondayShort: "MON",
+    tuesdayShort: "TUE",
+    wednesdayShort: "WED",
+    thursdayShort: "THU",
+    fridayShort: "FRI",
+    saturdayShort: "SAT",
+    sundayShort: "SUN",
   },
 };
 export default en;

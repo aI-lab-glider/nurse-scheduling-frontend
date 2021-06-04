@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import xlsx from "exceljs";
+import xlsx, { Cell, Row } from "exceljs";
 
 import _ from "lodash";
 import { FileHelper } from "../../../../helpers/file.helper";
@@ -11,6 +11,8 @@ import { VerboseDate } from "../../../../state/schedule-data/foundation-info/fou
 import { ShiftCode, SHIFTS } from "../../../../state/schedule-data/shifts-types/shift-types.model";
 import { ShiftHelper } from "../../../../helpers/shifts.helper";
 import { ColorHelper } from "../../../../helpers/colors/color.helper";
+import { Opaque } from "../../../../utils/type-utils";
+import { t } from "../../../../helpers/translations.helper";
 
 const TOP_OFFSET = 1;
 const LEFT_OFFSET = 1;
@@ -21,23 +23,26 @@ const WEEKDAY_HEIGHT = 2;
 
 const HEIGTH = 36;
 const WIDTH = 16;
+const CALENDAR_FIRST_ROW_INDEX = 12;
 
-export const exportToXlsx = (name: string, info, schedule: { string: string }): void => {
-  const xlsx = new WorkerCalendarXlsxExport({ name, info, schedule });
+export type WorkerMonthCalendarByWeeks = Opaque<"Worker month calendar", ShiftCode[][]>;
+
+export const exportToXlsx = (workerName: string, info, schedule: { string: string }): void => {
+  const xlsx = new WorkerCalendarXlsxExport({ workerName, info, schedule });
   xlsx.formatAndSave();
 };
 
 export const WORKSHEET_NAME = "grafik";
 
 export class WorkerCalendarXlsxExport {
-  private readonly name: string;
+  private readonly workerName: string;
 
   private readonly info: { string: string };
 
-  private readonly schedule: { string: string };
+  private readonly schedule: ShiftCode[];
 
-  constructor({ name, info, schedule }) {
-    this.name = name;
+  constructor({ workerName, info, schedule }) {
+    this.workerName = workerName;
     this.info = info;
     this.schedule = schedule;
   }
@@ -80,7 +85,7 @@ export class WorkerCalendarXlsxExport {
 
     this.setScheduleWorkSheet(scheduleWorkSheet);
 
-    const workbookName = WorkerCalendarXlsxExport.createFilename(this.name);
+    const workbookName = WorkerCalendarXlsxExport.createFilename(this.workerName);
     return [workbookName, workbook];
   }
 
@@ -103,37 +108,35 @@ export class WorkerCalendarXlsxExport {
     return infoSection;
   }
 
-  private static createCalendarSection(schedule): string[][] {
-    const calendar: string[][] = [];
-    let calendarDates: string[] = [];
-    let calendarShifts: string[] = [];
+  private static createCalendarSection(workerShifts: ShiftCode[]): WorkerMonthCalendarByWeeks {
+    const calendar: ShiftCode[][] = [];
+    let calendarDates: ShiftCode[] = [];
+    let calendarShifts: ShiftCode[] = [];
 
-    Object.keys(schedule).forEach((key) => {
-      // eslint-disable-next-line radix
-      const keyNum = parseInt(key);
-      const shift = schedule[key];
-      calendarDates.push((keyNum + 1).toString());
+    workerShifts.forEach((shift, key) => {
+      const keyNum = key;
+      calendarDates.push((keyNum + 1).toString() as ShiftCode);
 
-      if (shift === "W") {
-        calendarShifts.push(" ");
+      if (shift === ShiftCode.W) {
+        calendarShifts.push(" " as ShiftCode);
       } else {
         calendarShifts.push(shift);
       }
 
-      if ((keyNum + 1) % 7 === 0 || keyNum + 1 === schedule.length) {
+      if ((keyNum + 1) % 7 === 0 || keyNum + 1 === workerShifts.length) {
         calendar.push(calendarDates);
         calendar.push(calendarShifts);
         calendarDates = [];
         calendarShifts = [];
       }
     });
-    return calendar;
+    return calendar as WorkerMonthCalendarByWeeks;
   }
 
   public setScheduleWorkSheet(workSheet: xlsx.Worksheet): void {
     ScheduleExportLogic.setupWorksheet(workSheet);
 
-    const headerRow = WorkerCalendarXlsxExport.createHeader(this.name);
+    const headerRow = WorkerCalendarXlsxExport.createHeader(this.workerName);
     const infoSection = WorkerCalendarXlsxExport.createInfoSection(this.info);
     const calendar = WorkerCalendarXlsxExport.createCalendarSection(this.schedule);
 
@@ -149,8 +152,16 @@ export class WorkerCalendarXlsxExport {
     schedule.push(EMPTY_ROW);
     schedule.push(...infoSection);
     schedule.push(EMPTY_ROW);
-    schedule.push([" ", " ", "Zmiany"]);
-    schedule.push(["PN", "WT", "SR", "CZ", "PT", "SB", "ND"]);
+    schedule.push([" ", " ", t("shiftsWorksheetName")]);
+    schedule.push([
+      t("mondayShort"),
+      t("tuesdayShort"),
+      t("wednesdayShort"),
+      t("thursdayShort"),
+      t("fridayShort"),
+      t("saturdayShort"),
+      t("sundayShort"),
+    ]);
 
     for (let i = 0; i < WEEKDAY_HEIGHT - 1; i++) {
       schedule.push(EMPTY_ROW);
@@ -274,17 +285,17 @@ export class WorkerCalendarXlsxExport {
     }
 
     const regexNum = /[0-9]+/;
-    workSheet.eachRow((row, index) => {
+    workSheet.eachRow((row: Row, index: number) => {
       row.height = HEIGTH;
 
-      row.eachCell((cell, colNumber) => {
+      row.eachCell((cell: Cell, colNumber: number) => {
         workSheet.getColumn(colNumber).width = WIDTH;
         const cellValue = cell.value?.toString() || "";
         cell.style = WorkerCalendarXlsxExport.getCellStyle(ShiftCode[cellValue] || ShiftCode.W);
       });
 
-      if (index > 12) {
-        row.eachCell({ includeEmpty: false }, (cell, colNumber) => {
+      if (index > CALENDAR_FIRST_ROW_INDEX) {
+        row.eachCell({ includeEmpty: false }, (cell: Cell, colNumber: number) => {
           workSheet.getColumn(colNumber).width = WIDTH;
           const cellValue = cell.value?.toString() || "";
 

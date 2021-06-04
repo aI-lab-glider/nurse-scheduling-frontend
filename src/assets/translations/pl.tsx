@@ -139,6 +139,13 @@ export const pl = {
     workersWorksheetName: "pracownicy",
     shiftsWorksheetName: "zmiany",
     absenceWorksheetName: "urlopy",
+    mondayShort: "PN",
+    tuesdayShort: "WT",
+    wednesdayShort: "SR",
+    thursdayShort: "CZ",
+    fridayShort: "PT",
+    saturdayShort: "SB",
+    sundayShort: "ND",
   },
 };
 export default pl;
