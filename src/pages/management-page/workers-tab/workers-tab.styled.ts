@@ -3,6 +3,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
 import {
+  TableCell as MaterialTableCell,
+  TableContainer as MaterialTableContainer,
+} from "@material-ui/core";
+import {
   colors,
   fontFamilyPrimary,
   fontSizeBase,
@@ -10,10 +14,6 @@ import {
   headingLetterSpacing,
 } from "../../../assets/colors";
 import { Button } from "../../../components/common-components";
-import {
-  TableCell as MaterialTableCell,
-  TableContainer as MaterialTableContainer,
-} from "@material-ui/core";
 
 export const Wrapper = styled.div`
   margin-top: 45px;
