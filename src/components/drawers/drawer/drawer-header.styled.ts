@@ -3,7 +3,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid, IconButton, Box } from "@material-ui/core";
 import styled from "styled-components";
-import { colors, fontSizeH4, drawerHeaderHeight, fontFamilyPrimary } from "../../../assets/colors";
+import {
+  colors,
+  fontSizeLg,
+  drawerHeaderHeight,
+  fontFamilyPrimary,
+  fontWeightExtra,
+} from "../../../assets/colors";
 
 export const Container = styled(Grid)`
   padding: 25px 24px 15px 24px;
@@ -24,8 +30,8 @@ export const ExitButton = styled(IconButton)`
 
 export const Title = styled.h1`
   font-family: ${fontFamilyPrimary};
-  font-weight: 700;
-  font-size: ${fontSizeH4};
+  font-weight: ${fontWeightExtra};
+  font-size: ${fontSizeLg};
   line-height: 1.1;
   color: ${colors.primary};
 `;

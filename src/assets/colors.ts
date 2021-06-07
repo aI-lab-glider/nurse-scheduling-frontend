@@ -54,13 +54,6 @@ export const fontSizeDash = `${0.875}rem`;
 export const fontSizeLg = `${1.142}rem`;
 export const fontSizeXl = `${1.428}rem`;
 
-export const fontSizeH1 = `${2.1875}rem`;
-export const fontSizeH2 = `${1.685}rem`;
-export const fontSizeH3 = `${1.438}rem`;
-export const fontSizeH4 = `${1.0625}rem`;
-export const fontSizeH5 = `${0.8125}rem`;
-export const fontSizeH6 = `${0.75}rem`;
-
 export const fontWeightLight = 300;
 export const fontWeightNormal = 400;
 export const fontWeightMedium = 500;

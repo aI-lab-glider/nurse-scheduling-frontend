@@ -4,7 +4,13 @@
 import styled from "styled-components";
 import { TabList as MaterialTabList, TabPanel as MaterialTabPanel } from "@material-ui/lab";
 import { Tab as MaterialTab } from "@material-ui/core";
-import { fontWeightMedium, fontWeightBold, colors } from "../../../assets/colors";
+import {
+  fontWeightMedium,
+  fontWeightBold,
+  colors,
+  fontSizeLg,
+  fontFamilyPrimary,
+} from "../../../assets/colors";
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -30,8 +36,8 @@ export const Tab = styled(MaterialTab)`
     color: ${({ disabled }) => (disabled ? colors.gray100 : colors.secondaryTextColor)};
     outline: none;
     font-weight: ${fontWeightMedium};
-    font-size: 20px;
-    font-family: "Roboto";
+    font-size: ${fontSizeLg};
+    font-family: ${fontFamilyPrimary};
     min-width: 0;
     outline: none;
     margin: 0 20px 0 0;
