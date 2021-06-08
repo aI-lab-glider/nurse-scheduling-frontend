@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 /* source https://github.com/TheSoftwareDesignLab/monkey-cypress */
+/* eslint-disable */
 require("cypress-plugin-tab");
 const fs = require("fs");
 const faker = require("faker");
@@ -534,3 +535,4 @@ describe(`${appName} under smarter monkeys`, () => {
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // End of smart monkey
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/* eslint-enable */
