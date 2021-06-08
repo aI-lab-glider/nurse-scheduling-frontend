@@ -7,11 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../common-components";
 import { ScheduleErrorMessageModel } from "../../../state/schedule-data/schedule-errors/schedule-error-message.model";
 import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
-import { ApplicationStateModel } from "../../../state/application-state.model";
 import DefaultModal from "../modal.component";
 import ModalErrorList from "./error.modal.list.component";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
 import { t } from "../../../helpers/translations.helper";
+import { getPresentShiftTypes, getScheduleErrors } from "../../../state/schedule-data/selectors";
 
 export interface ErrorsModalComponent {
   setOpen: (open: boolean) => void;
@@ -20,7 +20,7 @@ export interface ErrorsModalComponent {
 
 export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Element {
   const { setOpen, open } = options;
-  const { scheduleErrors } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const scheduleErrors = useSelector(getScheduleErrors);
   const dispach = useDispatch();
 
   const handleClose = (): void => {
@@ -29,9 +29,7 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
   };
   const [mappedErrors, setMappedErrors] = useState<ScheduleErrorMessageModel[]>();
 
-  const { shift_types: shiftTypes } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
+  const shiftTypes = useSelector(getPresentShiftTypes);
   useEffect(() => {
     const errors = ErrorMessageHelper.mapScheduleErrors(scheduleErrors, shiftTypes);
     if (errors) {
@@ -43,7 +41,7 @@ export default function ParseErrorModal(options: ErrorsModalComponent): JSX.Elem
 
   const footer = (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <Button onClick={handleClose} variant="primary">
+      <Button onClick={handleClose} variant="primary" marginString="5px 10px 5px 0px">
         OK
       </Button>
     </div>

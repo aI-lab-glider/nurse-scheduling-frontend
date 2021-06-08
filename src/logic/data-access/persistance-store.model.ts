@@ -3,10 +3,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { ThunkDispatch } from "redux-thunk";
-import { ArrayPositionPointer } from "../../helpers/array.helper";
 import { ApplicationStateModel } from "../../state/application-state.model";
-import { MonthDataModel, ScheduleDataModel } from "../../state/schedule-data/schedule-data.model";
+import { MonthDataModel } from "../../state/schedule-data/schedule-data.model";
 import { ActionModel } from "../../utils/action.model";
+import { LocalMonthPersistProvider, MonthPersistProvider } from "./month-persistance-provider";
 
 export type ThunkFunction<TDispatchedActionPayload> = (
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<TDispatchedActionPayload>>,
@@ -79,33 +79,24 @@ export interface MonthRevision {
   _rev?: Revision;
 }
 
-export abstract class PersistenceStoreProvider {
-  abstract getMonthRevision(revisionKey: RevisionKey): Promise<MonthDataModel | undefined>;
+export class PersistStorageManager {
+  private static instance: PersistStorageManager;
 
-  abstract saveSchedule(type: RevisionType, scheduleDataModel: ScheduleDataModel): Promise<void>;
+  private readonly monthPersistProvider: MonthPersistProvider;
 
-  abstract saveBothMonthRevisionsIfNeeded(
-    type: RevisionType,
-    monthDataModel: MonthDataModel
-  ): Promise<void>;
+  private constructor() {
+    this.monthPersistProvider = new LocalMonthPersistProvider();
+  }
 
-  abstract updateMonthPartBasedOnScheduleDM(
-    revisionKey: RevisionKey,
-    scheduleDataModel: ScheduleDataModel,
-    missingDays: number,
-    updatePosition: ArrayPositionPointer
-  ): Promise<void>;
+  public static getInstance(): PersistStorageManager {
+    if (!PersistStorageManager.instance) {
+      PersistStorageManager.instance = new PersistStorageManager();
+    }
 
-  abstract fetchOrCreateMonthNeighbours(
-    month: MonthDataModel,
-    revision: RevisionType
-  ): Promise<[MonthDataModel, MonthDataModel]>;
+    return PersistStorageManager.instance;
+  }
 
-  abstract fetchOrCreateMonthRevision(
-    monthKey: ScheduleKey,
-    revision: RevisionType,
-    baseMonth: MonthDataModel
-  ): Promise<MonthDataModel>;
-
-  abstract reloadDb(): Promise<void>;
+  get actualPersistProvider() {
+    return this.monthPersistProvider;
+  }
 }

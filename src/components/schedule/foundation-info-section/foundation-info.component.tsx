@@ -7,8 +7,7 @@ import styled from "styled-components";
 import { DataRowHelper } from "../../../helpers/data-row.helper";
 import { DataRow } from "../../../logic/schedule-logic/data-row";
 import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../../../logic/section.model";
-import { ApplicationStateModel } from "../../../state/application-state.model";
-import { FoundationInfoActionCreator } from "../../../state/schedule-data/foundation-info/foundation-info.action-creator";
+import { updateChildrenAndExtraworkers } from "../../../state/schedule-data/foundation-info/foundation-info.action-creator";
 import { NameTableComponent } from "../worker-info-section/name-table/nametable.component";
 import { ScheduleMode } from "../schedule-state.model";
 import { BaseSectionComponent } from "../base/base-section/base-section.component";
@@ -16,36 +15,42 @@ import { SelectionMatrix } from "../base/base-section/use-selection-matrix";
 import { useFoundationInfo } from "../../../hooks/use-foundation-info";
 import { SectionContainer, SectionWrapper } from "../base/styled";
 import { colors } from "../../../assets/colors";
+import { getActualMode } from "../../../state/schedule-data/selectors";
+import { TEMPORARY_SCHEDULE_NAME, PERSISTENT_SCHEDULE_NAME } from "../../../state/app.reducer";
 
 export function FoundationInfoComponent(): JSX.Element {
   const { childrenNumber, extraWorkers } = useFoundationInfo();
 
-  const { mode } = useSelector((state: ApplicationStateModel) => state.actualState);
+  const mode = useSelector(getActualMode);
 
-  const isEditable = mode === ScheduleMode.Edit;
+  const isEditMode = mode === ScheduleMode.Edit;
 
   const sectionData = [
-    new DataRow(ChildrenSectionKey.RegisteredChildrenCount, childrenNumber, isEditable),
-    new DataRow(ExtraWorkersSectionKey.ExtraWorkersCount, extraWorkers, isEditable),
+    new DataRow(ChildrenSectionKey.RegisteredChildrenCount, childrenNumber, isEditMode),
+    new DataRow(ExtraWorkersSectionKey.ExtraWorkersCount, extraWorkers, isEditMode),
   ];
 
   const dispatch = useDispatch();
   const updateFoundationInfoData = useCallback(
     (selectionMatrix: SelectionMatrix, oldData: DataRow<string>[], newValue: string) => {
-      // TODO: Fix unkonw
       const updatedDataRows = DataRowHelper.copyWithReplaced<number>(
         selectionMatrix,
-        (oldData as unknown) as DataRow<number>[],
+        oldData.map((row) => new DataRow(row.rowKey, row.rowData(true, false))),
         parseInt(newValue, 10)
       );
       const updatedFoundationInfo = DataRowHelper.dataRowsAsValueDict<number>(updatedDataRows);
-      const action = FoundationInfoActionCreator.updateFoundationInfo(
-        updatedFoundationInfo[ChildrenSectionKey.RegisteredChildrenCount],
-        updatedFoundationInfo[ExtraWorkersSectionKey.ExtraWorkersCount]
+      const action = {
+        childrenNumber: updatedFoundationInfo[ChildrenSectionKey.RegisteredChildrenCount],
+        extraWorkers: updatedFoundationInfo[ExtraWorkersSectionKey.ExtraWorkersCount],
+      };
+
+      dispatch(
+        updateChildrenAndExtraworkers(
+          isEditMode ? TEMPORARY_SCHEDULE_NAME : PERSISTENT_SCHEDULE_NAME
+        )(action)
       );
-      dispatch(action);
     },
-    [dispatch]
+    [dispatch, isEditMode]
   );
   return (
     <div style={{ display: "inline-block" }}>

@@ -22,7 +22,7 @@ const LOG_FILENAME = "./results/monkey-execution.html";
 const fs = require("fs");
 
 module.exports = (on, config) => {
-  // config.browsers = config.browsers.filter((b) => b.name === "electron");
+  require("@cypress/code-coverage/task")(on, config);
   // add other tasks to be registered here
 
   // IMPORTANT to return the config object

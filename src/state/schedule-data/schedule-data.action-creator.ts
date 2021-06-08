@@ -3,26 +3,32 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import _ from "lodash";
-import { LocalStorageProvider } from "../../logic/data-access/local-storage-provider.model";
+import { NewShiftTemplate } from "../../components/shifts-drawer/shift-edit-drawer.component";
 import {
+  getMonthRevision,
+  getOrGenerateMonthRevision,
+} from "../../logic/data-access/month-revision-manager";
+import {
+  PersistStorageManager,
   RevisionType,
   ScheduleKey,
   ThunkFunction,
 } from "../../logic/data-access/persistance-store.model";
-
+import { saveSchedule } from "../../logic/data-access/schedule-persistance-manager";
+import {
+  cropScheduleDMToMonthDM,
+  extendMonthDMRevisionToScheduleDM,
+} from "../../logic/schedule-container-converter/schedule-container-converter";
 import { ActionModel } from "../../utils/action.model";
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../app.reducer";
+import { PrimaryMonthRevisionDataModel } from "../application-state.model";
 import {
   AddMonthRevisionAction,
   PrimaryRevisionAction,
 } from "./primary-revision/primary-revision.reducer";
 import { MonthDataModel, ScheduleDataModel } from "./schedule-data.model";
-import { PrimaryMonthRevisionDataModel } from "../application-state.model";
-import {
-  extendMonthDMRevisionToScheduleDM,
-  cropScheduleDMToMonthDM,
-} from "../../logic/schedule-container-converter/schedule-container-converter";
 import { ScheduleErrorMessageModel } from "./schedule-errors/schedule-error-message.model";
+import { cleanScheduleErrors } from "./schedule-errors/schedule-errors.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 import { Shift } from "./shifts-types/shift-types.model";
 
@@ -51,14 +57,10 @@ export class ScheduleDataActionCreator {
   }
 
   private static setScheduleFromMonthDM(
-    monthDataModel: MonthDataModel,
-    revision?: RevisionType
+    monthDataModel: MonthDataModel
   ): ThunkFunction<ScheduleDataModel> {
-    return async (dispatch, getState): Promise<void> => {
-      if (_.isNil(revision)) {
-        revision = getState().actualState.revision;
-      }
-      const newSchedule = await extendMonthDMRevisionToScheduleDM(monthDataModel, revision);
+    return async (dispatch): Promise<void> => {
+      const newSchedule = await extendMonthDMRevisionToScheduleDM(monthDataModel);
       const primaryMonthDM = await this.getMonthPrimaryRevisionDM(monthDataModel);
 
       dispatch(this.setCurrentAndPrimaryScheduleState(newSchedule, primaryMonthDM));
@@ -71,10 +73,11 @@ export class ScheduleDataActionCreator {
     revision: RevisionType
   ): ThunkFunction<ScheduleDataModel> {
     return async (dispatch): Promise<void> => {
-      const monthDataModel = await new LocalStorageProvider().fetchOrCreateMonthRevision(
+      const monthDataModel = await getOrGenerateMonthRevision(
         monthKey,
         revision,
-        baseMonthModel
+        baseMonthModel,
+        PersistStorageManager.getInstance().actualPersistProvider
       );
       dispatch(this.setScheduleFromMonthDM(monthDataModel));
     };
@@ -89,8 +92,9 @@ export class ScheduleDataActionCreator {
         revision = getState().actualState.revision;
       }
 
-      const monthDataModel = await new LocalStorageProvider().getMonthRevision(
-        monthKey.getRevisionKey(revision)
+      const monthDataModel = await getMonthRevision(
+        monthKey.getRevisionKey(revision),
+        PersistStorageManager.getInstance().actualPersistProvider
       );
 
       if (!_.isNil(monthDataModel)) {
@@ -109,7 +113,7 @@ export class ScheduleDataActionCreator {
       if (_.isNil(revision)) {
         revision = getState().actualState.revision;
       }
-      await new LocalStorageProvider().saveSchedule(revision, newSchedule);
+      await saveSchedule(revision, newSchedule);
       const primaryMonthDM = await this.getMonthPrimaryRevisionDM(
         cropScheduleDMToMonthDM(newSchedule)
       );
@@ -125,7 +129,7 @@ export class ScheduleDataActionCreator {
       if (_.isNil(revision)) {
         revision = getState().actualState.revision;
       }
-      const newSchedule = await extendMonthDMRevisionToScheduleDM(newMonth, revision);
+      const newSchedule = await extendMonthDMRevisionToScheduleDM(newMonth);
       dispatch(this.setScheduleStateAndSaveToDb(newSchedule, revision));
     };
   }
@@ -135,48 +139,30 @@ export class ScheduleDataActionCreator {
   private static async getMonthPrimaryRevisionDM(
     monthDataModel: MonthDataModel
   ): Promise<PrimaryMonthRevisionDataModel> {
-    const primaryMonthDM = await new LocalStorageProvider().getMonthRevision(
-      monthDataModel.scheduleKey.getRevisionKey("primary")
+    const primaryMonthDM = await getMonthRevision(
+      monthDataModel.scheduleKey.getRevisionKey("primary"),
+      PersistStorageManager.getInstance().actualPersistProvider
     );
     return (primaryMonthDM ?? monthDataModel) as PrimaryMonthRevisionDataModel;
   }
 
   static updateSchedule(newScheduleModel: ScheduleDataModel): ScheduleActionModel {
-    // TODO: make separate action creator for Tmp
     return {
       type: createActionName(TEMPORARY_SCHEDULE_NAME, ScheduleActionType.UPDATE),
       payload: newScheduleModel,
     };
   }
 
-  static addNewShift(shift: Shift): (dispatch) => Promise<void> {
-    return async (dispatch): Promise<void> => {
-      const action = {
-        type: ScheduleActionType.ADD_NEW_SHIFT,
-        payload: { ...shift },
-      };
-      dispatch(action);
-    };
+  static addNewShift(shift: Shift) {
+    throw Error("Not implemented");
   }
 
-  static modifyShift(shift: Shift, oldShift: Shift): (dispatch) => Promise<void> {
-    return async (dispatch): Promise<void> => {
-      const action = {
-        type: ScheduleActionType.MODIFY_SHIFT,
-        payload: Array<Shift>(shift, oldShift),
-      };
-      dispatch(action);
-    };
+  static modifyShift(shift: Shift, oldShift: Shift | NewShiftTemplate) {
+    throw Error("Not implemented");
   }
 
-  static deleteShift(shift: Shift): (dispatch) => Promise<void> {
-    return async (dispatch): Promise<void> => {
-      const action = {
-        type: ScheduleActionType.DELETE_SHIFT,
-        payload: shift,
-      };
-      dispatch(action);
-    };
+  static deleteShift(shift: Shift) {
+    throw Error("Not implemented");
   }
 
   static hideErrors(): ActionModel<unknown> {
@@ -184,17 +170,8 @@ export class ScheduleDataActionCreator {
   }
 
   static showError(error: ScheduleErrorMessageModel | undefined): ActionModel<unknown> {
-    const action = {
-      type: ScheduleActionType.SHOW_ERROR,
-      payload: error,
-    };
-    return action;
+    throw Error("Not implemented");
   }
 
-  static cleanErrors(): ActionModel<unknown> {
-    const action = {
-      type: ScheduleActionType.CLEAN_ERRORS,
-    };
-    return action;
-  }
+  static cleanErrors = cleanScheduleErrors;
 }

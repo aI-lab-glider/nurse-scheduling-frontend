@@ -13,7 +13,6 @@ import { Button } from "../../../components/common-components";
 import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
 import { Order } from "../../../helpers/comparator.helper";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
-import { WorkerDrawerMode } from "../../../components/drawers/worker-drawer/worker-drawer.component";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -35,7 +34,7 @@ interface EnhancedTableProps {
   order: Order;
   orderBy: string;
   rowCount: number;
-  toggleDrawer: (open: boolean, mode?: WorkerDrawerMode, workerData?: WorkerInfoModel) => void;
+  toggleDrawer: () => void;
 }
 
 interface WorkerDataCell {
@@ -87,7 +86,7 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
             variant="primary"
             data-cy="btn-add-worker"
             onClick={(): void => {
-              toggleDrawer(true, WorkerDrawerMode.ADD_NEW, undefined);
+              toggleDrawer();
             }}
           >
             Dodaj pracownika

@@ -40,7 +40,13 @@ export default function NewVersionModal(options: NewVersionModalOptions): JSX.El
 
   const footer = (
     <div>
-      <Button onClick={handleClose} size="small" className="submit-button" variant="primary">
+      <Button
+        onClick={handleClose}
+        size="small"
+        className="submit-button"
+        variant="primary"
+        marginString="5px 10px 5px 0px"
+      >
         OK
       </Button>
     </div>

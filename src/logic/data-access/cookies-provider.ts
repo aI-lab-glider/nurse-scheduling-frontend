@@ -7,8 +7,7 @@ export class CookiesProvider {
     const filteredCookie = document.cookie
       .split(";")
       .find((cookie) => cookie.split("=")[0]?.trim() === key);
-    const cookieValue = filteredCookie?.split("=")[1];
-    return cookieValue;
+    return filteredCookie?.split("=")[1];
   }
 
   public static saveCookie(key: string, value: string): void {

@@ -10,7 +10,7 @@ import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-d
 import {
   ContractType,
   Team,
-  WorkerType
+  WorkerType,
 } from "../../../../state/schedule-data/worker-info/worker-info.model";
 
 export interface FormFieldOptions {

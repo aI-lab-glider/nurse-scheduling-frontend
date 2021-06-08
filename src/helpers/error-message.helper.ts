@@ -148,12 +148,11 @@ export class ErrorMessageHelper {
         title = `${error.worker}`;
         break;
       case AlgorithmErrorCode.WorkerTeamsCollision:
-        const sections = findSections(error.hours!);
+        const sections = findSections(error.hours);
         const sectionIntersectionMsg = sections.map(({ start, end }) =>
           start === end ? `${start}:00` : `${start}:00-${end}:00`
         );
         message = `W godzinach: <b>${sectionIntersectionMsg.join(", ")}</b>`;
-        i = 0;
         message += `<br>Niedozwolone połączenie zespołów: <b>${error.workers.join(", ")}</b>.`;
         type = ScheduleErrorType.WTC;
         title = "date";
@@ -166,7 +165,7 @@ export class ErrorMessageHelper {
         message = `Nieznana wartość zmiany: "<b>${error.actual}</b>". Obecnie pole jest puste. Możesz ręcznie przypisać zmianę z tych już istniejących lub utworzyć nową.`;
         type = ScheduleErrorType.ILLEGAL_SHIFT_VALUE;
         title = `${error.worker}`;
-        day += error.day! + 1;
+        day += error.day + 1;
         break;
       case InputFileErrorCode.EMPTY_FILE:
         message = "Błąd podczas wczytywania pliku wejściowego: Pusty plik";

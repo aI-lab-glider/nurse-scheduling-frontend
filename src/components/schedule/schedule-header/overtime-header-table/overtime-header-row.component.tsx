@@ -5,19 +5,21 @@ import React from "react";
 import styled from "styled-components";
 import { ArrayHelper } from "../../../../helpers/array.helper";
 import { OvertimeHeaderCell } from "./overtime-header-cell.component";
-import { SectionRow } from "../../base/styled";
+import { SectionRow, SectionWrapper } from "../../base/styled";
 
 export interface OvertimeHeaderRowOptions {
   data: string[];
 }
 
-export function OvertimeHeaderRowF({ data }: OvertimeHeaderRowOptions): JSX.Element {
+function OvertimeHeaderRowF({ data }: OvertimeHeaderRowOptions): JSX.Element {
   return (
-    <SummaryRow>
-      {data.map((cellData) => (
-        <OvertimeHeaderCell value={cellData} key={cellData} />
-      ))}
-    </SummaryRow>
+    <Wrapper>
+      <SummaryRow>
+        {data.map((cellData) => (
+          <OvertimeHeaderCell value={cellData} key={cellData} />
+        ))}
+      </SummaryRow>
+    </Wrapper>
   );
 }
 
@@ -28,4 +30,9 @@ export const OvertimeHeaderRow = React.memo(OvertimeHeaderRowF, (prev, next) =>
 const SummaryRow = styled(SectionRow)`
   height: 40px;
   width: 130px;
+`;
+
+const Wrapper = styled(SectionWrapper)`
+  height: 71px;
+  cursor: default;
 `;

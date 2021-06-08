@@ -17,7 +17,7 @@ import { FormFieldErrorLabel } from "./form-field-error-label.component";
 import { useFormFieldStyles } from "./worker-edit.models";
 
 export function WorkerEmploymentContractWorkNormSelector({
-  employmentTime,
+  workerTime,
   setWorkerTime,
   setIsFieldValid: setIsFormValid,
 }: WorkNormSelectorOptions): JSX.Element {
@@ -69,7 +69,7 @@ export function WorkerEmploymentContractWorkNormSelector({
     setFirstEditMade(true);
   }
   const inputWidth = 100;
-  const employmentTimeAsFraction = toFraction(employmentTime);
+  const employmentTimeAsFraction = toFraction(workerTime);
   return (
     <>
       <Grid item xs={6} style={{ zIndex: 2 }}>
@@ -100,7 +100,7 @@ export function WorkerEmploymentContractWorkNormSelector({
             }
           />
           <FormFieldErrorLabel
-            shouldBeVisible={!isEmploymentTimeValid(employmentTime) && firstEditMade}
+            shouldBeVisible={!isEmploymentTimeValid(workerTime) && firstEditMade}
             message={t("workerCouldNotBeEmployedMore")}
           />
         </Grid>

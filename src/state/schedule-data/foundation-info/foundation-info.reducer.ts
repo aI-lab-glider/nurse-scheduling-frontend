@@ -3,33 +3,35 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import * as _ from "lodash";
-import { FoundationInfoModel } from "./foundation-info.model";
-import { FoundationInfoAction, FoundationInfoActionType } from "./foundation-info.action-creator";
-import { scheduleDataInitialState } from "../schedule-data-initial-state";
+import { createReducer } from "@reduxjs/toolkit";
 import {
-  createActionName,
-  isScheduleAction,
-  ScheduleActionModel,
-  ScheduleActionType,
-} from "../schedule.actions";
+  FoundationInfoAction,
+  updateChildrenAndExtraworkers,
+} from "./foundation-info.action-creator";
+import { scheduleDataInitialState } from "../schedule-data-initial-state";
+import { addNewSchedule, isScheduleAction, updateSchedule } from "../schedule.actions";
+import { ScheduleActionDestination } from "../../app.reducer";
+import { FoundationInfoModel } from "./foundation-info.model";
+import { ScheduleDataModel } from "../schedule-data.model";
 
-export function foundationInfoReducerF(name: string) {
-  return (
-    state: FoundationInfoModel = scheduleDataInitialState.month_info,
-    action: ScheduleActionModel | FoundationInfoAction
-  ): FoundationInfoModel => {
-    switch (action.type) {
-      case createActionName(name, ScheduleActionType.ADD_NEW):
-      case createActionName(name, ScheduleActionType.UPDATE):
-        if (!isScheduleAction(action)) {
-          return state;
-        }
-        const monthInfo = action.payload?.month_info;
-        if (!monthInfo) {
-          return state;
-        }
-        return { ...monthInfo };
-      case createActionName(name, FoundationInfoActionType.UPDATE_CHILDREN_AND_EXTRAWORKERS):
+const replaceStateWithPayload = (
+  state: FoundationInfoModel,
+  action: { payload: ScheduleDataModel; type: string }
+) => {
+  if (!isScheduleAction(action)) {
+    return state;
+  }
+  const monthInfo = action.payload?.month_info;
+  if (!monthInfo) {
+    return state;
+  }
+  return { ...monthInfo };
+};
+
+export const foundationInfoReducerF = (name: ScheduleActionDestination) =>
+  createReducer(scheduleDataInitialState.month_info, (builder) => {
+    builder
+      .addCase(updateChildrenAndExtraworkers(name), (state, action) => {
         const data = (action as FoundationInfoAction).payload;
         if (_.isNil(data)) {
           return state;
@@ -41,8 +43,8 @@ export function foundationInfoReducerF(name: string) {
           extra_workers: [...extraWorkers],
           children_number: [...childrenNumber],
         };
-      default:
-        return state;
-    }
-  };
-}
+      })
+      .addCase(updateSchedule(name), replaceStateWithPayload)
+      .addCase(addNewSchedule(name), replaceStateWithPayload)
+      .addDefaultCase((state) => state);
+  });

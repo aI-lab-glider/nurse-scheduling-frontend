@@ -1,13 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
-import { Divider, Tab, withStyles } from "@material-ui/core";
+import { Divider, Tab } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
 import TabPanel from "@material-ui/lab/TabPanel";
-import { makeStyles } from "@material-ui/core/styles";
 import _ from "lodash";
+import React, { useCallback, useMemo } from "react";
 import styled from "styled-components";
 import { colors } from "../../../assets/colors";
 
@@ -38,78 +38,90 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.Element {
-  const { tabs } = props;
+  const { tabs, disabled } = props;
   if (tabs.length === 0) {
     throw Error("Component cannot be called without tabs");
   }
-  const [tab, setTab] = React.useState(tabs[0]!.label);
+  const [tabLabel, setTabLabel] = React.useState(tabs[0]!.label);
+
   const classes = useStyles();
-  const handleChange = (event: React.ChangeEvent<unknown>, newValue: string): void => {
-    setTab(newValue);
-    const tabObj = _.find(tabs, (tab) => tab.label === newValue);
-    if (tabObj && tabObj.onChange) {
-      tabObj.onChange();
-    }
-  };
 
-  // eslint-disable-next-line
-  const StyledTab: any = withStyles((theme) => ({
-    root: {
-      textTransform: "none",
-      color: props.disabled ? colors.gray100 : colors.secondaryTextColor,
-      outline: "none",
-      fontWeight: theme.typography.fontWeightMedium,
-      fontSize: "20",
-      fontFamily: ["Roboto"].join(","),
-
-      "&:hover": {
-        color: props.disabled ? colors.gray100 : colors.primaryTextColor,
-        cursor: props.disabled ? "default" : "pointer",
-        opacity: 1,
-        outline: "none",
-      },
-      "&$selected": {
-        color: colors.secondaryTextColor,
-        outline: "none",
-        fontWeight: theme.typography.fontWeightBold,
-      },
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<unknown>, newValue: string): void => {
+      if (disabled) {
+        return;
+      }
+      setTabLabel(newValue);
+      const tabObj = _.find(tabs, (tab) => tab.label === newValue);
+      if (tabObj && tabObj.onChange) {
+        tabObj.onChange();
+      }
     },
+    [disabled, setTabLabel, tabs]
+  );
 
-    selected: {
-      outline: "none",
-    },
-  }))((props) => <Tab disableRipple {...props} />);
+  const tabListClasses = useMemo(() => ({ indicator: classes.indicatorStyle }), [
+    classes.indicatorStyle,
+  ]);
+
+  const tabTitles = useMemo(
+    () =>
+      tabs.map((tab) => (
+        <StyledTab
+          disableRipple
+          disabled={disabled}
+          className={classes.tabStyle}
+          key={tab.label}
+          label={tab.label}
+          value={tab.label}
+          data-cy={tab.dataCy}
+        />
+      )),
+    [tabs, classes.tabStyle, disabled]
+  );
+
+  const tabContents = useMemo(
+    () =>
+      tabs.map((tab) => (
+        <TabPanel value={tab.label} key={tab.label} className={classes.tabStyle}>
+          {tab.component}
+        </TabPanel>
+      )),
+    [tabs, classes.tabStyle]
+  );
 
   return (
     <Wrapper>
-      <TabContext value={tab}>
+      <TabContext value={tabLabel}>
         <HeaderWrapper>
-          <TabList
-            classes={{ indicator: classes.indicatorStyle }}
-            onChange={!props.disabled ? handleChange : void 0}
-          >
-            {tabs.map((tab) => (
-              <StyledTab
-                className={classes.tabStyle}
-                key={tab.label}
-                label={tab.label}
-                value={tab.label}
-                data-cy={tab.dataCy}
-              />
-            ))}
+          <TabList classes={tabListClasses} onChange={handleChange}>
+            {tabTitles}
           </TabList>
           <Divider />
         </HeaderWrapper>
-
-        {tabs.map((tab) => (
-          <TabPanel value={tab.label} key={tab.label} className={classes.tabStyle}>
-            {tab.component}
-          </TabPanel>
-        ))}
+        {tabContents}
       </TabContext>
     </Wrapper>
   );
 }
+
+const StyledTab = styled(Tab)`
+  &&& {
+    outline: none;
+    text-transform: none;
+    color: ${({ disabled }) => (disabled ? colors.gray100 : colors.secondaryTextColor)};
+    font-size: 20;
+    font-weight: ${({ theme }) => theme.typography.fontWeightMedium};
+    font-family: Roboto;
+
+    &:hover {
+      color: ${({ disabled }) => (disabled ? colors.gray100 : colors.primaryTextColor)};
+      cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
+      opacity: 1;
+      outline: none;
+    }
+  }
+`;
 
 const Wrapper = styled.div`
   width: 100%;

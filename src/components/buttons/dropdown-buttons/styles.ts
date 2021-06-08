@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import styled from "styled-components";
+import { fade } from "@material-ui/core/styles/colorManipulator";
 import { Button } from "../button-component/button.component";
 import { colors } from "../../../assets/colors";
 
@@ -33,8 +34,7 @@ export const DropdownButton = styled.div`
   &:hover {
     cursor: pointer;
     box-shadow: 0 0;
-    // TODO check color
-    background-color: rgba(29, 53, 87, 0.1);
+    background-color: ${fade(colors.primary, 0.1)};
   }
   &:first-child {
     padding-top: 25px;

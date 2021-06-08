@@ -1,13 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
+import { ParserHelper } from "../../helpers/parser.helper";
 import {
   InputFileErrorCode,
   ScheduleError,
 } from "../../state/schedule-data/schedule-errors/schedule-error.model";
 import { Shift, ShiftCode, SHIFTS } from "../../state/schedule-data/shifts-types/shift-types.model";
-import { AcronymGenerator } from "../../helpers/acronym-generator.helper";
-import { ParserHelper } from "../../helpers/parser.helper";
 
 const DEFAULT_SHIFT_NAME = "Zmiana";
 export const DEFAULT_FROM = 7;

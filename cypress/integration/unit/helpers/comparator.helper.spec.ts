@@ -13,46 +13,30 @@ describe("ComparatorHelper", () => {
       { simpleType: 2, complexType: { string: "z1", number: 2 } },
     ];
   });
+  const sort = (order: "asc" | "desc") => {
+    context("when sorting by simple type", () => {
+      const orderBy = "simpleType";
 
-  describe("stableSort", () => {
-    context("ascending order", () => {
-      const order = "asc";
-
-      context("when sorting by simple type", () => {
-        const orderBy = "simpleType";
-
-        it("sorts array in stable manner", () => {
-          cy.wrap(ComparatorHelper.stableSort(array, order, orderBy)).snapshot();
-        });
-      });
-
-      context("when sorting by complex type", () => {
-        const orderBy = "complexType";
-
-        it("does not change the array", () => {
-          expect(ComparatorHelper.stableSort(array, order, orderBy)).to.eql(array);
-        });
+      it("sorts array in stable manner", () => {
+        cy.wrap(ComparatorHelper.stableSort(array, order, orderBy));
       });
     });
 
+    context("when sorting by complex type", () => {
+      const orderBy = "complexType";
+
+      it("does not change the array", () => {
+        expect(ComparatorHelper.stableSort(array, order, orderBy)).to.eql(array);
+      });
+    });
+  };
+  describe("stableSort", () => {
+    context("ascending order", () => {
+      sort("asc");
+    });
+
     context("descending order", () => {
-      const order = "desc";
-
-      context("when sorting by simple type", () => {
-        const orderBy = "simpleType";
-
-        it("sorts array in stable manner", () => {
-          cy.wrap(ComparatorHelper.stableSort(array, order, orderBy)).snapshot();
-        });
-      });
-
-      context("when sorting by complex type", () => {
-        const orderBy = "complexType";
-
-        it("does not change the array", () => {
-          expect(ComparatorHelper.stableSort(array, order, orderBy)).to.eql(array);
-        });
-      });
+      sort("desc");
     });
   });
 });

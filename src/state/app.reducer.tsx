@@ -13,7 +13,7 @@ import {
 import { scheduleReducerF } from "./schedule-data/schedule.reducer";
 import { scheduleErrorsReducer } from "./schedule-data/schedule-errors/schedule-errors.reducer";
 import { revisionInfoReducer } from "./schedule-data/schedule-condition/revision-info.reducer";
-import { modeInfoReducer } from "./app-condition/mode-info-reducer";
+import modeInfoReducer from "./app-condition/mode-info-reducer";
 import { primaryRevisionReducer } from "./schedule-data/primary-revision/primary-revision.reducer";
 
 export type CombinedReducers<StateModel> = {

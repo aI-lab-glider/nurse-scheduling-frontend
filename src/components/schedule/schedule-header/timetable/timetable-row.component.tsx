@@ -3,10 +3,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import styled from "styled-components";
+import { colors } from "../../../../assets/colors";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
 import { MonthInfoLogic } from "../../../../logic/schedule-logic/month-info.logic";
 import { VerboseDate } from "../../../../state/schedule-data/foundation-info/foundation-info.model";
-import { SectionRow } from "../../base/styled";
+import { SectionRow, SectionWrapper } from "../../base/styled";
 import { TimeTableCell } from "./timetable-cell.component";
 
 export function TimeTableRow(): JSX.Element {
@@ -35,8 +36,9 @@ export function TimeTableRow(): JSX.Element {
   [verboseDates, currMont] = getVerboseDates();
 
   return (
-    <Wrapper id="timetableRow">
-      {verboseDates.map((verboseDate, cellIndex) => (
+    <Wrapper>
+      <TimetableRow data-cy="timetable-row">
+        {verboseDates.map((verboseDate, cellIndex) => (
           <TimeTableCell
             key={`${verboseDate.date}_${cellIndex}`}
             value={verboseDate}
@@ -44,12 +46,27 @@ export function TimeTableRow(): JSX.Element {
             index={cellIndex}
           />
         ))}
+      </TimetableRow>
     </Wrapper>
   );
 }
 
-const Wrapper = styled(SectionRow)`
+const TimetableRow = styled(SectionRow)`
   width: 1350px;
   height: 70px;
   cursor: default;
+`;
+
+export const Wrapper = styled(SectionWrapper)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+
+  background: ${colors.white};
+  box-sizing: border-box;
+
+  overflow: hidden;
+  border: 1px solid ${colors.tableBorderGrey};
+  border-radius: 10px;
 `;

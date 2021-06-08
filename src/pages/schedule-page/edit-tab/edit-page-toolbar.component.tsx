@@ -9,46 +9,46 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled, { css } from "styled-components";
 import backend from "../../../api/backend";
+import { colors, fontSizeBase, fontSizeXl } from "../../../assets/colors";
+import { Button } from "../../../components/common-components";
+import ConditionalLink from "../../../components/common-components/conditional-link/conditional-link.component";
+import { usePersistentDrawer } from "../../../components/drawers/drawer/persistent-drawer-context";
+import ErrorContainerDrawerComponent from "../../../components/drawers/error-container-drawer/error-container-drawer.component";
+import SaveChangesModal from "../../../components/modals/save-changes-modal/save-changes-modal.component";
+import { useNotification } from "../../../components/notification/notification.context";
+import { t } from "../../../helpers/translations.helper";
+import { useTemporarySchedule } from "../../../hooks/use-temporary-schedule";
 import {
   NetworkErrorCode,
   ScheduleError,
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
-import { ActionModel } from "../../../utils/action.model";
-import { ApplicationStateModel } from "../../../state/application-state.model";
+import { updateScheduleErrors } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
 import { TEMPORARY_SCHEDULE_UNDOABLE_CONFIG } from "../../../state/schedule-data/schedule.actions";
-import { ScheduleErrorActionType } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
+import {
+  getPresentScheduleShifts,
+  getPresentTemporarySchedule,
+  getPresentTemporaryScheduleShifts,
+  getPrimaryRevision,
+} from "../../../state/schedule-data/selectors";
 import { UndoActionCreator } from "../../../state/schedule-data/undoable.action-creator";
-import { Button } from "../../../components/common-components";
-import ConditionalLink from "../../../components/common-components/conditional-link/conditional-link.component";
-import { usePersistentDrawer } from "../../../components/drawers/drawer/persistent-drawer-context";
-import SaveChangesModal from "../../../components/modals/save-changes-modal/save-changes-modal.component";
-import { useNotification } from "../../../components/notification/notification.context";
-import ErrorContainerDrawerComponent from "../../../components/drawers/error-container-drawer/error-container-drawer.component";
-import { useTemporarySchedule } from "../../../hooks/use-temporary-schedule";
-import { colors, fontSizeBase, fontSizeXl } from "../../../assets/colors";
+import { WorkerShiftsModel } from "../../../state/schedule-data/workers-shifts/worker-shifts.model";
 
 interface EditPageToolbarOptions {
   close: () => void;
 }
 
 export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element {
-  const schedule = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present
-  );
+  const schedule = useSelector(getPresentTemporarySchedule);
 
-  const { primaryRevision } = useSelector((app: ApplicationStateModel) => app.actualState);
+  const primaryRevision = useSelector(getPrimaryRevision);
   const { createNotification } = useNotification();
   const dispatcher = useDispatch();
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
-  const { shifts: persistentShifts } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.persistentSchedule.present
-  );
-  const { shifts: temporaryShifts } = useSelector(
-    (state: ApplicationStateModel) => state.actualState.temporarySchedule.present
-  );
+  const persistentShifts: WorkerShiftsModel = useSelector(getPresentScheduleShifts);
+  const temporaryShifts: WorkerShiftsModel = useSelector(getPresentTemporaryScheduleShifts);
   const [undoCounter, setUndoCounter] = useState(0);
 
-  async function updateScheduleErrors(): Promise<void> {
+  async function updateScheduleError(): Promise<void> {
     if (schedule) {
       let response: ScheduleError[];
       try {
@@ -60,10 +60,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
           },
         ];
       }
-      dispatcher({
-        type: ScheduleErrorActionType.UPDATE,
-        payload: response,
-      } as ActionModel<ScheduleError[]>);
+      dispatcher(updateScheduleErrors(response));
     }
   }
 
@@ -73,7 +70,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
     setChildrenComponent(<ErrorContainerDrawerComponent setOpen={setOpen} loadingErrors />);
     setTitle("Sprawdź plan");
     setOpen(true);
-    updateScheduleErrors().then(() =>
+    updateScheduleError().then(() =>
       setChildrenComponent(
         <ErrorContainerDrawerComponent setOpen={setOpen} loadingErrors={false} />
       )
@@ -125,14 +122,14 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
       <EditTextWrapper data-cy="edit-mode-text">Tryb edycji aktywny</EditTextWrapper>
 
       <Button data-cy="check-schedule-button" variant="primary" onClick={prepareDrawer}>
-        Sprawdź Plan
+        {t("editPageToolbarCheckPlan")}
       </Button>
 
       <Filler />
 
       <ConditionalLink to="/" shouldNavigate={!anyChanges()}>
         <Button onClick={askForSavingChanges} variant="secondary" data-cy="leave-edit-mode">
-          Wyjdź
+          {t("editPageToolbarExit")}
         </Button>
         <SaveChangesModal
           closeOptions={close}
@@ -150,7 +147,7 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
           handleSaveClick();
         }}
       >
-        Zapisz
+        {t("editPageToolbarSavePlan")}
       </Button>
     </Wrapper>
   );

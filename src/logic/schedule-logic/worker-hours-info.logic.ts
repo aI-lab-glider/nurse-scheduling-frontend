@@ -3,7 +3,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import * as _ from "lodash";
-import { MonthInfoLogic } from "./month-info.logic";
+import { MonthDataArray } from "../../helpers/month-data-array.model";
+import { ShiftHelper, WORK_HOURS_PER_DAY } from "../../helpers/shifts.helper";
+import { TranslationHelper } from "../../helpers/translations.helper";
+import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
 import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
 import { MonthDataModel, ScheduleDataModel } from "../../state/schedule-data/schedule-data.model";
@@ -15,11 +18,9 @@ import {
   ShiftTypesDict,
 } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { ContractType } from "../../state/schedule-data/worker-info/worker-info.model";
-import { isAllValuesDefined, Opaque } from "../../utils/type-utils";
+import { isAllValuesDefined } from "../../utils/type-utils";
 import { nameOf } from "../../utils/utils";
-import { WORK_HOURS_PER_DAY, MonthDataArray, ShiftHelper } from "../../helpers/shifts.helper";
-import { TranslationHelper } from "../../helpers/translations.helper";
-import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
+import { MonthInfoLogic } from "./month-info.logic";
 
 export const DEFAULT_NORM_SUBTRACTION = WORK_HOURS_PER_DAY;
 
@@ -124,7 +125,7 @@ export class WorkerHourInfo {
     const { dates } = actualScheduleModel.month_info;
     return this.fromWorkerInfo(
       shifts[workerName],
-      primaryScheduleModel?.shifts[workerName] as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
+      primaryScheduleModel?.shifts[workerName],
       time[workerName],
       workerContractType,
       month,
@@ -232,7 +233,7 @@ export class WorkerHourInfo {
   private static createCropToMonthFunc(
     dates: DateInformationForWorkInfoCalculation[],
     month: string
-  ): <T>(array: T[]) => Opaque<"MonthData", T[]> {
+  ): <T>(array: T[]) => MonthDataArray<T> {
     const firstDayOfCurrentMonth = dates.findIndex((d) => d.month === month);
     const lastDayOfCurrentMonth = _.findLastIndex(dates, (d) => d.month === month);
     return <T>(array: T[]): MonthDataArray<T> =>
@@ -288,17 +289,15 @@ export class WorkerHourInfo {
     currentMonthDates: DateInformationForWorkInfoCalculation[],
     shiftTypes: ShiftTypesDict
   ): number {
-    switch (workerContractType) {
-      case ContractType.EMPLOYMENT_CONTRACT:
-        return this.calculateFreeHoursForEmplContract(
-          actualShiftsFromCurrentMonth,
-          primaryScheduleWorkerShifts,
-          currentMonthDates,
-          shiftTypes
-        );
-      default:
-        return 0;
+    if (workerContractType === ContractType.EMPLOYMENT_CONTRACT) {
+      return this.calculateFreeHoursForEmplContract(
+        actualShiftsFromCurrentMonth,
+        primaryScheduleWorkerShifts,
+        currentMonthDates,
+        shiftTypes
+      );
     }
+    return 0;
   }
 
   private static calculateFreeHoursForEmplContract(
@@ -375,7 +374,7 @@ export class WorkerHourInfo {
     shiftTypes: ShiftTypesDict
   ): number {
     return actualShiftsFromCurrentMonth.reduce(
-      (acc, shift) => acc + ShiftHelper.shiftToWorkTime(shiftTypes[shift!]),
+      (acc, shift) => acc + ShiftHelper.shiftToWorkTime(shiftTypes[shift]),
       0
     );
   }

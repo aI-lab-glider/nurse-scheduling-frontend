@@ -40,8 +40,8 @@ export default function ModalErrorListItem({ error }: Options): JSX.Element {
       <div>
         {displayTitle && (
           <Title>
-            {error.title === "date" ? `${errorDay} ${  monthName}` : `${error.title}`}
-            {errorDayIndex > -1 && error.title !== "date" ? `, ${errorDay} ${  monthName}` : ""}
+            {error.title === "date" ? `${errorDay} ${monthName}` : `${error.title}`}
+            {errorDayIndex > -1 && error.title !== "date" ? `, ${errorDay} ${monthName}` : ""}
           </Title>
         )}
         <Content dangerouslySetInnerHTML={{ __html: error.message || "" }} />

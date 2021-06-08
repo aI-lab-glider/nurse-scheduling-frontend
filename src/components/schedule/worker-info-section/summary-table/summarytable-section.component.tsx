@@ -10,18 +10,18 @@ import { SectionWrapper } from "../../base/styled";
 import { colors } from "../../../../assets/colors";
 
 export interface SummaryTableSectionOptions {
-  dataRows: DataRow[];
-  sectionIdx: number;
+  data: DataRow[];
+  sectionIndex: number;
 }
 
 export function SummaryTableSection({
-  dataRows,
-  sectionIdx,
+  data,
+  sectionIndex,
 }: SummaryTableSectionOptions): JSX.Element {
   return (
-    <Wrapper id="summaryTable" data-cy={summaryTableSectionDataCy(sectionIdx)}>
+    <Wrapper id="summaryTable" data-cy={summaryTableSectionDataCy(sectionIndex)}>
       <div>
-        {dataRows.map((dataRow, rowIndex) => (
+        {data.map((dataRow, rowIndex) => (
           <SummaryTableRow key={dataRow.rowKey} workerName={dataRow.rowKey} rowIndex={rowIndex} />
         ))}
       </div>

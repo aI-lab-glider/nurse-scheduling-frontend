@@ -81,23 +81,28 @@ export default function ErrorList({ errors = [] }: Options): JSX.Element {
     return 0;
   }
 
-  const renderOneTypeOfErrors = (errorData: ErrorTypes): JSX.Element =>
-    errorData.errors && errorData.errors.length > 0 ? (
-      <FoldingSection name={`${errorData.errorDescription} (${errorData.errors.length})`}>
-        {errorData.errors.sort(compareErrors).map(
-          (error, index): JSX.Element => (
-            <ErrorListItem
-              key={`${error.kind ? error.kind : "0"}_${index}`}
-              error={error}
-              index={index}
-              interactable
-            />
-          )
-        )}
-      </FoldingSection>
-    ) : (
-      <></>
-    );
+  const renderOneTypeOfErrors = (errorData: ErrorTypes): JSX.Element => {
+    if (errorData.errors && errorData.errors.length > 0) {
+      const sortedErrors = [...errorData.errors];
+      sortedErrors.sort(compareErrors);
+
+      return (
+        <FoldingSection name={`${errorData.errorDescription} (${errorData.errors.length})`}>
+          {sortedErrors.map(
+            (error, index): JSX.Element => (
+              <ErrorListItem
+                key={`${error.kind ? error.kind : "0"}_${index}`}
+                error={error}
+                index={index}
+                interactable
+              />
+            )
+          )}
+        </FoldingSection>
+      );
+    }
+    return <></>;
+  };
 
   return (
     <>

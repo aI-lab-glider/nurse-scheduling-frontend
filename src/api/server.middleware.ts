@@ -139,7 +139,7 @@ export class ServerMiddleware {
           (otherError) => item.day === otherError.day
         );
         sameDayErrors.forEach((otherError) => {
-          newWTCError.hours!.push(otherError.hour);
+          newWTCError.hours.push(otherError.hour);
           newWTCError.workers = _.uniq(_.concat(newWTCError.workers, otherError.workers));
           otherError.hour = -1;
         });

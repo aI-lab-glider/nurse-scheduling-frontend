@@ -16,7 +16,6 @@ import { MouseEventListener } from "../../../../common-components/mouse-event-li
 import { ShiftCellContent } from "./shift-cell-content.component";
 import { ShiftsCellDropdown } from "./shifts-cell-dropdown.component";
 
-// TODO: Create a config file, that will contain this definitions
 const MODAL_CLOSE_MS = 4444;
 export const DEFAULT_SHIFT_HEX = "FFD100";
 

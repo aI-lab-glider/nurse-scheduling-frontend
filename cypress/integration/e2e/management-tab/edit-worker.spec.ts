@@ -49,18 +49,47 @@ describe("Tab management", () => {
       },
     };
 
+    describe("Changing workers contract type ", () => {
+      testWorkerData.hoursInfo[2] = 80;
+      beforeEach(() => {
+        cy.get('[data-cy="btn-management-tab"]').click();
+        cy.get(`[data-cy="edit-worker-${testWorker}"]`).click();
+        cy.get('[data-cy="contract"]').click();
+      });
+      context(
+        "when changing worker's contract type from employment contract to civil contract",
+        () => {
+          it("properly handles worker contract type change", () => {
+            cy.get('[data-cy="civil_contract"]').click();
+            cy.get('[data-cy="btn-save-worker"]').click();
+            cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa zlecenie 160 godz.");
+            cy.get('[data-cy="btn-schedule-tab"]').click();
+            cy.checkHoursInfo(testWorkerData);
+          });
+        }
+      );
+      context(
+        "when changing worker's contract type from civil contract to employment contract",
+        () => {
+          it("properly handles worker contract type change", () => {
+            cy.get('[data-cy="employment_contract"]').click();
+            cy.get('[data-cy="btn-save-worker"]').click();
+            cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1/1");
+            cy.get('[data-cy="btn-schedule-tab"]').click();
+            cy.checkHoursInfo(testWorkerData);
+          });
+        }
+      );
+    });
     describe("Editing workers time ", () => {
       beforeEach(() => {
         cy.get('[data-cy="btn-management-tab"]').click();
         cy.get(`[data-cy="edit-worker-${testWorker}"]`).click();
       });
-      context("properly handles worker hours edition from 1 to 1/2", () => {
+      context("when editing worker hours from 1 to 1/2", () => {
         it("properly handles worker hours edition", () => {
-          testWorkerData.hoursInfo = {
-            [HoursInfoCells.required]: 80,
-            [HoursInfoCells.actual]: 240,
-            [HoursInfoCells.overtime]: 160,
-          };
+          testWorkerData.hoursInfo[0] = 80;
+          testWorkerData.hoursInfo[2] = 160;
           cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="half"]').click();
           cy.get('[data-cy="btn-save-worker"]').click();
           cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1/2");
@@ -69,13 +98,10 @@ describe("Tab management", () => {
         });
       });
 
-      context("properly handles worker hours edition from 1/2 to 1", () => {
+      context("when editing worker hours from 1/2 to 1", () => {
         it("properly handles worker hours edition", () => {
-          testWorkerData.hoursInfo = {
-            [HoursInfoCells.required]: 160,
-            [HoursInfoCells.actual]: 240,
-            [HoursInfoCells.overtime]: 80,
-          };
+          testWorkerData.hoursInfo[0] = 160;
+          testWorkerData.hoursInfo[2] = 80;
           cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="full"]').click();
           cy.get('[data-cy="btn-save-worker"]').click();
           cy.get(`[data-cy="worker-hours-${testWorker}"]`).contains("umowa o pracę 1");
@@ -83,13 +109,10 @@ describe("Tab management", () => {
           cy.checkHoursInfo(testWorkerData);
         });
       });
-      context("properly handles worker hours edition from 1 to 1/8", () => {
+      context("when editing worker hour from 1 to 1/8", () => {
         it("properly handles worker hours edition", () => {
-          testWorkerData.hoursInfo = {
-            [HoursInfoCells.required]: 20,
-            [HoursInfoCells.actual]: 240,
-            [HoursInfoCells.overtime]: 220,
-          };
+          testWorkerData.hoursInfo[0] = 20;
+          testWorkerData.hoursInfo[2] = 220;
           cy.get('[data-cy="contract-time-dropdown"]').click().get('[data-cy="other"]').click();
           cy.get('[data-cy="input-employ-time-other"] input')
             .click()
