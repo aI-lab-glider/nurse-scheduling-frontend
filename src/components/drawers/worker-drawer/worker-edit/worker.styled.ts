@@ -8,7 +8,7 @@ import {
   Input as MaterialInput,
 } from "@material-ui/core";
 import styled from "styled-components";
-import { fontSizeBase, fontSizeXs, lineHeightXl } from "../../../../assets/colors";
+import { fontSizeBase, fontSizeXs, lineHeightXl } from "../../../../assets/css-consts";
 import { Button } from "../../../common-components";
 
 export const OptionsContainer = styled(Grid)`

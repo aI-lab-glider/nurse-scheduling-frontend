@@ -4,7 +4,7 @@
 
 import React from "react";
 import styled from "styled-components";
-import { colors } from "../../../assets/colors";
+import { colors } from "../../../assets/css-consts";
 
 interface ErrorSwitchInterface {
   errorStyle: string;

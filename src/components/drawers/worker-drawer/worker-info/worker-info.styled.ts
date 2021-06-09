@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
 import { Divider } from "@material-ui/core";
-import { fontSizeBase, fontSizeLg } from "../../../../assets/colors";
+import { fontSizeBase, fontSizeLg } from "../../../../assets/css-consts";
 import { Button } from "../../../common-components";
 
 export const WorkerNameLabel = styled.h2`

@@ -7,7 +7,7 @@ import {
   fontFamilyPrimary,
   fontSizeBase,
   fontWeightNormal,
-} from "../../../../assets/colors";
+} from "../../../../assets/css-consts";
 
 export const AutoSeparator = styled.div`
   flex: 1;

@@ -4,7 +4,7 @@
 import styled, { css } from "styled-components";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import { colors, fontSizeBase, fontSizeXl } from "../../../assets/colors";
+import { colors, fontSizeBase, fontSizeXl } from "../../../assets/css-consts";
 
 export const Wrapper = styled.div`
   display: flex;

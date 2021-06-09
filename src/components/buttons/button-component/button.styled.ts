@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
-import { fontFamilyPrimary, colors } from "../../../assets/colors";
+import { fontFamilyPrimary, colors } from "../../../assets/css-consts";
 import { ButtonBaseProps } from "./button.component";
 
 export const ButtonBase = styled.button<ButtonBaseProps>`

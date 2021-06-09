@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
 import { Popper } from "../popper";
-import { colors } from "../../../assets/colors";
+import { colors } from "../../../assets/css-consts";
 
 export const ErrorTooltip = styled(Popper)`
   position: absolute;

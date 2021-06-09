@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
 import { Radio, RadioGroup } from "@material-ui/core";
-import { colors, fontSizeBase, fontWeightExtra } from "../../assets/colors";
+import { colors, fontSizeBase, fontWeightExtra } from "../../assets/css-consts";
 
 export const FormLabel = styled.h4`
   font-weight: 700;

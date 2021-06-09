@@ -10,7 +10,7 @@ import {
   colors,
   fontSizeLg,
   fontFamilyPrimary,
-} from "../../../assets/colors";
+} from "../../../assets/css-consts";
 
 export const Wrapper = styled.div`
   width: 100%;

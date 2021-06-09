@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid } from "@material-ui/core";
 import styled from "styled-components";
-import { colors, footerHeight } from "../../assets/colors";
+import { colors, footerHeight } from "../../assets/css-consts";
 
 export const Container = styled(Grid)`
   background: ${colors.white};

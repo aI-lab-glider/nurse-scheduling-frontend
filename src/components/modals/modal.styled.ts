@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Box, IconButton, Paper, fade } from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
 import Modal from "@material-ui/core/Modal";
-import { colors, fontSizeBase, fontSizeLg } from "../../assets/colors";
+import { colors, fontSizeBase, fontSizeLg } from "../../assets/css-consts";
 
 export const ModalWrapper = styled(Modal)`
   display: flex;

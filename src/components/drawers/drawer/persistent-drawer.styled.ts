@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Box } from "@material-ui/core";
 import styled from "styled-components";
-import { drawerHeaderHeight, headerHeight } from "../../../assets/colors";
+import { drawerHeaderHeight, headerHeight } from "../../../assets/css-consts";
 import { StyleProps } from "./persistent-drawer.component";
 
 export const Drawer = styled(Box)<StyleProps>`

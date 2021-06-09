@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import TableCell from "@material-ui/core/TableCell";
 import styled from "styled-components";
-import { colors } from "../../../assets/colors";
+import { colors } from "../../../assets/css-consts";
 import { Button } from "../../../components/common-components";
 
 export const StyledTableCell = styled(TableCell)`

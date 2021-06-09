@@ -6,7 +6,7 @@ import { Button as MaterialButton } from "@material-ui/core";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import SettingsIcon from "@material-ui/icons/Settings";
-import { colors, fontSizeBase } from "../../assets/colors";
+import { colors, fontSizeBase } from "../../assets/css-consts";
 import { Button } from "../buttons/button-component/button.component";
 
 export const Header = styled.div`

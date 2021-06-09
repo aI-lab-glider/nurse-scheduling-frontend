@@ -9,7 +9,7 @@ import {
   drawerHeaderHeight,
   fontFamilyPrimary,
   fontWeightExtra,
-} from "../../../assets/colors";
+} from "../../../assets/css-consts";
 
 export const Container = styled(Grid)`
   padding: 25px 24px 15px 24px;

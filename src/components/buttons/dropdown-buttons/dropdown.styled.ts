@@ -4,7 +4,7 @@
 import styled from "styled-components";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import { Button } from "../button-component/button.component";
-import { colors } from "../../../assets/colors";
+import { colors } from "../../../assets/css-consts";
 
 export const ColorSample = styled.div`
   width: 16px;

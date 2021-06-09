@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import * as S from "./worker-info.styled";
-import { colors } from "../../../../assets/colors";
+import { colors } from "../../../../assets/css-consts";
 import { ContractTypeHelper } from "../../../../helpers/contract-type.helper";
 import { StringHelper } from "../../../../helpers/string.helper";
 import { WorkerTypeHelper } from "../../../../helpers/worker-type.helper";

@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
-import { colors } from "../../../assets/colors";
+import { colors } from "../../../assets/css-consts";
 import { Button } from "../../common-components";
 
 export const Title = styled.h3`

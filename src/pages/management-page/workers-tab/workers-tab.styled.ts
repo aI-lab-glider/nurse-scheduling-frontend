@@ -12,7 +12,7 @@ import {
   fontSizeBase,
   fontSizeXs,
   headingLetterSpacing,
-} from "../../../assets/colors";
+} from "../../../assets/css-consts";
 import { Button } from "../../../components/common-components";
 
 export const Wrapper = styled.div`

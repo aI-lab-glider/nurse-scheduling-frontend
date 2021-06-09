@@ -9,7 +9,7 @@ import {
   fontFamilyPrimary,
   fontSizeBase,
   headingLetterSpacing,
-} from "../../../assets/colors";
+} from "../../../assets/css-consts";
 
 export const HeaderButton = styled(Button)`
   width: 187px;

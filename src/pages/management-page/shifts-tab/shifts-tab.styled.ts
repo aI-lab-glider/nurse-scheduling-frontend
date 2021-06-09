@@ -11,7 +11,7 @@ import {
   fontSizeBase,
   headingLetterSpacing,
   fontSizeXs,
-} from "../../../assets/colors";
+} from "../../../assets/css-consts";
 import { Button } from "../../../components/common-components";
 
 export const TableContainer = styled(MaterialTableContainer)`

@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
 import { Grid } from "@material-ui/core";
-import { alertHeight, colors, fontSizeBase } from "../../assets/colors";
+import { alertHeight, colors, fontSizeBase } from "../../assets/css-consts";
 import { ReactComponent } from "../../assets/images/done.svg";
 
 export const ShadowContainer = styled.div`

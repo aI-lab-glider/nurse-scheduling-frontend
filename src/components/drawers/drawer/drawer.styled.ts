@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Drawer as MaterialDrawer } from "@material-ui/core";
 import styled from "styled-components";
-import { headerHeight } from "../../../assets/colors";
+import { headerHeight } from "../../../assets/css-consts";
 
 export const Drawer = styled(MaterialDrawer)`
   & > [class*="paper"] {

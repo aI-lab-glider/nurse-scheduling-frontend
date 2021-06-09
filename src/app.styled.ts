@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
 import { fade } from "@material-ui/core";
-import { colors, headerHeight } from "./assets/colors";
+import { colors, headerHeight } from "./assets/css-consts";
 
 export const Root = styled.div`
   display: flex;
