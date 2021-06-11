@@ -4,8 +4,7 @@
 import classNames from "classnames/bind";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
-import { colors, fontSizeXs } from "../../../../assets/colors";
+import * as S from "./nametalbe-section.styled";
 import { WorkerInfo } from "../../../../hooks/use-worker-info";
 import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
@@ -61,7 +60,7 @@ export function NameTableSection({
 
   return (
     <>
-      <Wrapper>
+      <S.Wrapper>
         {data.map((workerName, index) => {
           const isNurse = type[workerName] === WorkerType.NURSE;
           const isLast = index === data.length - 1;
@@ -75,7 +74,7 @@ export function NameTableSection({
               }
               showErrorTitle={false}
             >
-              <Row
+              <S.Row
                 key={workerName}
                 onClick={(): void => openDrawer(workerName)}
                 className={classNames(
@@ -86,14 +85,14 @@ export function NameTableSection({
                   isLast && "isLast"
                 )}
               >
-                <LabelWrapper>
+                <S.LabelWrapper>
                   <span>{workerName}</span>
-                </LabelWrapper>
-              </Row>
+                </S.LabelWrapper>
+              </S.Row>
             </ErrorPopper>
           );
         })}
-      </Wrapper>
+      </S.Wrapper>
       <WorkerDrawerComponent
         open={open}
         onClose={closeDrawer}
@@ -104,46 +103,3 @@ export function NameTableSection({
     </>
   );
 }
-
-const Wrapper = styled.div`
-  align-items: center;
-  padding: 0;
-  width: 126px;
-`;
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  height: 40px;
-  width: 100%;
-
-  font-style: normal;
-  font-weight: 500;
-  font-size: ${fontSizeXs};
-
-  color: ${colors.primaryTextColor};
-  border-bottom: 1px solid ${colors.tableBorderGrey};
-  cursor: default;
-
-  &.babysitterMarker {
-    border-left: 3px solid ${colors.babysitterColor};
-    cursor: pointer;
-  }
-
-  &.nurseMarker {
-    border-left: 3px solid ${colors.nurseColor};
-    cursor: pointer;
-  }
-
-  &.isFirst {
-    border-top-left-radius: 10px;
-  }
-
-  &.isLast {
-    border-bottom-left-radius: 10px;
-    border-bottom: 0;
-  }
-`;
-
-const LabelWrapper = styled.div`
-  padding: 4px;
-`;

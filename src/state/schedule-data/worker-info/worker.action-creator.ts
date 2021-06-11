@@ -9,19 +9,19 @@ import { MonthModelHelper } from "../../../helpers/month-model.helper";
 import { VerboseDateHelper } from "../../../helpers/verbose-date.helper";
 import {
   getMonthRevision,
-  saveMonthRevision
+  saveMonthRevision,
 } from "../../../logic/data-access/month-revision-manager";
 import {
   PersistStorageManager,
   RevisionType,
   ScheduleKey,
-  ThunkFunction
+  ThunkFunction,
 } from "../../../logic/data-access/persistance-store.model";
 import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
 import {
   DEFAULT_CONTRACT_TYPE,
   DEFAULT_TEAM,
-  DEFAULT_WORKER_TYPE
+  DEFAULT_WORKER_TYPE,
 } from "../../../logic/schedule-parser/workers-info.parser";
 import { ScheduleDataActionCreator } from "../schedule-data.action-creator";
 import { MonthDataModel, ScheduleDataModel } from "../schedule-data.model";

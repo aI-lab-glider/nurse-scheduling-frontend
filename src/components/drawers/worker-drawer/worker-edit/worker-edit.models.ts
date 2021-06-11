@@ -1,8 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { makeStyles } from "@material-ui/core";
-import ScssVars from "../../../../assets/styles/styles/custom/_variables.module.scss";
 import { ContractTypeHelper } from "../../../../helpers/contract-type.helper";
 import { StringHelper } from "../../../../helpers/string.helper";
 import { WorkerTypeHelper } from "../../../../helpers/worker-type.helper";
@@ -32,25 +30,6 @@ export function translateAndCapitalize<T>(
   const translation = using.translate(what);
   return StringHelper.capitalize(translation);
 }
-
-export const useFormFieldStyles = makeStyles({
-  label: {
-    fontSize: ScssVars.fontSizeBase,
-    fontWeight: 700,
-    lineHeight: ScssVars.lineHeightXl,
-    marginLeft: "4%",
-  },
-  formInput: {
-    marginLeft: "4%",
-  },
-  errorLabel: {
-    fontSize: ScssVars.fontSizeSm,
-    fontWeight: 100,
-    marginLeft: "4%",
-    color: "red",
-    height: 20,
-  },
-});
 
 export interface WorkerInfoExtendedInterface {
   workerName: string;

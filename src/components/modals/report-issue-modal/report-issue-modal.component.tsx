@@ -1,11 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-
-import { TextField } from "@material-ui/core";
 import { send } from "emailjs-com";
 import React, { useState } from "react";
-import styled from "styled-components";
+import * as S from "./report-issue-modal.styled";
 import { t } from "../../../helpers/translations.helper";
 import { Button } from "../../buttons/button-component/button.component";
 import { useNotification } from "../../notification/notification.context";
@@ -80,11 +78,11 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   const body = (
     <div>
       {isSent ? (
-        <Message>{t("errorMessageWasSent")}</Message>
+        <S.Message>{t("errorMessageWasSent")}</S.Message>
       ) : (
         <>
-          <Message>{t("whatErrorOccurred")}</Message>
-          <Input
+          <S.Message>{t("whatErrorOccurred")}</S.Message>
+          <S.Input
             placeholder={t("provideErrorDescription")}
             value={issueDescription}
             onChange={onIssueDescriptionChange}
@@ -128,13 +126,3 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
     />
   );
 }
-
-const Message = styled.p`
-  font-weight: bolder;
-  letter-spacing: 0.75px;
-`;
-
-const Input = styled(TextField)`
-  letter-spacing: 0.25px;
-  margin-top: 0;
-`;

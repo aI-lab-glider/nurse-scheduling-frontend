@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
-import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
-import { colors, fontSizeBase, fontWeightBold } from "../../../../assets/colors";
+import { ErrorPopper } from "../../../../poppers/error-popper/error-popper.component";
+import { colors, fontSizeBase, fontWeightBold } from "../../../../../assets/css-consts";
 
 export const CellWrapper = styled.div`
   flex: 1 1 auto;
@@ -35,28 +35,33 @@ export const CellWrapper = styled.div`
     box-shadow: 0 4px 7px rgba(16, 32, 70, 0.2), 0 0 7px rgba(16, 32, 70, 0.2);
   }
 `;
+
 export const StyledErrorPopper = styled(ErrorPopper)`
   height: 100%;
   width: 100%;
   padding: 4px 0 4px 0;
 `;
+
 export const ContentWrapper = styled.div`
   height: 100%;
   width: 100%;
   padding: 4px 0 4px 0;
 `;
+
 export const Content = styled.div`
   display: flex;
   justify-content: flex-start;
   height: 100%;
   width: 100%;
 `;
+
 export const ShiftBar = styled.div`
   width: 4px;
   height: 100%;
   margin-right: 4px;
   border-radius: 2px 0 0 2px;
 `;
+
 export const Shift = styled.div`
   display: flex;
   flex: 1;

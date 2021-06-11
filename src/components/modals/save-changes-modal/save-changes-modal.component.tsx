@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
 import { Button } from "../../buttons/button-component/button.component";
-import DefaultModal  from "../modal.component";
+import DefaultModal from "../modal.component";
 import { t } from "../../../helpers/translations.helper";
 import { getPresentSchedule } from "../../../state/schedule-data/selectors";
 

@@ -22,7 +22,7 @@ export const colors = {
   weekendHeader: "rgba(60, 105, 168, 0.3)",
   cellOtherMonthBackgroundColor: "#f5f9ff",
   currMonthBackground: "#ecf4ff",
-  white: "#FFFFFF",
+  white: "#ffffff",
   gray100: "#f6f9fc",
   gray200: "#e9ecef",
   gray300: "#e3e3e3",
@@ -56,6 +56,7 @@ export const fontSizeXl = `${1.428}rem`;
 
 export const fontWeightLight = 300;
 export const fontWeightNormal = 400;
+export const fontWeightMedium = 500;
 export const fontWeightBold = 600;
 export const fontWeightExtra = "bold";
 export const fontWeightBase = fontWeightNormal;
@@ -65,3 +66,13 @@ export const iconSizeRegular = "2.375rem";
 export const iconSizeSm = "1.5rem";
 export const iconSizeLg = "3.7rem";
 export const iconSizeXl = "5rem";
+
+export const headingLetterSpacing = "0.025em";
+
+export const alertHeight = "52px";
+
+export const headerHeight = "52px";
+export const drawerHeaderHeight = "67px";
+export const footerHeight = "72px";
+
+export const lineHeightXl = "1.75rem";

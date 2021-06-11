@@ -5,7 +5,7 @@ import React, { useCallback, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import * as Sentry from "@sentry/react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./schedule-page.styled";
 import { ScheduleEditPage } from "./edit-tab/schedule-edit.page";
 import { ScheduleReadOnlyPage } from "./read-only-tab/schedule-read-only.page";
 import { usePersistentDrawer } from "../../components/drawers/drawer/persistent-drawer-context";
@@ -51,7 +51,7 @@ export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Elem
   }, [editModeHandler, setDrawerOpen]);
 
   return (
-    <Wrapper>
+    <S.Wrapper>
       <Sentry.ErrorBoundary fallback={fallback} onError={onError}>
         {isCorrupted ? (
           <CorruptedScheduleComponent />
@@ -62,14 +62,6 @@ export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Elem
           </Switch>
         )}
       </Sentry.ErrorBoundary>
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-  min-height: 100vh;
-`;

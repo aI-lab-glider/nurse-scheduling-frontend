@@ -10,7 +10,7 @@ import {
   MonthFoundationInfoModel,
   MonthWorkerShiftsModel,
   ScheduleDataModel,
-  validateMonthDM
+  validateMonthDM,
 } from "../../state/schedule-data/schedule-data.model";
 import { cropScheduleDMToMonthDM } from "../schedule-container-converter/schedule-container-converter";
 import { getMonthRevision, saveMonthRevision } from "./month-revision-manager";
@@ -72,7 +72,7 @@ function updateNextMonthShifts(
   nextMonthDM: MonthDataModel,
   scheduleDataModel: ScheduleDataModel,
   missingDays: number
-) : MonthWorkerShiftsModel{
+): MonthWorkerShiftsModel {
   const newShifts = _.cloneDeep(nextMonthDM.shifts);
 
   Object.keys(nextMonthDM.shifts).forEach((key) => {

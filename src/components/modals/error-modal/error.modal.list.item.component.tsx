@@ -3,8 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import React from "react";
-import styled from "styled-components";
-import { colors } from "../../../assets/colors";
+import * as S from "./error.modal.list.item.styled";
 import { TranslationHelper } from "../../../helpers/translations.helper";
 import { useMonthInfo } from "../../../hooks/use-month-info";
 import { VerboseDate } from "../../../state/schedule-data/foundation-info/foundation-info.model";
@@ -35,57 +34,17 @@ export default function ModalErrorListItem({ error }: Options): JSX.Element {
 
   const displayTitle = error.title && error.title !== "Nie rozpoznano błędu";
   return (
-    <Wrapper>
-      <RedBar />
+    <S.Wrapper>
+      <S.RedBar />
       <div>
         {displayTitle && (
-          <Title>
+          <S.Title>
             {error.title === "date" ? `${errorDay} ${monthName}` : `${error.title}`}
             {errorDayIndex > -1 && error.title !== "date" ? `, ${errorDay} ${monthName}` : ""}
-          </Title>
+          </S.Title>
         )}
-        <Content dangerouslySetInnerHTML={{ __html: error.message || "" }} />
+        <S.Content dangerouslySetInnerHTML={{ __html: error.message || "" }} />
       </div>
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-
-  border: 1px solid ${colors.errorListItemBorder};
-  border-radius: 2px;
-  margin: 0 24px 8px 24px;
-`;
-
-const RedBar = styled.div`
-  border-radius: 4px;
-  width: 4.5px;
-  position: absolute;
-  height: 100%;
-  background-color: ${colors.errorRed};
-  left: 0;
-`;
-
-const Title = styled.div`
-  padding: 10px 0 0 25px;
-  color: ${colors.errorDateText};
-  size: 14px;
-`;
-
-const Content = styled.div`
-  position: static;
-  color: ${colors.primaryTextColor};
-  size: 13px;
-  margin: 10px;
-  padding-left: 15px;
-  text-align: justify;
-  strong {
-    letter-spacing: 1.5px;
-    font-weight: bolder;
-  }
-`;

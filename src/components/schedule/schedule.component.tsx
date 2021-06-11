@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./schedule.styled";
 import { t } from "../../helpers/translations.helper";
 import { useTeams } from "../../hooks/use-teams";
 import { WorkerHourInfo } from "../../logic/schedule-logic/worker-hours-info.logic";
@@ -32,14 +32,14 @@ export function ScheduleComponent(): JSX.Element {
   return (
     <div style={{ margin: "20 0" }}>
       <div>
-        <TimeHeader>
-          <TimeTableContainer>
+        <S.TimeHeader>
+          <S.TimeTableContainer>
             <TimeTableRow />
-          </TimeTableContainer>
-          <SummaryContainer>
+          </S.TimeTableContainer>
+          <S.SummaryContainer>
             <OvertimeHeaderRow data={Object.values(WorkerHourInfo.summaryTranslations)} />
-          </SummaryContainer>
-        </TimeHeader>
+          </S.SummaryContainer>
+        </S.TimeHeader>
 
         {Object.entries(teams).map(([teamName, workers], index) => (
           <ScheduleFoldingSection name={teamName} key={teamName}>
@@ -54,21 +54,3 @@ export function ScheduleComponent(): JSX.Element {
     </div>
   );
 }
-const TimeHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: sticky;
-
-  top: 52px;
-  z-index: 3;
-  flex: 1;
-  padding-top: 19px;
-  width: 1500px;
-`;
-
-const TimeTableContainer = styled.div`
-  margin-left: 128px;
-`;
-const SummaryContainer = styled.div`
-  margin-left: 32px;
-`;

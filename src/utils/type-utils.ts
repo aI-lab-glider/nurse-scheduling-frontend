@@ -15,4 +15,3 @@ export function isAllValuesDefined(values: unknown[]): boolean {
   const isAnyValueUndefined = _.some(values, (argument) => _.isNil(argument));
   return !isAnyValueUndefined;
 }
-

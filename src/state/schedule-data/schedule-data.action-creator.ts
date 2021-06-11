@@ -6,31 +6,31 @@ import _ from "lodash";
 import { NewShiftTemplate } from "../../components/shifts-drawer/shift-edit-drawer.component";
 import {
   getMonthRevision,
-  getOrGenerateMonthRevision
+  getOrGenerateMonthRevision,
 } from "../../logic/data-access/month-revision-manager";
 import {
   PersistStorageManager,
   RevisionType,
   ScheduleKey,
-  ThunkFunction
+  ThunkFunction,
 } from "../../logic/data-access/persistance-store.model";
 import { saveSchedule } from "../../logic/data-access/schedule-persistance-manager";
 import {
-  cropScheduleDMToMonthDM, extendMonthDMRevisionToScheduleDM
+  cropScheduleDMToMonthDM,
+  extendMonthDMRevisionToScheduleDM,
 } from "../../logic/schedule-container-converter/schedule-container-converter";
 import { ActionModel } from "../../utils/action.model";
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../app.reducer";
 import { PrimaryMonthRevisionDataModel } from "../application-state.model";
 import {
   AddMonthRevisionAction,
-  PrimaryRevisionAction
+  PrimaryRevisionAction,
 } from "./primary-revision/primary-revision.reducer";
 import { MonthDataModel, ScheduleDataModel } from "./schedule-data.model";
 import { ScheduleErrorMessageModel } from "./schedule-errors/schedule-error-message.model";
 import { cleanScheduleErrors } from "./schedule-errors/schedule-errors.reducer";
 import { createActionName, ScheduleActionModel, ScheduleActionType } from "./schedule.actions";
 import { Shift } from "./shifts-types/shift-types.model";
-
 
 export class ScheduleDataActionCreator {
   // #region Update state
