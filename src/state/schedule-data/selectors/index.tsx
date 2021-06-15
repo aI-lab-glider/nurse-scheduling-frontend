@@ -120,3 +120,7 @@ const selectSchedule = (
 ) => state.actualState[targetSchedule].present;
 
 export const getSchedule = createSelector(selectSchedule, (state) => state);
+
+const selectTheme = (state: ApplicationStateModel) => state.theme;
+
+export const getTheme = createSelector(selectTheme, (state) => state);

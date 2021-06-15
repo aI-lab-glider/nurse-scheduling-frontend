@@ -15,6 +15,7 @@ import { scheduleErrorsReducer } from "./schedule-data/schedule-errors/schedule-
 import { revisionInfoReducer } from "./schedule-data/schedule-condition/revision-info.reducer";
 import modeInfoReducer from "./app-condition/mode-info-reducer";
 import { primaryRevisionReducer } from "./schedule-data/primary-revision/primary-revision.reducer";
+import { themeReducer } from "./schedule-data/theme/theme.reducer";
 
 export type CombinedReducers<StateModel> = {
   [key in keyof StateModel]: <T, U>(state: T, action: ActionModel<U>) => T;
@@ -42,4 +43,5 @@ const monthStateReducer = combineReducers({
 
 export const appReducer = combineReducers({
   actualState: monthStateReducer,
+  theme: themeReducer,
 } as CombinedReducers<ApplicationStateModel>);
