@@ -14,14 +14,10 @@ export interface ModalOptions {
   body: JSX.Element;
   footer: JSX.Element;
   closeOptions?: () => void;
-  classNames?: Record<
-    "modal" | "paper" | "titleMargin" | "modalBody" | "footer" | "exitButton" | "title",
-    string
-  >;
 }
 
 export default function DefaultModal(options: ModalOptions): JSX.Element {
-  const { setOpen, open, title, body, footer, closeOptions, classNames } = options;
+  const { setOpen, open, title, body, footer, closeOptions } = options;
 
   const handleClose = (): void => {
     closeOptions ? closeOptions() : setOpen(false);
@@ -33,7 +29,6 @@ export default function DefaultModal(options: ModalOptions): JSX.Element {
       <S.ModalWrapper
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        className={classNames?.modal}
         open={open}
         onClose={handleClose}
         closeAfterTransition
@@ -44,15 +39,15 @@ export default function DefaultModal(options: ModalOptions): JSX.Element {
       >
         <S.FadeWrapper in={open}>
           <S.ContentWrapper>
-            <S.HeaderWrapper className={classNames?.titleMargin}>
+            <S.HeaderWrapper>
               <S.Title>{title}</S.Title>
-              <S.ExitButton className={classNames?.exitButton} onClick={handleClose}>
+              <S.ExitButton onClick={handleClose}>
                 <MdClose />
               </S.ExitButton>
             </S.HeaderWrapper>
             <Divider />
-            <S.BodyWrapper className={classNames?.modalBody}>{body}</S.BodyWrapper>
-            <S.FooterWrapper className={classNames?.footer}>{footer}</S.FooterWrapper>
+            <S.BodyWrapper>{body}</S.BodyWrapper>
+            <S.FooterWrapper>{footer}</S.FooterWrapper>
           </S.ContentWrapper>
         </S.FadeWrapper>
       </S.ModalWrapper>
