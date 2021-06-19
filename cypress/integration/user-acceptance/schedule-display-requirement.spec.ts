@@ -23,15 +23,4 @@ describe("Display schedule", () => {
       });
     });
   });
-
-  // TODO: make more generic test
-  // it("Should be able to read name and surname of worker", () => {
-  //   cy.get(".nametable").children().eq(0).children().eq(0).contains("pielęgniarka 1");
-
-  //   cy.get(".nametable").children().eq(0).children().eq(4).contains("pielęgniarka 5");
-
-  //   cy.get(".nametable").children().eq(1).children().eq(1).contains("opiekunka 10");
-
-  //   cy.get(".nametable").children().eq(1).children().eq(8).contains("opiekunka 8");
-  // });
 });

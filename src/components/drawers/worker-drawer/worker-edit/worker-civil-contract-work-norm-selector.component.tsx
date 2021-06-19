@@ -37,11 +37,11 @@ export function WorkerCivilContractWorkNormSelector({
   const maximumWorkHoursForMonth = requiredHours * 2;
   function isTimeValid(): boolean {
     const workerTimeCivilTimeAsNumber = parseInt(workerCivilTime, 10);
-    const isTimeValid =
+    const isValid =
       !_.isNaN(workerTimeCivilTimeAsNumber) &&
       workerTimeCivilTimeAsNumber <= maximumWorkHoursForMonth;
-    setIsFormValid?.(isTimeValid);
-    return isTimeValid;
+    setIsFormValid?.(isValid);
+    return isValid;
   }
 
   function toWorkerNorm(workerHours: string | number): number {

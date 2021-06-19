@@ -4,7 +4,6 @@
 import styled from "styled-components";
 import { colors } from "../../assets/css-consts";
 
-// TODO: Simplify that
 export const Wrapper = styled.div`
   flex: 1;
   flex-direction: row;

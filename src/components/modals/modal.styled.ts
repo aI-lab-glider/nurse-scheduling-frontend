@@ -15,11 +15,13 @@ export const ModalWrapper = styled(Modal)`
 `;
 
 export const ContentWrapper = styled(Paper)`
-  background-color: ${colors.white};
-  box-shadow: -3px 4px 20px 4px ${fade(colors.black, 0.15)};
-  max-height: 40%;
-  max-width: 35%;
-  min-width: 350px;
+  && {
+    background-color: ${colors.white};
+    box-shadow: -3px 4px 20px 4px ${fade(colors.black, 0.15)};
+    max-height: 40%;
+    max-width: 35%;
+    min-width: 350px;
+  }
 `;
 
 export const HeaderWrapper = styled.div`
@@ -35,9 +37,11 @@ export const Title = styled.h1`
 `;
 
 export const ExitButton = styled(IconButton)`
-  color: ${colors.primary};
-  align-items: center;
-  padding-right: 0;
+  && {
+    color: ${colors.primary};
+    align-items: center;
+    margin-right: -12px;
+  }
 `;
 
 export const BodyWrapper = styled(Box)`

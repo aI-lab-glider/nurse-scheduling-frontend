@@ -11,7 +11,7 @@ interface ComponentVisibleInterface {
 
 export default function useComponentVisible(initialIsVisible: boolean): ComponentVisibleInterface {
   const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible);
-  const componentContainer = useRef(null) as RefObject<HTMLElement>;
+  const componentContainer = useRef(null);
 
   useEffect((): { (): void } => {
     const handleClickOutside = (event): void => {

@@ -53,7 +53,7 @@ export default function ShiftEditComponent({
     selectedShift.isWorkingShift ? "working" : "not_working"
   );
 
-  function getButtonLabel(mode: ShiftEditComponentMode): string {
+  function getButtonLabel(): string {
     switch (mode) {
       case ShiftEditComponentMode.EDIT:
         return i18next.t("shiftEdit");
@@ -207,7 +207,7 @@ export default function ShiftEditComponent({
           }}
           style={{ marginLeft: 0 }}
         >
-          {getButtonLabel(mode)}
+          {getButtonLabel()}
         </Button>
       </Grid>
     </Grid>
