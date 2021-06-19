@@ -123,29 +123,37 @@ export class WorkerHourInfo {
       year = info.year;
     }
     const { dates } = actualScheduleModel.month_info;
-    return this.fromWorkerInfo(
-      shifts[workerName],
-      primaryScheduleModel?.shifts[workerName],
-      time[workerName],
-      workerContractType,
+    return this.fromWorkerInfo({
+      shifts: shifts[workerName],
+      primaryScheduleWorkerShifts: primaryScheduleModel?.shifts[workerName],
+      workerNorm: time[workerName],
+      workerEmploymentContract: workerContractType,
       month,
       year,
       dates,
-      actualScheduleModel.shift_types
-    );
+      shiftTypes: actualScheduleModel.shift_types,
+    });
   }
 
-  // to test
-  public static fromWorkerInfo(
-    shifts: ShiftCode[],
-    primaryScheduleWorkerShifts: MonthDataArray<ShiftCode>,
-    workerNorm: number,
-    workerEmploymentContract: ContractType,
-    month: number,
-    year: number,
-    dates: number[],
-    shiftTypes: ShiftTypesDict
-  ): WorkerHourInfo {
+  public static fromWorkerInfo({
+    shifts,
+    primaryScheduleWorkerShifts,
+    workerNorm,
+    workerEmploymentContract,
+    month,
+    year,
+    dates,
+    shiftTypes,
+  }: {
+    shifts: ShiftCode[];
+    primaryScheduleWorkerShifts: MonthDataArray<ShiftCode>;
+    workerNorm: number;
+    workerEmploymentContract: ContractType;
+    month: number;
+    year: number;
+    dates: number[];
+    shiftTypes: ShiftTypesDict;
+  }): WorkerHourInfo {
     const { verboseDates } = new MonthInfoLogic(month, year, dates);
     const monthName = TranslationHelper.englishMonths[month];
     return this.calculateWorkHoursInfo({

@@ -99,8 +99,8 @@ export function isMonthModelEmpty(monthDataModel: MonthDataModel): boolean {
     MonthDataModel,
     "employee_info" | "month_info" | "shifts"
   >)[] = ["employee_info", "month_info", "shifts"];
-  return requiredFields.every((field) => {
-    const requiredObject = monthDataModel[field];
+  return requiredFields.every((requiredField) => {
+    const requiredObject = monthDataModel[requiredField];
     return Object.values(requiredObject).every((field) => _.isEmpty(field));
   });
 }

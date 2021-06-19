@@ -67,7 +67,9 @@ export function useScheduleConverter(): UseScheduleConverterOutput {
         case ScheduleConverterActionType.UpdateScheduleModel:
           return { ...(action.payload ?? initialConverterState) };
         default:
-          throw Error(`Unsupported action ${action!.type}`);
+          // In other case typescript compiler rejects, to compile code
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          throw Error(`Unsupported action ${(action as any).type}`);
       }
     },
     initialConverterState
