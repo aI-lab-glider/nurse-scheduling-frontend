@@ -31,26 +31,24 @@ export function ScheduleComponent(): JSX.Element {
 
   return (
     <div style={{ margin: "20 0" }}>
-      <div>
-        <S.TimeHeader>
-          <S.TimeTableContainer>
-            <TimeTableRow />
-          </S.TimeTableContainer>
-          <S.SummaryContainer>
-            <OvertimeHeaderRow data={Object.values(WorkerHourInfo.summaryTranslations)} />
-          </S.SummaryContainer>
-        </S.TimeHeader>
+      <S.TimeHeader>
+        <S.TimeTableContainer>
+          <TimeTableRow />
+        </S.TimeTableContainer>
+        <S.SummaryContainer>
+          <OvertimeHeaderRow data={Object.values(WorkerHourInfo.summaryTranslations)} />
+        </S.SummaryContainer>
+      </S.TimeHeader>
 
-        {Object.entries(teams).map(([teamName, workers], index) => (
-          <ScheduleFoldingSection name={teamName} key={teamName}>
-            <WorkerInfoSection sectionIndex={index} data={workers} sectionName={teamName} />
-          </ScheduleFoldingSection>
-        ))}
-
-        <ScheduleFoldingSection name={t("scheduleSectionNameInformation")}>
-          <FoundationInfoComponent />
+      {Object.entries(teams).map(([teamName, workers], index) => (
+        <ScheduleFoldingSection name={teamName} key={teamName}>
+          <WorkerInfoSection sectionIndex={index} data={workers} sectionName={teamName} />
         </ScheduleFoldingSection>
-      </div>
+      ))}
+
+      <ScheduleFoldingSection name={t("scheduleSectionNameInformation")}>
+        <FoundationInfoComponent />
+      </ScheduleFoldingSection>
     </div>
   );
 }

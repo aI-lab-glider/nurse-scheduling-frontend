@@ -61,9 +61,7 @@ export function DropdownButtons({
       >
         <S.PlaceholderButtonContent>
           <span>{mainLabel}</span>
-          <div>
-            <ArrowDropDownIcon />
-          </div>
+          <ArrowDropDownIcon />
         </S.PlaceholderButtonContent>
       </S.PlaceholderButton>
       <Popper

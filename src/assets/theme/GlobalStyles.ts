@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { createGlobalStyle } from "styled-components";
-
 export const GlobalStyle = createGlobalStyle`
 * {
     @import url('../fonts/fonts.css');
@@ -11,8 +10,7 @@ export const GlobalStyle = createGlobalStyle`
     padding:0;
 
 
-    //Main textcolor from FIGMA
-    /* color: ${({ theme }) => theme.primaryText} */
+ 
 }
 
 *,
@@ -24,8 +22,7 @@ export const GlobalStyle = createGlobalStyle`
 html {
 
 
-    //Main bakcground-color from FIGMA
-    /* background-color: ${({ theme }) => theme.background} */
+
 
 
   font-family: sans-serif; // 2
@@ -38,8 +35,7 @@ html {
 
 body {
 
-    //Main background-color from FIGMA
-    /* background-color: ${({ theme }) => theme.background} */
+
 
   font-size: 1rem;
   font-weight: 300;

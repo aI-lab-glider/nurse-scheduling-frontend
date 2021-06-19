@@ -3,7 +3,4 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
 
-export const ScheduleWrapper = styled.div`
-  margin: auto;
-  min-height: 80vh;
-`;
+export const ScheduleWrapper = styled.div``;
