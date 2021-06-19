@@ -3,17 +3,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import * as _ from "lodash";
-import { ActionModel } from "../../../utils/action.model";
 import { PrimaryMonthRevisionDataModel } from "../../application-state.model";
 import { primaryRevisionInitialState } from "./primary-revision.initial-state";
 
-export enum PrimaryRevisionAction {
-  ADD_MONTH_PRIMARY_REVISION = "ADD_MONTH_BASE_REVISION",
-}
-
-export interface AddMonthRevisionAction extends ActionModel<PrimaryMonthRevisionDataModel> {
-  type: PrimaryRevisionAction.ADD_MONTH_PRIMARY_REVISION;
-}
 export const addMonthPrimaryRevision = createAction<PrimaryMonthRevisionDataModel>(
   "schedule/addMonthPrimaryRevision"
 );
