@@ -38,7 +38,7 @@ export function WorkersCalendarCell(params: CellOptions): JSX.Element {
   }
   return (
     <S.ShiftCell>
-      <S.ShiftTop className={notCurrentMonth}>{date!.date}</S.ShiftTop>
+      <S.ShiftTop className={notCurrentMonth}>{date.date}</S.ShiftTop>
       <S.ShiftBottom style={{ color: shiftColor, backgroundColor: background }}>
         <S.ShiftBar style={{ backgroundColor: shiftColor }} />
         <S.ShiftSymbol>{params.keepOn ? void 0 : shiftCode}</S.ShiftSymbol>

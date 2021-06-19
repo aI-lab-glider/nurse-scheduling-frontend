@@ -3,8 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import _ from "lodash";
 import React from "react";
-import * as S from "./workers-calendar.styled";
 import { useSelector } from "react-redux";
+import * as S from "./workers-calendar.styled";
 import { useMonthInfo } from "../../hooks/use-month-info";
 import { applyScheduleStyling } from "../../hooks/apply-schedule-styling/apply-schedule-styling";
 import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";

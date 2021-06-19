@@ -7,11 +7,11 @@ import { drawerHeaderHeight, headerHeight } from "../../../assets/css-consts";
 import { StyleProps } from "./persistent-drawer.component";
 
 export const Drawer = styled(Box)<StyleProps>`
-  width: ${({ width }) => `${width}px`};
+  width: ${({ width }) => width}px;
   height: calc(
     100vh -
-      ${parseInt(headerHeight!.slice(0, -2), 10) +
-      parseInt(drawerHeaderHeight!.slice(0, -2), 10) +
+      ${parseInt(headerHeight.slice(0, -2), 10) +
+      parseInt(drawerHeaderHeight.slice(0, -2), 10) +
       1}px
   );
 `;

@@ -46,7 +46,10 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
 
   return (
     <S.MainRow id="mainRow" data-cy={baseRowDataCy(rowIndex)}>
-      {data.map((dataItem = { value: defaultEmpty }, cellIndex) => (
+      {data.map((
+        dataItem = { value: defaultEmpty }, // nosonar
+        cellIndex
+      ) => (
         <CellComponent
           {...{
             ...options,

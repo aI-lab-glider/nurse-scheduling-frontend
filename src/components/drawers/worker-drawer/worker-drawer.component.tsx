@@ -57,7 +57,9 @@ export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX
       case WorkerDrawerMode.INFO:
         return <WorkerInfoComponent workerName={options.worker.name} />;
       default:
-        throw new Error(`Cannot return component for mode ${options!.mode}`);
+        // In other case typescript compiler rejects, to compile code
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        throw new Error(`Cannot return component for mode ${(options as any).mode}`);
     }
   };
 

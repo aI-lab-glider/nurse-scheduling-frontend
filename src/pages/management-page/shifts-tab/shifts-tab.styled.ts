@@ -22,7 +22,7 @@ export const TableContainer = styled(MaterialTableContainer)`
 export const TableCell = styled(MaterialTableCell)`
   color: black;
   font-weight: normal;
-  font-wize: ${fontSizeBase};
+  font-size: ${fontSizeBase};
   font-family: ${fontFamilyPrimary};
   letter-spacing: ${headingLetterSpacing};
   text-align: left;
@@ -42,5 +42,5 @@ export const ColorSample = styled.div`
   width: 18px;
   height: 18px;
   border-radius: 24px;
-  background: ${({ color }) => `#${color}`};
+  background: #${({ color }) => color};
 `;
