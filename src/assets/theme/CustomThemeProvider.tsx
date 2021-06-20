@@ -12,9 +12,9 @@ interface ThemeProviderProps {
   children: ReactNode;
 }
 
-const TProvider: React.FC<ThemeProviderProps> = ({ children }: ThemeProviderProps) => {
+const CustomThemeProvider: React.FC<ThemeProviderProps> = ({ children }: ThemeProviderProps) => {
   const themeKey = useSelector(getThemeKey);
   return <ThemeProvider theme={themes[themeKey]}>{children}</ThemeProvider>;
 };
 
-export default TProvider;
+export default CustomThemeProvider;

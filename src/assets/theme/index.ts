@@ -7,7 +7,7 @@ import FontStyles from "./FontStyles";
 
 export type ThemeKey = "purple";
 
-export interface ThemeInterface {
+export interface CustomThemeProps {
   primary: string;
   primaryHover: string;
   primaryText: string;
@@ -21,9 +21,9 @@ const ThemeConstants = {
 };
 type ThemeConstantsType = typeof ThemeConstants;
 
-export interface Theme extends ThemeInterface, ThemeConstantsType {}
+export interface Theme extends CustomThemeProps, ThemeConstantsType {}
 
-const enchanceTheme = (theme: ThemeInterface): Theme => ({ ...theme, ...ThemeConstants });
+const enchanceTheme = (theme: CustomThemeProps): Theme => ({ ...theme, ...ThemeConstants });
 
 export const themes = {
   purple: enchanceTheme(purple),

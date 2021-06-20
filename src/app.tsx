@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-import ThemeProvider from "./assets/theme/ThemeProvider";
+import CustomThemeProvider from "./assets/theme/CustomThemeProvider";
 import schedule from "./assets/devMode/schedule";
 import { ScheduleDataModel } from "./state/schedule-data/schedule-data.model";
 import { HeaderComponent } from "./components/common-components";
@@ -109,7 +109,7 @@ function App(): JSX.Element {
     <>
       <GlobalStyle />
       <MuiThemeProvider theme={theme}>
-        <ThemeProvider>
+        <CustomThemeProvider>
           <NotificationProvider>
             <PersistentDrawerProvider>
               <ImportModalProvider>
@@ -131,7 +131,7 @@ function App(): JSX.Element {
               </ImportModalProvider>
             </PersistentDrawerProvider>
           </NotificationProvider>
-        </ThemeProvider>
+        </CustomThemeProvider>
       </MuiThemeProvider>
     </>
   );
