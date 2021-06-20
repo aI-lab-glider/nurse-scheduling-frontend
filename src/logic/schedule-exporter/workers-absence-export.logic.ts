@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import xlsx from "exceljs";
+import * as _ from "lodash";
 import { ABSENCE_HEADERS, EMPTY_ROW } from "../../helpers/parser.helper";
 import { TranslationHelper } from "../../helpers/translations.helper";
 import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
@@ -59,7 +60,7 @@ export class WorkersAbsenceExportLogic {
       this.scheduleModel
     );
 
-    const colLens = workersAbsenceInfoArray[0].map((_, colIndex) =>
+    const colLens = workersAbsenceInfoArray[0].map((absence, colIndex) =>
       Math.max(...workersAbsenceInfoArray.map((row) => row[colIndex]?.toString().length ?? 0))
     );
 
@@ -148,6 +149,7 @@ export class WorkersAbsenceExportLogic {
   }
 
   private createAbsenceInfoSection(scheduleModel: ScheduleDataModel): AbsenceInfo {
+    scheduleModel = _.cloneDeep(scheduleModel);
     const cellsToMerge: number[][] = [];
     const names = Object.keys(scheduleModel.employee_info?.type);
     const month = scheduleModel.schedule_info.month_number;
