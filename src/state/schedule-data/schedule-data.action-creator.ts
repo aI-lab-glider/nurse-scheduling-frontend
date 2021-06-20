@@ -22,10 +22,7 @@ import {
 import { ActionModel } from "../../utils/action.model";
 import { PERSISTENT_SCHEDULE_NAME, TEMPORARY_SCHEDULE_NAME } from "../app.reducer";
 import { PrimaryMonthRevisionDataModel } from "../application-state.model";
-import {
-  AddMonthRevisionAction,
-  PrimaryRevisionAction,
-} from "./primary-revision/primary-revision.reducer";
+import { addMonthPrimaryRevision } from "./primary-revision/primary-revision.reducer";
 import { MonthDataModel, ScheduleDataModel } from "./schedule-data.model";
 import { ScheduleErrorMessageModel } from "./schedule-errors/schedule-error-message.model";
 import { cleanScheduleErrors } from "./schedule-errors/schedule-errors.reducer";
@@ -47,12 +44,7 @@ export class ScheduleDataActionCreator {
         };
         dispatch(addNewSchedule);
       });
-
-      const addPrimaryRevision = {
-        type: PrimaryRevisionAction.ADD_MONTH_PRIMARY_REVISION,
-        payload: baseSchedule,
-      } as AddMonthRevisionAction;
-      dispatch(addPrimaryRevision);
+      dispatch(addMonthPrimaryRevision(baseSchedule));
     };
   }
 
