@@ -4,9 +4,9 @@
 
 import React from "react";
 
-//TextStyles from FIGMA
+// TextStyles from FIGMA
 
-//? Roboto
+// ? Roboto
 
 const RobotoNormal: React.CSSProperties = {
   fontFamily: "Roboto",

@@ -19,9 +19,9 @@ const ThemeConstants = {
   fonts: ["Roboto"],
   FontStyles,
 };
-type TC = typeof ThemeConstants;
+type ThemeConstantsType = typeof ThemeConstants;
 
-export interface Theme extends ThemeInterface, TC {}
+export interface Theme extends ThemeInterface, ThemeConstantsType {}
 
 const enchanceTheme = (theme: ThemeInterface): Theme => ({ ...theme, ...ThemeConstants });
 

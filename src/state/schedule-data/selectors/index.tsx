@@ -123,4 +123,4 @@ export const getSchedule = createSelector(selectSchedule, (state) => state);
 
 const selectTheme = (state: ApplicationStateModel) => state.theme;
 
-export const getTheme = createSelector(selectTheme, (state) => state);
+export const getThemeKey = createSelector(selectTheme, (state) => state.key);

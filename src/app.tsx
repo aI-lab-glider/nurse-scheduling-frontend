@@ -105,7 +105,7 @@ function App(): JSX.Element {
   }, []);
 
   return (
-    // Two theme prociders: https://github.com/mui-org/material-ui/issues/10098#issuecomment-574162533
+    // Two theme providers: https://github.com/mui-org/material-ui/issues/10098#issuecomment-574162533
     <>
       <GlobalStyle />
       <MuiThemeProvider theme={theme}>
