@@ -7,6 +7,7 @@ import { MonthDataModel, ScheduleDataModel } from "./schedule-data/schedule-data
 import { GroupedScheduleErrors } from "./schedule-data/schedule-errors/schedule-error.model";
 import { Opaque } from "../utils/type-utils";
 import { ScheduleMode } from "../components/schedule/schedule-state.model";
+import { ThemeState } from "./schedule-data/theme/theme.model";
 
 export type PrimaryMonthRevisionDataModel = Opaque<"PrimaryScheduleRevision", MonthDataModel>;
 export interface ScheduleStateModel {
@@ -20,4 +21,5 @@ export interface ScheduleStateModel {
 
 export interface ApplicationStateModel {
   actualState: ScheduleStateModel;
+  theme: ThemeState;
 }
