@@ -13,18 +13,18 @@ export const Wrapper = styled.div`
 export const Row = styled.div`
   display: flex;
   align-items: center;
-  height: 40px;
+  height: 26px;
   width: 100%;
 
   font-style: normal;
   font-weight: 500;
   font-size: ${fontSizeXs};
 
-  color: ${colors.primaryTextColor};
+  /* color: ${colors.primaryTextColor}; */
   border-bottom: 1px solid ${colors.tableBorderGrey};
   cursor: default;
 
-  &.babysitterMarker {
+  /* &.babysitterMarker {
     border-left: 3px solid ${colors.babysitterColor};
     cursor: pointer;
   }
@@ -32,7 +32,7 @@ export const Row = styled.div`
   &.nurseMarker {
     border-left: 3px solid ${colors.nurseColor};
     cursor: pointer;
-  }
+  } */
 
   &.isFirst {
     border-top-left-radius: 10px;

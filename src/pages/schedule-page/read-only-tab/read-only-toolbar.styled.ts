@@ -9,7 +9,8 @@ export const Wrapper = styled.div`
   flex-direction: row;
   align-items: center;
   width: 100%;
-  margin: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 export const RevisionWrapper = styled.div`

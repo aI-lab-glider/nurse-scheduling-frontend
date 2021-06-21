@@ -4,28 +4,24 @@
 import styled from "styled-components";
 import { TabList as MaterialTabList, TabPanel as MaterialTabPanel } from "@material-ui/lab";
 import { Tab as MaterialTab } from "@material-ui/core";
-import {
-  fontWeightMedium,
-  fontWeightBold,
-  colors,
-  fontSizeLg,
-  fontFamilyPrimary,
-} from "../../../assets/css-consts";
+import { colors } from "../../../assets/css-consts";
 
 export const Wrapper = styled.div`
-  width: 100%;
-  margin-top: 52px;
+  width: calc(100% - 20px);
+  margin-top: 42px;
+  margin-left: 10px;
+  margin-right: 10px;
 `;
 
 export const HeaderWrapper = styled.div`
   width: 100%;
-  padding: 0 20px;
 `;
 
 export const TabList = styled(MaterialTabList)`
   & span[class*="indicator"] {
-    background-color: ${colors.primary};
+    background-color: ${({ theme }) => theme.primary};
     height: 3px;
+    bottom: 7px;
     outline: none;
   }
 `;
@@ -35,9 +31,8 @@ export const Tab = styled(MaterialTab)`
     text-transform: none;
     color: ${({ disabled }) => (disabled ? colors.gray100 : colors.secondaryTextColor)};
     outline: none;
-    font-weight: ${fontWeightMedium};
-    font-size: ${fontSizeLg};
-    font-family: ${fontFamilyPrimary};
+    font-weight: ${({ theme }) => theme.FontStyles.roboto.Regular16px.fontWeight};
+    font-size: ${({ theme }) => theme.FontStyles.roboto.Regular16px.fontSize};
     min-width: 0;
     outline: none;
     margin: 0 20px 0 0;
@@ -50,9 +45,8 @@ export const Tab = styled(MaterialTab)`
     outline: none;
   }
   &[class*="selected"] {
-    color: ${colors.secondaryTextColor};
     outline: none;
-    font-weight: ${fontWeightBold};
+    font-weight: ${({ theme }) => theme.FontStyles.roboto.Black16px.fontWeight};
   }
 `;
 
@@ -60,7 +54,6 @@ export const TabPanel = styled(MaterialTabPanel)`
   && {
     min-width: 0;
     outline: none;
-    margin: 0 20px 0 0;
     padding: 0;
   }
 `;

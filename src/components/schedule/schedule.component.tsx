@@ -30,7 +30,7 @@ export function ScheduleComponent(): JSX.Element {
   }
 
   return (
-    <div style={{ margin: "20 0" }}>
+    <>
       <S.TimeHeader>
         <S.TimeTableContainer>
           <TimeTableRow />
@@ -49,6 +49,6 @@ export function ScheduleComponent(): JSX.Element {
       <ScheduleFoldingSection name={t("scheduleSectionNameInformation")}>
         <FoundationInfoComponent />
       </ScheduleFoldingSection>
-    </div>
+    </>
   );
 }

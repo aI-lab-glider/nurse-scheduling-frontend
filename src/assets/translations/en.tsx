@@ -12,6 +12,8 @@ const en: LocalizationResource = {
     // header.component.tsx
     reportError: "Report error",
     returnToNow: "Come back to now",
+    help: "Help",
+    changeSettings: "Change settings",
     // empty-month-bttons.tsx
     loadScheduleFrom: "Load schedule from",
     loadFromFile: "Load from file",

@@ -20,6 +20,10 @@ import WorkerDrawerComponent, {
 } from "../../../drawers/worker-drawer/worker-drawer.component";
 import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
 import { BaseSectionOptions } from "../../base/base-section/base-section.component";
+import NurseIcon from "../../../../assets/images/svg-components/NurseIcon";
+import CaretakerIcon from "../../../../assets/images/svg-components/CaretakerIcon";
+import BabyIcon from "../../../../assets/images/svg-components/BabyIcon";
+import WorkerIcon from "../../../../assets/images/svg-components/WorkerIcon";
 
 export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "errorSelector"> {
   data: DataRow[];
@@ -62,6 +66,7 @@ export function NameTableSection({
     <>
       <S.Wrapper>
         {data.map((workerName, index) => {
+          console.log(type[workerName]);
           const isNurse = type[workerName] === WorkerType.NURSE;
           const isLast = index === data.length - 1;
           const isFirst = index === 0;
@@ -85,6 +90,10 @@ export function NameTableSection({
                   isLast && "isLast"
                 )}
               >
+                {isWorker && isNurse && <NurseIcon />}
+                {isWorker && !isNurse && <CaretakerIcon />}
+                {!isWorker && workerName === "Dzieci" && <BabyIcon />}
+                {!isWorker && workerName === "Pracownicy" && <WorkerIcon />}
                 <S.LabelWrapper>
                   <span>{workerName}</span>
                 </S.LabelWrapper>

@@ -12,6 +12,8 @@ export interface CustomThemeProps {
   primaryHover: string;
   primaryText: string;
   background: string;
+  calendarWeekend: string;
+  calendarOtherMonth: string;
   type: "dark" | "light";
 }
 

@@ -7,14 +7,13 @@ import { ErrorPopper } from "../../../poppers/error-popper/error-popper.componen
 
 export const Wrapper = styled.div`
   flex: 1 1 auto;
-  border-left: 1px solid ${colors.tableBorderGrey};
+  /* border-left: 1px solid ${colors.tableBorderGrey}; */
   align-items: center;
   width: 120%;
-  height: 100%;
   cursor: cell;
   padding: 0;
   overflow: hidden;
-  color: ${colors.tableColor};
+  /* color: ${colors.tableColor}; */
   background: ${colors.white};
 
   &:first-child {

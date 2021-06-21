@@ -11,16 +11,11 @@ export const TimetableRow = styled.div`
   padding: 0;
   position: static;
   width: 1350px;
-  height: 70px;
   cursor: default;
 
   //text
   text-align: center;
   letter-spacing: 0.75px;
-  font-style: normal;
-  font-weight: 300;
-  font-size: 12px;
-  line-height: 24px;
 
   &:not(:last-child) {
     border-bottom: 1px solid ${colors.tableBorderGrey};
@@ -48,10 +43,8 @@ export const SectionWrapper = styled.div`
   align-items: center;
   padding: 0;
 
-  background: ${colors.white};
+  background: #fff;
   box-sizing: border-box;
 
   overflow: hidden;
-  border: 1px solid ${colors.tableBorderGrey};
-  border-radius: 10px;
 `;

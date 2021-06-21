@@ -12,16 +12,16 @@ import {
 
 export const Wrapper = styled.div`
   width: 100%;
-  border-left: 1px solid ${colors.tableBorderGrey};
-  color: ${colors.tableColor};
-  background: ${colors.currMonthBackground};
+  /* border-left: 1px solid ${colors.tableBorderGrey}; */
+  /* color: ${colors.tableColor}; */
+  /* background: ${colors.currMonthBackground}; */
 
   &:first-child {
     border-left: none;
   }
 
   &.weekend {
-    background: ${colors.weekendHeader};
+    background: ${({ theme }) => theme.calendarWeekend};
   }
   &.otherMonth {
     opacity: 0.5;
@@ -34,12 +34,10 @@ export const Popper = styled(ErrorPopper)`
   align-items: center;
   width: 100%;
 
-  height: 75px;
   padding-top: 30%;
 `;
 
 export const DayName = styled.span`
-  color: ${colors.primary};
   font-size: ${fontSizeBase};
   font-weight: ${fontWeightBase};
 `;
@@ -54,7 +52,7 @@ export const DayMarker = styled.div`
     border-radius: 50%;
     height: 30px;
     width: 30px;
-    background: ${colors.primary};
+    background: ${({ theme }) => theme.primaryText};
     display: flex;
     justify-content: center;
     align-items: center;
