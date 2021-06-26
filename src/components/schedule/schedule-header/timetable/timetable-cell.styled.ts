@@ -3,19 +3,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
 import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
-import {
-  colors,
-  fontSizeBase,
-  fontWeightBase,
-  fontWeightBold,
-} from "../../../../assets/css-consts";
+import { colors } from "../../../../assets/css-consts";
 
 export const Wrapper = styled.div`
   width: 100%;
-  /* border-left: 1px solid ${colors.tableBorderGrey}; */
-  /* color: ${colors.tableColor}; */
-  /* background: ${colors.currMonthBackground}; */
-
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &:first-child {
     border-left: none;
   }
@@ -24,7 +19,7 @@ export const Wrapper = styled.div`
     background: ${({ theme }) => theme.calendarWeekend};
   }
   &.otherMonth {
-    opacity: 0.5;
+    background: ${({ theme }) => theme.calendarOtherMonth};
   }
 `;
 
@@ -32,26 +27,17 @@ export const Popper = styled(ErrorPopper)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-
-  padding-top: 30%;
 `;
 
-export const DayName = styled.span`
-  font-size: ${fontSizeBase};
-  font-weight: ${fontWeightBase};
-`;
+export const DayName = styled.span``;
 
 export const DayMarker = styled.div`
-  color: ${colors.primary};
-  font-size: ${fontSizeBase};
-  font-weight: ${fontWeightBold};
   text-align: center;
 
   &.today {
     border-radius: 50%;
-    height: 30px;
-    width: 30px;
+    height: 18px;
+    width: 18px;
     background: ${({ theme }) => theme.primaryText};
     display: flex;
     justify-content: center;

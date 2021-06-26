@@ -14,8 +14,6 @@ export const CalendarWrapper = styled.div`
   flex-flow: row wrap;
   align-content: space-between;
   justify-content: space-between;
-  border-left: 1px solid ${colors.tableBorderGrey};
-  border-top: 1px solid ${colors.tableBorderGrey};
 `;
 
 export const DayName = styled.div`
@@ -28,6 +26,4 @@ export const DayName = styled.div`
   margin: auto;
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid ${colors.tableBorderGrey};
-  border-right: 1px solid ${colors.tableBorderGrey};
 `;

@@ -9,8 +9,8 @@ export const TimetableRow = styled.div`
   flex-direction: row;
   align-items: center;
   padding: 0;
-  position: static;
-  width: 1350px;
+  /* position: static; */
+  /* width: 1350px; */
   cursor: default;
 
   //text
@@ -18,7 +18,7 @@ export const TimetableRow = styled.div`
   letter-spacing: 0.75px;
 
   &:not(:last-child) {
-    border-bottom: 1px solid ${colors.tableBorderGrey};
+    /* border-bottom: 1px solid ${colors.tableBorderGrey}; */
 
     &.selection {
       border-color: white;
@@ -39,12 +39,5 @@ export const TimetableRow = styled.div`
 
 export const SectionWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0;
-
   background: #fff;
-  box-sizing: border-box;
-
-  overflow: hidden;
 `;

@@ -24,6 +24,7 @@ import NurseIcon from "../../../../assets/images/svg-components/NurseIcon";
 import CaretakerIcon from "../../../../assets/images/svg-components/CaretakerIcon";
 import BabyIcon from "../../../../assets/images/svg-components/BabyIcon";
 import WorkerIcon from "../../../../assets/images/svg-components/WorkerIcon";
+import FontStyles from "../../../../assets/theme/FontStyles";
 
 export interface NameTableSectionOptions extends Pick<BaseSectionOptions, "errorSelector"> {
   data: DataRow[];
@@ -66,7 +67,6 @@ export function NameTableSection({
     <>
       <S.Wrapper>
         {data.map((workerName, index) => {
-          console.log(type[workerName]);
           const isNurse = type[workerName] === WorkerType.NURSE;
           const isLast = index === data.length - 1;
           const isFirst = index === 0;
@@ -90,12 +90,15 @@ export function NameTableSection({
                   isLast && "isLast"
                 )}
               >
-                {isWorker && isNurse && <NurseIcon />}
-                {isWorker && !isNurse && <CaretakerIcon />}
-                {!isWorker && workerName === "Dzieci" && <BabyIcon />}
-                {!isWorker && workerName === "Pracownicy" && <WorkerIcon />}
+                <div style={{ marginLeft: "8px" }}>
+                  {isWorker && isNurse && <NurseIcon />}
+                  {isWorker && !isNurse && <CaretakerIcon />}
+                  {!isWorker && workerName === "Dzieci" && <BabyIcon />}
+                  {!isWorker && workerName === "Pracownicy" && <WorkerIcon />}
+                </div>
+
                 <S.LabelWrapper>
-                  <span>{workerName}</span>
+                  <span style={FontStyles.roboto.Regular12px}>{workerName}</span>
                 </S.LabelWrapper>
               </S.Row>
             </ErrorPopper>

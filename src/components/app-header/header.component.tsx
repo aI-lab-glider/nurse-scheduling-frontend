@@ -111,7 +111,7 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
           <Logo style={{ marginLeft: "16px" }} />
           <S.Row style={{ marginLeft: "8px", marginRight: "50px", flex: 0 }}>
             <p style={{ color: theme.primary, fontSize: "19px" }}>Schedule</p>
-            <p style={{ color: theme.primary, fontSize: "19px", fontWeight: 900 }}>.ai</p>
+            <p style={{ color: theme.primary, fontSize: "19px", fontWeight: 900 }}>.it</p>
           </S.Row>
           <TabContext value={tabLabel}>
             <SS.TabList onChange={!disabled ? handleChange : void 0}>{tabTitles}</SS.TabList>

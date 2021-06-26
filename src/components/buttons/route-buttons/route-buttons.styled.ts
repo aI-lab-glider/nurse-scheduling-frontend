@@ -29,17 +29,18 @@ export const TabList = styled(MaterialTabList)`
 export const Tab = styled(MaterialTab)`
   && {
     text-transform: none;
-    color: ${({ disabled }) => (disabled ? colors.gray100 : colors.secondaryTextColor)};
+    color: ${({ disabled, theme }) => (disabled ? colors.gray100 : theme.primaryText)};
     outline: none;
     font-weight: ${({ theme }) => theme.FontStyles.roboto.Regular16px.fontWeight};
     font-size: ${({ theme }) => theme.FontStyles.roboto.Regular16px.fontSize};
     min-width: 0;
+    opacity: 1;
     outline: none;
     margin: 0 20px 0 0;
     padding: 0;
   }
   &:hover {
-    color: ${({ disabled }) => (disabled ? colors.gray100 : colors.primaryTextColor)};
+    color: ${({ disabled, theme }) => (disabled ? colors.gray100 : theme.primaryText)};
     cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
     opacity: 1;
     outline: none;

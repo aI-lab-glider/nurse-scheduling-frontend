@@ -23,6 +23,7 @@ import {
   getPresentTemporaryScheduleInfo,
   getScheduleErrors,
 } from "../../../state/schedule-data/selectors";
+import FontStyles from "../../../assets/theme/FontStyles";
 
 interface ViewOnlyToolbarOptions {
   openEdit: () => void;
@@ -78,7 +79,8 @@ export function ReadOnlyToolbar({ openEdit }: ViewOnlyToolbarOptions): JSX.Eleme
             ) : (
               <form>
                 <select
-                  value={revision}
+                  style={FontStyles.roboto.Regular14px}
+                  value={revision[0].toUpperCase() + revision.substring(1)}
                   onChange={handleChange}
                   className="revision-select"
                   data-cy="revision-select"

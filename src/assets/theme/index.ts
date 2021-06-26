@@ -20,6 +20,7 @@ export interface CustomThemeProps {
 const ThemeConstants = {
   fonts: ["Roboto"],
   FontStyles,
+  gray: "#c4c4c4",
 };
 type ThemeConstantsType = typeof ThemeConstants;
 

@@ -4,7 +4,9 @@
 import React from "react";
 import * as S from "./overtime-header-row.styled";
 import { ArrayHelper } from "../../../../helpers/array.helper";
-import { OvertimeHeaderCell } from "./overtime-header-cell.component";
+import FileSignatureIcon from "../../../../assets/images/svg-components/FileSignatureIcon";
+import ClockIcon from "../../../../assets/images/svg-components/ClockIcon";
+import OvertimeIcon from "../../../../assets/images/svg-components/OvertimeIcon";
 
 export interface OvertimeHeaderRowOptions {
   data: string[];
@@ -12,13 +14,11 @@ export interface OvertimeHeaderRowOptions {
 
 function OvertimeHeaderRowF({ data }: OvertimeHeaderRowOptions): JSX.Element {
   return (
-    <S.SectionWrapper>
-      <S.SummaryRow>
-        {data.map((cellData) => (
-          <OvertimeHeaderCell value={cellData} key={cellData} />
-        ))}
-      </S.SummaryRow>
-    </S.SectionWrapper>
+    <>
+      <FileSignatureIcon />
+      <ClockIcon />
+      <OvertimeIcon />
+    </>
   );
 }
 

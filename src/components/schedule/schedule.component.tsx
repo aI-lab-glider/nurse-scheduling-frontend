@@ -32,10 +32,10 @@ export function ScheduleComponent(): JSX.Element {
   return (
     <>
       <S.TimeHeader>
-        <S.TimeTableContainer>
+        <S.TimeTableContainer style={{ flex: 1, marginLeft: "107px" }}>
           <TimeTableRow />
         </S.TimeTableContainer>
-        <S.SummaryContainer>
+        <S.SummaryContainer style={{ width: "107px" }}>
           <OvertimeHeaderRow data={Object.values(WorkerHourInfo.summaryTranslations)} />
         </S.SummaryContainer>
       </S.TimeHeader>
