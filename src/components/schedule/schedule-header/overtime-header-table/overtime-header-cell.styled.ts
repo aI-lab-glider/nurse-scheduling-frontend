@@ -30,3 +30,12 @@ export const RotatedText = styled.span`
   transform: rotate(180deg);
   letter-spacing: 0.4px;
 `;
+export const OvertimeHeaderContainer = styled.div`
+  display: flex;
+  width: 102px;
+  margin-left: 5px;
+  align-content: center;
+  align-items: center;
+  justify-content: space-around;
+  justify-items: center;
+`;

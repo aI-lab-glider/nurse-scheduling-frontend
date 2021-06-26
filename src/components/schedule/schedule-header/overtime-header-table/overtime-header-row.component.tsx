@@ -7,6 +7,7 @@ import { ArrayHelper } from "../../../../helpers/array.helper";
 import FileSignatureIcon from "../../../../assets/images/svg-components/FileSignatureIcon";
 import ClockIcon from "../../../../assets/images/svg-components/ClockIcon";
 import OvertimeIcon from "../../../../assets/images/svg-components/OvertimeIcon";
+import { OvertimeHeaderContainer } from "./overtime-header-cell.styled";
 
 export interface OvertimeHeaderRowOptions {
   data: string[];
@@ -14,11 +15,11 @@ export interface OvertimeHeaderRowOptions {
 
 function OvertimeHeaderRowF({ data }: OvertimeHeaderRowOptions): JSX.Element {
   return (
-    <>
+    <OvertimeHeaderContainer>
       <FileSignatureIcon />
       <ClockIcon />
       <OvertimeIcon />
-    </>
+    </OvertimeHeaderContainer>
   );
 }
 
