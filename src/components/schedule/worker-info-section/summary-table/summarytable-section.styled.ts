@@ -4,9 +4,6 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   width: 102px;
   margin-left: 5px;
   cursor: default;

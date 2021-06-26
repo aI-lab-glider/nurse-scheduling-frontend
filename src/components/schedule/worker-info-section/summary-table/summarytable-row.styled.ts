@@ -11,6 +11,7 @@ export const SummaryRow = styled.div`
   gap: 1px;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 5px;
   height: 26px;
 
   //text
