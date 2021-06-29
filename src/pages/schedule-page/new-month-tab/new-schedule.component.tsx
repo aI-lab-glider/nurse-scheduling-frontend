@@ -2,37 +2,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import styled from "styled-components";
-import { colors, fontSizeBase, fontWeightBold } from "../../../assets/colors";
+import * as S from "./new-schedule.styled";
 import nurse from "../../../assets/images/nurse.png";
 import { EmptyMonthButtons } from "../../../components/buttons/empty-month-buttons/empty-month-buttons";
 
 export function NewScheduleComponent(): JSX.Element {
   return (
-    <Wrapper>
-      <Image src={nurse} alt="" />
-      <Message>Nie masz planu na ten miesiąc</Message>
+    <S.Wrapper>
+      <S.Image src={nurse} alt="" />
+      <S.Message>Nie masz planu na ten miesiąc</S.Message>
       <EmptyMonthButtons />
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  min-height: 80vh;
-`;
-
-const Image = styled.img`
-  height: 270px;
-`;
-
-const Message = styled.pre`
-  color: ${colors.primary};
-  font-weight: ${fontWeightBold};
-  font-size: ${fontSizeBase};
-  margin-top: 1rem;
-`;

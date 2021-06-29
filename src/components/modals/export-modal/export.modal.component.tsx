@@ -12,7 +12,7 @@ import {
 import { blue } from "@material-ui/core/colors";
 import React from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./export.modal.styled";
 import { Button } from "../../common-components";
 import { ScheduleDataModel } from "../../../state/schedule-data/schedule-data.model";
 import { cropScheduleDMToMonthDM } from "../../../logic/schedule-container-converter/schedule-container-converter";
@@ -23,7 +23,6 @@ import {
 } from "../../buttons/dropdown-buttons/dropdown-buttons.component";
 import DefaultModal from "../modal.component";
 import { t } from "../../../helpers/translations.helper";
-import { colors, fontSizeBase } from "../../../assets/colors";
 import { getActualRevision, getPrimaryRevision } from "../../../state/schedule-data/selectors";
 
 export interface ExportModalComponent {
@@ -114,17 +113,17 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
 
   const body = (
     <>
-      <FormatWrapper>
-        <Label>{t("fileFormat")}: </Label>
+      <S.FormatWrapper>
+        <S.Label>{t("fileFormat")}: </S.Label>
         <DropdownButtons
           buttons={btnData}
           mainLabel={exportMode}
           buttonVariant="secondary"
           width={112}
         />
-      </FormatWrapper>
+      </S.FormatWrapper>
       <div>
-        <Label>{t("fileOptions")}: </Label>
+        <S.Label>{t("fileOptions")}: </S.Label>
         <FormGroup>
           {Object.keys(exportOptions).map((key, index) => (
             <FormControlLabel
@@ -147,14 +146,3 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
 
   return <DefaultModal open={open} setOpen={setOpen} title={title} body={body} footer={footer} />;
 }
-
-const Label = styled.span`
-  color: ${colors.primary};
-  font-size: ${fontSizeBase};
-  line-height: 1.1;
-`;
-
-const FormatWrapper = styled.div`
-  display: flex;
-  align-items: center;
-`;

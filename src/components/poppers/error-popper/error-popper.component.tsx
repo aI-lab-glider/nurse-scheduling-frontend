@@ -5,7 +5,7 @@
 import React, { ReactNode, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./error-popper.styled";
 import { ErrorMessageHelper } from "../../../helpers/error-message.helper";
 import { ApplicationStateModel } from "../../../state/application-state.model";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
@@ -14,7 +14,6 @@ import {
   ScheduleError,
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
 import ErrorListItem from "../../error-list/error-list-item.component";
-import { Popper } from "../popper";
 import { getPresentSchedule } from "../../../state/schedule-data/selectors";
 import { ErrorSwitch, ErrorTriangle } from "./error-switch.component";
 
@@ -86,7 +85,7 @@ export function ErrorPopper({
   const { shift_types: shiftTypes } = useSelector(getPresentSchedule);
   return (
     <>
-      <ErrorTooltip
+      <S.ErrorTooltip
         ref={tooltipRef}
         isOpen={isOpen}
         {...attributes.popper}
@@ -105,7 +104,7 @@ export function ErrorPopper({
             showTitle={showErrorTitle}
           />
         ))}
-      </ErrorTooltip>
+      </S.ErrorTooltip>
 
       <div
         id={id}
@@ -128,14 +127,3 @@ export function ErrorPopper({
     </>
   );
 }
-
-const ErrorTooltip = styled(Popper)`
-  position: absolute;
-  background-color: white;
-  color: black;
-  font-weight: bold;
-  font-size: 13px;
-  border-radius: 4px;
-  z-index: 3;
-  max-width: 500px;
-`;

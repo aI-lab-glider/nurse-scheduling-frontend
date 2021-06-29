@@ -2,22 +2,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import xlsx from "exceljs";
-import { ScheduleDataModel } from "../../state/schedule-data/schedule-data.model";
-import { EMPTY_ROW, ABSENCE_HEADERS } from "../../helpers/parser.helper";
-import { CELL_MARGIN } from "./schedule-export.logic";
-import { ShiftCode, SHIFTS } from "../../state/schedule-data/shifts-types/shift-types.model";
+import * as _ from "lodash";
+import { ABSENCE_HEADERS, EMPTY_ROW } from "../../helpers/parser.helper";
 import { TranslationHelper } from "../../helpers/translations.helper";
-import {
-  DateInformationForWorkInfoCalculation,
-  WorkerHourInfo,
-} from "../schedule-logic/worker-hours-info.logic";
 import { PrimaryMonthRevisionDataModel } from "../../state/application-state.model";
-import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
 import {
   VerboseDate,
   WeekDay,
 } from "../../state/schedule-data/foundation-info/foundation-info.model";
+import { ScheduleDataModel } from "../../state/schedule-data/schedule-data.model";
+import { ShiftCode, SHIFTS } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { ContractType } from "../../state/schedule-data/worker-info/worker-info.model";
+import { MonthInfoLogic } from "../schedule-logic/month-info.logic";
+import { WorkerHourInfo } from "../schedule-logic/worker-hours-info.logic";
+import { CELL_MARGIN } from "./schedule-export.logic";
 
 interface AbsenceInfo {
   workersAbsenceInfoArray: (string | number)[][];
@@ -62,7 +60,7 @@ export class WorkersAbsenceExportLogic {
       this.scheduleModel
     );
 
-    const colLens = workersAbsenceInfoArray[0].map((_, colIndex) =>
+    const colLens = workersAbsenceInfoArray[0].map((absence, colIndex) =>
       Math.max(...workersAbsenceInfoArray.map((row) => row[colIndex]?.toString().length ?? 0))
     );
 
@@ -99,28 +97,38 @@ export class WorkersAbsenceExportLogic {
     return shift === ShiftCode.W || shift === ShiftCode.NZ || SHIFTS[shift].isWorkingShift;
   }
 
-  private pushWorkersRow(
-    name: string,
-    workers: (string | number)[][],
-    shift: ShiftCode,
-    from: number,
-    to: number,
-    month: number,
-    daysNo: number,
-    workerContractType: ContractType,
-    verboseDates: VerboseDate[]
-  ): void {
+  private pushWorkersRow({
+    workerName,
+    workers,
+    shift,
+    from,
+    to,
+    month,
+    totalDaysNo,
+    workerContractType,
+    verboseDates,
+  }: {
+    workerName: string;
+    workers: (string | number)[][];
+    shift: ShiftCode;
+    from: number;
+    to: number;
+    month: number;
+    totalDaysNo: number;
+    workerContractType: ContractType;
+    verboseDates: VerboseDate[];
+  }): void {
     workers.push([
-      name,
+      workerName,
       SHIFTS[shift].name,
       `${from} ${TranslationHelper.polishMonthsGenetivus[month]}`,
       `${to} ${TranslationHelper.polishMonthsGenetivus[month]}`,
-      daysNo,
+      totalDaysNo,
       WorkerHourInfo.calculateFreeHoursForContractType(
         workerContractType,
-        this.scheduleModel.shifts[name] as ShiftCode[],
-        this.revision.shifts[name],
-        verboseDates as DateInformationForWorkInfoCalculation[],
+        this.scheduleModel.shifts[workerName],
+        this.revision.shifts[workerName],
+        verboseDates,
         this.scheduleModel.shift_types
       ),
     ]);
@@ -141,6 +149,7 @@ export class WorkersAbsenceExportLogic {
   }
 
   private createAbsenceInfoSection(scheduleModel: ScheduleDataModel): AbsenceInfo {
+    scheduleModel = _.cloneDeep(scheduleModel);
     const cellsToMerge: number[][] = [];
     const names = Object.keys(scheduleModel.employee_info?.type);
     const month = scheduleModel.schedule_info.month_number;
@@ -153,7 +162,7 @@ export class WorkersAbsenceExportLogic {
     workers.push(ABSENCE_HEADERS);
     workers.push(EMPTY_ROW);
     names.forEach((name) => {
-      const workerShifts = scheduleModel.shifts[name] as ShiftCode[];
+      const workerShifts = scheduleModel.shifts[name];
       const workerContractType = scheduleModel.employee_info.contractType[name];
       const { verboseDates } = new MonthInfoLogic(month, year, dates);
 
@@ -182,7 +191,7 @@ export class WorkersAbsenceExportLogic {
             toMerge.push(employeeRowIndex);
             cellsToMerge.push(toMerge);
           }
-          this.pushWorkersRow(
+          this.pushWorkersRow({
             workerName,
             workers,
             shift,
@@ -191,8 +200,8 @@ export class WorkersAbsenceExportLogic {
             month,
             totalDaysNo,
             workerContractType,
-            verboseDates
-          );
+            verboseDates,
+          });
         }
       });
     });

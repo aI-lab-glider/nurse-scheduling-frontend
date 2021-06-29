@@ -4,8 +4,7 @@
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React, { ReactNode, useState } from "react";
-import styled from "styled-components";
-import { colors, fontSizeBase } from "../../assets/colors";
+import * as S from "./schedule-folding-section.styled";
 
 interface ScheduleFoldingSectionOptions {
   name: string;
@@ -21,39 +20,14 @@ export function ScheduleFoldingSection({
   const [opened, setOpened] = useState(true);
   return (
     <>
-      <SeparatorWrapper>
-        <LabelWrapper onClick={(): void => setOpened((prev) => !prev)}>
+      <S.SeparatorWrapper>
+        <S.LabelWrapper onClick={(): void => setOpened((prev) => !prev)}>
           <span>{opened ? <ExpandMoreIcon /> : <ChevronRightIcon />}</span>
           <span>{name}</span>
-        </LabelWrapper>
-        <Separator />
-      </SeparatorWrapper>
+        </S.LabelWrapper>
+        <S.Separator />
+      </S.SeparatorWrapper>
       <div style={{ display: opened ? "initial" : "none" }}>{children}</div>
     </>
   );
 }
-
-const SeparatorWrapper = styled.div`
-  height: 50px;
-  display: flex;
-  align-items: center;
-`;
-
-const Separator = styled.hr`
-  width: 102%;
-  border: 0;
-  border-top: 2px solid ${colors.tableBorderGrey};
-`;
-const LabelWrapper = styled.div`
-  width: 126px;
-  cursor: pointer;
-  align-items: center;
-  display: flex;
-  font-style: normal;
-  font-weight: bold;
-  font-size: ${fontSizeBase};
-  line-height: 20px;
-  letter-spacing: 0.75px;
-  color: ${colors.primary};
-  padding-right: 10px;
-`;

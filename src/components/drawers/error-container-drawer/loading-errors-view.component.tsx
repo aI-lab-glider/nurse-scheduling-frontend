@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./loading-errors-view.styled";
 import backend from "../../../api/backend";
 import ok from "../../../assets/images/ok.svg";
 import warning from "../../../assets/images/warning.svg";
@@ -12,11 +12,9 @@ import {
   NetworkErrorCode,
   ScheduleError,
 } from "../../../state/schedule-data/schedule-errors/schedule-error.model";
-import { Button } from "../../common-components";
 import ErrorList from "../../error-list/error-list.component";
 import { ErrorLoaderState, Props } from "./error-container-drawer.component";
 import { t } from "../../../helpers/translations.helper";
-import { colors } from "../../../assets/colors";
 import {
   getPresentTemporarySchedule,
   getPrimaryRevision,
@@ -67,139 +65,43 @@ export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions):
   return (
     <>
       {(options.state?.state === ErrorLoaderState.CHECKING || spinnerAgain) && (
-        <Wrapper>
-          <Content>
-            <Spinner />
-            <ErrorLoadingText>Trwa sprawdzanie planu</ErrorLoadingText>
-          </Content>
-        </Wrapper>
+        <S.Wrapper>
+          <S.Content>
+            <S.Spinner />
+            <S.ErrorLoadingText>Trwa sprawdzanie planu</S.ErrorLoadingText>
+          </S.Content>
+        </S.Wrapper>
       )}
       {isNetworkError && !spinnerAgain && options.state?.state !== ErrorLoaderState.CHECKING && (
-        <Wrapper>
-          <Content>
-            <Image src={warning} alt="" />
-            <ErrorLoadingText>Błąd podczas sprawdzania</ErrorLoadingText>
-            <ErrorButton variant="primary" onClick={reload}>
+        <S.Wrapper>
+          <S.Content>
+            <S.Image src={warning} alt="" />
+            <S.ErrorLoadingText>Błąd podczas sprawdzania</S.ErrorLoadingText>
+            <S.ErrorButton variant="primary" onClick={reload}>
               Spróbuj ponownie
-            </ErrorButton>
-          </Content>
-        </Wrapper>
+            </S.ErrorButton>
+          </S.Content>
+        </S.Wrapper>
       )}
       {options.state?.state === ErrorLoaderState.ERRORS && !isNetworkError && (
         <>
-          <Title>
+          <S.Title>
             {t("errors")}: {options.errors?.length}
-          </Title>
+          </S.Title>
           <ErrorList errors={options.errors} />
         </>
       )}
       {options.state?.state === ErrorLoaderState.NOERRORS && (
-        <Wrapper>
-          <Content>
-            <Image src={ok} alt="" />
-            <ErrorLoadingText>Plan nie zawiera błędów</ErrorLoadingText>
-            <ErrorButton variant="primary" onClick={closeDrawer}>
+        <S.Wrapper>
+          <S.Content>
+            <S.Image src={ok} alt="" />
+            <S.ErrorLoadingText>Plan nie zawiera błędów</S.ErrorLoadingText>
+            <S.ErrorButton variant="primary" onClick={closeDrawer}>
               Wróć do planu
-            </ErrorButton>
-          </Content>
-        </Wrapper>
+            </S.ErrorButton>
+          </S.Content>
+        </S.Wrapper>
       )}
     </>
   );
 }
-
-const Title = styled.h3`
-  color: ${colors.errorRed};
-`;
-const ErrorLoadingText = styled.div`
-  display: block;
-  margin: auto;
-  text-align: center;
-  font-weight: 500;
-  size: 16px;
-  line-height: 28px;
-  color: ${colors.primary};
-  clear: both;
-  position: relative;
-  top: 27px;
-`;
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-`;
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-const ErrorButton = styled(Button)`
-  display: block;
-  margin: auto;
-  position: relative;
-  top: 41px;
-`;
-const Image = styled.img`
-  display: block;
-  margin: auto;
-  width: 55px;
-  height: 49px;
-`;
-const Spinner = styled.div`
-  display: block;
-  margin: auto;
-  text-indent: -9999em;
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  background: #ffffff;
-  background: linear-gradient(to right, ${colors.primary} 10%, rgba(255, 255, 255, 0) 42%);
-  position: relative;
-  animation: load3 1.4s infinite linear;
-  transform: translateZ(0);
-
-  &:before {
-    width: 50%;
-    height: 50%;
-    background: ${colors.primary};
-    border-radius: 100% 0 0 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    content: "";
-  }
-
-  &:after {
-    background: #ffffff;
-    width: 75%;
-    height: 75%;
-    border-radius: 50%;
-    content: "";
-    margin: auto;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-  }
-
-  @-webkit-keyframes load3 {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  @keyframes load3 {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-`;

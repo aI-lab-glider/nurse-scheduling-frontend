@@ -61,16 +61,16 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
       return;
     }
     setWorkHoursInfo(
-      WorkerHourInfo.fromWorkerInfo(
-        workerShifts,
-        primaryWorkerShifts,
-        workerTime,
-        workerContractType,
+      WorkerHourInfo.fromWorkerInfo({
+        shifts: workerShifts,
+        primaryScheduleWorkerShifts: primaryWorkerShifts,
+        workerNorm: workerTime,
+        workerEmploymentContract: workerContractType,
         month,
         year,
         dates,
-        shiftTypes
-      )
+        shiftTypes,
+      })
     );
   }, [
     shiftTypes,

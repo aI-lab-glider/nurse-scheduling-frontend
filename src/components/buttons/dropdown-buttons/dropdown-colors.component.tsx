@@ -5,9 +5,8 @@ import React, { useEffect, useRef, useState } from "react";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Popper from "@material-ui/core/Popper";
-import styled from "styled-components";
+import * as S from "./dropdown.styled";
 import { ButtonVariant } from "../../common-components";
-import { Wrapper, PlaceholderButtonContent, PlaceholderButton, ButtonListWrapper } from "./styles";
 
 interface DropdownColorsOptions {
   shiftType: string;
@@ -75,8 +74,8 @@ export function DropdownColors({
 
   const dropdownZIndex = 100;
   return (
-    <Wrapper>
-      <PlaceholderButton
+    <S.Wrapper>
+      <S.PlaceholderButton
         variant={buttonVariant}
         onClick={handleToggle}
         ref={anchorRef}
@@ -89,12 +88,12 @@ export function DropdownColors({
           } as React.CSSProperties
         }
       >
-        <PlaceholderButtonContent>
-          <ColorSample style={{ backgroundColor: `#${colorPicked}` }} />
+        <S.PlaceholderButtonContent>
+          <S.ColorSample style={{ backgroundColor: `#${colorPicked}` }} />
           <span>{mainLabel}</span>
           <ArrowDropDownIcon />
-        </PlaceholderButtonContent>
-      </PlaceholderButton>
+        </S.PlaceholderButtonContent>
+      </S.PlaceholderButton>
       <Popper
         data-cy="openedDropdown"
         open={open}
@@ -107,15 +106,15 @@ export function DropdownColors({
         }}
       >
         <ClickAwayListener onClickAway={handleClickAway}>
-          <ButtonListWrapper>
-            <ColorSampleWrapper>
+          <S.ButtonListWrapper>
+            <S.ColorSampleWrapper>
               {getChunckedColors(
                 shiftType === "working" ? worksShiftsColors : notWorksShiftsColors,
                 6
               ).map((colorRow) => (
-                <ColorSampleRow>
+                <S.ColorSampleRow>
                   {colorRow.map((color) => (
-                    <ColorSample
+                    <S.ColorSample
                       onClick={(): void => {
                         colorClicker(color);
                         setLocalColor(color);
@@ -124,35 +123,12 @@ export function DropdownColors({
                       style={{ backgroundColor: `#${color}` }}
                     />
                   ))}
-                </ColorSampleRow>
+                </S.ColorSampleRow>
               ))}
-            </ColorSampleWrapper>
-          </ButtonListWrapper>
+            </S.ColorSampleWrapper>
+          </S.ButtonListWrapper>
         </ClickAwayListener>
       </Popper>
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-
-const ColorSample = styled.div`
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  margin-top: 10px;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const ColorSampleRow = styled.div`
-  display: flex;
-  position: relative;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const ColorSampleWrapper = styled.div`
-  margin-top: 20px;
-  padding: 10px 20px 20px;
-`;

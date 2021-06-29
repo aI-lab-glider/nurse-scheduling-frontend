@@ -6,13 +6,7 @@ import Popper from "@material-ui/core/Popper";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React, { useRef, useState } from "react";
 import { ButtonVariant } from "../../common-components";
-import {
-  Wrapper,
-  PlaceholderButtonContent,
-  PlaceholderButton,
-  ButtonListWrapper,
-  DropdownButton,
-} from "./styles";
+import * as S from "./dropdown.styled";
 
 export interface ButtonData {
   label: string;
@@ -51,8 +45,8 @@ export function DropdownButtons({
   const dropdownZIndex = 100;
 
   return (
-    <Wrapper>
-      <PlaceholderButton
+    <S.Wrapper>
+      <S.PlaceholderButton
         variant={buttonVariant}
         onClick={handleToggle}
         ref={anchorRef}
@@ -65,13 +59,11 @@ export function DropdownButtons({
           } as React.CSSProperties
         }
       >
-        <PlaceholderButtonContent>
+        <S.PlaceholderButtonContent>
           <span>{mainLabel}</span>
-          <div>
-            <ArrowDropDownIcon />
-          </div>
-        </PlaceholderButtonContent>
-      </PlaceholderButton>
+          <ArrowDropDownIcon />
+        </S.PlaceholderButtonContent>
+      </S.PlaceholderButton>
       <Popper
         data-cy="openedDropdown"
         open={open}
@@ -84,9 +76,9 @@ export function DropdownButtons({
         }}
       >
         <ClickAwayListener onClickAway={handleClickAway}>
-          <ButtonListWrapper>
+          <S.ButtonListWrapper>
             {buttons.map((item) => (
-              <DropdownButton
+              <S.DropdownButton
                 key={item.label}
                 onClick={(): void => {
                   item.action();
@@ -95,11 +87,11 @@ export function DropdownButtons({
                 data-cy={item.dataCy}
               >
                 {item.label}
-              </DropdownButton>
+              </S.DropdownButton>
             ))}
-          </ButtonListWrapper>
+          </S.ButtonListWrapper>
         </ClickAwayListener>
       </Popper>
-    </Wrapper>
+    </S.Wrapper>
   );
 }

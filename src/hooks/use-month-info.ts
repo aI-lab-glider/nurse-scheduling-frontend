@@ -29,9 +29,9 @@ export function useMonthInfo(): UseMonthInfoReturn {
   });
 
   useEffect(() => {
-    const { verboseDates } = new MonthInfoLogic(month_number, year, dates);
+    const { verboseDates: newMonthDates } = new MonthInfoLogic(month_number, year, dates);
     setUseMonthState({
-      verboseDates,
+      verboseDates: newMonthDates,
       year,
       monthNumber: month_number,
     });

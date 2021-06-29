@@ -53,7 +53,7 @@ export function ImportButtonsComponent(): JSX.Element {
   const [exportModalOpen, setExportModalOpen] = React.useState(false);
 
   return (
-    <div>
+    <>
       <DropdownButtons
         buttons={btnData}
         mainLabel={t("file")}
@@ -71,6 +71,6 @@ export function ImportButtonsComponent(): JSX.Element {
         accept=".xlsx"
       />
       <ExportModal open={exportModalOpen} setOpen={setExportModalOpen} model={stateScheduleModel} />
-    </div>
+    </>
   );
 }

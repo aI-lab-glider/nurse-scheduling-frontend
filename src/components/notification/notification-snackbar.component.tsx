@@ -2,53 +2,38 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { Box, createStyles, Snackbar, Theme } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Box } from "@material-ui/core";
+import * as S from "./notification-snackbar.styled";
 import { Notification } from "./types";
 import { useNotification } from "./notification.context";
 import { Alert } from "./alert.component";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    list: {
-      position: "fixed",
-      bottom: 0,
-    },
-    snackbar: {
-      position: "relative",
-      margin: 25,
-    },
-  })
-);
 
 export interface NotificationSnackbarOptions {
   notification: Notification;
 }
 
 export function NotificationSnackbar({ notification }: NotificationSnackbarOptions): JSX.Element {
-  const classes = useStyles();
   const { type, message } = notification;
 
   return (
-    <Snackbar className={classes.snackbar} open autoHideDuration={8000}>
+    <S.Snackbar open autoHideDuration={8000}>
       <Alert severity={type}>{message}</Alert>
-    </Snackbar>
+    </S.Snackbar>
   );
 }
 
 export function NotificationList(): JSX.Element {
-  const classes = useStyles();
   const { notifications } = useNotification();
 
   if (!notifications.length) return <></>;
 
   return (
-    <Box className={classes.list}>
+    <S.List>
       {notifications.map((notification) => (
         <Box key={notification.id}>
           <NotificationSnackbar notification={notification} />
         </Box>
       ))}
-    </Box>
+    </S.List>
   );
 }

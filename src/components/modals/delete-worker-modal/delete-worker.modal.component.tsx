@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useDispatch } from "react-redux";
-import styled from "styled-components";
+import * as S from "./delete-worker.styled";
 import { t } from "../../../helpers/translations.helper";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { WorkerActionCreator } from "../../../state/schedule-data/worker-info/worker.action-creator";
@@ -27,7 +27,7 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
 
   const title = t("confirmAction");
 
-  const body = <Message>{t("removeEmployeeQuestion", { name: worker?.name })}?</Message>;
+  const body = <S.Message>{t("removeEmployeeQuestion", { name: worker?.name })}?</S.Message>;
 
   const footer = (
     <>
@@ -60,6 +60,3 @@ export default function DeleteWorkerModalComponent(options: DeleteWorkerModalOpt
     </div>
   );
 }
-const Message = styled.div`
-  margin-bottom: 0;
-`;

@@ -1,22 +1,16 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { Button as MaterialButton } from "@material-ui/core";
-import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import SettingsIcon from "@material-ui/icons/Settings";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
-import { colors, fontSizeBase } from "../../assets/colors";
 import { t } from "../../helpers/translations.helper";
 import { AppConfigContext, AppConfigOptions, AppMode } from "../../state/app-config-context";
 import { MonthSwitchActionCreator } from "../../state/schedule-data/month-switch.action-creator";
 import { getActualMode, getPresentScheduleInfo } from "../../state/schedule-data/selectors";
-import { Button } from "../buttons/button-component/button.component";
 import ReportIssueModal from "../modals/report-issue-modal/report-issue-modal.component";
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
 import { ScheduleMode } from "../schedule/schedule-state.model";
+import * as S from "./header.styled";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -71,74 +65,23 @@ export function HeaderComponent(): JSX.Element {
     window.open(process.env.REACT_APP_HELP_PAGE_URL);
   }, []);
   return (
-    <Header id="header">
-      <Logo />
-      <ReturnToNowBtn
+    <S.Header id="header">
+      <S.Logo />
+      <S.ReturnToNowBtn
         data-cy="return-to-now-button"
         hidden={!isNewMonth || !showNowNavigation}
         variant="secondary"
         onClick={returnToCurrentMonth}
       >
         {t("returnToNow")}
-      </ReturnToNowBtn>
-      <Filler />
+      </S.ReturnToNowBtn>
+      <S.Filler />
       <MonthSwitchComponent isInViewMode={isInViewMode} />
-      <Filler />
-      <ReportIssueBtn onClick={onReportIssueClick}>{t("reportError")}</ReportIssueBtn>
+      <S.Filler />
+      <S.ReportIssueBtn onClick={onReportIssueClick}>{t("reportError")}</S.ReportIssueBtn>
       <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
-      <Settings />
-      <Help onClick={redirectToDocumentation} />
-    </Header>
+      <S.Settings />
+      <S.Help onClick={redirectToDocumentation} />
+    </S.Header>
   );
 }
-
-const Header = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 52px;
-  background-color: ${colors.primary};
-  padding: 0 20px 0 20px;
-  align-items: center;
-  justify-content: space-around;
-  position: fixed;
-  top: 0;
-  z-index: 2;
-`;
-
-const ReturnToNowBtn = styled(Button)`
-  margin-top: 0;
-  font-size: ${fontSizeBase};
-  padding: 0 10px;
-  margin-bottom: 0;
-`;
-
-const Settings = styled(SettingsIcon)`
-  color: ${colors.white};
-`;
-
-const Help = styled(HelpOutlineIcon)`
-  margin: auto 5px;
-  cursor: pointer;
-  color: ${colors.white};
-`;
-
-const Logo = styled(AssignmentIndIcon)`
-  color: ${colors.white};
-`;
-
-const Filler = styled.div`
-  flex-grow: 1;
-`;
-
-const ReportIssueBtn = styled(MaterialButton)`
-  color: ${colors.white};
-  padding-right: 5px;
-  letter-spacing: 0.75px;
-  outline: none;
-  text-transform: none;
-  &:hover {
-    text-decoration: underline;
-    transform: none;
-  }
-`;
