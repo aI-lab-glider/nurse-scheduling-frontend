@@ -66,7 +66,7 @@ module.exports = (on, config) => {
     logPctNo100() {
       fs.appendFile(
         LOG_FILENAME,
-        `<h1>Error:</h1><p>El porcentaje de eventos configurados no suma 100, sino ${pcg}</p>`,
+        `<h1>Error:</h1><p>The sum of events propabilities is different than 100 (sum==${pcg})</p>`,
         (err) => {
           if (err) throw err;
           console.log("Logged error");
