@@ -2,10 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { createAction, createReducer } from "@reduxjs/toolkit";
-import { addNewSchedule, isScheduleAction, updateSchedule } from "../schedule.actions";
-import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import { ScheduleActionDestination } from "../../app.reducer";
+import { scheduleDataInitialState } from "../schedule-data-initial-state";
 import { ScheduleDataModel } from "../schedule-data.model";
+import { addNewSchedule, isScheduleAction, updateSchedule } from "../schedule.actions";
 
 const replaceStateWithPayload = (
   state: boolean,
