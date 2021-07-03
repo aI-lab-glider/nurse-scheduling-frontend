@@ -24,6 +24,7 @@ const fs = require("fs");
 
 module.exports = (on, config) => {
   require("@cypress/code-coverage/task")(on, config);
+  config.browsers = config.browsers.filter((b) => b.name === "electron");
   // add other tasks to be registered here
 
   // IMPORTANT to return the config object
