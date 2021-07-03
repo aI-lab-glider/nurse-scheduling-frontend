@@ -7,6 +7,7 @@ import { LocalizationResource } from "./types";
 const en: LocalizationResource = {
   translation: {
     // App.tsx
+    editModeActive: "Edit mode active",
     schedule: "Schedule",
     management: "Management",
     // header.component.tsx

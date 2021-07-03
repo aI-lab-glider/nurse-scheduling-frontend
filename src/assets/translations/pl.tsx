@@ -5,6 +5,7 @@
 export const pl = {
   translation: {
     // App.tsx
+    editModeActive: "Tryb edycji aktywny",
     schedule: "Plan",
     management: "Zarządzanie",
     // header.component.tsx

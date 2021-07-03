@@ -113,9 +113,18 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
             <p style={{ color: theme.primary, fontSize: "19px" }}>Schedule</p>
             <p style={{ color: theme.primary, fontSize: "19px", fontWeight: 900 }}>.it</p>
           </S.Row>
-          <TabContext value={tabLabel}>
-            <SS.TabList onChange={!disabled ? handleChange : void 0}>{tabTitles}</SS.TabList>
-          </TabContext>
+          {!isInViewMode ? (
+            <p
+              style={{ ...FontStyles.roboto.Black16px, color: theme.primary }}
+              data-cy="edit-mode-text"
+            >
+              {t("editModeActive")}
+            </p>
+          ) : (
+            <TabContext value={tabLabel}>
+              <SS.TabList onChange={!disabled ? handleChange : void 0}>{tabTitles}</SS.TabList>
+            </TabContext>
+          )}
         </S.Row>
 
         <S.Row style={{ position: "relative" }}>

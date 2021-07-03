@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
-import { fontSizeXs } from "../../../../assets/css-consts";
 import { ErrorPopper } from "../../../poppers/error-popper/error-popper.component";
 
 export const Wrapper = styled.div`
@@ -32,10 +31,12 @@ export const Wrapper = styled.div`
 `;
 
 export const ContentWrapper = styled.div`
+  display: flex;
+  flex: 1;
+  height: 26px;
   align-items: center;
   justify-content: center;
   align-self: center;
-  /* padding: 4px 0 4px 0; */
 `;
 
 export const Popper = styled(ErrorPopper)`
@@ -45,6 +46,8 @@ export const Popper = styled(ErrorPopper)`
 
 export const CellWrapper = styled.div`
   display: flex;
+  flex: 1;
+  height: 26px;
   justify-content: center;
   justify-content: center;
   align-content: center;
@@ -53,20 +56,9 @@ export const CellWrapper = styled.div`
 `;
 
 export const CellValue = styled.p`
-  display: flex;
+  display: block;
+  margin: 0 auto !important;
   align-self: center;
-  /* display: flex;
-  flex-direction: row;
-  margin: auto;
-  font-size: ${fontSizeXs};
-  font-style: normal;
-  font-weight: 600;
-  line-height: 20px;
-  letter-spacing: 0.75px;
-  text-align: center;
-  left: -2px;
-
-  min-width: 10px;
-  min-height: 10px;
-  position: relative; */
+  font-size: ${({ theme }) => theme.FontStyles.roboto.Light12px.fontSize};
+  font-weight: ${({ theme }) => theme.FontStyles.roboto.Light12px.fontWeight};
 `;

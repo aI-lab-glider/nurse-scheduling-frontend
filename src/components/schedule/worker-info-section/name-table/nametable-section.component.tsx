@@ -98,7 +98,7 @@ export function NameTableSection({
                 </div>
 
                 <S.LabelWrapper>
-                  <span style={FontStyles.roboto.Regular12px}>{workerName}</span>
+                  <span style={FontStyles.roboto.Regular10px}>{workerName}</span>
                 </S.LabelWrapper>
               </S.Row>
             </ErrorPopper>

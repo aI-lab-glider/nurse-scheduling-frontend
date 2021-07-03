@@ -52,9 +52,6 @@ export function ShiftCellContent({
             ...cellStyle,
           }}
         >
-          {/* {!keepOn && !shiftTypes[shiftCode].isWorkingShift && shiftCode !== ShiftCode.W && (
-            <ShiftBar style={{ backgroundColor: colorHex }} />
-          )} */}
           <Shift
             style={{
               color:
