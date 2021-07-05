@@ -11,7 +11,6 @@ import { ScheduleDataModel } from "../state/schedule-data/schedule-data.model";
 import {
   AlgorithmError,
   AlgorithmErrorCode,
-  isWorkerRelatedError,
   WorkerOvertime,
   WorkerTeamsCollision,
   WorkerUnderTime,
@@ -104,13 +103,19 @@ export class ServerMiddleware {
     error: AlgorithmError,
     anonimizationMap: NameToUUIDMap
   ): AlgorithmError {
-    if (!isWorkerRelatedError(error)) {
-      return error;
-    }
-    if (error.worker !== undefined) {
-      Object.keys(anonimizationMap).forEach((workerName) => {
-        if (anonimizationMap[workerName] === error.worker) error.worker = workerName as WorkerName;
-      });
+    const mapUUIDToWorkerName = (uuid: string) =>
+      Object.keys(anonimizationMap).find((workerName) => anonimizationMap[workerName] === uuid);
+
+    switch (error.kind) {
+      case AlgorithmErrorCode.DissalowedShiftSequence:
+      case AlgorithmErrorCode.LackingLongBreak:
+      case AlgorithmErrorCode.WorkerUnderTime:
+      case AlgorithmErrorCode.WorkerOvertime:
+        error.worker = mapUUIDToWorkerName(error.worker);
+        break;
+      case AlgorithmErrorCode.WorkerTeamsCollision:
+        error.workers = error.workers.map(mapUUIDToWorkerName);
+        break;
     }
     return error;
   }
@@ -139,7 +144,7 @@ export class ServerMiddleware {
           (otherError) => item.day === otherError.day
         );
         sameDayErrors.forEach((otherError) => {
-          newWTCError.hours!.push(otherError.hour);
+          newWTCError.hours.push(otherError.hour);
           newWTCError.workers = _.uniq(_.concat(newWTCError.workers, otherError.workers));
           otherError.hour = -1;
         });

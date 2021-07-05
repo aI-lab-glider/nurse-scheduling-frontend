@@ -2,20 +2,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import * as _ from "lodash";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled, { css } from "styled-components";
+import * as S from "./edit-page-toolbar.styled";
 import backend from "../../../api/backend";
-import { colors, fontSizeBase, fontSizeXl } from "../../../assets/colors";
 import { Button } from "../../../components/common-components";
 import ConditionalLink from "../../../components/common-components/conditional-link/conditional-link.component";
 import { usePersistentDrawer } from "../../../components/drawers/drawer/persistent-drawer-context";
 import ErrorContainerDrawerComponent from "../../../components/drawers/error-container-drawer/error-container-drawer.component";
 import SaveChangesModal from "../../../components/modals/save-changes-modal/save-changes-modal.component";
 import { useNotification } from "../../../components/notification/notification.context";
+import { t } from "../../../helpers/translations.helper";
 import { useTemporarySchedule } from "../../../hooks/use-temporary-schedule";
 import {
   NetworkErrorCode,
@@ -104,9 +102,9 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
   }
 
   return (
-    <Wrapper>
+    <S.Wrapper>
       <Button onClick={onUndoClick} variant="circle" data-cy="undo-button" disabled={!anyChanges()}>
-        <UndoIcon />
+        <S.UndoIcon />
       </Button>
 
       <Button
@@ -115,22 +113,20 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
         variant="circle"
         disabled={undoCounter === 0}
       >
-        <RedoIcon />
+        <S.RedoIcon />
       </Button>
 
-      <EditTextWrapper data-cy="edit-mode-text">Tryb edycji aktywny</EditTextWrapper>
+      <S.EditTextWrapper data-cy="edit-mode-text">Tryb edycji aktywny</S.EditTextWrapper>
 
       <Button data-cy="check-schedule-button" variant="primary" onClick={prepareDrawer}>
-        {/* TODO: move to translations */}
-        Sprawdź Plan
+        {t("editPageToolbarCheckPlan")}
       </Button>
 
-      <Filler />
+      <S.Filler />
 
       <ConditionalLink to="/" shouldNavigate={!anyChanges()}>
         <Button onClick={askForSavingChanges} variant="secondary" data-cy="leave-edit-mode">
-          {/* TODO: move to translations */}
-          Wyjdź
+          {t("editPageToolbarExit")}
         </Button>
         <SaveChangesModal
           closeOptions={close}
@@ -148,38 +144,8 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
           handleSaveClick();
         }}
       >
-        {/* TODO: move to translations */}
-        Zapisz
+        {t("editPageToolbarSavePlan")}
       </Button>
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  margin: 5px;
-`;
-
-const undoRedoIcon = css`
-  color: ${colors.primary};
-  font-size: ${fontSizeXl};
-  margin: auto 10px auto 10px;
-`;
-
-const UndoIcon = styled(ArrowBackIcon)`
-  ${undoRedoIcon}
-`;
-const RedoIcon = styled(ArrowForwardIcon)`
-  ${undoRedoIcon}
-`;
-const Filler = styled.div`
-  flex-grow: 1;
-`;
-const EditTextWrapper = styled.p`
-  color: ${colors.primary};
-  font-size: ${fontSizeBase};
-  margin: auto;
-`;

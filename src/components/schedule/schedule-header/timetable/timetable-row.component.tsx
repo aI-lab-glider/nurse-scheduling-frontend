@@ -2,11 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import styled from "styled-components";
+import * as S from "./timetable-row.styled";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
 import { MonthInfoLogic } from "../../../../logic/schedule-logic/month-info.logic";
 import { VerboseDate } from "../../../../state/schedule-data/foundation-info/foundation-info.model";
-import { SectionRow } from "../../base/styled";
 import { TimeTableCell } from "./timetable-cell.component";
 
 export function TimeTableRow(): JSX.Element {
@@ -35,8 +34,9 @@ export function TimeTableRow(): JSX.Element {
   [verboseDates, currMont] = getVerboseDates();
 
   return (
-    <Wrapper id="timetableRow">
-      {verboseDates.map((verboseDate, cellIndex) => (
+    <S.SectionWrapper>
+      <S.TimetableRow data-cy="timetable-row">
+        {verboseDates.map((verboseDate, cellIndex) => (
           <TimeTableCell
             key={`${verboseDate.date}_${cellIndex}`}
             value={verboseDate}
@@ -44,12 +44,7 @@ export function TimeTableRow(): JSX.Element {
             index={cellIndex}
           />
         ))}
-    </Wrapper>
+      </S.TimetableRow>
+    </S.SectionWrapper>
   );
 }
-
-const Wrapper = styled(SectionRow)`
-  width: 1350px;
-  height: 70px;
-  cursor: default;
-`;

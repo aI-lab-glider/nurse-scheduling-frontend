@@ -3,16 +3,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { ShiftCode } from "../state/schedule-data/shifts-types/shift-types.model";
-import { isAllValuesDefined } from "../utils/type-utils";
-import { MonthDataArray } from "../helpers/shifts.helper";
-import { ApplicationStateModel, ScheduleStateModel } from "../state/application-state.model";
-import { ContractType } from "../state/schedule-data/worker-info/worker-info.model";
 import {
   WorkerHourInfo,
   WorkerHourInfoSummary,
 } from "../logic/schedule-logic/worker-hours-info.logic";
+import { ApplicationStateModel, ScheduleStateModel } from "../state/application-state.model";
 import { getIsEditMode, getPresentSchedule } from "../state/schedule-data/selectors";
+import { ContractType } from "../state/schedule-data/worker-info/worker-info.model";
+import { isAllValuesDefined } from "../utils/type-utils";
 
 export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
   const isEditMode = useSelector(getIsEditMode);
@@ -63,16 +61,16 @@ export function useWorkerHoursInfo(workerName: string): WorkerHourInfoSummary {
       return;
     }
     setWorkHoursInfo(
-      WorkerHourInfo.fromWorkerInfo(
-        workerShifts,
-        primaryWorkerShifts as MonthDataArray<ShiftCode>, // TODO: modify MonthDataModel to contain only MonthDataArray
-        workerTime,
-        workerContractType,
+      WorkerHourInfo.fromWorkerInfo({
+        shifts: workerShifts,
+        primaryScheduleWorkerShifts: primaryWorkerShifts,
+        workerNorm: workerTime,
+        workerEmploymentContract: workerContractType,
         month,
         year,
         dates,
-        shiftTypes
-      )
+        shiftTypes,
+      })
     );
   }, [
     shiftTypes,

@@ -3,25 +3,26 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./worker-info-section.styled";
 import { DataRow } from "../../../logic/schedule-logic/data-row";
 import { NameTableSectionOptions } from "./name-table/nametable-section.component";
 import { NameTableComponent } from "./name-table/nametable.component";
 import { WorkerInfo } from "../../../hooks/use-worker-info";
-import { SummaryTableComponent, SummaryTableOptions } from "./summary-table/summarytable.component";
 import { ScheduleMode } from "../schedule-state.model";
 import {
   ShiftsSectionComponent,
   ShiftsSectionOptions,
 } from "./shifts-section/shifts-section.component";
 import { shiftSectionDataCy } from "./worker-info-section.models";
-import { SectionContainer, SectionWrapper } from "../base/styled";
-import { colors } from "../../../assets/colors";
 import { getActualMode } from "../../../state/schedule-data/selectors";
+import {
+  SummaryTableSection,
+  SummaryTableSectionOptions,
+} from "./summary-table/summarytable-section.component";
 
 type SubcomponentsOptions = Omit<NameTableSectionOptions, "isWorker" | "uuid" | "updateData"> &
   ShiftsSectionOptions &
-  SummaryTableOptions;
+  SummaryTableSectionOptions;
 
 export interface WorkerInfoSectionOptions
   extends Omit<SubcomponentsOptions, "data" | "team" | "sectionKey"> {
@@ -42,33 +43,18 @@ export function WorkerInfoSection({
       new DataRow(workerInfo.workerName, workerInfo.workerShifts, mode === ScheduleMode.Edit)
   );
   return (
-    <Wrapper>
-      <SectionContainer className="borderContainer">
+    <S.Wrapper>
+      <S.SectionContainer className="borderContainer">
         <div>
           <NameTableComponent data={dataRows} isWorker {...options} />
         </div>
-        <ShiftSectionWrapper data-cy={shiftSectionDataCy(sectionIndex)}>
+        <S.ShiftSectionWrapper data-cy={shiftSectionDataCy(sectionIndex)}>
           <ShiftsSectionComponent sectionKey={options.sectionName} data={dataRows} {...options} />
-        </ShiftSectionWrapper>
-      </SectionContainer>
-      <SummarySectionWrapper>
-        <SummaryTableComponent data={dataRows} {...options} sectionIndex={sectionIndex} />
-      </SummarySectionWrapper>
-    </Wrapper>
+        </S.ShiftSectionWrapper>
+      </S.SectionContainer>
+      <S.SummarySectionWrapper>
+        <SummaryTableSection data={dataRows} {...options} sectionIndex={sectionIndex} />
+      </S.SummarySectionWrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const ShiftSectionWrapper = styled(SectionWrapper)`
-  border: none;
-  border-radius: 0;
-  border-left: 1px solid ${colors.tableBorderGrey};
-`;
-
-const SummarySectionWrapper = styled.div`
-  margin-left: 2%;
-`;

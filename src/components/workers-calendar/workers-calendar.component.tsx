@@ -3,11 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import _ from "lodash";
 import React from "react";
-import styled from "styled-components";
-import { colors } from "../../assets/colors";
+import { useSelector } from "react-redux";
+import * as S from "./workers-calendar.styled";
 import { useMonthInfo } from "../../hooks/use-month-info";
-import { applyScheduleStyling } from "../../hooks/use-schedule-styling/use-schedule-styling";
+import { applyScheduleStyling } from "../../hooks/apply-schedule-styling/apply-schedule-styling";
 import { VerboseDate } from "../../state/schedule-data/foundation-info/foundation-info.model";
+import { getPresentShiftTypes } from "../../state/schedule-data/selectors";
 import { ShiftCode } from "../../state/schedule-data/shifts-types/shift-types.model";
 import { WorkersCalendarCell } from "./worker-calendar-cell.component";
 
@@ -15,11 +16,11 @@ interface CalendarOptions {
   id: string;
   workerShifts: ShiftCode[];
 }
-// TODO: Shrink drawer
 
 export default function WorkersCalendar({ id, workerShifts }: CalendarOptions): JSX.Element {
   const { verboseDates } = useMonthInfo();
   const shiftsArr = _.zip(verboseDates, workerShifts);
+  const shiftTypes = useSelector(getPresentShiftTypes);
   const firstDay = shiftsArr[0][0].dayOfWeek;
   const dayOfWeekNamesEng = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
   const dayOfWeekNames = ["PON", "WT", "ŚR", "CZW", "PT", "SB", "ND"];
@@ -33,15 +34,20 @@ export default function WorkersCalendar({ id, workerShifts }: CalendarOptions): 
     daysToDisplay.push(dayOfWeekNames[i]);
   }
 
-  const data = applyScheduleStyling(shiftsArr.map((x) => x[1]));
+  const data = applyScheduleStyling(
+    shiftsArr.map((x) => x[1]),
+    shiftTypes
+  );
 
   let isTop = false;
   let isLeft = false;
 
   return (
-    <Wrapper id={id}>
-      <CalendarWrapper>
-        {daysToDisplay.map((element) => <DayName>{element}</DayName>)}
+    <S.Wrapper id={id}>
+      <S.CalendarWrapper>
+        {daysToDisplay.map((element) => (
+          <S.DayName>{element}</S.DayName>
+        ))}
         {data?.map(({ value: shiftCode, keepOn, hasNext }, index) => {
           date = shiftsArr[index][0];
           if (date.date === 1) {
@@ -68,34 +74,7 @@ export default function WorkersCalendar({ id, workerShifts }: CalendarOptions): 
             />
           );
         })}
-      </CalendarWrapper>
-    </Wrapper>
+      </S.CalendarWrapper>
+    </S.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  width: 100%;
-`;
-const CalendarWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-flow: row wrap;
-  align-content: space-between;
-  justify-content: space-between;
-  border-left: 1px solid ${colors.tableBorderGrey};
-  border-top: 1px solid ${colors.tableBorderGrey};
-`;
-
-const DayName = styled.div`
-  size: 14px;
-  letter-spacing: 0.75px;
-  font-weight: 400;
-  width: 14.2%;
-  height: 30px;
-  padding: 5px;
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  border-bottom: 1px solid ${colors.tableBorderGrey};
-  border-right: 1px solid ${colors.tableBorderGrey};
-`;

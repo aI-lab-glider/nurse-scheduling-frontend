@@ -6,16 +6,11 @@ import _ from "lodash";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { usePopper } from "react-popper";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
-import {
-  colors,
-  fontFamilyPrimary,
-  fontSizeBase,
-  fontWeightNormal,
-} from "../../../../assets/colors";
+import * as S from "./shift-autocomplete.styled";
 import useTimeout from "../../../../hooks/use-timeout";
 import { getPresentShiftTypes } from "../../../../state/schedule-data/selectors";
 import {
+  Shift,
   ShiftCode,
   ShiftTypesDict,
 } from "../../../../state/schedule-data/shifts-types/shift-types.model";
@@ -32,14 +27,19 @@ interface ShiftCodeSelectItem {
   color: string;
   "data-cy": `autocomplete-${keyof typeof ShiftCode}`;
 }
+const nameString = (shift: Shift): string => {
+  let string = shift.name;
+  if (shift.isWorkingShift) string += `(${shift.from}-${shift.to})`;
+  return string;
+};
 const ShiftCodeSelectItems = (shifts: ShiftTypesDict): ShiftCodeSelectItem[] =>
   _.sortBy(
     Object.values(shifts).map((shift) => ({
-      name: `${shift.name} ${shift.isWorkingShift ? `(${shift.from}-${shift.to})` : ""}`,
+      name: nameString(shift),
       symbol: shift.code,
       from: shift.from,
       to: shift.to,
-      isWorkingShift: shift!.isWorkingShift,
+      isWorkingShift: shift.isWorkingShift,
       code: shift.code,
       color: shift.color ? shift.color : "$white",
       "data-cy": `autocomplete-${shift.code}` as const,
@@ -52,6 +52,18 @@ const ShiftCodeSelectItems = (shifts: ShiftTypesDict): ShiftCodeSelectItem[] =>
  * @param inputOptions : BaseCellInputOptions
  * @returns JSX.Element
  */
+
+const getNonWorkingShifts = (
+  shift: ShiftCodeSelectItem,
+  shiftTypes: ShiftTypesDict
+): ShiftCodeSelectItem | undefined => {
+  if (shift.name.trim() !== shiftTypes[ShiftCode.W].name && !shift.isWorkingShift) {
+    return shift;
+  }
+  return undefined;
+};
+const getWorkingShifts = (shift: ShiftCodeSelectItem): ShiftCodeSelectItem =>
+  shift.isWorkingShift && shift;
 export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): JSX.Element {
   const inputRef = useRef(null);
   const tooltipRef = useRef(null);
@@ -88,13 +100,8 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
   const [isComponentVisible, setIsComponentVisible] = useState(true);
   const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
 
-  const getNonWorkingShifts = (shift: ShiftCodeSelectItem): ShiftCodeSelectItem | undefined => {
-    if (shift.name.trim() !== shiftTypes[ShiftCode.W].name) {
-      if (!shift.isWorkingShift) return shift;
-    }
-    return undefined;
-  };
-  const nonWorkingShifts = groupedOptions.filter(getNonWorkingShifts);
+  const nonWorkingShifts = groupedOptions.filter((shift) => getNonWorkingShifts(shift, shiftTypes));
+  const workingShifts = groupedOptions.filter(getWorkingShifts);
   /**
    * @description Small element for rendering shift info & shift color circle
    * @returns JSX.Element
@@ -114,8 +121,8 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
         setSelectedShiftCode(option);
       }}
     >
-      <OptionLabel>{getOptionLabel(option)}</OptionLabel>
-      <OptionColor style={{ backgroundColor: `#${getOptionColor(option)}` }} />
+      <S.OptionLabel>{getOptionLabel(option)}</S.OptionLabel>
+      <S.OptionColor style={{ backgroundColor: `#${getOptionColor(option)}` }} />
     </div>
   );
   const pageOffset: number | undefined = document.getElementById("root")?.children[0]?.children[0]
@@ -148,7 +155,7 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
         />
       </div>
       {shiftTypes && groupedOptions.length > 0 && (
-        <ListBox
+        <S.ListBox
           ref={tooltipRef}
           style={styles.popper}
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -162,84 +169,15 @@ export function ShiftAutocompleteComponent(inputOptions: BaseCellInputOptions): 
             }
             return null;
           })}
-          {groupedOptions.map((option, index) => {
-            if (option.isWorkingShift) {
-              return (
-                <LabelComponent option={option} index={index} key={option.name + option.symbol} />
-              );
-            }
-            return null;
-          })}
-          {nonWorkingShifts.length > 0 && <AutoSeparator />}
+          {workingShifts.map((option, index) => (
+            <LabelComponent option={option} index={index} key={option.name + option.symbol} />
+          ))}
+          {nonWorkingShifts.length > 0 && workingShifts.length > 0 && <S.AutoSeparator />}
           {nonWorkingShifts.map((option, index) => (
             <LabelComponent option={option} index={index} key={option.name + option.symbol} />
           ))}
-        </ListBox>
+        </S.ListBox>
       )}
     </div>
   );
 }
-
-const AutoSeparator = styled.div`
-  flex: 1;
-  width: 90%;
-  background-color: ${colors.gray400};
-  height: 1.25px;
-  display: flex;
-  align-self: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
-`;
-
-const ListBox = styled.div`
-  position: absolute;
-  padding: 10px 0;
-  margin: -5px 0 0 -2px;
-  overflow: auto;
-  font-family: ${fontFamilyPrimary};
-  font-size: ${fontSizeBase}rem;
-  text-align: left;
-  color: ${colors.primary};
-  background-color: ${colors.white};
-  font-weight: ${fontWeightNormal};
-  box-shadow: 0 4px 7px rgba(16, 32, 70, 0.2);
-  max-height: 500px;
-  border-radius: 7px;
-  min-width: 260px;
-  z-index: 300;
-
-  & > div {
-    display: flex;
-    margin-left: 0.6em;
-    flex: 1;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    letter-spacing: 0.75px;
-    align-content: center;
-    justify-items: center;
-    justify-content: left;
-    &:hover {
-      cursor: pointer;
-    }
-    &[data-focus="true"] {
-      cursor: pointer;
-    }
-  }
-`;
-
-const OptionLabel = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  margin-right: 0.2em;
-  word-wrap: normal;
-  overflow-wrap: normal;
-`;
-const OptionColor = styled.div`
-  display: flex;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  margin: 0 0;
-  align-self: center;
-`;

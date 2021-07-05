@@ -3,14 +3,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./schedule.styled";
+import { t } from "../../helpers/translations.helper";
 import { useTeams } from "../../hooks/use-teams";
 import { WorkerHourInfo } from "../../logic/schedule-logic/worker-hours-info.logic";
 import { getPresentEmployeeInfo } from "../../state/schedule-data/selectors";
 import { FoundationInfoComponent } from "./foundation-info-section/foundation-info.component";
 import { ScheduleFoldingSection } from "./schedule-folding-section.component";
-import { OvertimeHeaderComponent } from "./schedule-header/overtime-header-table/overtime-header.component";
-import { TimeTableComponent } from "./schedule-header/timetable/timetable.component";
+import { OvertimeHeaderRow } from "./schedule-header/overtime-header-table/overtime-header-row.component";
+import { TimeTableRow } from "./schedule-header/timetable/timetable-row.component";
 import { WorkerInfoSection } from "./worker-info-section/worker-info-section.component";
 
 export function ScheduleComponent(): JSX.Element {
@@ -30,44 +31,24 @@ export function ScheduleComponent(): JSX.Element {
 
   return (
     <div style={{ margin: "20 0" }}>
-      <div>
-        <TimeHeader>
-          <TimeTableContainer>
-            <TimeTableComponent />
-          </TimeTableContainer>
-          <SummaryContainer>
-            <OvertimeHeaderComponent data={Object.values(WorkerHourInfo.summaryTranslations)} />
-          </SummaryContainer>
-        </TimeHeader>
+      <S.TimeHeader>
+        <S.TimeTableContainer>
+          <TimeTableRow />
+        </S.TimeTableContainer>
+        <S.SummaryContainer>
+          <OvertimeHeaderRow data={Object.values(WorkerHourInfo.summaryTranslations)} />
+        </S.SummaryContainer>
+      </S.TimeHeader>
 
-        {Object.entries(teams).map(([teamName, workers], index) => (
-          <ScheduleFoldingSection name={teamName} key={teamName}>
-            <WorkerInfoSection sectionIndex={index} data={workers} sectionName={teamName} />
-          </ScheduleFoldingSection>
-        ))}
-
-        <ScheduleFoldingSection name="Informacje">
-          <FoundationInfoComponent />
+      {Object.entries(teams).map(([teamName, workers], index) => (
+        <ScheduleFoldingSection name={teamName} key={teamName}>
+          <WorkerInfoSection sectionIndex={index} data={workers} sectionName={teamName} />
         </ScheduleFoldingSection>
-      </div>
+      ))}
+
+      <ScheduleFoldingSection name={t("scheduleSectionNameInformation")}>
+        <FoundationInfoComponent />
+      </ScheduleFoldingSection>
     </div>
   );
 }
-const TimeHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: sticky;
-
-  top: 52px;
-  z-index: 3;
-  flex: 1;
-  padding-top: 19px;
-  width: 1500px;
-`;
-
-const TimeTableContainer = styled.div`
-  margin-left: 128px;
-`;
-const SummaryContainer = styled.div`
-  margin-left: 32px;
-`;

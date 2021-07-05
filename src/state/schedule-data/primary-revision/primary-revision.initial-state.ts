@@ -6,8 +6,8 @@ import { PrimaryMonthRevisionDataModel } from "../../application-state.model";
 import { initialDate } from "../month-info/month-info.initial-state";
 import { scheduleDataInitialState } from "../schedule-data-initial-state";
 
-export const primaryRevisionInitialState: PrimaryMonthRevisionDataModel = {
+export const primaryRevisionInitialState: PrimaryMonthRevisionDataModel = ({
   scheduleKey: new ScheduleKey(initialDate.getMonth(), initialDate.getFullYear()),
   ...scheduleDataInitialState,
   __TYPE__: "PrimaryScheduleRevision",
-};
+} as unknown) as PrimaryMonthRevisionDataModel;

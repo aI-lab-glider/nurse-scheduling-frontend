@@ -1,18 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
-import { colors, fontSizeXs } from "../../../assets/colors";
-import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
-import { Button } from "../../../components/common-components";
+import * as S from "./workers-tab.styled";
 import WorkerDrawerComponent, {
   WorkerDrawerMode,
 } from "../../../components/drawers/worker-drawer/worker-drawer.component";
@@ -33,27 +28,29 @@ import {
 } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      paddingTop: 0,
-      width: "100%",
-    },
-    tableCell: {
-      color: ScssVars.primary,
-      fontWeight: "normal",
-      fontSize: ScssVars.fontSizeBase,
-      fontFamily: ScssVars.fontFamilyPrimary,
-      letterSpacing: ScssVars.headingLetterSpacing,
-    },
-    row: {
-      borderTop: `2px solid ${ScssVars.workerTableBorderColor}`,
-    },
-  })
-);
+function toggleDrawer(
+  open: boolean,
+  setIsOpen: (value: React.SetStateAction<boolean>) => void,
+  setMode: (value: React.SetStateAction<WorkerDrawerMode>) => void,
+  setWorker: (value: React.SetStateAction<WorkerInfoModel>) => void,
+  mode?: WorkerDrawerMode,
+  workerData?: WorkerInfoModel
+): void {
+  setIsOpen(open);
+  mode !== undefined && setMode(mode);
+  setWorker(workerData);
+}
+function workerDeleteModal(
+  open: boolean,
+  setDelModalOpen: (value: React.SetStateAction<boolean>) => void,
+  setWorker: (value: React.SetStateAction<WorkerInfoModel>) => void,
+  workerData?: WorkerInfoModel
+): void {
+  setDelModalOpen(open);
+  setWorker(workerData);
+}
 
 export default function WorkersTab(): JSX.Element {
-  const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof WorkerInfoModel>("name");
   const { type, time, contractType, team } = useSelector(getPresentEmployeeInfo);
@@ -86,21 +83,6 @@ export default function WorkersTab(): JSX.Element {
     setOrderBy(property);
   }
 
-  function toggleDrawer(
-    open: boolean,
-    mode?: WorkerDrawerMode,
-    workerData?: WorkerInfoModel
-  ): void {
-    setIsOpen(open);
-    mode !== undefined && setMode(mode);
-    setWorker(workerData);
-  }
-
-  function workerDeleteModal(open: boolean, workerData?: WorkerInfoModel): void {
-    setDelModalOpen(open);
-    setWorker(workerData);
-  }
-
   const getWorkerTimeLabel = useCallback(
     (workerName: string) => {
       const workHourNormInMonth = WorkerHourInfo.calculateWorkNormForMonth(monthNumber, year);
@@ -119,93 +101,65 @@ export default function WorkersTab(): JSX.Element {
   );
 
   return (
-    <Wrapper>
-      <TableContainer className={classes.root}>
+    <S.Wrapper>
+      <S.TableContainer>
         <Table size="small">
           <EnhancedTableHeaderComponent
             order={order}
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
             rowCount={workerData.length}
-            toggleDrawer={toggleDrawer}
+            toggleDrawer={() =>
+              toggleDrawer(true, setIsOpen, setMode, setWorker, WorkerDrawerMode.ADD_NEW)
+            }
           />
           <TableBody>
-            {ComparatorHelper.stableSort(workerData, order, orderBy).map((worker) => {
-              const workerType = worker.type ?? WorkerType.NURSE;
+            {ComparatorHelper.stableSort(workerData, order, orderBy).map((w) => {
+              const workerType = w.type ?? S.WorkerType.NURSE;
 
               return (
-                <TableRow key={worker.name} className={classes.row}>
-                  <TableCell className={classes.tableCell} data-cy="workerName">
-                    {worker.name}
-                  </TableCell>
-                  <TableCell className={classes.tableCell} align="left">
-                    <WorkerType className={`${workerType.toString().toLowerCase()}-label`}>
+                <TableRow key={w.name}>
+                  <S.TableCell data-cy="workerName">{w.name}</S.TableCell>
+                  <S.TableCell align="left">
+                    <S.WorkerType className={`${workerType.toString().toLowerCase()}-label`}>
                       {StringHelper.capitalize(WorkerTypeHelper.translate(workerType))}
-                    </WorkerType>
-                  </TableCell>
-                  <TableCell
-                    className={classes.tableCell}
-                    align="left"
-                    data-cy={`worker-hours-${worker.name}`}
-                  >
-                    {getWorkerTimeLabel(worker.name)}
-                  </TableCell>
-                  <TableCell className={classes.tableCell} align="left">
-                    {worker.team}
-                  </TableCell>
+                    </S.WorkerType>
+                  </S.TableCell>
+                  <S.TableCell align="left" data-cy={`worker-hours-${w.name}`}>
+                    {getWorkerTimeLabel(w.name)}
+                  </S.TableCell>
+                  <S.TableCell align="left">{w.team}</S.TableCell>
                   <TableCell align="right">
-                    <ActionButton
-                      data-cy={`edit-worker-${worker.name}`}
+                    <S.ActionButton
+                      data-cy={`edit-worker-${w.name}`}
                       variant="primary"
-                      onClick={(): void => toggleDrawer(true, WorkerDrawerMode.EDIT, worker)}
+                      onClick={(): void =>
+                        toggleDrawer(true, setIsOpen, setMode, setWorker, WorkerDrawerMode.EDIT, w)
+                      }
                     >
                       Edytuj
-                    </ActionButton>
-                    <ActionButton
+                    </S.ActionButton>
+                    <S.ActionButton
                       variant="secondary"
-                      onClick={(): void => workerDeleteModal(true, worker)}
+                      onClick={(): void => workerDeleteModal(true, setDelModalOpen, setWorker, w)}
                     >
                       Usuń
-                    </ActionButton>
+                    </S.ActionButton>
                   </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
-      </TableContainer>
+      </S.TableContainer>
       <WorkerDrawerComponent
         open={open}
-        onClose={(): void => toggleDrawer(false)}
+        onClose={(): void => toggleDrawer(false, setIsOpen, setMode, setWorker)}
         mode={mode}
         worker={worker}
         setOpen={setIsOpen}
       />
       <DeleteWorkerModalComponent setOpen={setDelModalOpen} open={openDelModal} worker={worker} />
-    </Wrapper>
+    </S.Wrapper>
   );
 }
-const Wrapper = styled.div`
-  margin-top: 45px;
-`;
-
-const WorkerType = styled.span`
-  border-radius: 20px;
-  font-weight: 400;
-  letter-spacing: 0.025em;
-  background-color: ${colors.nurseColor};
-  padding: 6px;
-
-  &.nurse-label {
-    background-color: ${colors.nurseColor};
-  }
-
-  &.other-label {
-    background-color: ${colors.babysitterLabelBackground};
-  }
-`;
-
-const ActionButton = styled(Button)`
-  font-size: ${fontSizeXs};
-  padding: 2px 25px 2px;
-`;

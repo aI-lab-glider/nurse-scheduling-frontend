@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import * as S from "./foundation-info.styled";
 import { DataRowHelper } from "../../../helpers/data-row.helper";
 import { DataRow } from "../../../logic/schedule-logic/data-row";
 import { ChildrenSectionKey, ExtraWorkersSectionKey } from "../../../logic/section.model";
@@ -13,8 +13,6 @@ import { ScheduleMode } from "../schedule-state.model";
 import { BaseSectionComponent } from "../base/base-section/base-section.component";
 import { SelectionMatrix } from "../base/base-section/use-selection-matrix";
 import { useFoundationInfo } from "../../../hooks/use-foundation-info";
-import { SectionContainer, SectionWrapper } from "../base/styled";
-import { colors } from "../../../assets/colors";
 import { getActualMode } from "../../../state/schedule-data/selectors";
 import { TEMPORARY_SCHEDULE_NAME, PERSISTENT_SCHEDULE_NAME } from "../../../state/app.reducer";
 
@@ -33,10 +31,9 @@ export function FoundationInfoComponent(): JSX.Element {
   const dispatch = useDispatch();
   const updateFoundationInfoData = useCallback(
     (selectionMatrix: SelectionMatrix, oldData: DataRow<string>[], newValue: string) => {
-      // TODO: Fix unkonw
       const updatedDataRows = DataRowHelper.copyWithReplaced<number>(
         selectionMatrix,
-        (oldData as unknown) as DataRow<number>[],
+        oldData.map((row) => new DataRow(row.rowKey, row.rowData(true, false))),
         parseInt(newValue, 10)
       );
       const updatedFoundationInfo = DataRowHelper.dataRowsAsValueDict<number>(updatedDataRows);
@@ -55,28 +52,22 @@ export function FoundationInfoComponent(): JSX.Element {
   );
   return (
     <div style={{ display: "inline-block" }}>
-      <SectionContainer className="borderContainer">
+      <S.SectionContainer className="borderContainer">
         <div>
           <NameTableComponent data={sectionData} isWorker={false} />
         </div>
         <div>
           <div>
-            <FoundationSectionWrapper data-cy="foundationInfoSection">
+            <S.FoundationSectionWrapper data-cy="foundationInfoSection">
               <BaseSectionComponent
                 sectionKey="foundationInfo"
                 data={sectionData}
                 updateData={updateFoundationInfoData}
               />
-            </FoundationSectionWrapper>
+            </S.FoundationSectionWrapper>
           </div>
         </div>
-      </SectionContainer>
+      </S.SectionContainer>
     </div>
   );
 }
-
-const FoundationSectionWrapper = styled(SectionWrapper)`
-  border: none;
-  border-radius: 0;
-  border-left: 1px solid ${colors.tableBorderGrey};
-`;

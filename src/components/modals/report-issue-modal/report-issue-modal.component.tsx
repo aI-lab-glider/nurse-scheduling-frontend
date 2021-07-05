@@ -1,11 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-
-import { TextField } from "@material-ui/core";
 import { send } from "emailjs-com";
 import React, { useState } from "react";
-import styled from "styled-components";
+import * as S from "./report-issue-modal.styled";
 import { t } from "../../../helpers/translations.helper";
 import { Button } from "../../buttons/button-component/button.component";
 import { useNotification } from "../../notification/notification.context";
@@ -62,28 +60,35 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   ) {
     throw new Error("[TEST MODE] Error message was entered");
   }
-
+  const addSuffix = (length: number): string => {
+    if (length < 5) {
+      if (length === 1) return "";
+      return "i";
+    }
+    return "ów";
+  };
+  const helperText = (length: number): string => {
+    if (length < 19) {
+      return `Treść wiadomości jest za krótka! Wprowadź jeszcze min. ${
+        19 - length + 1
+      } znak${addSuffix(length)}.`;
+    }
+    return " ";
+  };
   const body = (
     <div>
-      {isSent && <Message>{t("errorMessageWasSent")}</Message>}
-      {!isSent && (
+      {isSent ? (
+        <S.Message>{t("errorMessageWasSent")}</S.Message>
+      ) : (
         <>
-          <Message>{t("whatErrorOccurred")}</Message>
-          <Input
+          <S.Message>{t("whatErrorOccurred")}</S.Message>
+          <S.Input
             placeholder={t("provideErrorDescription")}
             value={issueDescription}
             onChange={onIssueDescriptionChange}
             fullWidth
             multiline
-            helperText={
-              issueDescription.length > 19
-                ? " "
-                : `Treść wiadomości jest za krótka! Wprowadź jeszcze min. ${
-                    19 - issueDescription.length + 1
-                  } znak${
-                    issueDescription.length < 16 ? "ów" : issueDescription.length < 19 ? "i" : ""
-                  }.`
-            }
+            helperText={helperText(issueDescription.length)}
           />
         </>
       )}
@@ -121,13 +126,3 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
     />
   );
 }
-
-const Message = styled.p`
-  font-weight: bolder;
-  letter-spacing: 0.75px;
-`;
-
-const Input = styled(TextField)`
-  letter-spacing: 0.25px;
-  margin-top: 0;
-`;

@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { Grid, Input, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import * as _ from "lodash";
 import React, { useState } from "react";
 import { t } from "../../../../helpers/translations.helper";
@@ -14,15 +14,13 @@ import {
 import { TextMaskCustom } from "../../../common-components/text-mask-custom/text-mask-custom.component";
 import { WorkNormSelectorOptions } from "./combined-worknorm-selector.component";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
-import { useFormFieldStyles } from "./worker-edit.models";
+import * as S from "./worker.styled";
 
 export function WorkerEmploymentContractWorkNormSelector({
-  employmentTime,
+  workerTime,
   setWorkerTime,
   setIsFieldValid: setIsFormValid,
 }: WorkNormSelectorOptions): JSX.Element {
-  const classes = useFormFieldStyles();
-
   const [selectedTimeType, setSelectedTimeType] = useState<TimeDrawerType>(TimeDrawerType.FULL);
   const [firstEditMade, setFirstEditMade] = useState(false);
 
@@ -69,7 +67,7 @@ export function WorkerEmploymentContractWorkNormSelector({
     setFirstEditMade(true);
   }
   const inputWidth = 100;
-  const employmentTimeAsFraction = toFraction(employmentTime);
+  const employmentTimeAsFraction = toFraction(workerTime);
   return (
     <>
       <Grid item xs={6} style={{ zIndex: 2 }}>
@@ -83,8 +81,8 @@ export function WorkerEmploymentContractWorkNormSelector({
       </Grid>
       {selectedTimeType === TimeDrawerType.OTHER && (
         <Grid item xs={6}>
-          <Typography className={classes.label}>{t("enterWorkerHours")}</Typography>
-          <Input
+          <S.Label>{t("enterWorkerHours")}</S.Label>
+          <S.Input
             fullWidth
             name="employmentTimeOther"
             value={employmentTimeAsFraction}
@@ -93,14 +91,13 @@ export function WorkerEmploymentContractWorkNormSelector({
             style={{
               width: inputWidth,
             }}
-            className={classes.formInput}
             inputComponent={
               // eslint-disable-next-line
               TextMaskCustom as any
             }
           />
           <FormFieldErrorLabel
-            shouldBeVisible={!isEmploymentTimeValid(employmentTime) && firstEditMade}
+            shouldBeVisible={!isEmploymentTimeValid(workerTime) && firstEditMade}
             message={t("workerCouldNotBeEmployedMore")}
           />
         </Grid>

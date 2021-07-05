@@ -1,29 +1,19 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
+import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import styled from "styled-components";
-import { Button } from "../../../components/common-components";
-import { ShiftDrawerMode } from "../../../components/shifts-drawer/shift-drawer.component";
-import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
-import { Shift, ShiftCode } from "../../../state/schedule-data/shifts-types/shift-types.model";
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    tableCellH: {
-      fontWeight: "bolder",
-      color: ScssVars.primary,
-      padding: "0px",
-    },
-  })
-);
+import React from "react";
+import * as S from "./enhanced-table-header.styled";
+import {
+  NewShiftTemplate,
+  ShiftEditComponentMode,
+} from "../../../components/shifts-drawer/shift-edit-drawer.component";
+import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
 
 interface EnhancedTableProps {
-  toggleOpen: (shift: Shift, mode: ShiftDrawerMode) => void;
+  toggleOpen: (shift: NewShiftTemplate, mode: ShiftEditComponentMode) => void;
 }
 
 interface ShiftDataCell {
@@ -40,42 +30,34 @@ const headCells: ShiftDataCell[] = [
 
 export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Element {
   const { toggleOpen } = props;
-  const classes = useStyles();
 
   return (
     <TableHead>
       <TableRow>
         {headCells.map((headCell) => (
-          <TableCell className={classes.tableCellH} key={headCell.id}>
-            {headCell.label}
-          </TableCell>
+          <S.StyledTableCell key={headCell.id}>{headCell.label}</S.StyledTableCell>
         ))}
         <TableCell align="right">
-          <HeaderButton
+          <S.HeaderButton
             variant="primary"
             disabled
             onClick={(): void => {
               toggleOpen(
                 {
-                  code: "" as ShiftCode, // TODO: fix typing
                   name: "Nowa zmiana",
                   from: 0,
                   to: 0,
                   color: "FFD100",
                   isWorkingShift: true,
                 },
-                ShiftDrawerMode.ADD_NEW
+                ShiftEditComponentMode.ADD_NEW
               );
             }}
           >
             Dodaj zmianę
-          </HeaderButton>
+          </S.HeaderButton>
         </TableCell>
       </TableRow>
     </TableHead>
   );
 }
-
-const HeaderButton = styled(Button)`
-  width: 187px;
-`;

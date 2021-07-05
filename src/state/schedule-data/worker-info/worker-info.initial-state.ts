@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { WorkersInfoModel } from "./worker-info.model";
 
-// TODO: Split to separate states for each schedule props
 export const workerInfoinitialState: WorkersInfoModel = {
   time: {},
   type: {},

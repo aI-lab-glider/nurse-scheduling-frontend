@@ -1,11 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import _ from "lodash";
 import { WorkerName } from "../schedule-sensitive-data.model";
 import { ShiftCode } from "../shifts-types/shift-types.model";
-
-// TODO: merge with schedule-error-message.model
 
 export enum AlgorithmErrorCode {
   AlwaysAtLeastOneNurse = "AON",
@@ -127,10 +124,6 @@ export interface WorkerTeamsCollision {
 // #endregion
 
 // #endregion
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const isWorkerRelatedError = (
-  error: AlgorithmError
-): error is AlgorithmError & { worker: WorkerName } => !_.isNil((error as any).worker);
 export type AlgorithmError =
   | AlwaysAtLeastOneNurse
   | WorkerNumberDuringDay

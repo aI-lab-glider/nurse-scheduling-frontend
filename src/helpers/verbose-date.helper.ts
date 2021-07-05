@@ -7,7 +7,7 @@ import { PublicHolidaysLogic } from "../logic/schedule-logic/public-holidays.log
 import { CellColorSet } from "./colors/cell-color-set.model";
 import { ColorHelper } from "./colors/color.helper";
 import { Colors } from "./colors/color.model";
-import { MonthDataArray } from "./shifts.helper";
+import { MonthDataArray } from "./month-data-array.model";
 import { Opaque } from "../utils/type-utils";
 
 export type WorkingDay = Opaque<"WorkingDay", VerboseDate>;

@@ -8,10 +8,10 @@ import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import {
   AlgorithmErrorCode,
   GroupedScheduleErrors,
-  ScheduleError,
 } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { ShiftCode } from "../../../../state/schedule-data/shifts-types/shift-types.model";
 import { WorkerShiftsActionCreator } from "../../../../state/schedule-data/workers-shifts/worker-shifts.action-creator";
+import { StyledScheduleError } from "../../../poppers/error-popper/error-popper.component";
 import {
   BaseSectionComponent,
   BaseSectionOptions,
@@ -26,7 +26,7 @@ function shiftSectionErrorSelector(
   worker: string,
   cellIndex: number,
   scheduleErrors: GroupedScheduleErrors
-): ScheduleError[] {
+): StyledScheduleError[] {
   const errors = [
     ...(scheduleErrors[AlgorithmErrorCode.DissalowedShiftSequence]?.filter(
       (error) => error.worker === worker && error.day === cellIndex

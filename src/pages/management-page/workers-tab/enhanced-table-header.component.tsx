@@ -5,37 +5,16 @@ import React from "react";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import classNames from "classnames/bind";
-import styled from "styled-components";
-import { Button } from "../../../components/common-components";
-import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
+import * as S from "./enhanced-table-header.styled";
 import { Order } from "../../../helpers/comparator.helper";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
-import { WorkerDrawerMode } from "../../../components/drawers/worker-drawer/worker-drawer.component";
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    label: {
-      color: ScssVars.primary,
-      fontWeight: "normal",
-      fontSize: ScssVars.fontSizeBase,
-      fontFamily: ScssVars.fontFamilyPrimary,
-      letterSpacing: ScssVars.headingLetterSpacing,
-    },
-    activeLabel: {
-      fontWeight: "bold",
-    },
-  })
-);
 
 interface EnhancedTableProps {
   onRequestSort: (event: React.MouseEvent<unknown>, property: keyof WorkerInfoModel) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
-  toggleDrawer: (open: boolean, mode?: WorkerDrawerMode, workerData?: WorkerInfoModel) => void;
+  toggleDrawer: () => void;
 }
 
 interface WorkerDataCell {
@@ -52,7 +31,6 @@ const headCells: WorkerDataCell[] = [
 ];
 
 export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Element {
-  const classes = useStyles();
   const { order, orderBy, onRequestSort, toggleDrawer } = props;
 
   function createSortHandler(
@@ -69,35 +47,30 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
           const isActive = orderBy === headCell.id;
           return (
             <TableCell key={headCell.id} sortDirection={isActive ? order : false}>
-              <TableSortLabel
+              <S.TableSortLabel
                 active={isActive}
                 direction={isActive ? order : "asc"}
                 onClick={(event: React.MouseEvent<unknown>): void =>
                   createSortHandler(headCell.id, event)
                 }
-                className={classNames(classes.label, { [classes.activeLabel]: isActive })}
               >
                 {headCell.label}
-              </TableSortLabel>
+              </S.TableSortLabel>
             </TableCell>
           );
         })}
         <TableCell align="right">
-          <HeaderButton
+          <S.HeaderButton
             variant="primary"
             data-cy="btn-add-worker"
             onClick={(): void => {
-              toggleDrawer(true, WorkerDrawerMode.ADD_NEW, undefined);
+              toggleDrawer();
             }}
           >
             Dodaj pracownika
-          </HeaderButton>
+          </S.HeaderButton>
         </TableCell>
       </TableRow>
     </TableHead>
   );
 }
-
-const HeaderButton = styled(Button)`
-  width: 187px;
-`;

@@ -11,12 +11,11 @@ import { ShiftCode } from "../../../../../state/schedule-data/shifts-types/shift
 import { BaseCellOptions } from "../../../base/base-cell/base-cell.models";
 import { useCellBackgroundHighlight } from "../../../hooks/use-cell-highlight";
 import { useCellSelection } from "../../../hooks/use-cell-selection";
-import { CellWrapper } from "../shit-cell.styles";
+import { CellWrapper } from "./shift-cell.styled";
 import { MouseEventListener } from "../../../../common-components/mouse-event-listener/mouse-event-listener";
 import { ShiftCellContent } from "./shift-cell-content.component";
 import { ShiftsCellDropdown } from "./shifts-cell-dropdown.component";
 
-// TODO: Create a config file, that will contain this definitions
 const MODAL_CLOSE_MS = 4444;
 export const DEFAULT_SHIFT_HEX = "FFD100";
 

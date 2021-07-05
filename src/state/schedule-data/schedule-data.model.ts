@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import * as _ from "lodash";
 import { MonthHelper, NUMBER_OF_DAYS_IN_WEEK } from "../../helpers/month.helper";
+import { MonthDataArray } from "../../helpers/month-data-array.model";
 import { ScheduleKey } from "../../logic/data-access/persistance-store.model";
 import {
   FoundationInfoModel,
@@ -39,8 +40,22 @@ export interface ScheduleDataModel {
   isCorrupted: boolean;
 }
 
-export interface MonthDataModel extends Omit<ScheduleDataModel, "schedule_info" | "revisionType"> {
+/**
+ * Creates new type with data for concrete month
+ */
+type MonthModel<TOriginal> = {
+  [key in keyof TOriginal]: TOriginal[key] extends unknown[]
+    ? MonthDataArray<TOriginal[key][0]>
+    : TOriginal[key];
+};
+export type MonthWorkerShiftsModel = MonthModel<ScheduleDataModel["shifts"]>;
+export type MonthFoundationInfoModel = MonthModel<ScheduleDataModel["month_info"]>;
+
+export interface MonthDataModel
+  extends Omit<ScheduleDataModel, "schedule_info" | "revisionType" | "month_info" | "shifts"> {
   scheduleKey: ScheduleKey;
+  shifts: MonthWorkerShiftsModel;
+  month_info: MonthFoundationInfoModel;
 }
 
 export function validateScheduleDM({
@@ -84,11 +99,14 @@ export function isMonthModelEmpty(monthDataModel: MonthDataModel): boolean {
     MonthDataModel,
     "employee_info" | "month_info" | "shifts"
   >)[] = ["employee_info", "month_info", "shifts"];
-  return requiredFields.every((field) => {
-    const requiredObject = monthDataModel[field];
+  return requiredFields.every((requiredField) => {
+    const requiredObject = monthDataModel[requiredField];
     return Object.values(requiredObject).every((field) => _.isEmpty(field));
   });
 }
+
+const createMonthArray = <T>(monthLen: number, getValue: () => T): MonthDataArray<T> =>
+  new Array(monthLen).fill(getValue()) as MonthDataArray<T>;
 
 export function createEmptyMonthDataModel(
   scheduleKey: ScheduleKey,
@@ -101,18 +119,18 @@ export function createEmptyMonthDataModel(
   const dates = MonthHelper.daysInMonth(scheduleKey.month, scheduleKey.year);
   const monthLength = dates.length;
 
-  const freeShifts: WorkerShiftsModel = {};
+  const freeShifts: MonthWorkerShiftsModel = {};
   Object.keys(shifts).forEach((key) => {
-    freeShifts[key] = new Array(monthLength).fill(ShiftCode.W);
+    freeShifts[key] = createMonthArray(monthLength, () => ShiftCode.W);
   });
 
-  const monthDataModel = {
+  const monthDataModel: MonthDataModel = {
     scheduleKey,
     month_info: {
-      children_number: new Array(monthLength).fill(0),
-      extra_workers: new Array(monthLength).fill(0),
-      frozen_shifts: [],
-      dates,
+      children_number: createMonthArray(monthLength, () => 0),
+      extra_workers: createMonthArray(monthLength, () => 0),
+      frozen_shifts: createMonthArray(0, () => undefined),
+      dates: dates as MonthDataArray<number>,
     },
     employee_info: _.cloneDeep(employee_info),
     shifts: freeShifts,
@@ -132,19 +150,29 @@ export function getScheduleKey(newSchedule: ScheduleDataModel): ScheduleKey {
   );
 }
 
-function validateScheduleContainerDataIntegrity({
+type KeysForContainerDataIntegrityValidation =
+  | "month_info"
+  | "employee_info"
+  | "shifts"
+  | "shift_types";
+function validateScheduleContainerDataIntegrity<
+  TContainer extends ScheduleDataModel | MonthDataModel
+>({
   month_info: monthInfo,
   employee_info: employeeInfo,
   shifts,
   shift_types: shiftTypes,
-}: Pick<ScheduleDataModel, "month_info" | "employee_info" | "shifts" | "shift_types">): void {
+}: Pick<TContainer, KeysForContainerDataIntegrityValidation>): void {
   const scheduleLen = monthInfo.dates.length;
   validateShiftLengthIntegrity(scheduleLen, shifts);
   validateWorkersIntegrity(employeeInfo, shifts);
   ensureShiftTypesIntegrity(shiftTypes, shifts);
 }
 
-function validateShiftLengthIntegrity(scheduleLen: number, shifts: WorkerShiftsModel): void {
+function validateShiftLengthIntegrity(
+  scheduleLen: number,
+  shifts: WorkerShiftsModel | MonthWorkerShiftsModel
+): void {
   if (shifts !== undefined && !_.isEmpty(shifts)) {
     const [worker, workerShifts] = Object.entries(shifts)[0];
     const shiftLen = workerShifts.length;
@@ -156,7 +184,10 @@ function validateShiftLengthIntegrity(scheduleLen: number, shifts: WorkerShiftsM
   }
 }
 
-function validateWorkersIntegrity(employeeInfo: WorkersInfoModel, shifts: WorkerShiftsModel): void {
+function validateWorkersIntegrity(
+  employeeInfo: WorkersInfoModel,
+  shifts: WorkerShiftsModel | MonthWorkerShiftsModel
+): void {
   const workersWithShifts = _.sortBy(Object.keys(shifts));
   const workersWithType = _.sortBy(Object.keys(employeeInfo.type));
   if (!_.isEqual(workersWithType, workersWithShifts)) {
@@ -167,7 +198,10 @@ function validateWorkersIntegrity(employeeInfo: WorkersInfoModel, shifts: Worker
   }
 }
 
-function ensureShiftTypesIntegrity(shiftModel: ShiftTypesDict, shifts: WorkerShiftsModel): void {
+function ensureShiftTypesIntegrity(
+  shiftModel: ShiftTypesDict,
+  shifts: WorkerShiftsModel | MonthWorkerShiftsModel
+): void {
   const shiftTypes = Object.keys(shiftModel);
 
   Object.keys(shifts).forEach((worker) => {

@@ -2,12 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import styled from "styled-components";
+import * as S from "./base-row.styled";
 import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
 import { BaseCellComponent } from "../base-cell/base-cell.component";
 import { baseRowDataCy, BaseRowOptions, toCellDataItemArray } from "./base-row.models";
-import { SectionRow } from "../styled";
+
+const isCellFromPrevMonth = (index: number, firstDayOfTheMonth): boolean =>
+  index < firstDayOfTheMonth;
 
 export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
   const {
@@ -31,8 +33,6 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
   const numberOfDays = verboseDates?.length;
   const firstMonthDayIndex = verboseDates?.findIndex((date) => date.date === 1);
 
-  const isCellFromPrevMonth = (index, firstMonthDayIndex): boolean => index < firstMonthDayIndex;
-
   function saveValue(newValue: string): void {
     onSave?.(newValue);
   }
@@ -45,8 +45,11 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
   }
 
   return (
-    <MainRow id="mainRow" data-cy={baseRowDataCy(rowIndex)}>
-      {data.map((dataItem = { value: defaultEmpty }, cellIndex) => (
+    <S.MainRow id="mainRow" data-cy={baseRowDataCy(rowIndex)}>
+      {data.map((
+        dataItem = { value: defaultEmpty }, // nosonar
+        cellIndex
+      ) => (
         <CellComponent
           {...{
             ...options,
@@ -70,11 +73,6 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
           monthNumber={currMonthNumber}
         />
       ))}
-    </MainRow>
+    </S.MainRow>
   );
 }
-
-const MainRow = styled(SectionRow)`
-  width: 1350px;
-  height: 40px;
-`;

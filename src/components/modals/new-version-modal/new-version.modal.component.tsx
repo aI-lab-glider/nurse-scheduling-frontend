@@ -2,20 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import * as S from "./new-version.modal.styled";
 import { t } from "../../../helpers/translations.helper";
 import { Button } from "../../buttons/button-component/button.component";
 import DefaultModal from "../modal.component";
 import { CookiesProvider } from "../../../logic/data-access/cookies-provider";
-import ScssVars from "../../../assets/styles/styles/custom/_variables.module.scss";
-
-const useStyles = makeStyles({
-  bodyText: {
-    color: ScssVars.secondary,
-    fontSize: 16,
-    paddingRight: 40,
-  },
-});
 
 interface NewVersionModalOptions {
   setOpen: (open: boolean) => void;
@@ -23,7 +14,6 @@ interface NewVersionModalOptions {
 }
 
 export default function NewVersionModal(options: NewVersionModalOptions): JSX.Element {
-  const classes = useStyles();
   const { setOpen, open } = options;
   const handleClose = (): void => {
     setOpen(false);
@@ -34,13 +24,19 @@ export default function NewVersionModal(options: NewVersionModalOptions): JSX.El
   const version = CookiesProvider.getCookie("appversion");
   const body = (
     <div>
-      <p className={classes.bodyText}>{t("updateMessage", { version })}</p>
+      <S.BodyText>{t("updateMessage", { version })}</S.BodyText>
     </div>
   );
 
   const footer = (
     <div>
-      <Button onClick={handleClose} size="small" className="submit-button" variant="primary">
+      <Button
+        onClick={handleClose}
+        size="small"
+        className="submit-button"
+        variant="primary"
+        marginString="5px 10px 5px 0px"
+      >
         OK
       </Button>
     </div>

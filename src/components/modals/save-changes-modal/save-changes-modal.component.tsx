@@ -48,7 +48,12 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
   const footer = (
     <>
       <Link to="/">
-        <Button variant="primary" onClick={onSaveClick} data-cy="bt-leave-edit-save-yes">
+        <Button
+          variant="primary"
+          onClick={onSaveClick}
+          data-cy="bt-leave-edit-save-yes"
+          marginString="5px 10px 5px 0px"
+        >
           {t("yes")}
         </Button>
       </Link>
@@ -59,6 +64,7 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
           color="secondary"
           onClick={onNoSaveClick}
           data-cy="bt-leave-edit-save-no"
+          marginString="5px 10px 5px 0px"
         >
           {t("no")}
         </Button>

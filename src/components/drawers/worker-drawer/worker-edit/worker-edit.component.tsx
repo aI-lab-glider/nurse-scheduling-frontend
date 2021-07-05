@@ -2,17 +2,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import styled from "styled-components";
+import * as S from "./worker.styled";
 import {
   ContractType,
   Team,
   WorkerType,
 } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import { WorkerActionCreator } from "../../../../state/schedule-data/worker-info/worker.action-creator";
-import { Button } from "../../../common-components";
 import { useWorkerInfo, WorkerInfo } from "../../../../hooks/use-worker-info";
 import { CombinedWorkNormSelector } from "./combined-worknorm-selector.component";
 import { WorkerContractTypeSelector } from "./worker-contract-type-selector.component";
@@ -23,29 +21,16 @@ import { WorkerWorkerTypeSelector } from "./worker-position-selector.component";
 import { t } from "../../../../helpers/translations.helper";
 import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
 
-const useStyles = makeStyles({
-  container: {
-    minHeight: "80%",
-  },
-});
-
 export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.Element {
   const { mode, setOpen } = options;
-  const classes = useStyles();
 
   const dispatcher = useDispatch();
 
-  /**
-   * TODO Rewrite as separate components: one for edit one for add ???
-   * */
-  const getWorkerName = useCallback((options: WorkerEditComponentOptions) => {
-    switch (options.mode) {
-      case WorkerEditComponentMode.EDIT:
-        return options.name;
-      default:
-        return "" as WorkerName;
-    }
-  }, []);
+  const getWorkerName = useCallback(
+    (workerOptions: WorkerEditComponentOptions) =>
+      workerOptions.mode === WorkerEditComponentMode.EDIT ? workerOptions.name : ("" as WorkerName),
+    []
+  );
 
   const { workerInfo, setWorkerInfo } = useWorkerInfo(getWorkerName(options));
   const [isWorkerNameValid, setIsWorkerNameValid] = useState(true);
@@ -99,7 +84,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
   // #region view
   return (
     <Grid container direction="column" justify="space-between">
-      <Grid container className={classes.container} direction="column">
+      <S.OptionsContainer container direction="column">
         <WorkerNameEditField
           workerName={workerInfo.workerName}
           setWorkerName={handleWorkerNameUpdate}
@@ -120,28 +105,23 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
         />
 
         <CombinedWorkNormSelector
-          employmentTime={workerInfo.workerTime}
+          workerTime={workerInfo.workerTime}
           setWorkerTime={handleWorkerTimeUpdate}
           setIsFieldValid={setIsWorkerTimeValid}
           workerContractType={workerInfo.contractType}
         />
 
         <TeamSelector team={workerInfo.team} setTeam={handleWorkerTeamUpdate} />
-      </Grid>
-      <SubmitButton
+      </S.OptionsContainer>
+      <S.SubmitButton
         disabled={!canSaveWorker()}
         variant="primary"
         data-cy="btn-save-worker"
         onClick={handleClose}
       >
         {t("saveWorker")}
-      </SubmitButton>
+      </S.SubmitButton>
     </Grid>
   );
   // #endregion
 }
-const SubmitButton = styled(Button)`
-  position: absolute;
-  bottom: 74px;
-  left: 23px;
-`;

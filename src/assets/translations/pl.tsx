@@ -47,7 +47,6 @@ export const pl = {
     // error-list-item.component.tsx
     show: "Pokaż",
     // error-list.component.tsx
-    //! Errors
     noNurses: "Brak pielęgniarek",
     notEnoughWorkersDuringDay: "Za mało pracowników w trakcie dnia",
     notEnoughWorkersDuringNight: "Za mało pracowników w nocy",
@@ -139,6 +138,12 @@ export const pl = {
     workersWorksheetName: "pracownicy",
     shiftsWorksheetName: "zmiany",
     absenceWorksheetName: "urlopy",
+    // edit-page toolbar
+    editPageToolbarCheckPlan: "Sprawdź Plan",
+    editPageToolbarExit: "Wyjdź",
+    editPageToolbarSavePlan: "Zapisz",
+    //
+    scheduleSectionNameInformation: "Informacje",
     mondayShort: "PN",
     tuesdayShort: "WT",
     wednesdayShort: "SR",

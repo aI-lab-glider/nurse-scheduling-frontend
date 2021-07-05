@@ -7,7 +7,7 @@ import {
   CellInputOptions,
 } from "../../../base/base-cell/cell-blockable-input.component";
 import { ShiftAutocompleteComponent } from "../shift-autocomplete.component";
-import { ContentWrapper } from "../shit-cell.styles";
+import { ContentWrapper } from "./shift-cell.styled";
 import { getShiftCode } from "./shift-cell.component";
 
 interface ShiftsCellDropdownInputOptions extends Omit<CellInputOptions, "input"> {

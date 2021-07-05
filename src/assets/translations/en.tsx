@@ -49,7 +49,6 @@ const en: LocalizationResource = {
     // error-list-item.component.tsx
     show: "Show",
     // error-list.component.tsx
-    //! Errors
     noNurses: "No nurses",
     notEnoughWorkersDuringDay: "Not enough workers during day",
     notEnoughWorkersDuringNight: "Not enough workers during night",
@@ -141,6 +140,11 @@ const en: LocalizationResource = {
     workersWorksheetName: "workers",
     shiftsWorksheetName: "shifts",
     absenceWorksheetName: "leaves",
+    // edit-page toolbar
+    editPageToolbarCheckPlan: "Check plan",
+    editPageToolbarExit: "Exit",
+    editPageToolbarSavePlan: "Save plan",
+    scheduleSectionNameInformation: "Informations",
     mondayShort: "MON",
     tuesdayShort: "TUE",
     wednesdayShort: "WED",

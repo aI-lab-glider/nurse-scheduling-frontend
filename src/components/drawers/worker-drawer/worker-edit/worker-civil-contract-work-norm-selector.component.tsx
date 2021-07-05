@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { Grid, TextField, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import * as _ from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { t } from "../../../../helpers/translations.helper";
@@ -9,10 +9,10 @@ import { useMonthInfo } from "../../../../hooks/use-month-info";
 import { WorkerHourInfo } from "../../../../logic/schedule-logic/worker-hours-info.logic";
 import { WorkNormSelectorOptions } from "./combined-worknorm-selector.component";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
-import { useFormFieldStyles } from "./worker-edit.models";
+import * as S from "./worker.styled";
 
 export function WorkerCivilContractWorkNormSelector({
-  employmentTime,
+  workerTime,
   setWorkerTime,
   setIsFieldValid: setIsFormValid,
 }: WorkNormSelectorOptions): JSX.Element {
@@ -27,23 +27,21 @@ export function WorkerCivilContractWorkNormSelector({
   );
 
   const [workerCivilTime, setWorkerCivilTime] = useState(
-    convertToNormalHours(employmentTime).toString()
+    convertToNormalHours(workerTime).toString()
   );
 
   useEffect(() => {
-    setWorkerCivilTime(convertToNormalHours(employmentTime).toString());
-  }, [employmentTime, setWorkerCivilTime, convertToNormalHours]);
-
-  const classes = useFormFieldStyles();
+    setWorkerCivilTime(convertToNormalHours(workerTime).toString());
+  }, [workerTime, setWorkerCivilTime, convertToNormalHours]);
 
   const maximumWorkHoursForMonth = requiredHours * 2;
   function isTimeValid(): boolean {
     const workerTimeCivilTimeAsNumber = parseInt(workerCivilTime, 10);
-    const isTimeValid =
+    const isValid =
       !_.isNaN(workerTimeCivilTimeAsNumber) &&
       workerTimeCivilTimeAsNumber <= maximumWorkHoursForMonth;
-    setIsFormValid?.(isTimeValid);
-    return isTimeValid;
+    setIsFormValid?.(isValid);
+    return isValid;
   }
 
   function toWorkerNorm(workerHours: string | number): number {
@@ -64,8 +62,8 @@ export function WorkerCivilContractWorkNormSelector({
   return (
     <>
       <Grid item xs={6}>
-        <Typography className={classes.label}>{t("hourAmmount")}</Typography>
-        <TextField
+        <S.Label>{t("hourAmmount")}</S.Label>
+        <S.TextField
           fullWidth
           name="civilTime"
           data-cy="input-civil-time"
@@ -74,7 +72,6 @@ export function WorkerCivilContractWorkNormSelector({
           style={{
             width: 100,
           }}
-          className={classes.formInput}
           onChange={handleCivilTimeChange}
           onBlur={(): void => setWorkerTime(toWorkerNorm(workerCivilTime))}
           color="primary"
