@@ -11,8 +11,6 @@ import { useWorkerHoursInfo } from "../../../../hooks/use-worker-hours-info";
 import { useWorkerInfo } from "../../../../hooks/use-worker-info";
 import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
 import { WorkerType } from "../../../../state/schedule-data/worker-info/worker-info.model";
-import { Button } from "../../../common-components";
-import { WorkerType } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import WorkersCalendar from "../../../workers-calendar/workers-calendar.component";
 import { exportToXlsx } from "./export-to-xlsx";
 

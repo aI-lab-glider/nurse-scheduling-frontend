@@ -4,11 +4,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Box } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { createMuiTheme } from "@material-ui/core";
-import { MuiThemeProvider } from "@material-ui/core";
-import { ThemeProvider } from "styled-components";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import CustomThemeProvider from "./assets/theme/CustomThemeProvider";
 import schedule from "./assets/devMode/schedule";
