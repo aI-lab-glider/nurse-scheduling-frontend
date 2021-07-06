@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
+import _ from "lodash";
 import * as S from "./worker-info.styled";
 import { colors } from "../../../../assets/css-consts";
 import { ContractTypeHelper } from "../../../../helpers/contract-type.helper";
@@ -14,7 +15,6 @@ import { WorkerType } from "../../../../state/schedule-data/worker-info/worker-i
 import WorkersCalendar from "../../../workers-calendar/workers-calendar.component";
 import { exportToXlsx } from "./export-to-xlsx";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
-import _ from "lodash";
 import { ShiftCode } from "../../../../state/schedule-data/shifts-types/shift-types.model";
 
 interface WorkerInfoComponentOptions {
@@ -28,15 +28,19 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
   const calendarExport = "calendar-export";
   const { verboseDates } = useMonthInfo();
 
-  const handleExportAsXlsx = (workerInfo, workerHoursInfo, workerShifts: ShiftCode[]): void => {
+  const handleExportAsXlsx = (
+    workerInfoForXlsx,
+    workerHoursInfoForXlsx,
+    workerShifts: ShiftCode[]
+  ): void => {
     const infoSection = {
-      contractType: ContractTypeHelper.translate(workerInfo.contractType),
-      workerHourNorm: workerHoursInfo.workerHourNorm,
-      overTime: workerHoursInfo.overTime,
-      workerTime: workerHoursInfo.workerTime,
+      contractType: ContractTypeHelper.translate(workerInfoForXlsx.contractType),
+      workerHourNorm: workerHoursInfoForXlsx.workerHourNorm,
+      overTime: workerHoursInfoForXlsx.overTime,
+      workerTime: workerHoursInfoForXlsx.workerTime,
     };
     const shiftsArr = _.zip(verboseDates, workerShifts);
-    exportToXlsx(workerInfo.workerName, infoSection, shiftsArr);
+    exportToXlsx(workerInfoForXlsx.workerName, infoSection, shiftsArr);
   };
 
   const workerLabelColor =
