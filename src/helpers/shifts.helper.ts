@@ -123,7 +123,7 @@ export class ShiftHelper {
     const colorSet: CellColorSet = ColorHelper.DEFAULT_COLOR_SET;
     const shiftFromSHIFTS = shiftTypes[shift];
     if (shiftFromSHIFTS && shift !== "W") {
-      colorSet.backgroundColor = this.createRGBFromHex(shiftFromSHIFTS.color!);
+      colorSet.backgroundColor = this.createRGBFromHex(shiftFromSHIFTS.color);
       return {
         ...colorSet,
         ...VerboseDateHelper.getDayColor(day, colorSet, isFrozen, ignoreFrozenState),

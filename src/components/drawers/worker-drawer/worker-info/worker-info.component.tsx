@@ -13,6 +13,9 @@ import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-d
 import { WorkerType } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import WorkersCalendar from "../../../workers-calendar/workers-calendar.component";
 import { exportToXlsx } from "./export-to-xlsx";
+import { useMonthInfo } from "../../../../hooks/use-month-info";
+import _ from "lodash";
+import { ShiftCode } from "../../../../state/schedule-data/shifts-types/shift-types.model";
 
 interface WorkerInfoComponentOptions {
   workerName: WorkerName;
@@ -23,15 +26,17 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
   const workerHoursInfo = useWorkerHoursInfo(workerName);
   const workerInfoExport = "worker-info-export";
   const calendarExport = "calendar-export";
+  const { verboseDates } = useMonthInfo();
 
-  const handleExportAsXlsx = (workerInfo, workerHoursInfo): void => {
+  const handleExportAsXlsx = (workerInfo, workerHoursInfo, workerShifts: ShiftCode[]): void => {
     const infoSection = {
       contractType: ContractTypeHelper.translate(workerInfo.contractType),
       workerHourNorm: workerHoursInfo.workerHourNorm,
       overTime: workerHoursInfo.overTime,
       workerTime: workerHoursInfo.workerTime,
     };
-    exportToXlsx(workerInfo.workerName, infoSection, workerInfo.workerShifts!);
+    const shiftsArr = _.zip(verboseDates, workerShifts);
+    exportToXlsx(workerInfo.workerName, infoSection, shiftsArr);
   };
 
   const workerLabelColor =
@@ -61,7 +66,9 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
       </div>
       <S.DownloadButton
         variant="primary"
-        onClick={(): void => handleExportAsXlsx(workerInfo, workerHoursInfo)}
+        onClick={(): void =>
+          handleExportAsXlsx(workerInfo, workerHoursInfo, workerInfo.workerShifts)
+        }
       >
         Pobierz
       </S.DownloadButton>

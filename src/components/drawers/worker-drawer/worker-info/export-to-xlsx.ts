@@ -27,9 +27,13 @@ const CALENDAR_FIRST_ROW_INDEX = 12;
 
 export type WorkerMonthCalendarByWeeks = Opaque<"Worker month calendar", ShiftCode[][]>;
 
-export const exportToXlsx = (workerName: string, info, schedule: { string: string }): void => {
-  const xlsx = new WorkerCalendarXlsxExport({ workerName, info, schedule });
-  xlsx.formatAndSave();
+export const exportToXlsx = (
+  workerName: string,
+  info,
+  schedule: [VerboseDate, ShiftCode][]
+): void => {
+  const xlsxExported = new WorkerCalendarXlsxExport({ workerName, info, schedule });
+  xlsxExported.formatAndSave();
 };
 
 export const WORKSHEET_NAME = "grafik";
@@ -39,7 +43,7 @@ export class WorkerCalendarXlsxExport {
 
   private readonly info: { string: string };
 
-  private readonly schedule: ShiftCode[];
+  private readonly schedule: [VerboseDate, ShiftCode][];
 
   constructor({ workerName, info, schedule }) {
     this.workerName = workerName;
@@ -110,14 +114,16 @@ export class WorkerCalendarXlsxExport {
     return infoSection;
   }
 
-  private static createCalendarSection(workerShifts: ShiftCode[]): WorkerMonthCalendarByWeeks {
+  private static createCalendarSection(
+    workerShifts: [VerboseDate, ShiftCode][]
+  ): WorkerMonthCalendarByWeeks {
     const calendar: ShiftCode[][] = [];
     let calendarDates: ShiftCode[] = [];
     let calendarShifts: ShiftCode[] = [];
 
-    workerShifts.forEach((shift, key) => {
+    workerShifts.forEach(([verboseDate, shift], key) => {
       const keyNum = key;
-      calendarDates.push((keyNum + 1).toString() as ShiftCode);
+      calendarDates.push(verboseDate.date.toString() as ShiftCode);
 
       if (shift === ShiftCode.W) {
         calendarShifts.push(" " as ShiftCode);
@@ -286,7 +292,6 @@ export class WorkerCalendarXlsxExport {
       );
     }
 
-    const regexNum = /[0-9]+/;
     workSheet.eachRow((row: Row, index: number) => {
       row.height = HEIGTH;
 
@@ -303,7 +308,10 @@ export class WorkerCalendarXlsxExport {
 
           cell.style = WorkerCalendarXlsxExport.getShiftStyle(ShiftCode[cellValue] || ShiftCode.W);
 
-          if (cellValue.match(regexNum)) {
+          if (
+            !Object.values(ShiftCode).includes(cellValue as ShiftCode) &&
+            cellValue.replace(/\s/g, "") !== ""
+          ) {
             row.height = HEIGTH * (2 / 3);
             cell.border = {
               top: { style: "thin" },
