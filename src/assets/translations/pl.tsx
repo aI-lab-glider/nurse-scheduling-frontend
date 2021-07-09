@@ -147,6 +147,16 @@ export const pl = {
     editPageToolbarSavePlan: "Zapisz",
     //
     scheduleSectionNameInformation: "Informacje",
+    mondayShort: "PN",
+    tuesdayShort: "WT",
+    wednesdayShort: "SR",
+    thursdayShort: "CZ",
+    fridayShort: "PT",
+    saturdayShort: "SB",
+    sundayShort: "ND",
+    workerHourNorm: "Liczba Godzin",
+    overTime: "Liczba Nadgodzin",
+    workerTime: "Suma Godzin",
   },
 };
 export default pl;

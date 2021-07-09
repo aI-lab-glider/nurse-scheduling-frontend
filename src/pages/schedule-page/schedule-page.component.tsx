@@ -1,18 +1,18 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useCallback, useState } from "react";
-import { Route, Switch } from "react-router-dom";
 import * as Sentry from "@sentry/react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import * as S from "./schedule-page.styled";
-import { ScheduleEditPage } from "./edit-tab/schedule-edit.page";
-import { ScheduleReadOnlyPage } from "./read-only-tab/schedule-read-only.page";
+import { Route, Switch } from "react-router-dom";
 import { usePersistentDrawer } from "../../components/drawers/drawer/persistent-drawer-context";
 import AppErrorModal from "../../components/modals/app-error-modal/app-error.modal.component";
-import { CorruptedScheduleComponent } from "./corrupted-month-tab/corrupted-schedule.component";
 import { setScheduleCorrupted } from "../../state/schedule-data/schedule-condition/corrupted-info.reducer";
 import { getPresentScheduleIsCorrupted } from "../../state/schedule-data/selectors";
+import { CorruptedScheduleComponent } from "./corrupted-month-tab/corrupted-schedule.component";
+import { ScheduleEditPage } from "./edit-tab/schedule-edit.page";
+import { ScheduleReadOnlyPage } from "./read-only-tab/schedule-read-only.page";
+import * as S from "./schedule-page.styled";
 
 interface SchedulePageOptions {
   editModeHandler: (editMode: boolean) => void;
@@ -34,7 +34,7 @@ export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Elem
 
   const onError = (): void => {
     setIsAppErrorOpen(true);
-    dispatch(setScheduleCorrupted);
+    dispatch(setScheduleCorrupted());
   };
 
   const ViewOnly = useCallback(
