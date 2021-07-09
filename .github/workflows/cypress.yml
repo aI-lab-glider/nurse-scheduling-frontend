@@ -98,24 +98,22 @@ jobs:
           mv reports/parallel-job-3/coverage-final-3.json reports
           mv reports/parallel-job-4/coverage-final-4.json reports
           mv reports/parallel-job-5/coverage-final-5.json reports
-
           npx nyc merge reports ./.nyc_output/out.json
           npx nyc report --reporter=text-summary -t ./.nyc_output
           SUMMARY="$(npx nyc report --reporter=text-summary -t ./.nyc_output | tail -2 | head -1)" 
           TOKENS=($SUMMARY)
           echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
-
-          REF=${{ github.ref }}
+          REF="${{ github.ref }}"
           IFS='/' read -ra PATHS <<< "$REF"
           BRANCH_NAME="${PATHS[1]}_${PATHS[2]}"
-          echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
-      
+          echo "BRANCH=\"${BRANCH_NAME}\"" >> $GITHUB_ENV
+
       - name: Create the Badge
         uses: schneegans/dynamic-badges-action@v1.0.0
         with:
           auth: ${{ secrets.GIST_SECRET }}
           gistID: 792d640ad8dad0e4c316a487f04cf471
-          filename: nurse-scheduling-problem-frontend__${{ env.BRANCH }}.json
+          filename: "nurse-scheduling-problem-frontend__${env.BRANCH}.json"
           label: Test Coverage
           message: ${{ env.COVERAGE }}
           color: green

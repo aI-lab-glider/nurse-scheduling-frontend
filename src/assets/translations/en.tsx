@@ -145,6 +145,16 @@ const en: LocalizationResource = {
     editPageToolbarExit: "Exit",
     editPageToolbarSavePlan: "Save plan",
     scheduleSectionNameInformation: "Informations",
+    mondayShort: "MON",
+    tuesdayShort: "TUE",
+    wednesdayShort: "WED",
+    thursdayShort: "THU",
+    fridayShort: "FRI",
+    saturdayShort: "SAT",
+    sundayShort: "SUN",
+    workerHourNorm: "WorkerHourNorm",
+    overTime: "Overtime",
+    workerTime: "Total Hours",
   },
 };
 export default en;
