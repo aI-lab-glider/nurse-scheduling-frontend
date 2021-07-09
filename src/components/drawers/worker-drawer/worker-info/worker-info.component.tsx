@@ -9,13 +9,14 @@ import { ContractTypeHelper } from "../../../../helpers/contract-type.helper";
 import { StringHelper } from "../../../../helpers/string.helper";
 import { WorkerTypeHelper } from "../../../../helpers/worker-type.helper";
 import { useWorkerHoursInfo } from "../../../../hooks/use-worker-hours-info";
-import { useWorkerInfo } from "../../../../hooks/use-worker-info";
+import { useWorkerInfo, WorkerInfo } from "../../../../hooks/use-worker-info";
 import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
 import { WorkerType } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import WorkersCalendar from "../../../workers-calendar/workers-calendar.component";
 import { exportToXlsx } from "./export-to-xlsx";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
 import { ShiftCode } from "../../../../state/schedule-data/shifts-types/shift-types.model";
+import { WorkerHourInfoSummary } from "../../../../logic/schedule-logic/worker-hours-info.logic";
 
 interface WorkerInfoComponentOptions {
   workerName: WorkerName;
@@ -29,8 +30,8 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
   const { verboseDates } = useMonthInfo();
 
   const handleExportAsXlsx = (
-    workerInfoForXlsx,
-    workerHoursInfoForXlsx,
+    workerInfoForXlsx: WorkerInfo,
+    workerHoursInfoForXlsx: WorkerHourInfoSummary,
     workerShifts: ShiftCode[]
   ): void => {
     const infoSection = {
