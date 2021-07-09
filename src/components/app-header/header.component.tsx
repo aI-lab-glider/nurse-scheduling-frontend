@@ -3,6 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { TabContext } from "@material-ui/lab";
+import { useTheme } from "styled-components";
 import Envelope from "../../assets/images/svg-components/Envelope";
 import OutlineCog from "../../assets/images/svg-components/OutlineCog";
 import QuestionCircle from "../../assets/images/svg-components/QuestionCircle";
@@ -16,9 +18,7 @@ import { MonthSwitchComponent } from "../month-switch/month-switch.component";
 import { ScheduleMode } from "../schedule/schedule-state.model";
 import * as S from "./header.styled";
 import * as SS from "../buttons/route-buttons/route-buttons.styled";
-import { TabContext } from "@material-ui/lab";
 import Logo from "../../assets/images/svg-components/Logo";
-import { useTheme } from "styled-components";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;

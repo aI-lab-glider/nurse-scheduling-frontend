@@ -37,7 +37,6 @@ export const CellWrapper = styled.div`
 
 export const StyledErrorPopper = styled(ErrorPopper)`
   width: 100%;
-  /* padding: 4px 0 4px 0; */
 `;
 
 export const ContentWrapper = styled.div`
@@ -47,7 +46,6 @@ export const ContentWrapper = styled.div`
   align-self: center;
   align-items: center;
   justify-content: center;
-  /* padding: 4px 0 4px 0; */
 `;
 
 export const Content = styled.div`

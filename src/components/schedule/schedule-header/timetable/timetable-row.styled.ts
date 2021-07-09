@@ -2,24 +2,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import styled from "styled-components";
-import { colors } from "../../../../assets/css-consts";
 
 export const TimetableRow = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 0;
-  /* position: static; */
-  /* width: 1350px; */
   cursor: default;
 
-  //text
   text-align: center;
   letter-spacing: 0.75px;
 
   &:not(:last-child) {
-    /* border-bottom: 1px solid ${colors.tableBorderGrey}; */
-
     &.selection {
       border-color: white;
     }

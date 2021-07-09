@@ -16,7 +16,6 @@ export const SummaryRow = styled.div`
 
   //text
   text-align: center;
-  /* letter-spacing: 0.75px; */
   font-style: normal;
 
   &:not(:last-child) {
@@ -44,5 +43,4 @@ export const SectionWrapper = styled.div`
   padding: 0;
   box-sizing: border-box;
   overflow: hidden;
-  /* border-radius: 10px; */
 `;

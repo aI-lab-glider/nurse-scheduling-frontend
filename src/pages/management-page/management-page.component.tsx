@@ -16,7 +16,7 @@ export default function ManagementPage(): JSX.Element {
   ];
   return (
     <S.Wrapper>
-      {/* <S.Title data-cy="management-page-title">Panel zarządzania</S.Title> */}
+      <S.Title data-cy="management-page-title">Panel zarządzania</S.Title>
       <RouteButtonsComponent tabs={tabs} />
     </S.Wrapper>
   );
