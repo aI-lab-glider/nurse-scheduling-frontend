@@ -13,13 +13,15 @@ export interface Tabs {
   onChange?: () => void;
 }
 
-interface RouteButtonsOptions {
+interface HeaderRouteButtonsOptions {
   tabs: Tabs[];
   tabLabel: string;
   disabled?: boolean;
 }
 
-export default function RouteButtonsComponent(props: RouteButtonsOptions): JSX.Element {
+export default function HeaderRouteButtonsComponents(
+  props: HeaderRouteButtonsOptions
+): JSX.Element {
   const { tabs, tabLabel } = props;
   if (tabs.length === 0) {
     throw Error("Component cannot be called without tabs");

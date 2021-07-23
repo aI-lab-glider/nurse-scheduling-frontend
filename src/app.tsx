@@ -10,9 +10,9 @@ import CustomThemeProvider from "./assets/theme/CustomThemeProvider";
 import schedule from "./assets/devMode/schedule";
 import { ScheduleDataModel } from "./state/schedule-data/schedule-data.model";
 import { HeaderComponent } from "./components/common-components";
-import RouteButtonsComponent, {
+import HeaderRouteButtonsComponents, {
   Tabs,
-} from "./components/buttons/route-buttons/route-buttons.component";
+} from "./components/buttons/route-buttons/header-route-buttons.components";
 import { SchedulePage } from "./pages/schedule-page/schedule-page.component";
 import ManagementPage from "./pages/management-page/management-page.component";
 import { ScheduleDataActionCreator } from "./state/schedule-data/schedule-data.action-creator";
@@ -137,7 +137,7 @@ function App(): JSX.Element {
                         handleChange={handleChange}
                         tabLabel={tabLabel}
                       />
-                      <RouteButtonsComponent
+                      <HeaderRouteButtonsComponents
                         tabs={tabs}
                         disabled={disableRouteButtons}
                         tabLabel={tabLabel}

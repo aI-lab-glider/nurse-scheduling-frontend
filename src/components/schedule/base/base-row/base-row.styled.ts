@@ -18,14 +18,6 @@ export const MainRow = styled.div`
   text-align: center;
   margin-bottom: 5px;
 
-  &:not(:last-child) {
-    /* border-bottom: 1px solid ${colors.tableBorderGrey}; */
-
-    &.selection {
-      /* border-color: white; */
-    }
-  }
-
   &.selection {
     background-color: white;
     outline: white solid 1px;

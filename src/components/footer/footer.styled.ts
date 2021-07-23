@@ -28,3 +28,20 @@ export const Part = styled.div`
   justify-content: center;
   flex: 1;
 `;
+
+export const LinkWrapper = styled.a`
+  display: flex;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  width: 246px;
+`;
+
+export const LogoContainer = styled.div`
+  display: flex;
+  width: 60px;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+`;

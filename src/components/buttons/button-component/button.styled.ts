@@ -9,7 +9,6 @@ export const ButtonBase = styled.button<ButtonBaseProps>`
   background: none;
   border: none;
   padding: 9px 16px 9px 16px;
-  /* margin: ${({ marginString }) => marginString ?? "5px 10px 5px 10px"}; */
   white-space: nowrap;
   border-radius: 5px;
   font-size: 12px;

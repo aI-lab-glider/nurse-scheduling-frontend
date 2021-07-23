@@ -2,11 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useState } from "react";
-import { useTheme } from "styled-components";
+import styled, { useTheme } from "styled-components";
 import * as S from "./footer.styled";
 import { latestAppVersion } from "../../api/latest-github-version";
 import { t } from "../../helpers/translations.helper";
 import GliderLogo from "../../assets/images/svg-components/GliderLogo";
+import { colors } from "../../assets/css-consts";
 
 export function Footer(): JSX.Element {
   const [latestVersion, setLatestVersion] = useState("");
@@ -28,15 +29,7 @@ export function Footer(): JSX.Element {
         </p>
       </S.Part>
       <S.Part>
-        <a
-          style={{
-            display: "flex",
-            textDecoration: "none",
-            alignItems: "center",
-            justifyContent: "center",
-            justifyItems: "center",
-            width: "246px",
-          }}
+        <S.LinkWrapper
           href="http://www.glider.agh.edu.pl/" //nosonar
           target="_blank"
           rel="noopener noreferrer"
@@ -44,20 +37,12 @@ export function Footer(): JSX.Element {
           <p style={{ ...theme.FontStyles.roboto.Regular12px, width: "60px" }}>
             {t("realization")}
           </p>
-          <div
-            style={{
-              display: "flex",
-              width: "60px",
-              alignItems: "center",
-              justifyContent: "center",
-              justifyItems: "center",
-            }}
-          >
+          <S.LogoContainer>
             <GliderLogo style={{ alignSelf: "center" }} />
-          </div>
+          </S.LogoContainer>
 
           <p style={{ ...theme.FontStyles.roboto.Regular12px, width: "60px" }}>Glider</p>
-        </a>
+        </S.LinkWrapper>
       </S.Part>
       <S.Part style={{ justifyContent: "flex-end" }}>
         <a href="https://www.netlify.com" style={{ marginRight: "16px" }}>

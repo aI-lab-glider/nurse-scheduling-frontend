@@ -33,7 +33,3 @@ export const ShiftSectionWrapper = styled.div`
   border-radius: 0;
   border-left: 1px solid ${colors.tableBorderGrey};
 `;
-
-export const SummarySectionWrapper = styled.div`
-  /* margin-left: 2%; */
-`;

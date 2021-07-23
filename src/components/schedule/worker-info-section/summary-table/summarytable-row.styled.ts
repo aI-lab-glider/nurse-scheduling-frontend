@@ -23,15 +23,12 @@ export const SummaryRow = styled.div`
   line-height: 14px;
 
   &:not(:last-child) {
-    /* border-bottom: 1px solid ${colors.tableBorderGrey}; */
-
     &.selection {
       border-color: white;
     }
   }
 
   &.selection {
-    /* border-left: 1px solid white; */
     background-color: white;
     outline: white solid 1px;
     box-shadow: 0 4px 7px rgba(16, 32, 70, 0.2), 0 0 7px rgba(16, 32, 70, 0.2);
