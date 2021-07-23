@@ -2,11 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useState } from "react";
-import { Grid } from "@material-ui/core";
-import * as S from "./footer.styled";
-import gliderLogo from "../../assets/images/gliderLogo.png";
+import { useTheme } from "styled-components";
 import { latestAppVersion } from "../../api/latest-github-version";
+import GliderLogo from "../../assets/images/svg-components/GliderLogo";
 import { t } from "../../helpers/translations.helper";
+import * as S from "./footer.styled";
 
 export function Footer(): JSX.Element {
   const [latestVersion, setLatestVersion] = useState("");
@@ -18,24 +18,40 @@ export function Footer(): JSX.Element {
     awaitVersion();
   }, []);
 
+  const theme = useTheme();
+
   return (
-    <S.Container container justify="space-between" alignItems="center">
-      <Grid item>{latestVersion && `${t("version")}: ${latestVersion}`}</Grid>
-      <Grid item>
-        {t("realization")}
-        <a href="http://www.glider.agh.edu.pl/" target="_blank" rel="noopener noreferrer">
-          <S.Logo src={gliderLogo} alt="Logo koła naukowego Glider" />
-          Glider
-        </a>
-      </Grid>
-      <Grid item>
-        <a href="https://www.netlify.com">
+    <S.Container>
+      <S.Part style={{ justifyContent: "flex-start" }}>
+        <p style={{ ...theme.FontStyles.roboto.Regular12px, marginLeft: "16px" }}>
+          {latestVersion && `${t("version")}: ${latestVersion}`}
+        </p>
+      </S.Part>
+      <S.Part>
+        <S.LinkWrapper
+          href="http://www.glider.agh.edu.pl/" // nosonar
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <p style={{ ...theme.FontStyles.roboto.Regular12px, width: "60px" }}>
+            {t("realization")}
+          </p>
+          <S.LogoContainer>
+            <GliderLogo style={{ alignSelf: "center" }} />
+          </S.LogoContainer>
+
+          <p style={{ ...theme.FontStyles.roboto.Regular12px, width: "60px" }}>Glider</p>
+        </S.LinkWrapper>
+      </S.Part>
+      <S.Part style={{ justifyContent: "flex-end" }}>
+        <a href="https://www.netlify.com" style={{ marginRight: "16px" }}>
           <img
+            style={{ height: "37px", width: "104px" }}
             src="https://www.netlify.com/img/global/badges/netlify-light.svg"
             alt="Deploys by Netlify"
           />
         </a>
-      </Grid>
+      </S.Part>
     </S.Container>
   );
 }

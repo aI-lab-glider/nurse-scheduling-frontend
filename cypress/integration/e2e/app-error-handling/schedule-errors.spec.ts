@@ -6,7 +6,6 @@ import { WorkerType } from "../../../../src/state/schedule-data/worker-info/work
 
 const addWorker = (workerName: string, position: WorkerType): void => {
   cy.get('[data-cy="btn-management-tab"]').click();
-  cy.get('[data-cy="management-page-title"]').should("be.visible");
   cy.get('[data-cy="btn-add-worker"]').click();
   cy.get('[data-cy="worker-drawer"]').should("be.visible");
   cy.get('[data-cy="name"]').type(workerName);
