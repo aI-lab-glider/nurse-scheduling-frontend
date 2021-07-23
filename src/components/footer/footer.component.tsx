@@ -2,12 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useEffect, useState } from "react";
-import styled, { useTheme } from "styled-components";
-import * as S from "./footer.styled";
+import { useTheme } from "styled-components";
 import { latestAppVersion } from "../../api/latest-github-version";
-import { t } from "../../helpers/translations.helper";
 import GliderLogo from "../../assets/images/svg-components/GliderLogo";
-import { colors } from "../../assets/css-consts";
+import { t } from "../../helpers/translations.helper";
+import * as S from "./footer.styled";
 
 export function Footer(): JSX.Element {
   const [latestVersion, setLatestVersion] = useState("");
@@ -30,7 +29,7 @@ export function Footer(): JSX.Element {
       </S.Part>
       <S.Part>
         <S.LinkWrapper
-          href="http://www.glider.agh.edu.pl/" //nosonar
+          href="http://www.glider.agh.edu.pl/" // nosonar
           target="_blank"
           rel="noopener noreferrer"
         >

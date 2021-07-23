@@ -7,7 +7,6 @@ describe("Tab management", () => {
   beforeEach(() => {
     cy.loadScheduleToMonth();
     cy.get('[data-cy="btn-management-tab"]').click();
-    cy.get('[data-cy="management-page-title"]').should("be.visible");
   });
 
   describe("Worker drawer management", () => {
