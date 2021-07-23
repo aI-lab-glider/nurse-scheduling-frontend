@@ -88,7 +88,7 @@ export class FileHelper {
       }` +
       `_${RevisionTypeLabels[revisionType].replace(" ", "_")}` +
       ".xlsx"
-    );
+    ).toLowerCase();
   }
 
   public static handleDbDump = async (): Promise<void> => {
