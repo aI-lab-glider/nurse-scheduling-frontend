@@ -13,7 +13,7 @@ import { summaryCellDataCy } from "../../src/components/schedule/worker-info-sec
 import { summaryRowDataCy } from "../../src/components/schedule/worker-info-section/summary-table/summarytable-row.models";
 import { summaryTableSectionDataCy } from "../../src/components/schedule/worker-info-section/summary-table/summarytable-section.models";
 import { ShiftCode } from "../../src/state/schedule-data/shifts-types/shift-types.model";
-import { LocalMonthPersistProvider } from "../../src/logic/data-access/month-persistance-provider";
+import { LocalMonthPersistProvider } from "../../src/logic/data-access/local-month-persist-provider";
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 require("@cypress/snapshot").register();

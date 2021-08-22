@@ -13,7 +13,8 @@ import {
 } from "../logic/data-access/persistance-store.model";
 import { MonthDataModel } from "../state/schedule-data/schedule-data.model";
 import { ScheduleExportLogic } from "../logic/schedule-exporter/schedule-export.logic";
-import { LocalMonthPersistProvider } from "../logic/data-access/month-persistance-provider";
+import { LocalMonthPersistProvider } from "../logic/data-access/local-month-persist-provider";
+import { isCypress } from "../utils/is-cypress";
 
 type FilenamesToDirnameDict = { [dirName: string]: string[] };
 export type WorkbookToFilename = { [name: string]: xlsx.Workbook };
@@ -64,9 +65,7 @@ export class FileHelper {
 
     document.body.appendChild(anchor);
 
-    // eslint-disable-next-line
-    // @ts-ignore
-    if (window.Cypress) {
+    if (isCypress()) {
       return;
     }
 
