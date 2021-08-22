@@ -6,7 +6,10 @@ import { ThunkDispatch } from "redux-thunk";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { MonthDataModel } from "../../state/schedule-data/schedule-data.model";
 import { ActionModel } from "../../utils/action.model";
-import { LocalMonthPersistProvider, MonthPersistProvider } from "./month-persistance-provider";
+import { MonthPersistProvider } from "./month-persistance-provider";
+import { LocalMonthPersistProvider } from "./local-month-persist-provider";
+import { FirebaseMonthPersistProvider } from "./firebase-month-persist-provider";
+import { isCypress } from "../../utils/is-cypress";
 
 export type ThunkFunction<TDispatchedActionPayload> = (
   dispatch: ThunkDispatch<ApplicationStateModel, void, ActionModel<TDispatchedActionPayload>>,
@@ -26,6 +29,11 @@ export class ScheduleKey {
     if (year < 2000 || year > 2100) {
       throw new Error(`Year has to be within range 2000-2100 not ${year}`);
     }
+  }
+
+  static fromRevisionKey(revisionKey: RevisionKey): ScheduleKey {
+    const [month, year] = revisionKey.split("_");
+    return new ScheduleKey(parseInt(month, 10), parseInt(year, 10));
   }
 
   getRevisionKey(revision: RevisionType): RevisionKey {
@@ -85,7 +93,10 @@ export class PersistStorageManager {
   private readonly monthPersistProvider: MonthPersistProvider;
 
   private constructor() {
-    this.monthPersistProvider = new LocalMonthPersistProvider();
+    
+    this.monthPersistProvider = isCypress() 
+      ? new LocalMonthPersistProvider()
+      : new FirebaseMonthPersistProvider();
   }
 
   public static getInstance(): PersistStorageManager {
