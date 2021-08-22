@@ -96,19 +96,19 @@
     "wait-on": "^5.2.1"
   },
   "scripts": {
-    "b-start": "react-scripts -r @cypress/instrument-cra start",
-    "b-build": "react-scripts build",
-    "eject": "react-scripts eject",
+    "start": "react-scripts -r @cypress/instrument-cra start",
+    "build": "react-scripts build",
+    "electron-start": "concurrently \"cross-env BROWSER=none npm run b-start\" \"node scripts/await.js && electron .\"",
     "electron-build": "electron-builder",
+    "build-all": "npm build && npm electron-build",
     "release": "npm build && electron-builder --publish=always",
-    "build": "npm build && npm electron-build",
-    "start": "concurrently \"cross-env BROWSER=none npm run b-start\" \"node scripts/await.js && electron .\"",
     "lint": "eslint .",
     "lint-fix": "eslint . -c .eslintrc.pre-push.json --fix",
     "lint-warn": "eslint . -c .eslintrc.pre-push.json --max-warnings=0",
     "cypress:open": "cypress open",
     "test": "cypress run",
-    "coverage": "nyc report --reporter=text-summary"
+    "coverage": "nyc report --reporter=text-summary",
+    "eject": "react-scripts eject"
   },
   "nyc": {
     "reporter": [
