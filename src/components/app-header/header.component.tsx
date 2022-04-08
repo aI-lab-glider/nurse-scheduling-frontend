@@ -19,6 +19,7 @@ import { ScheduleMode } from "../schedule/schedule-state.model";
 import * as S from "./header.styled";
 import * as SS from "../buttons/route-buttons/route-buttons.styled";
 import Logo from "../../assets/images/svg-components/Logo";
+import { isLoaded } from "react-redux-firebase";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -41,6 +42,7 @@ interface RouteButtonsOptions {
   disabled?: boolean;
 }
 export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
+  const auth = useSelector((state) => false);
   const { tabs, disabled, handleChange, tabLabel } = props;
 
   const tabTitles = useMemo(
@@ -126,20 +128,29 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
             </TabContext>
           )}
         </S.Row>
+        <S.Row>
+          <S.ReturnToNowBtn
+            data-cy="return-to-now-button"
+            hidden={!isNewMonth || !showNowNavigation}
+            variant="secondary"
+            onClick={returnToCurrentMonth}
+          >
+            {t("returnToNow")}
+          </S.ReturnToNowBtn>
+        </S.Row>
 
         <S.Row style={{ position: "relative" }}>
-          <S.Row style={{ flex: 0 }}>
-            <S.ReturnToNowBtn
-              data-cy="return-to-now-button"
-              hidden={!isNewMonth || !showNowNavigation}
-              variant="secondary"
-              onClick={returnToCurrentMonth}
-              style={{ position: "absolute", margin: 0, left: "16px" }}
-            >
-              {t("returnToNow")}
-            </S.ReturnToNowBtn>
-            <MonthSwitchComponent isInViewMode={isInViewMode} />
-          </S.Row>
+          <MonthSwitchComponent isInViewMode={isInViewMode} />
+        </S.Row>
+        <S.Row>
+          <S.ReturnToNowBtn
+            data-cy="login-modal-button"
+            hidden={isLoaded(auth)}
+            variant="secondary"
+            onClick={returnToCurrentMonth}
+          >
+            {t("returnToNow")}
+          </S.ReturnToNowBtn>
         </S.Row>
         <S.Row style={{ justifyContent: "flex-end" }}>
           <S.UtilityButton onClick={onReportIssueClick}>

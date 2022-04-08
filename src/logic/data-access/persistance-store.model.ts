@@ -8,7 +8,7 @@ import { MonthDataModel } from "../../state/schedule-data/schedule-data.model";
 import { ActionModel } from "../../utils/action.model";
 import { MonthPersistProvider } from "./month-persistance-provider";
 import { LocalMonthPersistProvider } from "./local-month-persist-provider";
-import { FirebaseMonthPersistProvider } from "./firebase-month-persist-provider";
+// import { FirebaseMonthPersistProvider } from "./firebase-month-persist-provider";
 import { isCypress } from "../../utils/is-cypress";
 
 export type ThunkFunction<TDispatchedActionPayload> = (
@@ -93,10 +93,9 @@ export class PersistStorageManager {
   private readonly monthPersistProvider: MonthPersistProvider;
 
   private constructor() {
-    
-    this.monthPersistProvider = isCypress() 
-      ? new LocalMonthPersistProvider()
-      : new FirebaseMonthPersistProvider();
+    this.monthPersistProvider = new LocalMonthPersistProvider();
+
+    // : new FirebaseMonthPersistProvider();
   }
 
   public static getInstance(): PersistStorageManager {
