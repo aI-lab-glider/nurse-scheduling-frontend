@@ -27,7 +27,6 @@ export const ButtonBase = styled.button<ButtonBaseProps>`
   &:focus {
     outline: none;
   }
-}
 `;
 
 export const ButtonPrimary = styled(ButtonBase)`
@@ -85,4 +84,5 @@ export const ButtonCircle = styled(ButtonBase)`
       box-shadow: none;
       background: none;
     }
+  }
 `;

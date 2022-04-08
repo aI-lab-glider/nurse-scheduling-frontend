@@ -14,6 +14,7 @@ import { AppErrorBoundary } from "./components/app-error-boundary/app-error-boun
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/analytics";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 import { createFirestoreInstance } from "redux-firestore";
 import { PersistGate } from "redux-persist/integration/react";
@@ -35,6 +36,8 @@ const { store, persistor } = createAppStore();
 
 firebase.initializeApp(firebaseConfig);
 firebase.firestore();
+firebase.auth();
+firebase.analytics();
 
 const rrfConfig = {
   userProfile: "users",
@@ -47,7 +50,6 @@ const rrfProps = {
   dispatch: store.dispatch,
   createFirestoreInstance,
 };
-
 ReactDOM.render(
   <AppErrorBoundary>
     <DndProvider backend={HTML5Backend}>

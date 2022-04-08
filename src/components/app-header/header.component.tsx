@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
 import { TabContext } from "@material-ui/lab";
 import { useTheme } from "styled-components";
 import Envelope from "../../assets/images/svg-components/Envelope";
@@ -19,7 +19,14 @@ import { ScheduleMode } from "../schedule/schedule-state.model";
 import * as S from "./header.styled";
 import * as SS from "../buttons/route-buttons/route-buttons.styled";
 import Logo from "../../assets/images/svg-components/Logo";
-import { isLoaded } from "react-redux-firebase";
+import {
+  isLoaded,
+  isEmpty,
+  FirebaseReducer,
+  useFirebase,
+  useFirestore,
+} from "react-redux-firebase";
+import LoginModal from "../modals/login-modal/login-modal";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -42,7 +49,30 @@ interface RouteButtonsOptions {
   disabled?: boolean;
 }
 export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
-  const auth = useSelector((state) => false);
+  const auth = useSelector<RootStateOrAny, FirebaseReducer.AuthState>(
+    (state) => state.firestore.user
+  );
+  const [OrgName, setOrgName] = useState("");
+  const org = useSelector<RootStateOrAny, string>((state) => state.firebase.profile.org);
+  const firebase = useFirebase();
+  const firestore = useFirestore();
+
+  const a = firebase.auth().currentUser;
+  if (a != null && isLoaded(org)) {
+    firestore
+      .collection("organizations")
+      .doc(org)
+      .get()
+      .then((snap) => {
+        if (snap.exists) {
+          setOrgName(snap.data().name);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
   const { tabs, disabled, handleChange, tabLabel } = props;
 
   const tabTitles = useMemo(
@@ -79,6 +109,7 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
 
   const isInViewMode = applicationStateModel === ScheduleMode.Readonly;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   function onReportIssueClick(): void {
     setIsModalOpen(true);
@@ -143,14 +174,18 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
           <MonthSwitchComponent isInViewMode={isInViewMode} />
         </S.Row>
         <S.Row>
-          <S.ReturnToNowBtn
-            data-cy="login-modal-button"
-            hidden={isLoaded(auth)}
-            variant="secondary"
-            onClick={returnToCurrentMonth}
-          >
-            {t("returnToNow")}
-          </S.ReturnToNowBtn>
+          {a == null && (
+            <S.ReturnToNowBtn
+              data-cy="login-modal-button"
+              hidden={false}
+              variant="secondary"
+              onClick={() => setIsLoginModalOpen(true)}
+            >
+              {t("login")}
+            </S.ReturnToNowBtn>
+          )}
+
+          {a != null && <p style={FontStyles.roboto.Black16px}>{OrgName}</p>}
         </S.Row>
         <S.Row style={{ justifyContent: "flex-end" }}>
           <S.UtilityButton onClick={onReportIssueClick}>
@@ -168,6 +203,11 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
           </S.UtilityButton>
         </S.Row>
       </S.Header>
+      <LoginModal
+        open={isLoginModalOpen}
+        setOpen={setIsLoginModalOpen}
+        onClick={() => console.log("OpenLogin")}
+      />
       <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
     </>
   );
