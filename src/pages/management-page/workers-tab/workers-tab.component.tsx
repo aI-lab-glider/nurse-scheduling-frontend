@@ -3,8 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import * as S from "./workers-tab.styled";
@@ -118,7 +116,7 @@ export default function WorkersTab(): JSX.Element {
               const workerType = w.type ?? S.WorkerType.NURSE;
 
               return (
-                <TableRow key={w.name}>
+                <S.TableRow key={w.name}>
                   <S.TableCell data-cy="workerName">{w.name}</S.TableCell>
                   <S.TableCell align="left">
                     <S.WorkerType className={`${workerType.toString().toLowerCase()}-label`}>
@@ -129,7 +127,7 @@ export default function WorkersTab(): JSX.Element {
                     {getWorkerTimeLabel(w.name)}
                   </S.TableCell>
                   <S.TableCell align="left">{w.team}</S.TableCell>
-                  <TableCell align="right">
+                  <S.TableCell align="right">
                     <S.ActionButton
                       data-cy={`edit-worker-${w.name}`}
                       variant="primary"
@@ -145,8 +143,8 @@ export default function WorkersTab(): JSX.Element {
                     >
                       Usuń
                     </S.ActionButton>
-                  </TableCell>
-                </TableRow>
+                  </S.TableCell>
+                </S.TableRow>
               );
             })}
           </TableBody>

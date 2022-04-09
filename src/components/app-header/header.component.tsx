@@ -17,7 +17,6 @@ import ReportIssueModal from "../modals/report-issue-modal/report-issue-modal.co
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
 import { ScheduleMode } from "../schedule/schedule-state.model";
 import * as S from "./header.styled";
-import * as SS from "../buttons/route-buttons/route-buttons.styled";
 import Logo from "../../assets/images/svg-components/Logo";
 import {
   isLoaded,
@@ -78,7 +77,7 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
   const tabTitles = useMemo(
     () =>
       tabs.map((tab) => (
-        <SS.Tab
+        <S.Tab
           disableRipple
           disabled={disabled}
           key={tab.label}
@@ -155,7 +154,7 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
             </p>
           ) : (
             <TabContext value={tabLabel}>
-              <SS.TabList onChange={!disabled ? handleChange : void 0}>{tabTitles}</SS.TabList>
+              <S.TabList onChange={!disabled ? handleChange : void 0}>{tabTitles}</S.TabList>
             </TabContext>
           )}
         </S.Row>
