@@ -22,17 +22,12 @@ import { AppErrorBoundary } from "./components/app-error-boundary/app-error-boun
 
 const history = createBrowserHistory();
 
-Sentry.init({
-  dsn: process.env.REACT_APP_SENTRY_DSN,
-  normalizeDepth: 10,
-  integrations: [
-    new ReportingObserver(),
-    new Integrations.BrowserTracing({
-      routingInstrumentation: Sentry.reactRouterV5Instrumentation(history),
-    }),
-  ],
-  tracesSampleRate: 1.0,
-});
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+// serviceWorker.register({});
+
+const { store, persistor } = createAppStore();
 
 const sentryReduxEnhancer = Sentry.createReduxEnhancer();
 
@@ -46,10 +41,14 @@ ReactDOM.render(
     <DndProvider backend={HTML5Backend}>
       <Router history={history}>
         <React.StrictMode>
-          <Provider store={appStore}>
-            <AppConfigProvider>
-              <App />
-            </AppConfigProvider>
+          <Provider store={store}>
+            <ReactReduxFirebaseProvider {...rrfProps}>
+              <PersistGate loading={null} persistor={persistor}>
+                <AppConfigProvider>
+                  <App />
+                </AppConfigProvider>
+              </PersistGate>
+            </ReactReduxFirebaseProvider>
           </Provider>
         </React.StrictMode>
       </Router>
@@ -61,7 +60,4 @@ ReactDOM.render(
 if ((window as any).Cypress) {
   (window as any).store = appStore;
 }
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+serviceWorker.register({});

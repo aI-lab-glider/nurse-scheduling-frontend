@@ -28,3 +28,11 @@ npm start
 ```
 npm run e-start
 ```
+
+## Test account
+
+```
+login: test@nurse-scheduling.pl password: xsww2!QAZ
+```
+
+

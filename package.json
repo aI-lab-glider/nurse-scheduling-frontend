@@ -2,10 +2,10 @@
   "name": "nurse-scheduling-problem",
   "version": "2.0.0",
   "private": true,
-  "description": "Application for managining personal in medical foundations",
+  "description": "Application for managining personel in medical foundations",
   "author": "KN Glider",
   "build": {
-    "appId": "<com.your_app>"
+    "appId": "com.glider.nurse-scheduling"
   },
   "main": "public/electron.js",
   "homepage": "./",
@@ -48,17 +48,12 @@
     "@sentry/integrations": "^6.2.0",
     "@sentry/react": "^6.2.0",
     "@sentry/tracing": "^6.2.0",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
     "@types/firebase": "^3.2.1",
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "cross-env": "^7.0.2",
     "date-fns": "^2.15.0",
     "dotenv": "^8.2.0",
-    "electron": "^10.1.5",
-    "electron-is-dev": "^1.2.0",
     "emailjs-com": "^2.6.4",
     "exceljs": "^4.1.1",
     "file-saver": "^2.0.2",
@@ -95,7 +90,12 @@
     "styled-components": "^5.2.3",
     "typescript": "^4.2.4",
     "uuid": "^8.3.2",
-    "wait-on": "^5.2.1"
+    "wait-on": "^5.2.1",
+    "workbox-core": "^6.5.2",
+    "workbox-expiration": "^6.5.2",
+    "workbox-precaching": "^6.5.2",
+    "workbox-routing": "^6.5.2",
+    "workbox-strategies": "^6.5.2"
   },
   "scripts": {
     "start": "react-scripts -r @cypress/instrument-cra start",
@@ -125,6 +125,9 @@
     "all": true
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
     "@cypress/instrument-cra": "^1.4.0",
     "@cypress/snapshot": "^2.1.7",
     "@semantic-release/changelog": "^5.0.1",
