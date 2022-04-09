@@ -8,7 +8,7 @@ import { Router } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppConfigProvider } from "./state/app-config-context";
-import * as serviceWorker from "./serviceWorker";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import App from "./app";
 import { AppErrorBoundary } from "./components/app-error-boundary/app-error-boundary.component";
 import firebase from "firebase/app";
@@ -20,6 +20,7 @@ import { createFirestoreInstance } from "redux-firestore";
 import { PersistGate } from "redux-persist/integration/react";
 import createAppStore from "./state/createStore";
 import { createBrowserHistory } from "history";
+import reportWebVitals from "./reportWebVitals";
 
 const history = createBrowserHistory();
 const firebaseConfig = {
@@ -74,4 +75,5 @@ ReactDOM.render(
 if ((window as any).Cypress) {
   (window as any).store = store;
 }
-serviceWorker.register({});
+serviceWorkerRegistration.register({});
+reportWebVitals();

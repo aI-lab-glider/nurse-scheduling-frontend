@@ -95,12 +95,14 @@
     "typescript": "^4.2.4",
     "uuid": "^8.3.2",
     "wait-on": "^5.2.1",
+    "web-vitals": "^2.1.4",
     "workbox-core": "^6.5.2",
     "workbox-expiration": "^6.5.2",
     "workbox-precaching": "^6.5.2",
     "workbox-routing": "^6.5.2",
     "workbox-strategies": "^6.5.2"
   },
+  "minified": "true",
   "scripts": {
     "start": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build",
@@ -130,13 +132,13 @@
     "all": true
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
     "@cypress/instrument-cra": "^1.4.0",
     "@cypress/snapshot": "^2.1.7",
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/git": "^9.0.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
     "@types/classnames": "^2.3.1",
     "@types/history": "^4.7.8",
     "@types/lodash": "^4.14.168",
