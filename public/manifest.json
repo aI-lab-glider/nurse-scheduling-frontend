@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Nurse Scheduling",
+  "name": "Work scheduling application for nurses and guardians",
   "icons": [
     {
       "src": "favicon.ico",
@@ -21,6 +21,5 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#632FD0",
-  "prefer_related_applications": false,
   "background_color": "#ffffff"
 }

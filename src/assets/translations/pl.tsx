@@ -157,6 +157,9 @@ export const pl = {
     workerHourNorm: "Liczba Godzin",
     overTime: "Liczba Nadgodzin",
     workerTime: "Suma Godzin",
+    login: "Zaloguj",
+    email: "Email",
+    password: "Hasło",
   },
 };
 export default pl;
