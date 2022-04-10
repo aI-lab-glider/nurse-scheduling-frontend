@@ -30,12 +30,18 @@ export class FirebaseMonthPersistProvider extends MonthPersistProvider {
   async saveMonth(revisionKey: RevisionType, monthDataModel: MonthDataModel): Promise<void> {
     if (!isNull(this.auth)) {
       const dataToSave = cloneDeep(monthDataModel);
-      console.log("save");
       dataToSave.scheduleKey = (dataToSave.scheduleKey.getRevisionKey(
         revisionKey
       ) as unknown) as ScheduleKey;
       const monthKey = monthDataModel.scheduleKey.getRevisionKey(revisionKey);
-      // this.firestore.collection(SCHEDULES_COLLECTION).doc(monthKey).set(dataToSave);
+      await this.firestore
+        .collection("organizations")
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        .doc(store.getState().firebase.profile.org)
+        .collection("schedules")
+        .doc(monthKey)
+        .set(dataToSave);
     }
   }
 
@@ -52,6 +58,7 @@ export class FirebaseMonthPersistProvider extends MonthPersistProvider {
           .doc(revisionKey)
           .get()
       ).data() as unknown) as MonthDataModel;
+      console.log(schedule);
       if (schedule) {
         schedule.scheduleKey = ScheduleKey.fromRevisionKey(
           (schedule.scheduleKey as unknown) as RevisionKey
@@ -67,8 +74,16 @@ export class FirebaseMonthPersistProvider extends MonthPersistProvider {
   }
 
   async getAllMonths(): Promise<MonthDMToRevisionKeyDict> {
-    const schedules = (await this.firestore.doc("/")) || null;
+    let schedules;
+    if (!isNull(this.auth) && this.firestore)
+      schedules = (
+        await this.firestore
+          .collection("organizations")
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          .doc(store.getState().firebase.profile.org)
+          .collection("schedules")
+      ).get();
     return (schedules as unknown) as MonthDMToRevisionKeyDict;
   }
 }
-export {};
