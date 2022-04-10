@@ -124,9 +124,9 @@ export default function WorkersTab(): JSX.Element {
                   <S.TableCell align="left">
                     <S.WorkerType className={`${workerType.toString().toLowerCase()}-label`}>
                       {workerType === WorkerType.NURSE ? (
-                        <NurseIcon width={20} height={20} />
+                        <NurseIcon width={14} height={16} />
                       ) : (
-                        <CaretakerIcon width={18} height={18} />
+                        <CaretakerIcon width={18} height={15} />
                       )}
                       {StringHelper.capitalize(WorkerTypeHelper.translate(workerType))}
                     </S.WorkerType>

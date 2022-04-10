@@ -25,7 +25,7 @@ export const WorkerType = styled.span`
   height: 30px;
   line-height: 30px;
   max-width: 130px;
-  font-size: 13px;
+  font-size: 14px;
   border-radius: 5px;
   background-color: ${colors.nurseColor};
   padding: 4px 6px;
