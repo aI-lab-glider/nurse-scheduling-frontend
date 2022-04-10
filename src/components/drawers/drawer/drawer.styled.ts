@@ -5,9 +5,9 @@ import { Drawer as MaterialDrawer } from "@material-ui/core";
 import styled from "styled-components";
 import { headerHeight } from "../../../assets/css-consts";
 
-export const Drawer = styled(MaterialDrawer)`
+export const Drawer = styled(MaterialDrawer)<{ isFullHeight?: boolean }>`
   & > [class*="paper"] {
-    margin-top: ${headerHeight};
+    margin-top: ${({ isFullHeight }) => (isFullHeight ? 0 : headerHeight)};
     min-width: 500px;
     overflow: hidden;
   }
