@@ -23,8 +23,11 @@ import { getPresentEmployeeInfo } from "../../../state/schedule-data/selectors";
 import {
   ContractType,
   WorkerInfoModel,
+  WorkerType,
 } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
+import NurseIcon from "../../../assets/images/svg-components/NurseIcon";
+import CaretakerIcon from "../../../assets/images/svg-components/CaretakerIcon";
 
 function toggleDrawer(
   open: boolean,
@@ -120,6 +123,11 @@ export default function WorkersTab(): JSX.Element {
                   <S.TableCell data-cy="workerName">{w.name}</S.TableCell>
                   <S.TableCell align="left">
                     <S.WorkerType className={`${workerType.toString().toLowerCase()}-label`}>
+                      {workerType === WorkerType.NURSE ? (
+                        <NurseIcon width={20} height={20} />
+                      ) : (
+                        <CaretakerIcon width={18} height={18} />
+                      )}
                       {StringHelper.capitalize(WorkerTypeHelper.translate(workerType))}
                     </S.WorkerType>
                   </S.TableCell>
