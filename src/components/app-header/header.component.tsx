@@ -19,14 +19,9 @@ import { ScheduleMode } from "../schedule/schedule-state.model";
 import * as S from "./header.styled";
 import * as SS from "../buttons/route-buttons/route-buttons.styled";
 import Logo from "../../assets/images/svg-components/Logo";
-import {
-  isLoaded,
-  isEmpty,
-  FirebaseReducer,
-  useFirebase,
-  useFirestore,
-} from "react-redux-firebase";
+import { isLoaded, useFirebase, useFirestore } from "react-redux-firebase";
 import LoginModal from "../modals/login-modal/login-modal";
+import { isEmpty } from "lodash";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -49,16 +44,13 @@ interface RouteButtonsOptions {
   disabled?: boolean;
 }
 export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
-  const auth = useSelector<RootStateOrAny, FirebaseReducer.AuthState>(
-    (state) => state.firestore.user
-  );
   const [OrgName, setOrgName] = useState("");
   const org = useSelector<RootStateOrAny, string>((state) => state.firebase.profile.org);
   const firebase = useFirebase();
   const firestore = useFirestore();
 
   const a = firebase.auth().currentUser;
-  if (a != null && isLoaded(org)) {
+  if (a != null && isLoaded(org) && !isEmpty(org)) {
     firestore
       .collection("organizations")
       .doc(org)
@@ -67,9 +59,6 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
         if (snap.exists) {
           setOrgName(snap.data().name);
         }
-      })
-      .catch((e) => {
-        console.log(e);
       });
   }
 
