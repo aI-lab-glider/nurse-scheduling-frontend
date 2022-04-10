@@ -33,7 +33,7 @@ const firebaseConfig = {
   measurementId: "G-EVVMHE09RF",
 };
 
-const { store, persistor } = createAppStore();
+export const { store, persistor } = createAppStore();
 
 firebase.initializeApp(firebaseConfig);
 firebase.firestore();
