@@ -22,15 +22,11 @@ npm install
 npm start
 ```
 
-## Tauri
-```
-npm run tauri
-```
 
 ## Test account
 
 ```
-login: test@nurse-scheduling.pl password: xsww2!QAZ
+login: test@nurse-scheduling.pl password: xsw2!QAZ
 ```
 
 

@@ -42,6 +42,7 @@ firebase.analytics();
 
 const rrfConfig = {
   userProfile: "users",
+  presence: "presence",
   useFirestoreForProfile: true,
 };
 

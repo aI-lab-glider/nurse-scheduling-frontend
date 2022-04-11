@@ -161,6 +161,7 @@ const en: LocalizationResource = {
     login: "Login",
     email: "Email",
     password: "Password",
+    youdonthaveplanforthismonth: "You dont have a schedule for this month.",
   },
 };
 export default en;

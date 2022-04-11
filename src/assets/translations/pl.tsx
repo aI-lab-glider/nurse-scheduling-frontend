@@ -160,6 +160,7 @@ export const pl = {
     login: "Zaloguj",
     email: "Email",
     password: "Hasło",
+    youdonthaveplanforthismonth: "Nie masz planu na ten miesiąc",
   },
 };
 export default pl;

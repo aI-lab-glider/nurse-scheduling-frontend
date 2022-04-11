@@ -192,11 +192,7 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
           </S.UtilityButton>
         </S.Row>
       </S.Header>
-      <LoginModal
-        open={isLoginModalOpen}
-        setOpen={setIsLoginModalOpen}
-        onClick={() => console.log("OpenLogin")}
-      />
+      <LoginModal open={isLoginModalOpen} setOpen={setIsLoginModalOpen} onClick={() => null} />
       <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
     </>
   );

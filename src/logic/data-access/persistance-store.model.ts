@@ -6,9 +6,6 @@ import { ThunkDispatch } from "redux-thunk";
 import { ApplicationStateModel } from "../../state/application-state.model";
 import { MonthDataModel } from "../../state/schedule-data/schedule-data.model";
 import { ActionModel } from "../../utils/action.model";
-import { MonthPersistProvider } from "./month-persistance-provider";
-import { LocalMonthPersistProvider } from "./local-month-persist-provider";
-// import { FirebaseMonthPersistProvider } from "./firebase-month-persist-provider";
 import { FirebaseMonthPersistProvider } from "./firebase-month-persist-provider";
 
 export type ThunkFunction<TDispatchedActionPayload> = (
@@ -94,7 +91,6 @@ export class PersistStorageManager {
 
   private constructor() {
     this.monthPersistProvider = new FirebaseMonthPersistProvider();
-    // isCypress() && false ? new LocalMonthPersistProvider() : new FirebaseMonthPersistProvider();
   }
 
   public static getInstance(): PersistStorageManager {

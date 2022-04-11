@@ -25,12 +25,14 @@ export default function LoginModal(options: LoginModalOptions): JSX.Element {
   const title = t("login");
   const firebase = useFirebase();
   const handleLogin = (): void => {
-    firebase
-      .login({ email: Username, password: Password })
-      .then(() => {
+    firebase.login({ email: Username, password: Password }).then(
+      () => {
         handleClose();
-      })
-      .catch((e) => console.log(e));
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   };
   const body = (
     <>

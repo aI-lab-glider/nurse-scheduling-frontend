@@ -39,7 +39,7 @@ export class FirebaseMonthPersistProvider extends MonthPersistProvider {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         .doc(store.getState().firebase.profile.org)
-        .collection("schedules")
+        .collection(SCHEDULES_COLLECTION)
         .doc(monthKey)
         .set(dataToSave);
     }
@@ -54,11 +54,10 @@ export class FirebaseMonthPersistProvider extends MonthPersistProvider {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           .doc(store.getState().firebase.profile.org)
-          .collection("schedules")
+          .collection(SCHEDULES_COLLECTION)
           .doc(revisionKey)
           .get()
       ).data() as unknown) as MonthDataModel;
-      console.log(schedule);
       if (schedule) {
         schedule.scheduleKey = ScheduleKey.fromRevisionKey(
           (schedule.scheduleKey as unknown) as RevisionKey
@@ -82,7 +81,7 @@ export class FirebaseMonthPersistProvider extends MonthPersistProvider {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           .doc(store.getState().firebase.profile.org)
-          .collection("schedules")
+          .collection(SCHEDULES_COLLECTION)
       ).get();
     return (schedules as unknown) as MonthDMToRevisionKeyDict;
   }
