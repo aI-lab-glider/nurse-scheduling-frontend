@@ -161,6 +161,7 @@ export const pl = {
     email: "Email",
     password: "Hasło",
     youdonthaveplanforthismonth: "Nie masz planu na ten miesiąc",
+    downloadingSchedule: "Pobieram zapisany plan",
   },
 };
 export default pl;
