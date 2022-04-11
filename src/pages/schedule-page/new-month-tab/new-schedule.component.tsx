@@ -56,7 +56,7 @@ export function NewScheduleComponent(): JSX.Element {
       {isLoggedIn && IsCloudScheduleSaved ? (
         <>
           <S.Image src={nurse} alt="" />
-          <S.Message>Pobieram zapisany plan</S.Message>
+          <S.Message>{t("downloadingSchedule")}</S.Message>
           <Spinner />
         </>
       ) : (
