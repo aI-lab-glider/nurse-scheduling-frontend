@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
   align-items: center;
   padding: 0;
   margin-right: 5px;
-  width: 102px;
+  width: 132px;
 `;
 
 export const Row = styled.div`
@@ -15,7 +15,7 @@ export const Row = styled.div`
   align-items: center;
   height: 26px;
   width: 100%;
-  padding: 10px, 6px, 10px, 6px;
+  padding: 10px 6px 10px 6px;
   background-color: #fff;
   margin-bottom: 5px;
   border-radius: 2px;
@@ -31,4 +31,7 @@ export const Row = styled.div`
 
 export const LabelWrapper = styled.div`
   padding: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;

@@ -70,7 +70,7 @@ export function WorkerEmploymentContractWorkNormSelector({
   const employmentTimeAsFraction = toFraction(workerTime);
   return (
     <>
-      <Grid item xs={6} style={{ zIndex: 2 }}>
+      <Grid item xs={6} style={{ zIndex: 2, marginBottom: "15px" }}>
         <DropdownButtons
           dataCy="contract-time-dropdown"
           buttons={contractTimeDropdownOptions}

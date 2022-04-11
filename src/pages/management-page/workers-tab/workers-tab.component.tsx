@@ -3,8 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import * as S from "./workers-tab.styled";
@@ -25,8 +23,11 @@ import { getPresentEmployeeInfo } from "../../../state/schedule-data/selectors";
 import {
   ContractType,
   WorkerInfoModel,
+  WorkerType,
 } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
+import NurseIcon from "../../../assets/images/svg-components/NurseIcon";
+import CaretakerIcon from "../../../assets/images/svg-components/CaretakerIcon";
 
 function toggleDrawer(
   open: boolean,
@@ -118,10 +119,15 @@ export default function WorkersTab(): JSX.Element {
               const workerType = w.type ?? S.WorkerType.NURSE;
 
               return (
-                <TableRow key={w.name}>
+                <S.TableRow key={w.name}>
                   <S.TableCell data-cy="workerName">{w.name}</S.TableCell>
                   <S.TableCell align="left">
                     <S.WorkerType className={`${workerType.toString().toLowerCase()}-label`}>
+                      {workerType === WorkerType.NURSE ? (
+                        <NurseIcon width={14} height={16} />
+                      ) : (
+                        <CaretakerIcon width={18} height={15} />
+                      )}
                       {StringHelper.capitalize(WorkerTypeHelper.translate(workerType))}
                     </S.WorkerType>
                   </S.TableCell>
@@ -129,7 +135,7 @@ export default function WorkersTab(): JSX.Element {
                     {getWorkerTimeLabel(w.name)}
                   </S.TableCell>
                   <S.TableCell align="left">{w.team}</S.TableCell>
-                  <TableCell align="right">
+                  <S.TableCell align="right">
                     <S.ActionButton
                       data-cy={`edit-worker-${w.name}`}
                       variant="primary"
@@ -145,8 +151,8 @@ export default function WorkersTab(): JSX.Element {
                     >
                       Usuń
                     </S.ActionButton>
-                  </TableCell>
-                </TableRow>
+                  </S.TableCell>
+                </S.TableRow>
               );
             })}
           </TableBody>

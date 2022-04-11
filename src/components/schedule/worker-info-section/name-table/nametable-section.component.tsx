@@ -97,9 +97,7 @@ export function NameTableSection({
                   {!isWorker && workerName === "Pracownicy" && <WorkerIcon />}
                 </div>
 
-                <S.LabelWrapper>
-                  <span style={FontStyles.roboto.Regular10px}>{workerName}</span>
-                </S.LabelWrapper>
+                <S.LabelWrapper style={FontStyles.roboto.Regular10px}>{workerName}</S.LabelWrapper>
               </S.Row>
             </ErrorPopper>
           );
