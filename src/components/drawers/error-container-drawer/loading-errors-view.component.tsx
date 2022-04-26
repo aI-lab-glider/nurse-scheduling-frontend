@@ -20,6 +20,7 @@ import {
   getPrimaryRevision,
 } from "../../../state/schedule-data/selectors";
 import { updateScheduleErrors as updateScheduleErrorsInState } from "../../../state/schedule-data/schedule-errors/schedule-errors.reducer";
+import { Spinner } from "../../Spinner";
 
 interface ErrorLoaderOptions {
   state?: Props;
@@ -67,7 +68,7 @@ export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions):
       {(options.state?.state === ErrorLoaderState.CHECKING || spinnerAgain) && (
         <S.Wrapper>
           <S.Content>
-            <S.Spinner />
+            <Spinner />
             <S.ErrorLoadingText>Trwa sprawdzanie planu</S.ErrorLoadingText>
           </S.Content>
         </S.Wrapper>

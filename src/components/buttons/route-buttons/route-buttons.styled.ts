@@ -8,21 +8,23 @@ import { colors } from "../../../assets/css-consts";
 
 export const Wrapper = styled.div`
   width: calc(100% - 20px);
-  margin-top: 42px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin: 52px 10px 0;
 `;
 
 export const HeaderWrapper = styled.div`
   width: 100%;
+  
+  hr {
+    display: none;
+  }
 `;
 
 export const TabList = styled(MaterialTabList)`
+  && {
+    min-height: 40px;
+  }
   & span[class*="indicator"] {
-    background-color: ${({ theme }) => theme.primary};
-    height: 3px;
-    bottom: 7px;
-    outline: none;
+    display: none;
   }
 `;
 
@@ -35,9 +37,10 @@ export const Tab = styled(MaterialTab)`
     font-size: ${({ theme }) => theme.FontStyles.roboto.Regular16px.fontSize};
     min-width: 0;
     opacity: 1;
-    outline: none;
-    margin: 0 20px 0 0;
-    padding: 0;
+    margin: 0;
+    padding: 0 20px;
+    min-height: 40px;
+    border-radius: 5px 5px 0 0;
   }
   &:hover {
     color: ${({ disabled, theme }) => (disabled ? colors.gray100 : theme.primaryText)};
@@ -47,7 +50,11 @@ export const Tab = styled(MaterialTab)`
   }
   &[class*="selected"] {
     outline: none;
+    background: #fff;
     font-weight: ${({ theme }) => theme.FontStyles.roboto.Black16px.fontWeight};
+  }
+  &[class*="selected"] span {
+    color: ${({ theme }) => theme.primary};
   }
 `;
 

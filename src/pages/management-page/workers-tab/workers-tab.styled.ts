@@ -5,6 +5,7 @@ import styled from "styled-components";
 import {
   TableCell as MaterialTableCell,
   TableContainer as MaterialTableContainer,
+  TableRow as MaterialTableRow,
 } from "@material-ui/core";
 import {
   colors,
@@ -16,20 +17,35 @@ import {
 import { Button } from "../../../components/common-components";
 
 export const Wrapper = styled.div`
-  margin-top: 45px;
+  padding: 10px;
+  background: ${colors.white};
 `;
 
 export const WorkerType = styled.span`
-  border-radius: 20px;
-  font-weight: 400;
-  letter-spacing: 0.025em;
+  height: 30px;
+  line-height: 30px;
+  max-width: 130px;
+  font-size: 14px;
+  border-radius: 5px;
   background-color: ${colors.nurseColor};
-  padding: 6px;
-
+  padding: 4px 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${colors.white};
+  text-transform: uppercase;
+  
+  & svg {
+    margin-right: 5px;
+    fill: ${colors.white};
+  }  
+  & svg path {
+    fill: ${colors.white};
+  }
+  
   &.nurse-label {
     background-color: ${colors.nurseColor};
   }
-
   &.other-label {
     background-color: ${colors.babysitterLabelBackground};
   }
@@ -38,11 +54,21 @@ export const WorkerType = styled.span`
 export const ActionButton = styled(Button)`
   font-size: ${fontSizeXs};
   padding: 2px 25px 2px;
+  visibility: hidden;
 `;
 
 export const TableContainer = styled(MaterialTableContainer)`
   padding-top: 0;
   width: 100%;
+`;
+
+export const TableRow = styled(MaterialTableRow)`
+  &:nth-of-type(2n) {
+    background: #f0f0f0;
+  }
+  &:hover ${ActionButton} {
+    visibility: visible;
+  }
 `;
 
 export const TableCell = styled(MaterialTableCell)`
@@ -51,4 +77,7 @@ export const TableCell = styled(MaterialTableCell)`
   font-size: ${fontSizeBase};
   font-family: ${fontFamilyPrimary};
   letter-spacing: ${headingLetterSpacing};
+  && {
+    border: none;
+  }
 `;
