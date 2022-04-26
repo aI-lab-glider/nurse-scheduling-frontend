@@ -55,7 +55,6 @@ export const BodyWrapper = styled(Box)`
 `;
 
 export const FooterWrapper = styled(Box)`
-  display: flex;
   margin-left: 0px;
   margin-top: -5px;
 `;

@@ -5,40 +5,18 @@ import styled from "styled-components";
 import {
   TableContainer as MaterialTableContainer,
   TableCell as MaterialTableCell,
-  TableRow as MaterialTableRow,
 } from "@material-ui/core";
 import {
   fontFamilyPrimary,
   fontSizeBase,
   headingLetterSpacing,
   fontSizeXs,
-  colors,
 } from "../../../assets/css-consts";
 import { Button } from "../../../components/common-components";
 
-export const Wrapper = styled.div`
-  padding: 10px;
-  background: ${colors.white};
-`;
-
 export const TableContainer = styled(MaterialTableContainer)`
-  padding: 0;
+  padding: 0 0 0 10px;
   width: 100%;
-`;
-
-export const ActionButton = styled(Button)`
-  font-size: ${fontSizeXs};
-  padding: 2px 25px 2px;
-  visibility: hidden;
-`;
-
-export const TableRow = styled(MaterialTableRow)`
-  &:nth-of-type(2n) {
-    background: #f0f0f0;
-  }
-  &:hover ${ActionButton} {
-    visibility: visible;
-  }
 `;
 
 export const TableCell = styled(MaterialTableCell)`
@@ -48,10 +26,16 @@ export const TableCell = styled(MaterialTableCell)`
   font-family: ${fontFamilyPrimary};
   letter-spacing: ${headingLetterSpacing};
   text-align: left;
-  padding: 0;
-  && {
-    border: none;
-  }
+  padding: 0 0 0 0;
+`;
+
+export const Wrapper = styled.div`
+  margin-top: 45px;
+`;
+
+export const ActionButton = styled(Button)`
+  font-size: ${fontSizeXs};
+  padding: 2px 25px 2px;
 `;
 
 export const ColorSample = styled.div`

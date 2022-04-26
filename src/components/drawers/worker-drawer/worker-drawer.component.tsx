@@ -64,13 +64,7 @@ export default function WorkerDrawerComponent(options: WorkerDrawerOptions): JSX
   };
 
   return (
-    <Drawer
-      setOpen={setOpen}
-      title={title}
-      isFullHeight
-      {...otherOptions}
-      data-cy="worker-drawer"
-    >
+    <Drawer setOpen={setOpen} title={title} {...otherOptions} data-cy="worker-drawer">
       <RenderSwitch />
     </Drawer>
   );

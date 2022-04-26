@@ -9,14 +9,13 @@ import * as S from "./drawer.styled";
 export interface DrawerOptions extends DrawerProps {
   title: string;
   setOpen: (open: boolean) => void;
-  isFullHeight?: boolean;
 }
 
 export default function Drawer(options: DrawerOptions): JSX.Element {
-  const { title, setOpen, children, isFullHeight, ...otherOptions } = options;
+  const { title, setOpen, children, ...otherOptions } = options;
 
   return (
-    <S.Drawer isFullHeight={isFullHeight} {...otherOptions} anchor="right">
+    <S.Drawer {...otherOptions} anchor="right">
       <DrawerHeader title={title} setOpen={setOpen}>
         {children}
       </DrawerHeader>

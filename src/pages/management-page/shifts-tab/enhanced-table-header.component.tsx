@@ -1,7 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 import * as S from "./enhanced-table-header.styled";
 import {
@@ -31,11 +33,11 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
 
   return (
     <TableHead>
-      <S.TableRow>
+      <TableRow>
         {headCells.map((headCell) => (
-          <S.TableCell key={headCell.id}>{headCell.label}</S.TableCell>
+          <S.StyledTableCell key={headCell.id}>{headCell.label}</S.StyledTableCell>
         ))}
-        <S.TableCell align="right">
+        <TableCell align="right">
           <S.HeaderButton
             variant="primary"
             disabled
@@ -54,8 +56,8 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
           >
             Dodaj zmianę
           </S.HeaderButton>
-        </S.TableCell>
-      </S.TableRow>
+        </TableCell>
+      </TableRow>
     </TableHead>
   );
 }

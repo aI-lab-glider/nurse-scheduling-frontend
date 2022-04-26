@@ -3,14 +3,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Divider } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
-import React, { ReactNode } from "react";
+import React from "react";
 import { MdClose } from "react-icons/md";
 import * as S from "./modal.styled";
 
 export interface ModalOptions {
   setOpen: (open: boolean) => void;
   open: boolean;
-  title: string | ReactNode;
+  title: string;
   body: JSX.Element;
   footer: JSX.Element;
   closeOptions?: () => void;

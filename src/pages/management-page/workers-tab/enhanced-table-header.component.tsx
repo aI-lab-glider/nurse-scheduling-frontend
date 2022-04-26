@@ -3,6 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React from "react";
 import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
 import * as S from "./enhanced-table-header.styled";
 import { Order } from "../../../helpers/comparator.helper";
 import { WorkerInfoModel } from "../../../state/schedule-data/worker-info/worker-info.model";
@@ -40,11 +42,11 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
 
   return (
     <TableHead>
-      <S.TableRow>
+      <TableRow>
         {headCells.map((headCell) => {
           const isActive = orderBy === headCell.id;
           return (
-            <S.TableCell key={headCell.id} sortDirection={isActive ? order : false}>
+            <TableCell key={headCell.id} sortDirection={isActive ? order : false}>
               <S.TableSortLabel
                 active={isActive}
                 direction={isActive ? order : "asc"}
@@ -54,10 +56,10 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
               >
                 {headCell.label}
               </S.TableSortLabel>
-            </S.TableCell>
+            </TableCell>
           );
         })}
-        <S.TableCell align="right">
+        <TableCell align="right">
           <S.HeaderButton
             variant="primary"
             data-cy="btn-add-worker"
@@ -67,8 +69,8 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
           >
             Dodaj pracownika
           </S.HeaderButton>
-        </S.TableCell>
-      </S.TableRow>
+        </TableCell>
+      </TableRow>
     </TableHead>
   );
 }

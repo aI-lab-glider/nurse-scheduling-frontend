@@ -38,8 +38,8 @@ export default function HeaderRouteButtonsComponents(
   );
 
   return (
-    <S.HeaderWrapper>
+    <S.Wrapper>
       <TabContext value={tabLabel}>{tabContents}</TabContext>
-    </S.HeaderWrapper>
+    </S.Wrapper>
   );
 }

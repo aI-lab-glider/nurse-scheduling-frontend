@@ -8,7 +8,6 @@ import { GroupedScheduleErrors } from "./schedule-data/schedule-errors/schedule-
 import { Opaque } from "../utils/type-utils";
 import { ScheduleMode } from "../components/schedule/schedule-state.model";
 import { ThemeState } from "./schedule-data/theme/theme.model";
-import { FirebaseReducer } from "react-redux-firebase";
 
 export type PrimaryMonthRevisionDataModel = Opaque<"PrimaryScheduleRevision", MonthDataModel>;
 export interface ScheduleStateModel {
@@ -20,15 +19,7 @@ export interface ScheduleStateModel {
   primaryRevision: PrimaryMonthRevisionDataModel;
 }
 
-export interface FirebaseSchema {
-  organization: string;
-}
-
-export interface User {
-  org: string;
-}
 export interface ApplicationStateModel {
   actualState: ScheduleStateModel;
   theme: ThemeState;
-  firebase: FirebaseReducer.Reducer<User, FirebaseSchema>;
 }
