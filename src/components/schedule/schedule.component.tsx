@@ -32,7 +32,7 @@ export function ScheduleComponent(): JSX.Element {
   return (
     <>
       <S.TimeHeader>
-        <S.TimeTableContainer style={{ flex: 1, marginLeft: "137px" }}>
+        <S.TimeTableContainer style={{ flex: 1, marginLeft: "107px" }}>
           <TimeTableRow />
         </S.TimeTableContainer>
         <S.SummaryContainer style={{ width: "107px" }}>

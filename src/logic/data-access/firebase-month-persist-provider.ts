@@ -3,68 +3,53 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { cloneDeep, isNull } from "lodash";
+import { cloneDeep } from "lodash";
 import { MonthDataModel } from "../../state/schedule-data/schedule-data.model";
 import { MonthDMToRevisionKeyDict, MonthPersistProvider } from "./month-persistance-provider";
 import { RevisionKey, RevisionType, ScheduleKey } from "./persistance-store.model";
-import { store } from "../../index";
-//https://www.freecodecamp.org/news/how-to-build-a-todo-application-using-reactjs-and-firebase/
+// https://www.freecodecamp.org/news/how-to-build-a-todo-application-using-reactjs-and-firebase/
 
 const SCHEDULES_COLLECTION = "schedules";
-
 export class FirebaseMonthPersistProvider extends MonthPersistProvider {
-  private firestore: firebase.firestore.Firestore | null;
 
-  private auth: firebase.User | null;
+  private firestore: firebase.firestore.Firestore;
 
-  constructor() {
+  constructor () {
     super();
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.auth = firebase.auth().currentUser;
-        this.firestore = firebase.firestore();
-      }
+    this.firestore = this.createFirebaseAdmin().firestore();
+  }
+
+  private createFirebaseAdmin() {
+    return firebase.initializeApp({
+      apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+      authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+      storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+      appId: process.env.REACT_APP_FIREBASE_APP_ID,
+      measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
     });
   }
 
   async saveMonth(revisionKey: RevisionType, monthDataModel: MonthDataModel): Promise<void> {
-    if (!isNull(this.auth)) {
-      const dataToSave = cloneDeep(monthDataModel);
-      dataToSave.scheduleKey = (dataToSave.scheduleKey.getRevisionKey(
-        revisionKey
-      ) as unknown) as ScheduleKey;
-      const monthKey = monthDataModel.scheduleKey.getRevisionKey(revisionKey);
-      await this.firestore
-        .collection("organizations")
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        .doc(store.getState().firebase.profile.org)
-        .collection(SCHEDULES_COLLECTION)
-        .doc(monthKey)
-        .set(dataToSave);
-    }
+    const dataToSave = cloneDeep(monthDataModel);
+    dataToSave.scheduleKey = (dataToSave.scheduleKey.getRevisionKey(
+      revisionKey
+    ) as unknown) as ScheduleKey;
+    const monthKey = monthDataModel.scheduleKey.getRevisionKey(revisionKey);
+
+    this.firestore.collection(SCHEDULES_COLLECTION).doc(monthKey).set(dataToSave);
   }
 
   async getMonth(revisionKey: string): Promise<MonthDataModel> {
-    let schedule;
-    if (!isNull(this.auth) && this.firestore) {
-      schedule = ((
-        await this.firestore
-          .collection("organizations")
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          .doc(store.getState().firebase.profile.org)
-          .collection(SCHEDULES_COLLECTION)
-          .doc(revisionKey)
-          .get()
-      ).data() as unknown) as MonthDataModel;
-      if (schedule) {
-        schedule.scheduleKey = ScheduleKey.fromRevisionKey(
-          (schedule.scheduleKey as unknown) as RevisionKey
-        );
-      }
+    const schedule = ((
+      await this.firestore.collection(SCHEDULES_COLLECTION).doc(`/${revisionKey.toString()}/`).get()
+    ).data() as unknown) as MonthDataModel;
+    if (schedule) {
+      schedule.scheduleKey = ScheduleKey.fromRevisionKey(
+        (schedule.scheduleKey as unknown) as RevisionKey
+      );
     }
-
     return (schedule as unknown) as MonthDataModel;
   }
 
@@ -73,16 +58,7 @@ export class FirebaseMonthPersistProvider extends MonthPersistProvider {
   }
 
   async getAllMonths(): Promise<MonthDMToRevisionKeyDict> {
-    let schedules;
-    if (!isNull(this.auth) && this.firestore)
-      schedules = (
-        await this.firestore
-          .collection("organizations")
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          .doc(store.getState().firebase.profile.org)
-          .collection(SCHEDULES_COLLECTION)
-      ).get();
+    const schedules = await this.firestore.doc("/");
     return (schedules as unknown) as MonthDMToRevisionKeyDict;
   }
 }

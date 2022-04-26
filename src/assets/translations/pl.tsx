@@ -157,11 +157,6 @@ export const pl = {
     workerHourNorm: "Liczba Godzin",
     overTime: "Liczba Nadgodzin",
     workerTime: "Suma Godzin",
-    login: "Zaloguj",
-    email: "Email",
-    password: "Hasło",
-    youdonthaveplanforthismonth: "Nie masz planu na ten miesiąc",
-    downloadingSchedule: "Pobieram zapisany plan",
   },
 };
 export default pl;

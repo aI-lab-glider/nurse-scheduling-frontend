@@ -17,7 +17,7 @@ export const OptionsContainer = styled(Grid)`
 
 export const SubmitButton = styled(Button)`
   position: absolute;
-  bottom: 34px;
+  bottom: 74px;
   left: 23px;
 `;
 

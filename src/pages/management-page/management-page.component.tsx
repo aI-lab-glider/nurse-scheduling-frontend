@@ -11,11 +11,12 @@ import WorkersTab from "./workers-tab/workers-tab.component";
 
 export default function ManagementPage(): JSX.Element {
   const tabs: Tabs[] = [
-    { label: "Pracownicy", component: <WorkersTab />, dataCy: "btn-workers-tab" },
-    { label: "Zmiany", component: <ShiftTab />, dataCy: "btn-shifts-tab" },
+    { label: "PRACOWNICY", component: <WorkersTab />, dataCy: "btn-workers-tab" },
+    { label: "ZMIANY", component: <ShiftTab />, dataCy: "btn-shifts-tab" },
   ];
   return (
     <S.Wrapper>
+      <S.Title>Panel zarządzania</S.Title>
       <RouteButtonsComponent tabs={tabs} />
     </S.Wrapper>
   );

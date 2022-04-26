@@ -10,14 +10,7 @@ export const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 0 auto;
-  position: absolute;
-  padding: 80px;
-  border-radius: 10px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
+  min-height: 80vh;
 `;
 
 export const Image = styled.img`
@@ -29,5 +22,4 @@ export const Message = styled.pre`
   font-weight: ${fontWeightBold};
   font-size: ${fontSizeBase};
   margin-top: 1rem;
-  margin-bottom: 2rem;
 `;
