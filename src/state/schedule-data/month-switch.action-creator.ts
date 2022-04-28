@@ -32,7 +32,7 @@ export class MonthSwitchActionCreator {
       const newDate = MonthHelper.getDateWithMonthOffset(month, year, offset);
       const newYear = newDate.getFullYear();
       const newMonth = newDate.getMonth();
-      const newMonthKey = new ScheduleKey(newDate.getMonth(), newDate.getFullYear());
+      const newMonthKey = new ScheduleKey(newMonth, newYear);
 
       // Set default revision type - primary in future, actual for present and past
       const { revision } = getState().actualState;

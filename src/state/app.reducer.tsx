@@ -5,7 +5,6 @@
 import { combineReducers } from "redux";
 import undoable from "redux-undo";
 import { ActionModel } from "../utils/action.model";
-import storage from "redux-persist/lib/storage";
 import {
   PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
   TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
@@ -16,10 +15,9 @@ import { revisionInfoReducer } from "./schedule-data/schedule-condition/revision
 import modeInfoReducer from "./app-condition/mode-info-reducer";
 import { primaryRevisionReducer } from "./schedule-data/primary-revision/primary-revision.reducer";
 import { themeReducer } from "./schedule-data/theme/theme.reducer";
-import { persistReducer } from "redux-persist";
 import { firebaseReducer } from "react-redux-firebase";
 import { firestoreReducer } from "redux-firestore";
-import hardSet from "redux-persist/lib/stateReconciler/hardSet";
+import { ApplicationStateModel } from "./application-state.model";
 
 export type CombinedReducers<StateModel> = {
   [key in keyof StateModel]: <T, U>(state: T, action: ActionModel<U>) => T;
@@ -44,16 +42,11 @@ const monthStateReducer = combineReducers({
   primaryRevision: primaryRevisionReducer,
   scheduleErrors: scheduleErrorsReducer,
 });
-
-export const appReducer = combineReducers({
+export type monthStateReducerType = ReturnType<typeof monthStateReducer>;
+export const appReducer = combineReducers<ApplicationStateModel>({
   actualState: monthStateReducer,
   theme: themeReducer,
-  firebase: persistReducer(
-    { key: "firebaseState", storage, stateReconciler: hardSet },
-    firebaseReducer
-  ),
-  firestore: persistReducer(
-    { key: "firestoreState", storage, stateReconciler: hardSet },
-    firestoreReducer
-  ),
+  firebase: firebaseReducer,
+  firestore: firestoreReducer,
 });
+export type RootState = ReturnType<typeof appReducer>;

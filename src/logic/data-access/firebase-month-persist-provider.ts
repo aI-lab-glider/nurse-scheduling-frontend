@@ -28,7 +28,7 @@ export class FirebaseMonthPersistProvider extends MonthPersistProvider {
   }
 
   async saveMonth(revisionKey: RevisionType, monthDataModel: MonthDataModel): Promise<void> {
-    if (!isNull(this.auth)) {
+    if (!isNull(this.auth) && this.firestore) {
       const dataToSave = cloneDeep(monthDataModel);
       dataToSave.scheduleKey = (dataToSave.scheduleKey.getRevisionKey(
         revisionKey

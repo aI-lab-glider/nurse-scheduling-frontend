@@ -9,6 +9,7 @@ import { Opaque } from "../utils/type-utils";
 import { ScheduleMode } from "../components/schedule/schedule-state.model";
 import { ThemeState } from "./schedule-data/theme/theme.model";
 import { FirebaseReducer } from "react-redux-firebase";
+import { monthStateReducerType } from "./app.reducer";
 
 export type PrimaryMonthRevisionDataModel = Opaque<"PrimaryScheduleRevision", MonthDataModel>;
 export interface ScheduleStateModel {
@@ -23,12 +24,26 @@ export interface ScheduleStateModel {
 export interface FirebaseSchema {
   organization: string;
 }
-
+export interface FireStoreSchema {
+  data: {
+    organizations: {
+      [key: string]: Organization;
+    };
+    schedules: {
+      [key: string]: ScheduleDataModel;
+    };
+  };
+}
+export interface Organization {
+  members: string[];
+  name: string;
+}
 export interface User {
   org: string;
 }
 export interface ApplicationStateModel {
-  actualState: ScheduleStateModel;
+  actualState: monthStateReducerType;
   theme: ThemeState;
   firebase: FirebaseReducer.Reducer<User, FirebaseSchema>;
+  firestore: FireStoreSchema;
 }

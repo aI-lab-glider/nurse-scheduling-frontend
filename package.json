@@ -110,8 +110,7 @@
     "cypress:open": "cypress open",
     "test": "cypress run",
     "coverage": "nyc report --reporter=text-summary",
-    "eject": "react-scripts eject",
-    "tauri": "tauri"
+    "eject": "react-scripts eject"
   },
   "nyc": {
     "reporter": [

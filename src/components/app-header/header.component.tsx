@@ -21,6 +21,7 @@ import Logo from "../../assets/images/svg-components/Logo";
 import { isLoaded, useFirebase, useFirestore } from "react-redux-firebase";
 import LoginModal from "../modals/login-modal/login-modal";
 import { isEmpty } from "lodash";
+import { useAppSelector } from "../../state/store-hooks";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -44,7 +45,7 @@ interface RouteButtonsOptions {
 }
 export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
   const [OrgName, setOrgName] = useState("");
-  const org = useSelector<RootStateOrAny, string>((state) => state.firebase.profile.org);
+  const org = useAppSelector((state) => state.firebase.profile.org);
   const firebase = useFirebase();
   const firestore = useFirestore();
 

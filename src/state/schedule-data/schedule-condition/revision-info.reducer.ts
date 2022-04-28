@@ -29,7 +29,7 @@ export class RevisionReducerActionCreator {
   }
 }
 
-export const revisionInfoReducer = createReducer("actual", (builder) => {
+export const revisionInfoReducer = createReducer<RevisionType>("actual", (builder) => {
   builder
     .addCase(changeRevision, (state, action) => {
       if (!action.payload) return state;
