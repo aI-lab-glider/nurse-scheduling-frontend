@@ -36,7 +36,7 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
           <S.TableCell key={headCell.id}>{headCell.label}</S.TableCell>
         ))}
         <S.TableCell align="right">
-          <S.HeaderButton
+          {/* <S.HeaderButton
             variant="primary"
             disabled
             onClick={(): void => {
@@ -53,7 +53,7 @@ export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Ele
             }}
           >
             Dodaj zmianę
-          </S.HeaderButton>
+          </S.HeaderButton> */}
         </S.TableCell>
       </S.TableRow>
     </TableHead>
