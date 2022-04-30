@@ -6,13 +6,8 @@ import xlsx from "exceljs";
 import JSZip from "jszip";
 import _ from "lodash";
 import { TranslationHelper } from "./translations.helper";
-import {
-  getRevisionTypeFromKey,
-  RevisionType,
-  RevisionTypeLabels,
-} from "../logic/data-access/persistance-store.model";
+import { RevisionType, RevisionTypeLabels } from "../logic/data-access/persistance-store.model";
 import { MonthDataModel } from "../state/schedule-data/schedule-data.model";
-import { ScheduleExportLogic } from "../logic/schedule-exporter/schedule-export.logic";
 import { isCypress } from "../utils/is-cypress";
 
 type FilenamesToDirnameDict = { [dirName: string]: string[] };

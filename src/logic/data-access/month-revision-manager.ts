@@ -9,8 +9,7 @@ import {
 } from "../../state/schedule-data/schedule-data.model";
 import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 import { RevisionKey, RevisionType, ScheduleKey } from "./persistance-store.model";
-import { MonthPersistProvider } from "./month-persistance-provider";
-import {FirebaseMonthPersistProvider} from "./firebase-month-persist-provider";
+import { FirebaseMonthPersistProvider } from "./firebase-month-persist-provider";
 
 export async function saveMonthRevision(
   revisionType: RevisionType,

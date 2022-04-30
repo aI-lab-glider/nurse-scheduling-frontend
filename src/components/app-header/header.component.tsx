@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TabContext } from "@material-ui/lab";
 import { useTheme } from "styled-components";
 import Envelope from "../../assets/images/svg-components/Envelope";

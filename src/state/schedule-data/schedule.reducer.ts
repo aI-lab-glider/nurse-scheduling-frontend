@@ -3,8 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import { combineReducers } from "redux";
-import { ScheduleDataModel } from "./schedule-data.model";
-import { CombinedReducers, ScheduleActionDestination } from "../app.reducer";
+import { ScheduleActionDestination } from "../app.reducer";
 import { employeeInfoReducerF } from "./worker-info/worker-info.reducer";
 import { foundationInfoReducerF } from "./foundation-info/foundation-info.reducer";
 import { scheduleInfoReducerF } from "./month-info/month-info.reducer";
