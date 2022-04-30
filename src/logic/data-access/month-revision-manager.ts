@@ -9,12 +9,12 @@ import {
 } from "../../state/schedule-data/schedule-data.model";
 import { VerboseDateHelper } from "../../helpers/verbose-date.helper";
 import { RevisionKey, RevisionType, ScheduleKey } from "./persistance-store.model";
-import { MonthPersistProvider } from "./month-persistance-provider";
+import { FirebaseMonthPersistProvider } from "./firebase-month-persist-provider";
 
 export async function saveMonthRevision(
   revisionType: RevisionType,
   monthDataModel: MonthDataModel,
-  monthPersistProvider: MonthPersistProvider
+  monthPersistProvider: FirebaseMonthPersistProvider
 ): Promise<void> {
   if (isMonthModelEmpty(monthDataModel)) {
     return;
@@ -47,7 +47,7 @@ export async function saveMonthRevision(
 
 export function getMonthRevision(
   revisionKey: RevisionKey,
-  monthPersistProvider: MonthPersistProvider
+  monthPersistProvider: FirebaseMonthPersistProvider
 ): Promise<MonthDataModel | undefined> {
   return monthPersistProvider.getMonth(revisionKey);
 }
@@ -56,7 +56,7 @@ export async function getOrGenerateMonthRevision(
   monthKey: ScheduleKey,
   revision: RevisionType,
   baseMonth: MonthDataModel,
-  monthPersistProvider: MonthPersistProvider
+  monthPersistProvider: FirebaseMonthPersistProvider
 ): Promise<MonthDataModel> {
   let monthDataModel = await getMonthRevision(
     monthKey.getRevisionKey(revision),
@@ -77,7 +77,7 @@ export async function getOrGenerateMonthRevision(
 
 export async function getOrGenerateMonthNeighbours(
   month: MonthDataModel,
-  monthPersistProvider: MonthPersistProvider
+  monthPersistProvider: FirebaseMonthPersistProvider
 ): Promise<[MonthDataModel, MonthDataModel]> {
   const scheduleKey = new ScheduleKey(month.scheduleKey.month, month.scheduleKey.year);
 
@@ -103,7 +103,7 @@ async function generateMonthRevision(
   monthKey: ScheduleKey,
   revision: RevisionType,
   baseMonth: MonthDataModel,
-  monthPersistProvider: MonthPersistProvider
+  monthPersistProvider: FirebaseMonthPersistProvider
 ): Promise<MonthDataModel> {
   const monthDataModel = createEmptyMonthDataModel(monthKey, baseMonth);
   await saveMonthRevision(revision, monthDataModel, monthPersistProvider);

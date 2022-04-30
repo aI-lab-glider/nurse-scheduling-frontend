@@ -158,6 +158,11 @@ const en: LocalizationResource = {
     workerHourNorm: "WorkerHourNorm",
     overTime: "Overtime",
     workerTime: "Total Hours",
+    login: "Login",
+    email: "Email",
+    password: "Password",
+    youdonthaveplanforthismonth: "You dont have a schedule for this month.",
+    downloadingSchedule: "Downloading schedule.",
   },
 };
 export default en;

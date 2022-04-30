@@ -3,7 +3,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableRow from "@material-ui/core/TableRow";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as S from "./shifts-tab.styled";
@@ -61,7 +60,7 @@ export default function ShiftTab(): JSX.Element {
           <EnhancedTableHeaderComponent toggleOpen={toggleOpen} />
           <TableBody>
             {Object.values(shiftData).map((shift) => (
-              <TableRow key={shift.code}>
+              <S.TableRow key={shift.code}>
                 <S.TableCell>{shift.name}</S.TableCell>
                 <S.TableCell>
                   {shift.isWorkingShift ? `${shift.from}:00 ` : ""}-
@@ -87,7 +86,7 @@ export default function ShiftTab(): JSX.Element {
                     Usuń
                   </S.ActionButton>
                 </S.TableCell>
-              </TableRow>
+              </S.TableRow>
             ))}
           </TableBody>
         </Table>

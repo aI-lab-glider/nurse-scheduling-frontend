@@ -18,13 +18,15 @@ This repository contains the frontend web application, and also a mock backend s
 ```
 git clone https://github.com/Project-Summer-AI-Lab-Glider/nurse-scheduling-problem-frontend.git nurse-scheduling
 cd nurse-scheduling
-git checkout develop
 npm install
 npm start
 ```
 
-## Electron
+
+## Test account
 
 ```
-npm run e-start
+login: test@nurse-scheduling.pl password: xsw2!QAZ
 ```
+
+

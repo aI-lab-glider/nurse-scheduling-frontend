@@ -17,8 +17,11 @@ import ReportIssueModal from "../modals/report-issue-modal/report-issue-modal.co
 import { MonthSwitchComponent } from "../month-switch/month-switch.component";
 import { ScheduleMode } from "../schedule/schedule-state.model";
 import * as S from "./header.styled";
-import * as SS from "../buttons/route-buttons/route-buttons.styled";
 import Logo from "../../assets/images/svg-components/Logo";
+import { isLoaded, useFirebase, useFirestore } from "react-redux-firebase";
+import LoginModal from "../modals/login-modal/login-modal";
+import { isEmpty } from "lodash";
+import { useAppSelector } from "../../state/store-hooks";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -41,12 +44,30 @@ interface RouteButtonsOptions {
   disabled?: boolean;
 }
 export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
+  const [OrgName, setOrgName] = useState("");
+  const org = useAppSelector((state) => state.firebase.profile.org);
+  const firebase = useFirebase();
+  const firestore = useFirestore();
+
+  const a = firebase.auth().currentUser;
+  if (a != null && isLoaded(org) && !isEmpty(org)) {
+    firestore
+      .collection("organizations")
+      .doc(org)
+      .get()
+      .then((snap) => {
+        if (snap.exists) {
+          setOrgName(snap.data().name);
+        }
+      });
+  }
+
   const { tabs, disabled, handleChange, tabLabel } = props;
 
   const tabTitles = useMemo(
     () =>
       tabs.map((tab) => (
-        <SS.Tab
+        <S.Tab
           disableRipple
           disabled={disabled}
           key={tab.label}
@@ -77,6 +98,7 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
 
   const isInViewMode = applicationStateModel === ScheduleMode.Readonly;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   function onReportIssueClick(): void {
     setIsModalOpen(true);
@@ -122,24 +144,37 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
             </p>
           ) : (
             <TabContext value={tabLabel}>
-              <SS.TabList onChange={!disabled ? handleChange : void 0}>{tabTitles}</SS.TabList>
+              <S.TabList onChange={!disabled ? handleChange : void 0}>{tabTitles}</S.TabList>
             </TabContext>
           )}
         </S.Row>
+        <S.Row>
+          <S.ReturnToNowBtn
+            data-cy="return-to-now-button"
+            hidden={!isNewMonth || !showNowNavigation}
+            variant="secondary"
+            onClick={returnToCurrentMonth}
+          >
+            {t("returnToNow")}
+          </S.ReturnToNowBtn>
+        </S.Row>
 
         <S.Row style={{ position: "relative" }}>
-          <S.Row style={{ flex: 0 }}>
+          <MonthSwitchComponent isInViewMode={isInViewMode} />
+        </S.Row>
+        <S.Row>
+          {a == null && (
             <S.ReturnToNowBtn
-              data-cy="return-to-now-button"
-              hidden={!isNewMonth || !showNowNavigation}
+              data-cy="login-modal-button"
+              hidden={false}
               variant="secondary"
-              onClick={returnToCurrentMonth}
-              style={{ position: "absolute", margin: 0, left: "16px" }}
+              onClick={() => setIsLoginModalOpen(true)}
             >
-              {t("returnToNow")}
+              {t("login")}
             </S.ReturnToNowBtn>
-            <MonthSwitchComponent isInViewMode={isInViewMode} />
-          </S.Row>
+          )}
+
+          {a != null && <p style={FontStyles.roboto.Black16px}>{OrgName}</p>}
         </S.Row>
         <S.Row style={{ justifyContent: "flex-end" }}>
           <S.UtilityButton onClick={onReportIssueClick}>
@@ -157,6 +192,7 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
           </S.UtilityButton>
         </S.Row>
       </S.Header>
+      <LoginModal open={isLoginModalOpen} setOpen={setIsLoginModalOpen} onClick={() => null} />
       <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
     </>
   );
