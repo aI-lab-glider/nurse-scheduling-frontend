@@ -27,8 +27,6 @@ const headCells: ShiftDataCell[] = [
 ];
 
 export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Element {
-  const { toggleOpen } = props;
-
   return (
     <TableHead>
       <S.TableRow>
