@@ -10,7 +10,6 @@ import ShiftDrawerComponent from "../../../components/shifts-drawer/shift-drawer
 import { ParserHelper } from "../../../helpers/parser.helper";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
 import { Shift } from "../../../state/schedule-data/shifts-types/shift-types.model";
-import { ShiftsActionCreator } from "../../../state/schedule-data/shifts-types/shifts.action-creator";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
 import { getPresentShiftTypes } from "../../../state/schedule-data/selectors";
 import {
@@ -48,11 +47,6 @@ export default function ShiftTab(): JSX.Element {
     }
   };
 
-  const handleRemoveItem = (shift: Shift): void => {
-    dispatcher(ScheduleDataActionCreator.deleteShift(shift));
-    dispatcher(ShiftsActionCreator.deleteShift(shift));
-  };
-
   return (
     <S.Wrapper>
       <S.TableContainer>
@@ -71,7 +65,7 @@ export default function ShiftTab(): JSX.Element {
                   <S.ColorSample color={shift.color} />
                 </S.TableCell>
                 <S.TableCell align="right">
-                  <S.ActionButton
+                  {/* <S.ActionButton
                     variant="primary"
                     onClick={(): void => toggleOpen(shift, ShiftEditComponentMode.EDIT)}
                     disabled
@@ -84,7 +78,7 @@ export default function ShiftTab(): JSX.Element {
                     disabled
                   >
                     Usuń
-                  </S.ActionButton>
+                  </S.ActionButton> */}
                 </S.TableCell>
               </S.TableRow>
             ))}
