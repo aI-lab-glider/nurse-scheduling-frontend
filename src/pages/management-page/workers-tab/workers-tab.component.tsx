@@ -28,6 +28,7 @@ import {
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
 import NurseIcon from "../../../assets/images/svg-components/NurseIcon";
 import CaretakerIcon from "../../../assets/images/svg-components/CaretakerIcon";
+import { WorkerTypeLabel } from "../../../components/schedule/worker-info-section/WorkerTypeLabel/WorkerTypeLabel";
 
 function toggleDrawer(
   open: boolean,
@@ -122,14 +123,7 @@ export default function WorkersTab(): JSX.Element {
                 <S.TableRow key={w.name}>
                   <S.TableCell data-cy="workerName">{w.name}</S.TableCell>
                   <S.TableCell align="left">
-                    <S.WorkerType className={`${workerType.toString().toLowerCase()}-label`}>
-                      {workerType === WorkerType.NURSE ? (
-                        <NurseIcon width={14} height={16} />
-                      ) : (
-                        <CaretakerIcon width={18} height={15} />
-                      )}
-                      {StringHelper.capitalize(WorkerTypeHelper.translate(workerType))}
-                    </S.WorkerType>
+                    <WorkerTypeLabel workerType={workerType} />
                   </S.TableCell>
                   <S.TableCell align="left" data-cy={`worker-hours-${w.name}`}>
                     {getWorkerTimeLabel(w.name)}

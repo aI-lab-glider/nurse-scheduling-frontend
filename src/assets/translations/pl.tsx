@@ -80,6 +80,7 @@ export const pl = {
     // export.modal.component.tsx
     dayWorkers: "dzienni pracownicy",
     downloadScheduleTitle: "Pobierz grafik",
+    downloadWorkerSchedule: "Pobierz plan pracownika",
     fileFormat: "Format pliku",
     fileOptions: "Opcje",
     // new-version.modal.component.tsx
@@ -167,6 +168,8 @@ export const pl = {
     essentialInformation: "Podstawowe informacje",
     youdonthaveplanforthismonth: "Nie masz planu na ten miesiąc",
     downloadingSchedule: "Pobieram zapisany plan",
+    NURSE: "Pielęgniarka",
+    OTHER: "Opiekunka",
   },
 };
 export default pl;

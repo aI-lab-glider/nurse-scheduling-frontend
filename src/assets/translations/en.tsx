@@ -152,6 +152,7 @@ const en: LocalizationResource = {
     tuesdayShort: "TUE",
     wednesdayShort: "WED",
     thursdayShort: "THU",
+    downloadWorkerSchedule: "Download worker schedule",
     fridayShort: "FRI",
     saturdayShort: "SAT",
     sundayShort: "SUN",
@@ -168,6 +169,8 @@ const en: LocalizationResource = {
     essentialInformation: "Essential information",
     youdonthaveplanforthismonth: "You dont have a schedule for this month.",
     downloadingSchedule: "Downloading schedule.",
+    NURSE: "Nurse",
+    OTHER: "Caretaker",
   },
 };
 export default en;
