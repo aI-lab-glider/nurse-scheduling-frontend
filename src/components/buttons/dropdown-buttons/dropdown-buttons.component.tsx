@@ -3,8 +3,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Popper from "@material-ui/core/Popper";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React, { useRef, useState } from "react";
+import AngleDown from "../../../assets/images/svg-components/AngleDown";
+import Check from "../../../assets/images/svg-components/Check";
 import { ButtonVariant } from "../../common-components";
 import * as S from "./dropdown.styled";
 
@@ -21,6 +22,7 @@ interface DropdownOptions {
   width: number;
   dataCy?: string;
   disabled?: boolean;
+  style?: React.CSSProperties;
 }
 
 export function DropdownButtons({
@@ -30,6 +32,7 @@ export function DropdownButtons({
   width,
   dataCy,
   disabled = false,
+  style,
 }: DropdownOptions): JSX.Element {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
@@ -45,23 +48,21 @@ export function DropdownButtons({
   const dropdownZIndex = 100;
 
   return (
-    <S.Wrapper>
+    <>
       <S.PlaceholderButton
         variant={buttonVariant}
         onClick={handleToggle}
         ref={anchorRef}
         data-cy={dataCy}
         disabled={disabled}
-        style={
-          {
-            zIndex: open ? dropdownZIndex + 1 : "initial",
-            "--width": width,
-          } as React.CSSProperties
-        }
+        style={{
+          ...style,
+          zIndex: open ? dropdownZIndex + 1 : "initial",
+        }}
       >
         <S.PlaceholderButtonContent>
           <span>{mainLabel}</span>
-          <ArrowDropDownIcon />
+          <AngleDown />
         </S.PlaceholderButtonContent>
       </S.PlaceholderButton>
       <Popper
@@ -71,27 +72,32 @@ export function DropdownButtons({
         anchorEl={anchorRef.current}
         disablePortal
         style={{
+          width: style?.width || "auto",
           zIndex: dropdownZIndex,
-          width: `${width}px`,
         }}
       >
         <ClickAwayListener onClickAway={handleClickAway}>
           <S.ButtonListWrapper>
             {buttons.map((item) => (
-              <S.DropdownButton
-                key={item.label}
-                onClick={(): void => {
-                  item.action();
-                  setOpen(false);
-                }}
-                data-cy={item.dataCy}
-              >
-                {item.label}
-              </S.DropdownButton>
+              <S.ButtonRow>
+                {mainLabel === item.label && (
+                  <Check style={{ position: "absolute", left: "10px" }} />
+                )}
+                <S.DropdownButton
+                  key={item.label}
+                  onClick={(): void => {
+                    item.action();
+                    setOpen(false);
+                  }}
+                  data-cy={item.dataCy}
+                >
+                  {item.label}
+                </S.DropdownButton>
+              </S.ButtonRow>
             ))}
           </S.ButtonListWrapper>
         </ClickAwayListener>
       </Popper>
-    </S.Wrapper>
+    </>
   );
 }

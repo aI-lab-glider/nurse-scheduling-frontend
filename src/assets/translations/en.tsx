@@ -161,6 +161,8 @@ const en: LocalizationResource = {
     login: "Login",
     email: "Email",
     password: "Password",
+    editWorker: "Edit worker",
+    essentialInformation: "Essential information",
     youdonthaveplanforthismonth: "You dont have a schedule for this month.",
     downloadingSchedule: "Downloading schedule.",
   },

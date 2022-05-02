@@ -8,23 +8,31 @@ import {
   Input as MaterialInput,
 } from "@material-ui/core";
 import styled from "styled-components";
-import { fontSizeBase, fontSizeXs, lineHeightXl } from "../../../../assets/css-consts";
+import {
+  fontSizeBase,
+  fontSizeXs,
+  fontWeightMedium,
+  lineHeightXl,
+} from "../../../../assets/css-consts";
 import { Button } from "../../../common-components";
 
 export const OptionsContainer = styled(Grid)`
   min-height: 80%;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 5px;
 `;
 
 export const SubmitButton = styled(Button)`
-  position: absolute;
-  bottom: 34px;
-  left: 23px;
+  float: right;
+  &:nth-of-type(2n) {
+    margin-left: 8px;
+  }
 `;
 
 export const Label = styled(Typography)`
-  font-size: ${fontSizeBase};
-  font-weight: 700;
-  line-height: ${lineHeightXl};
+  font-size: 14px !important;
+  font-weight: ${fontWeightMedium} !important;
   margin-left: 4%;
 `;
 
@@ -38,7 +46,24 @@ export const ErrorLabel = styled(Typography)`
 `;
 
 export const TextField = styled(MaterialTextField)`
+  width: 240px;
+  height: 32px;
   margin-left: 4%;
+  margin-bottom: 5px;
+  & input {
+    padding-bottom: 8px;
+    padding-top: 8px;
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 14px;
+    color: ${({ theme }) => theme.primaryText};
+  }
+  & .MuiOutlinedInput-root {
+    color: ${({ theme }) => theme.primaryText};
+    &.Mui-focused fieldset {
+      border-color: ${({ theme }) => theme.gray};
+    }
+  }
 `;
 
 export const Input = styled(MaterialInput)`

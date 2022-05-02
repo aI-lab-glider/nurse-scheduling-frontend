@@ -20,6 +20,9 @@ import { WorkerNameEditField } from "./worker-name-edit-field.components";
 import { WorkerWorkerTypeSelector } from "./worker-position-selector.component";
 import { t } from "../../../../helpers/translations.helper";
 import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
+import { left } from "@popperjs/core";
+import FontStyles from "../../../../assets/theme/FontStyles";
+import { LineSeparator } from "../../../separators/LineSeparator";
 
 export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.Element {
   const { mode, setOpen } = options;
@@ -84,6 +87,43 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
   // #region view
   return (
     <Grid container direction="column" justify="space-between">
+      <div
+        style={{
+          flexDirection: "row",
+          marginTop: "42px",
+          marginBottom: "20px",
+          alignContent: "center",
+          justifyItems: "center",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flex: 1,
+            float: "left",
+          }}
+        >
+          <p style={{ ...FontStyles.roboto.Black16px }}>{t("editWorker")}</p>
+        </div>
+        <S.SubmitButton
+          variant="secondary"
+          data-cy="btn-save-worker"
+          onClick={() => setOpen(false)}
+        >
+          {t("editPageToolbarExit")}
+        </S.SubmitButton>
+        <S.SubmitButton
+          disabled={!canSaveWorker()}
+          variant="primary"
+          data-cy="btn-save-worker"
+          onClick={handleClose}
+        >
+          {t("saveWorker")}
+        </S.SubmitButton>
+      </div>
+      <LineSeparator text={t("essentialInformation")} />
       <S.OptionsContainer container direction="column">
         <WorkerNameEditField
           workerName={workerInfo.workerName}
@@ -113,14 +153,6 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
 
         <TeamSelector team={workerInfo.team} setTeam={handleWorkerTeamUpdate} />
       </S.OptionsContainer>
-      <S.SubmitButton
-        disabled={!canSaveWorker()}
-        variant="primary"
-        data-cy="btn-save-worker"
-        onClick={handleClose}
-      >
-        {t("saveWorker")}
-      </S.SubmitButton>
     </Grid>
   );
   // #endregion

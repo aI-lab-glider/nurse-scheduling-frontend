@@ -160,6 +160,8 @@ export const pl = {
     login: "Zaloguj",
     email: "Email",
     password: "Hasło",
+    editWorker: "Edytuj pracownika",
+    essentialInformation: "Podstawowe informacje",
     youdonthaveplanforthismonth: "Nie masz planu na ten miesiąc",
     downloadingSchedule: "Pobieram zapisany plan",
   },
