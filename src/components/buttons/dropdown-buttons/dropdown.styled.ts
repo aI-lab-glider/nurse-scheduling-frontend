@@ -66,6 +66,7 @@ export const DropdownButton = styled.div`
   font-size: 14px;
 
   padding-left: 33px;
+  padding-right: 33px;
   color: ${({ theme }) => theme.primaryText};
 `;
 
