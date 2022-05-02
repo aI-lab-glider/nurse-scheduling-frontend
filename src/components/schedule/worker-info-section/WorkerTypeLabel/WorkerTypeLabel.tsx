@@ -7,10 +7,14 @@ import * as S from "./WorkerTypeLabel.styled";
 
 interface WorkerTypeLabelInterface {
   workerType: WorkerType;
+  style?: React.CSSProperties;
 }
 
-export const WorkerTypeLabel = ({ workerType }: WorkerTypeLabelInterface) => (
-  <S.WorkerTypeLabelContainer className={`${workerType.toString().toLowerCase()}-label`}>
+export const WorkerTypeLabel = ({ workerType, style }: WorkerTypeLabelInterface) => (
+  <S.WorkerTypeLabelContainer
+    style={style}
+    className={`${workerType.toString().toLowerCase()}-label`}
+  >
     {workerType === WorkerType.NURSE ? (
       <NurseIcon width={14} height={16} />
     ) : (

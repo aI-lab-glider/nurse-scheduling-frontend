@@ -7,8 +7,8 @@ import { fontSizeBase, fontSizeLg } from "../../../../assets/css-consts";
 import { Button } from "../../../common-components";
 
 export const WorkerNameLabel = styled.h2`
-  font-size: ${fontSizeLg};
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: bold;
 `;
 
 export const WorkerTypeLabel = styled.p`
@@ -42,6 +42,8 @@ export const WorkerInfoContainer = styled.div`
 `;
 
 export const HeaderRow = styled.div`
+  margin-top: 42px;
+  align-items: center;
   display: flex;
   flex-direction: row;
 `;
