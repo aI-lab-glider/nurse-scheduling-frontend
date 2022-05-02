@@ -77,7 +77,6 @@ export function WorkerEmploymentContractWorkNormSelector({
           buttons={contractTimeDropdownOptions}
           mainLabel={employmentTimeAsFraction ?? t("selectWorkerHours")}
           buttonVariant="secondary"
-          width={inputWidth}
         />
       </Grid>
       {selectedTimeType === TimeDrawerType.OTHER && (

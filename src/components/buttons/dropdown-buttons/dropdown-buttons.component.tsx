@@ -19,7 +19,6 @@ interface DropdownOptions {
   buttons: ButtonData[];
   mainLabel: string;
   buttonVariant?: ButtonVariant;
-  width: number;
   dataCy?: string;
   disabled?: boolean;
   style?: React.CSSProperties;
@@ -29,7 +28,7 @@ export function DropdownButtons({
   buttons,
   mainLabel,
   buttonVariant,
-  width,
+
   dataCy,
   disabled = false,
   style,
@@ -56,6 +55,7 @@ export function DropdownButtons({
         data-cy={dataCy}
         disabled={disabled}
         style={{
+          borderRadius: 4,
           ...style,
           zIndex: open ? dropdownZIndex + 1 : "initial",
         }}

@@ -73,7 +73,7 @@ export const PlaceholderButton = styled(Button)`
   position: relative;
   padding: 0px;
   font-size: 14px;
-
+  border-color: ${({ theme }) => theme.gray};
   width: var(--width) px;
 `;
 
