@@ -41,7 +41,6 @@ export function TeamSelector({ setTeam, team }: TeamSelectorOptions): JSX.Elemen
         buttons={teamsOptions}
         mainLabel={team}
         buttonVariant="secondary"
-        width={134}
       />
     </>
   );

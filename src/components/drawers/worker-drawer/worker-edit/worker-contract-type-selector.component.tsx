@@ -57,7 +57,6 @@ export function WorkerContractTypeSelector({
           workerContractType ? translateAndCapitalizeContractType(workerContractType) : "Typ umowy"
         }
         buttonVariant="secondary"
-        width={workerContractType ? 190 : 154}
       />
 
       <FormFieldErrorLabel
