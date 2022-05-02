@@ -4,29 +4,21 @@
 import styled from "styled-components";
 import { colors } from "../../assets/css-consts";
 
-export const ShiftBar = styled.div`
-  width: 4px;
-  height: 100%;
-  margin-right: 4px;
-  border-radius: 2px 0 0 2px;
-`;
-
 export const ShiftCell = styled.div`
-  width: 14.2%;
-  height: 100%;
+  padding: 5px;
   background-color: white;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+  &.notCurrentMonthtrue {
+    background-color: #f0f0f0;
+  }
 `;
 
 export const ShiftTop = styled.div`
   letter-spacing: 0.75px;
-  font-weight: 400;
+  font-weight: bold;
+  font-size: 12px;
   display: flex;
   height: 40%;
-  margin: 2px 5px 4px 5px;
+  margin-bottom: 5px;
   flex-direction: row;
   justify-content: flex-end;
 
@@ -36,18 +28,18 @@ export const ShiftTop = styled.div`
 `;
 
 export const ShiftBottom = styled.div`
-  height: 100%;
+  height: 18px;
   min-height: 3vh;
   size: 4px;
   letter-spacing: 0.25px;
   font-weight: 800;
   display: flex;
-  margin: 0 4px 4px 4px;
   justify-content: flex-start;
   flex-direction: row;
   border-radius: 2px;
 `;
 
 export const ShiftSymbol = styled.p`
+  font-size: 12px;
   margin: auto;
 `;

@@ -53,7 +53,7 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
           <S.WorkerNameLabel>
             {StringHelper.capitalizeEach(workerInfo.workerName)}
           </S.WorkerNameLabel>
-          <WorkerTypeLabel workerType={workerInfo.workerType} />
+          <WorkerTypeLabel style={{ marginLeft: "10px" }} workerType={workerInfo.workerType} />
           <S.DownloadButton
             variant="primary"
             onClick={(): void =>
@@ -74,7 +74,6 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
           <S.WorkerInfo>Liczba nadgodzin: {workerHoursInfo.overTime}</S.WorkerInfo>
           <S.WorkerInfo>Suma godzin: {workerHoursInfo.workerTime}</S.WorkerInfo>
           <S.CalendarDivider data-html2canvas-ignore="true" />
-          <S.ShiftsLabel id="shiftsWord">ZMIANY</S.ShiftsLabel>
         </div>
         <WorkersCalendar id={calendarExport} workerShifts={workerInfo.workerShifts} />
       </div>

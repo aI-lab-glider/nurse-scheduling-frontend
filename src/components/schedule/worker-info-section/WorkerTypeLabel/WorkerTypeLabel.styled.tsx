@@ -2,12 +2,12 @@ import styled from "styled-components";
 import { colors } from "../../../../assets/css-consts";
 
 export const WorkerTypeLabelContainer = styled.span`
-  height: 30px;
-  line-height: 30px;
-  max-width: 130px;
-  font-size: 14px;
-  border-radius: 5px;
-  background-color: ${colors.nurseColor};
+  height: 22px;
+  line-height: 14px;
+  width: 110px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
   padding: 4px 6px;
   display: flex;
   justify-content: center;
@@ -17,6 +17,7 @@ export const WorkerTypeLabelContainer = styled.span`
 
   & svg {
     margin-right: 5px;
+    margin-left: 1px;
     fill: ${colors.white};
   }
   & svg path {
