@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Popper from "@material-ui/core/Popper";
+import Popper, { PopperPlacementType } from "@material-ui/core/Popper";
 import React, { useRef, useState } from "react";
 import AngleDown from "../../../assets/images/svg-components/AngleDown";
 import Check from "../../../assets/images/svg-components/Check";
@@ -22,16 +22,21 @@ interface DropdownOptions {
   dataCy?: string;
   disabled?: boolean;
   style?: React.CSSProperties;
+  placeholderButtonContentStyle?: React.CSSProperties;
+  isTooltip?: boolean;
+  placement?: PopperPlacementType;
 }
 
 export function DropdownButtons({
   buttons,
   mainLabel,
   buttonVariant,
-
+  isTooltip,
   dataCy,
   disabled = false,
   style,
+  placeholderButtonContentStyle,
+  placement,
 }: DropdownOptions): JSX.Element {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
@@ -60,7 +65,7 @@ export function DropdownButtons({
           zIndex: open ? dropdownZIndex + 1 : "initial",
         }}
       >
-        <S.PlaceholderButtonContent>
+        <S.PlaceholderButtonContent style={placeholderButtonContentStyle}>
           <span>{mainLabel}</span>
           <AngleDown />
         </S.PlaceholderButtonContent>
@@ -68,11 +73,11 @@ export function DropdownButtons({
       <Popper
         data-cy="openedDropdown"
         open={open}
-        placement="bottom"
+        placement={placement || "bottom"}
         anchorEl={anchorRef.current}
         disablePortal
         style={{
-          width: style?.width || "auto",
+          width: (!isTooltip && style?.width) || "auto",
           zIndex: dropdownZIndex,
         }}
       >
