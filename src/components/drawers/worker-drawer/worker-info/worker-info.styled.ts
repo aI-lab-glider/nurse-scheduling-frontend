@@ -34,7 +34,14 @@ export const ShiftsLabel = styled.h3`
 `;
 
 export const DownloadButton = styled(Button)`
-  position: absolute;
-  bottom: 74px;
-  left: 23px;
+  float: right;
+`;
+
+export const WorkerInfoContainer = styled.div`
+  width: 750px;
+`;
+
+export const HeaderRow = styled.div`
+  display: flex;
+  flex-direction: row;
 `;

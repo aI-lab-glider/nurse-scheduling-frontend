@@ -17,6 +17,8 @@ import { exportToXlsx } from "./export-to-xlsx";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
 import { ShiftCode } from "../../../../state/schedule-data/shifts-types/shift-types.model";
 import { WorkerHourInfoSummary } from "../../../../logic/schedule-logic/worker-hours-info.logic";
+import { t } from "../../../../helpers/translations.helper";
+import { WorkerTypeLabel } from "../../../schedule/worker-info-section/WorkerTypeLabel/WorkerTypeLabel";
 
 interface WorkerInfoComponentOptions {
   workerName: WorkerName;
@@ -44,17 +46,24 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
     exportToXlsx(workerInfoForXlsx.workerName, infoSection, shiftsArr);
   };
 
-  const workerLabelColor =
-    workerInfo.workerType === WorkerType.NURSE ? colors.nurseColor : colors.babysitterColor;
   return (
-    <>
+    <S.WorkerInfoContainer>
       <div id={workerInfoExport}>
-        <S.WorkerNameLabel>{StringHelper.capitalizeEach(workerInfo.workerName)}</S.WorkerNameLabel>
-        {workerInfo.workerType && (
-          <S.WorkerTypeLabel color={workerLabelColor}>
-            {StringHelper.capitalize(WorkerTypeHelper.translate(workerInfo.workerType))}
-          </S.WorkerTypeLabel>
-        )}
+        <S.HeaderRow>
+          <S.WorkerNameLabel>
+            {StringHelper.capitalizeEach(workerInfo.workerName)}
+          </S.WorkerNameLabel>
+          <WorkerTypeLabel workerType={workerInfo.workerType} />
+          <S.DownloadButton
+            variant="primary"
+            onClick={(): void =>
+              handleExportAsXlsx(workerInfo, workerHoursInfo, workerInfo.workerShifts)
+            }
+          >
+            {t("downloadWorkerSchedule")}
+          </S.DownloadButton>
+        </S.HeaderRow>
+
         <div>
           {workerInfo.contractType && (
             <S.WorkerInfo>
@@ -69,14 +78,6 @@ export function WorkerInfoComponent({ workerName }: WorkerInfoComponentOptions):
         </div>
         <WorkersCalendar id={calendarExport} workerShifts={workerInfo.workerShifts} />
       </div>
-      <S.DownloadButton
-        variant="primary"
-        onClick={(): void =>
-          handleExportAsXlsx(workerInfo, workerHoursInfo, workerInfo.workerShifts)
-        }
-      >
-        Pobierz
-      </S.DownloadButton>
-    </>
+    </S.WorkerInfoContainer>
   );
 }
