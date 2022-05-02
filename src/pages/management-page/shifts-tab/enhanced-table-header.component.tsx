@@ -27,34 +27,12 @@ const headCells: ShiftDataCell[] = [
 ];
 
 export function EnhancedTableHeaderComponent(props: EnhancedTableProps): JSX.Element {
-  const { toggleOpen } = props;
-
   return (
     <TableHead>
       <S.TableRow>
         {headCells.map((headCell) => (
           <S.TableCell key={headCell.id}>{headCell.label}</S.TableCell>
         ))}
-        <S.TableCell align="right">
-          <S.HeaderButton
-            variant="primary"
-            disabled
-            onClick={(): void => {
-              toggleOpen(
-                {
-                  name: "Nowa zmiana",
-                  from: 0,
-                  to: 0,
-                  color: "FFD100",
-                  isWorkingShift: true,
-                },
-                ShiftEditComponentMode.ADD_NEW
-              );
-            }}
-          >
-            Dodaj zmianę
-          </S.HeaderButton>
-        </S.TableCell>
       </S.TableRow>
     </TableHead>
   );

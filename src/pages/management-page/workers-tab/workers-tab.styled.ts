@@ -34,15 +34,15 @@ export const WorkerType = styled.span`
   align-items: center;
   color: ${colors.white};
   text-transform: uppercase;
-  
+
   & svg {
     margin-right: 5px;
     fill: ${colors.white};
-  }  
+  }
   & svg path {
     fill: ${colors.white};
   }
-  
+
   &.nurse-label {
     background-color: ${colors.nurseColor};
   }
@@ -53,8 +53,12 @@ export const WorkerType = styled.span`
 
 export const ActionButton = styled(Button)`
   font-size: ${fontSizeXs};
+  width: 90px;
   padding: 2px 25px 2px;
   visibility: hidden;
+  &:nth-of-type(2n) {
+    margin-left: 7px;
+  }
 `;
 
 export const TableContainer = styled(MaterialTableContainer)`
