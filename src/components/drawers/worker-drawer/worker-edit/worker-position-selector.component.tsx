@@ -45,19 +45,20 @@ export function WorkerWorkerTypeSelector({
     setIsFieldValid?.(isWorkerPositionValid());
   }, [workerType, setIsFieldValid, isWorkerPositionValid]);
   return (
-    <Grid item xs={6}>
-      <S.Label>{t("position")}</S.Label>
+    <>
+      <S.Label style={{ marginTop: "10px" }}>{t("position")}</S.Label>
       <DropdownButtons
+        style={{ width: "240px", borderColor: "#c4c4c4", borderRadius: 4 }}
         dataCy="position"
         buttons={positionOptions}
         mainLabel={workerType ? translateAndCapitalizeWorkerType(workerType) : t("position")}
         buttonVariant="secondary"
-        width={160}
+        width={240}
       />
       <FormFieldErrorLabel
         shouldBeVisible={!isWorkerPositionValid() && firstEditMade}
         message={t("selectWorkerPosition")}
       />
-    </Grid>
+    </>
   );
 }

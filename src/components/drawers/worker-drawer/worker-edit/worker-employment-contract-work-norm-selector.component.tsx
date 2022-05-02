@@ -70,9 +70,10 @@ export function WorkerEmploymentContractWorkNormSelector({
   const employmentTimeAsFraction = toFraction(workerTime);
   return (
     <>
-      <Grid item xs={6} style={{ zIndex: 2, marginBottom: "15px" }}>
+      <Grid item xs={6} style={{ zIndex: 2, marginBottom: "10px" }}>
         <DropdownButtons
           dataCy="contract-time-dropdown"
+          style={{ width: "240px", borderColor: "#c4c4c4", borderRadius: 4 }}
           buttons={contractTimeDropdownOptions}
           mainLabel={employmentTimeAsFraction ?? t("selectWorkerHours")}
           buttonVariant="secondary"
@@ -80,7 +81,7 @@ export function WorkerEmploymentContractWorkNormSelector({
         />
       </Grid>
       {selectedTimeType === TimeDrawerType.OTHER && (
-        <Grid item xs={6}>
+        <Grid item xs={6} style={{ marginBottom: "10px" }}>
           <S.Label>{t("enterWorkerHours")}</S.Label>
           <S.Input
             fullWidth

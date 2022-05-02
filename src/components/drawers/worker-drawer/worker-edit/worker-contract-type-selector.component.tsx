@@ -48,25 +48,22 @@ export function WorkerContractTypeSelector({
   }, [workerContractType, setIsFieldValid, isContractTypeValid]);
   return (
     <>
-      <Grid item xs={6}>
-        <S.Label>{t("workingTime")}</S.Label>
-        <DropdownButtons
-          dataCy="contract"
-          buttons={contractOptions}
-          mainLabel={
-            workerContractType
-              ? translateAndCapitalizeContractType(workerContractType)
-              : "Typ umowy"
-          }
-          buttonVariant="secondary"
-          width={workerContractType ? 190 : 154}
-        />
+      <S.Label style={{ marginTop: "10px" }}>{t("workingTime")}</S.Label>
+      <DropdownButtons
+        style={{ width: "240px", borderColor: "#c4c4c4", borderRadius: 4, marginBottom: "10px" }}
+        dataCy="contract"
+        buttons={contractOptions}
+        mainLabel={
+          workerContractType ? translateAndCapitalizeContractType(workerContractType) : "Typ umowy"
+        }
+        buttonVariant="secondary"
+        width={workerContractType ? 190 : 154}
+      />
 
-        <FormFieldErrorLabel
-          shouldBeVisible={!isContractTypeValid() && firstEditMade}
-          message={t("selectContractType")}
-        />
-      </Grid>
+      <FormFieldErrorLabel
+        shouldBeVisible={!isContractTypeValid() && firstEditMade}
+        message={t("selectContractType")}
+      />
     </>
   );
 }

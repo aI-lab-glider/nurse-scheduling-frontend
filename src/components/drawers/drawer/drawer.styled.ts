@@ -10,5 +10,6 @@ export const Drawer = styled(MaterialDrawer)<{ isFullHeight?: boolean }>`
     margin-top: ${({ isFullHeight }) => (isFullHeight ? 0 : headerHeight)};
     min-width: 500px;
     overflow: hidden;
+    background-color: ${({ theme }) => theme.gray};
   }
 `;

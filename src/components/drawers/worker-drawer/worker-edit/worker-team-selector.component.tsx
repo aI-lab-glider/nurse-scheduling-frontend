@@ -33,15 +33,16 @@ export function TeamSelector({ setTeam, team }: TeamSelectorOptions): JSX.Elemen
   }));
 
   return (
-    <Grid item xs={6}>
+    <>
       <S.Label>{t("workerTeam")}</S.Label>
       <DropdownButtons
+        style={{ width: "240px", borderColor: "#c4c4c4", borderRadius: 4 }}
         dataCy="team-dropdown"
         buttons={teamsOptions}
         mainLabel={team}
         buttonVariant="secondary"
         width={134}
       />
-    </Grid>
+    </>
   );
 }
