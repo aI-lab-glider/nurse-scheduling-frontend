@@ -19,13 +19,24 @@ export const WorkerTypeLabel = styled.p`
   width: 100px;
   text-align: center;
 `;
-
+export const BoldInfo = styled.p`
+  font-weight: bold;
+  margin-left: 10px;
+`;
+export const OvertimeHours = styled(BoldInfo)`
+  color: #c60053;
+`;
 export const CalendarDivider = styled(Divider)`
   margin: 20px 0;
 `;
 
 export const WorkerInfo = styled.p`
   margin-bottom: 0;
+  flex-direction: row;
+  font-size: 14px;
+  font-weight: normal;
+  margin-bottom: 10px;
+  display: flex;
 `;
 
 export const ShiftsLabel = styled.h3`
@@ -43,7 +54,14 @@ export const WorkerInfoContainer = styled.div`
 
 export const HeaderRow = styled.div`
   margin-top: 42px;
+  margin-bottom: 10px;
   align-items: center;
   display: flex;
+  flex-direction: row;
+`;
+export const NameLabelRow = styled.div`
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
   flex-direction: row;
 `;
