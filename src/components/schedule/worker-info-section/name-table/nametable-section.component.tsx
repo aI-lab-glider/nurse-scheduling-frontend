@@ -93,8 +93,10 @@ export function NameTableSection({
                 <div style={{ marginLeft: "8px" }}>
                   {isWorker && isNurse && <NurseIcon />}
                   {isWorker && !isNurse && <CaretakerIcon />}
-                  {!isWorker && workerName === "Dzieci" && <BabyIcon />}
-                  {!isWorker && workerName === "Pracownicy" && <WorkerIcon />}
+                  {!isWorker && workerName === "Dzieci" && <BabyIcon width={14} height={14} />}
+                  {!isWorker && workerName === "Pracownicy" && (
+                    <WorkerIcon width={14} height={14} />
+                  )}
                 </div>
 
                 <S.LabelWrapper style={FontStyles.roboto.Regular10px}>{workerName}</S.LabelWrapper>
