@@ -17,7 +17,6 @@ export const ShiftTop = styled.div`
   font-weight: bold;
   font-size: 12px;
   display: flex;
-  height: 40%;
   margin-bottom: 5px;
   flex-direction: row;
   justify-content: flex-end;
@@ -29,7 +28,6 @@ export const ShiftTop = styled.div`
 
 export const ShiftBottom = styled.div`
   height: 18px;
-  min-height: 3vh;
   size: 4px;
   letter-spacing: 0.25px;
   font-weight: 800;
