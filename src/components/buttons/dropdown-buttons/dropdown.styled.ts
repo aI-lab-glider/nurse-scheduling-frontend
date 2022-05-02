@@ -36,45 +36,54 @@ export const Wrapper = styled.div`
 export const ButtonListWrapper = styled.div`
   width: 100%;
   overflow: hidden;
+  border-radius: 2px;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   box-shadow: 0 5px 30px 0 ${colors.gray400};
   position: relative;
-  margin-top: -20px;
+  margin-top: 2px;
+  padding-top: 16px;
+  padding-bottom: 16px;
   background-color: ${colors.white};
   white-space: nowrap;
-`;
 
+  & div:hover {
+    cursor: pointer;
+  }
+`;
+export const ButtonRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: 11px;
+  &:first-child {
+    margin-top: 0px;
+  }
+`;
 export const DropdownButton = styled.div`
-  width: var(--width) px;
   position: relative;
   text-align: left;
-  height: 100%;
+  font-weight: 400;
+  font-size: 14px;
 
-  padding: 7px 16px 7px;
-  background-color: ${colors.white};
-  color: ${colors.primary};
-
-  &:hover {
-    cursor: pointer;
-    box-shadow: 0 0;
-    background-color: ${fade(colors.primary, 0.1)};
-  }
-  &:first-child {
-    padding-top: 25px;
-  }
+  padding-left: 33px;
+  padding-right: 33px;
+  color: ${({ theme }) => theme.primaryText};
 `;
 
 export const PlaceholderButton = styled(Button)`
   position: relative;
+  padding: 0px;
+  font-size: 14px;
+  border-color: ${({ theme }) => theme.gray};
   width: var(--width) px;
 `;
 
 export const PlaceholderButtonContent = styled.div`
-  width: calc(100% + 40px);
-  margin-left: -15px;
-  padding-left: 10px;
-  padding-right: 10px;
+  flex: 1;
+  padding-left: 6px;
+  padding-right: 8px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  justify-items: center;
 `;
