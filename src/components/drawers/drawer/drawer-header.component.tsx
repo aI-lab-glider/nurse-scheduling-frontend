@@ -11,7 +11,7 @@ export interface DrawerHeaderOptions extends DrawerProps {
 }
 
 export default function DrawerHeader(options: DrawerHeaderOptions): JSX.Element {
-  const { title, setOpen, children } = options;
+  const { children } = options;
 
   return (
     <>

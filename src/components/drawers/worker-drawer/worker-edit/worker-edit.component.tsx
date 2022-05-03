@@ -4,25 +4,24 @@
 import { Grid } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import * as S from "./worker.styled";
+import FontStyles from "../../../../assets/theme/FontStyles";
+import { t } from "../../../../helpers/translations.helper";
+import { useWorkerInfo, WorkerInfo } from "../../../../hooks/use-worker-info";
+import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
 import {
   ContractType,
   Team,
-  WorkerType,
+  WorkerType
 } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import { WorkerActionCreator } from "../../../../state/schedule-data/worker-info/worker.action-creator";
-import { useWorkerInfo, WorkerInfo } from "../../../../hooks/use-worker-info";
+import { LineSeparator } from "../../../separators/LineSeparator";
 import { CombinedWorkNormSelector } from "./combined-worknorm-selector.component";
 import { WorkerContractTypeSelector } from "./worker-contract-type-selector.component";
-import { WorkerEditComponentOptions, WorkerEditComponentMode } from "./worker-edit.models";
-import { TeamSelector } from "./worker-team-selector.component";
+import { WorkerEditComponentMode, WorkerEditComponentOptions } from "./worker-edit.models";
 import { WorkerNameEditField } from "./worker-name-edit-field.components";
 import { WorkerWorkerTypeSelector } from "./worker-position-selector.component";
-import { t } from "../../../../helpers/translations.helper";
-import { WorkerName } from "../../../../state/schedule-data/schedule-sensitive-data.model";
-import { left } from "@popperjs/core";
-import FontStyles from "../../../../assets/theme/FontStyles";
-import { LineSeparator } from "../../../separators/LineSeparator";
+import { TeamSelector } from "./worker-team-selector.component";
+import * as S from "./worker.styled";
 
 export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.Element {
   const { mode, setOpen } = options;

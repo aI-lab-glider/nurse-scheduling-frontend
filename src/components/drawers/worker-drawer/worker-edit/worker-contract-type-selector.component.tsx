@@ -1,13 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { Grid } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { t } from "../../../../helpers/translations.helper";
 import { ContractType } from "../../../../state/schedule-data/worker-info/worker-info.model";
 import {
   ButtonData,
-  DropdownButtons,
+  DropdownButtons
 } from "../../../buttons/dropdown-buttons/dropdown-buttons.component";
 import { FormFieldErrorLabel } from "./form-field-error-label.component";
 import { FormFieldOptions, translateAndCapitalizeContractType } from "./worker-edit.models";

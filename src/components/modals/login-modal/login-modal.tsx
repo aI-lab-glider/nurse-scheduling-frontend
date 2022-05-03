@@ -30,6 +30,7 @@ export default function LoginModal(options: LoginModalOptions): JSX.Element {
         handleClose();
       },
       (error) => {
+        // eslint-disable-next-line no-console
         console.log(error);
       }
     );

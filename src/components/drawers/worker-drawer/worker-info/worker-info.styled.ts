@@ -1,9 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import styled from "styled-components";
 import { Divider } from "@material-ui/core";
-import { fontSizeBase, fontSizeLg } from "../../../../assets/css-consts";
+import styled from "styled-components";
+import { fontSizeBase } from "../../../../assets/css-consts";
 import { Button } from "../../../common-components";
 
 export const WorkerNameLabel = styled.h2`
