@@ -48,11 +48,26 @@ export const ContentWrapper = styled.div`
   justify-content: center;
 `;
 
-export const Content = styled.div`
+export const Content = styled.div<{ keepOn?: boolean; color?: string; hasNext?: boolean }>`
   display: flex;
   align-self: "center";
   width: 100%;
-  height: 18px;
+
+  height: 15.5px;
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: bold;
+  &.naws {
+    background-color: ${({ color }) => color};
+    color: ${({ color }) => color};
+    box-shadow: ${({ keepOn, color }) => !keepOn && `-1px 0 0 0 ${color}`};
+    border-top-left-radius: ${({ keepOn }) => !keepOn && "3px"};
+    border-bottom-left-radius: ${({ keepOn }) => !keepOn && "3px"};
+    margin-left: ${({ keepOn }) => !keepOn && "6px"};
+    margin-right: ${({ hasNext }) => !hasNext && "6px"};
+    border-top-right-radius: ${({ hasNext }) => !hasNext && "3px"};
+    border-bottom-right-radius: ${({ hasNext }) => !hasNext && "3px"};
+  }
 `;
 
 export const ShiftBar = styled.div`

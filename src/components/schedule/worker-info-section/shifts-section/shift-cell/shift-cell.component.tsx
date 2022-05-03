@@ -25,6 +25,7 @@ export function getShiftCode(value: string): ShiftCode {
 
 export interface ShiftCellOptions extends BaseCellOptions {
   keepOn?: boolean;
+  hasNext?: boolean;
   workerName?: string;
 }
 

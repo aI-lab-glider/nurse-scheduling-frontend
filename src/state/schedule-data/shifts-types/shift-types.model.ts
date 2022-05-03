@@ -191,7 +191,7 @@ export const SHIFTS: ShiftsDictionary = {
     name: "zwolnienie lekarskie (L4)",
     from: 0,
     to: 24,
-    color: "EF002B",
+    color: "C60053",
     isWorkingShift: false,
     type: NotWorkingShiftType.MedicalLeave,
   },

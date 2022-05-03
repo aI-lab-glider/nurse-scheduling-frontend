@@ -9,11 +9,11 @@ import { ShiftCode } from "../../../../../state/schedule-data/shifts-types/shift
 import { baseCellDataCy } from "../../../base/base-cell/base-cell.models";
 import { Content, ContentWrapper, Shift, StyledErrorPopper } from "./shift-cell.styled";
 import { ShiftCellOptions, DEFAULT_SHIFT_HEX } from "./shift-cell.component";
-import FontStyles from "../../../../../assets/theme/FontStyles";
 
 interface ShiftCellContentOptions extends Pick<ShiftCellOptions, "onClick" | "errorSelector"> {
   shiftCode: ShiftCode;
   keepOn?: boolean;
+  hasNext?: boolean;
   isBlocked: boolean;
   cellIndex: number;
 }
@@ -21,6 +21,7 @@ export function ShiftCellContent({
   shiftCode,
   keepOn,
   isBlocked,
+  hasNext,
   onClick,
   cellIndex,
   errorSelector,
@@ -32,32 +33,21 @@ export function ShiftCellContent({
 
   const colorHex = `#${shiftTypes[shiftCode].color ?? DEFAULT_SHIFT_HEX}`;
 
-  const cellStyle: CSSProperties = useMemo(() => {
-    const color = ColorHelper.hexToRgb(colorHex).fade(0.7).toString();
-    return !shiftTypes[shiftCode].isWorkingShift && shiftCode !== ShiftCode.W
-      ? {
-          boxShadow: !keepOn ? `-1px 0 0 0 ${color}` : "",
-          backgroundColor: color,
-          color,
-        }
-      : {};
-  }, [shiftCode, keepOn, colorHex, shiftTypes]);
+  const isNotAWorkingShift = !shiftTypes[shiftCode].isWorkingShift && shiftCode !== ShiftCode.W;
+  const color = ColorHelper.hexToRgb(colorHex).fade(0.7).toString();
 
   return (
     <StyledErrorPopper errorSelector={errorSelector} showTooltip>
       <ContentWrapper onClick={conditionalClick}>
         <Content
-          style={{
-            ...FontStyles.roboto.Black12px,
-            ...cellStyle,
-          }}
+          keepOn={keepOn}
+          hasNext={hasNext}
+          className={isNotAWorkingShift && "naws"}
+          color={color}
         >
           <Shift
             style={{
-              color:
-                !keepOn && !shiftTypes[shiftCode].isWorkingShift && shiftCode !== ShiftCode.W
-                  ? "#FFF"
-                  : colorHex,
+              color: !keepOn && isNotAWorkingShift ? "#FFF" : colorHex,
             }}
             data-cy={baseCellDataCy(cellIndex, "cell")}
           >

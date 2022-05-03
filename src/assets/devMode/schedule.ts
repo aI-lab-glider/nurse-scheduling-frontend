@@ -1065,7 +1065,7 @@ export default {
       name: "zwolnienie lekarskie (L4)",
       from: 0,
       to: 24,
-      color: "C60000",
+      color: "C60053",
       isWorkingShift: false,
       type: "zwolnienie lekarskie",
     },
