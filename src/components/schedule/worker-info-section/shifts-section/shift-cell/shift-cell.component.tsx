@@ -56,8 +56,8 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   function resetPopperCloseTimer() {
     setIsCounting(false);
   }
-  function toggleComponentVisibility(): void {
-    setIsComponentVisible(!isComponentVisible);
+  function toggleComponentVisibility() {
+    !isBlocked && setIsComponentVisible(!isComponentVisible);
   }
 
   return (

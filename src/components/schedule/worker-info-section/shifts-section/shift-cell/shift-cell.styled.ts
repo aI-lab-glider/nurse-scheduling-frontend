@@ -8,12 +8,15 @@ export const CellWrapper = styled.div`
   flex: 1;
   align-items: center;
   justify-content: center;
-
+  overflow: hidden;
   height: 26px;
   background: #fff;
-  cursor: cell;
+
   padding: 0;
-  overflow: hidden;
+
+  &:not(.blocked) {
+    cursor: cell;
+  }
 
   &:first-child {
     border-left: 0;
@@ -31,7 +34,8 @@ export const CellWrapper = styled.div`
     border-left: 1px solid white;
     background-color: white;
     outline: white solid 1px;
-    box-shadow: 0 4px 7px rgba(16, 32, 70, 0.2), 0 0 7px rgba(16, 32, 70, 0.2);
+
+    /* box-shadow: 0 4px 7px rgba(16, 32, 70, 0.2), 0 0 7px rgba(16, 32, 70, 0.2); */
   }
 `;
 
@@ -48,7 +52,12 @@ export const ContentWrapper = styled.div`
   justify-content: center;
 `;
 
-export const Content = styled.div<{ keepOn?: boolean; color?: string; hasNext?: boolean }>`
+export const Content = styled.div<{
+  keepOn?: boolean;
+  clor?: string;
+  hasNext?: boolean;
+  colorHex?: string;
+}>`
   display: flex;
   align-self: "center";
   width: 100%;
@@ -57,16 +66,26 @@ export const Content = styled.div<{ keepOn?: boolean; color?: string; hasNext?: 
   font-size: 12px;
   line-height: 14px;
   font-weight: bold;
+
+  div {
+    color: ${({ colorHex }) => colorHex};
+  }
+
   &.naws {
     background-color: ${({ color }) => color};
-    color: ${({ color }) => color};
-    box-shadow: ${({ keepOn, color }) => !keepOn && `-1px 0 0 0 ${color}`};
     border-top-left-radius: ${({ keepOn }) => !keepOn && "3px"};
     border-bottom-left-radius: ${({ keepOn }) => !keepOn && "3px"};
-    margin-left: ${({ keepOn }) => !keepOn && "6px"};
-    margin-right: ${({ hasNext }) => !hasNext && "6px"};
+    margin-left: ${({ keepOn }) => !keepOn && "7px"};
+    margin-right: ${({ hasNext }) => !hasNext && "7px"};
     border-top-right-radius: ${({ hasNext }) => !hasNext && "3px"};
     border-bottom-right-radius: ${({ hasNext }) => !hasNext && "3px"};
+
+    /* width: ${({ hasNext, keepOn }) => hasNext && keepOn && "103%"};
+    position: ${({ hasNext, keepOn }) => hasNext && keepOn && "absolute"}; */
+
+    div {
+      color: ${({ keepOn, colorHex }) => (!keepOn ? "#FFF" : colorHex)};
+    }
   }
 `;
 
@@ -86,5 +105,4 @@ export const Shift = styled.div`
   flex-direction: row;
   margin: auto;
   text-align: center;
-  left: -2px;
 `;

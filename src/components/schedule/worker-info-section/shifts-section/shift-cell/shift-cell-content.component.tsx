@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { CSSProperties, useMemo } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { ColorHelper } from "../../../../../helpers/colors/color.helper";
 import { getPresentShiftTypes } from "../../../../../state/schedule-data/selectors";
@@ -44,13 +44,9 @@ export function ShiftCellContent({
           hasNext={hasNext}
           className={isNotAWorkingShift && "naws"}
           color={color}
+          colorHex={colorHex}
         >
-          <Shift
-            style={{
-              color: !keepOn && isNotAWorkingShift ? "#FFF" : colorHex,
-            }}
-            data-cy={baseCellDataCy(cellIndex, "cell")}
-          >
+          <Shift data-cy={baseCellDataCy(cellIndex, "cell")}>
             {keepOn || shiftCode === ShiftCode.W ? "" : shiftCode}
           </Shift>
         </Content>
