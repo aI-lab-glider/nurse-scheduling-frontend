@@ -12,7 +12,7 @@ export const ButtonBase = styled.button<ButtonBaseProps>`
   white-space: nowrap;
   border-radius: 5px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: medium;
   line-height: 14px;
   letter-spacing: 0.025em;
   height: 32px;
@@ -20,7 +20,6 @@ export const ButtonBase = styled.button<ButtonBaseProps>`
 
   &:hover {
     cursor: pointer;
-    font-weight: 500;
     box-shadow: 0 10px 20px -10px ${colors.gray500};
   }
 

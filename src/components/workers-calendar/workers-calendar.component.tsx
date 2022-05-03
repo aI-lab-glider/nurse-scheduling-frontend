@@ -48,6 +48,7 @@ export default function WorkersCalendar({ id, workerShifts }: CalendarOptions): 
         {daysToDisplay.map((element) => (
           <S.DayName>{element}</S.DayName>
         ))}
+
         {data?.map(({ value: shiftCode, keepOn, hasNext }, index) => {
           date = shiftsArr[index][0];
           if (date.date === 1) {

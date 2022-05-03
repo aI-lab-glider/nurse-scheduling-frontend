@@ -58,8 +58,18 @@ export function ImportButtonsComponent(): JSX.Element {
         buttons={btnData}
         mainLabel={t("file")}
         buttonVariant="secondary"
-        width={100}
         dataCy="file-dropdown"
+        isTooltip
+        placement="bottom-end"
+        style={{
+          width: "62px",
+          borderColor: "#333",
+          fontSize: "12px",
+          fontWeight: 500,
+        }}
+        placeholderButtonContentStyle={{
+          paddingLeft: "16px",
+        }}
       />
       <input
         ref={fileUpload}

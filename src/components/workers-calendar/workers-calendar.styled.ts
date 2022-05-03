@@ -4,25 +4,28 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
+  margin-top: 20px;
   width: 100%;
 `;
 
 export const CalendarWrapper = styled.div`
   width: 100%;
-  display: flex;
-  flex-flow: row wrap;
-  align-content: space-between;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
 `;
-
-export const DayName = styled.div`
-  size: 14px;
-  letter-spacing: 0.75px;
-  font-weight: 400;
-  width: 14.2%;
-  height: 30px;
-  padding: 5px;
-  margin: auto;
+export const CalendarRow = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  margin-bottom: 4px;
+  width: 100%;
+`;
+export const DayName = styled.div`
+  letter-spacing: 0.75px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 12px;
+  height: 22px;
+  padding: 4px;
+  background-color: #fff;
 `;

@@ -80,6 +80,7 @@ export const pl = {
     // export.modal.component.tsx
     dayWorkers: "dzienni pracownicy",
     downloadScheduleTitle: "Pobierz grafik",
+    downloadWorkerSchedule: "Pobierz plan pracownika",
     fileFormat: "Format pliku",
     fileOptions: "Opcje",
     // new-version.modal.component.tsx
@@ -154,14 +155,21 @@ export const pl = {
     fridayShort: "PT",
     saturdayShort: "SB",
     sundayShort: "ND",
-    workerHourNorm: "Liczba Godzin",
-    overTime: "Liczba Nadgodzin",
-    workerTime: "Suma Godzin",
+    workerHourNorm: "Liczba godzin",
+    overTime: "Liczba nadgodzin",
+    workerTime: "Suma godzin",
     login: "Zaloguj",
     email: "Email",
+    edit: "Edytuj",
+    actual: "Wersja aktualna",
+    primary: "Wersja bazowa",
     password: "Hasło",
+    editWorker: "Edytuj pracownika",
+    essentialInformation: "Podstawowe informacje",
     youdonthaveplanforthismonth: "Nie masz planu na ten miesiąc",
     downloadingSchedule: "Pobieram zapisany plan",
+    NURSE: "Pielęgniarka",
+    OTHER: "Opiekunka",
   },
 };
 export default pl;

@@ -115,12 +115,7 @@ export default function ExportModal(options: ExportModalComponent): JSX.Element 
     <>
       <S.FormatWrapper>
         <S.Label>{t("fileFormat")}: </S.Label>
-        <DropdownButtons
-          buttons={btnData}
-          mainLabel={exportMode}
-          buttonVariant="secondary"
-          width={112}
-        />
+        <DropdownButtons buttons={btnData} mainLabel={exportMode} buttonVariant="secondary" />
       </S.FormatWrapper>
       <div>
         <S.Label>{t("fileOptions")}: </S.Label>

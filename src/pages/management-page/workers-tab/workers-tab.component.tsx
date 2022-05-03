@@ -5,15 +5,13 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import * as S from "./workers-tab.styled";
 import WorkerDrawerComponent, {
-  WorkerDrawerMode,
+  WorkerDrawerMode
 } from "../../../components/drawers/worker-drawer/worker-drawer.component";
 import DeleteWorkerModalComponent from "../../../components/modals/delete-worker-modal/delete-worker.modal.component";
+import { WorkerTypeLabel } from "../../../components/schedule/worker-info-section/WorkerTypeLabel/WorkerTypeLabel";
 import { ComparatorHelper, Order } from "../../../helpers/comparator.helper";
 import { ContractTypeHelper } from "../../../helpers/contract-type.helper";
-import { StringHelper } from "../../../helpers/string.helper";
-import { WorkerTypeHelper } from "../../../helpers/worker-type.helper";
 import { WorkingTimeHelper } from "../../../helpers/working-time.helper";
 import { useMonthInfo } from "../../../hooks/use-month-info";
 import { WorkerHourInfo } from "../../../logic/schedule-logic/worker-hours-info.logic";
@@ -22,12 +20,10 @@ import { WorkerName } from "../../../state/schedule-data/schedule-sensitive-data
 import { getPresentEmployeeInfo } from "../../../state/schedule-data/selectors";
 import {
   ContractType,
-  WorkerInfoModel,
-  WorkerType,
+  WorkerInfoModel
 } from "../../../state/schedule-data/worker-info/worker-info.model";
 import { EnhancedTableHeaderComponent } from "./enhanced-table-header.component";
-import NurseIcon from "../../../assets/images/svg-components/NurseIcon";
-import CaretakerIcon from "../../../assets/images/svg-components/CaretakerIcon";
+import * as S from "./workers-tab.styled";
 
 function toggleDrawer(
   open: boolean,
@@ -122,14 +118,7 @@ export default function WorkersTab(): JSX.Element {
                 <S.TableRow key={w.name}>
                   <S.TableCell data-cy="workerName">{w.name}</S.TableCell>
                   <S.TableCell align="left">
-                    <S.WorkerType className={`${workerType.toString().toLowerCase()}-label`}>
-                      {workerType === WorkerType.NURSE ? (
-                        <NurseIcon width={14} height={16} />
-                      ) : (
-                        <CaretakerIcon width={18} height={15} />
-                      )}
-                      {StringHelper.capitalize(WorkerTypeHelper.translate(workerType))}
-                    </S.WorkerType>
+                    <WorkerTypeLabel workerType={workerType} />
                   </S.TableCell>
                   <S.TableCell align="left" data-cy={`worker-hours-${w.name}`}>
                     {getWorkerTimeLabel(w.name)}

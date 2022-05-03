@@ -17,8 +17,8 @@ export const Container = styled(Grid)`
 `;
 
 export const FullHeightBox = styled(Box)`
-  padding: 25px 24px 15px 24px;
   height: 97%;
+  padding: 10px;
   overflow-y: auto;
 `;
 

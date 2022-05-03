@@ -16,9 +16,11 @@ export function FormFieldErrorLabel({
 }: FormFieldErrorLabelOptions): JSX.Element {
   return (
     <>
-      <Grid item xs={12}>
-        <S.ErrorLabel>{condition && message}</S.ErrorLabel>
-      </Grid>
+      {condition && (
+        <Grid item xs={12}>
+          <S.ErrorLabel>{condition && message}</S.ErrorLabel>
+        </Grid>
+      )}
     </>
   );
 }

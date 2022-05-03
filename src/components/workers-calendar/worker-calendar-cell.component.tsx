@@ -31,17 +31,18 @@ export function WorkersCalendarCell(params: CellOptions): JSX.Element {
 
   if (shiftCode) {
     shiftColor = `#${shiftTypes[shiftCode].color ?? DEFAULT_SHIFT_HEX}`;
-    background = fade(shiftColor, 0.3);
+    background = fade(shiftColor, 0.4);
   } else {
     shiftColor = fade("#FFFFFF", 0);
     background = fade(shiftColor, 0);
   }
   return (
-    <S.ShiftCell>
+    <S.ShiftCell className={notCurrentMonth}>
       <S.ShiftTop className={notCurrentMonth}>{date.date}</S.ShiftTop>
       <S.ShiftBottom style={{ color: shiftColor, backgroundColor: background }}>
-        <S.ShiftBar style={{ backgroundColor: shiftColor }} />
-        <S.ShiftSymbol>{params.keepOn ? void 0 : shiftCode}</S.ShiftSymbol>
+        <S.ShiftSymbol style={{ color: shiftColor }}>
+          {params.keepOn ? void 0 : shiftCode}
+        </S.ShiftSymbol>
       </S.ShiftBottom>
     </S.ShiftCell>
   );

@@ -65,11 +65,8 @@ export function WorkerNameEditField({
       <Grid item xs={6}>
         <S.Label>{t("firstAndLastName")}</S.Label>
         <S.TextField
-          fullWidth
+          variant="outlined"
           name="workerName"
-          style={{
-            marginBottom: 5,
-          }}
           data-cy="name"
           value={workerName}
           onChange={handleWorkerNameChange}
