@@ -20,7 +20,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   const { open, setOpen, clear } = options;
 
   const [issueDescription, setIssueDescription] = useState("");
-  const title = t("reportError");
+  const title = t("whatErrorOccurred");
   const { createNotification } = useNotification();
 
   function onIssueDescriptionChange(event): void {
@@ -76,43 +76,45 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
     return " ";
   };
   const body = (
-    <div>
+    <>
       {isSent ? (
         <S.Message>{t("errorMessageWasSent")}</S.Message>
       ) : (
-        <>
-          <S.Message>{t("whatErrorOccurred")}</S.Message>
-          <S.Input
-            placeholder={t("provideErrorDescription")}
-            value={issueDescription}
-            onChange={onIssueDescriptionChange}
-            fullWidth
-            multiline
-            helperText={helperText(issueDescription.length)}
-          />
-        </>
+        <S.Input
+          placeholder={t("provideErrorDescription")}
+          value={issueDescription}
+          onChange={onIssueDescriptionChange}
+          fullWidth
+          multiline
+          helperText={helperText(issueDescription.length)}
+        />
       )}
-    </div>
+    </>
   );
 
   const footer = (
-    <div>
-      {!isSent && (
-        <>
-          <Button variant="primary" onClick={handleSend} disabled={issueDescription.length < 20}>
-            {t("send")}
-          </Button>
-          <Button variant="secondary" color="secondary" onClick={handleClose}>
-            {t("cancel")}
-          </Button>
-        </>
-      )}
+    <>
       {isSent && (
         <Button variant="primary" onClick={handleClose}>
           {t("close")}
         </Button>
       )}
-    </div>
+      {!isSent && (
+        <>
+          <Button variant="secondary" color="secondary" onClick={handleClose}>
+            {t("cancel")}
+          </Button>
+          <Button
+            style={{ marginLeft: "5px" }}
+            variant="primary"
+            onClick={handleSend}
+            disabled={issueDescription.length < 20}
+          >
+            {t("send")}
+          </Button>
+        </>
+      )}
+    </>
   );
 
   return (

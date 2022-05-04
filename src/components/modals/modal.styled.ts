@@ -20,7 +20,9 @@ export const ContentWrapper = styled(Paper)`
     box-shadow: -3px 4px 20px 4px ${fade(colors.black, 0.15)};
     max-height: 40%;
     max-width: 35%;
-    min-width: 350px;
+    min-width: 560px;
+    min-height: 280px;
+    position: relative;
   }
 `;
 
@@ -31,9 +33,11 @@ export const HeaderWrapper = styled.div`
 `;
 
 export const Title = styled.h1`
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.primaryText};
+  font-weight: 500;
+  font-size: 18px;
   font-size: ${fontSizeLg};
-  margin-bottom: 0;
+  margin-bottom: 24px;
 `;
 
 export const ExitButton = styled(IconButton)`
@@ -56,10 +60,11 @@ export const BodyWrapper = styled(Box)`
 
 export const FooterWrapper = styled(Box)`
   display: flex;
-  margin-left: 0px;
-  margin-top: -5px;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
 `;
 
 export const FadeWrapper = styled(Fade)`
-  padding: 10px 20px;
+  padding: 20px;
 `;

@@ -12,4 +12,7 @@ export const Message = styled.p`
 export const Input = styled(TextField)`
   letter-spacing: 0.25px;
   margin-top: 0;
+  & .MuiInput-underline:after {
+    border-bottom-color: ${({ theme }) => theme.primary};
+  }
 `;

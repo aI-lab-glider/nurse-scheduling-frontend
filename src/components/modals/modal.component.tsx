@@ -1,10 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { Divider } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
 import React, { ReactNode } from "react";
-import { MdClose } from "react-icons/md";
 import * as S from "./modal.styled";
 
 export interface ModalOptions {
@@ -25,32 +23,24 @@ export default function DefaultModal(options: ModalOptions): JSX.Element {
   };
 
   return (
-    <div>
-      <S.ModalWrapper
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <S.FadeWrapper in={open}>
-          <S.ContentWrapper>
-            <S.HeaderWrapper>
-              <S.Title>{title}</S.Title>
-              <S.ExitButton onClick={handleClose}>
-                <MdClose />
-              </S.ExitButton>
-            </S.HeaderWrapper>
-            <Divider />
-            <S.BodyWrapper>{body}</S.BodyWrapper>
-            <S.FooterWrapper>{footer}</S.FooterWrapper>
-          </S.ContentWrapper>
-        </S.FadeWrapper>
-      </S.ModalWrapper>
-    </div>
+    <S.ModalWrapper
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      open={open}
+      onClose={handleClose}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+      }}
+    >
+      <S.FadeWrapper in={open}>
+        <S.ContentWrapper>
+          <S.Title>{title}</S.Title>
+          <S.BodyWrapper>{body}</S.BodyWrapper>
+          <S.FooterWrapper>{footer}</S.FooterWrapper>
+        </S.ContentWrapper>
+      </S.FadeWrapper>
+    </S.ModalWrapper>
   );
 }
