@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import { fade } from "@material-ui/core";
 import styled from "styled-components";
 import { colors } from "../../../assets/css-consts";
 import { Button } from "../button-component/button.component";
@@ -41,21 +42,25 @@ export const ButtonListWrapper = styled.div`
   box-shadow: 0 5px 30px 0 ${colors.gray400};
   position: relative;
   margin-top: 2px;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   background-color: ${colors.white};
   white-space: nowrap;
 
-  & div:hover {
+  & > div:hover {
     cursor: pointer;
+    background-color: ${fade(colors.primary, 0.1)};
   }
 `;
 export const ButtonRow = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 11px;
+  height: 27px;
   &:first-child {
     margin-top: 0px;
+  }
+  & svg {
+    align-self: center;
   }
 `;
 export const DropdownButton = styled.div`
@@ -63,7 +68,10 @@ export const DropdownButton = styled.div`
   text-align: left;
   font-weight: 400;
   font-size: 14px;
-
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
   padding-left: 33px;
   padding-right: 33px;
   color: ${({ theme }) => theme.primaryText};
