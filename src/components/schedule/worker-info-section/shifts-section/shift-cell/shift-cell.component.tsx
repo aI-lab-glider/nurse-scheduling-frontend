@@ -15,6 +15,8 @@ import { CellWrapper } from "./shift-cell.styled";
 import { MouseEventListener } from "../../../../common-components/mouse-event-listener/mouse-event-listener";
 import { ShiftCellContent } from "./shift-cell-content.component";
 import { ShiftsCellDropdown } from "./shifts-cell-dropdown.component";
+import { useSelector } from "react-redux";
+import { getIsEditMode } from "../../../../../state/schedule-data/selectors";
 
 const MODAL_CLOSE_MS = 4444;
 export const DEFAULT_SHIFT_HEX = "FFD100";
@@ -34,6 +36,7 @@ export interface ShiftCellOptions extends BaseCellOptions {
  */
 export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   const { value, isBlocked, isSelected, isPointerOn, onBlur } = options;
+  const isEditMode = useSelector(getIsEditMode);
 
   const shiftCode = getShiftCode(value);
   const selectableItemRef = useCellSelection(options);
@@ -70,7 +73,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
       <CellWrapper
         ref={mergeRefs([selectableItemRef, componentContainer])}
         className={classNames(backgroundHighlight, {
-          selection: isSelected || (isComponentVisible && isBlocked), // should be so????
+          selection: isEditMode && isSelected,
           blocked: isBlocked,
         })}
         onClick={toggleComponentVisibility}
