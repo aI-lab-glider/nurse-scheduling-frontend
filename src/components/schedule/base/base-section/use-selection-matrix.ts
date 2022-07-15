@@ -12,10 +12,8 @@ export function areDimesionsEqual(matrix1: unknown[][], matrix2: unknown[][]): b
 interface UseSelectionMatrixReturn {
   setSelectionMatrix: (
     source: SelectionMatrix,
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number
+    x: number,
+    y: number,
   ) => void;
   selectionMatrix: SelectionMatrix;
   resetSelectionMatrix: () => void;
@@ -36,23 +34,11 @@ export function useSelectionMatrix(matrix: unknown[][]): UseSelectionMatrixRetur
 
   function setSelection(
     source: SelectionMatrix,
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number
+    x: number,
+    y: number,
   ): void {
     const selection = getFalsyCopy(source);
-    const [startX, endX] = x2 < x1 ? [x2, x1] : [x1, x2];
-    const [startY, endY] = y2 < y1 ? [y2, y1] : [y1, y2];
-    if (startX < 0 || startY < 0) {
-      setSelectionMatrix(selection);
-      return;
-    }
-    for (let y = startY; y <= endY; ++y) {
-      for (let x = startX; x <= endX; ++x) {
-        selection[y][x] = true;
-      }
-    }
+    selection[y][x] = true;
     setSelectionMatrix(selection);
   }
 

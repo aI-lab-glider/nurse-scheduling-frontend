@@ -11,7 +11,6 @@ import { DataRow } from "../../../../logic/schedule-logic/data-row";
 import { BaseCellComponent } from "../base-cell/base-cell.component";
 import { BaseCellOptions } from "../base-cell/base-cell.models";
 import { BaseRowComponent } from "../base-row/base-row.component";
-import { PivotCell } from "../../hooks/use-cell-selection";
 import { ShiftRowOptions } from "../../worker-info-section/shifts-section/shift-row.component";
 import { areDimesionsEqual, SelectionMatrix, useSelectionMatrix } from "./use-selection-matrix";
 
@@ -88,16 +87,9 @@ function BaseSectionComponentF({
     resetSelectionMatrix();
   }, [resetSelectionMatrix, setPointerPosition]);
 
-  const onDrag = useCallback(
-    (pivot: PivotCell, rowInd: number, cellInd: number): void => {
-      setSelectionMatrix(selectionMatrix, pivot.cellIndex, pivot.rowIndex, cellInd, rowInd);
-    },
-    [selectionMatrix, setSelectionMatrix]
-  );
-
   const handleCellClick = useCallback(
     (rowInd: number, cellInd: number): void => {
-      setSelectionMatrix(selectionMatrix, cellInd, rowInd, cellInd, rowInd);
+      setSelectionMatrix(selectionMatrix, cellInd, rowInd);
       setPointerPosition({ row: rowInd, cell: cellInd });
     },
     [selectionMatrix, setSelectionMatrix, setPointerPosition]
@@ -124,10 +116,6 @@ function BaseSectionComponentF({
             pointerPosition={pointerPosition.row === rowInd ? pointerPosition.cell : -1}
             onKeyDown={movePointer}
             onClick={(cellInd): void => handleCellClick(rowInd, cellInd)}
-            onDrag={(pivot, cellInd): void => onDrag(pivot, rowInd, cellInd)}
-            onDragEnd={(rowIndex, cellIndex): void =>
-              setPointerPosition({ row: rowIndex, cell: cellIndex })
-            }
             sectionKey={sectionKey}
             onSave={onSave}
             onBlur={resetSelection}

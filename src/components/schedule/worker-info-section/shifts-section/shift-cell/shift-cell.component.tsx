@@ -10,7 +10,6 @@ import useTimeout from "../../../../../hooks/use-timeout";
 import { ShiftCode } from "../../../../../state/schedule-data/shifts-types/shift-types.model";
 import { BaseCellOptions } from "../../../base/base-cell/base-cell.models";
 import { useCellBackgroundHighlight } from "../../../hooks/use-cell-highlight";
-import { useCellSelection } from "../../../hooks/use-cell-selection";
 import { CellWrapper } from "./shift-cell.styled";
 import { MouseEventListener } from "../../../../common-components/mouse-event-listener/mouse-event-listener";
 import { ShiftCellContent } from "./shift-cell-content.component";
@@ -36,7 +35,6 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   const { value, isBlocked, isSelected, isPointerOn, onBlur } = options;
 
   const shiftCode = getShiftCode(value);
-  const selectableItemRef = useCellSelection(options);
   const backgroundHighlight = useCellBackgroundHighlight(options);
 
   const [isInputVisible, setIsInputVisible] = useState(isPointerOn && !isBlocked);
@@ -68,7 +66,7 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
         />
       )}
       <CellWrapper
-        ref={mergeRefs([selectableItemRef, componentContainer])}
+        ref={mergeRefs([componentContainer])}
         className={classNames(backgroundHighlight, {
           selection: isSelected || (isComponentVisible && isBlocked), // should be so????
           blocked: isBlocked,
