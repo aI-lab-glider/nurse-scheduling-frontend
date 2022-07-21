@@ -46,34 +46,33 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
     }
   }, [mode, workerInfo, options]);
   // #region event handlers
-  function handleWorkerNameUpdate(newWorkerName: string): void {
+  const handleWorkerNameUpdate = useCallback((newWorkerName: string) => {
     setWorkerInfo(workerInfo.withNewName(newWorkerName));
-  }
+  }, [setWorkerInfo, workerInfo])
 
-  function handleWorkerTimeUpdate(newWorkerTime: number): void {
+  const handleWorkerTimeUpdate = useCallback((newWorkerTime: number) => {
     setWorkerInfo(workerInfo.withNewWorkerTime(newWorkerTime));
-  }
+  }, [setWorkerInfo, workerInfo])
 
-  function handleWorkerContractTypeUpdate(newContractType: ContractType): void {
+  const handleWorkerContractTypeUpdate = useCallback((newContractType: ContractType) => {
     setWorkerInfo(workerInfo.withNewContractType(newContractType));
-  }
+  }, [setWorkerInfo, workerInfo])
 
-  function handleWorkerWorkerTypeUpdate(newWorkerType: WorkerType): void {
+  const handleWorkerWorkerTypeUpdate = useCallback((newWorkerType: WorkerType) => {
     setWorkerInfo(workerInfo.withNewWorkerType(newWorkerType));
-  }
+  }, [setWorkerInfo, workerInfo])
 
-  function handleWorkerTeamUpdate(newTeam: Team): void {
+  const handleWorkerTeamUpdate = useCallback((newTeam: Team) => {
     setWorkerInfo(workerInfo.withNewTeam(newTeam));
-  }
+  }, [setWorkerInfo, workerInfo])
   // #endregion
 
-  function canSaveWorker(): boolean {
-    return [isWorkerNameValid, isWorkerTimeValid, isContractTypeValid, isWorkerTypeValid].every(
-      (item) => item
-    );
-  }
+  const canSaveWorker = useCallback(() => [isWorkerNameValid, isWorkerTimeValid, isContractTypeValid, isWorkerTypeValid].every(
+    (item) => item
+  )
+    , [isWorkerNameValid, isWorkerTimeValid, isContractTypeValid, isWorkerTypeValid])
 
-  function handleClose(): void {
+  const handleClose = useCallback(() => {
     const newWorker = workerInfo.asWorkerInfoExtendedInterface();
     mode === WorkerEditComponentMode.ADD
       ? dispatcher(WorkerActionCreator.addNewWorker(newWorker))
@@ -81,7 +80,7 @@ export function WorkerEditComponent(options: WorkerEditComponentOptions): JSX.El
 
     setWorkerInfo(new WorkerInfo());
     setOpen(false);
-  }
+  }, [setOpen, setWorkerInfo, dispatcher, mode, workerInfo])
 
   // #region view
   return (

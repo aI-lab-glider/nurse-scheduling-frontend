@@ -4,7 +4,7 @@
 
 export class DataRowParser {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(private data: string[]) {}
+  constructor(private data: string[]) { }
 
   public get isEmpty(): boolean {
     return this.rowData(false, true).length === 0;

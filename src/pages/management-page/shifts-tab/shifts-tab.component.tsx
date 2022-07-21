@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as S from "./shifts-tab.styled";
 import ShiftDrawerComponent from "../../../components/shifts-drawer/shift-drawer.component";
@@ -23,11 +23,11 @@ export default function ShiftTab(): JSX.Element {
   const [selectedShift, setShift] = useState<Shift | NewShiftTemplate>({});
   const shiftData = useSelector(getPresentShiftTypes);
 
-  function toggleOpen(shift: Shift | NewShiftTemplate, newMode: ShiftEditComponentMode): void {
+  const toggleOpen = useCallback((shift: Shift | NewShiftTemplate, newMode: ShiftEditComponentMode): void => {
     setShift(shift);
     setMode(newMode);
     setIsOpen(true);
-  }
+  }, [setShift, setMode, setIsOpen])
 
   function toggleClose(): void {
     setIsOpen(false);

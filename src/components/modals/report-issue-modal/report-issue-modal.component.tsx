@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { send } from "emailjs-com";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import * as S from "./report-issue-modal.styled";
 import { t } from "../../../helpers/translations.helper";
 import { Button } from "../../buttons/button-component/button.component";
@@ -23,19 +23,19 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   const title = t("whatErrorOccurred");
   const { createNotification } = useNotification();
 
-  function onIssueDescriptionChange(event): void {
+  const onIssueDescriptionChange = useCallback((event) => {
     const { value } = event.target;
     setIssueDescription(value);
-  }
+  }, [setIssueDescription])
 
-  function handleClose(): void {
+  const handleClose = useCallback(() => {
     clear && clear();
     setIssueDescription("");
     setIsSent(false);
     setOpen(false);
-  }
+  }, [clear, setIssueDescription, setIsSent, setOpen])
 
-  function handleSend(): void {
+  const handleSend = useCallback(() => {
     send(
       "service_74nkmaq",
       "template_120y7az",
@@ -51,7 +51,7 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
         createNotification({ type: "error", message: t("thereWasNetworkingError") });
         handleClose();
       });
-  }
+  }, [setIsSent, handleClose, createNotification, issueDescription])
 
   // Only for testing purposes
   if (
@@ -69,9 +69,8 @@ export default function ReportIssueModal(options: ReportIssueModalOptions): JSX.
   };
   const helperText = (length: number): string => {
     if (length < 19) {
-      return `Treść wiadomości jest za krótka! Wprowadź jeszcze min. ${
-        19 - length + 1
-      } znak${addSuffix(length)}.`;
+      return `Treść wiadomości jest za krótka! Wprowadź jeszcze min. ${19 - length + 1
+        } znak${addSuffix(length)}.`;
     }
     return " ";
   };

@@ -71,14 +71,14 @@ export default function WorkersTab(): JSX.Element {
     setWorkerData(newWorkerData);
   }, [type, time, setWorkerData, team]);
 
-  function handleRequestSort(
+  const handleRequestSort = useCallback((
     event: React.MouseEvent<unknown>,
     property: keyof WorkerInfoModel
-  ): void {
+  ): void => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
-  }
+  }, [order, orderBy, setOrder, setOrderBy])
 
   const getWorkerTimeLabel = useCallback(
     (workerName: string) => {
@@ -89,9 +89,9 @@ export default function WorkersTab(): JSX.Element {
         workerContractType === ContractType.CIVIL_CONTRACT
           ? `${time[workerName] * workHourNormInMonth} godz.`
           : WorkingTimeHelper.fromHoursToFraction(
-              time[workerName] * workHourNormInMonth,
-              workHourNormInMonth
-            );
+            time[workerName] * workHourNormInMonth,
+            workHourNormInMonth
+          );
       return `${contractTypeLabel} ${workerTimeLabel}`;
     },
     [year, monthNumber, time, contractType]

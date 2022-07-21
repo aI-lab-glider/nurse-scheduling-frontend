@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Popper from "@material-ui/core/Popper";
@@ -64,13 +64,13 @@ export function DropdownColors({
     return result;
   }
 
-  function handleToggle(): void {
+  const handleToggle = useCallback(() => {
     setOpen((prevVal) => !prevVal);
-  }
+  }, [setOpen]);
 
-  function handleClickAway(): void {
+  const handleClickAway = useCallback(() => {
     setOpen(false);
-  }
+  }, [setOpen]);
 
   const dropdownZIndex = 100;
   return (

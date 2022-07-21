@@ -46,11 +46,24 @@ function BaseSectionComponentF({
 }: BaseSectionOptions): JSX.Element {
   const [pointerPosition, setPointerPosition] = useState<PointerPosition>({ row: -1, cell: -1 });
 
-  function isInRange(position: PointerPosition): boolean {
-    return !!data[position.row] && !!data[position.row].rowData(false)[position.cell];
-  }
 
-  function movePointer(cellIndex: number, event: React.KeyboardEvent): void {
+  const dataArray = data.map((d) => d.rowData());
+  const { selectionMatrix, setSelectionMatrix, resetSelectionMatrix } = useSelectionMatrix(
+    dataArray
+  );
+
+  const resetSelection = useCallback((): void => {
+    setPointerPosition({ row: -1, cell: -1 });
+    resetSelectionMatrix();
+  }, [resetSelectionMatrix, setPointerPosition]);
+
+
+
+  const movePointer = useCallback((cellIndex: number, event: React.KeyboardEvent): void => {
+    function isInRange(position: PointerPosition): boolean {
+      return !!data[position.row] && !!data[position.row].rowData(false)[position.cell];
+    }
+
     let newPosition: PointerPosition;
     switch (event.key) {
       case DirectionKey.ArrowDown:
@@ -75,17 +88,10 @@ function BaseSectionComponentF({
     if (isInRange(newPosition) || (newPosition.row === -1 && newPosition.cell === -1)) {
       setPointerPosition(newPosition);
     }
-  }
+  }, [setPointerPosition, pointerPosition.row, pointerPosition.cell, data, resetSelection])
 
-  const dataArray = data.map((d) => d.rowData());
-  const { selectionMatrix, setSelectionMatrix, resetSelectionMatrix } = useSelectionMatrix(
-    dataArray
-  );
 
-  const resetSelection = useCallback((): void => {
-    setPointerPosition({ row: -1, cell: -1 });
-    resetSelectionMatrix();
-  }, [resetSelectionMatrix, setPointerPosition]);
+
 
   const handleCellClick = useCallback(
     (rowInd: number, cellInd: number): void => {
@@ -115,6 +121,7 @@ function BaseSectionComponentF({
             cellComponent={cellComponent}
             pointerPosition={pointerPosition.row === rowInd ? pointerPosition.cell : -1}
             onKeyDown={movePointer}
+            /* eslint-disable-next-line react/jsx-no-bind */
             onClick={(cellInd): void => handleCellClick(rowInd, cellInd)}
             sectionKey={sectionKey}
             onSave={onSave}
@@ -128,6 +135,7 @@ function BaseSectionComponentF({
     </>
   );
 }
+
 
 export const BaseSectionComponent = React.memo(BaseSectionComponentF, (prev, next) =>
   DataRowHelper.areDataRowArraysEqual(prev.data, next.data)

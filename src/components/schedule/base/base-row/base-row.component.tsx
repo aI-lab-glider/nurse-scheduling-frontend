@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
+import React, { useCallback } from "react";
 import * as S from "./base-row.styled";
 import { ScheduleError } from "../../../../state/schedule-data/schedule-errors/schedule-error.model";
 import { useMonthInfo } from "../../../../hooks/use-month-info";
@@ -31,9 +31,9 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
   const numberOfDays = verboseDates?.length;
   const firstMonthDayIndex = verboseDates?.findIndex((date) => date.date === 1);
 
-  function saveValue(newValue: string): void {
+  const saveValue = useCallback((newValue: string) => {
     onSave?.(newValue);
-  }
+  }, [onSave]);
 
   let data = toCellDataItemArray(dataRow.rowData(false));
 

@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import classNames from "classnames/bind";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import * as S from "./nametalbe-section.styled";
 import { WorkerInfo } from "../../../../hooks/use-worker-info";
@@ -53,9 +53,9 @@ export function NameTableSection({
     }
   }
 
-  function closeDrawer(): void {
+  const closeDrawer = useCallback(() => {
     setIsOpen(false);
-  }
+  }, [setIsOpen])
 
   function getNames(): WorkerName[] {
     return dataRows.map((a) => a.rowKey) as WorkerName[];

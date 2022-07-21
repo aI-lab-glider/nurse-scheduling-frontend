@@ -17,8 +17,10 @@ const CustomThemeProvider: React.FC<ThemeProviderProps> = ({ children }: ThemePr
   const themeKey = useSelector(getThemeKey);
   return (
     <ThemeProvider theme={themes[themeKey]}>
-      <GlobalStyle />
-      {children}
+      <>
+        <GlobalStyle />
+        {children}
+      </>
     </ThemeProvider>
   );
 };

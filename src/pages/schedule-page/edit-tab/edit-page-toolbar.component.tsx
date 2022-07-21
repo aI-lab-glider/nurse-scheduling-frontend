@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
 import * as _ from "lodash";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as S from "./edit-page-toolbar.styled";
 import backend from "../../../api/backend";
@@ -47,25 +47,26 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
   const temporaryShifts: WorkerShiftsModel = useSelector(getPresentTemporaryScheduleShifts);
   const [undoCounter, setUndoCounter] = useState(0);
 
-  async function updateScheduleError(): Promise<void> {
-    if (schedule) {
-      let response: ScheduleError[];
-      try {
-        response = await backend.getErrors(schedule, primaryRevision);
-      } catch (err) {
-        response = [
-          {
-            kind: NetworkErrorCode.NETWORK_ERROR,
-          },
-        ];
-      }
-      dispatcher(updateScheduleErrors(response));
-    }
-  }
 
   const { setTitle, setOpen, setChildrenComponent } = usePersistentDrawer();
 
-  function prepareDrawer(): void {
+  const prepareDrawer = useCallback((): void => {
+
+    async function updateScheduleError(): Promise<void> {
+      if (schedule) {
+        let response: ScheduleError[];
+        try {
+          response = await backend.getErrors(schedule, primaryRevision);
+        } catch (err) {
+          response = [
+            {
+              kind: NetworkErrorCode.NETWORK_ERROR,
+            },
+          ];
+        }
+        dispatcher(updateScheduleErrors(response));
+      }
+    }
     setChildrenComponent(<ErrorContainerDrawerComponent setOpen={setOpen} loadingErrors />);
     setTitle("Sprawdź plan");
     setOpen(true);
@@ -74,34 +75,35 @@ export function EditPageToolbar({ close }: EditPageToolbarOptions): JSX.Element 
         <ErrorContainerDrawerComponent setOpen={setOpen} loadingErrors={false} />
       )
     );
-  }
+  }, [setChildrenComponent, setTitle, setOpen, dispatcher, primaryRevision, schedule])
 
   const { saveToPersistent } = useTemporarySchedule();
 
-  function handleSaveClick(): void {
+  const handleSaveClick = useCallback((): void => {
     saveToPersistent();
     createNotification({ type: "success", message: "Plan został zapisany!" });
-  }
+  }, [saveToPersistent, createNotification])
 
-  function askForSavingChanges(): void {
-    if (anyChanges()) setIsSaveModalOpen(true);
-    else close();
-  }
-
-  function anyChanges(): boolean {
+  const anyChanges = useCallback((): boolean => {
     if (persistentShifts && temporaryShifts) return !_.isEqual(persistentShifts, temporaryShifts);
     return false;
-  }
+  }, [persistentShifts, temporaryShifts])
 
-  function onUndoClick(): void {
+  const askForSavingChanges = useCallback((): void => {
+    if (anyChanges()) setIsSaveModalOpen(true);
+    else close();
+  }, [anyChanges, setIsSaveModalOpen, close])
+
+
+  const onUndoClick = useCallback((): void => {
     dispatcher(UndoActionCreator.undo(TEMPORARY_SCHEDULE_UNDOABLE_CONFIG));
     setUndoCounter(undoCounter + 1);
-  }
+  }, [setUndoCounter, undoCounter, dispatcher])
 
-  function onRedoClick(): void {
+  const onRedoClick = useCallback((): void => {
     dispatcher(UndoActionCreator.redo(TEMPORARY_SCHEDULE_UNDOABLE_CONFIG));
     setUndoCounter(undoCounter - 1);
-  }
+  }, [dispatcher, undoCounter, setUndoCounter])
 
   return (
     <S.Wrapper>

@@ -42,13 +42,12 @@ export function SchedulePage({ editModeHandler }: SchedulePageOptions): JSX.Elem
     [editModeHandler]
   );
 
-  const Edit = useCallback((): JSX.Element => {
-    function handleEditButton(): void {
-      editModeHandler(false);
-      setDrawerOpen(false);
-    }
-    return <ScheduleEditPage close={handleEditButton} />;
-  }, [editModeHandler, setDrawerOpen]);
+  const handleEditButton = useCallback((): void => {
+    editModeHandler(false);
+    setDrawerOpen(false);
+  }, [editModeHandler, setDrawerOpen])
+
+  const Edit = useCallback((): JSX.Element => <ScheduleEditPage close={handleEditButton} />, [handleEditButton]);
 
   return (
     <S.Wrapper>

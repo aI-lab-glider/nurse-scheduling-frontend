@@ -61,10 +61,9 @@ export class ChildrenInfoParser implements ChildrenInfoProvider {
     const children = Array<number>();
     for (let i = 0; i < this.metaData.dayCount; i++) {
       const numDay = parseInt(slicedChildrenRow[i], 10);
-      if (isNaN(numDay) || numDay < 0) {
+      if (Number.isNaN(numDay) || numDay < 0) {
         this.logLoadFileError(
-          `Nieoczekiwana wartość w sekcji <b>dzieci</b> w dniu ${
-            i + 1
+          `Nieoczekiwana wartość w sekcji <b>dzieci</b> w dniu ${i + 1
           }. Przyjęto, że liczba dzieci wynosi ${DEFAULT_CHILDREN_NUMBER}.`
         );
         children.push(DEFAULT_CHILDREN_NUMBER);

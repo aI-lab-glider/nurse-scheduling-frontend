@@ -91,18 +91,18 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
     setIsNewMonth(monthNumber !== currentMonth);
   }, [monthNumber]);
 
-  function returnToCurrentMonth(): void {
+  const returnToCurrentMonth = useCallback(() => {
     const offset = monthDiff(new Date(year, monthNumber), new Date());
     dispatch(MonthSwitchActionCreator.switchToNewMonth(offset));
-  }
+  }, [dispatch, monthNumber, year]);
 
   const isInViewMode = applicationStateModel === ScheduleMode.Readonly;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-  function onReportIssueClick(): void {
+  const onReportIssueClick = useCallback(() => {
     setIsModalOpen(true);
-  }
+  }, [setIsModalOpen]);
 
   function useAppConfig(): AppConfigOptions {
     const context = useContext(AppConfigContext);
@@ -115,9 +115,11 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
   const [showNowNavigation, setShowNowNavigation] = useState(false);
 
   useEffect(() => {
-    appConfigContext === AppMode.SCHEDULE
-      ? setShowNowNavigation(isInViewMode)
-      : setShowNowNavigation(false);
+    if (appConfigContext === AppMode.SCHEDULE) {
+      setShowNowNavigation(isInViewMode)
+    } else {
+      setShowNowNavigation(false);
+    }
   }, [appConfigContext, isInViewMode]);
 
   const redirectToDocumentation = useCallback((): void => {
