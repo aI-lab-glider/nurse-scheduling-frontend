@@ -19,8 +19,6 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
     pointerPosition = -1,
     onKeyDown,
     onClick,
-    onDrag,
-    onDragEnd,
     onSave,
     sectionKey,
     selection = [],
@@ -68,8 +66,6 @@ export function BaseRowComponent(options: BaseRowOptions): JSX.Element {
           errorSelector={(scheduleErrors): ScheduleError[] =>
             errorSelector?.(cellIndex, scheduleErrors) ?? []
           }
-          onDrag={(pivot): void => onDrag?.(pivot, cellIndex)}
-          onDragEnd={(): void => onDragEnd?.(rowIndex, cellIndex)}
           monthNumber={currMonthNumber}
         />
       ))}

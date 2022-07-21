@@ -69,7 +69,7 @@ export function ShiftsSectionComponent(options: ShiftsSectionOptions): JSX.Eleme
       {...options}
       sectionKey={sectionKey}
       data={data}
-      cellComponent={ShiftCellComponent}
+      cellComponent={ShiftCellComponent}// TODO: Pass here created component instead of component reference. It would be more flexible.
       rowComponent={ShiftRowComponent}
       errorSelector={shiftSectionErrorSelector}
       updateData={updateWorkerShifts}

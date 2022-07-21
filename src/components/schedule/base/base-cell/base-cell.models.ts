@@ -34,8 +34,8 @@ export interface PivotCell {
 
 export interface BaseCellOptions
   extends UseCellSelectionOptions,
-    UseCellBackgroundHighlightOptions,
-    Omit<CellInputOptions, "input" | "isVisible"> {
+  UseCellBackgroundHighlightOptions,
+  Omit<CellInputOptions, "input" | "isVisible"> {
   rowIndex: number;
   value: string;
   isBlocked: boolean;
