@@ -1,0 +1,46 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import Backdrop from "@material-ui/core/Backdrop";
+import React, { ReactNode } from "react";
+import * as S from "./modal.styled";
+
+export interface ModalOptions {
+  setOpen: (open: boolean) => void;
+  open: boolean;
+  title: string | ReactNode;
+  body: JSX.Element;
+  footer: JSX.Element;
+  closeOptions?: () => void;
+}
+
+export default function DefaultModal(options: ModalOptions): JSX.Element {
+  const { setOpen, open, title, body, footer, closeOptions } = options;
+
+  const handleClose = (): void => {
+    closeOptions ? closeOptions() : setOpen(false);
+    setOpen(false);
+  };
+
+  return (
+    <S.ModalWrapper
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      open={open}
+      onClose={handleClose}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+      }}
+    >
+      <S.FadeWrapper in={open}>
+        <S.ContentWrapper>
+          <S.Title>{title}</S.Title>
+          <S.BodyWrapper>{body}</S.BodyWrapper>
+          <S.FooterWrapper>{footer}</S.FooterWrapper>
+        </S.ContentWrapper>
+      </S.FadeWrapper>
+    </S.ModalWrapper>
+  );
+}

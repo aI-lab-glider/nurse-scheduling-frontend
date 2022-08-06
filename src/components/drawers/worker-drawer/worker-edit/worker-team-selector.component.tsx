@@ -1,0 +1,46 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+import * as _ from "lodash";
+import React from "react";
+import { t } from "../../../../helpers/translations.helper";
+import { TEAM_PREFIX } from "../../../../logic/schedule-parser/workers-info.parser";
+import { Team } from "../../../../state/schedule-data/worker-info/worker-info.model";
+import {
+  ButtonData,
+  DropdownButtons
+} from "../../../buttons/dropdown-buttons/dropdown-buttons.component";
+import { FormFieldOptions } from "./worker-edit.models";
+import * as S from "./worker.styled";
+
+interface TeamSelectorOptions extends FormFieldOptions {
+  setTeam: (team: Team) => void;
+  team: Team;
+}
+
+export function TeamSelector({ setTeam, team }: TeamSelectorOptions): JSX.Element {
+  function handleTeamUpdate(newTeam: Team): void {
+    setTeam(newTeam);
+  }
+
+  const defaultTeams = _.range(1, 6).map((i) => `${TEAM_PREFIX} ${i}` as Team);
+
+  const teamsOptions: ButtonData[] = defaultTeams.map((teamName) => ({
+    label: teamName,
+    action: (): void => handleTeamUpdate(teamName),
+    dataCy: teamName.toLowerCase(),
+  }));
+
+  return (
+    <>
+      <S.Label>{t("workerTeam")}</S.Label>
+      <DropdownButtons
+        style={{ width: "240px", borderColor: "#c4c4c4", borderRadius: 4 }}
+        dataCy="team-dropdown"
+        buttons={teamsOptions}
+        mainLabel={team}
+        buttonVariant="secondary"
+      />
+    </>
+  );
+}

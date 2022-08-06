@@ -4,17 +4,20 @@
 
 import { combineReducers } from "redux";
 import undoable from "redux-undo";
-import { ActionModel } from "./models/action.model";
-import { ApplicationStateModel, ScheduleStateModel } from "./models/application-state.model";
+import { ActionModel } from "../utils/action.model";
 import {
   PERSISTENT_SCHEDULE_UNDOABLE_CONFIG,
   TEMPORARY_SCHEDULE_UNDOABLE_CONFIG,
-} from "./reducers/month-state/schedule-data/schedule.actions";
-import { scheduleReducerF } from "./reducers/month-state/schedule-data/schedule.reducer";
-import { scheduleErrorsReducer } from "./reducers/month-state/schedule-errors.reducer";
-import { revisionInfoReducer } from "./reducers/month-state/revision-info.reducer";
-import { modeInfoReducer } from "./reducers/month-state/mode-info-reducer";
-import { primaryRevisionReducer } from "./reducers/base-revision.reducer";
+} from "./schedule-data/schedule.actions";
+import { scheduleReducerF } from "./schedule-data/schedule.reducer";
+import { scheduleErrorsReducer } from "./schedule-data/schedule-errors/schedule-errors.reducer";
+import { revisionInfoReducer } from "./schedule-data/schedule-condition/revision-info.reducer";
+import modeInfoReducer from "./app-condition/mode-info-reducer";
+import { primaryRevisionReducer } from "./schedule-data/primary-revision/primary-revision.reducer";
+import { themeReducer } from "./schedule-data/theme/theme.reducer";
+import { firebaseReducer } from "react-redux-firebase";
+import { firestoreReducer } from "redux-firestore";
+import { ApplicationStateModel } from "./application-state.model";
 
 export type CombinedReducers<StateModel> = {
   [key in keyof StateModel]: <T, U>(state: T, action: ActionModel<U>) => T;
@@ -38,8 +41,12 @@ const monthStateReducer = combineReducers({
   }),
   primaryRevision: primaryRevisionReducer,
   scheduleErrors: scheduleErrorsReducer,
-} as CombinedReducers<ScheduleStateModel>);
-
-export const appReducer = combineReducers({
+});
+export type monthStateReducerType = ReturnType<typeof monthStateReducer>;
+export const appReducer = combineReducers<ApplicationStateModel>({
   actualState: monthStateReducer,
-} as CombinedReducers<ApplicationStateModel>);
+  theme: themeReducer,
+  firebase: firebaseReducer,
+  firestore: firestoreReducer,
+});
+export type RootState = ReturnType<typeof appReducer>;
