@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import React from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { ScheduleDataActionCreator } from "../../../state/schedule-data/schedule-data.action-creator";
@@ -24,24 +24,25 @@ export default function SaveChangesModal(options: SaveChangesModalOptions): JSX.
   const persistent = useSelector(getPresentSchedule);
 
   const dispatch = useDispatch();
-  const fetchPrevScheduleVersion = (): void => {
-    dispatch(ScheduleDataActionCreator.setScheduleStateAndSaveToDb(persistent));
-  };
 
-  function handleClose(): void {
+  const handleClose = useCallback(() => {
     setOpen(false);
     closeOptions(false);
-  }
+  }, [setOpen, closeOptions])
 
-  function onSaveClick(): void {
+  const onSaveClick = useCallback(() => {
     handleSave();
     handleClose();
-  }
+  }, [handleSave, handleClose])
 
-  function onNoSaveClick(): void {
+  const onNoSaveClick = useCallback(() => {
+    const fetchPrevScheduleVersion = (): void => {
+      dispatch(ScheduleDataActionCreator.setScheduleStateAndSaveToDb(persistent));
+    };
+
     fetchPrevScheduleVersion();
     handleClose();
-  }
+  }, [dispatch, persistent, handleClose])
 
   const body = <span>{t("wantToSave")}</span>;
 

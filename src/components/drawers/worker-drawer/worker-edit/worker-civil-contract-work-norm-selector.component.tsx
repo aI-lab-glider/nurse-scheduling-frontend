@@ -52,12 +52,12 @@ export function WorkerCivilContractWorkNormSelector({
     return workerHoursAsNumber / requiredHours;
   }
 
-  function handleCivilTimeChange(
+  const handleCivilTimeChange = useCallback((
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ): void {
+  ) => {
     setWorkerCivilTime(event.target.value);
     setFirstEditMade(true);
-  }
+  }, [setWorkerCivilTime, setFirstEditMade])
 
   return (
     <>

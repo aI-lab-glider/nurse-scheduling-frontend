@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
+import React, { useCallback } from "react";
 import * as S from "./base-cell-input.styled";
 import { CellManagementKeys } from "./cell-blockable-input.component";
 
@@ -14,13 +14,14 @@ export function BaseCellInputComponent({
   onValueChange,
   onKeyDown,
 }: BaseCellInputOptions): JSX.Element {
-  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === CellManagementKeys.Enter) {
       onValueChange(e.currentTarget.value);
       return;
     }
     onKeyDown(e);
-  }
+  }, [onValueChange, onKeyDown]);
 
   return (
     <S.Input

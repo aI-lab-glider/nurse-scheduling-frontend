@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Popper, { PopperPlacementType } from "@material-ui/core/Popper";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import AngleDown from "../../../assets/images/svg-components/AngleDown";
 import Check from "../../../assets/images/svg-components/Check";
 import { ButtonVariant } from "../../common-components";
@@ -41,13 +41,13 @@ export function DropdownButtons({
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
 
-  function handleToggle(): void {
+  const handleToggle = useCallback(() => {
     setOpen((prevVal) => !prevVal);
-  }
+  }, [setOpen]);
 
-  function handleClickAway(): void {
+  const handleClickAway = useCallback(() => {
     setOpen(false);
-  }
+  }, [setOpen]);
 
   const dropdownZIndex = 100;
 

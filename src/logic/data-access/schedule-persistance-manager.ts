@@ -64,7 +64,7 @@ async function updateNextMonthRevision(
     );
   } catch (error) {
     // eslint-disable-next-line no-console
-    error.status !== 404 && console.error(error);
+    console.error(error);
   }
 }
 
@@ -80,11 +80,11 @@ function updateNextMonthShifts(
       _.isNil(scheduleDataModel.shifts[key]) || scheduleDataModel.shifts[key]?.length === 0
         ? nextMonthDM.shifts[key]
         : MonthModelHelper.updateArray(
-            nextMonthDM.shifts[key],
-            "HEAD",
-            scheduleDataModel.shifts[key],
-            missingDays
-          );
+          nextMonthDM.shifts[key],
+          "HEAD",
+          scheduleDataModel.shifts[key],
+          missingDays
+        );
   });
 
   return newShifts;

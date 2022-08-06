@@ -94,7 +94,7 @@ export class ShiftsTypesInfoParser {
       }
 
       const number = parseInt(shiftRow[index].trim(), 10);
-      if (isNaN(number) || number < 0 || number > 24) {
+      if (Number.isNaN(number) || number < 0 || number > 24) {
         this.logLoadFileError(
           `Nieoczekiwana wartość dla początku zmiany: ${name}. Ustawiono: ${DEFAULT_FROM}`
         );
@@ -121,7 +121,7 @@ export class ShiftsTypesInfoParser {
         return DEFAULT_NON_WORKING_TO;
       }
       const number = parseInt(shiftRow[index].trim(), 10);
-      if (isNaN(number) || number < 0 || number > 24) {
+      if (Number.isNaN(number) || number < 0 || number > 24) {
         this.logLoadFileError(
           `Nieoczekiwana wartość dla końca zmiany: ${name}. Ustawiono: ${DEFAULT_TO}`
         );

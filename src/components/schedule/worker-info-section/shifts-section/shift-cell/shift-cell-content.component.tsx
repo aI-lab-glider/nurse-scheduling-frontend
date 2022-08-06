@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { CSSProperties, useMemo } from "react";
+import React, { CSSProperties, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { ColorHelper } from "../../../../../helpers/colors/color.helper";
 import { getPresentShiftTypes } from "../../../../../state/schedule-data/selectors";
@@ -26,9 +26,9 @@ export function ShiftCellContent({
   errorSelector,
 }: ShiftCellContentOptions): JSX.Element {
   const shiftTypes = useSelector(getPresentShiftTypes);
-  function conditionalClick() {
+  const conditionalClick = useCallback(() => {
     if (!isBlocked) onClick?.();
-  }
+  }, [isBlocked, onClick]);
 
   const colorHex = `#${shiftTypes[shiftCode].color ?? DEFAULT_SHIFT_HEX}`;
 
@@ -36,10 +36,10 @@ export function ShiftCellContent({
     const color = ColorHelper.hexToRgb(colorHex).fade(0.7).toString();
     return !shiftTypes[shiftCode].isWorkingShift && shiftCode !== ShiftCode.W
       ? {
-          boxShadow: !keepOn ? `-1px 0 0 0 ${color}` : "",
-          backgroundColor: color,
-          color,
-        }
+        boxShadow: !keepOn ? `-1px 0 0 0 ${color}` : "",
+        backgroundColor: color,
+        color,
+      }
       : {};
   }, [shiftCode, keepOn, colorHex, shiftTypes]);
 

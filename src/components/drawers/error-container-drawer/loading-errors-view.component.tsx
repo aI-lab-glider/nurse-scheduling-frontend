@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as S from "./loading-errors-view.styled";
 import backend from "../../../api/backend";
@@ -36,9 +36,9 @@ export default function LoadingErrorsViewComponent(options: ErrorLoaderOptions):
 
   const dispatcher = useDispatch();
 
-  function closeDrawer(): void {
+  const closeDrawer = useCallback(() => {
     setOpen(false);
-  }
+  }, [setOpen])
 
   const schedule = useSelector(getPresentTemporarySchedule);
   const reload = React.useCallback(() => {

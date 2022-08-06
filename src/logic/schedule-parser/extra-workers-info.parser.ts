@@ -57,10 +57,9 @@ export class ExtraWorkersInfoParser implements ExtraWorkersInfoProvider {
     const dayWorkers = Array<number>();
     for (let i = 0; i < this.metaData.dayCount; i++) {
       const numDay = parseInt(slicedChildrenRow[i], 10);
-      if (isNaN(numDay) || numDay < 0) {
+      if (Number.isNaN(numDay) || numDay < 0) {
         this.logLoadFileError(
-          `Nieoczekiwana wartość w sekcji <b>pracownicy dzienni</b> w dniu ${
-            i + 1
+          `Nieoczekiwana wartość w sekcji <b>pracownicy dzienni</b> w dniu ${i + 1
           }. Przyjęto, że liczba pracowników dziennych wynosi ${this.DEFAULT_EXTRA_WORKERS_NUMBER}.`
         );
         dayWorkers.push(this.DEFAULT_EXTRA_WORKERS_NUMBER);

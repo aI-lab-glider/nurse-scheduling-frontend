@@ -38,7 +38,7 @@ export class MonthInfoLogic {
 
   constructor(monthId: string | number, year: string | number, monthDates?: number[]) {
     this.year = year.toString();
-    if (typeof monthId == "string") {
+    if (typeof monthId === "string") {
       monthId = TranslationHelper.polishMonths.findIndex(
         (month) => StringHelper.getRawValue(month) === monthId
       );

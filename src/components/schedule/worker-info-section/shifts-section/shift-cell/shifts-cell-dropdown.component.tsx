@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import React from "react";
+import React, { useCallback } from "react";
 import {
   CellInput,
   CellInputOptions,
@@ -16,13 +16,13 @@ interface ShiftsCellDropdownInputOptions extends Omit<CellInputOptions, "input">
 }
 export function ShiftsCellDropdown(options: ShiftsCellDropdownInputOptions) {
   const { isBlocked, onClick, onValueChange: UserDefinedOnValueChange } = options;
-  function conditionalClick() {
+  const conditionalClick = useCallback(() => {
     if (!isBlocked) onClick?.();
-  }
+  }, [isBlocked, onClick])
 
-  function onValueChange(inputValue: string): void {
+  const onValueChange = useCallback((inputValue: string): void => {
     UserDefinedOnValueChange?.(getShiftCode(inputValue));
-  }
+  }, [UserDefinedOnValueChange])
 
   return (
     <ContentWrapper onClick={conditionalClick}>

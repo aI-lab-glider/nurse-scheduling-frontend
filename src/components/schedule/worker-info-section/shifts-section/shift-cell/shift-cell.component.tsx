@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import classNames from "classnames/bind";
 import * as _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import mergeRefs from "react-merge-refs";
 import useComponentVisible from "../../../../../hooks/use-component-visible";
 import useTimeout from "../../../../../hooks/use-timeout";
@@ -50,15 +50,15 @@ export function ShiftCellComponentF(options: ShiftCellOptions): JSX.Element {
   );
   const { setIsCounting } = useTimeout(MODAL_CLOSE_MS, () => setIsComponentVisible(false));
 
-  function startPopperCloseTimer() {
+  const startPopperCloseTimer = useCallback(() => {
     setIsCounting(true);
-  }
-  function resetPopperCloseTimer() {
+  }, [setIsCounting]);
+  const resetPopperCloseTimer = useCallback(() => {
     setIsCounting(false);
-  }
-  function toggleComponentVisibility(): void {
+  }, [setIsCounting]);
+  const toggleComponentVisibility = useCallback(() => {
     setIsComponentVisible(!isComponentVisible);
-  }
+  }, [setIsComponentVisible, isComponentVisible]);
 
   return (
     <>

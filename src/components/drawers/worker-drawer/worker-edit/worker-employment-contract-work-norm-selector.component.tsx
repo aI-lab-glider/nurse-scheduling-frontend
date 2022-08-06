@@ -3,7 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 import { Grid } from "@material-ui/core";
 import * as _ from "lodash";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { t } from "../../../../helpers/translations.helper";
 import { WorkingTimeHelper } from "../../../../helpers/working-time.helper";
 import { TimeDrawerType } from "../../../../state/schedule-data/worker-info/worker-info.model";
@@ -59,13 +59,14 @@ export function WorkerEmploymentContractWorkNormSelector({
     return WorkingTimeHelper.fromFractionToDecimal(fraction);
   }
 
-  function handleWorkerTimeUpdate(
+  const handleWorkerTimeUpdate = useCallback((
     event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void {
+  ) => {
     const workerNorm = toWorkNorm(event.target.value);
     setWorkerTime(workerNorm);
     setFirstEditMade(true);
-  }
+  }, [setWorkerTime, setFirstEditMade]);
+
   const inputWidth = 100;
   const employmentTimeAsFraction = toFraction(workerTime);
   return (

@@ -101,7 +101,7 @@ export class WorkersInfoParser {
   private parseWOrkerTime(personelRow: string[], name: string): number {
     if (personelRow[3]) {
       const number = parseFloat(personelRow[3].trim());
-      if (isNaN(number) || number < 0 || number > 1) {
+      if (Number.isNaN(number) || number < 0 || number > 1) {
         this.logLoadFileError(
           `Nieoczekiwana wartość dla wymiaru czasu dla pracownika: ${name}. Przyjęto wymiar czasu: ${DEFAULT_TIME}`
         );
