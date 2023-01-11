@@ -37,7 +37,7 @@ export const { store, persistor } = createAppStore();
 export type AppDispatch = typeof store.dispatch;
 firebase.initializeApp(firebaseConfig);
 firebase.firestore();
-firebase.auth();
+const auth = firebase.auth();
 firebase.analytics();
 
 const rrfConfig = {

@@ -19,9 +19,10 @@ import { ScheduleMode } from "../schedule/schedule-state.model";
 import * as S from "./header.styled";
 import Logo from "../../assets/images/svg-components/Logo";
 import { isLoaded, useFirebase, useFirestore } from "react-redux-firebase";
-import LoginModal from "../modals/login-modal/login-modal";
+import LoginModal from "../modals/auth-modals/login-modal";
 import { isEmpty } from "lodash";
 import { useAppSelector } from "../../state/store-hooks";
+import { RegistrationModal } from "../modals/auth-modals/registration-modal";
 
 function monthDiff(d1: Date, d2: Date): number {
   let months: number;
@@ -99,6 +100,8 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
   const isInViewMode = applicationStateModel === ScheduleMode.Readonly;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
+
 
   const onReportIssueClick = useCallback(() => {
     setIsModalOpen(true);
@@ -175,6 +178,16 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
               {t("login")}
             </S.ReturnToNowBtn>
           )}
+          {a == null && (
+            <S.ReturnToNowBtn
+              data-cy="login-modal-button"
+              hidden={false}
+              variant="secondary"
+              onClick={() => setIsRegistrationModalOpen(true)}
+            >
+              {t("register")}
+            </S.ReturnToNowBtn>
+          )}
 
           {a != null && <p style={FontStyles.roboto.Black16px}>{OrgName}</p>}
         </S.Row>
@@ -194,6 +207,7 @@ export function HeaderComponent(props: RouteButtonsOptions): JSX.Element {
           </S.UtilityButton>
         </S.Row>
       </S.Header>
+      <RegistrationModal open={isRegistrationModalOpen} setOpen={setIsRegistrationModalOpen} onClick={() => null} />
       <LoginModal open={isLoginModalOpen} setOpen={setIsLoginModalOpen} onClick={() => null} />
       <ReportIssueModal open={isModalOpen} setOpen={setIsModalOpen} />
     </>

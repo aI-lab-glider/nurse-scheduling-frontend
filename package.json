@@ -57,6 +57,7 @@
     "file-saver": "^2.0.2",
     "file-type": "^16.2.0",
     "firebase": "^8.9.1",
+    "formik": "^2.2.9",
     "history": "4.10.1",
     "html2canvas": "^1.0.0-rc.7",
     "i18next": "^20.2.1",
@@ -94,7 +95,8 @@
     "workbox-expiration": "^6.5.2",
     "workbox-precaching": "^6.5.2",
     "workbox-routing": "^6.5.2",
-    "workbox-strategies": "^6.5.2"
+    "workbox-strategies": "^6.5.2",
+    "yup": "^0.32.11"
   },
   "minified": "true",
   "scripts": {

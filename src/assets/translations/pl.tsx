@@ -159,6 +159,7 @@ export const pl = {
     overTime: "Liczba nadgodzin",
     workerTime: "Suma godzin",
     login: "Zaloguj",
+    register: "Załóż konto",
     email: "Email",
     edit: "Edytuj",
     actual: "Wersja aktualna",

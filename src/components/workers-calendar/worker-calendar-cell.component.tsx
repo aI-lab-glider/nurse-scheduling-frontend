@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { fade } from "@material-ui/core";
+import { alpha } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import * as S from "./worker-calendar-cell.styled";
@@ -31,10 +31,10 @@ export function WorkersCalendarCell(params: CellOptions): JSX.Element {
 
   if (shiftCode) {
     shiftColor = `#${shiftTypes[shiftCode].color ?? DEFAULT_SHIFT_HEX}`;
-    background = fade(shiftColor, 0.4);
+    background = alpha(shiftColor, 0.4);
   } else {
-    shiftColor = fade("#FFFFFF", 0);
-    background = fade(shiftColor, 0);
+    shiftColor = alpha("#FFFFFF", 0);
+    background = alpha(shiftColor, 0);
   }
   return (
     <S.ShiftCell className={notCurrentMonth}>

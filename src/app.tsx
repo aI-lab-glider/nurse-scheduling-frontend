@@ -4,7 +4,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import { createTheme, MuiThemeProvider } from "@material-ui/core";
 import _ from "lodash";
 import CustomThemeProvider from "./assets/theme/CustomThemeProvider";
 import schedule from "./assets/devMode/schedule";
@@ -35,7 +35,7 @@ import {
   getPresentScheduleIsCorrupted,
 } from "./state/schedule-data/selectors";
 
-const theme = createMuiTheme();
+const theme = createTheme();
 
 function App(): JSX.Element {
   const scheduleDispatcher = useDispatch();

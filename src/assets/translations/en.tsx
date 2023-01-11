@@ -160,6 +160,7 @@ const en: LocalizationResource = {
     overTime: "Overtime",
     workerTime: "Total Hours",
     login: "Login",
+    register: "Create an account",
     email: "Email",
     edit: "Edit",
     actual: "Actual version",

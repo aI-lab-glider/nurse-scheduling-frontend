@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-import { fade } from "@material-ui/core";
+import { alpha } from "@material-ui/core";
 import styled from "styled-components";
 import { colors } from "../../../assets/css-consts";
 import { Button } from "../button-component/button.component";
@@ -49,7 +49,7 @@ export const ButtonListWrapper = styled.div`
 
   & > div:hover {
     cursor: pointer;
-    background-color: ${fade(colors.primary, 0.1)};
+    background-color: ${alpha(colors.primary, 0.1)};
   }
 `;
 export const ButtonRow = styled.div`
